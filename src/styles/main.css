@@ -99,9 +99,10 @@ img, svg { pointer-events: none; }
   animation: screen-in 0.26s var(--ease) both;
 }
 .screen.out { animation: screen-out 0.18s ease-in both; pointer-events: none; }
-.screen.game { background: transparent; padding: 0; pointer-events: none; }
-.screen.game > * { pointer-events: auto; }
-.screen.game > .objective { pointer-events: none; }
+/* The game layer must let touches through to the table canvas; `#ui > *` would win on specificity. */
+#ui > .screen.game { background: transparent; padding: 0; pointer-events: none; }
+#ui > .screen.game > * { pointer-events: auto; }
+#ui > .screen.game > .objective { pointer-events: none; }
 
 @keyframes screen-in { from { opacity: 0; transform: translateX(20px); } to { opacity: 1; transform: none; } }
 @keyframes screen-out { to { opacity: 0; transform: translateX(-12px); } }
