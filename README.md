@@ -1,78 +1,63 @@
-# Thần Công Bida
+# Cơ Tiên — bida tu tiên
 
-Game bida kỹ năng cho điện thoại (màn hình ngang) và máy tính. Cài được như app (PWA) và chơi offline.
+Game bida cho điện thoại (màn hình ngang) và máy tính, với vật lý và luật bida thật, đặt trong một thế giới
+tiên hiệp riêng: **Cơ Tiên Giới** — 13 môn phái, 65 tướng, mỗi tướng có nội tại và 3 chiêu. Cài được như ứng
+dụng (PWA), chơi offline.
 
-**Chơi ngay:** https://ndanhkhoi.github.io/than-cong-bida/
+**Chơi ngay:** https://ndanhkhoi.github.io/co-tien/
 
 ## Tính năng
 
-- **Năm thể loại theo luật WPA (2026) và UMB:** 8 bi, 9 bi, 10 bi (gọi bi, gọi lỗ), bi-a phăng tự do và 3 băng.
-  - Push-out ở 9 bi và 10 bi.
-  - Thua ván khi phạm lỗi 3 lần liên tiếp (9 bi, 10 bi).
-  - Luật phá 3 bi ở 9 bi (Regulation 16).
-  - Người vào bàn được quyền chọn khi đối thủ phá không hợp lệ.
-  - Gọi lỗ cho bi 8.
-  - Đặt lại bi trên đường dọc của bàn, đúng luật WPA.
-- **Xếp bi đúng luật:**
-  - 8 bi: bi đỉnh nằm trên điểm chân bàn, bi 8 giữa hàng thứ ba, hai góc sau một bi trơn một bi sọc.
-  - 9 bi: bi 1 ở đỉnh, bi 9 ở giữa và nằm trên điểm chân bàn.
-  - 10 bi: bi 1 ở đỉnh, bi 10 giữa hàng thứ ba.
-  - Carom: bi đỏ trên điểm chân bàn, bi của đối thủ trên điểm đầu bàn, bi cái lệch 18,25 cm.
-- **Màu bi theo bộ Aramith truyền thống.** Số in trên hai vòng tròn trắng đối diện nhau, sọc nằm giữa thân bi. Bi cái có 6 chấm đỏ như bộ bi thi đấu truyền hình. Bi được vẽ bằng shader WebGL và lăn theo đúng vận tốc góc của mô phỏng.
-- **Vật lý thật:**
-  - Có ma sát trượt và ma sát lăn, nên các cú dừng bi, kéo bi, theo bi xảy ra tự nhiên.
-  - Phê ngang làm đổi góc bật băng. Cắt bi có hiệu ứng throw. Đánh phê có hiệu ứng squirt.
-  - Va chạm tính theo đúng thời điểm tiếp xúc.
-  - Khi phá bi, khối bi khít được mô phỏng bằng tiếp xúc đàn hồi bước 3 µs, nên vỡ đối xứng và bảo toàn năng lượng.
-  - Hàm lỗ dùng góc 142°/104° theo chuẩn WPA.
-- **Thao tác như game native:**
-  - Kéo trên bàn để xoay cơ.
-  - Giữ nút ↺ ↻ để xoay liên tục, giữ càng lâu xoay càng nhanh.
-  - Thanh TINH để chỉnh góc từng chút.
-  - Bảng chọn điểm phê. Đặt điểm ra ngoài vòng đỏ thì có thể trượt cơ.
-  - Giữ nút **ĐÁNH** để nạp lực. Kim lực chạy lên xuống, mỗi lượt nhanh hơn. Lực càng mạnh, giữ càng lâu thì tay càng run, nên có thể "lỡ tay" như ngoài đời. Kéo ngón tay ra xa nút để hủy.
-  - Không chọn được text, không hiện menu khi giữ lâu, không zoom.
-  - Rung haptic (trên Android), giữ màn hình luôn sáng.
-- **AI 4 cấp độ, 4 lối đánh:**
-  - Tìm cú đánh bằng mô phỏng vật lý: ăn thẳng, đánh băng, đi bi cho cú sau, phòng thủ, đặt bi trong tay, push-out.
-  - Chạy trong Web Worker nên không làm giật hình.
-  - Diễn hoạt như người thật: xoay cơ, ngắm, nạp lực rồi đánh.
-- **Sự Nghiệp:** 5 chương với 15 đối thủ, mỗi người có tên, tính cách và lời thoại riêng. Đi từ quán đầu hẻm Sài Gòn đến giải Vô Địch Quốc Gia.
-- **60 thử thách** chia 5 nhóm (ăn thẳng, cắt bi, đánh băng, đi bi, phăng). Thử thách được sinh tự động, và mỗi cái đều có lời giải đã được kiểm chứng bằng vật lý.
-- **Kỹ năng lật kèo:** Thần Nhãn, Phê Thần, Thổi Bi, Bảo Hộ, Run Tay, Hồi Cục.
-- **Biến thể bàn:** Bi Nổ, Hố Ma, Sương Mù, Nỉ Băng, Lỗ Hẹp.
-- **Bộ sưu tập:** 6 cây cơ với chỉ số riêng và 5 mặt bàn.
-- **Khác:** 2 người chơi cùng máy, chế độ thuận tay trái, xuất và nhập mã lưu.
+- **Bida thật**
+  - 8 bi, 9 bi, 10 bi theo luật WPA 2026 (push-out, 3 lỗi liên tiếp, luật phá 3 bi, quyền chọn sau phá
+    không hợp lệ, gọi bi gọi lỗ) và bi-a phăng tự do, 3 băng theo UMB.
+  - Kích thước chuẩn WPA: bàn 7 ft, bi 57,15 mm, miệng lỗ góc 117,5 mm và lỗ giữa 130 mm, hàm lỗ 142°/104°.
+  - Vật lý: ma sát trượt và lăn, spin ba trục, throw, squirt, áp phê đổi góc bật băng, phá bi bảo toàn năng
+    lượng. Màu bi theo bộ Aramith truyền thống, vẽ bằng shader và lăn theo vận tốc góc thật.
+- **Hai chế độ cho mọi thể loại:** **Tiên Đạo** (chiêu, nội tại, địa thế) và **Cổ Điển** (bida thuần).
+- **Địa thế:** mỗi môn phái có Linh Đài riêng (màu nỉ, ma sát, độ nảy băng, miệng lỗ) và Thiên Tượng ngẫu
+  nhiên — bão tuyết, sóng lừng, gió giật, giếng sao, rễ cây… — đều là lực và ma sát thật trong mô phỏng,
+  báo trước và vẽ lên bàn. Địa Lợi cho tướng đánh trên bàn quê nhà.
+- **Hành trình:** bản đồ Cơ Tiên Giới; mỗi vùng có 5 cao thủ để thách đấu (thắng thì chiêu mộ được) và các
+  thử thách. 60 thử thách được sinh tự động, mỗi bài có lời giải đã kiểm chứng bằng vật lý.
+- **Cơ Tiên Truyện:** truyện chữ có tranh minh hoạ thuỷ mặc, 15 chương mở dần theo Hành trình — một câu
+  chuyện riêng của Cơ Tiên Giới, lấy cảm hứng từ cách kể của truyện cổ Việt Nam và Trung Hoa.
+- **Cơ Tiên Lục:** wiki trong game về vùng đất, tướng, hệ và luật chơi; tướng chưa gặp hiện "???".
+- **Thao tác như game native:** joystick xoay cơ và di bi, quả bi áp phê dạng joystick, giữ để nạp lực có
+  thể "lỡ tay", rung, giữ màn hình sáng; bắt cài app và xoay ngang trên điện thoại, kiểm tra kích thước cửa
+  sổ trên máy tính.
+- **AI 4 cấp, 4 lối đánh:** tìm cú đánh bằng chính bộ mô phỏng (kể cả địa thế), chạy trong Web Worker.
+- **Người mới:** giới thiệu thế giới, gợi ý đúng lúc, luật chơi đầy đủ trong menu tạm dừng.
 
 ## Phát triển
 
 ```bash
 npm install
 npm run dev            # http://localhost:5173
-npm test               # vật lý, luật, AI, 60 thử thách
-npm run build          # bản production vào dist/
+npm test               # vật lý, luật, AI, thử thách, tương phản bi–nỉ
+npm run build          # typecheck + bản production vào dist/
 npm run gen:challenges # sinh lại bộ thử thách (có kiểm chứng lời giải)
-npm run gen:icons      # sinh lại icon PNG
 ```
 
-Công nghệ: TypeScript, Vite, PixiJS 8 (WebGL) và vite-plugin-pwa. Âm thanh được tổng hợp bằng WebAudio, không dùng file âm thanh nào.
+TypeScript, Vite, PixiJS 8 (WebGL), vite-plugin-pwa. Âm thanh tổng hợp bằng WebAudio, không có file âm
+thanh. Tài liệu: [kiến trúc](docs/architecture.md) · [thế giới](docs/world-bible.md) · [cốt truyện](docs/story.md) ·
+[đồ hoạ](docs/art-pipeline.md) · [đóng góp](CONTRIBUTING.md) · [AGENTS.md](AGENTS.md) cho AI agent.
 
-```
-src/core     vật lý, hình học bàn, xếp bi, luật (8/9/10 bi, carom), dự đoán đường ngắm
-src/ai       AI tìm cú đánh (chạy trong Web Worker)
-src/game     trận đấu (state machine), nội dung (cơ, bàn, kỹ năng, NPC, thử thách), hồ sơ người chơi
-src/render   PixiJS: bàn vẽ thủ công, shader bi, cơ, đường ngắm, hiệu ứng
-src/ui       màn hình, HUD, điều khiển cảm ứng
-tools        sinh thử thách, sinh icon
-tests        vitest
-```
+## Ý tưởng, nội dung và đồ hoạ đến từ đâu
+
+- **Ý tưởng và định hướng:** tác giả (Nguyễn Đức Anh Khôi) — game bida tu tiên, thế giới Cơ Tiên Giới,
+  các lựa chọn về lối chơi, phong cách Thuỷ Mặc, tên game, và mọi quyết định duyệt hay loại nội dung.
+- **Nguyên bản:** toàn bộ tên, truyện, môn phái, nhân vật, chiêu thức và tranh là sáng tác riêng cho Cơ Tiên,
+  không dùng nội dung của bất kỳ game hay tác phẩm nào khác.
+- **Viết nội dung và code:** được phát triển cùng trợ lý AI (Claude, qua Claude Code) theo chỉ đạo của tác
+  giả — trợ lý đề xuất và viết, tác giả chọn và duyệt.
+- **Đồ hoạ:** toàn bộ tranh được vẽ bằng mô hình sinh ảnh AI (model ảnh của Codex `gpt-6-sol-image` qua
+  9router/Codex CLI, và Gemini qua Antigravity CLI) theo prompt viết riêng cho game, rồi duyệt và chỉnh từng
+  tấm. Quy trình, công cụ và tiêu chí duyệt: [docs/art-pipeline.md](docs/art-pipeline.md) và skill
+  `.claude/skills/game-art`.
 
 ## Giấy phép
 
-Mã nguồn: MIT.
-
-### Hình nhân vật (không thuộc giấy phép MIT)
-
-Ảnh đại diện trong `public/avatars/` là nhân vật của **Doraemon** (© Fujiko Pro, Shogakukan) và **Dragon Ball** (© Bird Studio/Shueisha, Toei Animation). Ảnh được cắt từ các ảnh minh hoạ trên Wikipedia tiếng Anh.
-
-Đây là dự án cá nhân, phi thương mại, làm cho vui. Dự án không liên kết với và không được chủ bản quyền xác nhận. Không dùng các hình này cho mục đích thương mại. Nếu chủ bản quyền yêu cầu, chỉ cần xoá thư mục `public/avatars/`, game vẫn chạy (avatar sẽ trống).
+Mã nguồn: MIT. Các agent skill bên thứ ba trong `.claude/skills` (trừ `game-art`) thuộc
+[gamedev-skills/awesome-gamedev-agent-skills](https://github.com/gamedev-skills/awesome-gamedev-agent-skills),
+giấy phép Apache-2.0 — xem `.claude/skills/README.md`.
