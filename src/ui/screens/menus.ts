@@ -532,6 +532,7 @@ export function settingsScreen(app: App): Screen {
     h('div.kv', null, h('span', null, 'Cấp'), h('b', null, `${prog.level} (${prog.into}/${prog.need} EXP)`)),
     h('div.kv', null, h('span', null, 'Trận / thắng'), h('b', null, `${p.stats.played} / ${p.stats.won}`)),
     h('div.kv', null, h('span', null, 'Loạt ăn dài nhất'), h('b', null, String(p.stats.bestRun))),
+    h('div.kv', null, h('span', null, 'Phiên bản'), h('b.small', null, __APP_VERSION__)),
     btn('Xuất mã lưu', () => {
       const code = exportCode(p);
       void navigator.clipboard?.writeText(code).then(() => toast('Đã chép mã lưu', 'good'), () => {});

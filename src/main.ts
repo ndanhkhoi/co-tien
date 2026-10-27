@@ -26,7 +26,31 @@ async function boot() {
   (window as unknown as { __app: App }).__app = app;
   app.go(splashScreen, { reset: true });
   document.getElementById('boot')?.remove();
-  if (import.meta.env.PROD) registerSW({ immediate: true });
+  if (import.meta.env.PROD) setupUpdates(app);
+}
+
+/**
+ * Check for a new version every 30 minutes and whenever the app comes back to the
+ * foreground. A new version installs right away from menus; during a match it waits
+ * until the player leaves the table so a rack is never cut off.
+ */
+function setupUpdates(app: App) {
+  const updateSW = registerSW({
+    immediate: true,
+    onNeedRefresh() {
+      app.setPendingUpdate(() => void updateSW(true));
+    },
+    onRegisteredSW(_url, reg) {
+      if (!reg) return;
+      const check = () => {
+        if (navigator.onLine) void reg.update().catch(() => undefined);
+      };
+      setInterval(check, 30 * 60 * 1000);
+      document.addEventListener('visibilitychange', () => {
+        if (!document.hidden) check();
+      });
+    },
+  });
 }
 
 boot().catch((err) => {

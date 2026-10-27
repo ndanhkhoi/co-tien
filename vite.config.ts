@@ -1,13 +1,17 @@
-import { defineConfig } from 'vite';
+import { defineConfig } from 'vitest/config';
+import pkg from './package.json' with { type: 'json' };
 import { VitePWA } from 'vite-plugin-pwa';
 
 export default defineConfig({
   base: './',
+  define: {
+    __APP_VERSION__: JSON.stringify(`${pkg.version} · ${new Date().toISOString().slice(0, 16).replace('T', ' ')}`),
+  },
   build: { target: 'es2022', chunkSizeWarningLimit: 1500 },
   worker: { format: 'es' },
   plugins: [
     VitePWA({
-      registerType: 'autoUpdate',
+      registerType: 'prompt',
       injectRegister: null,
       includeAssets: ['icons/*.png', 'icons/*.svg'],
       manifest: {
@@ -27,7 +31,7 @@ export default defineConfig({
           { src: 'icons/icon-maskable-512.png', sizes: '512x512', type: 'image/png', purpose: 'maskable' },
         ],
       },
-      workbox: { globPatterns: ['**/*.{js,css,html,png,svg,woff2,woff,json}'], maximumFileSizeToCacheInBytes: 6_000_000 },
+      workbox: { cleanupOutdatedCaches: true, globPatterns: ['**/*.{js,css,html,png,svg,woff2,woff,json}'], maximumFileSizeToCacheInBytes: 6_000_000 },
     }),
   ],
   test: { include: ['tests/**/*.test.ts'], testTimeout: 60_000 },

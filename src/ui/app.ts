@@ -4,7 +4,7 @@ import { sound } from '../audio/sound';
 import { CUES, TABLES } from '../game/content/gear';
 import { levelOf, loadProfile, saveProfile, type Profile } from '../game/profile';
 import { setHaptics } from '../platform/device';
-import { h } from './dom';
+import { h, toast } from './dom';
 
 export interface Screen {
   el: HTMLElement;
@@ -26,6 +26,7 @@ export class App {
   private stageEl = document.getElementById('stage')!;
   private stack: ScreenFactory[] = [];
   private current: Screen | null = null;
+  private pendingUpdate: (() => void) | null = null;
 
   constructor() {
     this.profile = loadProfile();
@@ -100,6 +101,21 @@ export class App {
     this.show(this.stack[this.stack.length - 1]);
   }
 
+  /** A new version is ready: apply now from menus, or after the current match. */
+  setPendingUpdate(apply: () => void) {
+    this.pendingUpdate = apply;
+    if (this.current?.usesStage) toast('Có bản mới — sẽ cập nhật khi bạn về menu', 'gold');
+    else this.applyUpdate();
+  }
+
+  private applyUpdate() {
+    const apply = this.pendingUpdate;
+    if (!apply) return;
+    this.pendingUpdate = null;
+    toast('Đang cập nhật bản mới…', 'gold');
+    setTimeout(apply, 700);
+  }
+
   /** Leave the current screen unconditionally (closes any open dialogs). */
   pop() {
     document.querySelectorAll('.modal-wrap').forEach((m) => m.remove());
@@ -121,6 +137,7 @@ export class App {
     if (next.usesStage) this.pixi.ticker.start();
     else this.pixi.ticker.stop();
     this.ui.append(next.el);
+    if (!next.usesStage && this.pendingUpdate) this.applyUpdate();
   }
 
   /** Coins / XP reward with level-up detection. Returns levels gained. */
