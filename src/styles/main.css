@@ -791,3 +791,14 @@ textarea { width: 100%; min-height: 70px; border-radius: var(--r-sm); background
 .call-tag .mini-ball { width: 13px; height: 13px; }
 .call-tag.pop { animation: call-pop 0.32s var(--ease) both; }
 @keyframes call-pop { from { opacity: 0; transform: translate(-50%, -50%) scale(0.6); } to { opacity: 1; transform: translate(-50%, -50%) scale(1); } }
+
+/* ---------- Profile editor ---------- */
+button.profile-chip { text-align: left; padding: 4px 8px 4px 4px; border-radius: var(--r-md); transition: background 0.12s, transform 0.08s; }
+button.profile-chip:active, button.profile-chip.pressed { background: var(--surface-2); transform: scale(0.98); }
+.profile-chip .pc-edit { width: 16px; height: 16px; color: var(--dim); }
+.pm-body { display: flex; gap: 18px; min-height: 0; }
+.pm-left { display: flex; flex-direction: column; align-items: center; gap: 6px; width: 170px; flex-shrink: 0; }
+.pm-left input { width: 100%; }
+.pm-preview { width: 120px; height: 120px; border-radius: var(--r-md); overflow: hidden; border: 3px solid var(--accent); }
+.pm-char { font-family: var(--display); font-weight: 800; font-style: italic; font-size: 20px; text-transform: uppercase; }
+.pm-right { flex: 1; min-width: 0; max-height: 52vh; }

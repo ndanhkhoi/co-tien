@@ -14,6 +14,8 @@ export interface Profile {
   name: string;
   /** Portrait id (see ui/avatar.ts). */
   avatar: string;
+  /** The player has chosen a name and portrait (first-run prompt done). */
+  named: boolean;
   xp: number;
   coins: number;
   cues: string[];
@@ -37,6 +39,7 @@ export function defaultProfile(): Profile {
     v: 1,
     name: 'Cơ Thủ',
     avatar: 'nobita',
+    named: false,
     xp: 0,
     coins: 300,
     cues: ['house'],

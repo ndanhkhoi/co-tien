@@ -40,6 +40,58 @@ function seg<T extends string | number>(options: [T, string][], value: T, onChan
   return box;
 }
 
+// ---------- Player profile ----------
+
+function avatarPicker(selected: () => string, onPick: (id: string) => void): HTMLElement {
+  const grid = h('div.av-picker');
+  const render = () => grid.replaceChildren(...AVATARS.map((a) => tap(
+    h('button.av-pick', { class: selected() === a.id ? 'on' : '', 'aria-label': a.name, title: a.name }, avatar(a.id)),
+    () => {
+      onPick(a.id);
+      render();
+    },
+  )));
+  render();
+  return grid;
+}
+
+/** Name + portrait editor; shown on first launch and from the home profile card. */
+function profileModal(app: App, onDone: () => void, first = false) {
+  const p = app.profile;
+  let name = p.name;
+  let pick = p.avatar;
+  const preview = h('div.pm-preview', null, avatar(pick));
+  const label = h('div.pm-char');
+  const setLabel = () => (label.textContent = AVATARS.find((a) => a.id === pick)?.name ?? '');
+  setLabel();
+  const input = h('input', {
+    id: 'player-name', value: name, maxLength: 14, placeholder: 'Tên của bạn',
+    oninput: (e: Event) => (name = (e.target as HTMLInputElement).value),
+  }) as HTMLInputElement;
+  modal((close) => h('div.modal', { style: 'width:min(720px,100%)' },
+    h('h2', null, first ? 'Chào cơ thủ mới!' : 'Hồ sơ cơ thủ'),
+    h('div.pm-body', null,
+      h('div.pm-left', null, preview, label,
+        h('label.section-title', { for: 'player-name', style: 'margin-top:6px' }, 'Tên hiển thị'), input),
+      h('div.pm-right.scroll', null, h('div.section-title', null, 'Chọn nhân vật'),
+        avatarPicker(() => pick, (id) => {
+          pick = id;
+          preview.replaceChildren(avatar(id));
+          setLabel();
+        })),
+    ),
+    h('div.actions', null, btn(first ? 'Vào game' : 'Lưu', () => {
+      p.name = name.trim().slice(0, 14) || 'Cơ Thủ';
+      p.avatar = pick;
+      p.named = true;
+      app.save();
+      close();
+      onDone();
+    })),
+  ));
+  if (!first) setTimeout(() => input.focus(), 50);
+}
+
 // ---------- Splash ----------
 
 export function splashScreen(app: App): Screen {
@@ -70,11 +122,13 @@ export function homeScreen(app: App): Screen {
   const el = screenEl();
   const p = app.profile;
   const prog = levelProgress(p.xp);
-  const profileChip = h('div.profile-chip', null,
+  const profileChip = tap(h('button.profile-chip', { 'aria-label': 'Sửa hồ sơ' },
     h('div.home-av', null, avatar(p.avatar)),
     h('div.lvl', null, String(prog.level)),
     h('div', null, h('div.pname', null, p.name), h('div.xpbar', null, h('i', { style: `width:${(prog.into / prog.need) * 100}%` }))),
-  );
+    icon('pencil', 'pc-edit'),
+  ), () => profileModal(app, () => app.go(homeScreen, { replace: true })));
+  if (!p.named) setTimeout(() => profileModal(app, () => app.go(homeScreen, { replace: true }), true), 350);
   let n = 0;
   const tile = (name: string, desc: string, art: Element | null, c1: string, fn: () => void, big = false) => {
     n++;
@@ -516,16 +570,10 @@ export function settingsScreen(app: App): Screen {
     },
   });
   const prog = levelProgress(p.xp);
-  const picker = h('div.av-picker');
-  const renderPicker = () => picker.replaceChildren(...AVATARS.map((a) => tap(
-    h('button.av-pick', { class: p.avatar === a.id ? 'on' : '', 'aria-label': a.name }, avatar(a.id)),
-    () => {
-      p.avatar = a.id;
-      save();
-      renderPicker();
-    },
-  )));
-  renderPicker();
+  const picker = avatarPicker(() => p.avatar, (id) => {
+    p.avatar = id;
+    save();
+  });
   const left = h('div.panel.scroll', { style: 'flex:1;padding:6px 16px;min-height:0' },
     line('Tên cơ thủ', nameInput),
     h('div', { style: 'padding:8px 0;border-bottom:1px solid var(--line)' }, h('div', { style: 'font-size:15px;font-weight:600;margin-bottom:8px' }, 'Ảnh đại diện'), picker),
