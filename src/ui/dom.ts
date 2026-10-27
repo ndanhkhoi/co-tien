@@ -87,10 +87,14 @@ export function toast(text: string, kind: '' | 'bad' | 'good' | 'gold' = '') {
     toastLayer = h('div.toast-layer');
     document.getElementById('ui')!.append(toastLayer);
   }
-  const t = h('div.toast', { class: kind }, text);
+  const glyph = { bad: '!', good: '✓', gold: '★', '': 'i' }[kind];
+  const t = h('div.toast', { class: kind || 'info', role: 'status' }, h('span.ti', null, glyph), h('span.tt', null, text), h('i.tbar'));
   toastLayer.append(t);
   while (toastLayer.children.length > 3) toastLayer.firstElementChild!.remove();
-  setTimeout(() => t.remove(), 2400);
+  setTimeout(() => {
+    t.classList.add('leaving');
+    setTimeout(() => t.remove(), 220);
+  }, 2600);
 }
 
 export function banner(text: string, bad = false) {

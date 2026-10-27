@@ -61,6 +61,9 @@ export function matchScreen(opts: MatchOptions) {
     let rotHeld = 0;
     let rotT = 0;
     let callPocket: number | null = null;
+    /** Call announced by the AI before it lines up, and the call of the shot in flight. */
+    let aiCall: ShotCall | null = null;
+    let firedCall: ShotCall | null = null;
     let pushOut = false;
     let aiToken = 0;
     let aiActing = false;
@@ -142,11 +145,13 @@ export function matchScreen(opts: MatchOptions) {
       // Pills sit on the long rails between a corner and the side pocket.
       const railMid = (t.W / 2 + t.railWidth / 2) * scale;
       const quarter = (t.L / 4) * scale;
+      // Top centre stays free for toasts; the bottom rail carries the objective (left)
+      // and either the call/push chips or the AI's "thinking" plate (right).
       objective.style.left = `${cx - quarter}px`;
-      objective.style.top = `${cy - railMid}px`;
+      objective.style.top = `${cy + railMid}px`;
       chips.style.left = `${cx + quarter}px`;
       chips.style.top = `${cy + railMid}px`;
-      thinking.style.left = `${cx - quarter}px`;
+      thinking.style.left = `${cx + quarter}px`;
       thinking.style.top = `${cy + railMid}px`;
     }
     const onResize = () => layout();
@@ -190,7 +195,10 @@ export function matchScreen(opts: MatchOptions) {
         }
         c.energy.style.width = `${match.energy[s]}%`;
       }
-      objective.textContent = opts.challenge ? opts.challenge.goal : `${MODE_NAMES[match.setup.mode]} · chạm ${match.setup.raceTo} — ${match.objective()}`;
+      objective.replaceChildren(
+        h('span.obj-mode', null, opts.challenge ? opts.label : `${MODE_NAMES[match.setup.mode]} · chạm ${match.setup.raceTo}`),
+        h('span.obj-text', null, opts.challenge ? opts.challenge.goal : match.objective()),
+      );
       renderSkills();
       renderChips();
       shootBtn.toggleAttribute('disabled', !canAct());
@@ -335,11 +343,13 @@ export function matchScreen(opts: MatchOptions) {
       fire(finalAngle, finalPower, aim.side, aim.vert);
     }
 
-    function fire(angle: number, pw: number, side: number, vert: number, aiCall?: ShotCall | null) {
+    function fire(angle: number, pw: number, side: number, vert: number, aiShotCall?: ShotCall | null) {
       strikePull = pw;
       strikeT = 0.0001;
       const ct = match.callType();
-      const call = aiCall !== undefined ? aiCall : ct === 'none' ? null : { ball: callBallId() ?? 8, pocket: effectiveCallPocket() ?? 0 };
+      const call = aiShotCall !== undefined ? aiShotCall : ct === 'none' ? null : { ball: callBallId() ?? 8, pocket: effectiveCallPocket() ?? 0 };
+      firedCall = call;
+      aiCall = null;
       const input = { angle, power: pw, side, vert, call, pushOut };
       // Let the cue travel through before the ball moves.
       setTimeout(() => {
@@ -697,6 +707,8 @@ export function matchScreen(opts: MatchOptions) {
       pushOut = false;
       callPocket = null;
       callBall = null;
+      aiCall = null;
+      firedCall = null;
       view.refreshCue();
       if (match.phase === 'option') {
         if (match.current.kind === 'ai') void aiTurn();
@@ -753,6 +765,11 @@ export function matchScreen(opts: MatchOptions) {
         aiActing = false;
         return;
       }
+      if (shot.call) {
+        aiCall = shot.call;
+        const ballTxt = match.callType() === 'ball-pocket' || shot.call.ball !== 8 ? `bi ${shot.call.ball}` : 'bi 8';
+        toast(`${player.name} gọi ${ballTxt} → ${POCKET_NAMES[shot.call.pocket]}`, 'gold');
+      }
       if (decision.skill && match.canUseSkill(side, decision.skill)) {
         match.useSkill(side, decision.skill);
         await sleep(450);
@@ -790,7 +807,6 @@ export function matchScreen(opts: MatchOptions) {
       if (disposed || token !== aiToken) return;
       aiActing = false;
       // The AI's call comes from its plan, not from the human aim helpers.
-      if (shot.call) callPocket = shot.call.pocket;
       fire(shot.angle, shot.power, shot.side, shot.vert, shot.call);
     }
 
@@ -988,6 +1004,48 @@ export function matchScreen(opts: MatchOptions) {
       ));
     }
 
+    // ---------- Called-shot marker ----------
+    const callTag = h('div.call-tag');
+    callTag.style.display = 'none';
+    el.append(callTag);
+    let callTagKey = '';
+
+    function currentCall(): { ball: number | null; pocket: number } | null {
+      if (match.phase === 'rolling') return firedCall;
+      if (match.phase !== 'aim' || match.callType() === 'none') return null;
+      if (aiActing || match.current.kind === 'ai') return aiCall;
+      const pk = effectiveCallPocket();
+      const ball = match.callType() === 'ball-pocket' ? callBallId() : 8;
+      return pk === null && callBall === null ? null : { ball, pocket: pk ?? -1 };
+    }
+
+    function placeCallTag() {
+      const cs = view.calledShot;
+      if (!cs || cs.pocket < 0) {
+        callTag.style.display = 'none';
+        callTagKey = '';
+        return;
+      }
+      const p = match.table.pockets[cs.pocket];
+      const sp = view.toScreen(p.hx, p.hy);
+      // Push the tag toward the table centre so it never sits off-screen.
+      const dirX = -Math.sign(p.hx) || 0;
+      const dirY = -Math.sign(p.hy);
+      const off = (p.hr + 0.07) * view.pxPerM;
+      callTag.style.left = `${sp.x + dirX * off}px`;
+      callTag.style.top = `${sp.y + dirY * off}px`;
+      const key = `${cs.ball}|${cs.pocket}|${match.turn}`;
+      if (key !== callTagKey) {
+        callTagKey = key;
+        callTag.replaceChildren(h('span.ct-label', null, 'Gọi'));
+        if (cs.ball !== null) callTag.append(miniBall(cs.ball, false), h('b', null, String(cs.ball)));
+        callTag.classList.remove('pop');
+        void callTag.offsetWidth;
+        callTag.classList.add('pop');
+      }
+      callTag.style.display = '';
+    }
+
     // ---------- Frame loop ----------
     const tick = (ticker: Ticker) => {
       const dt = Math.min(0.05, ticker.deltaMS / 1000);
@@ -1032,11 +1090,11 @@ export function matchScreen(opts: MatchOptions) {
         showCue,
         showGuide: humanAim && isHumanTurn() && !match.tremorNow && strikeT === 0,
         guideScale: guideScale(),
-        callPocket: ct !== 'none' ? (isHumanTurn() ? effectiveCallPocket() : callPocket) : null,
-        callBall: ct === 'ball-pocket' && isHumanTurn() ? callBallId() : null,
         pocketChoices: ct !== 'none' && isHumanTurn(),
         strike: strikeT > 0 ? Math.min(1, strikeT) : 0,
       } : null;
+      view.calledShot = currentCall();
+      placeCallTag();
       view.update(dt, av);
       // Power UI.
       const shown = strikeT > 0 ? strikePull : power;

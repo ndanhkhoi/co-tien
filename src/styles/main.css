@@ -409,25 +409,53 @@ img, svg { pointer-events: none; }
 @keyframes fade-in { from { opacity: 0; } }
 @keyframes pop-in { from { opacity: 0; transform: scale(0.94) translateY(8px); } }
 
-.toast-layer { position: absolute; left: 0; right: 0; top: calc(10px + var(--st)); display: flex; flex-direction: column; align-items: center; gap: 6px; pointer-events: none; z-index: 30; }
+.toast-layer { position: absolute; left: 0; right: 0; top: calc(8px + var(--st)); display: flex; flex-direction: column; align-items: center; gap: 6px; pointer-events: none; z-index: 30; }
+/* Broadcast ticker plate: coloured glyph block, condensed text, countdown bar. */
 .toast {
-  padding: 8px 16px 8px 14px;
+  --tone: var(--info);
+  position: relative;
+  display: flex;
+  align-items: stretch;
+  max-width: min(560px, 74vw);
+  background: linear-gradient(180deg, #17233a, #0f1828);
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  clip-path: polygon(10px 0, 100% 0, calc(100% - 10px) 100%, 0 100%);
+  overflow: hidden;
+  animation: toast-in 0.28s var(--ease) both;
+}
+.toast.bad { --tone: var(--danger); }
+.toast.good { --tone: var(--felt); }
+.toast.gold { --tone: var(--accent); }
+.toast .ti {
+  flex-shrink: 0;
+  width: 38px;
+  display: grid;
+  place-items: center;
+  padding-left: 6px;
+  background: var(--tone);
+  color: #0b1220;
+  font-family: var(--display);
+  font-weight: 900;
+  font-size: 18px;
+}
+.toast.bad .ti { color: #ffffff; }
+.toast .tt {
+  padding: 7px 22px 9px 12px;
+  font-family: var(--display);
   font-weight: 700;
-  font-size: 14px;
-  background: var(--surface);
-  border: 1px solid var(--line-strong);
-  border-left: 4px solid var(--info);
-  box-shadow: var(--shadow);
-  animation: toast 2.4s ease both;
+  font-size: 17px;
+  letter-spacing: 0.02em;
+  line-height: 1.15;
+  color: var(--text);
   white-space: nowrap;
-  max-width: 70vw;
   overflow: hidden;
   text-overflow: ellipsis;
 }
-.toast.bad { border-left-color: var(--danger); }
-.toast.good { border-left-color: var(--felt); }
-.toast.gold { border-left-color: var(--accent); }
-@keyframes toast { 0% { opacity: 0; transform: translateY(-8px); } 10% { opacity: 1; transform: none; } 80% { opacity: 1; } 100% { opacity: 0; transform: translateY(-6px); } }
+.toast .tbar { position: absolute; left: 38px; right: 0; bottom: 0; height: 3px; background: var(--tone); transform-origin: left; animation: toast-bar 2.6s linear both; opacity: 0.85; }
+.toast.leaving { animation: toast-out 0.22s ease-in both; }
+@keyframes toast-in { from { opacity: 0; transform: translateY(-10px) skewX(-6deg); } to { opacity: 1; transform: none; } }
+@keyframes toast-out { to { opacity: 0; transform: translateX(16px); } }
+@keyframes toast-bar { from { transform: scaleX(1); } to { transform: scaleX(0); } }
 
 /* Lower-third style plate. */
 .big-banner {
@@ -575,14 +603,31 @@ textarea { width: 100%; min-height: 70px; border-radius: var(--r-sm); background
 
 .objective, .float-chips, .thinking { position: absolute; transform: translate(-50%, -50%); white-space: nowrap; }
 .objective {
-  padding: 3px 12px;
+  display: flex;
+  align-items: stretch;
   font-family: var(--display);
-  font-size: 14px; font-weight: 700; letter-spacing: 0.02em;
-  color: #ffffff;
-  background: rgba(10, 17, 29, 0.82);
-  border-left: 3px solid var(--accent);
+  font-size: 15px; font-weight: 700; letter-spacing: 0.02em;
   pointer-events: none;
-  max-width: 40vw;
+  max-width: 38vw;
+  filter: drop-shadow(0 6px 10px rgba(0, 0, 0, 0.45));
+}
+.objective .obj-mode {
+  flex-shrink: 0;
+  padding: 3px 14px 3px 12px;
+  color: var(--accent-ink);
+  background: var(--accent);
+  font-style: italic;
+  font-weight: 800;
+  text-transform: uppercase;
+  clip-path: polygon(7px 0, 100% 0, calc(100% - 7px) 100%, 0 100%);
+}
+.objective .obj-text {
+  margin-left: -6px;
+  padding: 3px 14px;
+  color: #ffffff;
+  background: rgba(10, 17, 29, 0.92);
+  clip-path: polygon(7px 0, 100% 0, calc(100% - 7px) 100%, 0 100%);
+  white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
@@ -723,3 +768,26 @@ textarea { width: 100%; min-height: 70px; border-radius: var(--r-sm); background
 .av-pick { aspect-ratio: 1; border-radius: var(--r-sm); overflow: hidden; border: 2px solid transparent; transition: transform 0.08s; }
 .av-pick:active, .av-pick.pressed { transform: scale(0.94); }
 .av-pick.on { border-color: var(--accent); box-shadow: 0 0 0 2px rgba(255, 197, 49, 0.3); }
+
+/* Called-shot tag next to the pocket, visible to both players. */
+.call-tag {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  z-index: 4;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 10px 3px 8px;
+  pointer-events: none;
+  font-family: var(--display);
+  font-weight: 800;
+  font-size: 15px;
+  color: var(--accent-ink);
+  background: var(--accent);
+  clip-path: polygon(6px 0, 100% 0, calc(100% - 6px) 100%, 0 100%);
+  white-space: nowrap;
+}
+.call-tag .ct-label { font-style: italic; text-transform: uppercase; letter-spacing: 0.06em; }
+.call-tag .mini-ball { width: 13px; height: 13px; }
+.call-tag.pop { animation: call-pop 0.32s var(--ease) both; }
+@keyframes call-pop { from { opacity: 0; transform: translate(-50%, -50%) scale(0.6); } to { opacity: 1; transform: translate(-50%, -50%) scale(1); } }

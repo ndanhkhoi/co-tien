@@ -18,9 +18,6 @@ export interface AimView {
   showGuide: boolean;
   /** Fraction of the normal guide length (fog, cue aim stat). */
   guideScale: number;
-  /** Called pocket to highlight. */
-  callPocket: number | null;
-  callBall: number | null;
   /** Pockets the player may tap when calling. */
   pocketChoices: boolean;
   /** Strike animation 0..1 (cue moving through). */
@@ -89,6 +86,8 @@ export class TableView {
   private time = 0;
   private eagleCache: { key: string; paths: { id: number; pts: number[] }[] } | null = null;
   private lastPocketOf = new Map<number, number>();
+  /** The shooter's declared call, shown to everyone (pocket -1 = ball chosen, pocket not yet). */
+  calledShot: { ball: number | null; pocket: number } | null = null;
   /** Challenge marks: target pocket and cue-ball landing zone. */
   goal: { pocket?: number; zone?: [number, number, number] } | null = null;
 
@@ -341,6 +340,20 @@ export class TableView {
         g.circle(b.x, b.y - t.R * 1.1, t.R * 0.22).fill({ color: 0xffd34d, alpha: 0.6 + pulse * 0.4 });
       }
     }
+    // Called shot: visible to both players from the call until the result.
+    if (this.calledShot) {
+      const pulse = 0.5 + 0.5 * Math.sin(this.time * 6);
+      const cs = this.calledShot;
+      if (cs.pocket >= 0) {
+        const p = t.pockets[cs.pocket];
+        g.circle(p.hx, p.hy, p.hr * (1.02 + pulse * 0.1)).stroke({ width: 3.5, color: 0xffc531, alpha: 0.95 });
+        g.circle(p.hx, p.hy, p.hr * (1.3 + pulse * 0.25)).stroke({ width: 2, color: 0xffc531, alpha: 0.5 * (1 - pulse) + 0.15 });
+      }
+      if (cs.ball !== null) {
+        const b = m.balls.find((x) => x.id === cs.ball);
+        if (b && b.onTable) g.circle(b.x, b.y, t.R * (1.3 + pulse * 0.12)).stroke({ width: 2.5, color: 0xffc531, alpha: 0.9 });
+      }
+    }
     if (!aim) return;
     // Ball in hand.
     if (m.canMoveCue && m.current.kind === 'human') {
@@ -355,17 +368,12 @@ export class TableView {
       const pulse = 0.5 + 0.5 * Math.sin(this.time * 5);
       g.circle(c.x, c.y, t.R * (1.6 + pulse * 0.3)).stroke({ width: 2, color: 0xffffff, alpha: 0.4 + pulse * 0.4 });
     }
-    // Pocket choices / called pocket.
+    // Pockets the shooter can tap to call.
     if (aim.pocketChoices) {
       t.pockets.forEach((p, i) => {
-        if (m.closedPockets.includes(i)) return;
-        const on = aim.callPocket === i;
-        g.circle(p.hx, p.hy, p.hr * (on ? 1.05 : 0.9)).stroke({ width: on ? 3 : 1.5, color: on ? 0xffd34d : 0xffffff, alpha: on ? 0.95 : 0.35 });
+        if (m.closedPockets.includes(i) || this.calledShot?.pocket === i) return;
+        g.circle(p.hx, p.hy, p.hr * 0.9).stroke({ width: 1.5, color: 0xffffff, alpha: 0.35 });
       });
-    }
-    if (aim.callBall !== null) {
-      const b = m.balls.find((x) => x.id === aim.callBall);
-      if (b && b.onTable) g.circle(b.x, b.y, t.R * 1.3).stroke({ width: 2, color: 0xffd34d, alpha: 0.85 });
     }
   }
 
