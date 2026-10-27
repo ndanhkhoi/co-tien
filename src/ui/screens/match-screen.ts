@@ -1,19 +1,18 @@
 import type { Ticker } from 'pixi.js';
 import type { AiRequest } from '../../ai/types';
 import { sound } from '../../audio/sound';
-import { pocketAlong } from '../../core/aim';
 import { ballCss } from '../../core/ball-styles';
 import { MODE_NAMES } from '../../core/rules';
 import { other, type Resolution, type ShotCall, type Side } from '../../core/rules/types';
 import { Rng } from '../../core/rng';
 import { skillDef, type SkillId } from '../../game/content/gear';
 import { Match, type MatchSetup } from '../../game/match';
-import { haptic, keepAwake } from '../../platform/device';
+import { haptic, isTouchDevice, keepAwake, toggleFullscreen } from '../../platform/device';
 import { TableView, type AimView } from '../../render/table-view';
 import type { App, Screen } from '../app';
 import { avatar } from '../avatar';
 import type { AvatarLook } from '../../game/content/career';
-import { banner, btn, h, iconBtn, modal, tap, toast } from '../dom';
+import { banner, btn, h, modal, tap, toast } from '../dom';
 import { icon, skillIcon } from '../icons';
 
 export interface MatchResult {
@@ -76,24 +75,21 @@ export function matchScreen(opts: MatchOptions) {
 
     // ---------- DOM ----------
     const el = h('div.screen.game');
-    const pause = iconBtn(icon('pause'), () => openPause(), 'Tạm dừng');
+    const pause = tap(h('button.mini-pause', { 'aria-label': 'Tạm dừng' }, icon('pause')), () => openPause());
     const cards = [playerCard(0), playerCard(1)];
-    cards[1].el.classList.add('right');
     if (opts.challenge) {
       cards[1].el.style.visibility = 'hidden';
       cards[0].energy.parentElement!.style.display = 'none';
     }
-    const scoreMid = h('div.score-mid', null, h('b'), h('span'));
-    const top = h('div.hud-top', null, pause, cards[0].el, scoreMid, cards[1].el);
     const objective = h('div.objective');
 
     const spinDot = h('div.dot');
-    const spinBtn = tap(h('button.spin-btn', { 'aria-label': 'Chọn điểm phê' }, h('div.cross'), spinDot), () => canAct() && openSpin());
+    const spinBtn = h('button.spin-btn', { 'aria-label': 'Điểm phê: kéo để chỉnh, chạm đúp để về giữa' }, h('div.cross'), spinDot);
     const ridges = h('div.ridges');
     const wheel = h('div.wheel', null, ridges, h('div.lbl', null, 'TINH'));
     const rotL = h('button.rot-btn', { 'aria-label': 'Xoay trái' }, icon('rotL'));
     const rotR = h('button.rot-btn', { 'aria-label': 'Xoay phải' }, icon('rotR'));
-    const colAim = h('div.ctrl-col', { class: left ? 'right' : 'left' }, spinBtn, wheel, h('div.rot-pair', null, rotL, rotR));
+    const aimControls = [spinBtn, h('div.spin-label', null, 'Phê'), wheel, h('div.rot-pair', null, rotL, rotR)];
 
     const powerFill = h('div.fill');
     const powerPct = h('div.pct');
@@ -101,44 +97,61 @@ export function matchScreen(opts: MatchOptions) {
     for (let i = 1; i < 10; i++) powerBar.append(h('div.tick', { style: `bottom:${i * 10}%` }));
     const shootBtn = h('button.shoot', null, 'ĐÁNH');
     const skillsBox = h('div.skills');
-    const colShoot = h('div.ctrl-col', { class: left ? 'left' : 'right' }, skillsBox, powerBar, shootBtn);
+    const shootControls = [skillsBox, powerBar, shootBtn];
+
+    // Player 1 always on the left, player 2 on the right; controls swap for left-handers.
+    const sideL = h('div.side.left', null, h('div.side-top', null, pause, cards[0].el), ...(left ? shootControls : aimControls));
+    const sideR = h('div.side.right', null, h('div.side-top', null, cards[1].el), ...(left ? aimControls : shootControls));
 
     const chips = h('div.float-chips');
     const thinking = h('div.thinking', null, h('span.dots', null, h('i'), h('i'), h('i')), h('span'));
     thinking.style.display = 'none';
-    el.append(top, objective, colAim, colShoot, chips, thinking);
+    el.append(objective, sideL, sideR, chips, thinking);
 
     function playerCard(side: Side) {
       const av = h('div.av', null, avatar(opts.looks[side]));
       const nm = h('div.nm', null, opts.setup.players[side].name);
+      const score = h('div.score');
       const sub = h('div.sub');
       const energy = h('div.energy', null, h('i'));
-      const info = h('div.grow', null, nm, sub);
-      const e = h('div.pcard', null, av, info, energy);
-      return { el: e, sub, energy: energy.firstElementChild as HTMLElement };
+      const e = h('div.scard', null, h('div.scard-head', null, av, score), nm, sub, energy);
+      return { el: e, sub, score, energy: energy.firstElementChild as HTMLElement };
     }
 
     // ---------- Layout ----------
     function layout() {
       const W = window.innerWidth;
       const H = window.innerHeight;
+      // offset* ignores the screen's slide-in transform, unlike getBoundingClientRect.
+      const L = { right: sideL.offsetLeft + sideL.offsetWidth };
+      const R = { left: sideR.offsetLeft };
       const probe = getComputedStyle(document.documentElement);
-      const sl = parseFloat(probe.getPropertyValue('--sl')) || 0;
-      const sr = parseFloat(probe.getPropertyValue('--sr')) || 0;
       const st = parseFloat(probe.getPropertyValue('--st')) || 0;
       const sb = parseFloat(probe.getPropertyValue('--sb')) || 0;
-      const lw = (left ? 82 : 64) + 18 + sl;
-      const rw = (left ? 64 : 82) + 18 + sr;
-      const topH = 74 + st;
-      const botH = 6 + sb;
-      const aw = W - lw - rw;
-      const ah = H - topH - botH;
-      const { w, h: oh } = view.outer;
-      const scale = Math.min(aw / w, ah / oh);
-      view.layout(lw + aw / 2, topH + ah / 2, scale);
+      const t = match.table;
+      // Only the outer lip of the wooden rail may slide under the columns; pocket holes stay clear.
+      const tuck = 0.004;
+      const x0 = (L.right || 90) + 4;
+      const x1 = (R.left || W - 90) - 4;
+      const aw = x1 - x0;
+      const ah = H - st - sb - 6;
+      const scale = Math.min(aw / (t.L + 2 * (t.railWidth - tuck)), ah / (t.W + 2 * t.railWidth));
+      const cx = x0 + aw / 2;
+      const cy = st + 3 + ah / 2;
+      view.layout(cx, cy, scale);
+      // Pills sit on the long rails between a corner and the side pocket.
+      const railMid = (t.W / 2 + t.railWidth / 2) * scale;
+      const quarter = (t.L / 4) * scale;
+      objective.style.left = `${cx - quarter}px`;
+      objective.style.top = `${cy - railMid}px`;
+      chips.style.left = `${cx + quarter}px`;
+      chips.style.top = `${cy + railMid}px`;
+      thinking.style.left = `${cx - quarter}px`;
+      thinking.style.top = `${cy + railMid}px`;
     }
     const onResize = () => layout();
     window.addEventListener('resize', onResize);
+    requestAnimationFrame(layout);
     layout();
 
     // ---------- HUD ----------
@@ -149,12 +162,13 @@ export function matchScreen(opts: MatchOptions) {
         const c = cards[s];
         c.el.classList.toggle('active', match.turn === s && match.phase !== 'match-over');
         c.sub.replaceChildren();
+        c.score.textContent = opts.challenge ? `${attempt}/${opts.challenge.tries}` : carom ? `${st.scores[s]}/${st.caromTarget}` : String(match.rackWins[s]);
         if (opts.challenge) {
-          c.sub.append(h('span.muted.small', null, opts.label));
+          c.sub.append(h('span.muted', null, 'lượt thử'));
         } else if (match.setup.mode === 'eight') {
           const g = st.groups[s];
           if (g === null) {
-            c.sub.append(h('span.muted.small', null, st.isBreak ? (match.breaker === s ? 'Phá bi' : '') : 'Bàn mở'));
+            c.sub.append(h('span.muted', null, st.isBreak ? (match.breaker === s ? 'Phá bi' : '') : 'Bàn mở'));
           } else {
             const ids = g === 'solid' ? [1, 2, 3, 4, 5, 6, 7] : [9, 10, 11, 12, 13, 14, 15];
             for (const id of ids) {
@@ -165,27 +179,18 @@ export function matchScreen(opts: MatchOptions) {
             if (left8) c.sub.append(miniBall(8, false));
           }
         } else if (carom) {
-          c.sub.append(h('b', { style: 'font-size:15px' }, String(st.scores[s])), h('span.muted.small', null, ` / ${st.caromTarget}`));
+          c.sub.append(h('span.muted', null, `ván ${match.rackWins[s]}/${match.setup.raceTo}`));
         } else {
           const f = st.fouls[s];
-          if (f > 0) c.sub.append(h('span.small', { style: 'color:var(--red);font-weight:800' }, `${f} lỗi liên tiếp`));
+          if (f > 0) c.sub.append(h('span', { style: 'color:var(--red);font-weight:800' }, `${f} lỗi`));
           else if (s === match.turn) {
             const lo = match.legalTargets(s)[0];
-            if (lo) c.sub.append(h('span.muted.small', null, 'Mục tiêu'), miniBall(lo, false));
+            if (lo) c.sub.append(h('span.muted', null, 'Bi'), miniBall(lo, false));
           }
         }
         c.energy.style.width = `${match.energy[s]}%`;
       }
-      const b = scoreMid.querySelector('b')!;
-      const span = scoreMid.querySelector('span')!;
-      if (opts.challenge) {
-        b.textContent = `${attempt}/${opts.challenge.tries}`;
-        span.textContent = 'Lượt thử';
-      } else {
-        b.textContent = `${match.rackWins[0]} – ${match.rackWins[1]}`;
-        span.textContent = `${MODE_NAMES[match.setup.mode]} · chạm ${match.setup.raceTo}`;
-      }
-      objective.textContent = opts.challenge ? opts.challenge.goal : match.objective();
+      objective.textContent = opts.challenge ? opts.challenge.goal : `${MODE_NAMES[match.setup.mode]} · chạm ${match.setup.raceTo} — ${match.objective()}`;
       renderSkills();
       renderChips();
       shootBtn.toggleAttribute('disabled', !canAct());
@@ -229,7 +234,8 @@ export function matchScreen(opts: MatchOptions) {
       const ct = match.callType();
       if (ct !== 'none') {
         const pk = effectiveCallPocket();
-        chips.append(h('div.fchip', null, icon('target'), pk === null ? 'Chạm lỗ trên bàn để gọi' : `Gọi ${ct === 'ball-pocket' ? `bi ${callBallId() ?? '?'} → ` : ''}${POCKET_NAMES[pk]}`));
+        const ballPart = ct === 'ball-pocket' ? `bi ${callBallId() ?? '?'} → ` : '';
+        chips.append(h('div.fchip', { class: pk === null ? '' : 'on' }, icon('target'), pk === null ? `Gọi ${ballPart}chạm 1 lỗ` : `Gọi ${ballPart}${POCKET_NAMES[pk]}`));
       }
     }
 
@@ -243,22 +249,18 @@ export function matchScreen(opts: MatchOptions) {
     }
 
     // ---------- Calls ----------
-    function callBallId(): number | null {
-      const pred = view.prediction;
-      if (match.callType() === 'pocket') return 8;
-      if (pred?.hitBall != null) return pred.hitBall;
-      return match.legalTargets()[0] ?? null;
-    }
+    // Calls are always the player's own choice; nothing is inferred from the aim.
+    let callBall: number | null = null;
 
-    function autoPocket(): number | null {
-      const pred = view.prediction;
-      if (!pred || pred.hitBall === null || !pred.objDir) return null;
-      const b = match.balls.find((x) => x.id === pred.hitBall)!;
-      return pocketAlong(match.table, b.x, b.y, pred.objDir.x, pred.objDir.y, match.closedPockets);
+    function callBallId(): number | null {
+      if (match.callType() === 'pocket') return 8;
+      const legal = match.legalTargets();
+      if (callBall !== null && match.balls.some((b) => b.id === callBall && b.onTable)) return callBall;
+      return legal[0] ?? null;
     }
 
     function effectiveCallPocket(): number | null {
-      return callPocket ?? autoPocket();
+      return callPocket;
     }
 
     // ---------- Aim helpers ----------
@@ -290,7 +292,6 @@ export function matchScreen(opts: MatchOptions) {
 
     function guideScale(): number {
       let s = 0.55 + 0.12 * cueDef().aim;
-      if (app.profile.settings.longGuide) s *= 1.3;
       if (match.setup.mutator === 'fog') s *= 0.4;
       return s;
     }
@@ -299,7 +300,7 @@ export function matchScreen(opts: MatchOptions) {
     function startCharge() {
       if (!canAct()) return;
       if (match.callType() !== 'none' && effectiveCallPocket() === null) {
-        toast('Chạm vào một lỗ trên bàn để gọi trước khi đánh', 'bad');
+        toast(match.callType() === 'ball-pocket' ? 'Chạm bi muốn gọi, rồi chạm lỗ trước khi đánh' : 'Chạm vào một lỗ trên bàn để gọi trước khi đánh', 'bad');
         haptic([20, 40, 20]);
         return;
       }
@@ -352,7 +353,17 @@ export function matchScreen(opts: MatchOptions) {
 
     // ---------- Pointer input on the table ----------
     const canvas = app.pixi.canvas;
-    let drag: { mode: 'aim' | 'cue'; id: number } | null = null;
+    let drag: { mode: 'aim' | 'cue' | 'stick'; id: number } | null = null;
+
+    /** Is (x, y) on the cue stick behind the cue ball? Grabbing it rotates around the ball. */
+    function onStick(x: number, y: number): boolean {
+      const c = match.cueBall();
+      const dx = -Math.cos(aim.angle);
+      const dy = -Math.sin(aim.angle);
+      const along = (x - c.x) * dx + (y - c.y) * dy;
+      const across = Math.abs((x - c.x) * dy - (y - c.y) * dx);
+      return along > match.table.R * 1.6 && along < 1.5 && across < Math.max(0.035, 26 / view.pxPerM);
+    }
     const onDown = (e: PointerEvent) => {
       sound.unlock();
       if (!canAct() || charging) return;
@@ -369,10 +380,20 @@ export function matchScreen(opts: MatchOptions) {
           return;
         }
       }
+      if (match.callType() === 'ball-pocket') {
+        const hitBall = match.balls.find((b) => b.onTable && b.id !== match.cueId() && Math.hypot(p.x - b.x, p.y - b.y) < t.R * 1.6);
+        if (hitBall) {
+          callBall = hitBall.id;
+          renderHud();
+        }
+      }
       const cue = match.cueBall();
       const grab = Math.max(t.R * 2.6, 30 / view.pxPerM);
       if (match.canMoveCue && Math.hypot(p.x - cue.x, p.y - cue.y) < grab) {
         drag = { mode: 'cue', id: e.pointerId };
+      } else if (onStick(p.x, p.y)) {
+        drag = { mode: 'stick', id: e.pointerId };
+        haptic(8);
       } else {
         drag = { mode: 'aim', id: e.pointerId };
         aim.angle = Math.atan2(p.y - cue.y, p.x - cue.x);
@@ -384,6 +405,10 @@ export function matchScreen(opts: MatchOptions) {
       const p = view.toTable(e.clientX, e.clientY);
       if (drag.mode === 'cue') {
         match.placeCue(p.x, p.y);
+      } else if (drag.mode === 'stick') {
+        // The butt is behind the ball: aim points from the hand through the cue ball.
+        const cue = match.cueBall();
+        if (Math.hypot(p.x - cue.x, p.y - cue.y) > match.table.R * 2) aim.angle = Math.atan2(cue.y - p.y, cue.x - p.x);
       } else {
         const cue = match.cueBall();
         if (Math.hypot(p.x - cue.x, p.y - cue.y) > match.table.R * 1.2) aim.angle = Math.atan2(p.y - cue.y, p.x - cue.x);
@@ -486,63 +511,92 @@ export function matchScreen(opts: MatchOptions) {
     window.addEventListener('keyup', onKey);
     canvas.addEventListener('wheel', onWheel, { passive: true });
 
-    // ---------- Spin picker ----------
-    function openSpin() {
-      modal((close) => {
-        const tip = h('div.tip');
-        const pad = h('div.spin-pad', null, h('div.h'), h('div.v'), h('div.limit'), tip);
-        const place = () => {
-          tip.style.left = `${50 + aim.side * 41}%`;
-          tip.style.top = `${50 - aim.vert * 41}%`;
-        };
-        place();
-        const set = (e: PointerEvent) => {
-          const r = pad.getBoundingClientRect();
-          let x = ((e.clientX - r.left) / r.width - 0.5) / 0.41;
-          let y = -((e.clientY - r.top) / r.height - 0.5) / 0.41;
-          const m = Math.hypot(x, y);
-          if (m > 1) {
-            x /= m;
-            y /= m;
-          }
-          aim.side = x;
-          aim.vert = y;
-          place();
-          updateSpinDot();
-        };
-        pad.addEventListener('pointerdown', (e) => {
-          pad.setPointerCapture(e.pointerId);
-          set(e);
-          haptic(5);
-        });
-        pad.addEventListener('pointermove', (e) => {
-          if (e.buttons || e.pointerType === 'touch') set(e);
-        });
-        const hint = h('div.small.muted', { style: 'font-weight:600;line-height:1.45' },
-          'Kéo điểm xanh trên bi cái.', h('br'), 'Trên: theo bi · Dưới: kéo bi', h('br'), 'Trái/Phải: phê ngang', h('br'),
-          h('span', { style: 'color:#ff8a80' }, 'Ngoài vòng đỏ dễ trượt cơ.'));
-        return h('div.modal', { style: 'width:min(560px,100%);flex-direction:row;align-items:center;gap:18px' },
-          pad,
-          h('div.col.grow', { style: 'align-self:stretch;justify-content:space-between' },
-            h('div.row', null, h('h2.grow', null, 'Điểm phê'), iconBtn(icon('close'), close)),
-            hint,
-            h('div.col', { style: 'gap:8px' },
-              btn('Giữa bi', () => {
-                aim.side = 0;
-                aim.vert = 0;
-                place();
-                updateSpinDot();
-              }, 'ghost small'),
-              btn('Xong', close, 'small'),
-            ),
-          ),
-        );
-      }, { dismissable: true });
+    // ---------- Spin: drag on the cue-ball control ----------
+    // Relative drag (like a trackpad) gives fine control on a small target; a magnified
+    // ball floats beside the thumb while dragging. Double-tap returns to centre.
+    const SPIN_PX = 64;
+    let spinDrag: { id: number; x: number; y: number } | null = null;
+    let lastSpinTap = 0;
+    let loupe: { el: HTMLElement; tip: HTMLElement; cap: HTMLElement } | null = null;
+    let overLimit = false;
+
+    function showLoupe() {
+      const tip = h('div.tip');
+      const cap = h('div.cap');
+      const lp = h('div.spin-loupe', null, h('div.h'), h('div.v'), h('div.limit'), tip, cap);
+      const r = spinBtn.getBoundingClientRect();
+      const size = 170;
+      const x = left ? r.left - size - 18 : r.right + 18;
+      const y = Math.max(8, Math.min(window.innerHeight - size - 30, r.top + r.height / 2 - size / 2));
+      lp.style.left = `${x}px`;
+      lp.style.top = `${y}px`;
+      el.append(lp);
+      loupe = { el: lp, tip, cap };
+      updateSpinDot();
     }
 
+    function spinCaption(): string {
+      const parts: string[] = [];
+      if (aim.vert > 0.15) parts.push('Theo bi');
+      else if (aim.vert < -0.15) parts.push('Kéo bi');
+      if (aim.side > 0.15) parts.push('phê phải');
+      else if (aim.side < -0.15) parts.push('phê trái');
+      return parts.length ? parts.join(' · ') : 'Giữa bi';
+    }
+
+    spinBtn.addEventListener('pointerdown', (e) => {
+      sound.unlock();
+      if (!canAct()) return;
+      const now = performance.now();
+      if (now - lastSpinTap < 320) {
+        aim.side = 0;
+        aim.vert = 0;
+        updateSpinDot();
+        haptic(12);
+      }
+      lastSpinTap = now;
+      spinDrag = { id: e.pointerId, x: e.clientX, y: e.clientY };
+      spinBtn.setPointerCapture(e.pointerId);
+      spinBtn.classList.add('pressed');
+      showLoupe();
+    });
+    spinBtn.addEventListener('pointermove', (e) => {
+      if (!spinDrag || e.pointerId !== spinDrag.id) return;
+      let sx = aim.side + (e.clientX - spinDrag.x) / SPIN_PX;
+      let sy = aim.vert - (e.clientY - spinDrag.y) / SPIN_PX;
+      spinDrag.x = e.clientX;
+      spinDrag.y = e.clientY;
+      const m = Math.hypot(sx, sy);
+      if (m > 1) {
+        sx /= m;
+        sy /= m;
+      }
+      aim.side = sx;
+      aim.vert = sy;
+      const over = Math.hypot(sx, sy) > 0.82;
+      if (over !== overLimit) {
+        overLimit = over;
+        if (over) haptic(15);
+      }
+      updateSpinDot();
+    });
+    const spinEnd = () => {
+      spinDrag = null;
+      spinBtn.classList.remove('pressed');
+      loupe?.el.remove();
+      loupe = null;
+    };
+    spinBtn.addEventListener('pointerup', spinEnd);
+    spinBtn.addEventListener('pointercancel', spinEnd);
+
     function updateSpinDot() {
-      spinDot.style.left = `${50 + aim.side * 36}%`;
-      spinDot.style.top = `${50 - aim.vert * 36}%`;
+      spinDot.style.left = `${50 + aim.side * 38}%`;
+      spinDot.style.top = `${50 - aim.vert * 38}%`;
+      if (loupe) {
+        loupe.tip.style.left = `${50 + aim.side * 41}%`;
+        loupe.tip.style.top = `${50 - aim.vert * 41}%`;
+        loupe.cap.textContent = spinCaption();
+      }
     }
 
     // ---------- Match events ----------
@@ -642,6 +696,7 @@ export function matchScreen(opts: MatchOptions) {
       cancelCharge();
       pushOut = false;
       callPocket = null;
+      callBall = null;
       view.refreshCue();
       if (match.phase === 'option') {
         if (match.current.kind === 'ai') void aiTurn();
@@ -896,6 +951,7 @@ export function matchScreen(opts: MatchOptions) {
           h('h2', null, 'Tạm dừng'),
           h('div.muted.small', null, `${opts.label} · ${MODE_NAMES[match.setup.mode]}${match.setup.mutator ? ' · có biến thể bàn' : ''}`),
           btn('Tiếp tục', done),
+          isTouchDevice() ? null : btn('Bật / tắt toàn màn hình', () => void toggleFullscreen(), 'ghost'),
           btn('Hướng dẫn điều khiển', () => {
             done();
             openHelp();
@@ -917,12 +973,12 @@ export function matchScreen(opts: MatchOptions) {
       modal((close) => h('div.modal', { style: 'width:min(720px,100%)' },
         h('h2', null, 'Cách chơi'),
         h('div', { style: 'display:grid;grid-template-columns:1fr 1fr;gap:12px 18px' },
-          tip('hand', 'Ngắm', 'Chạm hoặc kéo trên bàn để xoay cơ theo ngón tay.'),
+          tip('hand', 'Ngắm', 'Chạm/kéo trên bàn để chỉ hướng, hoặc nắm thân cơ kéo xoay quanh bi cái (càng xa đuôi càng tinh).'),
           tip('rotR', 'Xoay chính xác', 'Giữ nút ↺ ↻ để xoay liên tục; vuốt thanh TINH để chỉnh từng chút.'),
-          tip('target', 'Điểm phê', 'Bấm bi cái nhỏ: trên = theo, dưới = kéo, trái/phải = phê ngang.'),
+          tip('target', 'Điểm phê', 'Kéo trên quả bi PHÊ: trên = theo, dưới = kéo, trái/phải = phê ngang. Chạm đúp về giữa.'),
           tip('play', 'Nạp lực', 'GIỮ nút ĐÁNH, thả đúng lúc. Mạnh và giữ lâu thì tay run. Kéo ra xa để hủy.'),
           tip('hand', 'Bi trong tay', 'Kéo bi cái đến chỗ muốn đặt rồi ngắm.'),
-          tip('spin2', 'Kỹ năng', 'Nút bát giác tiêu năng lượng; ăn bi để hồi.'),
+          tip('spin2', 'Gọi lỗ & kỹ năng', 'Khi phải gọi: chạm bi rồi chạm lỗ. Nút bát giác là kỹ năng, tiêu năng lượng.'),
         ),
         h('div.actions', null, btn('Đã hiểu', () => {
           close();
@@ -988,7 +1044,6 @@ export function matchScreen(opts: MatchOptions) {
       powerFill.style.setProperty('--h', `${powerBar.clientHeight}px`);
       powerPct.textContent = shown > 0 ? `${Math.round(shown * 100)}` : '';
       powerBar.classList.toggle('hot', shown > 0.85);
-      if (ct !== 'none' && isHumanTurn() && match.phase === 'aim' && performance.now() % 500 < 20) renderChips();
     };
     app.pixi.ticker.add(tick);
 

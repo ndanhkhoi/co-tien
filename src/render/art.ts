@@ -240,7 +240,7 @@ export function paintNumberAtlas(): Texture {
   for (let n = 1; n <= 15; n++) {
     const cx = ((n - 1) % 4) * cell + cell / 2;
     const cy = Math.floor((n - 1) / 4) * cell + cell / 2;
-    g.font = `800 ${n >= 10 ? 66 : 80}px "Be Vietnam Pro", system-ui, sans-serif`;
+    g.font = `800 ${n >= 10 ? 74 : 86}px "Barlow Condensed", system-ui, sans-serif`;
     g.fillText(String(n), cx, cy + 4);
     if (n === 6 || n === 9) g.fillRect(cx - 18, cy + 38, 36, 7);
   }

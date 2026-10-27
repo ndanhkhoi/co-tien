@@ -7,7 +7,7 @@ import { CHAPTERS, LEVEL_NAMES, PERSONALITY_NAMES, type Npc } from '../../game/c
 import { CHALLENGES, challengeBalls, FAMILY_INFO, goalText, judgeChallenge, type ChallengeDef, type ChallengeFamily } from '../../game/content/challenges';
 import { CUES, MUTATORS, SKILLS, TABLES, type MutatorId, type SkillId } from '../../game/content/gear';
 import { defaultProfile, exportCode, importCode, levelProgress } from '../../game/profile';
-import { enterFullscreen } from '../../platform/device';
+import { enterFullscreen, isTouchDevice, toggleFullscreen } from '../../platform/device';
 import { screenEl, type App, type Screen } from '../app';
 import { AI_LOOKS, avatar, GUEST_LOOK, PLAYER_LOOK } from '../avatar';
 import { append, bar5, btn, h, iconBtn, modal, stars, tap, toast } from '../dom';
@@ -57,7 +57,7 @@ export function splashScreen(app: App): Screen {
     started = true;
     sound.unlock();
     sound.tap();
-    void enterFullscreen();
+    if (isTouchDevice()) void enterFullscreen();
     if (app.profile.settings.music > 0) sound.startMusic();
     app.go(homeScreen, { reset: true });
   });
@@ -74,21 +74,25 @@ export function homeScreen(app: App): Screen {
     h('div.lvl', null, String(prog.level)),
     h('div', null, h('div.pname', null, p.name), h('div.xpbar', null, h('i', { style: `width:${(prog.into / prog.need) * 100}%` }))),
   );
-  const tile = (name: string, desc: string, art: Element | null, c1: string, c2: string, fn: () => void, big = false) => {
-    const t = h('button.tile', { class: big ? 'big' : '', style: `--c1:${c1};--c2:${c2}` }, art, h('div.name', null, name), h('div.desc', null, desc));
+  let n = 0;
+  const tile = (name: string, desc: string, art: Element | null, c1: string, fn: () => void, big = false) => {
+    n++;
+    const t = h('button.tile', { class: big ? 'big' : '', style: `--c1:${c1}` }, h('span.idx', null, String(n).padStart(2, '0')), art, h('div.name', null, name), h('div.desc', null, desc));
     return tap(t, fn);
   };
   const beaten = Object.keys(p.career).length;
   const chDone = Object.keys(p.challenges).length;
   const careerArt = h('div.art', { style: 'aspect-ratio:1' }, ballArt(8, 220));
   el.append(
-    h('div.topbar', null, profileChip, h('div.grow'), wallet(app), iconBtn(icon('gear'), () => app.go(settingsScreen), 'Cài đặt')),
+    h('div.topbar', null, profileChip, h('div.grow'), wallet(app),
+      isTouchDevice() ? null : iconBtn(icon('expand'), () => void toggleFullscreen(), 'Toàn màn hình'),
+      iconBtn(icon('gear'), () => app.go(settingsScreen), 'Cài đặt')),
     h('div.home-grid', { style: 'margin-top:10px' },
-      tile('Sự Nghiệp', `${beaten}/15 đối thủ · 5 chương`, careerArt, '#2a7a4f', '#0b2a1c', () => app.go(careerScreen), true),
-      tile('Đấu Nhanh', 'Chọn thể loại & đối thủ', h('div.art', null, ballArt(9, 140)), '#8a5a12', '#2c1a05', () => app.go(quickScreen)),
-      tile('Thử Thách', `${chDone}/60 đã qua`, h('div.art', null, ballArt(3, 140)), '#7a1f2c', '#2a0a10', () => app.go(challengesScreen)),
-      tile('2 Người', 'Chơi chung một máy', h('div.art', null, ballArt(10, 140)), '#1f4f8a', '#0a1a2e', () => app.go(localScreen)),
-      tile('Bộ Sưu Tập', 'Cơ · Bàn · Kỹ năng', h('div.art', null, ballArt(12, 140)), '#4c2275', '#170a26', () => app.go(collectionScreen)),
+      tile('Sự Nghiệp', `${beaten}/15 đối thủ · 5 chương`, careerArt, '#ffc531', () => app.go(careerScreen), true),
+      tile('Đấu Nhanh', 'Chọn thể loại & đối thủ', h('div.art', null, ballArt(9, 120)), '#17a673', () => app.go(quickScreen)),
+      tile('Thử Thách', `${chDone}/60 đã qua`, h('div.art', null, ballArt(3, 120)), '#ef4444', () => app.go(challengesScreen)),
+      tile('2 Người', 'Chơi chung một máy', h('div.art', null, ballArt(10, 120)), '#38bdf8', () => app.go(localScreen)),
+      tile('Bộ Sưu Tập', 'Cơ · Bàn · Kỹ năng', h('div.art', null, ballArt(12, 120)), '#a78bfa', () => app.go(collectionScreen)),
     ),
   );
   return { el };
@@ -122,7 +126,6 @@ function setupScreen(app: App, local: boolean): Screen {
         h('div.section-title', null, 'Tên người chơi 2'),
         h('input', {
           value: st.name2, maxLength: 14,
-          style: 'height:42px;border-radius:12px;border:1px solid var(--line);background:rgba(0,0,0,0.3);color:var(--text);padding:0 12px;font-weight:700;font-size:15px',
           oninput: (e: Event) => (st.name2 = (e.target as HTMLInputElement).value || 'Người chơi 2'),
         }),
       ] : [
@@ -443,7 +446,7 @@ export function collectionScreen(app: App): Screen {
         const locked = lv < s.level;
         const card = h('button.card', { class: `${on ? 'sel' : ''} ${locked ? 'locked' : ''}` },
           h('div.row', null,
-            h('div', { style: 'width:44px;height:44px;display:grid;place-items:center;border-radius:12px;background:linear-gradient(180deg,#3b5ba8,#1d2f63);flex-shrink:0' }, skillIcon(s.id)),
+            h('div', { style: 'width:44px;height:44px;display:grid;place-items:center;border-radius:var(--r-sm);background:var(--surface-3);color:var(--info);flex-shrink:0' }, skillIcon(s.id)),
             h('div.grow', null, h('b', null, s.name), h('div.muted.small', null, `${s.cost} năng lượng${locked ? ` · mở ở cấp ${s.level}` : ''}`)),
             on ? icon('check') : null,
           ),
@@ -505,7 +508,7 @@ export function settingsScreen(app: App): Screen {
     h('div.kv', { style: 'align-items:center;gap:12px' }, h('div.grow', null, h('div', null, label), sub ? h('div.muted.small', { style: 'font-weight:600' }, sub) : null), ctl);
   const nameInput = h('input', {
     value: p.name, maxLength: 14,
-    style: 'height:40px;width:170px;border-radius:12px;border:1px solid var(--line);background:rgba(0,0,0,0.3);color:var(--text);padding:0 12px;font-weight:700',
+    style: 'width:170px',
     onchange: (e: Event) => {
       p.name = ((e.target as HTMLInputElement).value || 'Cơ Thủ').slice(0, 14);
       save();
@@ -525,7 +528,6 @@ export function settingsScreen(app: App): Screen {
     })),
     line('Rung khi chạm', toggle(s.haptics, (v) => (s.haptics = v)), 'Android hỗ trợ rung; iPhone không cho web rung.'),
     line('Thuận tay trái', toggle(s.leftHanded, (v) => (s.leftHanded = v)), 'Đảo nút ĐÁNH sang bên trái'),
-    line('Đường ngắm dài hơn', toggle(s.longGuide, (v) => (s.longGuide = v)), 'Hỗ trợ người mới'),
   );
   const right = h('div.panel.col', { style: 'width:min(300px,42vw);padding:14px' },
     h('div.section-title', null, 'Hồ sơ'),

@@ -1,5 +1,4 @@
 import { Container, Graphics, Sprite, Texture, type Application } from 'pixi.js';
-import { predictAim, type AimPrediction } from '../core/aim';
 import { ballStyle } from '../core/ball-styles';
 import { cloneBalls, step, strike, type Ball } from '../core/physics';
 import { powerToSpeed } from '../core/cue-power';
@@ -89,7 +88,6 @@ export class TableView {
   private time = 0;
   private eagleCache: { key: string; paths: { id: number; pts: number[] }[] } | null = null;
   private lastPocketOf = new Map<number, number>();
-  prediction: AimPrediction | null = null;
   /** Challenge marks: target pocket and cue-ball landing zone. */
   goal: { pocket?: number; zone?: [number, number, number] } | null = null;
 
@@ -397,45 +395,20 @@ export class TableView {
     }
     if (!aim!.showGuide || m.phase !== 'aim') return;
 
-    const pred = predictAim(t, m.balls, m.cueId(), aim!.angle, m.closedPockets.map((i) => t.pockets[i].mouth));
-    this.prediction = pred;
-    const legal = m.legalTargets();
-    const illegal = pred.hitBall !== null && legal.length > 0 && !legal.includes(pred.hitBall) && !m.state.pushOutAvailable;
-    const lineCol = 0xffffff;
-    const scaleLen = aim!.guideScale;
-
     if (m.eagle) {
       this.drawEagle(aim!);
-    }
-    // Main line to the ghost ball.
-    g.moveTo(cue.x + dx * R, cue.y + dy * R).lineTo(pred.gx - dx * R, pred.gy - dy * R).stroke({ width: 1.6, color: lineCol, alpha: 0.85 });
-    // Ghost ball.
-    g.circle(pred.gx, pred.gy, R).stroke({ width: 1.6, color: illegal ? 0xff4d4d : 0xffffff, alpha: 0.9 });
-    if (illegal) {
-      const s = R * 0.55;
-      g.moveTo(pred.gx - s, pred.gy - s).lineTo(pred.gx + s, pred.gy + s).moveTo(pred.gx + s, pred.gy - s).lineTo(pred.gx - s, pred.gy + s).stroke({ width: 2, color: 0xff4d4d });
       return;
     }
-    if (m.eagle) return;
-    if (pred.hitBall !== null && pred.objDir) {
-      const hb = m.balls.find((b) => b.id === pred.hitBall)!;
-      const objLen = (0.12 + 0.55 * (1 - pred.cut)) * scaleLen;
-      g.moveTo(hb.x + pred.objDir.x * R, hb.y + pred.objDir.y * R)
-        .lineTo(hb.x + pred.objDir.x * (R + objLen), hb.y + pred.objDir.y * (R + objLen))
-        .stroke({ width: 2, color: 0xffffff, alpha: 0.75 });
-      if (pred.cueDir) {
-        const cueLen = (0.06 + 0.3 * pred.cut) * scaleLen;
-        // Follow/draw bends the cue path off the tangent line.
-        const bend = aim!.vert * (1 - pred.cut) * 0.9;
-        const cx = pred.cueDir.x * (1 - Math.abs(bend)) + dx * bend;
-        const cy = pred.cueDir.y * (1 - Math.abs(bend)) + dy * bend;
-        const l = Math.hypot(cx, cy) || 1;
-        g.moveTo(pred.gx, pred.gy).lineTo(pred.gx + (cx / l) * cueLen, pred.gy + (cy / l) * cueLen).stroke({ width: 1.2, color: 0x9fd8ff, alpha: 0.7 });
-      }
-    } else if (pred.cueDir) {
-      const len = 0.25 * scaleLen;
-      g.moveTo(pred.gx, pred.gy).lineTo(pred.gx + pred.cueDir.x * len, pred.gy + pred.cueDir.y * len).stroke({ width: 1.2, color: 0xffffff, alpha: 0.5 });
-    }
+    // Only a short pointer off the cue ball: where it is going, not what it will hit.
+    const len = 0.05 + 0.05 * aim!.guideScale;
+    const r0 = R * 1.25;
+    const tipX = cue.x + dx * (r0 + len);
+    const tipY = cue.y + dy * (r0 + len);
+    g.moveTo(cue.x + dx * r0, cue.y + dy * r0).lineTo(tipX - dx * R * 0.5, tipY - dy * R * 0.5).stroke({ width: 2, color: 0xffffff, alpha: 0.8 });
+    const hw = R * 0.42;
+    const bx = tipX - dx * R * 0.75;
+    const by = tipY - dy * R * 0.75;
+    g.moveTo(tipX, tipY).lineTo(bx - dy * hw, by + dx * hw).lineTo(bx + dy * hw, by - dx * hw).lineTo(tipX, tipY).fill({ color: 0xffffff, alpha: 0.85 });
   }
 
   /** Thần Nhãn: simulate the exact shot and draw every moving ball's path. */

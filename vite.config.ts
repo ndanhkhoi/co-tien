@@ -15,6 +15,7 @@ export default defineConfig({
       injectRegister: null,
       includeAssets: ['icons/*.png', 'icons/*.svg'],
       manifest: {
+        id: './',
         name: 'Thần Công Bida',
         short_name: 'Thần Công',
         description: 'Game bida kỹ năng: 8 bi, 9 bi, 10 bi, bi-a phăng',

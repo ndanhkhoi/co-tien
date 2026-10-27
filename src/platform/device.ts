@@ -46,6 +46,16 @@ export function installNativeFeel() {
   }, { passive: false });
 }
 
+/** Touch devices go fullscreen on first tap; desktops only when the player asks. */
+export const isTouchDevice = () => matchMedia('(pointer: coarse)').matches && navigator.maxTouchPoints > 0;
+
+export const isFullscreen = () => !!document.fullscreenElement;
+
+export async function toggleFullscreen() {
+  if (document.fullscreenElement) await document.exitFullscreen().catch(() => undefined);
+  else await enterFullscreen();
+}
+
 export async function enterFullscreen() {
   if (navigator.webdriver) return;
   const el = document.documentElement as HTMLElement & { webkitRequestFullscreen?: () => Promise<void> };
@@ -75,9 +85,3 @@ export async function keepAwake(on: boolean) {
     wakeLock = null;
   }
 }
-
-export const isTouch = () => matchMedia('(pointer: coarse)').matches;
-
-export const isStandalone = () =>
-  matchMedia('(display-mode: standalone), (display-mode: fullscreen)').matches ||
-  (navigator as Navigator & { standalone?: boolean }).standalone === true;

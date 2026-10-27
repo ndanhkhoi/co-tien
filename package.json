@@ -3,7 +3,7 @@
   "version": "3.0.0",
   "private": true,
   "type": "module",
-  "description": "TH\u1ea6N C\u00d4NG \u2014 game bida k\u1ef9 n\u0103ng cho mobile & desktop (PWA)",
+  "description": "THẦN CÔNG — game bida kỹ năng cho mobile & desktop (PWA)",
   "scripts": {
     "dev": "vite --host",
     "build": "tsc --noEmit && vite build",
@@ -14,7 +14,8 @@
     "gen:icons": "node tools/gen-icons.mjs"
   },
   "dependencies": {
-    "@fontsource/be-vietnam-pro": "^5.3.0",
+    "@fontsource/barlow": "^5.2.6",
+    "@fontsource/barlow-condensed": "^5.2.6",
     "pixi.js": "^8.22.0"
   },
   "devDependencies": {
