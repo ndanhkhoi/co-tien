@@ -1,5 +1,6 @@
 import { sound } from '../audio/sound';
 import { haptic } from '../platform/device';
+import { icon, type IconName } from './icons';
 
 type Child = Node | string | number | null | undefined | false;
 type Props = Record<string, unknown> & { class?: string; style?: string };
@@ -76,7 +77,7 @@ export function btn(label: Child, fn: () => void, cls = ''): HTMLButtonElement {
   return tap(h('button.btn', { class: cls }, label), fn);
 }
 
-export function iconBtn(icon: SVGElement, fn: () => void, title = ''): HTMLButtonElement {
+export function iconBtn(icon: Element, fn: () => void, title = ''): HTMLButtonElement {
   return tap(h('button.icon-btn', { 'aria-label': title }, icon), fn);
 }
 
@@ -87,11 +88,11 @@ export function toast(text: string, kind: '' | 'bad' | 'good' | 'gold' = '') {
     toastLayer = h('div.toast-layer');
     document.getElementById('ui')!.append(toastLayer);
   }
-  const glyph = { bad: '!', good: '✓', gold: '★', '': 'i' }[kind];
+  const glyph: IconName = ({ bad: 'warning', good: 'check', gold: 'star', '': 'info' } as const)[kind];
   // Long rule explanations stay up long enough to read (about 15 characters a second).
   const ms = Math.min(8000, Math.max(2600, text.length * 65));
   const bar = h('i.tbar', { style: `animation-duration:${ms}ms` });
-  const t = h('div.toast', { class: kind || 'info', role: 'status' }, h('span.ti', null, glyph), h('span.tt', null, text), bar);
+  const t = h('div.toast', { class: kind || 'info', role: 'status' }, icon(glyph), h('span.tt', null, text), bar);
   toastLayer.append(t);
   while (toastLayer.children.length > 3) toastLayer.firstElementChild!.remove();
   setTimeout(() => {
@@ -121,10 +122,8 @@ export function modal(build: (close: () => void) => HTMLElement, opts: { dismiss
 }
 
 export function stars(n: number, max = 3): HTMLElement {
-  const s = h('span.stars');
-  for (let i = 0; i < max; i++) {
-    s.append(svg(`<svg viewBox="0 0 24 24"><path d="M12 2.5l2.9 6.1 6.6.8-4.9 4.6 1.3 6.6L12 17.3l-5.9 3.3 1.3-6.6L2.5 9.4l6.6-.8z" fill="${i < n ? '#f5c542' : 'rgba(255,255,255,0.18)'}"/></svg>`));
-  }
+  const s = h('span.stars', { 'aria-label': `${n}/${max} sao` });
+  for (let i = 0; i < max; i++) s.append(icon(i < n ? 'star' : 'star-empty'));
   return s;
 }
 
@@ -132,4 +131,43 @@ export function bar5(v: number): HTMLElement {
   const b = h('span.bar5');
   for (let i = 1; i <= 5; i++) b.append(h('i', { class: i <= v ? 'on' : '' }));
   return b;
+}
+
+/** On/off switch (role=switch) — the whole row label can toggle it too. */
+export function toggle(on: boolean, onChange: (on: boolean) => void, label = ''): HTMLButtonElement {
+  const el = tap(h('button.switch', { role: 'switch', 'aria-checked': String(on), 'aria-label': label }), () => {
+    on = !on;
+    el.setAttribute('aria-checked', String(on));
+    onChange(on);
+  });
+  return el;
+}
+
+/** Range slider whose filled part tracks the value. */
+export function slider(value: number, onInput: (v: number) => void, opts: { min?: number; max?: number; step?: number; label?: string } = {}): HTMLInputElement {
+  const { min = 0, max = 1, step = 0.05, label = '' } = opts;
+  const fill = (v: number) => el.style.setProperty('--fill', `${((v - min) / (max - min)) * 100}%`);
+  const el = h('input', { type: 'range', min: String(min), max: String(max), step: String(step), value: String(value), 'aria-label': label,
+    oninput: (e: Event) => { const v = Number((e.target as HTMLInputElement).value); fill(v); onInput(v); } });
+  fill(value);
+  return el;
+}
+
+/** Settings/list row: icon, label with optional hint, control. */
+export function item(label: string, control: Child, opts: { hint?: string; icon?: IconName } = {}): HTMLElement {
+  return h('div.item', null, opts.icon ? icon(opts.icon) : null, h('div.label', null, label, opts.hint ? h('span.small', null, opts.hint) : null), control);
+}
+
+/** Pill tabs; returns the bar and a setter. */
+export function tabs<T extends string>(items: { id: T; label: string; icon?: IconName }[], active: T, onChange: (id: T) => void): HTMLElement {
+  const bar = h('div.tabs', { role: 'tablist' });
+  const render = () => bar.replaceChildren(...items.map((it) => tap(h('button.tab', { role: 'tab', 'aria-selected': String(it.id === active) },
+    it.icon ? icon(it.icon) : null, it.label), () => { if (it.id === active) return; active = it.id; render(); onChange(it.id); })));
+  render();
+  return bar;
+}
+
+/** Selectable chip. */
+export function chip(label: Child, selected: boolean, fn: () => void, ic?: IconName): HTMLButtonElement {
+  return tap(h('button.chip', { 'aria-pressed': String(selected) }, ic ? icon(ic) : null, label), fn);
 }

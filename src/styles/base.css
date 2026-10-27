@@ -1,0 +1,161 @@
+/*
+ * Cơ Tiên — design foundation.
+ * Paper is the frame, never the page you read: every block of text sits on a smooth, solid
+ * sheet with high contrast ink. One vermilion accent. Serif display, Be Vietnam Pro body.
+ * Contrast on --sheet: --ink ≈ 15:1, --ink-2 ≈ 9:1, --muted ≈ 6:1 (never lighter for text).
+ */
+:root {
+  --frame: #e9e1d0;          /* app background around sheets */
+  --sheet: #fbf8f2;          /* reading surface */
+  --sheet-2: #f3ede2;        /* nested surface, hover */
+  --sheet-3: #e7dfd0;        /* pressed, tracks */
+  --ink: #1a1713;
+  --ink-2: #3f372e;
+  --muted: #5f564b;
+  --line: rgba(26, 23, 19, 0.14);
+  --line-2: rgba(26, 23, 19, 0.28);
+  --accent: #b03522;         /* vermilion seal */
+  --accent-2: #8f2617;       /* pressed */
+  --on-accent: #fffaf3;
+  --gold: #8a6420;
+  --ok: #2f6b45;
+  --bad: #b03522;
+  --info: #2f5677;
+  --felt: #3f5f55;
+  --scrim: rgba(20, 16, 12, 0.55);
+
+  --r-1: 8px;
+  --r-2: 12px;
+  --r-3: 18px;
+  --sh-1: 0 1px 2px rgba(40, 30, 18, 0.08), 0 4px 14px rgba(40, 30, 18, 0.08);
+  --sh-2: 0 2px 6px rgba(40, 30, 18, 0.12), 0 14px 34px rgba(40, 30, 18, 0.16);
+  --ease: cubic-bezier(0.2, 0.9, 0.25, 1);
+
+  --display: 'Noto Serif', 'Times New Roman', serif;
+  --body: 'Be Vietnam Pro', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --fs-xs: 13px;
+  --fs-s: 14px;
+  --fs-m: 15px;
+  --fs-l: 17px;
+  --fs-xl: 21px;
+  --fs-2xl: 27px;
+
+  --sl: env(safe-area-inset-left, 0px);
+  --sr: env(safe-area-inset-right, 0px);
+  --st: env(safe-area-inset-top, 0px);
+  --sb: env(safe-area-inset-bottom, 0px);
+  color-scheme: light;
+
+  /* Legacy aliases still referenced by inline styles. */
+  --bg: var(--frame);
+  --surface: var(--sheet);
+  --surface-2: var(--sheet-2);
+  --text: var(--ink);
+  --dim: var(--muted);
+}
+
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+html, body {
+  margin: 0;
+  height: 100%;
+  overflow: hidden;
+  background: var(--frame);
+  color: var(--ink);
+  font: 500 var(--fs-m)/1.5 var(--body);
+  overscroll-behavior: none;
+  touch-action: none;
+  -webkit-text-size-adjust: 100%;
+  -webkit-font-smoothing: antialiased;
+}
+
+input, textarea { -webkit-user-select: text; user-select: text; touch-action: manipulation; font: inherit; color: inherit; }
+button { font: inherit; color: inherit; border: 0; background: none; padding: 0; cursor: pointer; touch-action: manipulation; }
+:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+img, svg { pointer-events: none; }
+h1, h2, h3, p { margin: 0; }
+
+#stage { position: fixed; inset: 0; z-index: 0; background: var(--frame); }
+#stage canvas { display: block; width: 100%; height: 100%; touch-action: none; }
+#ui { position: fixed; inset: 0; z-index: 1; pointer-events: none; }
+#ui > * { pointer-events: auto; }
+
+/* ---------- Screens ---------- */
+
+.screen {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: calc(10px + var(--st)) calc(16px + var(--sr)) calc(10px + var(--sb)) calc(16px + var(--sl));
+  /* A calm, nearly flat paper: the fibre texture is kept faint so it never fights the text. */
+  background: linear-gradient(rgba(233, 225, 208, 0.82), rgba(233, 225, 208, 0.82)), var(--paper, none) center / 640px;
+  animation: screen-in 0.24s var(--ease) both;
+}
+.screen.out { animation: screen-out 0.16s ease-in both; pointer-events: none; }
+#ui > .screen.game { background: transparent; padding: 0; gap: 0; pointer-events: none; }
+#ui > .screen.game > * { pointer-events: auto; }
+@keyframes screen-in { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+@keyframes screen-out { to { opacity: 0; } }
+
+.body { flex: 1; min-height: 0; display: flex; gap: 12px; }
+.grow { flex: 1; min-width: 0; min-height: 0; }
+.row { display: flex; align-items: center; gap: 10px; }
+.col { display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+.wrap { flex-wrap: wrap; }
+.center { align-items: center; justify-content: center; }
+
+/* ---------- Type ---------- */
+
+.h1 { font: 800 var(--fs-2xl)/1.15 var(--display); letter-spacing: 0.01em; }
+.h2 { font: 700 var(--fs-xl)/1.2 var(--display); }
+.h3 { font: 700 var(--fs-l)/1.3 var(--display); }
+.lead { font-size: var(--fs-l); color: var(--ink-2); }
+.small { font-size: var(--fs-s); }
+.muted { color: var(--muted); }
+.gold { color: var(--gold); }
+.section-title {
+  display: block;
+  margin: 4px 0 6px;
+  font: 700 var(--fs-xs)/1.2 var(--body);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.num { font-variant-numeric: tabular-nums; }
+
+/* ---------- Scroll: one scroller per screen, always touch-scrollable, with a visible hint ---------- */
+
+.scroll {
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-y;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  scrollbar-color: var(--line-2) transparent;
+}
+.scroll.x { overflow-x: auto; overflow-y: hidden; touch-action: pan-x; }
+.scroll[data-more*='b'] { -webkit-mask-image: linear-gradient(180deg, #000 calc(100% - 36px), transparent); mask-image: linear-gradient(180deg, #000 calc(100% - 36px), transparent); }
+.scroll[data-more='r'] { -webkit-mask-image: linear-gradient(90deg, #000 calc(100% - 36px), transparent); mask-image: linear-gradient(90deg, #000 calc(100% - 36px), transparent); }
+.more-chevron {
+  position: absolute; z-index: 5; width: 14px; height: 14px; margin-left: -7px; pointer-events: none;
+  border-right: 3px solid var(--accent); border-bottom: 3px solid var(--accent); transform: rotate(45deg);
+  animation: more-bounce 1.2s ease-in-out infinite;
+}
+@keyframes more-bounce { 50% { translate: 3px 3px; } }
+
+/* ---------- Icons ---------- */
+
+.ico { width: 24px; height: 24px; object-fit: contain; flex-shrink: 0; display: inline-block; vertical-align: middle; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+}

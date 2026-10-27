@@ -1,45 +1,40 @@
 import { ballCss } from '../core/ball-styles';
 import { svg } from './dom';
 
-const S = (body: string, vb = '0 0 24 24') =>
-  `<svg viewBox="${vb}" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">${body}</svg>`;
+/**
+ * Painted ink icons (public/art/ui/icons, ordered through the game-art skill). No hand-drawn SVG,
+ * emoji or icon fonts: every glyph in the UI is one of these.
+ */
+const FILES = [
+  'strike', 'place', 'pause', 'settings', 'back', 'rotate-left', 'rotate-right', 'switch-target', 'spin', 'power',
+  'scroll', 'lock', 'coin', 'sound', 'music', 'fullscreen', 'edit', 'close', 'trophy', 'target', 'users', 'user',
+  'check', 'play', 'home', 'replay', 'shop', 'install', 'star', 'star-empty', 'warning', 'info', 'journey',
+  'quick-match', 'collection', 'story', 'codex', 'energy', 'ultimate', 'cooldown', 'hint', 'vision', 'nudge',
+  'shield', 'tremor', 'rewind', 'thinking', 'turn',
+] as const;
 
-const ICONS = {
-  pencil: S('<path d="M4 20h4L19 9l-4-4L4 16v4z"/><path d="M14 6l4 4"/>'),
-  expand: S('<path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/>'),
-  pause: S('<rect x="6" y="5" width="4" height="14" rx="1.2" fill="currentColor" stroke="none"/><rect x="14" y="5" width="4" height="14" rx="1.2" fill="currentColor" stroke="none"/>'),
-  back: S('<path d="M15 5l-7 7 7 7"/>'),
-  close: S('<path d="M6 6l12 12M18 6L6 18"/>'),
-  coin: `<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="#f5c542"/><circle cx="12" cy="12" r="7.2" fill="none" stroke="#a8730c" stroke-width="1.6"/><path d="M12 7.5v9M9.5 9.5h4a1.6 1.6 0 010 3.2h-3a1.6 1.6 0 000 3.2h4" stroke="#7a4f06" stroke-width="1.7" fill="none" stroke-linecap="round"/></svg>`,
-  gear: S('<circle cx="12" cy="12" r="3.2"/><path d="M19.4 15a1.7 1.7 0 00.3 1.8l.1.1a2 2 0 11-2.8 2.8l-.1-.1a1.7 1.7 0 00-1.8-.3 1.7 1.7 0 00-1 1.5V21a2 2 0 11-4 0v-.1a1.7 1.7 0 00-1.1-1.6 1.7 1.7 0 00-1.8.3l-.1.1a2 2 0 11-2.8-2.8l.1-.1a1.7 1.7 0 00.3-1.8 1.7 1.7 0 00-1.5-1H3a2 2 0 110-4h.1a1.7 1.7 0 001.6-1.1 1.7 1.7 0 00-.3-1.8l-.1-.1a2 2 0 112.8-2.8l.1.1a1.7 1.7 0 001.8.3H9a1.7 1.7 0 001-1.5V3a2 2 0 114 0v.1a1.7 1.7 0 001 1.5 1.7 1.7 0 001.8-.3l.1-.1a2 2 0 112.8 2.8l-.1.1a1.7 1.7 0 00-.3 1.8V9a1.7 1.7 0 001.5 1H21a2 2 0 110 4h-.1a1.7 1.7 0 00-1.5 1z"/>'),
-  trophy: S('<path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 01-10 0V4z"/><path d="M17 5h3v2a3 3 0 01-3 3M7 5H4v2a3 3 0 003 3"/>'),
-  target: S('<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.4" fill="currentColor"/>'),
-  users: S('<circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0113 0"/><circle cx="17" cy="9" r="2.8"/><path d="M15.5 14.2A5.5 5.5 0 0121.5 20"/>'),
-  user: S('<circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0116 0"/>'),
-  rotL: S('<path d="M4 12a8 8 0 108-8H8"/><path d="M11 1L8 4l3 3"/>'),
-  rotR: S('<path d="M20 12a8 8 0 11-8-8h4"/><path d="M13 1l3 3-3 3"/>'),
-  check: S('<path d="M5 12.5l4.5 4.5L19 7.5"/>'),
-  lock: S('<rect x="5" y="11" width="14" height="10" rx="2.2"/><path d="M8 11V8a4 4 0 018 0v3"/>'),
-  play: `<svg viewBox="0 0 24 24"><path d="M8 5.5v13l11-6.5z" fill="currentColor"/></svg>`,
-  home: S('<path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/>'),
-  refresh: S('<path d="M20 11a8 8 0 10-2.3 6.3"/><path d="M20 4v7h-7"/>'),
-  sound: S('<path d="M4 9v6h4l5 4V5L8 9z"/><path d="M16.5 8.5a5 5 0 010 7M19 6a8.5 8.5 0 010 12"/>'),
-  cart: S('<circle cx="9" cy="20" r="1.5"/><circle cx="18" cy="20" r="1.5"/><path d="M2 3h3l2.6 12.2a2 2 0 002 1.6h8.6a2 2 0 002-1.6L21.5 7H6"/>'),
-  phone: S('<rect x="7" y="2" width="10" height="20" rx="2.5"/><path d="M11 18h2"/>'),
-  hand: S('<path d="M8 13V5.5a1.5 1.5 0 013 0V11m0-1.5V4a1.5 1.5 0 013 0v7m0-5.5a1.5 1.5 0 013 0V13m0-4a1.5 1.5 0 013 0v5.5a7 7 0 01-7 7h-1a7 7 0 01-5.6-2.8L4 14.6a1.6 1.6 0 012.4-2.1L8 14"/>'),
-  eagle: S('<path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>'),
-  spin2: S('<path d="M12 3a9 9 0 109 9"/><path d="M12 7a5 5 0 105 5"/><circle cx="12" cy="12" r="1.5" fill="currentColor"/><path d="M19 2v4h4"/>'),
-  nudge: S('<path d="M3 8h11a3 3 0 10-3-3M3 12h15a3 3 0 11-3 3M3 16h8"/>'),
-  shield: S('<path d="M12 2.5l8 3v6c0 5-3.5 8.7-8 10-4.5-1.3-8-5-8-10v-6z"/><path d="M8.5 12l2.5 2.5 4.5-5"/>'),
-  tremor: S('<path d="M2 12h3l2-5 3 10 3-12 3 14 2-7h4"/>'),
-  rewind: S('<path d="M11 19L3 12l8-7v14zM21 19l-8-7 8-7v14z"/>'),
-  star: `<svg viewBox="0 0 24 24"><path d="M12 2.5l2.9 6.1 6.6.8-4.9 4.6 1.3 6.6L12 17.3l-5.9 3.3 1.3-6.6L2.5 9.4l6.6-.8z" fill="currentColor"/></svg>`,
-};
+/** Older names used across the code base. */
+const ALIAS = {
+  pencil: 'edit', expand: 'fullscreen', gear: 'settings', rotL: 'rotate-left', rotR: 'rotate-right',
+  refresh: 'replay', cart: 'shop', phone: 'install', hand: 'place', eagle: 'vision', spin2: 'spin',
+} as const;
 
-export type IconName = keyof typeof ICONS;
+export type IconName = (typeof FILES)[number] | keyof typeof ALIAS;
 
-export function icon(name: IconName, cls = ''): SVGElement {
-  return svg(ICONS[name], cls);
+const BASE = new URL(`${import.meta.env.BASE_URL}art/ui/icons/`, document.baseURI).href;
+
+export function iconUrl(name: IconName): string {
+  return `${BASE}${(ALIAS as Record<string, string>)[name] ?? name}.webp`;
+}
+
+export function icon(name: IconName, cls = ''): HTMLImageElement {
+  const img = document.createElement('img');
+  img.className = cls ? `ico ${cls}` : 'ico';
+  img.src = iconUrl(name);
+  img.alt = '';
+  img.draggable = false;
+  img.decoding = 'async';
+  return img;
 }
 
 /** Painted pool ball for menus (solid / stripe with number). */
