@@ -62,7 +62,7 @@ export function artImage(url: string, onReady: () => void): HTMLImageElement | n
  * Paints the whole table: wooden frame, cloth bed with lamp falloff, pocket holes,
  * cloth-covered cushions with a lit nose, diamonds and the foot spot.
  */
-export function paintTable(t: TableGeom, skin: TableSkin, pxPerM: number, railImg: HTMLImageElement | null = null): TableArt {
+export function paintTable(t: TableGeom, skin: TableSkin, pxPerM: number, railImg: HTMLImageElement | null = null, details: Partial<Record<'corner' | 'side' | 'sight', HTMLImageElement | null>> = {}): TableArt {
   const rail = t.railWidth;
   const hx = t.L / 2 + rail;
   const hy = t.W / 2 + rail;
@@ -177,6 +177,7 @@ export function paintTable(t: TableGeom, skin: TableSkin, pxPerM: number, railIm
 
   // --- Pocket holes ---
   for (const p of t.pockets) {
+    if (details[p.kind]) continue;
     const hole = g.createRadialGradient(X(p.hx), Y(p.hy), S(p.hr * 0.1), X(p.hx), Y(p.hy), S(p.hr));
     // Ink pooled in the hole, feathering out at the rim.
     hole.addColorStop(0, '#0b0a09');
@@ -242,6 +243,16 @@ export function paintTable(t: TableGeom, skin: TableSkin, pxPerM: number, railIm
 
   // --- Pocket liners (leather rims on the wood) ---
   for (const p of t.pockets) {
+    const image = details[p.kind];
+    if (image) {
+      g.save();
+      g.translate(X(p.hx), Y(p.hy));
+      // Assets face down into the bed at the top rail; corner orientation follows the diagonal.
+      g.rotate(p.kind === 'corner' ? Math.atan2(-Math.sign(p.hy), -Math.sign(p.hx)) - Math.PI / 2 : p.hy < 0 ? 0 : Math.PI);
+      g.drawImage(image, -S(p.hr), -S(p.hr), S(p.hr * 2), S(p.hr * 2));
+      g.restore();
+      continue;
+    }
     g.strokeStyle = 'rgba(20,14,10,0.9)';
     g.lineWidth = Math.max(2, S(0.012));
     g.beginPath();
@@ -256,6 +267,15 @@ export function paintTable(t: TableGeom, skin: TableSkin, pxPerM: number, railIm
 
   // --- Diamonds: vermilion seal dots, like the red marks on an ink painting ---
   for (const dm of t.diamonds) {
+    if (details.sight) {
+      const size = S(t.kind === 'pool' ? 0.017 : 0.011);
+      g.save();
+      g.translate(X(dm.x), Y(dm.y));
+      if (Math.abs(dm.x) > t.L / 2) g.rotate(Math.PI / 2);
+      g.drawImage(details.sight, -size / 2, -size / 2, size, size);
+      g.restore();
+      continue;
+    }
     g.fillStyle = '#b23a26';
     g.beginPath();
     g.arc(X(dm.x), Y(dm.y), Math.max(1.6, S(0.0055)), 0, Math.PI * 2);

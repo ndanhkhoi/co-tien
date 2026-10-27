@@ -9,6 +9,7 @@ import type { Match } from '../game/match';
 import { artImage, paintCue, paintGlow, paintNumberAtlas, paintShadow, paintTable } from './art';
 import { BallMesh } from './ball-mesh';
 import { SkillFx } from './skill-fx';
+import { OmenArt } from './omen-art';
 
 export interface AimView {
   angle: number;
@@ -86,6 +87,8 @@ export class TableView {
   private shadowTex: Texture;
   private glowTex: Texture;
   private skills: SkillFx;
+  private omenArt: OmenArt;
+  private disposed = false;
   private scale = 100;
   private artScale = 0;
   private shake = 0;
@@ -101,6 +104,8 @@ export class TableView {
     this.numbers = paintNumberAtlas();
     this.shadowTex = paintShadow();
     this.glowTex = paintGlow();
+    this.omenArt = new OmenArt(match);
+    this.under.addChild(this.omenArt.layer);
     this.skills = new SkillFx(this.fxLayer, this.glowTex);
     this.root.addChild(this.world);
     this.pxLayer.addChild(this.guideG);
@@ -115,6 +120,8 @@ export class TableView {
     this.fogSprite.visible = false;
     this.rebuildBalls();
     match.on((e) => {
+      if (this.disposed) return;
+      if (e.type === 'shot') this.omenArt.startShot();
       if (e.type === 'new-rack') this.rebuildBalls();
       if (e.type === 'phys' && e.e.t === 'pocket') this.lastPocketOf.set(e.e.id, e.e.pocket);
     });
@@ -157,10 +164,16 @@ export class TableView {
 
   /** Table and cue textures at the current pixel density; painted art is used once it has loaded. */
   private paintArt(want: number) {
+    if (this.disposed) return;
     this.artScale = want;
     const skin = this.match.setup.tableSkin;
     const rail = artImage(sectArtUrl(skin.sect, 'rail'), () => this.paintArt(this.artScale));
-    const art = paintTable(this.match.table, skin, want, rail);
+    const base = new URL(import.meta.env.BASE_URL, document.baseURI).href;
+    const ready = () => this.paintArt(this.artScale);
+    const corner = artImage(`${base}art/table/pocket-corner.webp`, ready);
+    const side = artImage(`${base}art/table/pocket-side.webp`, ready);
+    const sight = artImage(`${base}art/table/${this.match.table.kind === 'pool' ? 'diamond' : 'dot'}.webp`, ready);
+    const art = paintTable(this.match.table, skin, want, rail, { corner, side, sight });
     this.tableSprite.texture?.destroy(true);
     this.tableSprite.texture = art.texture;
     this.tableSprite.scale.set(1 / want);
@@ -177,6 +190,7 @@ export class TableView {
 
   /** Cue texture follows whoever is shooting. */
   refreshCue() {
+    if (this.disposed) return;
     const want = this.artScale || this.scale;
     const c = this.match.current.cue;
     const cue = paintCue(c, want, this.cueImage(c));
@@ -243,6 +257,7 @@ export class TableView {
   update(dt: number, aim: AimView | null) {
     this.time += dt;
     this.skills.update(dt);
+    this.omenArt.update(dt);
     const t = this.match.table;
     const R = t.R;
     // Balls.
@@ -347,54 +362,6 @@ export class TableView {
     const t = this.match.table;
     const m = this.match;
     g.clear();
-    // Closed (ghost) pockets.
-    for (const i of m.closedPockets) {
-      const p = t.pockets[i];
-      g.circle(p.hx, p.hy, p.hr * 0.95).fill({ color: 0x2a1240, alpha: 0.92 });
-      g.circle(p.hx, p.hy, p.hr * 0.95).stroke({ width: 2, color: 0xb57bff, alpha: 0.6 + 0.3 * Math.sin(this.time * 4) });
-      const s = p.hr * 0.4;
-      g.moveTo(p.hx - s, p.hy - s).lineTo(p.hx + s, p.hy + s).moveTo(p.hx + s, p.hy - s).lineTo(p.hx - s, p.hy + s).stroke({ width: 2.5, color: 0xd8b4ff });
-    }
-    // Thiên Tượng: show exactly where and which way the land acts on this shot.
-    const tr = m.omen?.terrain;
-    if (tr) {
-      const pulse = 0.5 + 0.5 * Math.sin(this.time * 2.5);
-      for (const pa of tr.patches ?? []) {
-        if (pa.r > t.L) continue; // table-wide sand: the banner says it
-        const col = pa.slide > pa.roll ? 0x8cff5a : 0xeaf6ff;
-        g.circle(pa.x, pa.y, pa.r).fill({ color: col, alpha: 0.16 + 0.05 * pulse });
-        g.circle(pa.x, pa.y, pa.r).stroke({ width: 1.5, color: col, alpha: 0.55 });
-      }
-      for (const wl of tr.wells ?? []) {
-        for (let i = 0; i < 3; i++) {
-          g.circle(wl.x, wl.y, wl.r * ((i + ((this.time * 0.6) % 1)) / 3)).stroke({ width: 1.5, color: 0xb9a8ff, alpha: 0.6 * (1 - i / 3) });
-        }
-      }
-      if (tr.force) {
-        // Wind / tilt: arrows streaming across the cloth, scaled by the gust right now.
-        const k = tr.gust ? 1 - tr.gust.amp + tr.gust.amp * Math.sin(tr.gust.omega * this.time) : 1;
-        const len = Math.hypot(tr.force.x, tr.force.y) || 1;
-        const ux = (tr.force.x / len) * Math.sign(k || 1);
-        const uy = (tr.force.y / len) * Math.sign(k || 1);
-        const a = 0.25 + 0.5 * Math.abs(k);
-        for (let i = -2; i <= 2; i++) {
-          for (let j = -1; j <= 1; j++) {
-            const drift = ((this.time * 0.25) % 0.4) - 0.2;
-            const cx = (i * t.L) / 5 + ux * drift;
-            const cy = (j * t.W) / 3 + uy * drift;
-            const s = 0.05;
-            g.moveTo(cx - ux * s, cy - uy * s).lineTo(cx + ux * s, cy + uy * s)
-              .moveTo(cx + ux * s - (ux * 0.4 - uy * 0.3) * s, cy + uy * s - (uy * 0.4 + ux * 0.3) * s).lineTo(cx + ux * s, cy + uy * s)
-              .lineTo(cx + ux * s - (ux * 0.4 + uy * 0.3) * s, cy + uy * s - (uy * 0.4 - ux * 0.3) * s)
-              .stroke({ width: 2, color: 0xffffff, alpha: a * 0.6 });
-          }
-        }
-      }
-    }
-    for (const sg of m.omen?.segments ?? []) {
-      g.moveTo(sg.ax, sg.ay).lineTo(sg.bx, sg.by).stroke({ width: 7, color: 0x5a3b1d, alpha: 0.95 });
-      g.moveTo(sg.ax, sg.ay).lineTo(sg.bx, sg.by).stroke({ width: 2, color: 0x9c7a4a, alpha: 0.9 });
-    }
     // Challenge goal.
     if (this.goal) {
       const pulse = 0.5 + 0.5 * Math.sin(this.time * 4);
@@ -636,6 +603,7 @@ export class TableView {
   }
 
   destroy() {
+    this.disposed = true;
     this.root.destroy({ children: true });
   }
 }
