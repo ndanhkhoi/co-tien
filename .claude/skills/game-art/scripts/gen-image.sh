@@ -20,7 +20,7 @@
 # If the chosen tool fails, it retries once with the other tool (GEN_NO_FALLBACK=1 disables this).
 set -euo pipefail
 
-tool=codex out="" prompt="" timeout=400 size=""
+tool=api out="" prompt="" timeout=400 size=""
 refs=()
 styles=()
 while [[ $# -gt 0 ]]; do

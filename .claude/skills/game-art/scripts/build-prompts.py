@@ -37,6 +37,7 @@ No text, no logo, no frame, no letters.
 Chibi 3D-render game avatar of the same character as the reference image: head and shoulders, big head,
 large expressive eyes, soft subsurface skin, toy-like clean materials, soft studio lighting, {c['expr']}.
 Keep the face, species features, hair, outfit colours and accessories of the reference exactly.
+Character spec (every visible trait must match): {c['look']}.
 Square 1:1, face centred and filling about 70% of the frame. Background: warm off-white rice paper with a soft
 ink-wash halo behind the head tinted with {main} (a pale wash, not a solid colour), nothing else. No text.
 """)
@@ -46,7 +47,8 @@ An expression sheet laid out as an exact 2x2 grid of 4 equal square cells, each 
 3D-render character as the reference image (same face, species features, hair, outfit and accessories),
 head and shoulders, centred, same scale in every cell. No text, no grid lines. Background of every cell:
 warm off-white rice paper with a soft ink-wash halo tinted with {main}.
-Cell 1 (top-left): focused and calm, looking down at the table, chin resting near their billiard cue (no bow, no other weapon).
+Character spec (every visible trait must match, including eye colour, marks and the signature cue): {c['look']}.
+Cell 1 (top-left): focused and calm, looking down at the table, chin resting near their own signature billiard cue exactly as described in the spec (no plain wooden cue, no bow, no other weapon).
 Cell 2 (top-right): overjoyed, cheering, sparkles.
 Cell 3 (bottom-left): frustrated / annoyed after a mistake, sweat drop.
 Cell 4 (bottom-right): casting a skill, glowing {el} in the eyes and around a raised hand.
@@ -55,6 +57,7 @@ Cell 4 (bottom-right): casting a skill, glowing {el} in the eyes and around a ra
 Full-body victory pose of the SAME character as the reference image (same face, species features, hair,
 outfit, cue and colours), painterly 2.5D anime style matching the reference: {c['name']} celebrating a won
 billiards match — triumphant, cue raised or resting on the shoulder, {c['expr']}, burst of {el} behind.
+Character spec (every trait must match, keep every signature prop, companion and the signature cue): {c['look']}.
 Whole body in frame with margin, rim light in {glow}. Background: fully transparent (PNG alpha).
 If alpha is impossible, flat pure #00ff00 green with no shadow. No text, no letters.
 """)
@@ -75,12 +78,13 @@ for c in champs:
     for i, s in enumerate(c["skills"]):
         cells.append(s["icon"])
         order.append(f"{c['id']}-{'12u'[i]}")
-cells.append(f"the sect emblem as a square vermilion-and-ink seal stamp: {sect['emblem']}")
+cells.append(f"the sect emblem as a square seal stamp printed only in vermilion red and black ink (no other colours, no metal, no shine): {sect['emblem']}")
 order.append("emblem")
 w("icons.order", ",".join(order))
 w("icons.txt", "A sprite sheet laid out as an exact 4x4 grid of 16 equal square cells. Each cell contains exactly one "
   "centred game ability icon painted in Chinese/Vietnamese ink-wash style: bold black ink brushwork with grey washes and "
-  f"one accent colour {main}, on a flat warm rice-paper square, matte, no glow, chunky silhouettes readable at 48px; "
+  f"one accent colour {main}, on a flat warm rice-paper square, matte, no glow, no light rays, no metallic shine, no white "
+  "highlights, no glossy 3D volume, no colours other than ink and the accent; chunky silhouettes readable at 48px; "
   "no borders, no grid lines, no text, no letters. Cells, row by row:\n"
   + "\n".join(f"{i + 1} {t};" for i, t in enumerate(cells)))
 w("vfx.txt", f"""
@@ -98,7 +102,8 @@ w("flip.txt", f"""
 An animation flipbook laid out as an exact 4x4 grid of 16 equal square cells, read left-to-right, top-to-bottom: a single
 drop of {main} coloured ink falls (cell 1), splashes and blooms outward into an ink painting of {sect['emblem']} (cells 2-9),
 holds at full bloom with crisp brush edges (cells 10-11), then dissolves into ink mist and drifting drops that fade out
-(cells 12-16). Same camera, same centre and scale in every cell, top-down, matte ink with paper-white edges, no glow.
+(cells 12-16). Same camera, same centre and scale in every cell, top-down, matte ink with paper-white edges, no glow,
+no bright white symbols, no saturated solid fills — irregular ink blooms with broken brush edges.
 Background fully transparent (PNG alpha). No text, no grid lines.
 """)
 w("rail.txt", f"""

@@ -25,7 +25,7 @@ npm run gen:challenges
   (`roster.json` sects/champions/skills, `lore.json` stories, `story.json` Cơ Tiên Truyện, `career.ts`, `challenges.json`)
 - `src/ai` shot-search opponent in a Web Worker
 - `src/render` PixiJS table, ball shader, skill FX
-- `src/ui` DOM screens over the canvas; `src/styles/main.css` is the Thuỷ Mặc design system
+- `src/ui` DOM screens over the canvas; `src/styles/{base,kit,screens,match}.css` define the Thuỷ Mặc UI
 - `public/art` processed art (webp); master art lives outside the repo
 - `.claude/skills` agent skills; `game-art` is this project's art pipeline
 
@@ -42,7 +42,10 @@ npm run gen:challenges
 6. **Data first.** Champions/sects are data; keep `docs/world-bible.md` in sync with `roster.json`/`lore.json`.
 7. **Saves are sacred.** Profile changes go through `sanitize` in `src/game/profile.ts`; never rename the
    storage key `thancong.profile.v1`.
-8. **Art via the skill.** Use `.claude/skills/game-art` (prompts, references, scripts). The image API key lives
-   in `.env.image-api` (gitignored) — never commit it. Use only model `cx/gpt-6-sol-image` on the API.
+8. **Painted assets only.** Every graphic must be a painted asset; no hand-drawn SVG, emoji or icon libraries.
+   **Art via the skill.** Use `.claude/skills/game-art` (prompts, references, scripts). The image API key lives
+   in `.env.image-api` (gitignored) — never commit it. Use `--tool api` with only model `cx/gpt-6-sol-image`;
+   disable tool fallback.
+   **Vietnamese UI.** Write all player-facing UI copy in Vietnamese.
 9. Conventional commits, one concern per commit, no AI references in commit messages. Run `npm test` and
    `npm run build` first.

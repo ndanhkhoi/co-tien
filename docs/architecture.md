@@ -12,6 +12,7 @@ src/
   ui/         màn hình DOM phủ trên canvas, điều khiển, hướng dẫn
   audio/      âm thanh tổng hợp bằng WebAudio (không có file âm thanh)
   platform/   cảm ứng, rung, toàn màn hình, cài PWA
+  styles/     base.css, kit.css, screens.css, match.css
 public/art/   tranh đã xử lý (webp) — xem docs/art-pipeline.md
 ```
 
@@ -57,11 +58,19 @@ UI (joystick, kéo bàn, nút ĐÁNH) ──► Match.shoot(input)
 - `profile.ts`: hồ sơ người chơi, tự chuyển đổi save cũ (khoá `thancong.profile.v1` giữ nguyên để không mất
   dữ liệu sau khi đổi tên game).
 
+Trong Tiên Đạo, mỗi bên bắt đầu ván với **30 năng lượng**, tối đa **100** (`ENERGY_MAX`). Mỗi cú
+đánh được **+8**; mỗi bi của mình vào lỗ hoặc điểm carom có mức cơ sở **+14**, rồi điều chỉnh theo chỉ
+số năng lượng của cơ, nội tại và Địa Lợi. Đối thủ phạm lỗi thì được **+12**. `match.ts` phát sự kiện
+`energy` với `side`, `gain` (phần tăng thực tế sau giới hạn) và `total`. Cổ Điển không cộng năng lượng.
+Hai chiêu thường hồi sau **2–3 lượt đánh của chính mình**; hệ Luân Hồi giảm một lượt (còn 1–2).
+Tuyệt chiêu cần đầy thanh năng lượng.
+
 ## `src/ai`
 
 `brain.ts` tìm cú đánh bằng chính bộ mô phỏng: liệt kê đường ăn thẳng / đánh băng, thử biến thể lực và áp
 phê, chấm điểm theo vị trí bi cái cho cú sau, chọn phòng thủ khi rủi ro; nhận cùng thông số bàn và Thiên
-Tượng như người chơi. Chạy trong Web Worker (`ai-worker.ts`) qua `ai-client.ts` để không giật hình.
+Tượng như người chơi. `chooseSkill` trong `brain.ts` chọn chiêu ở cả bốn cấp AI, kể cả cấp 1;
+chỉ chọn trong các chiêu sẵn dùng được truyền vào. Chạy trong Web Worker (`ai-worker.ts`) qua `ai-client.ts` để không giật hình.
 
 ## `src/render`
 
@@ -75,14 +84,29 @@ Màn hình là DOM phủ trên canvas (`app.ts` quản lý ngăn xếp màn hìn
 bộ sưu tập, cài đặt), `journey.ts` (bản đồ Hành trình), `codex.ts` (Cơ Tiên Lục), `story.ts` (đọc truyện có tranh, mở chương theo Hành trình), `match-screen.ts`
 (HUD, joystick, chiêu, cut-in, AI diễn hoạt), `install-gate.ts` (bắt cài PWA trên điện thoại),
 `viewport-guard.ts` (bắt xoay ngang, kiểm tra cửa sổ trên máy tính), `hints.ts` / `intro.ts` (hướng dẫn).
-Toàn bộ giao diện theo hệ thiết kế Thuỷ Mặc trong `src/styles/main.css`.
+`icons.ts` cung cấp `icon(name)` để tạo icon tranh từ `public/art/ui/icons/`.
+
+`src/main.ts` nạp bốn tệp CSS: `base.css` đặt nền tảng Thuỷ Mặc (màu, chữ, nền đọc và safe area);
+`kit.css` chứa thành phần dùng chung như nút, thẻ chọn và hộp thoại. `screens.css` dành cho các màn hình,
+`match.css` dành cho giao diện trận đấu; hai phần này đang được xây dựng lại.
+
+Trên điện thoại còn phải cài PWA (`mustInstall()`), màn hình cài đặt hiện trước ngay cả khi máy đang
+dọc; `viewport-guard.ts` bỏ qua chặn xoay ngang trong thời gian này. `src/platform/device.ts` chặn
+cử chỉ trình duyệt ngoài vùng cuộn, nhưng cho cuộn trong `.scroll` hoặc phần tử hoặc phần tử cha có `overflow`
+`auto`/`scroll` và nội dung thực sự tràn; chặn cả pinch zoom nhiều ngón.
 
 ## PWA và cập nhật
 
-`vite-plugin-pwa` tải sẵn code, UI, chân dung, icon chiêu và biểu tượng môn phái (~4 MB); tranh lớn (toàn
-thân, splash, VFX) tải khi cần và lưu cache. Bản mới được kiểm tra định kỳ và cài khi người chơi rời bàn.
+`vite-plugin-pwa` tải sẵn code, tranh trực tiếp trong `art/ui/`, chân dung, icon chiêu và biểu tượng
+môn phái theo `globPatterns` trong `vite.config.ts`; các ảnh khác trong `art/` được cache khi tải lần đầu.
+
+Trong bản production, `src/main.ts` kiểm tra bản mới mỗi **15 phút** và khi ứng dụng trở lại phía trước
+(nếu có mạng). `src/ui/app.ts` buộc áp dụng ngay từ menu; nếu đang ở màn hình trận đấu thì chờ hết trận,
+khi chuyển sang màn hình không dùng stage. Lúc áp dụng, một lớp **chặn thao tác** hiện “Đang cập nhật
+bản mới…” trước khi kích hoạt service worker mới và tải lại ứng dụng.
 
 ## Kiểm thử
 
 `npm test` (Vitest): vật lý, luật, AI, 60 thử thách có lời giải, độ tương phản bi–nỉ (ΔE ≥ 25) cho mọi
-môn phái. `npm run build` chạy typecheck trước khi build.
+môn phái. `tests/skill-usage.test.ts` kiểm tra AI dùng chiêu thường/tuyệt chiêu qua các ván, cộng và
+giới hạn năng lượng, sự kiện `energy`, hồi chiêu và tuyệt chiêu đặt bi của AI cấp 1. `npm run build` chạy typecheck trước khi build.

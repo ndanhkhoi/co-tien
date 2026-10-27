@@ -20,9 +20,9 @@ G="$here/gen-image.sh"
 # non-human champions.
 SP="$here/../references/style-portrait.png"
 SC="$here/../references/style-cutout.png"
-CT="${GEN_CHAR_TOOL:-codex}"
+CT="${GEN_CHAR_TOOL:-api}"
 RT="${GEN_REF_TOOL:-$CT}"
-ST="${GEN_SHEET_TOOL:-agy}"
+ST="${GEN_SHEET_TOOL:-api}"
 want() { [[ ! -f "$work/raw/$1" ]]; }
 
 ids=$(python3 -c "import json,sys;print(' '.join(c['id'] for c in json.load(open('$repo/src/game/content/roster.json'))['champions'] if c['sect']=='$sect'))")
