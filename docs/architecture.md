@@ -110,3 +110,5 @@ bản mới…” trước khi kích hoạt service worker mới và tải lại
 `npm test` (Vitest): vật lý, luật, AI, 60 thử thách có lời giải, độ tương phản bi–nỉ (ΔE ≥ 25) cho mọi
 môn phái. `tests/skill-usage.test.ts` kiểm tra AI dùng chiêu thường/tuyệt chiêu qua các ván, cộng và
 giới hạn năng lượng, sự kiện `energy`, hồi chiêu và tuyệt chiêu đặt bi của AI cấp 1. `npm run build` chạy typecheck trước khi build.
+
+Console test ẩn (bản dev hoặc `?dev`): `cotien.cheat(name, ...args)` với `unlockAll`, `coins(n)`, `xp(n)`, `story`, `journey`, `challenges`, `energy`, `reset`; ví dụ `cotien.cheat('coins', 5000)`. `coins`/`xp` cộng số lượng; `story` mở chương qua mốc Hành trình; không có giao diện cheat.

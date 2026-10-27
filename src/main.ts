@@ -35,6 +35,7 @@ async function boot() {
   installViewportGuard();
   await app.init();
   (window as unknown as { __app: App }).__app = app;
+  if (import.meta.env.DEV || new URLSearchParams(location.search).has('dev')) void import('./dev/cheats').then(({ installCheats }) => installCheats(app));
   if (mustInstall()) {
     document.body.classList.add('gate');
     app.go(installGate, { reset: true });
