@@ -21,6 +21,18 @@ export function haptic(pattern: number | number[]) {
  * long-press callout/context menu, no double-tap or pinch zoom, no pull-to-refresh,
  * no drag ghost images.
  */
+/** True when the touch started inside anything that can actually scroll (not just elements tagged `.scroll`). */
+function insideScroller(el: HTMLElement | null): boolean {
+  for (let n = el; n && n !== document.body; n = n.parentElement) {
+    if (n.classList.contains('scroll')) return true;
+    const oy = getComputedStyle(n).overflowY;
+    const ox = getComputedStyle(n).overflowX;
+    if (((oy === 'auto' || oy === 'scroll') && n.scrollHeight > n.clientHeight + 1) ||
+        ((ox === 'auto' || ox === 'scroll') && n.scrollWidth > n.clientWidth + 1)) return true;
+  }
+  return false;
+}
+
 export function installNativeFeel() {
   const stop = (e: Event) => e.preventDefault();
   document.addEventListener('contextmenu', stop);
@@ -34,8 +46,7 @@ export function installNativeFeel() {
   // iOS ignores user-scalable=no; block pinch and double-tap zoom manually.
   document.addEventListener('touchmove', (e) => {
     if (e.touches.length > 1) e.preventDefault();
-    const t = e.target as HTMLElement | null;
-    if (!t?.closest?.('.scroll')) e.preventDefault();
+    if (!insideScroller(e.target as HTMLElement | null)) e.preventDefault();
   }, { passive: false });
   let lastTouch = 0;
   document.addEventListener('touchend', (e) => {
