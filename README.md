@@ -69,4 +69,10 @@ tests        vitest
 
 ## Giấy phép
 
-MIT
+Mã nguồn: MIT.
+
+### Hình nhân vật (không thuộc giấy phép MIT)
+
+Ảnh đại diện trong `public/avatars/` là nhân vật của **Doraemon** (© Fujiko Pro, Shogakukan) và **Dragon Ball** (© Bird Studio/Shueisha, Toei Animation). Ảnh được cắt từ các ảnh minh hoạ trên Wikipedia tiếng Anh.
+
+Đây là dự án cá nhân, phi thương mại, làm cho vui. Dự án không liên kết với và không được chủ bản quyền xác nhận. Không dùng các hình này cho mục đích thương mại. Nếu chủ bản quyền yêu cầu, chỉ cần xoá thư mục `public/avatars/`, game vẫn chạy (avatar sẽ trống).

@@ -12,6 +12,8 @@ export interface Settings {
 export interface Profile {
   v: 1;
   name: string;
+  /** Portrait id (see ui/avatar.ts). */
+  avatar: string;
   xp: number;
   coins: number;
   cues: string[];
@@ -34,6 +36,7 @@ export function defaultProfile(): Profile {
   return {
     v: 1,
     name: 'Cơ Thủ',
+    avatar: 'nobita',
     xp: 0,
     coins: 300,
     cues: ['house'],

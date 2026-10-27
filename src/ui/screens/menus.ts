@@ -9,7 +9,7 @@ import { CUES, MUTATORS, SKILLS, TABLES, type MutatorId, type SkillId } from '..
 import { defaultProfile, exportCode, importCode, levelProgress } from '../../game/profile';
 import { enterFullscreen, isTouchDevice, toggleFullscreen } from '../../platform/device';
 import { screenEl, type App, type Screen } from '../app';
-import { AI_LOOKS, avatar, GUEST_LOOK, PLAYER_LOOK } from '../avatar';
+import { AI_AVATARS, AI_NAMES, AVATARS, avatar, GUEST_AVATAR } from '../avatar';
 import { append, bar5, btn, h, iconBtn, modal, stars, tap, toast } from '../dom';
 import { ballArt, cueArt, icon, skillIcon } from '../icons';
 import { matchScreen } from './match-screen';
@@ -71,6 +71,7 @@ export function homeScreen(app: App): Screen {
   const p = app.profile;
   const prog = levelProgress(p.xp);
   const profileChip = h('div.profile-chip', null,
+    h('div.home-av', null, avatar(p.avatar)),
     h('div.lvl', null, String(prog.level)),
     h('div', null, h('div.pname', null, p.name), h('div.xpbar', null, h('i', { style: `width:${(prog.into / prog.need) * 100}%` }))),
   );
@@ -162,17 +163,17 @@ function setupScreen(app: App, local: boolean): Screen {
 
   function start() {
     const me = { name: app.profile.name, kind: 'human' as const, cue: app.cue, skills: local ? [] : app.profile.skills, avatar: 'player' };
-    const look2 = local ? GUEST_LOOK : AI_LOOKS[st.level - 1];
+    const look2 = local ? GUEST_AVATAR : AI_AVATARS[st.level - 1];
     const opp = local
       ? { name: st.name2.slice(0, 14), kind: 'human' as const, cue: app.cue, skills: [], avatar: 'guest' }
-      : { name: `Máy ${LEVEL_NAMES[st.level]}`, kind: 'ai' as const, ai: { level: st.level, personality: st.pers }, cue: CUES[Math.min(5, st.level)], skills: (st.level >= 3 ? ['shield', 'tremor'] : st.level === 2 ? ['shield'] : []) as SkillId[], avatar: 'ai' };
+      : { name: AI_NAMES[st.level - 1], kind: 'ai' as const, ai: { level: st.level, personality: st.pers }, cue: CUES[Math.min(5, st.level)], skills: (st.level >= 3 ? ['shield', 'tremor'] : st.level === 2 ? ['shield'] : []) as SkillId[], avatar: 'ai' };
     const again = () => app.go(launch, { replace: true });
     const launch = matchScreen({
       setup: {
         mode: st.mode, raceTo: st.race, players: [me, opp], mutator: isCarom() ? null : st.mutator,
         tableSkin: app.tableSkin, caromTarget: st.points, firstBreaker: Math.random() < 0.5 ? 0 : 1,
       },
-      looks: [PLAYER_LOOK, look2],
+      looks: [app.profile.avatar, look2],
       titles: [`Cấp ${app.level}`, local ? 'Khách' : `${LEVEL_NAMES[st.level]} · ${PERSONALITY_NAMES[st.pers]}`],
       label: local ? '2 người' : 'Đấu nhanh',
       onExit: () => app.pop(),
@@ -217,7 +218,7 @@ export function careerScreen(app: App): Screen {
       const open = unlocked(n);
       const best = app.profile.career[n.id] ?? 0;
       const card = h('button.npc', { class: open ? '' : 'locked' },
-        h('div.av', null, avatar(n.look)),
+        h('div.av', null, avatar(n.avatar)),
         h('div.grow', null,
           h('div.nm', null, n.name),
           h('div.tt', null, `${n.title} · ${MODE_NAMES[n.mode]}`),
@@ -238,7 +239,7 @@ export function careerScreen(app: App): Screen {
 function npcModal(app: App, n: Npc) {
   modal((close) => h('div.modal', null,
     h('div.row', { style: 'gap:14px' },
-      h('div', { style: 'width:84px;height:84px;border-radius:20px;overflow:hidden;flex-shrink:0' }, avatar(n.look)),
+      h('div', { style: 'width:84px;height:84px;border-radius:20px;overflow:hidden;flex-shrink:0' }, avatar(n.avatar)),
       h('div.grow', null,
         h('h2', null, n.name),
         h('div.muted', { style: 'font-weight:700' }, n.title),
@@ -269,7 +270,7 @@ function startCareer(app: App, n: Npc) {
         { name: n.name, kind: 'ai', ai: { level: n.level, personality: n.personality }, cue, skills: n.skills, avatar: n.id },
       ],
     },
-    looks: [PLAYER_LOOK, n.look],
+    looks: [app.profile.avatar, n.avatar],
     titles: [`Cấp ${app.level}`, n.title],
     quote: n.intro,
     label: 'Sự nghiệp',
@@ -345,7 +346,7 @@ function startChallenge(app: App, c: ChallengeDef) {
       layout: challengeBalls(c),
       judge: (shot, balls) => judgeChallenge(c, shot, balls),
     },
-    looks: [PLAYER_LOOK, GUEST_LOOK],
+    looks: [app.profile.avatar, GUEST_AVATAR],
     label: `${FAMILY_INFO[c.family].name} ${idx + 1}`,
     challenge: {
       tries: 3,
@@ -515,8 +516,19 @@ export function settingsScreen(app: App): Screen {
     },
   });
   const prog = levelProgress(p.xp);
+  const picker = h('div.av-picker');
+  const renderPicker = () => picker.replaceChildren(...AVATARS.map((a) => tap(
+    h('button.av-pick', { class: p.avatar === a.id ? 'on' : '', 'aria-label': a.name }, avatar(a.id)),
+    () => {
+      p.avatar = a.id;
+      save();
+      renderPicker();
+    },
+  )));
+  renderPicker();
   const left = h('div.panel.scroll', { style: 'flex:1;padding:6px 16px;min-height:0' },
     line('Tên cơ thủ', nameInput),
+    h('div', { style: 'padding:8px 0;border-bottom:1px solid var(--line)' }, h('div', { style: 'font-size:15px;font-weight:600;margin-bottom:8px' }, 'Ảnh đại diện'), picker),
     line('Hiệu ứng âm thanh', slider(s.sfx, (v) => {
       s.sfx = v;
       sound.tap();

@@ -1,4 +1,5 @@
 import { Container, Graphics, Sprite, Texture, type Application } from 'pixi.js';
+import { predictAim } from '../core/aim';
 import { ballStyle } from '../core/ball-styles';
 import { cloneBalls, step, strike, type Ball } from '../core/physics';
 import { powerToSpeed } from '../core/cue-power';
@@ -399,16 +400,24 @@ export class TableView {
       this.drawEagle(aim!);
       return;
     }
-    // Only a short pointer off the cue ball: where it is going, not what it will hit.
-    const len = 0.05 + 0.05 * aim!.guideScale;
-    const r0 = R * 1.25;
-    const tipX = cue.x + dx * (r0 + len);
-    const tipY = cue.y + dy * (r0 + len);
-    g.moveTo(cue.x + dx * r0, cue.y + dy * r0).lineTo(tipX - dx * R * 0.5, tipY - dy * R * 0.5).stroke({ width: 2, color: 0xffffff, alpha: 0.8 });
-    const hw = R * 0.42;
-    const bx = tipX - dx * R * 0.75;
-    const by = tipY - dy * R * 0.75;
-    g.moveTo(tipX, tipY).lineTo(bx - dy * hw, by + dx * hw).lineTo(bx + dy * hw, by - dx * hw).lineTo(tipX, tipY).fill({ color: 0xffffff, alpha: 0.85 });
+    // Line to the first thing the cue ball meets and the ghost ball there. Where the
+    // object ball goes afterwards is left to the player's judgement.
+    const pred = predictAim(t, m.balls, m.cueId(), aim!.angle, m.closedPockets.map((i) => t.pockets[i].mouth));
+    const legal = m.legalTargets();
+    const illegal = pred.hitBall !== null && legal.length > 0 && !legal.includes(pred.hitBall) && !m.state.pushOutAvailable;
+    const maxLen = 0.35 + 1.1 * aim!.guideScale;
+    const dist = Math.hypot(pred.gx - cue.x, pred.gy - cue.y);
+    if (dist > maxLen) {
+      // Fog / short-sighted cues: the line fades out before reaching the target.
+      g.moveTo(cue.x + dx * R, cue.y + dy * R).lineTo(cue.x + dx * maxLen, cue.y + dy * maxLen).stroke({ width: 1.6, color: 0xffffff, alpha: 0.6 });
+      return;
+    }
+    g.moveTo(cue.x + dx * R, cue.y + dy * R).lineTo(pred.gx - dx * R, pred.gy - dy * R).stroke({ width: 1.6, color: 0xffffff, alpha: 0.85 });
+    g.circle(pred.gx, pred.gy, R).stroke({ width: 1.6, color: illegal ? 0xff4d4d : 0xffffff, alpha: 0.9 });
+    if (illegal) {
+      const sx = R * 0.55;
+      g.moveTo(pred.gx - sx, pred.gy - sx).lineTo(pred.gx + sx, pred.gy + sx).moveTo(pred.gx + sx, pred.gy - sx).lineTo(pred.gx - sx, pred.gy + sx).stroke({ width: 2, color: 0xff4d4d });
+    }
   }
 
   /** Thần Nhãn: simulate the exact shot and draw every moving ball's path. */

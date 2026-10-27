@@ -11,7 +11,6 @@ import { haptic, isTouchDevice, keepAwake, toggleFullscreen } from '../../platfo
 import { TableView, type AimView } from '../../render/table-view';
 import type { App, Screen } from '../app';
 import { avatar } from '../avatar';
-import type { AvatarLook } from '../../game/content/career';
 import { banner, btn, h, modal, tap, toast } from '../dom';
 import { icon, skillIcon } from '../icons';
 
@@ -22,7 +21,8 @@ export interface MatchResult {
 
 export interface MatchOptions {
   setup: MatchSetup;
-  looks: [AvatarLook, AvatarLook];
+  /** Portrait ids for player 1 and player 2. */
+  looks: [string, string];
   titles?: [string, string];
   /** Optional VS intro line (NPC). */
   quote?: string;
@@ -362,7 +362,7 @@ export function matchScreen(opts: MatchOptions) {
       const dy = -Math.sin(aim.angle);
       const along = (x - c.x) * dx + (y - c.y) * dy;
       const across = Math.abs((x - c.x) * dy - (y - c.y) * dx);
-      return along > match.table.R * 1.6 && along < 1.5 && across < Math.max(0.035, 26 / view.pxPerM);
+      return along > match.table.R * 1.1 && along < 1.55 && across < Math.max(0.045, 34 / view.pxPerM);
     }
     const onDown = (e: PointerEvent) => {
       sound.unlock();
@@ -973,7 +973,7 @@ export function matchScreen(opts: MatchOptions) {
       modal((close) => h('div.modal', { style: 'width:min(720px,100%)' },
         h('h2', null, 'Cách chơi'),
         h('div', { style: 'display:grid;grid-template-columns:1fr 1fr;gap:12px 18px' },
-          tip('hand', 'Ngắm', 'Chạm/kéo trên bàn để chỉ hướng, hoặc nắm thân cơ kéo xoay quanh bi cái (càng xa đuôi càng tinh).'),
+          tip('hand', 'Ngắm', 'Chạm/kéo trên bàn để chỉ hướng, hoặc nắm bất kỳ đâu trên cây cơ kéo xoay quanh bi cái (càng xa càng tinh).'),
           tip('rotR', 'Xoay chính xác', 'Giữ nút ↺ ↻ để xoay liên tục; vuốt thanh TINH để chỉnh từng chút.'),
           tip('target', 'Điểm phê', 'Kéo trên quả bi PHÊ: trên = theo, dưới = kéo, trái/phải = phê ngang. Chạm đúp về giữa.'),
           tip('play', 'Nạp lực', 'GIỮ nút ĐÁNH, thả đúng lúc. Mạnh và giữ lâu thì tay run. Kéo ra xa để hủy.'),
