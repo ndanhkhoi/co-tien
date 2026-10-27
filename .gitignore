@@ -8,3 +8,4 @@ dev-dist/
 
 # Image API credentials (copy .env.image-api.example)
 .env.image-api
+.idea/
