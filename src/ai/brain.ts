@@ -1,11 +1,11 @@
 import { powerToSpeed, speedToPower } from '../core/cue-power';
-import { cloneBalls, DEFAULT_PHYS, step, strike, type Ball, type PhysEvent, type PhysParams, type SimWorld } from '../core/physics';
+import { cloneBalls, step, strike, type Ball, type PhysEvent, type PhysParams, type SimWorld } from '../core/physics';
 import { canPlaceCue } from '../core/rack';
 import { Rng } from '../core/rng';
 import { RULES } from '../core/rules';
 import { other, summarize, type GameState, type Resolution, type RuleSet, type Side } from '../core/rules/types';
 import { makeCaromTable, makePoolTable, type TableGeom } from '../core/table';
-import { skillDef } from '../game/content/gear';
+import type { SkillKind } from '../game/content/sects';
 import type { AiDecision, AiProfile, AiRequest, AiShot } from './types';
 
 interface LevelTune {
@@ -62,7 +62,9 @@ function makeWorld(ctx: Ctx, balls: Ball[]): SimWorld {
     balls,
     params: ctx.params,
     closedPockets: closed,
-    extraSegments: closed.map((i) => ctx.table.pockets[i].mouth),
+    extraSegments: [...closed.map((i) => ctx.table.pockets[i].mouth), ...ctx.req.extraSegments],
+    terrain: ctx.req.terrain,
+    captureScale: ctx.req.captureScale,
   };
 }
 
@@ -234,7 +236,7 @@ function judge(ctx: Ctx, o: Outcome): number {
 
 function speedFor(dist: number, ctx: Ctx): number {
   // Enough to roll the distance with margin; firmer when the cloth is fast.
-  const mu = ctx.req.ice ? 0.005 : DEFAULT_PHYS.muRoll;
+  const mu = ctx.params.muRoll;
   return Math.sqrt(2 * mu * 9.81 * dist * 1.25) + 0.55;
 }
 
@@ -452,13 +454,23 @@ function addNoise(ctx: Ctx, shot: AiShot): AiShot {
   };
 }
 
+/** Families that help when the coming shot looks hard, and ones that hurt the opponent. */
+const RESCUE: SkillKind[] = ['maw', 'gravity', 'second', 'shield', 'blast'];
+const HEX: SkillKind[] = ['chill', 'freeze', 'seal', 'drain'];
+
 function chooseSkill(ctx: Ctx, confidence: number): AiDecision['skill'] {
-  const { energy, skills, profile } = ctx.req;
-  if (profile.level < 2) return undefined;
-  const can = (id: (typeof skills)[number]) => skills.includes(id) && energy >= skillDef(id).cost;
-  if (confidence < 0.45 && can('shield')) return 'shield';
-  if (confidence < 0.35 && can('tremor')) return 'tremor';
-  if (can('spin2') && ctx.rng.next() < 0.15) return 'spin2';
+  const { skills, profile } = ctx.req;
+  if (profile.level < 2 || !skills.length) return undefined;
+  // Placement skills need a cue-ball plan the brain does not make; rewind is handled after a miss.
+  const usable = skills.filter((s) => s.kind !== 'nudge' && s.kind !== 'teleport' && s.kind !== 'rewind');
+  const ult = usable.find((s) => s.ultimate);
+  if (ult && (confidence < 0.6 || HEX.includes(ult.kind))) return ult.slot;
+  const rescue = usable.find((s) => RESCUE.includes(s.kind));
+  if (rescue && confidence < 0.5) return rescue.slot;
+  const hex = usable.find((s) => HEX.includes(s.kind));
+  if (hex && (confidence < 0.4 || ctx.rng.next() < 0.25)) return hex.slot;
+  const boost = usable.find((s) => s.kind === 'spin' || s.kind === 'power' || s.kind === 'vision' || s.kind === 'reveal');
+  if (boost && ctx.rng.next() < 0.2) return boost.slot;
   return undefined;
 }
 
@@ -467,7 +479,7 @@ export function think(req: AiRequest): AiDecision {
   const table = rules.table === 'pool' ? makePoolTable() : makeCaromTable();
   const ctx: Ctx = {
     req, table, rules,
-    params: req.ice ? { ...DEFAULT_PHYS, muRoll: 0.0045, muSlide: 0.13, spinDecel: 18 } : DEFAULT_PHYS,
+    params: req.params,
     tune: LEVELS[req.profile.level],
     rng: new Rng(req.seed),
     cueId: rules.cueId(req.state, req.side),

@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { think } from '../src/ai/brain';
 import type { AiRequest } from '../src/ai/types';
 import { maxSpeed } from '../src/core/cue-power';
-import { makeBall } from '../src/core/physics';
+import { DEFAULT_PHYS, makeBall } from '../src/core/physics';
 import { newGameState } from '../src/core/rules/types';
 import { Match } from '../src/game/match';
 import { CUES, TABLES } from '../src/game/content/gear';
@@ -10,7 +10,7 @@ import { CUES, TABLES } from '../src/game/content/gear';
 function req(over: Partial<AiRequest>): AiRequest {
   return {
     balls: [], state: newGameState('nine', 0), side: 0, profile: { level: 4, personality: 'balanced' },
-    maxSpeed: maxSpeed('pool', 3), ballInHand: 'none', closedPockets: [], ice: false, seed: 1, option: false,
+    maxSpeed: maxSpeed('pool', 3), ballInHand: 'none', closedPockets: [], params: DEFAULT_PHYS, terrain: null, extraSegments: [], captureScale: 1, seed: 1, option: false,
     pushOutAvailable: false, energy: 0, skills: [], ...over,
   };
 }
@@ -33,10 +33,10 @@ describe('AI', () => {
     const games = 4;
     for (let g = 0; g < games; g++) {
       const m = new Match({
-        mode: 'nine', raceTo: 1, mutator: null, tableSkin: TABLES[0], seed: 100 + g, firstBreaker: (g % 2) as 0 | 1,
+        mode: 'nine', raceTo: 1, mutator: null, tableSkin: TABLES[0], classic: true, seed: 100 + g, firstBreaker: (g % 2) as 0 | 1,
         players: [
-          { name: 'A', kind: 'ai', ai: { level: 4, personality: 'balanced' }, cue: CUES[0], skills: [], avatar: 'a' },
-          { name: 'B', kind: 'ai', ai: { level: 1, personality: 'balanced' }, cue: CUES[0], skills: [], avatar: 'b' },
+          { name: 'A', kind: 'ai', ai: { level: 4, personality: 'balanced' }, cue: CUES[0], champion: 'tokiemnhi' },
+          { name: 'B', kind: 'ai', ai: { level: 1, personality: 'balanced' }, cue: CUES[0], champion: 'haclang' },
         ],
       });
       let guard = 0;

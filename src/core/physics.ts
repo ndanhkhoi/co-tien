@@ -41,6 +41,21 @@ export type PhysEvent =
   | { t: 'cushion'; id: number; speed: number; x: number; y: number }
   | { t: 'pocket'; id: number; pocket: number; speed: number };
 
+/**
+ * Land effects ("Thiên Tượng") as plain mechanics. Forces act only on rolling balls and stay
+ * below rolling resistance, so a resting ball stays put, as on a real slightly tilted table.
+ */
+export interface Terrain {
+  /** Uniform acceleration on moving balls (table tilt g·sinθ, or wind), m/s². */
+  force?: { x: number; y: number };
+  /** Gusts: the force is scaled by (1 − amp + amp·sin(ω·t)). */
+  gust?: { amp: number; omega: number };
+  /** Friction patches (snow, sand, poison puddles): multipliers inside the circle. */
+  patches?: { x: number; y: number; r: number; roll: number; slide: number }[];
+  /** Point attractors (m/s² at the centre, fading to 0 at radius r). */
+  wells?: { x: number; y: number; r: number; a: number }[];
+}
+
 export interface SimWorld {
   table: TableGeom;
   balls: Ball[];
@@ -49,6 +64,15 @@ export interface SimWorld {
   closedPockets?: number[];
   /** Extra segments (e.g. closed pocket mouths). */
   extraSegments?: { ax: number; ay: number; bx: number; by: number }[];
+  /** Pocket capture radius multiplier (skills that widen the pockets). */
+  captureScale?: number;
+  /** Acceleration (m/s²) pulling slow object balls near an open pocket into it. */
+  pocketPull?: number;
+  /** Ball id the pull ignores (the shooter's cue ball). */
+  pullExempt?: number;
+  terrain?: Terrain | null;
+  /** Simulation clock for time-varying terrain (s). */
+  time?: number;
 }
 
 const STOP_V = 0.004;
@@ -72,7 +96,7 @@ export function anyMoving(balls: Ball[]): boolean {
 }
 
 /** Cloth friction for one ball over dt. */
-function applyCloth(b: Ball, R: number, p: PhysParams, dt: number) {
+function applyCloth(b: Ball, R: number, p: PhysParams, dt: number, slideK = 1, rollK = 1) {
   // Contact point slip velocity.
   const cx = b.vx - R * b.wy;
   const cy = b.vy + R * b.wx;
@@ -81,7 +105,7 @@ function applyCloth(b: Ball, R: number, p: PhysParams, dt: number) {
   if (slip > 1e-3) {
     const ux = cx / slip;
     const uy = cy / slip;
-    const a = p.muSlide * p.g;
+    const a = p.muSlide * slideK * p.g;
     // Slip shrinks at 3.5·μg; snap to rolling instead of overshooting.
     if (3.5 * a * dt >= slip) {
       const k = slip / 3.5; // velocity change magnitude that zeroes slip
@@ -96,7 +120,7 @@ function applyCloth(b: Ball, R: number, p: PhysParams, dt: number) {
       b.wy += ((2.5 * a) / R) * ux * dt;
     }
   } else if (speed > 0) {
-    const dv = p.muRoll * p.g * dt;
+    const dv = p.muRoll * rollK * p.g * dt;
     if (speed <= dv) {
       b.vx = 0;
       b.vy = 0;
@@ -309,7 +333,8 @@ function checkPockets(w: SimWorld, b: Ball, events: PhysEvent[] | null): boolean
     const pk = t.pockets[i];
     const dx = b.x - pk.x;
     const dy = b.y - pk.y;
-    if (dx * dx + dy * dy < pk.r * pk.r) {
+    const r = pk.r * (w.captureScale ?? 1);
+    if (dx * dx + dy * dy < r * r) {
       pocketBall(b, i, events);
       return true;
     }
@@ -388,16 +413,30 @@ export function step(w: SimWorld, dt: number, events: PhysEvent[] | null): boole
       b.y += b.vy * h;
     }
     if (h > 0) {
+      const tr = w.terrain;
+      if (tr) applyTerrain(w, tr, h);
       for (const b of balls) {
         if (!b.onTable) continue;
-        applyCloth(b, R, p, h);
+        let slideK = 1;
+        let rollK = 1;
+        if (tr?.patches) {
+          for (const pa of tr.patches) {
+            if ((b.x - pa.x) ** 2 + (b.y - pa.y) ** 2 < pa.r * pa.r) {
+              slideK = pa.slide;
+              rollK = pa.roll;
+            }
+          }
+        }
+        applyCloth(b, R, p, h, slideK, rollK);
       }
+      w.time = (w.time ?? 0) + h;
     }
     if (hitA && hitB) {
       const frozen = clusterSize(balls, hitA, D) > 2 || clusterSize(balls, hitB, D) > 2;
       if (frozen && Math.abs((hitA.vx - hitB.vx)) + Math.abs(hitA.vy - hitB.vy) > 0.3) softImpact(balls, R, p, events);
       else collideBalls(hitA, hitB, R, p, events);
     }
+    if (w.pocketPull) applyPocketPull(w, h);
     for (const b of balls) {
       if (!b.onTable) continue;
       if (b.vx === 0 && b.vy === 0) continue;
@@ -407,6 +446,53 @@ export function step(w: SimWorld, dt: number, events: PhysEvent[] | null): boole
     }
   }
   return anyMoving(balls);
+}
+
+function applyTerrain(w: SimWorld, tr: Terrain, h: number) {
+  let fx = 0;
+  let fy = 0;
+  if (tr.force) {
+    const k = tr.gust ? 1 - tr.gust.amp + tr.gust.amp * Math.sin(tr.gust.omega * (w.time ?? 0)) : 1;
+    fx = tr.force.x * k;
+    fy = tr.force.y * k;
+  }
+  for (const b of w.balls) {
+    if (!b.onTable || (b.vx === 0 && b.vy === 0)) continue;
+    let ax = fx;
+    let ay = fy;
+    if (tr.wells) {
+      for (const wl of tr.wells) {
+        const dx = wl.x - b.x;
+        const dy = wl.y - b.y;
+        const d = Math.hypot(dx, dy);
+        if (d > wl.r || d < 1e-4) continue;
+        const a = wl.a * (1 - d / wl.r);
+        ax += (dx / d) * a;
+        ay += (dy / d) * a;
+      }
+    }
+    // A force through the centre of a rolling ball; cloth friction then re-establishes rolling.
+    b.vx += ax * h;
+    b.vy += ay * h;
+  }
+}
+
+/** Moving object balls within reach of an open pocket are drawn toward it. */
+function applyPocketPull(w: SimWorld, h: number) {
+  const reach = 0.16;
+  for (const b of w.balls) {
+    if (!b.onTable || b.id === w.pullExempt || (b.vx === 0 && b.vy === 0)) continue;
+    w.table.pockets.forEach((pk, i) => {
+      if (w.closedPockets?.includes(i)) return;
+      const dx = pk.x - b.x;
+      const dy = pk.y - b.y;
+      const d = Math.hypot(dx, dy);
+      if (d > reach || d < 1e-6) return;
+      const a = w.pocketPull! * (1 - d / reach);
+      b.vx += (dx / d) * a * h;
+      b.vy += (dy / d) * a * h;
+    });
+  }
 }
 
 export interface StrikeParams {

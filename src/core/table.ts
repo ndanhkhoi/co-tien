@@ -62,9 +62,8 @@ function seg(ax: number, ay: number, bx: number, by: number): Segment {
   return { ax, ay, bx, by };
 }
 
-function diamondsFor(L: number, W: number, rail: number): { x: number; y: number }[] {
+function diamondsFor(L: number, W: number, off: number): { x: number; y: number }[] {
   const out: { x: number; y: number }[] = [];
-  const off = rail * 0.55;
   for (let i = 1; i < 8; i++) {
     if (i === 4) continue; // side pocket position on pool, centre diamond on carom handled by caller
     const x = -L / 2 + (L * i) / 8;
@@ -141,14 +140,15 @@ export function makePoolTable(spec: PoolSpec = POOL_SPEC): TableGeom {
   const order = (p: Pocket) => (p.y < 0 ? 0 : 3) + (p.x < -0.01 ? 0 : p.x > 0.01 ? 2 : 1);
   pockets.sort((a, b) => order(a) - order(b));
 
-  const railWidth = 0.1;
+  // WPA: rail width (nose to outer edge) 4–7.5 in; diamond centres 3 11/16 in from the cushion nose.
+  const railWidth = 0.127;
   return {
     kind: 'pool', L, W, R, segments, pockets,
     headStringX: -L / 4,
     headSpot: { x: -L / 4, y: 0 },
     footSpot: { x: L / 4, y: 0 },
     centerSpot: { x: 0, y: 0 },
-    diamonds: diamondsFor(L, W, railWidth),
+    diamonds: diamondsFor(L, W, 0.0936),
     railWidth,
   };
 }
@@ -164,8 +164,8 @@ export function makeCaromTable(): TableGeom {
     seg(-hl, hw, -hl, -hw),
   ];
   const railWidth = 0.11;
-  const diamonds = diamondsFor(L, W, railWidth);
   const off = railWidth * 0.55;
+  const diamonds = diamondsFor(L, W, off);
   diamonds.push({ x: 0, y: -hw - off }, { x: 0, y: hw + off });
   return {
     kind: 'carom', L, W, R, segments, pockets: [],
