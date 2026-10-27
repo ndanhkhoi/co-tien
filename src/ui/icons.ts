@@ -1,5 +1,4 @@
 import { ballCss } from '../core/ball-styles';
-import type { SkillId } from '../game/content/gear';
 import { svg } from './dom';
 
 const S = (body: string, vb = '0 0 24 24') =>
@@ -43,10 +42,6 @@ export function icon(name: IconName, cls = ''): SVGElement {
   return svg(ICONS[name], cls);
 }
 
-export function skillIcon(id: SkillId): SVGElement {
-  return icon(id);
-}
-
 /** Painted pool ball for menus (solid / stripe with number). */
 export function ballArt(id: number, size = 120): SVGElement {
   const col = ballCss('pool', id);
@@ -62,7 +57,7 @@ export function ballArt(id: number, size = 120): SVGElement {
       <rect width="100" height="100" fill="${stripe ? '#f4f1e6' : col}"/>
       ${stripe ? `<rect y="24" width="100" height="52" fill="${col}"/>` : ''}
       <circle cx="50" cy="50" r="20" fill="#f6f3e8"/>
-      <text x="50" y="58" text-anchor="middle" font-family="Barlow Condensed, sans-serif" font-weight="800" font-size="${id > 9 ? 21 : 25}" fill="#111">${id}</text>
+      <text x="50" y="58" text-anchor="middle" font-family="Be Vietnam Pro, sans-serif" font-weight="600" font-size="${id > 9 ? 21 : 25}" fill="#111">${id}</text>
       <circle cx="50" cy="50" r="46" fill="url(#${uid}s)"/>
       <ellipse cx="34" cy="26" rx="12" ry="7" fill="#fff" opacity="0.55" transform="rotate(-30 34 26)"/>
     </g>

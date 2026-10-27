@@ -88,13 +88,16 @@ export function toast(text: string, kind: '' | 'bad' | 'good' | 'gold' = '') {
     document.getElementById('ui')!.append(toastLayer);
   }
   const glyph = { bad: '!', good: '✓', gold: '★', '': 'i' }[kind];
-  const t = h('div.toast', { class: kind || 'info', role: 'status' }, h('span.ti', null, glyph), h('span.tt', null, text), h('i.tbar'));
+  // Long rule explanations stay up long enough to read (about 15 characters a second).
+  const ms = Math.min(8000, Math.max(2600, text.length * 65));
+  const bar = h('i.tbar', { style: `animation-duration:${ms}ms` });
+  const t = h('div.toast', { class: kind || 'info', role: 'status' }, h('span.ti', null, glyph), h('span.tt', null, text), bar);
   toastLayer.append(t);
   while (toastLayer.children.length > 3) toastLayer.firstElementChild!.remove();
   setTimeout(() => {
     t.classList.add('leaving');
     setTimeout(() => t.remove(), 220);
-  }, 2600);
+  }, ms);
 }
 
 export function banner(text: string, bad = false) {

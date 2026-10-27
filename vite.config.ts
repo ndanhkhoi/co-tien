@@ -13,17 +13,17 @@ export default defineConfig({
     VitePWA({
       registerType: 'prompt',
       injectRegister: null,
-      includeAssets: ['icons/*.png', 'icons/*.svg'],
+      includeAssets: ['icons/*.png', 'favicon.ico'],
       manifest: {
         id: './',
-        name: 'Thần Công Bida',
-        short_name: 'Thần Công',
-        description: 'Game bida kỹ năng: 8 bi, 9 bi, 10 bi, bi-a phăng',
+        name: 'Cơ Tiên',
+        short_name: 'Cơ Tiên',
+        description: 'Bida tiên hiệp: 12 môn phái, 60 tướng, 8 bi, 9 bi, 10 bi, phăng',
         lang: 'vi',
         display: 'fullscreen',
         orientation: 'landscape',
-        background_color: '#07110d',
-        theme_color: '#07110d',
+        background_color: '#efe8da',
+        theme_color: '#efe8da',
         start_url: './',
         scope: './',
         icons: [
@@ -32,7 +32,17 @@ export default defineConfig({
           { src: 'icons/icon-maskable-512.png', sizes: '512x512', type: 'image/png', purpose: 'maskable' },
         ],
       },
-      workbox: { cleanupOutdatedCaches: true, globPatterns: ['**/*.{js,css,html,png,svg,webp,woff2,woff,json}'], maximumFileSizeToCacheInBytes: 6_000_000 },
+      workbox: {
+        cleanupOutdatedCaches: true,
+        // Precache code, UI art, portraits and skill icons; big art streams in and is cached on first view.
+        globPatterns: ['**/*.{js,css,html,png,svg,woff2,woff,json}', 'art/ui/*.webp', 'art/champions/*/portrait.webp', 'art/skills/*.webp', 'art/sects/*/emblem.webp'],
+        maximumFileSizeToCacheInBytes: 6_000_000,
+        runtimeCaching: [{
+          urlPattern: ({ url }) => url.pathname.includes('/art/'),
+          handler: 'CacheFirst',
+          options: { cacheName: 'art', expiration: { maxEntries: 2500 } },
+        }],
+      },
     }),
   ],
   test: { include: ['tests/**/*.test.ts'], testTimeout: 60_000 },

@@ -1,22 +1,30 @@
 import type { Personality } from '../../ai/types';
 import { sound } from '../../audio/sound';
-import { maxSpeed } from '../../core/cue-power';
 import { MODE_NAMES } from '../../core/rules';
 import type { GameMode } from '../../core/rules/types';
 import { CHAPTERS, LEVEL_NAMES, PERSONALITY_NAMES, type Npc } from '../../game/content/career';
 import { CHALLENGES, challengeBalls, FAMILY_INFO, goalText, judgeChallenge, type ChallengeDef, type ChallengeFamily } from '../../game/content/challenges';
-import { CUES, MUTATORS, SKILLS, TABLES, type MutatorId, type SkillId } from '../../game/content/gear';
+import { CUES, MUTATORS, TABLES, type CueDef, type MutatorId, type TableSkin } from '../../game/content/gear';
+import {
+  CHAMPION_PRICE, CHAMPIONS, champion, classInfo, cutoutUrl, sect, sectArtUrl, SECTS, skillIconUrl, type Champion,
+} from '../../game/content/sects';
+import { cueStats, tableStats, TABLE_NOTE, type StatLine } from '../../game/content/stat-text';
 import { defaultProfile, exportCode, importCode, levelProgress } from '../../game/profile';
 import { enterFullscreen, isTouchDevice, toggleFullscreen } from '../../platform/device';
 import { screenEl, type App, type Screen } from '../app';
-import { AI_AVATARS, AI_NAMES, AVATARS, avatar, GUEST_AVATAR } from '../avatar';
+import { avatar } from '../avatar';
 import { append, bar5, btn, h, iconBtn, modal, stars, tap, toast } from '../dom';
-import { ballArt, cueArt, icon, skillIcon } from '../icons';
+import { cueArt, icon } from '../icons';
+import { showIntro } from '../intro';
+import { resetHints } from '../hints';
+import { codexScreen } from './codex';
+import { journeyScreen } from './journey';
+import { storyScreen } from './story';
 import { matchScreen } from './match-screen';
 
 // ---------- Shared bits ----------
 
-function topbar(app: App, title: string, back = true): HTMLElement {
+export function topbar(app: App, title: string, back = true): HTMLElement {
   return h('div.topbar', null,
     back ? iconBtn(icon('back'), () => app.back(), 'Quay lại') : null,
     h('div.title', null, title),
@@ -24,11 +32,11 @@ function topbar(app: App, title: string, back = true): HTMLElement {
   );
 }
 
-function wallet(app: App): HTMLElement {
+export function wallet(app: App): HTMLElement {
   return h('div.wallet', null, h('span.chip.gold', null, icon('coin'), app.profile.coins.toLocaleString('vi-VN')));
 }
 
-function seg<T extends string | number>(options: [T, string][], value: T, onChange: (v: T) => void): HTMLElement {
+export function seg<T extends string | number>(options: [T, string][], value: T, onChange: (v: T) => void): HTMLElement {
   const box = h('div.seg');
   const render = (v: T) => {
     box.replaceChildren(...options.map(([k, label]) => tap(h('button', { class: k === v ? 'on' : '' }, label), () => {
@@ -42,47 +50,62 @@ function seg<T extends string | number>(options: [T, string][], value: T, onChan
 
 // ---------- Player profile ----------
 
-function avatarPicker(selected: () => string, onPick: (id: string) => void): HTMLElement {
-  const grid = h('div.av-picker');
-  const render = () => grid.replaceChildren(...AVATARS.map((a) => tap(
-    h('button.av-pick', { class: selected() === a.id ? 'on' : '', 'aria-label': a.name, title: a.name }, avatar(a.id)),
-    () => {
-      onPick(a.id);
-      render();
-    },
-  )));
+const hex6 = (n: number) => '#' + n.toString(16).padStart(6, '0');
+
+/** Champion grid grouped by sect; locked champions are shown dimmed. */
+function championPicker(app: App, selected: () => string, onPick: (c: Champion) => void, onlyOwned = false): HTMLElement {
+  const wrap = h('div.col', { style: 'gap:10px' });
+  const render = () => wrap.replaceChildren(...SECTS.map((s) => {
+    const list = CHAMPIONS.filter((c) => c.sect === s.id && (!onlyOwned || app.profile.champions.includes(c.id)));
+    if (!list.length) return null as unknown as HTMLElement;
+    return h('div', null,
+      // Ink title with the sect colour as a small seal, readable on paper.
+      h('div.section-title.sect-title', { style: `--sect:${hex6(s.main)}` }, s.name),
+      h('div.av-picker', null, ...list.map((c) => {
+        const owned = app.profile.champions.includes(c.id);
+        return tap(h('button.av-pick', { class: `${selected() === c.id ? 'on' : ''} ${owned ? '' : 'locked'}`, 'aria-label': c.name, title: c.name },
+          avatar(c.id), owned ? null : h('span.lock', null, icon('lock'))), () => {
+          onPick(c);
+          render();
+        });
+      })),
+    );
+  }).filter(Boolean));
   render();
-  return grid;
+  return wrap;
 }
 
-/** Name + portrait editor; shown on first launch and from the home profile card. */
+/** Name + champion editor; shown on first launch and from the home profile card. */
 function profileModal(app: App, onDone: () => void, first = false) {
   const p = app.profile;
   let name = p.name;
-  let pick = p.avatar;
+  let pick = p.champion;
   const preview = h('div.pm-preview', null, avatar(pick));
   const label = h('div.pm-char');
-  const setLabel = () => (label.textContent = AVATARS.find((a) => a.id === pick)?.name ?? '');
+  const setLabel = () => {
+    const c = champion(pick);
+    label.textContent = `${c.name} · ${classInfo(c.cls).name}`;
+  };
   setLabel();
   const input = h('input', {
     id: 'player-name', value: name, maxLength: 14, placeholder: 'Tên của bạn',
     oninput: (e: Event) => (name = (e.target as HTMLInputElement).value),
   }) as HTMLInputElement;
-  modal((close) => h('div.modal', { style: 'width:min(720px,100%)' },
+  modal((close) => h('div.modal', { style: 'width:min(760px,100%)' },
     h('h2', null, first ? 'Chào cơ thủ mới!' : 'Hồ sơ cơ thủ'),
     h('div.pm-body', null,
       h('div.pm-left', null, preview, label,
         h('label.section-title', { for: 'player-name', style: 'margin-top:6px' }, 'Tên hiển thị'), input),
-      h('div.pm-right.scroll', null, h('div.section-title', null, 'Chọn nhân vật'),
-        avatarPicker(() => pick, (id) => {
-          pick = id;
-          preview.replaceChildren(avatar(id));
+      h('div.pm-right.scroll', null, h('div.muted.small', null, 'Chọn tướng đã chiêu mộ. Thắng tướng khác ở Sự Nghiệp hoặc mua trong Bộ Sưu Tập để mở thêm.'),
+        championPicker(app, () => pick, (c) => {
+          pick = c.id;
+          preview.replaceChildren(avatar(c.id));
           setLabel();
-        })),
+        }, true)),
     ),
     h('div.actions', null, btn(first ? 'Vào game' : 'Lưu', () => {
       p.name = name.trim().slice(0, 14) || 'Cơ Thủ';
-      p.avatar = pick;
+      p.champion = pick;
       p.named = true;
       app.save();
       close();
@@ -92,15 +115,68 @@ function profileModal(app: App, onDone: () => void, first = false) {
   if (!first) setTimeout(() => input.focus(), 50);
 }
 
+/** One stat sheet row: label, optional 1–5 bar, value and what it does. */
+export function statRows(lines: StatLine[]): HTMLElement {
+  return h('div.stat-sheet', null, ...lines.map((l) => h('div.st-row', null,
+    h('div.st-head', null, h('b', null, l.label), l.bar ? bar5(l.bar) : null, h('span.st-val', null, l.value)),
+    h('div.st-exp', null, l.explain),
+  )));
+}
+
+/** Champion detail: cut-out art, class passive and the three skills with their real numbers. */
+export function championModal(app: App, c: Champion, onChange?: () => void) {
+  const p = app.profile;
+  const s = sect(c.sect);
+  const cls = classInfo(c.cls);
+  modal((close) => {
+    const owned = p.champions.includes(c.id);
+    const price = CHAMPION_PRICE[c.tier];
+    const action = owned
+      ? (p.champion === c.id ? btn('Đang dùng', () => {}, 'ghost') : btn('Chọn tướng', () => {
+        p.champion = c.id;
+        app.save();
+        close();
+        onChange?.();
+      }))
+      : btn(h('span', null, icon('coin'), ` Chiêu mộ ${price.toLocaleString('vi-VN')}`), () => {
+        if (p.coins < price) return toast('Không đủ xu — hoặc thắng tướng này ở Sự Nghiệp', 'bad');
+        p.coins -= price;
+        p.champions.push(c.id);
+        app.save();
+        toast(`Đã chiêu mộ ${c.name}`, 'gold');
+        close();
+        onChange?.();
+      });
+    return h('div.modal.champ-modal', { style: `--sect:${hex6(s.main)};--glow:${hex6(s.glow)}` },
+      h('div.cm-art', null, h('img', { src: cutoutUrl(c.id), alt: '', draggable: false, decoding: 'async' })),
+      h('div.cm-body.scroll', null,
+        h('div.cm-sect', null, h('img', { src: sectArtUrl(c.sect, 'emblem'), alt: '' }), s.name),
+        h('h2', null, c.name),
+        h('div.row', { style: 'gap:6px;flex-wrap:wrap' }, h('span.chip', null, `Bậc ${c.tier}`), h('span.chip.gold', null, cls.name)),
+        h('div.cm-passive', null, h('b', null, `Nội tại ${cls.name}: `), cls.passive),
+        ...c.skills.map((sk) => h('div.cm-skill', { class: sk.slot === 2 ? 'ult' : '' },
+          h('img', { src: skillIconUrl(c.id, sk.slot), alt: '' }),
+          h('div.grow', null,
+            h('div.row', { style: 'gap:6px' }, h('b', null, sk.name), h('span.chip.small', null, sk.slot === 2 ? 'Tuyệt chiêu · đầy năng lượng' : `Hồi ${sk.cooldown} cú`)),
+            h('div.small', null, sk.desc),
+          ),
+        )),
+        h('div.muted.small', null, 'Chiêu và nội tại có ở chế độ Tiên Đạo với mọi thể loại. Trên bàn phăng (không lỗ), chiêu liên quan đến lỗ tự đổi: phong ấn lỗ → làm run, nuốt chửng → áp phê thần, hấp dẫn → tiên tri, bộc phá → cuồng lực, dịch chuyển → dời bi.'),
+        h('div.actions', null, btn('Đóng', close, 'ghost'), action),
+      ),
+    );
+  }, { dismissable: true });
+}
+
 // ---------- Splash ----------
 
 export function splashScreen(app: App): Screen {
   const el = screenEl('splash');
-  const ball = ballArt(8, 150);
-  ball.classList.add('ball8');
+  const base = new URL(import.meta.env.BASE_URL, document.baseURI).href;
+  el.style.setProperty('--keyart', `url("${base}art/ui/keyart.webp")`);
+  el.style.setProperty('--keyart-tall', `url("${base}art/ui/keyart-portrait.webp")`);
   el.append(
-    ball,
-    h('div.logo', null, h('span.l1', null, 'Thần Công'), h('span.l2', null, 'Bida')),
+    h('img.logo-art', { src: `${base}art/ui/logo.webp`, alt: 'Cơ Tiên', draggable: false }),
     h('div.tap-hint', null, 'Chạm để bắt đầu'),
   );
   let started = false;
@@ -123,31 +199,37 @@ export function homeScreen(app: App): Screen {
   const p = app.profile;
   const prog = levelProgress(p.xp);
   const profileChip = tap(h('button.profile-chip', { 'aria-label': 'Sửa hồ sơ' },
-    h('div.home-av', null, avatar(p.avatar)),
+    h('div.home-av', null, avatar(p.champion)),
     h('div.lvl', null, String(prog.level)),
     h('div', null, h('div.pname', null, p.name), h('div.xpbar', null, h('i', { style: `width:${(prog.into / prog.need) * 100}%` }))),
     icon('pencil', 'pc-edit'),
   ), () => profileModal(app, () => app.go(homeScreen, { replace: true })));
-  if (!p.named) setTimeout(() => profileModal(app, () => app.go(homeScreen, { replace: true }), true), 350);
-  let n = 0;
-  const tile = (name: string, desc: string, art: Element | null, c1: string, fn: () => void, big = false) => {
-    n++;
-    const t = h('button.tile', { class: big ? 'big' : '', style: `--c1:${c1}` }, h('span.idx', null, String(n).padStart(2, '0')), art, h('div.name', null, name), h('div.desc', null, desc));
-    return tap(t, fn);
-  };
+  // First run: world introduction, then name and champion.
+  if (!p.introSeen) setTimeout(() => showIntro(app, () => !p.named && profileModal(app, () => app.go(homeScreen, { replace: true }), true)), 350);
+  else if (!p.named) setTimeout(() => profileModal(app, () => app.go(homeScreen, { replace: true }), true), 350);
   const beaten = Object.keys(p.career).length;
   const chDone = Object.keys(p.challenges).length;
-  const careerArt = h('div.art', { style: 'aspect-ratio:1' }, ballArt(8, 220));
+  // A vertical ink menu on the left, the painting and the player's champion on the right.
+  const item = (name: string, desc: string, fn: () => void) =>
+    tap(h('button.menu-item', null, h('span.mi-name', null, name), h('span.mi-desc', null, desc)), fn);
+  const base = new URL(import.meta.env.BASE_URL, document.baseURI).href;
+  el.classList.add('home');
+  el.style.setProperty('--home-bg', `url("${base}art/ui/home-bg.webp")`);
   el.append(
-    h('div.topbar', null, profileChip, h('div.grow'), wallet(app),
+    h('div.topbar.home-top', null, h('div.grow'), profileChip, wallet(app),
       isTouchDevice() ? null : iconBtn(icon('expand'), () => void toggleFullscreen(), 'Toàn màn hình'),
       iconBtn(icon('gear'), () => app.go(settingsScreen), 'Cài đặt')),
-    h('div.home-grid', { style: 'margin-top:10px' },
-      tile('Sự Nghiệp', `${beaten}/15 đối thủ · 5 chương`, careerArt, '#ffc531', () => app.go(careerScreen), true),
-      tile('Đấu Nhanh', 'Chọn thể loại & đối thủ', h('div.art', null, ballArt(9, 120)), '#17a673', () => app.go(quickScreen)),
-      tile('Thử Thách', `${chDone}/60 đã qua`, h('div.art', null, ballArt(3, 120)), '#ef4444', () => app.go(challengesScreen)),
-      tile('2 Người', 'Chơi chung một máy', h('div.art', null, ballArt(10, 120)), '#38bdf8', () => app.go(localScreen)),
-      tile('Bộ Sưu Tập', 'Cơ · Bàn · Kỹ năng', h('div.art', null, ballArt(12, 120)), '#a78bfa', () => app.go(collectionScreen)),
+    h('div.home-body', null,
+      h('nav.home-menu', null,
+        h('img.home-logo', { src: `${base}art/ui/logo.webp`, alt: 'Cơ Tiên', draggable: false }),
+        item('Hành trình', `${beaten}/${CHAMPIONS.length} cao thủ · ${chDone}/${CHALLENGES.length} thử thách`, () => app.go(journeyScreen)),
+        item('Đấu nhanh', 'Chọn thể loại và đối thủ', () => app.go(quickScreen)),
+        item('Hai người', 'Chơi chung một máy', () => app.go(localScreen)),
+        item('Bộ sưu tập', `${p.champions.length}/${CHAMPIONS.length} tướng · cơ · bàn`, () => app.go(collectionScreen)),
+        item('Truyện', 'Cơ Tiên Truyện · 15 chương có tranh', () => app.go(storyScreen)),
+        item('Cơ Tiên Lục', 'Vùng đất · tướng · luật chơi', () => app.go(codexScreen)),
+      ),
+      h('div.home-hero', null, h('img', { src: cutoutUrl(p.champion), alt: '', draggable: false, decoding: 'async' })),
     ),
   );
   return { el };
@@ -165,12 +247,15 @@ function setupScreen(app: App, local: boolean): Screen {
     points: 10,
     mutator: null as MutatorId | null,
     name2: 'Người chơi 2',
+    classic: false,
   };
   const left = h('div.col.grow.scroll', { style: 'padding-right:4px' });
   const isCarom = () => st.mode.startsWith('carom');
   const render = () => {
     left.replaceChildren();
     append(left, [
+      h('div.section-title', null, 'Chế độ'),
+      seg([['tc', 'Tiên Đạo · có chiêu'], ['cd', 'Cổ Điển · bida thuần']], st.classic ? 'cd' : 'tc', (v) => (st.classic = v === 'cd')),
       h('div.section-title', null, 'Thể loại'),
       seg(Object.entries(MODE_NAMES) as [GameMode, string][], st.mode, (v) => {
         st.mode = v;
@@ -201,33 +286,36 @@ function setupScreen(app: App, local: boolean): Screen {
     ]);
   };
   render();
+  const me = champion(app.profile.champion);
   const right = h('div.panel.col', { style: 'width:min(260px,38vw);padding:14px;justify-content:space-between' },
     h('div.col', null,
-      h('div.section-title', null, 'Trang bị'),
+      h('div.section-title', null, 'Tướng & trang bị'),
+      h('div.row', { style: 'gap:10px' }, h('div', { style: 'width:52px;height:52px;border-radius:14px;overflow:hidden;flex-shrink:0' }, avatar(me.id)),
+        h('div', null, h('b', null, me.name), h('div.muted.small', null, classInfo(me.cls).name))),
+      h('div.row', { style: 'gap:6px' }, ...me.skills.map((sk) => h('img.skill-mini', { src: skillIconUrl(me.id, sk.slot), alt: sk.name, title: sk.name }))),
       h('div', { style: 'font-weight:800' }, app.cue.name),
       cueArt(app.cue.colors),
-      h('div.muted.small', null, `Bàn: ${app.tableSkin.name}`),
-      local ? h('div.muted.small', null, 'Chế độ 2 người không dùng kỹ năng.') : h('div.row', { style: 'gap:6px;flex-wrap:wrap' },
-        ...app.profile.skills.map((id) => h('span.chip', null, skillIcon(id), SKILLS.find((s) => s.id === id)!.name)),
-      ),
+      h('div.muted.small', null, app.tableSkin.name),
     ),
     btn(h('span', null, icon('play'), ' Vào trận'), () => start(), 'green'),
   );
   el.append(topbar(app, local ? '2 Người · cùng máy' : 'Đấu Nhanh'), h('div.body', null, left, right));
 
   function start() {
-    const me = { name: app.profile.name, kind: 'human' as const, cue: app.cue, skills: local ? [] : app.profile.skills, avatar: 'player' };
-    const look2 = local ? GUEST_AVATAR : AI_AVATARS[st.level - 1];
+    // AI opponents: a champion whose tier fits the level, with a cue from their own sect.
+    const pool = CHAMPIONS.filter((c) => (local ? app.profile.champions.includes(c.id) && c.id !== me.id : Math.abs(c.tier - (st.level + 1)) <= 1));
+    const foe = pool[Math.floor(Math.random() * pool.length)] ?? CHAMPIONS[1];
+    const foeCue = local ? app.cue : CUES.find((c) => c.id === `${foe.sect}-${st.level >= 3 ? 'b' : 'a'}`) ?? CUES[0];
+    const p1 = { name: app.profile.name, kind: 'human' as const, cue: app.cue, champion: me.id };
     const opp = local
-      ? { name: st.name2.slice(0, 14), kind: 'human' as const, cue: app.cue, skills: [], avatar: 'guest' }
-      : { name: AI_NAMES[st.level - 1], kind: 'ai' as const, ai: { level: st.level, personality: st.pers }, cue: CUES[Math.min(5, st.level)], skills: (st.level >= 3 ? ['shield', 'tremor'] : st.level === 2 ? ['shield'] : []) as SkillId[], avatar: 'ai' };
+      ? { name: st.name2.slice(0, 14), kind: 'human' as const, cue: foeCue, champion: foe.id }
+      : { name: foe.name, kind: 'ai' as const, ai: { level: st.level, personality: st.pers }, cue: foeCue, champion: foe.id };
     const again = () => app.go(launch, { replace: true });
     const launch = matchScreen({
       setup: {
-        mode: st.mode, raceTo: st.race, players: [me, opp], mutator: isCarom() ? null : st.mutator,
-        tableSkin: app.tableSkin, caromTarget: st.points, firstBreaker: Math.random() < 0.5 ? 0 : 1,
+        mode: st.mode, raceTo: st.race, players: [p1, opp], mutator: isCarom() ? null : st.mutator,
+        tableSkin: app.tableSkin, caromTarget: st.points, firstBreaker: Math.random() < 0.5 ? 0 : 1, classic: st.classic,
       },
-      looks: [app.profile.avatar, look2],
       titles: [`Cấp ${app.level}`, local ? 'Khách' : `${LEVEL_NAMES[st.level]} · ${PERSONALITY_NAMES[st.pers]}`],
       label: local ? '2 người' : 'Đấu nhanh',
       onExit: () => app.pop(),
@@ -266,13 +354,14 @@ export function careerScreen(app: App): Screen {
   };
   for (const ch of CHAPTERS) {
     const box = h('div.chapter', null,
-      h('div', null, h('div.place', null, ch.place), h('h3', null, ch.name), h('div.muted.small', { style: 'margin-top:4px' }, ch.desc)),
+      h('div.ch-head', { style: `--sect:${hex6(sect(ch.id).main)}` }, h('img.ch-emblem', { src: sectArtUrl(ch.id, 'emblem'), alt: '' }),
+        h('div', null, h('div.place', null, `Chương ${CHAPTERS.indexOf(ch) + 1}`), h('h3', null, ch.name), h('div.muted.small', { style: 'margin-top:4px' }, ch.desc))),
     );
     for (const n of ch.npcs) {
       const open = unlocked(n);
       const best = app.profile.career[n.id] ?? 0;
       const card = h('button.npc', { class: open ? '' : 'locked' },
-        h('div.av', null, avatar(n.avatar)),
+        h('div.av', null, avatar(n.id)),
         h('div.grow', null,
           h('div.nm', null, n.name),
           h('div.tt', null, `${n.title} · ${MODE_NAMES[n.mode]}`),
@@ -290,10 +379,10 @@ export function careerScreen(app: App): Screen {
   return { el };
 }
 
-function npcModal(app: App, n: Npc) {
+export function npcModal(app: App, n: Npc) {
   modal((close) => h('div.modal', null,
     h('div.row', { style: 'gap:14px' },
-      h('div', { style: 'width:84px;height:84px;border-radius:20px;overflow:hidden;flex-shrink:0' }, avatar(n.avatar)),
+      h('div', { style: 'width:84px;height:84px;border-radius:20px;overflow:hidden;flex-shrink:0' }, avatar(n.id)),
       h('div.grow', null,
         h('h2', null, n.name),
         h('div.muted', { style: 'font-weight:700' }, n.title),
@@ -302,7 +391,9 @@ function npcModal(app: App, n: Npc) {
     ),
     h('div', { style: 'font-style:italic;font-weight:600;line-height:1.5' }, `“${n.intro}”`),
     n.mutator ? h('div.chip', null, `Biến thể: ${MUTATORS.find((m) => m.id === n.mutator)!.name} — ${MUTATORS.find((m) => m.id === n.mutator)!.desc}`) : null,
-    h('div.row', null, h('span.chip.gold', null, icon('coin'), `+${n.coins}`), h('span.chip', null, `+${n.xp} EXP`)),
+    h('div.row', null, h('span.chip.gold', null, icon('coin'), `+${n.coins}`), h('span.chip', null, `+${n.xp} EXP`),
+      app.profile.champions.includes(n.id) ? null : h('span.chip', null, `Thắng để chiêu mộ ${n.name}`)),
+    h('div.small.muted', null, `Bàn: ${tableOf(n).name}`),
     h('div.actions', null,
       btn('Để sau', close, 'ghost'),
       btn('Thách đấu', () => {
@@ -313,18 +404,19 @@ function npcModal(app: App, n: Npc) {
   ), { dismissable: true });
 }
 
+const tableOf = (n: Npc): TableSkin => TABLES.find((t) => t.id === n.sect) ?? TABLES[0];
+
 function startCareer(app: App, n: Npc) {
   const cue = CUES.find((c) => c.id === n.cueId) ?? CUES[0];
   const launch = matchScreen({
     setup: {
-      mode: n.mode, raceTo: n.raceTo, mutator: n.mutator, tableSkin: app.tableSkin, caromTarget: n.caromTarget,
+      mode: n.mode, raceTo: n.raceTo, mutator: n.mutator, tableSkin: tableOf(n), caromTarget: n.caromTarget,
       firstBreaker: 0,
       players: [
-        { name: app.profile.name, kind: 'human', cue: app.cue, skills: app.profile.skills, avatar: 'player' },
-        { name: n.name, kind: 'ai', ai: { level: n.level, personality: n.personality }, cue, skills: n.skills, avatar: n.id },
+        { name: app.profile.name, kind: 'human', cue: app.cue, champion: app.profile.champion },
+        { name: n.name, kind: 'ai', ai: { level: n.level, personality: n.personality }, cue, champion: n.id },
       ],
     },
-    looks: [app.profile.avatar, n.avatar],
     titles: [`Cấp ${app.level}`, n.title],
     quote: n.intro,
     label: 'Sự nghiệp',
@@ -346,11 +438,11 @@ function startCareer(app: App, n: Npc) {
       const first = p.career[n.id] === undefined;
       p.career[n.id] = Math.max(p.career[n.id] ?? 0, st);
       const coins = first ? n.coins : Math.round(n.coins * 0.3);
-      const unlockCue = n.id === 'thancong' && !p.cues.includes('thancong');
-      if (unlockCue) p.cues.push('thancong');
+      const recruit = !p.champions.includes(n.id);
+      if (recruit) p.champions.push(n.id);
       const up = app.reward(coins, n.xp);
       return {
-        lines: [`${n.name}: “${n.loseLine}”`, `${'★'.repeat(st)}${'☆'.repeat(3 - st)}`, `+${coins} xu · +${n.xp} EXP`, ...(up ? [`Lên cấp ${app.level}!`] : []), ...(unlockCue ? ['Nhận cơ Thần Công!'] : [])],
+        lines: [`${n.name}: “${n.loseLine}”`, `${'★'.repeat(st)}${'☆'.repeat(3 - st)}`, `+${coins} xu · +${n.xp} EXP`, ...(up ? [`Lên cấp ${app.level}!`] : []), ...(recruit ? [`Chiêu mộ được ${n.name}!`] : [])],
         again,
       };
     },
@@ -386,21 +478,20 @@ export function challengesScreen(app: App): Screen {
 
 const POCKET_LABEL = ['lỗ góc trên trái', 'lỗ giữa trên', 'lỗ góc trên phải', 'lỗ góc dưới trái', 'lỗ giữa dưới', 'lỗ góc dưới phải'];
 
-function startChallenge(app: App, c: ChallengeDef) {
+export function startChallenge(app: App, c: ChallengeDef, table: TableSkin = app.tableSkin) {
   const list = CHALLENGES.filter((x) => x.family === c.family);
   const idx = list.indexOf(c);
   const mode: GameMode = c.table === 'carom' ? (c.goal.kind === 'carom' && c.goal.three ? 'carom-3c' : 'carom-libre') : 'eight';
   const launch = matchScreen({
     setup: {
-      mode, raceTo: 1, mutator: null, tableSkin: app.tableSkin,
+      mode, raceTo: 1, mutator: null, tableSkin: table, classic: true,
       players: [
-        { name: app.profile.name, kind: 'human', cue: app.cue, skills: [], avatar: 'player' },
-        { name: 'Thử thách', kind: 'human', cue: app.cue, skills: [], avatar: 'none' },
+        { name: app.profile.name, kind: 'human', cue: app.cue, champion: app.profile.champion },
+        { name: 'Thử thách', kind: 'human', cue: app.cue, champion: app.profile.champion },
       ],
       layout: challengeBalls(c),
       judge: (shot, balls) => judgeChallenge(c, shot, balls),
     },
-    looks: [app.profile.avatar, GUEST_AVATAR],
     label: `${FAMILY_INFO[c.family].name} ${idx + 1}`,
     challenge: {
       tries: 3,
@@ -433,7 +524,7 @@ function startChallengeReplace(app: App, c: ChallengeDef) {
 
 export function collectionScreen(app: App): Screen {
   const el = screenEl();
-  let tab: 'cue' | 'table' | 'skill' = 'cue';
+  let tab: 'champ' | 'cue' | 'table' = 'champ';
   const content = h('div.scroll', { style: 'flex:1;min-height:0' });
   const lv = app.level;
   const p = app.profile;
@@ -442,91 +533,59 @@ export function collectionScreen(app: App): Screen {
   };
   const render = () => {
     content.replaceChildren();
-    const grid = h('div', { style: 'display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px' });
-    if (tab === 'cue') {
-      for (const c of CUES) {
-        const owned = p.cues.includes(c.id);
-        const eq = p.cue === c.id;
-        const locked = !owned && lv < c.level;
-        const card = h('div.card', { class: `${eq ? 'sel' : ''} ${locked ? 'locked' : ''}` },
-          h('div.row', null, h('b.grow', null, c.name), owned ? (eq ? h('span.chip.gold', null, 'Đang dùng') : null) : h('span.chip.gold', null, icon('coin'), c.price.toLocaleString('vi-VN'))),
-          h('div', { style: 'margin:8px 0' }, cueArt(c.colors)),
-          h('div.stats', null,
-            'Lực', bar5(c.power), 'Ngắm', bar5(c.aim), 'Phê', bar5(c.spin), 'Vững tay', bar5(c.control), 'Năng lượng', bar5(c.energy),
-          ),
-          h('div.muted.small', { style: 'margin-top:6px' }, `${c.desc} · Tốc độ tối đa ${maxSpeed('pool', c.power).toFixed(1)} m/s`),
-          h('div', { style: 'margin-top:8px' }, cardAction(owned, eq, locked, c.level, c.price, () => {
-            if (!owned) {
-              if (c.id === 'thancong') return toast('Đánh bại Thần Công ở Sự Nghiệp để nhận', 'bad');
-              p.coins -= c.price;
-              p.cues.push(c.id);
-              toast(`Đã mua ${c.name}`, 'gold');
-            }
-            p.cue = c.id;
-            app.save();
-            refreshWallet();
-            render();
-          })),
-        );
-        grid.append(card);
-      }
-    } else if (tab === 'table') {
-      for (const t of TABLES) {
-        const owned = p.tables.includes(t.id);
-        const eq = p.table === t.id;
-        const locked = !owned && lv < t.level;
-        const hex = (n: number) => '#' + n.toString(16).padStart(6, '0');
-        const preview = h('div', { style: `height:74px;border-radius:12px;margin:8px 0;border:9px solid ${hex(t.rail)};background:radial-gradient(circle at 50% 40%, ${hex(t.cloth)}, ${hex(t.clothDark)});box-shadow:inset 0 0 0 2px rgba(0,0,0,0.3)` });
-        grid.append(h('div.card', { class: `${eq ? 'sel' : ''} ${locked ? 'locked' : ''}` },
-          h('div.row', null, h('b.grow', null, t.name), owned ? (eq ? h('span.chip.gold', null, 'Đang dùng') : null) : h('span.chip.gold', null, icon('coin'), t.price.toLocaleString('vi-VN'))),
-          preview,
-          h('div.muted.small', null, t.desc),
-          h('div', { style: 'margin-top:8px' }, cardAction(owned, eq, locked, t.level, t.price, () => {
-            if (!owned) {
-              p.coins -= t.price;
-              p.tables.push(t.id);
-              toast(`Đã mua ${t.name}`, 'gold');
-            }
-            p.table = t.id;
-            app.save();
-            refreshWallet();
-            render();
-          })),
-        ));
-      }
-    } else {
-      content.append(h('div.muted.small', { style: 'margin-bottom:8px' }, 'Mang tối đa 2 kỹ năng vào mỗi trận. Kỹ năng tiêu năng lượng — ăn bi để hồi.'));
-      for (const s of SKILLS) {
-        const on = p.skills.includes(s.id);
-        const locked = lv < s.level;
-        const card = h('button.card', { class: `${on ? 'sel' : ''} ${locked ? 'locked' : ''}` },
-          h('div.row', null,
-            h('div', { style: 'width:44px;height:44px;display:grid;place-items:center;border-radius:var(--r-sm);background:var(--surface-3);color:var(--info);flex-shrink:0' }, skillIcon(s.id)),
-            h('div.grow', null, h('b', null, s.name), h('div.muted.small', null, `${s.cost} năng lượng${locked ? ` · mở ở cấp ${s.level}` : ''}`)),
-            on ? icon('check') : null,
-          ),
-          h('div.small', { style: 'margin-top:6px;font-weight:600' }, s.desc),
-        );
-        tap(card, () => {
-          if (locked) return toast(`Đạt cấp ${s.level} để mở`, 'bad');
-          if (on) p.skills = p.skills.filter((x) => x !== s.id);
-          else p.skills = [...p.skills, s.id].slice(-2);
-          app.save();
+    if (tab === 'champ') {
+      content.append(h('div.muted.small', { style: 'margin-bottom:8px' }, `Đã chiêu mộ ${p.champions.length}/${CHAMPIONS.length}. Chạm vào tướng để xem nội tại và 3 chiêu.`),
+        championPicker(app, () => p.champion, (c) => championModal(app, c, () => {
+          refreshWallet();
           render();
-        });
-        grid.append(card);
+        })));
+      return;
+    }
+    const grid = h('div', { style: 'display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px' });
+    if (tab === 'cue') {
+      content.append(h('div.muted.small', { style: 'margin-bottom:8px' }, 'Mọi cây cơ đều hiện đường ngắm và bi ảo. Chỉ số chỉ thay đổi những gì ghi bên dưới.'));
+      for (const c of CUES) grid.append(gearCard(c, c.colors ? cueArt(c.colors) : null, cueStats(c), p.cues.includes(c.id), p.cue === c.id, () => {
+        if (!p.cues.includes(c.id)) p.cues.push(c.id);
+        p.cue = c.id;
+      }));
+    } else {
+      content.append(h('div.muted.small', { style: 'margin-bottom:8px' }, TABLE_NOTE));
+      for (const t of TABLES) {
+        const preview = h('div', { style: `height:74px;border-radius:12px;margin:8px 0;border:9px solid ${hex6(t.rail)};background:radial-gradient(circle at 50% 40%, ${hex6(t.cloth)}, ${hex6(t.clothDark)});box-shadow:inset 0 0 0 2px rgba(0,0,0,0.3)` });
+        grid.append(gearCard(t, preview, tableStats(t), p.tables.includes(t.id), p.table === t.id, () => {
+          if (!p.tables.includes(t.id)) p.tables.push(t.id);
+          p.table = t.id;
+        }));
       }
     }
     content.append(grid);
   };
+  function gearCard(item: CueDef | TableSkin, art: Element | null, stats: StatLine[], owned: boolean, eq: boolean, take: () => void): HTMLElement {
+    const locked = !owned && lv < item.level;
+    return h('div.card', { class: `${eq ? 'sel' : ''} ${locked ? 'locked' : ''}` },
+      h('div.row', null, h('b.grow', null, item.name), owned ? (eq ? h('span.chip.gold', null, 'Đang dùng') : null) : h('span.chip.gold', null, icon('coin'), item.price.toLocaleString('vi-VN'))),
+      art ? h('div', { style: 'margin:8px 0' }, art) : null,
+      h('div.muted.small', { style: 'margin-bottom:6px' }, item.desc),
+      statRows(stats),
+      h('div', { style: 'margin-top:8px' }, cardAction(owned, eq, locked, item.level, item.price, () => {
+        if (!owned) {
+          p.coins -= item.price;
+          toast(`Đã mua ${item.name}`, 'gold');
+        }
+        take();
+        app.save();
+        refreshWallet();
+        render();
+      })),
+    );
+  }
   function cardAction(owned: boolean, eq: boolean, locked: boolean, level: number, price: number, act: () => void) {
     if (eq) return btn('Đã trang bị', () => {}, 'ghost small');
     if (owned) return btn('Trang bị', act, 'small');
     if (locked) return btn(h('span', null, icon('lock'), ` Cấp ${level}`), () => toast(`Đạt cấp ${level} để mở khóa`, 'bad'), 'ghost small');
-    const b = btn('Mua', () => (p.coins >= price ? act() : toast('Không đủ xu', 'bad')), 'small');
-    return b;
+    return btn('Mua', () => (p.coins >= price ? act() : toast('Không đủ xu', 'bad')), 'small');
   }
-  const tabs = seg([['cue', 'Cơ'], ['table', 'Bàn'], ['skill', 'Kỹ năng']], tab, (v) => {
+  const tabs = seg([['champ', 'Tướng'], ['cue', 'Cơ'], ['table', 'Bàn']], tab, (v) => {
     tab = v;
     render();
   });
@@ -570,13 +629,10 @@ export function settingsScreen(app: App): Screen {
     },
   });
   const prog = levelProgress(p.xp);
-  const picker = avatarPicker(() => p.avatar, (id) => {
-    p.avatar = id;
-    save();
-  });
+  const champBtn = btn(h('span', null, champion(p.champion).name), () => profileModal(app, () => app.go(settingsScreen, { replace: true })), 'ghost small');
   const left = h('div.panel.scroll', { style: 'flex:1;padding:6px 16px;min-height:0' },
     line('Tên cơ thủ', nameInput),
-    h('div', { style: 'padding:8px 0;border-bottom:1px solid var(--line)' }, h('div', { style: 'font-size:15px;font-weight:600;margin-bottom:8px' }, 'Ảnh đại diện'), picker),
+    line('Tướng đại diện', champBtn),
     line('Hiệu ứng âm thanh', slider(s.sfx, (v) => {
       s.sfx = v;
       sound.tap();
@@ -588,6 +644,11 @@ export function settingsScreen(app: App): Screen {
     })),
     line('Rung khi chạm', toggle(s.haptics, (v) => (s.haptics = v)), 'Android hỗ trợ rung; iPhone không cho web rung.'),
     line('Thuận tay trái', toggle(s.leftHanded, (v) => (s.leftHanded = v)), 'Đảo nút ĐÁNH sang bên trái'),
+    line('Giới thiệu Cơ Tiên Giới', btn('Xem lại', () => showIntro(app), 'ghost small')),
+    line('Gợi ý cho người mới', btn('Hiện lại', () => {
+      resetHints(app);
+      toast('Gợi ý sẽ hiện lại trong trận tới', 'good');
+    }, 'ghost small')),
   );
   const right = h('div.panel.col', { style: 'width:min(300px,42vw);padding:14px' },
     h('div.section-title', null, 'Hồ sơ'),

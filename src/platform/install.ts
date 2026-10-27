@@ -53,6 +53,8 @@ export function isStandalone(): boolean {
 
 /** Phones and tablets in a browser tab must install first; desktops play in the tab. */
 export function mustInstall(): boolean {
+  // `?gate` previews the install screen on any device (design checks); it never blocks desktops otherwise.
+  if (location.search.includes('gate')) return true;
   if (isStandalone() || navigator.webdriver) return false;
   if (import.meta.env.DEV && location.search.includes('browser')) return false;
   const touch = matchMedia('(pointer: coarse)').matches && navigator.maxTouchPoints > 0;

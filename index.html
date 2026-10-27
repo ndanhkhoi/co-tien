@@ -3,19 +3,20 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
-    <meta name="theme-color" content="#07110d" />
+    <meta name="theme-color" content="#efe8da" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-    <meta name="apple-mobile-web-app-title" content="Thần Công" />
+    <meta name="apple-mobile-web-app-title" content="Cơ Tiên" />
     <meta name="format-detection" content="telephone=no" />
-    <meta name="description" content="Thần Công Bida — game bida kỹ năng: 8 bi, 9 bi, 10 bi, bi-a phăng. Chơi offline trên điện thoại." />
-    <link rel="icon" href="./icons/favicon.svg" type="image/svg+xml" />
+    <meta name="description" content="Cơ Tiên — bida tu tiên: 12 môn phái, 60 tướng, vật lý và luật bida thật. 8 bi, 9 bi, 10 bi, phăng. Chơi offline trên điện thoại." />
+    <link rel="icon" href="./favicon.ico" sizes="any" />
+    <link rel="icon" href="./icons/icon-32.png" type="image/png" sizes="32x32" />
     <link rel="apple-touch-icon" href="./icons/icon-180.png" />
-    <title>Thần Công Bida</title>
+    <title>Cơ Tiên</title>
     <style>
-      html, body { margin: 0; height: 100%; background: #07110d; }
-      #boot { position: fixed; inset: 0; display: grid; place-items: center; color: #f5c542; font: 800 14px system-ui, sans-serif; letter-spacing: .3em; text-transform: uppercase; }
+      html, body { margin: 0; height: 100%; background: #efe8da; }
+      #boot { position: fixed; inset: 0; display: grid; place-items: center; color: #1c1a17; font: 500 14px Georgia, serif; letter-spacing: .3em; }
     </style>
   </head>
   <body>
@@ -23,8 +24,9 @@
     <div id="stage"></div>
     <div id="ui"></div>
     <div class="rotate-hint">
-      <svg viewBox="0 0 24 24" fill="none" stroke="#f5c542" stroke-width="1.8" stroke-linecap="round"><rect x="7" y="2" width="10" height="20" rx="2.5"/><path d="M11 18h2"/></svg>
-      <div>Xoay ngang điện thoại để chơi</div>
+      <div class="rh-stage"><img class="rh-arrow" src="./art/ui/arrow.webp" alt="" /><img class="rh-tablet" src="./art/ui/tablet.webp" alt="" /></div>
+      <div class="rh-title">Xoay ngang để chơi</div>
+      <div class="rh-sub">Cơ Tiên được vẽ cho khung ngang</div>
     </div>
     <script type="module" src="/src/main.ts"></script>
   </body>
