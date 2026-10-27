@@ -55,6 +55,7 @@ export type MatchEvent =
   | { type: 'phys'; e: PhysEvent }
   | { type: 'explode'; x: number; y: number }
   | { type: 'resolved'; res: Resolution; side: Side }
+  | { type: 'energy'; side: Side; gain: number; total: number }
   | { type: 'turn'; side: Side }
   | { type: 'skill'; side: Side; champion: string; slot: number; skill: SkillDef }
   | { type: 'omen'; side: Side; omen: Omen }
@@ -85,7 +86,7 @@ interface Snapshot {
 }
 
 export const ENERGY_MAX = 100;
-const ENERGY_START = 20;
+const ENERGY_START = 30;
 
 export class Match {
   readonly setup: MatchSetup;
@@ -558,8 +559,10 @@ export class Match {
     // Chú Sư slows the opponent's charge.
     if (this.passive(opp) === 'chusu') gain *= 0.85;
     if (this.homeSide(side)) gain *= 1.2;
-    this.energy[side] = Math.min(ENERGY_MAX, this.energy[side] + gain);
-    if (res.foul) this.energy[opp] = Math.min(ENERGY_MAX, this.energy[opp] + 8);
+    if (!this.setup.classic) {
+      this.gainEnergy(side, gain + 8);
+      if (res.foul) this.gainEnergy(opp, 12);
+    }
     if (res.keepTurn && (ownPots > 0 || res.points > 0)) {
       s.run++;
       s.bestRun = Math.max(s.bestRun, s.run);
@@ -600,6 +603,12 @@ export class Match {
       Object.assign(c, nearestCueSpot(this.table, this.balls, c.id, c.x, c.y, this.placing === 'kitchen'));
     }
     this.beginTurn();
+  }
+
+  private gainEnergy(side: Side, amount: number) {
+    const before = this.energy[side];
+    this.energy[side] = Math.min(ENERGY_MAX, before + amount);
+    this.emit({ type: 'energy', side, gain: this.energy[side] - before, total: this.energy[side] });
   }
 
   private ownPots(side: Side, ids: number[]): number {

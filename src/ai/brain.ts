@@ -5,7 +5,7 @@ import { Rng } from '../core/rng';
 import { RULES } from '../core/rules';
 import { other, summarize, type GameState, type Resolution, type RuleSet, type Side } from '../core/rules/types';
 import { makeCaromTable, makePoolTable, type TableGeom } from '../core/table';
-import type { SkillKind } from '../game/content/sects';
+import { skillPower, type SkillKind } from '../game/content/sects';
 import type { AiDecision, AiProfile, AiRequest, AiShot } from './types';
 
 interface LevelTune {
@@ -389,6 +389,16 @@ function placements(ctx: Ctx, balls: Ball[], kitchen: boolean): { x: number; y: 
       if (canPlaceCue(t, balls, ctx.cueId, x, y, kitchen)) out.push({ x, y });
     }
   }
+  if (ctx.req.nudge) {
+    const n = ctx.req.nudge;
+    for (let i = 0; i < 12; i++) {
+      const a = i * Math.PI / 6;
+      const x = n.x + Math.cos(a) * n.radius * 0.95;
+      const y = n.y + Math.sin(a) * n.radius * 0.95;
+      if (canPlaceCue(t, balls, ctx.cueId, x, y, false)) out.push({ x, y });
+    }
+    return ctx.rng.shuffle(out.filter((p) => Math.hypot(p.x - n.x, p.y - n.y) <= n.radius)).slice(0, 7);
+  }
   return ctx.rng.shuffle(out).slice(0, ctx.req.profile.level >= 3 ? 14 : 7);
 }
 
@@ -460,21 +470,27 @@ const HEX: SkillKind[] = ['chill', 'freeze', 'seal', 'drain'];
 
 function chooseSkill(ctx: Ctx, confidence: number): AiDecision['skill'] {
   const { skills, profile } = ctx.req;
-  if (profile.level < 2 || !skills.length) return undefined;
-  // Placement skills need a cue-ball plan the brain does not make; rewind is handled after a miss.
+  if (!skills.length) return undefined;
   const usable = skills.filter((s) => s.kind !== 'nudge' && s.kind !== 'teleport' && s.kind !== 'rewind');
+  const late = ctx.req.balls.filter((b) => b.onTable && b.id !== ctx.cueId).length <= 5;
   const ult = usable.find((s) => s.ultimate);
-  if (ult && (confidence < 0.6 || HEX.includes(ult.kind))) return ult.slot;
-  const rescue = usable.find((s) => RESCUE.includes(s.kind));
+  if (ult && (profile.level === 1 || late || confidence >= 0.5 || RESCUE.includes(ult.kind))) return ult.slot;
+  if (profile.level === 1) {
+    if (ctx.rng.next() >= 0.6) return undefined;
+    return usable.find((s) => !s.ultimate && (confidence < 0.5 ? RESCUE.includes(s.kind) : !HEX.includes(s.kind)))?.slot
+      ?? usable.find((s) => !s.ultimate)?.slot;
+  }
+  const rescue = usable.find((s) => !s.ultimate && RESCUE.includes(s.kind));
   if (rescue && confidence < 0.5) return rescue.slot;
-  const hex = usable.find((s) => HEX.includes(s.kind));
-  if (hex && (confidence < 0.4 || ctx.rng.next() < 0.25)) return hex.slot;
-  const boost = usable.find((s) => s.kind === 'spin' || s.kind === 'power' || s.kind === 'vision' || s.kind === 'reveal');
-  if (boost && ctx.rng.next() < 0.2) return boost.slot;
+  const hex = usable.find((s) => !s.ultimate && HEX.includes(s.kind));
+  if (hex && tableEase(ctx, ctx.req.balls, ctx.req.state, other(ctx.side), false) > 0.6) return hex.slot;
+  const boost = usable.find((s) => !s.ultimate && !HEX.includes(s.kind));
+  if (boost && confidence >= 0.5 && ctx.rules.legalTargets(ctx.req.state, ctx.req.balls, ctx.side).length <= 3 &&
+    tableEase(ctx, ctx.req.balls, ctx.req.state, ctx.side, ctx.req.ballInHand !== 'none') >= 0.65) return boost.slot;
   return undefined;
 }
 
-export function think(req: AiRequest): AiDecision {
+function planShot(req: AiRequest): AiDecision {
   const rules = RULES[req.state.mode];
   const table = rules.table === 'pool' ? makePoolTable() : makeCaromTable();
   const ctx: Ctx = {
@@ -536,8 +552,26 @@ export function think(req: AiRequest): AiDecision {
       cue: req.ballInHand !== 'none' ? { x: cue.x, y: cue.y } : undefined,
       call: rules.callType(req.state, balls, req.side) === 'none' ? null : { ball: ob.id, pocket: 0 },
     });
-    return { shot: addNoise(ctx, shot), confidence: 0.05 };
+    return { shot: addNoise(ctx, shot), confidence: 0.05, skill: chooseSkill(ctx, 0.05) };
   }
   return { shot: addNoise(ctx, best.shot), confidence: best.p, skill: chooseSkill(ctx, best.p) };
 }
 
+/** Placement skills must return a shot planned from the position the match will accept. */
+export function think(req: AiRequest): AiDecision {
+  const decision = planShot(req);
+  if (req.option || req.state.isBreak || RULES[req.state.mode].table === 'carom') return decision;
+  const placementUltimate = req.skills.some((s) => s.ultimate && (s.kind === 'nudge' || s.kind === 'teleport'));
+  if (decision.skill !== undefined && !placementUltimate) return decision;
+  const placements = req.skills.filter((s) => s.kind === 'teleport' || (s.kind === 'nudge' && s.tier !== undefined));
+  const skill = placements.find((s) => s.ultimate) ?? (decision.confidence < 0.5 ? placements[0] : undefined);
+  if (!skill) return decision;
+  if (req.profile.level === 1 && !skill.ultimate && new Rng(req.seed + 17).next() >= 0.6) return decision;
+  const cue = req.balls.find((b) => b.id === RULES[req.state.mode].cueId(req.state, req.side))!;
+  const placed = planShot({
+    ...req, skills: [], ballInHand: 'anywhere',
+    nudge: skill.kind === 'nudge' ? { x: cue.x, y: cue.y, radius: (skillPower('nudge', skill.tier!) as { radius: number }).radius } : undefined,
+  });
+  if (!placed.shot?.cue || (!skill.ultimate && placed.confidence <= decision.confidence)) return decision;
+  return { ...placed, skill: skill.slot };
+}

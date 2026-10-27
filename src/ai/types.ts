@@ -28,12 +28,14 @@ export interface AiRequest {
   extraSegments: Segment[];
   captureScale: number;
   seed: number;
+  /** Placement bounds while planning a nudge. */
+  nudge?: { x: number; y: number; radius: number };
   /** Whether the AI must answer an option (push-out / illegal break / wrong call). */
   option: boolean;
   pushOutAvailable: boolean;
   energy: number;
   /** Skills castable right now (checked by the match), with their leading effect family. */
-  skills: { slot: number; kind: SkillKind; ultimate: boolean }[];
+  skills: { slot: number; kind: SkillKind; ultimate: boolean; tier?: number }[];
 }
 
 export interface AiShot {

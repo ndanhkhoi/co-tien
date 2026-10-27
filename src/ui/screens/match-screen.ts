@@ -775,7 +775,7 @@ export function matchScreen(opts: MatchOptions) {
         params: match.params, terrain: match.omen?.terrain ?? null,
         extraSegments: match.omen?.segments ?? [], captureScale: match.omen?.capture ?? 1, seed: (Math.random() * 1e9) | 0, option: match.phase === 'option',
         pushOutAvailable: match.state.pushOutAvailable, energy: match.energy[side],
-        skills: match.skills(side).filter((sk) => match.canUseSkill(side, sk.slot)).map((sk) => ({ slot: sk.slot, kind: sk.kinds[0], ultimate: sk.slot === 2 })),
+        skills: match.skills(side).filter((sk) => match.canUseSkill(side, sk.slot)).map((sk) => ({ slot: sk.slot, kind: match.effectiveKind(sk.kinds[0]), ultimate: sk.slot === 2, tier: sk.tier })),
       };
       const started = performance.now();
       const decision = await app.ai.think(req);

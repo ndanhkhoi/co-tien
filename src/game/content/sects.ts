@@ -61,8 +61,8 @@ export const classInfo = (id: ClassId): ClassInfo => CLASSES.find((c) => c.id ==
 
 /** Turns a basic skill of each family waits before it can be cast again. */
 const KIND_COOLDOWN: Record<SkillKind, number> = {
-  vision: 3, rewind: 5, shield: 4, chill: 3, spin: 2, nudge: 3, reveal: 2, power: 2,
-  blast: 3, seal: 4, maw: 4, drain: 2, gravity: 4, freeze: 3, teleport: 4, second: 4,
+  vision: 3, rewind: 3, shield: 3, chill: 3, spin: 2, nudge: 3, reveal: 2, power: 2,
+  blast: 3, seal: 3, maw: 3, drain: 2, gravity: 3, freeze: 3, teleport: 3, second: 3,
 };
 
 /** Strength numbers per family and tier, shared by the match engine and the UI text. */
