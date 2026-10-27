@@ -5,17 +5,16 @@ import { ballCss } from '../../core/ball-styles';
 import { MODE_NAMES } from '../../core/rules';
 import { other, type Resolution, type ShotCall, type Side } from '../../core/rules/types';
 import { Rng } from '../../core/rng';
-import { champion, skillIconUrl } from '../../game/content/sects';
+import { champion, exprUrl, portraitUrl, sect, skillIconUrl, winUrl } from '../../game/content/sects';
+import { RULES_TEXT, SKILL_RULES } from '../../game/content/rules-text';
 import { ENERGY_MAX, Match, type MatchSetup } from '../../game/match';
 import { haptic, isTouchDevice, keepAwake, toggleFullscreen } from '../../platform/device';
 import { TableView, type AimView } from '../../render/table-view';
 import type { App, Screen } from '../app';
 import { avatar } from '../avatar';
-import { banner, btn, h, modal, tap, toast } from '../dom';
-import { icon } from '../icons';
-import { joystick } from '../joystick';
-import { hintOnce } from '../hints';
-import { RULES_TEXT, SKILL_RULES } from '../../game/content/rules-text';
+import { btn, h, item, modal, stars, tap, toggle } from '../dom';
+import { clearHints, hintOnce } from '../hints';
+import { icon, type IconName } from '../icons';
 import { playCutIn } from '../skill-cutin';
 
 export interface MatchResult {
@@ -37,8 +36,41 @@ export interface MatchOptions {
   onExit: () => void;
 }
 
+type Expr = 'focus' | 'joy' | 'sad' | 'cast';
+type Ball = ReturnType<Match['cueBall']>;
+
+interface HeraldMsg {
+  /** Whose face to show; null shows `icon` instead. */
+  side: Side | null;
+  expr?: Expr | null;
+  icon?: IconName;
+  title: string;
+  line?: string;
+  tone?: 'ink' | 'red';
+  ms?: number;
+}
+
 const DEG = Math.PI / 180;
 const POCKET_NAMES = ['lỗ góc trên trái', 'lỗ giữa trên', 'lỗ góc trên phải', 'lỗ góc dưới trái', 'lỗ giữa dưới', 'lỗ góc dưới phải'];
+const HAND_URL = `${import.meta.env.BASE_URL}art/ui/hand-ball.webp`;
+/** Painted hand: ball centre and radius as fractions of the 285×320 image. */
+const HAND = { w: 285, h: 320, cx: 0.153, cy: 0.239, r: 0.144 };
+const SPIN_PRESETS: { label: string; side: number; vert: number }[] = [
+  { label: 'Giữa', side: 0, vert: 0 },
+  { label: 'Trô', side: 0, vert: -0.2 },
+  { label: 'Cule', side: 0, vert: 0.55 },
+  { label: 'Giật', side: 0, vert: -0.6 },
+  { label: 'Trái', side: -0.55, vert: 0 },
+  { label: 'Phải', side: 0.55, vert: 0 },
+];
+
+const hex6 = (n: number) => '#' + n.toString(16).padStart(6, '0');
+
+function frag(...kids: (Node | string)[]): DocumentFragment {
+  const f = document.createDocumentFragment();
+  f.append(...kids);
+  return f;
+}
 
 export function matchScreen(opts: MatchOptions) {
   return (app: App): Screen => {
@@ -53,20 +85,27 @@ export function matchScreen(opts: MatchOptions) {
     view.goal = opts.challenge?.marks ?? null;
     app.pixi.stage.addChild(view.root);
     const rng = new Rng();
-    const left = app.profile.settings.leftHanded;
+    const lefty = app.profile.settings.leftHanded;
+    const hasSkills = !opts.challenge && !match.setup.classic;
 
     // ---------- Aim / input state ----------
     const aim = { angle: 0, side: 0, vert: 0 };
+    /** Power the player set on the power bar; a tap on ĐÁNH shoots with it. */
+    let preset = 0.55;
+    let barActive = false;
+    /** Live charge (hold ĐÁNH) or the shot in flight. */
     let power = 0;
     let charging = false;
     let chargeT = 0;
     let holdT = 0;
     let cancelArmed = false;
+    let strikePress: { id: number; t0: number } | null = null;
     let strikeT = 0;
     let strikePull = 0;
     /** Ball in hand: the player moves the cue ball, then confirms with ĐẶT BI before aiming. */
     let placeConfirmed = false;
     let callPocket: number | null = null;
+    let callBall: number | null = null;
     /** Call announced by the AI before it lines up, and the call of the shot in flight. */
     let aiCall: ShotCall | null = null;
     let firedCall: ShotCall | null = null;
@@ -74,151 +113,225 @@ export function matchScreen(opts: MatchOptions) {
     let aiToken = 0;
     let aiActing = false;
     let disposed = false;
+    let begun = false;
     let paused = false;
+    let pauseWrap: HTMLElement | null = null;
     let attempt = 1;
     let lastTick = 0;
     let showAiCue = false;
+    let targetIdx = -1;
+    let lastTurnSide: Side | null = null;
+    const pottedBefore: [number, number] = [0, 0];
+    /** Last values written to the DOM by the frame loop. */
+    let handKey = '';
+    let powerKey = '';
 
     const isHumanTurn = () => match.current.kind === 'human' && !aiActing;
     const canAct = () => isHumanTurn() && match.phase === 'aim' && strikeT === 0 && !paused;
     const placingNow = () => canAct() && match.canMoveCue && !placeConfirmed;
+    const nameOf = (s: Side) => match.setup.players[s].name;
+    const champOf = (s: Side) => match.setup.players[s].champion;
+
+    // Expressions load before they are needed so swaps never flash empty.
+    for (const p of opts.setup.players) {
+      for (const e of ['focus', 'joy', 'sad', 'cast'] as const) new Image().src = exprUrl(p.champion, e);
+      new Image().src = winUrl(p.champion);
+    }
 
     // ---------- DOM ----------
-    const el = h('div.screen.game');
-    const pause = tap(h('button.mini-pause', { 'aria-label': 'Tạm dừng' }, icon('pause')), () => openPause());
+    const el = h('div.screen.game.mx', { class: lefty ? 'lefty' : '' });
+    const probe = h('div.mx-probe', { 'aria-hidden': 'true' });
+
+    // Top strip: pause, both players, objective / herald in the middle.
+    const pauseBtn = tap(h('button.icon-btn.mx-pause', { 'aria-label': 'Tạm dừng' }, icon('pause')), () => openPause());
     const cards = [playerCard(0), playerCard(1)];
-    if (opts.challenge) {
-      cards[1].el.style.visibility = 'hidden';
-      cards[0].energy.parentElement!.style.display = 'none';
-    }
-    const objective = h('div.objective');
+    const objKicker = h('div.mx-obj-k');
+    const objText = h('div.mx-obj-t');
+    const objPlate = h('div.mx-obj', null, objKicker, objText);
+    const nextBall = h('div.mx-next', { 'aria-live': 'polite' });
+    const heraldEl = h('div.mx-herald', { role: 'status', 'aria-live': 'polite' });
+    const center = h('div.mx-center', null, objPlate, heraldEl);
+    const topBar = h('div.mx-top', null, pauseBtn, cards[0].el, center, cards[1].el);
+    if (opts.challenge) cards[1].el.style.visibility = 'hidden';
 
-    const spinDot = h('div.dot');
-    const spinBtn = h('button.spin-btn', { 'aria-label': 'Điểm áp phê: kéo để chỉnh, chạm đúp để về giữa' }, h('div.cross'), spinDot);
-    const stickLabel = h('div.js-label', null, 'Xoay cơ');
-    const aimStick = h('div.aim-stick', { 'aria-label': 'Cần điều khiển: đẩy trái/phải để xoay cơ; khi có bi trong tay thì đẩy để di bi' });
-    const aimControls = [spinBtn, h('div.spin-label', null, 'Áp phê'), aimStick, stickLabel];
+    // Skill dock.
+    const slots = [0, 1, 2].map((slot) => {
+      const img = h('img.mx-sk-img', { alt: '', draggable: false });
+      const state = h('span.mx-sk-state');
+      const name = h('span.mx-sk-name');
+      const b = tap(h('button.mx-skill', { class: slot === 2 ? 'ult' : '' }, h('span.mx-sk-art', null, img, state), name), () => openSkill(slot));
+      return { b, img, state, name, key: '' };
+    });
+    const dock = h('div.mx-col.mx-dock', { 'aria-label': 'Chiêu thức' }, ...slots.map((s) => s.b));
+    if (!hasSkills) dock.style.display = 'none';
 
-    const powerFill = h('div.fill');
-    const powerPct = h('div.pct');
-    const powerBar = h('div.power', null, powerFill, powerPct);
-    for (let i = 1; i < 10; i++) powerBar.append(h('div.tick', { style: `bottom:${i * 10}%` }));
-    const shootBtn = h('button.shoot', null, 'ĐÁNH');
-    const skillsBox = h('div.skills');
-    const shootControls = [skillsBox, powerBar, shootBtn];
+    // Controls column.
+    const rotL = h('button.mx-btn', { 'aria-label': 'Xoay cơ sang trái (giữ để xoay nhanh)' }, icon('rotate-left'));
+    const rotR = h('button.mx-btn', { 'aria-label': 'Xoay cơ sang phải (giữ để xoay nhanh)' }, icon('rotate-right'));
+    const switchBtn = tap(h('button.mx-btn', { 'aria-label': 'Đổi bi mục tiêu' }, icon('switch-target')), () => switchTarget());
+    const spinDot = h('i.mx-cb-dot');
+    const spinBtn = tap(h('button.mx-btn.mx-spinbtn', { 'aria-label': 'Áp phê: chọn điểm đánh trên bi cái' }, h('span.mx-cueball', null, spinDot)), () => openSpin());
+    const aimPad = h('div.mx-pad', null,
+      h('div.mx-pair', null, rotL, rotR),
+      h('div.mx-pair', null, switchBtn, spinBtn),
+    );
+    const arrow = (deg: number, label: string) => h('button.mx-btn.mx-arrow', { 'aria-label': label }, icon('turn', `rot${deg}`));
+    const upB = arrow(270, 'Dời bi lên');
+    const downB = arrow(90, 'Dời bi xuống');
+    const leftB = arrow(180, 'Dời bi sang trái');
+    const rightB = arrow(0, 'Dời bi sang phải');
+    const dpad = h('div.mx-dpad', null, h('span'), upB, h('span'), leftB, h('span.mx-dpad-c', null, icon('place')), rightB, h('span'), downB, h('span'));
+    const powerFill = h('i.mx-pfill');
+    const powerPct = h('span.mx-ppct.num');
+    const powerTrack = h('div.mx-ptrack', null, powerFill);
+    for (let i = 1; i < 10; i++) powerTrack.append(h('i.mx-ptick', { style: `bottom:${i * 10}%` }));
+    const powerBar = h('div.mx-power', { role: 'slider', 'aria-label': 'Lực đánh', 'aria-valuemin': '0', 'aria-valuemax': '100' },
+      h('div.mx-phead', null, icon('power'), powerPct), powerTrack);
+    const strikeIcon = icon('strike');
+    const strikeLabel = h('span.mx-st-label', null, 'ĐÁNH');
+    const strikeBtn = h('button.mx-strike', { 'aria-label': 'Đánh' }, strikeIcon, strikeLabel);
+    const ctrl = h('div.mx-col.mx-ctrl', null, aimPad, dpad, powerBar, strikeBtn);
 
-    // Player 1 always on the left, player 2 on the right; controls swap for left-handers.
-    const sideL = h('div.side.left', null, h('div.side-top', null, pause, cards[0].el), ...(left ? shootControls : aimControls));
-    const sideR = h('div.side.right', null, h('div.side-top', null, cards[1].el), ...(left ? aimControls : shootControls));
-
-    const chips = h('div.float-chips');
-    const thinking = h('div.thinking', null, h('span.dots', null, h('i'), h('i'), h('i')), h('span'));
-    thinking.style.display = 'none';
-    // Hand over the cue ball while it is in hand.
-    const handCue = h('div.hand-cue', { 'aria-hidden': 'true' }, icon('hand'));
-    handCue.style.display = 'none';
-    el.append(objective, sideL, sideR, chips, thinking, handCue);
+    const chips = h('div.mx-chips');
+    const callTag = h('div.mx-calltag');
+    callTag.style.display = 'none';
+    const hand = h('img.mx-hand', { src: HAND_URL, alt: '', draggable: false, 'aria-hidden': 'true' });
+    hand.style.display = 'none';
+    el.append(probe, hand, topBar, dock, ctrl, chips, callTag, nextBall);
 
     function playerCard(side: Side) {
-      const av = h('div.av', null, avatar(opts.setup.players[side].champion));
-      const nm = h('div.nm', null, opts.setup.players[side].name);
-      const score = h('div.score');
-      const sub = h('div.sub');
-      // Balls this player has pocketed this rack, in order.
-      const potted = h('div.potted', { 'aria-label': 'Bi đã ăn' });
-      const energy = h('div.energy', null, h('i'));
-      const e = h('div.scard', null, h('div.scard-head', null, av, score), nm, sub, potted, energy);
-      return { el: e, sub, potted, score, energy: energy.firstElementChild as HTMLElement };
+      const p = opts.setup.players[side];
+      const c = champion(p.champion);
+      const face = h('img.mx-face', { src: portraitUrl(p.champion), alt: c.name, draggable: false, decoding: 'async' });
+      face.style.background = hex6(sect(c.sect).main);
+      const ring = h('div.mx-ring', null, face);
+      const epill = h('span.mx-epill.num');
+      const ringWrap = h('div.mx-ringwrap', { 'aria-label': 'Năng lượng' }, ring, epill);
+      if (!hasSkills) ringWrap.classList.add('no-energy');
+      const score = h('span.mx-score.num');
+      const sub = h('span.mx-sub');
+      const potted = h('div.mx-potted', { 'aria-label': 'Bi đã ăn' });
+      const card = h('div.mx-card', { class: side ? 'p2' : 'p1' }, ringWrap,
+        h('div.mx-info', null, h('div.mx-name', null, p.name), h('div.mx-line', null, score, sub), potted));
+      return { el: card, face, ring, ringWrap, epill, score, sub, potted, temp: null as Expr | null, focus: false, timer: 0, key: '' };
     }
 
     // ---------- Layout ----------
     function layout() {
       const W = window.innerWidth;
       const H = window.innerHeight;
+      // Before the screen is attached nothing has a size yet: use the usual column widths.
+      const live = probe.offsetWidth > 0;
+      const insetL = live ? probe.offsetLeft : 0;
+      const insetR = live ? W - probe.offsetLeft - probe.offsetWidth : 0;
+      const insetB = live ? H - probe.offsetTop - probe.offsetHeight : 0;
       // offset* ignores the screen's slide-in transform, unlike getBoundingClientRect.
-      const L = { right: sideL.offsetLeft + sideL.offsetWidth };
-      const R = { left: sideR.offsetLeft };
-      const probe = getComputedStyle(document.documentElement);
-      const st = parseFloat(probe.getPropertyValue('--st')) || 0;
-      const sb = parseFloat(probe.getPropertyValue('--sb')) || 0;
+      const colL = lefty ? ctrl : dock;
+      const colR = lefty ? dock : ctrl;
+      const targetWidth = nextBall.hidden || !nextBall.textContent ? 0 : nextBall.offsetWidth;
+      const leftEdge = !live ? 104 : colL.offsetWidth ? colL.offsetLeft + colL.offsetWidth : insetL + (!lefty && targetWidth ? targetWidth + 8 : 4);
+      const rightEdge = !live ? W - 128 : colR.offsetWidth ? colR.offsetLeft : W - insetR - (lefty && targetWidth ? targetWidth + 8 : 4);
+      const top = live ? topBar.offsetTop + topBar.offsetHeight : 84;
       const t = match.table;
       // Only the outer lip of the wooden rail may slide under the columns; pocket holes stay clear.
       const tuck = 0.004;
-      const x0 = (L.right || 90) + 4;
-      const x1 = (R.left || W - 90) - 4;
+      const x0 = leftEdge + 4;
+      const x1 = rightEdge - 4;
       const aw = x1 - x0;
-      const ah = H - st - sb - 6;
+      const y0 = top + 2;
+      const ah = H - insetB - 4 - y0;
       const scale = Math.min(aw / (t.L + 2 * (t.railWidth - tuck)), ah / (t.W + 2 * t.railWidth));
       const cx = x0 + aw / 2;
-      const cy = st + 3 + ah / 2;
+      const cy = y0 + ah / 2;
       view.layout(cx, cy, scale);
-      // Pills sit on the long rails between a corner and the side pocket.
+      // Chips sit on the bottom rail, between the side pocket and a corner, never on the cloth.
       const railMid = (t.W / 2 + t.railWidth / 2) * scale;
-      const quarter = (t.L / 4) * scale;
-      // Top centre stays free for toasts; the bottom rail carries the objective (left)
-      // and either the call/push chips or the AI's "thinking" plate (right).
-      objective.style.left = `${cx - quarter}px`;
-      objective.style.top = `${cy + railMid}px`;
-      chips.style.left = `${cx + quarter}px`;
+      chips.style.left = `${cx}px`;
       chips.style.top = `${cy + railMid}px`;
-      thinking.style.left = `${cx + quarter}px`;
-      thinking.style.top = `${cy + railMid}px`;
+      // The painted ball in the hand is drawn a little larger than the real one: it is lifted off the cloth.
+      const handW = (t.R * scale * 1.3) / HAND.r;
+      hand.style.width = `${handW}px`;
+      hand.style.height = `${(handW * HAND.h) / HAND.w}px`;
+      handKey = '';
     }
     const onResize = () => layout();
     window.addEventListener('resize', onResize);
     requestAnimationFrame(layout);
     layout();
 
-    // ---------- HUD ----------
+    // ---------- HUD (event driven) ----------
     function renderHud() {
       const st = match.state;
       const carom = match.isCarom;
       for (const s of [0, 1] as Side[]) {
         const c = cards[s];
         c.el.classList.toggle('active', match.turn === s && match.phase !== 'match-over');
-        c.sub.replaceChildren();
         c.score.textContent = opts.challenge ? `${attempt}/${opts.challenge.tries}` : carom ? `${st.scores[s]}/${st.caromTarget}` : String(match.rackWins[s]);
+        c.sub.replaceChildren();
         if (opts.challenge) {
-          c.sub.append(h('span.muted', null, 'lượt thử'));
+          c.sub.append('lượt thử');
         } else if (match.setup.mode === 'eight') {
           const g = st.groups[s];
           if (g === null) {
-            c.sub.append(h('span.muted', null, st.isBreak ? (match.breaker === s ? 'Phá bi' : '') : 'Bàn mở'));
+            c.sub.append(st.isBreak ? (match.breaker === s ? 'Phá bi' : '') : 'Bàn mở');
           } else {
             const ids = g === 'solid' ? [1, 2, 3, 4, 5, 6, 7] : [9, 10, 11, 12, 13, 14, 15];
-            const left = ids.filter((id) => match.balls.find((x) => x.id === id)?.onTable).length;
-            c.sub.append(h('span.grp', { class: g }, g === 'solid' ? 'Trơn' : 'Sọc'), h('span.muted', null, left ? `còn ${left}` : 'tới bi 8'));
+            const remain = ids.filter((id) => match.balls.find((x) => x.id === id)?.onTable).length;
+            c.sub.append(h('b.mx-grp', { class: g }, g === 'solid' ? 'Trơn' : 'Sọc'), remain ? `còn ${remain}` : 'tới bi 8');
           }
         } else if (carom) {
-          c.sub.append(h('span.muted', null, `ván ${match.rackWins[s]}/${match.setup.raceTo}`));
+          c.sub.append(`ván ${match.rackWins[s]}/${match.setup.raceTo}`);
         } else {
           const f = st.fouls[s];
-          if (f > 0) c.sub.append(h('span', { style: 'color:var(--red);font-weight:800' }, `${f} lỗi`));
+          if (f > 0) c.sub.append(h('b.mx-foul', null, `${f} lỗi`));
           else if (s === match.turn) {
             const lo = match.legalTargets(s)[0];
-            if (lo) c.sub.append(h('span.muted', null, 'Bi'), miniBall(lo, false));
+            if (lo) c.sub.append('Bi', miniBall(lo));
           }
         }
-        c.potted.replaceChildren(...(carom || opts.challenge ? [] : match.potted[s].map((id) => miniBall(id, false))));
-        c.potted.style.display = c.potted.childElementCount ? '' : 'none';
-        c.energy.style.width = `${match.energy[s]}%`;
+        if (!carom && !opts.challenge) {
+          const key = match.potted[s].join(',');
+          if (key !== c.key) {
+            c.key = key;
+            c.potted.replaceChildren(...match.potted[s].map((id) => miniBall(id)));
+          }
+        }
+        const e = Math.round(match.energy[s]);
+        c.ring.style.setProperty('--e', String((e / ENERGY_MAX) * 100));
+        c.epill.textContent = `${e}%`;
+        c.ringWrap.setAttribute('aria-label', `Năng lượng ${nameOf(s)}: ${e}/${ENERGY_MAX}`);
+        c.ringWrap.classList.toggle('full', hasSkills && e >= ENERGY_MAX);
       }
-      objective.replaceChildren(
-        h('span.obj-mode', null, opts.challenge ? opts.label : `${MODE_NAMES[match.setup.mode]} · chạm ${match.setup.raceTo}`),
-        h('span.obj-text', null, opts.challenge ? opts.challenge.goal : match.objective()),
-      );
+      if (match.setup.mode === 'nine' || match.setup.mode === 'ten') {
+        const id = match.balls.filter((b) => b.onTable && b.id > 0).reduce((lo, b) => Math.min(lo, b.id), Infinity);
+        nextBall.replaceChildren('Bi tiếp theo', Number.isFinite(id) ? miniBall(id) : '', Number.isFinite(id) ? String(id) : 'Hết bi');
+      } else nextBall.hidden = true;
+      objKicker.textContent = opts.challenge ? opts.label : `${MODE_NAMES[match.setup.mode]} · chạm ${match.setup.raceTo} · ván ${match.rackNo}`;
+      objText.textContent = opts.challenge ? opts.challenge.goal : match.objective();
       renderSkills();
       renderChips();
-      shootBtn.toggleAttribute('disabled', !canAct());
-      if (!charging) shootBtn.textContent = placingNow() ? 'ĐẶT BI' : 'ĐÁNH';
-      shootBtn.classList.toggle('place', placingNow());
-      stickLabel.textContent = placingNow() ? 'Di bi' : 'Xoay cơ';
+      renderControls();
+      skillSheet?.refresh();
     }
 
-    function miniBall(id: number, gone: boolean) {
+    function renderControls() {
+      const act = canAct();
+      const placing = placingNow();
+      ctrl.classList.toggle('placing', placing);
+      ctrl.classList.toggle('off', !act);
+      for (const b of [rotL, rotR, switchBtn, spinBtn, upB, downB, leftB, rightB, strikeBtn]) b.disabled = !act;
+      powerBar.classList.toggle('off', !act || placing);
+      if (!charging) {
+        strikeLabel.textContent = placing ? 'ĐẶT BI' : 'ĐÁNH';
+        strikeIcon.src = icon(placing ? 'place' : 'strike').src;
+        strikeBtn.setAttribute('aria-label', placing ? 'Đặt bi cái tại đây' : 'Đánh');
+      }
+      strikeBtn.classList.toggle('place', placing);
+    }
+
+    function miniBall(id: number) {
       const col = ballCss('pool', id);
-      const stripe = id > 8;
-      return h('i.mini-ball', { class: `${stripe ? 'stripe' : ''} ${gone ? 'gone' : ''}`, style: `background:${col};--c:${col}` });
+      return h('i.mx-ball', { class: id > 8 ? 'stripe' : '', style: `--c:${col}`, title: `Bi ${id}` });
     }
 
     function humanSide(): Side | null {
@@ -227,74 +340,292 @@ export function matchScreen(opts: MatchOptions) {
       return hs < 0 ? null : (hs as Side);
     }
 
-    function renderSkills() {
-      skillsBox.replaceChildren();
-      const side = humanSide();
-      if (side === null || opts.challenge || match.setup.classic) return;
-      const champ = champion(match.setup.players[side].champion);
-      if (champ.skills.some((sk) => match.canUseSkill(side, sk.slot))) {
-        hintOnce(app, 'skills', 'Chiêu thức', 'Chạm nút chiêu để dùng, GIỮ để đọc mô tả. Hai chiêu nhỏ hồi lại sau vài cú; tuyệt chiêu (nút tròn) cần vòng năng lượng đầy, nạp bằng cách vào bi.');
-      }
-      for (const sk of champ.skills) {
-        const wait = match.skillWait(side, sk.slot);
-        const can = match.canUseSkill(side, sk.slot);
-        const ult = sk.slot === 2;
-        const b = h('button.skill', {
-          class: `${ult ? 'ult' : ''} ${can ? 'ready' : 'off'}`, 'aria-label': sk.name,
-          style: ult ? `--e:${Math.round((match.energy[side] / ENERGY_MAX) * 100)}` : '',
-        }, h('img', { src: skillIconUrl(champ.id, sk.slot), alt: '', draggable: false }),
-        !ult && wait > 0 ? h('span.cd', null, String(wait)) : null);
-        // Tap casts; a long press explains the skill instead.
-        let timer = 0;
-        let explained = false;
-        b.addEventListener('pointerdown', () => {
-          explained = false;
-          timer = window.setTimeout(() => {
-            explained = true;
-            toast(`${sk.name}${ult ? ' (tuyệt chiêu)' : ` · hồi ${sk.cooldown} cú`}: ${sk.desc}`, 'gold');
-          }, 480);
-        });
-        const clear = () => clearTimeout(timer);
-        b.addEventListener('pointerup', clear);
-        b.addEventListener('pointerleave', clear);
-        b.addEventListener('pointercancel', clear);
-        tap(b, () => {
-          if (!explained) useSkill(side, sk.slot);
-        });
-        skillsBox.append(b);
-      }
-    }
-
     function renderChips() {
       chips.replaceChildren();
       if (!canAct()) return;
       if (match.state.pushOutAvailable && match.current.kind === 'human') {
-        chips.append(tap(h('button.fchip', { class: pushOut ? 'on' : '' }, 'Đẩy bi (push-out)'), () => {
+        chips.append(tap(h('button.chip.mx-chip', { 'aria-pressed': String(pushOut) }, 'Đẩy bi (push-out)'), () => {
           pushOut = !pushOut;
           renderHud();
         }));
       }
       const ct = match.callType();
       if (ct !== 'none') {
-        const pk = effectiveCallPocket();
         const ballPart = ct === 'ball-pocket' ? `bi ${callBallId() ?? '?'} → ` : '';
-        chips.append(h('div.fchip', { class: pk === null ? '' : 'on' }, icon('target'), pk === null ? `Gọi ${ballPart}chạm 1 lỗ` : `Gọi ${ballPart}${POCKET_NAMES[pk]}`));
+        chips.append(h('div.chip.mx-chip', { class: callPocket === null ? 'need' : 'set' }, icon('target'),
+          callPocket === null ? `Gọi ${ballPart}chạm 1 lỗ` : `Gọi ${ballPart}${POCKET_NAMES[callPocket]}`));
       }
     }
 
-    function useSkill(side: Side, slot: number) {
-      if (match.useSkill(side, slot)) return;
-      const sk = match.skills(side)[slot];
+    // ---------- Expressions ----------
+    function applyFace(side: Side) {
+      const c = cards[side];
+      const e = c.temp ?? (c.focus ? 'focus' : null);
+      const src = e ? exprUrl(champOf(side), e) : portraitUrl(champOf(side));
+      if (c.face.getAttribute('src') !== src) {
+        c.face.src = src;
+        c.ring.classList.remove('swap');
+        void c.ring.offsetWidth;
+        c.ring.classList.add('swap');
+      }
+    }
+    function setExpr(side: Side, e: Expr, ms = 2600) {
+      const c = cards[side];
+      c.temp = e;
+      clearTimeout(c.timer);
+      c.timer = window.setTimeout(() => {
+        c.temp = null;
+        if (!disposed) applyFace(side);
+      }, ms);
+      applyFace(side);
+    }
+    function setFocus(side: Side, on: boolean) {
+      cards[side].focus = on;
+      applyFace(side);
+    }
+
+    function floatGain(side: Side, gain: number) {
+      if (!hasSkills || gain < 1) return;
+      const f = h('span.mx-gain.num', { 'aria-hidden': 'true' }, `+${Math.round(gain)}`);
+      cards[side].ringWrap.append(f);
+      setTimeout(() => f.remove(), 1200);
+    }
+
+    // ---------- Herald: turn banner in the top strip, never on the cloth ----------
+    const heraldQ: HeraldMsg[] = [];
+    let heraldTimer = 0;
+    let heraldOn = false;
+    let thinkingSide: Side | null = null;
+
+    function herald(m: HeraldMsg) {
+      if (disposed) return;
+      heraldQ.push(m);
+      // Old news is dropped rather than shown late.
+      if (heraldQ.length > 3) heraldQ.splice(0, heraldQ.length - 3);
+      if (!heraldOn) nextHerald();
+    }
+    function nextHerald() {
+      clearTimeout(heraldTimer);
+      const m = heraldQ.shift();
+      if (!m) {
+        heraldOn = false;
+        idleHerald();
+        return;
+      }
+      heraldOn = true;
+      showHerald(m, false);
+      const len = m.title.length + (m.line?.length ?? 0);
+      // Shorter while more news waits.
+      const ms = m.ms ?? Math.min(4200, 1600 + len * 30) * (heraldQ.length ? 0.7 : 1);
+      heraldTimer = window.setTimeout(nextHerald, ms);
+    }
+    function showHerald(m: HeraldMsg, thinking: boolean) {
+      const face = m.side !== null
+        ? h('img.mx-h-face', { src: m.expr ? exprUrl(champOf(m.side), m.expr) : portraitUrl(champOf(m.side)), alt: '', draggable: false })
+        : h('span.mx-h-icon', null, icon(m.icon ?? 'info'));
+      heraldEl.className = `mx-herald show ${m.tone ?? 'ink'}${thinking ? ' thinking' : ''}`;
+      heraldEl.replaceChildren(face,
+        h('div.mx-h-text', null, h('div.mx-h-title', null, m.title), m.line ? h('div.mx-h-line', null, m.line) : null),
+      );
+      if (thinking) heraldEl.append(icon('thinking', 'mx-h-think'));
+      center.classList.add('heralding');
+    }
+    function idleHerald() {
+      if (thinkingSide !== null) {
+        showHerald({ side: thinkingSide, expr: 'focus', title: `${nameOf(thinkingSide)} đang tính…` }, true);
+      } else {
+        heraldEl.className = 'mx-herald';
+        center.classList.remove('heralding');
+      }
+    }
+    function setThinking(side: Side | null) {
+      thinkingSide = side;
+      if (!heraldOn) idleHerald();
+    }
+
+    // ---------- Skill dock ----------
+    function renderSkills() {
+      const side = humanSide();
+      if (!hasSkills || side === null) return;
+      const champ = champion(champOf(side));
+      let anyReady = false;
+      for (const sk of champ.skills) {
+        const s = slots[sk.slot];
+        const key = `${champ.id}-${sk.slot}`;
+        if (s.key !== key) {
+          s.key = key;
+          s.img.src = skillIconUrl(champ.id, sk.slot);
+          s.name.textContent = sk.name;
+        }
+        const wait = match.skillWait(side, sk.slot);
+        const can = match.canUseSkill(side, sk.slot);
+        anyReady ||= can;
+        const ult = sk.slot === 2;
+        s.b.classList.toggle('ready', can);
+        s.b.classList.toggle('cool', !ult && wait > 0);
+        s.b.classList.toggle('charging', ult && wait < 0);
+        const pct = Math.round((match.energy[side] / ENERGY_MAX) * 100);
+        s.b.style.setProperty('--e', String(Math.min(100, pct)));
+        if (ult && wait < 0) s.state.replaceChildren(icon('energy'), `${pct}%`);
+        else if (!ult && wait > 0) s.state.replaceChildren(icon('cooldown'), String(wait));
+        else s.state.replaceChildren(icon(can ? 'check' : 'info'), can ? 'Sẵn sàng' : 'Chờ');
+        s.b.setAttribute('aria-label', `${sk.name}${ult ? ' (tuyệt chiêu)' : ''}: ${can ? 'sẵn sàng' : skillBlock(side, sk.slot) ?? ''}. Chạm để xem.`);
+      }
+      if (begun && anyReady && isHumanTurn()) {
+        hintOnce(app, 'skill-dock', 'Chiêu thức', 'Ô sáng viền đỏ là chiêu dùng được. Chạm một ô để đọc mô tả, rồi bấm Dùng. Hai chiêu đầu hồi lại sau vài lượt; tuyệt chiêu cần đầy năng lượng.',
+          { anchor: () => dock, place: lefty ? 'left' : 'right' });
+      }
+    }
+
+    function skillBlock(side: Side, slot: number): string | null {
+      if (match.canUseSkill(side, slot)) return null;
       const wait = match.skillWait(side, slot);
-      if (slot === 2 && wait < 0) toast(`${sk.name}: cần đầy năng lượng (${Math.round(match.energy[side])}/${ENERGY_MAX})`, 'bad');
-      else if (wait > 0) toast(`${sk.name}: hồi sau ${wait} cú`, 'bad');
-      else toast(`${sk.name}: chưa dùng được lúc này`, 'bad');
+      if (slot === 2 && wait < 0) return `Cần đầy năng lượng: ${Math.round(match.energy[side])}/${ENERGY_MAX}`;
+      if (wait > 0) return `Đang hồi: còn ${wait} lượt của bạn`;
+      if (match.phase === 'rolling') return 'Chờ bi dừng lăn';
+      if (match.phase === 'rack-over' || match.phase === 'match-over') return 'Ván đã kết thúc';
+      if (match.turn !== side || aiActing) return 'Chưa dùng được lúc này — đợi tới lượt bạn';
+      return 'Hiệu ứng đang có tác dụng hoặc chưa hợp lúc này';
+    }
+
+    let skillSheet: { el: HTMLElement; catcher: HTMLElement; refresh: () => void } | null = null;
+    let spinSheet: { el: HTMLElement; catcher: HTMLElement } | null = null;
+
+    function closeSheets() {
+      for (const s of [skillSheet, spinSheet]) {
+        s?.el.remove();
+        s?.catcher.remove();
+      }
+      skillSheet = null;
+      spinSheet = null;
+      dock.classList.remove('sheet-open');
+      ctrl.classList.remove('sheet-open');
+    }
+
+    function openSkill(slot: number) {
+      const side = humanSide();
+      if (side === null) return;
+      closeSheets();
+      sound.unlock();
+      const sk = match.skills(side)[slot];
+      const champ = champion(champOf(side));
+      const ult = slot === 2;
+      const req = h('div.mx-sc-req');
+      const reason = h('div.mx-sc-reason');
+      const useBtn = btn(frag(icon(ult ? 'ultimate' : 'energy'), 'Dùng'), () => {
+        if (!match.canUseSkill(side, slot)) return;
+        closeSheets();
+        match.useSkill(side, slot);
+      }, 'big');
+      const closeBtn = tap(h('button.icon-btn.small.mx-sc-x', { 'aria-label': 'Đóng' }, icon('close')), () => closeSheets());
+      const box = h('div.mx-sheet.mx-skillcard', { role: 'dialog', 'aria-label': sk.name },
+        closeBtn,
+        h('div.mx-sc-head', null,
+          h('img.mx-sc-icon', { src: skillIconUrl(champ.id, slot), alt: '', draggable: false }),
+          h('div.mx-sc-titles', null,
+            h('div.mx-sc-kicker', null, ult ? 'Tuyệt chiêu' : `Chiêu ${slot + 1}`, ' · ', champ.name),
+            h('div.mx-sc-name', null, sk.name))),
+        h('div.mx-sc-desc', null, sk.desc),
+        req,
+        h('div.mx-sc-foot', null, reason, useBtn));
+      const catcher = h('div.mx-catch');
+      catcher.addEventListener('pointerdown', () => closeSheets());
+      el.append(catcher, box);
+      dock.classList.add('sheet-open');
+      const refresh = () => {
+        const e = Math.round(match.energy[side]);
+        req.replaceChildren(ult
+          ? frag(icon('energy'), h('span', null, `Cần ${ENERGY_MAX} năng lượng · đang có `, h('b.num', null, String(e))))
+          : frag(icon('cooldown'), h('span', null, `Dùng xong hồi lại sau ${sk.cooldown} lượt của bạn`)));
+        const why = skillBlock(side, slot);
+        reason.textContent = why ?? 'Sẵn sàng';
+        reason.classList.toggle('ok', !why);
+        useBtn.disabled = !!why;
+      };
+      refresh();
+      skillSheet = { el: box, catcher, refresh };
+    }
+
+    // ---------- Spin ----------
+    function spinCaption(): string {
+      const parts: string[] = [];
+      if (aim.vert > 0.15) parts.push('Cule (theo bi)');
+      else if (aim.vert < -0.35) parts.push('Giật (kéo bi)');
+      else if (aim.vert < -0.1) parts.push('Trô (dừng bi)');
+      if (aim.side > 0.15) parts.push('phê phải');
+      else if (aim.side < -0.15) parts.push('phê trái');
+      return parts.length ? parts.join(' · ') : 'Giữa bi';
+    }
+
+    function updateSpinDot() {
+      spinDot.style.left = `${50 + aim.side * 40}%`;
+      spinDot.style.top = `${50 - aim.vert * 40}%`;
+    }
+
+    function openSpin() {
+      if (!canAct()) return;
+      closeSheets();
+      const tip = h('i.mx-bb-tip');
+      const cap = h('div.mx-sp-cap');
+      const ball = h('div.mx-bigball', { role: 'application', 'aria-label': 'Chạm vào bi cái để chọn điểm đánh' }, h('i.mx-bb-limit'), h('i.mx-bb-h'), h('i.mx-bb-v'), tip);
+      let over = false;
+      const paint = () => {
+        tip.style.left = `${50 + aim.side * 46}%`;
+        tip.style.top = `${50 - aim.vert * 46}%`;
+        cap.textContent = spinCaption();
+        updateSpinDot();
+        presetBtns.forEach((b, i) => b.setAttribute('aria-pressed', String(Math.abs(SPIN_PRESETS[i].side - aim.side) < 0.02 && Math.abs(SPIN_PRESETS[i].vert - aim.vert) < 0.02)));
+      };
+      const setFrom = (e: PointerEvent) => {
+        const r = ball.getBoundingClientRect();
+        let sx = ((e.clientX - r.left) / r.width - 0.5) / 0.46;
+        let sy = -((e.clientY - r.top) / r.height - 0.5) / 0.46;
+        const m = Math.hypot(sx, sy);
+        if (m > 1) {
+          sx /= m;
+          sy /= m;
+        }
+        aim.side = sx;
+        aim.vert = sy;
+        const o = m > 0.82;
+        if (o !== over) {
+          over = o;
+          if (o) haptic(15);
+        }
+        paint();
+      };
+      let pid: number | null = null;
+      ball.addEventListener('pointerdown', (e) => {
+        pid = e.pointerId;
+        ball.setPointerCapture(pid);
+        setFrom(e);
+      });
+      ball.addEventListener('pointermove', (e) => e.pointerId === pid && setFrom(e));
+      ball.addEventListener('pointerup', () => (pid = null));
+      ball.addEventListener('pointercancel', () => (pid = null));
+      const presetBtns = SPIN_PRESETS.map((p) => tap(h('button.chip.mx-sp-chip', null, p.label), () => {
+        aim.side = p.side;
+        aim.vert = p.vert;
+        paint();
+      }));
+      const box = h('div.mx-sheet.mx-spinsheet', { role: 'dialog', 'aria-label': 'Áp phê' },
+        tap(h('button.icon-btn.small.mx-sc-x', { 'aria-label': 'Đóng' }, icon('close')), () => closeSheets()),
+        h('div.mx-sp-ballwrap', null, ball),
+        h('div.mx-sp-side', null,
+          h('div.mx-sp-title', null, icon('spin'), 'Áp phê'),
+          cap,
+          h('div.mx-sp-presets', null, ...presetBtns),
+          btn('Xong', () => closeSheets(), 'small block')));
+      const catcher = h('div.mx-catch');
+      catcher.addEventListener('pointerdown', () => closeSheets());
+      el.append(catcher, box);
+      ctrl.classList.add('sheet-open');
+      spinSheet = { el: box, catcher };
+      paint();
     }
 
     // ---------- Calls ----------
     // Calls are always the player's own choice; nothing is inferred from the aim.
-    let callBall: number | null = null;
-
     function callBallId(): number | null {
       if (match.callType() === 'pocket') return 8;
       const legal = match.legalTargets();
@@ -302,18 +633,49 @@ export function matchScreen(opts: MatchOptions) {
       return legal[0] ?? null;
     }
 
-    function effectiveCallPocket(): number | null {
-      return callPocket;
+    // ---------- Aim helpers ----------
+    function aimAt(b: { x: number; y: number }) {
+      const cue = match.cueBall();
+      if (Math.hypot(b.x - cue.x, b.y - cue.y) < 1e-6) return;
+      aim.angle = Math.atan2(b.y - cue.y, b.x - cue.x);
     }
 
-    // ---------- Aim helpers ----------
-    function aimAtNearestTarget() {
+    /** Balls the switch button cycles through: legal targets first (lowest ball / own group), nearest first. */
+    function targetList(): Ball[] {
       const cue = match.cueBall();
-      const targets = match.legalTargets();
-      const pool = match.balls.filter((b) => b.onTable && b.id !== cue.id && (targets.length === 0 || targets.includes(b.id)));
-      if (!pool.length) return;
-      const near = pool.reduce((a, b) => (Math.hypot(b.x - cue.x, b.y - cue.y) < Math.hypot(a.x - cue.x, a.y - cue.y) ? b : a));
-      aim.angle = Math.atan2(near.y - cue.y, near.x - cue.x);
+      const legal = match.legalTargets();
+      const live = match.balls.filter((b) => b.onTable && b.id !== cue.id);
+      const pool = legal.length ? live.filter((b) => legal.includes(b.id)) : live;
+      const list = pool.length ? pool : live;
+      const d = (b: Ball) => Math.hypot(b.x - cue.x, b.y - cue.y);
+      return list.sort((a, b) => (legal.length ? legal.indexOf(a.id) - legal.indexOf(b.id) : 0) || d(a) - d(b));
+    }
+
+    function aimFirstTarget() {
+      const list = targetList();
+      targetIdx = 0;
+      if (list[0]) aimAt(list[0]);
+    }
+
+    function switchTarget() {
+      if (!canAct() || placingNow()) return;
+      const list = targetList();
+      if (!list.length) return;
+      targetIdx = (targetIdx + 1) % list.length;
+      const b = list[targetIdx];
+      aimAt(b);
+      view.ring(b.x, b.y, 0xffffff, 0.02);
+    }
+
+    function rotate(deg: number) {
+      if (!canAct() || placingNow()) return;
+      aim.angle += deg * DEG;
+    }
+
+    function nudgeCue(dx: number, dy: number, metres: number) {
+      if (!placingNow()) return;
+      const c = match.cueBall();
+      match.placeCue(c.x + dx * metres, c.y + dy * metres);
     }
 
     const cueDef = () => match.current.cue;
@@ -338,89 +700,107 @@ export function matchScreen(opts: MatchOptions) {
     }
 
     // ---------- Shooting ----------
-    function startCharge() {
-      if (!canAct()) return;
-      if (placingNow()) {
-        placeConfirmed = true;
-        haptic(15);
-        sound.tap();
-        renderHud();
-        return;
-      }
-      if (match.callType() !== 'none' && effectiveCallPocket() === null) {
-        toast(match.callType() === 'ball-pocket' ? 'Chạm bi muốn gọi, rồi chạm lỗ trước khi đánh' : 'Chạm vào một lỗ trên bàn để gọi trước khi đánh', 'bad');
+    /** Checks before any shot; false (with a message) when the player must do something first. */
+    function readyToShoot(): boolean {
+      if (!canAct() || placingNow()) return false;
+      if (match.callType() !== 'none' && callPocket === null) {
+        herald({ side: null, icon: 'target', tone: 'red', title: 'Chưa gọi lỗ',
+          line: match.callType() === 'ball-pocket' ? 'Chạm bi muốn gọi, rồi chạm một lỗ trên bàn' : 'Chạm một lỗ trên bàn để gọi trước khi đánh' });
         haptic([20, 40, 20]);
-        return;
+        return false;
       }
+      return true;
+    }
+
+    function confirmPlace() {
+      if (!placingNow()) return;
+      placeConfirmed = true;
+      haptic(15);
+      sound.tap();
+      renderHud();
+    }
+
+    function startCharge() {
+      if (!readyToShoot()) return;
       charging = true;
       chargeT = 0;
       holdT = 0;
       power = 0;
       cancelArmed = false;
-      shootBtn.classList.add('pressed');
+      strikeBtn.classList.add('charging');
+      setFocus(match.turn, true);
     }
 
     function cancelCharge() {
+      if (charging) setFocus(match.turn, false);
       charging = false;
       power = 0;
-      shootBtn.classList.remove('pressed', 'cancel');
-      shootBtn.textContent = 'ĐÁNH';
-      powerBar.classList.remove('hot');
+      strikePress = null;
+      strikeBtn.classList.remove('charging', 'cancel', 'pressed');
+      renderControls();
     }
 
     function releaseCharge() {
       if (!charging) return;
-      shootBtn.classList.remove('pressed');
+      strikeBtn.classList.remove('charging', 'pressed');
       if (cancelArmed || power < 0.02) {
         cancelCharge();
         return;
       }
       const amp = wobbleAmp();
       const finalAngle = aim.angle + wobbleNow() + rng.gauss() * amp * 0.3;
-      const err = 0.012 + 0.008 * (5 - cueDef().control);
-      const finalPower = Math.max(0.01, Math.min(1, power * (1 + rng.gauss() * err)));
       charging = false;
-      fire(finalAngle, finalPower, aim.side, aim.vert);
+      setFocus(match.turn, false);
+      shootWith(finalAngle, power);
+    }
+
+    /** Quick tap on ĐÁNH: shoot at the power set on the bar, with the hand's tremor at that power. */
+    function fireAtPreset() {
+      if (!readyToShoot()) return;
+      power = preset;
+      holdT = 0;
+      const amp = wobbleAmp();
+      const ph = rng.next() * Math.PI * 2;
+      const w = amp * (0.62 * Math.sin(ph) + 0.38 * Math.sin(ph * 1.8 + 1.7));
+      shootWith(aim.angle + w + rng.gauss() * amp * 0.3, preset);
+    }
+
+    function shootWith(angle: number, pw: number) {
+      const err = 0.012 + 0.008 * (5 - cueDef().control);
+      const finalPower = Math.max(0.01, Math.min(1, pw * (1 + rng.gauss() * err)));
+      fire(angle, finalPower, aim.side, aim.vert);
     }
 
     function fire(angle: number, pw: number, side: number, vert: number, aiShotCall?: ShotCall | null) {
+      closeSheets();
       strikePull = pw;
       strikeT = 0.0001;
       const ct = match.callType();
-      const call = aiShotCall !== undefined ? aiShotCall : ct === 'none' ? null : { ball: callBallId() ?? 8, pocket: effectiveCallPocket() ?? 0 };
+      const call = aiShotCall !== undefined ? aiShotCall : ct === 'none' ? null : { ball: callBallId() ?? 8, pocket: callPocket ?? 0 };
       firedCall = call;
       aiCall = null;
       const input = { angle, power: pw, side, vert, call, pushOut };
+      renderControls();
       // Let the cue travel through before the ball moves.
-      setTimeout(() => {
+      void sleep(70).then(() => {
         if (disposed) return;
         match.shoot(input);
         pushOut = false;
         callPocket = null;
-        powerBar.classList.remove('hot');
-      }, 70);
+      });
     }
 
     // ---------- Pointer input on the table ----------
     const canvas = app.pixi.canvas;
-    let drag: { mode: 'aim' | 'cue' | 'stick'; id: number } | null = null;
+    let drag: { id: number; mode: 'aim' | 'cue'; sx: number; sy: number; lastA: number; moved: boolean; cue0: { x: number; y: number }; p0: { x: number; y: number } } | null = null;
 
-    /** Is (x, y) on the cue stick behind the cue ball? Grabbing it rotates around the ball. */
-    function onStick(x: number, y: number): boolean {
-      const c = match.cueBall();
-      const dx = -Math.cos(aim.angle);
-      const dy = -Math.sin(aim.angle);
-      const along = (x - c.x) * dx + (y - c.y) * dy;
-      const across = Math.abs((x - c.x) * dy - (y - c.y) * dx);
-      return along > match.table.R * 1.1 && along < 1.55 && across < Math.max(0.045, 34 / view.pxPerM);
-    }
     const onDown = (e: PointerEvent) => {
       sound.unlock();
-      if (!canAct() || charging) return;
+      if (!canAct() || charging || drag) return;
       const p = view.toTable(e.clientX, e.clientY);
       const t = match.table;
       // Pocket call taps first.
-      if (match.callType() !== 'none') {
+      if (match.callType() !== 'none' && !placingNow()) {
         const hit = t.pockets.findIndex((pk, i) => !match.closedPockets.includes(i) && Math.hypot(p.x - pk.hx, p.y - pk.hy) < pk.hr * 1.6);
         if (hit >= 0) {
           callPocket = hit;
@@ -430,7 +810,7 @@ export function matchScreen(opts: MatchOptions) {
           return;
         }
       }
-      if (match.callType() === 'ball-pocket') {
+      if (match.callType() === 'ball-pocket' && !placingNow()) {
         const hitBall = match.balls.find((b) => b.onTable && b.id !== match.cueId() && Math.hypot(p.x - b.x, p.y - b.y) < t.R * 1.6);
         if (hitBall) {
           callBall = hitBall.id;
@@ -438,87 +818,212 @@ export function matchScreen(opts: MatchOptions) {
         }
       }
       const cue = match.cueBall();
-      const grab = Math.max(t.R * 2.6, 30 / view.pxPerM);
-      if (placingNow() && Math.hypot(p.x - cue.x, p.y - cue.y) < grab) {
-        drag = { mode: 'cue', id: e.pointerId };
-      } else if (onStick(p.x, p.y)) {
-        drag = { mode: 'stick', id: e.pointerId };
-        haptic(8);
-      } else {
-        drag = { mode: 'aim', id: e.pointerId };
-        aim.angle = Math.atan2(p.y - cue.y, p.x - cue.x);
-      }
+      drag = {
+        id: e.pointerId, mode: placingNow() ? 'cue' : 'aim', sx: e.clientX, sy: e.clientY, moved: false,
+        lastA: Math.atan2(p.y - cue.y, p.x - cue.x), cue0: { x: cue.x, y: cue.y }, p0: p,
+      };
       canvas.setPointerCapture(e.pointerId);
     };
     const onMove = (e: PointerEvent) => {
       if (!drag || e.pointerId !== drag.id || !canAct()) return;
+      if (!drag.moved && Math.hypot(e.clientX - drag.sx, e.clientY - drag.sy) < 6) return;
+      drag.moved = true;
       const p = view.toTable(e.clientX, e.clientY);
       if (drag.mode === 'cue') {
-        match.placeCue(p.x, p.y);
-      } else if (drag.mode === 'stick') {
-        // The butt is behind the ball: aim points from the hand through the cue ball.
-        const cue = match.cueBall();
-        if (Math.hypot(p.x - cue.x, p.y - cue.y) > match.table.R * 2) aim.angle = Math.atan2(cue.y - p.y, cue.x - p.x);
-      } else {
-        const cue = match.cueBall();
-        if (Math.hypot(p.x - cue.x, p.y - cue.y) > match.table.R * 1.2) aim.angle = Math.atan2(p.y - cue.y, p.x - cue.x);
+        // The ball keeps its offset from the finger, so the finger never hides it.
+        match.placeCue(drag.cue0.x + p.x - drag.p0.x, drag.cue0.y + p.y - drag.p0.y);
+        return;
       }
+      // Relative dial around the cue ball: the cue turns by the finger's angle change, and
+      // gears down further away from the ball for precise adjustments.
+      const cue = match.cueBall();
+      const a = Math.atan2(p.y - cue.y, p.x - cue.x);
+      const rpx = Math.hypot(p.x - cue.x, p.y - cue.y) * view.pxPerM;
+      if (rpx > 22) {
+        const da = Math.atan2(Math.sin(a - drag.lastA), Math.cos(a - drag.lastA));
+        const k = Math.max(0.35, Math.min(1, 1 - (rpx - 150) / 450));
+        aim.angle += da * k;
+      }
+      drag.lastA = a;
     };
     const onUp = (e: PointerEvent) => {
-      if (drag && e.pointerId === drag.id) drag = null;
+      if (!drag || e.pointerId !== drag.id) return;
+      const d = drag;
+      drag = null;
+      if (d.moved || !canAct() || e.type === 'pointercancel') return;
+      // A tap: place the ball there, aim straight at a tapped ball, or aim at the tapped spot.
+      const p = view.toTable(e.clientX, e.clientY);
+      if (d.mode === 'cue') {
+        match.placeCue(p.x, p.y);
+        return;
+      }
+      const cue = match.cueBall();
+      const grab = Math.max(match.table.R * 1.8, 16 / view.pxPerM);
+      const hit = match.balls
+        .filter((b) => b.onTable && b.id !== cue.id && Math.hypot(p.x - b.x, p.y - b.y) < grab)
+        .sort((a, b) => Math.hypot(p.x - a.x, p.y - a.y) - Math.hypot(p.x - b.x, p.y - b.y))[0];
+      if (hit) {
+        aimAt(hit);
+        const list = targetList();
+        targetIdx = Math.max(-1, list.findIndex((b) => b.id === hit.id));
+        haptic(8);
+      } else if (Math.hypot(p.x - cue.x, p.y - cue.y) > match.table.R * 1.5) {
+        aimAt(p);
+      }
     };
     canvas.addEventListener('pointerdown', onDown);
     canvas.addEventListener('pointermove', onMove);
     canvas.addEventListener('pointerup', onUp);
     canvas.addEventListener('pointercancel', onUp);
 
-    // Joystick: rotates the cue, or walks the cue ball while it is in hand. A light push
-    // turns about half a degree per second; a full push sweeps the table quickly.
-    joystick(aimStick, {
-      enabled: () => canAct(),
-      onTick: (x, y, dt) => {
-        if (!canAct()) return;
-        if (placingNow()) {
-          const c = match.cueBall();
-          match.placeCue(c.x + x * 0.7 * dt, c.y + y * 0.7 * dt);
-        } else {
-          aim.angle += x * 120 * DEG * dt;
-        }
-      },
-      onStart: () => sound.unlock(),
-    });
+    // ---------- Hold-to-repeat buttons ----------
+    function holdRepeat(b: HTMLButtonElement, step: () => void, hold: (dt: number, t: number) => void) {
+      let id: number | null = null;
+      let raf = 0;
+      let t0 = 0;
+      let last = 0;
+      b.addEventListener('pointerdown', (e) => {
+        if (e.button > 0 || b.disabled || id !== null) return;
+        sound.unlock();
+        id = e.pointerId;
+        b.setPointerCapture(id);
+        b.classList.add('pressed');
+        step();
+        haptic(6);
+        t0 = last = performance.now();
+        const loop = () => {
+          if (id === null || disposed) return;
+          const now = performance.now();
+          const held = (now - t0) / 1000;
+          if (held > 0.3) hold(Math.min(0.05, (now - last) / 1000), held - 0.3);
+          last = now;
+          raf = requestAnimationFrame(loop);
+        };
+        raf = requestAnimationFrame(loop);
+      });
+      const end = (e: PointerEvent) => {
+        if (e.pointerId !== id) return;
+        id = null;
+        cancelAnimationFrame(raf);
+        b.classList.remove('pressed');
+      };
+      b.addEventListener('pointerup', end);
+      b.addEventListener('pointercancel', end);
+      b.addEventListener('lostpointercapture', end);
+    }
+    // One tap = 0.1°; holding sweeps faster and faster.
+    const rotRate = (t: number) => Math.min(40, 1 + 14 * t * t);
+    holdRepeat(rotL, () => rotate(-0.1), (dt, t) => rotate(-rotRate(t) * dt));
+    holdRepeat(rotR, () => rotate(0.1), (dt, t) => rotate(rotRate(t) * dt));
+    // One tap = 3 mm; holding walks the ball, then runs.
+    const walk = (t: number) => Math.min(0.6, 0.05 + 0.5 * t * t);
+    holdRepeat(upB, () => nudgeCue(0, -1, 0.003), (dt, t) => nudgeCue(0, -1, walk(t) * dt));
+    holdRepeat(downB, () => nudgeCue(0, 1, 0.003), (dt, t) => nudgeCue(0, 1, walk(t) * dt));
+    holdRepeat(leftB, () => nudgeCue(-1, 0, 0.003), (dt, t) => nudgeCue(-1, 0, walk(t) * dt));
+    holdRepeat(rightB, () => nudgeCue(1, 0, 0.003), (dt, t) => nudgeCue(1, 0, walk(t) * dt));
 
-    // Hold-to-charge shoot button; slide away to cancel.
-    shootBtn.addEventListener('pointerdown', (e) => {
+    // ---------- Power bar: drag to set the power ----------
+    let barId: number | null = null;
+    const setBar = (e: PointerEvent) => {
+      const r = powerTrack.getBoundingClientRect();
+      preset = Math.max(0.05, Math.min(1, 1 - (e.clientY - r.top) / r.height));
+      const lvl = Math.floor(preset * 10);
+      if (lvl !== lastTick) {
+        lastTick = lvl;
+        sound.tick(preset);
+      }
+    };
+    powerBar.addEventListener('pointerdown', (e) => {
+      if (!canAct() || placingNow() || charging || barId !== null) return;
       sound.unlock();
-      startCharge();
-      if (charging) shootBtn.setPointerCapture(e.pointerId);
+      barId = e.pointerId;
+      powerBar.setPointerCapture(barId);
+      barActive = true;
+      setBar(e);
     });
-    shootBtn.addEventListener('pointermove', (e) => {
-      if (!charging) return;
-      const r = shootBtn.getBoundingClientRect();
+    powerBar.addEventListener('pointermove', (e) => e.pointerId === barId && canAct() && setBar(e));
+    const barEnd = (e: PointerEvent) => {
+      if (e.pointerId !== barId) return;
+      barId = null;
+      barActive = false;
+    };
+    powerBar.addEventListener('pointerup', barEnd);
+    powerBar.addEventListener('pointercancel', barEnd);
+
+    // ---------- Strike: tap = preset power, hold = swinging meter; slide away to cancel ----------
+    strikeBtn.addEventListener('pointerdown', (e) => {
+      if (e.button > 0 || !canAct() || strikePress) return;
+      sound.unlock();
+      if (placingNow()) {
+        confirmPlace();
+        return;
+      }
+      strikePress = { id: e.pointerId, t0: performance.now() };
+      strikeBtn.setPointerCapture(e.pointerId);
+      strikeBtn.classList.add('pressed');
+    });
+    strikeBtn.addEventListener('pointermove', (e) => {
+      if (!strikePress || e.pointerId !== strikePress.id) return;
+      const r = strikeBtn.getBoundingClientRect();
       const d = Math.hypot(e.clientX - (r.left + r.width / 2), e.clientY - (r.top + r.height / 2));
-      const armed = d > r.width * 1.1;
+      const armed = d > Math.max(r.width, r.height) * 1.1;
       if (armed !== cancelArmed) {
         cancelArmed = armed;
-        shootBtn.classList.toggle('cancel', armed);
-        shootBtn.textContent = armed ? 'HỦY' : 'ĐÁNH';
+        strikeBtn.classList.toggle('cancel', armed);
+        strikeLabel.textContent = armed ? 'HỦY' : 'ĐÁNH';
         haptic(12);
       }
     });
-    shootBtn.addEventListener('pointerup', () => releaseCharge());
-    shootBtn.addEventListener('pointercancel', () => cancelCharge());
+    strikeBtn.addEventListener('pointerup', (e) => {
+      if (!strikePress || e.pointerId !== strikePress.id) return;
+      strikePress = null;
+      strikeBtn.classList.remove('pressed');
+      if (charging) releaseCharge();
+      else if (cancelArmed) cancelCharge();
+      else fireAtPreset();
+      cancelArmed = false;
+      strikeBtn.classList.remove('cancel');
+    });
+    strikeBtn.addEventListener('pointercancel', () => cancelCharge());
 
-    // Keyboard for desktop.
+    // Keyboard and wheel for desktop.
     const onKey = (e: KeyboardEvent) => {
-      if (e.repeat && e.code === 'Space') return;
+      const target = e.target as HTMLElement | null;
+      if (target?.closest('input, textarea, select, [contenteditable=true]')) return;
+      if (skillSheet || spinSheet || paused || document.querySelector('.modal-wrap')) {
+        if (e.type === 'keydown' && e.code === 'Escape') app.back();
+        return;
+      }
       if (e.type === 'keydown') {
+        if (e.code.startsWith('Arrow') && canAct()) e.preventDefault();
         if (e.code === 'Space') {
           e.preventDefault();
-          startCharge();
+          if (!e.repeat) {
+            if (placingNow()) confirmPlace();
+            else startCharge();
+          }
         }
-        if (e.code === 'ArrowLeft') aim.angle -= (e.shiftKey ? 0.05 : 0.5) * DEG;
-        if (e.code === 'ArrowRight') aim.angle += (e.shiftKey ? 0.05 : 0.5) * DEG;
+        if (e.code === 'Enter' && !e.repeat) {
+          if (placingNow()) confirmPlace();
+          else if (!charging) fireAtPreset();
+        }
+        const fine = e.shiftKey ? 0.05 : 0.5;
+        if (placingNow()) {
+          const m = e.shiftKey ? 0.002 : 0.01;
+          if (e.code === 'ArrowLeft') nudgeCue(-1, 0, m);
+          if (e.code === 'ArrowRight') nudgeCue(1, 0, m);
+          if (e.code === 'ArrowUp') nudgeCue(0, -1, m);
+          if (e.code === 'ArrowDown') nudgeCue(0, 1, m);
+        } else {
+          if (e.code === 'ArrowLeft') rotate(-fine);
+          if (e.code === 'ArrowRight') rotate(fine);
+          if (e.code === 'ArrowUp' && canAct()) preset = Math.min(1, preset + 0.05);
+          if (e.code === 'ArrowDown' && canAct()) preset = Math.max(0.05, preset - 0.05);
+        }
+        if (e.code === 'Tab' && canAct()) {
+          e.preventDefault();
+          switchTarget();
+        }
         if (e.code === 'Escape') app.back();
       } else if (e.code === 'Space') {
         releaseCharge();
@@ -536,85 +1041,6 @@ export function matchScreen(opts: MatchOptions) {
     window.addEventListener('keydown', onKey);
     window.addEventListener('keyup', onKey);
     canvas.addEventListener('wheel', onWheel, { passive: true });
-
-    // ---------- Spin: drag on the cue-ball control ----------
-    // Relative drag (like a trackpad) gives fine control on a small target; a magnified
-    // ball floats beside the thumb while dragging. Double-tap returns to centre.
-    let lastSpinTap = 0;
-    let loupe: { el: HTMLElement; tip: HTMLElement; cap: HTMLElement } | null = null;
-    let overLimit = false;
-
-    function showLoupe() {
-      const tip = h('div.tip');
-      const cap = h('div.cap');
-      const lp = h('div.spin-loupe', null, h('div.h'), h('div.v'), h('div.limit'), tip, cap);
-      const r = spinBtn.getBoundingClientRect();
-      const size = 170;
-      const x = left ? r.left - size - 18 : r.right + 18;
-      const y = Math.max(8, Math.min(window.innerHeight - size - 30, r.top + r.height / 2 - size / 2));
-      lp.style.left = `${x}px`;
-      lp.style.top = `${y}px`;
-      el.append(lp);
-      loupe = { el: lp, tip, cap };
-      updateSpinDot();
-    }
-
-    function spinCaption(): string {
-      const parts: string[] = [];
-      if (aim.vert > 0.15) parts.push('Theo bi');
-      else if (aim.vert < -0.15) parts.push('Kéo bi');
-      if (aim.side > 0.15) parts.push('áp phê phải');
-      else if (aim.side < -0.15) parts.push('áp phê trái');
-      return parts.length ? parts.join(' · ') : 'Giữa bi';
-    }
-
-    // The spin ball is a joystick too: push to slide the contact point, release to keep it.
-    joystick(spinBtn, {
-      enabled: () => canAct(),
-      onStart: () => {
-        sound.unlock();
-        const now = performance.now();
-        if (now - lastSpinTap < 320) {
-          aim.side = 0;
-          aim.vert = 0;
-          updateSpinDot();
-          haptic(12);
-        }
-        lastSpinTap = now;
-        showLoupe();
-      },
-      onTick: (x, y, dt) => {
-        let sx = aim.side + x * 1.3 * dt;
-        let sy = aim.vert - y * 1.3 * dt;
-        const m = Math.hypot(sx, sy);
-        if (m > 1) {
-          sx /= m;
-          sy /= m;
-        }
-        aim.side = sx;
-        aim.vert = sy;
-        const over = m > 0.82;
-        if (over !== overLimit) {
-          overLimit = over;
-          if (over) haptic(15);
-        }
-        updateSpinDot();
-      },
-      onEnd: () => {
-        loupe?.el.remove();
-        loupe = null;
-      },
-    });
-
-    function updateSpinDot() {
-      spinDot.style.left = `${50 + aim.side * 38}%`;
-      spinDot.style.top = `${50 - aim.vert * 38}%`;
-      if (loupe) {
-        loupe.tip.style.left = `${50 + aim.side * 41}%`;
-        loupe.tip.style.top = `${50 - aim.vert * 41}%`;
-        loupe.cap.textContent = spinCaption();
-      }
-    }
 
     // ---------- Match events ----------
     const off = match.on((e) => {
@@ -635,9 +1061,12 @@ export function matchScreen(opts: MatchOptions) {
           break;
         }
         case 'shot':
+          pottedBefore[0] = match.potted[0].length;
+          pottedBefore[1] = match.potted[1].length;
           if (e.miscue) {
             sound.miscue();
-            banner('Trượt cơ!', true);
+            setExpr(e.side, 'sad');
+            herald({ side: e.side, expr: 'sad', tone: 'red', title: 'Trượt cơ!', line: 'Đầu cơ trượt khỏi bi cái' });
             haptic([30, 30, 60]);
           } else {
             sound.cueStrike(Math.min(1, e.speed / 7));
@@ -652,24 +1081,29 @@ export function matchScreen(opts: MatchOptions) {
           view.addShake(1.1);
           haptic([40, 20, 80]);
           break;
+        case 'energy':
+          floatGain(e.side, e.gain);
+          if (hasSkills && match.setup.players[e.side].kind === 'human') {
+            hintOnce(app, 'energy', 'Năng lượng', 'Vòng quanh chân dung là năng lượng: +8 mỗi cú đánh, +14 mỗi bi của mình vào lỗ, +12 khi đối thủ phạm lỗi. Đầy vòng thì tuyệt chiêu (ô thứ ba) dùng được.',
+              { anchor: () => cards[e.side].ringWrap, place: 'below' });
+          }
+          break;
         case 'skill': {
           if (e.slot !== 2) sound.skill(); // the ultimate cut-in plays its own gong
-          const who = match.setup.players[e.side].name;
           if (e.slot === 2) playCutIn(champion(e.champion), e.skill, e.side === 1);
-          else toast(`${who}: ${e.skill.name}`, 'gold');
+          setExpr(e.side, 'cast', 2400);
+          herald({ side: e.side, expr: 'cast', title: e.skill.name, line: `${nameOf(e.side)} ${e.slot === 2 ? 'tung tuyệt chiêu' : 'dùng chiêu'}` });
           if (e.skill.kinds.includes('rewind')) view.resync();
           view.skillFx(e.champion, e.skill, e.side);
           haptic(e.slot === 2 ? [30, 40, 60] : 25);
-          renderHud();
           break;
         }
         case 'omen':
           sound.omen();
-          hintOnce(app, 'omen', 'Thiên Tượng', 'Bàn của mỗi môn phái thỉnh thoảng nổi hiện tượng (gió, tuyết, nghiêng bàn…) cho đúng một cú đánh. Nó được vẽ lên bàn: tính vào đường bi! Tướng đánh trên bàn môn phái mình (Địa Lợi) không gặp Thiên Tượng.');
-          banner(e.omen.name);
-          toast(`${e.omen.name}: ${e.omen.desc}`, 'gold');
+          hintOnce(app, 'omen', 'Thiên Tượng', 'Bàn của mỗi môn phái thỉnh thoảng nổi hiện tượng (gió, tuyết, nghiêng bàn…) cho đúng một cú đánh. Nó được vẽ lên bàn: tính vào đường bi! Tướng đánh trên bàn môn phái mình không gặp Thiên Tượng.',
+            { anchor: () => (lefty ? ctrl : dock), place: 'over', highlight: false });
+          herald({ side: null, icon: 'warning', title: e.omen.name, line: e.omen.desc, ms: 4200 });
           view.addShake(e.omen.jitter ? 0.6 : 0.2);
-          renderHud();
           break;
         case 'resolved':
           onResolved(e.res, e.side);
@@ -679,10 +1113,18 @@ export function matchScreen(opts: MatchOptions) {
           break;
         case 'new-rack':
           view.resync();
+          for (const c of cards) c.key = '';
           break;
-        case 'rack-over':
-          setTimeout(() => onRackOver(e.winner), opts.challenge ? 700 : 1100);
+        case 'rack-over': {
+          const w = e.winner;
+          if (!opts.challenge) {
+            setExpr(w, 'joy', 5000);
+            setExpr(other(w), 'sad', 5000);
+            herald({ side: w, expr: 'joy', title: `${nameOf(w)} thắng ván`, line: match.lastRes?.messages.join(' ') || undefined, ms: 3000 });
+          }
+          setTimeout(() => onRackOver(w), opts.challenge ? 700 : 1100);
           break;
+        }
       }
       if (e.type !== 'phys') scheduleHud();
     });
@@ -698,15 +1140,22 @@ export function matchScreen(opts: MatchOptions) {
     }
 
     function onResolved(r: Resolution, side: Side) {
+      const potN = Math.max(0, match.potted[side].length - pottedBefore[side]);
       if (r.foul && !opts.challenge) {
         sound.foul();
-        hintOnce(app, 'foul', 'Phạm lỗi', 'Khi một bên phạm lỗi, đối thủ được "bi trong tay": đặt bi cái ở bất kỳ đâu rồi mới đánh. Lý do lỗi hiện ở thông báo phía trên.');
-        banner('Phạm lỗi', true);
-        toast(r.foul, 'bad');
+        setExpr(side, 'sad', 3000);
+        herald({ side, expr: 'sad', tone: 'red', title: r.ballInHand !== 'none' ? 'Lỗi — bi trong tay' : 'Phạm lỗi', line: r.foul, ms: 3400 });
+        hintOnce(app, 'foul', 'Phạm lỗi', 'Khi một bên phạm lỗi, đối thủ được "bi trong tay": đặt bi cái ở chỗ cho phép rồi mới đánh. Lý do lỗi hiện ở dải trên cùng.',
+          { anchor: () => (lefty ? ctrl : dock), place: 'over', highlight: false });
+      } else if (r.winner === null && (potN > 0 || r.points > 0) && r.keepTurn) {
+        sound.good();
+        setExpr(side, 'joy');
+        const title = r.highlight === 'golden' ? 'Bi vàng!' : match.isCarom ? 'Ghi điểm!' : potN > 1 ? `Ăn ${potN} bi!` : 'Ăn bi!';
+        herald({ side, expr: 'joy', title, line: r.messages.join(' ') || 'Đánh tiếp' });
+      } else if (r.winner === null && r.messages.length) {
+        if (!r.foul && (r.keepTurn || r.points)) sound.good();
+        herald({ side, title: r.messages[0], line: r.messages.slice(1).join(' ') || undefined });
       }
-      for (const m of r.messages) toast(m, r.highlight ? 'gold' : r.winner !== null && r.winner !== side ? 'bad' : 'good');
-      if (!r.foul && (r.keepTurn || r.points)) sound.good();
-      if (r.highlight === 'golden') banner('Bi vàng!');
       // AI may answer a missed shot with Hồi Cục.
       const p = match.setup.players[side];
       const rewindSlot = match.setup.classic ? -1 : match.skills(side).findIndex((sk) => sk.kinds[0] === 'rewind');
@@ -719,24 +1168,41 @@ export function matchScreen(opts: MatchOptions) {
       }
     }
 
-    /** First-time explanations, each shown once per player, in the order situations arise. */
+    /** First-time explanations, each shown once per player, beside the control they explain. */
     function coachTurn() {
       if (opts.challenge) return;
       const mode = match.setup.mode;
-      hintOnce(app, 'aim', 'Ngắm và đánh', 'Kéo trên bàn hoặc đẩy cần XOAY CƠ để ngắm (đẩy nhẹ = xoay chậm, tinh). Chạm quả bi ÁP PHÊ để chọn điểm đánh. GIỮ nút ĐÁNH để nạp lực, thả ra để đánh.');
-      hintOnce(app, `rules-${mode}`, `Luật ${MODE_NAMES[mode]}`, `${RULES_TEXT[mode].goal} Xem đầy đủ trong menu tạm dừng → Luật chơi.`);
-      if (match.canMoveCue) hintOnce(app, 'ballinhand', 'Bi trong tay', 'Bạn được đặt bi cái. Đẩy cần điều khiển hoặc kéo bi để di chuyển, rồi bấm ĐẶT BI để chốt vị trí.');
-      if (match.callType() !== 'none') hintOnce(app, 'call', 'Gọi lỗ', 'Cú này phải gọi: chạm vào lỗ bạn định đánh bi vào (và chạm bi nếu cần) trước khi đánh. Bi vào lỗ khác không được tính.');
+      if (hasSkills) {
+        const side = humanSide() ?? match.turn;
+        hintOnce(app, 'energy', 'Năng lượng', 'Vòng quanh chân dung: +8 mỗi cú đánh, +14 mỗi bi của mình vào lỗ, +12 khi đối thủ phạm lỗi. Đầy 100 năng lượng thì dùng được tuyệt chiêu ở ô thứ ba.',
+          { anchor: () => cards[side].ringWrap, place: 'below' });
+      }
+      const beside = lefty ? 'right' : 'left';
+      hintOnce(app, `rules-${mode}`, `Luật ${MODE_NAMES[mode]}`, `${RULES_TEXT[mode].goal} Xem đầy đủ trong menu tạm dừng → Luật chơi.`, { anchor: () => (lefty ? ctrl : dock), place: 'over', highlight: false });
+      hintOnce(app, 'ctl-aim', 'Ngắm', 'Kéo trên bàn để xoay cơ — kéo xa bi cái thì xoay chậm, tinh hơn. Chạm một bi để ngắm thẳng vào nó. Hai nút xoay chỉnh từng chút (giữ để xoay nhanh), nút đổi mục tiêu nhảy qua các bi hợp lệ, bi cái nhỏ là áp phê.',
+        { anchor: () => aimPad, place: beside });
+      hintOnce(app, 'ctl-power', 'Lực và đánh', 'Kéo thanh lực để chọn lực, rồi chạm ĐÁNH. Hoặc giữ ĐÁNH cho lực tự dao động và thả đúng lúc; trượt ngón ra xa để huỷ.',
+        { anchor: () => powerBar, place: beside });
+      if (match.canMoveCue) {
+        hintOnce(app, 'ctl-ballinhand', 'Bi trong tay', 'Kéo bi cái trên bàn, chạm chỗ muốn đặt, hoặc dùng 4 nút mũi tên để dời từng chút. Bấm ĐẶT BI để chốt rồi mới ngắm.',
+          { anchor: () => dpad, place: beside });
+      }
+      if (match.callType() !== 'none') {
+        hintOnce(app, 'call', 'Gọi lỗ', 'Cú này phải gọi: chạm vào lỗ bạn định đánh bi vào (và chạm bi nếu cần) trước khi đánh. Bi vào lỗ khác không được tính.',
+          { anchor: () => chips, place: 'above' });
+      }
     }
 
     function onTurn() {
       placeConfirmed = false;
       cancelCharge();
+      closeSheets();
       pushOut = false;
       callPocket = null;
       callBall = null;
       aiCall = null;
       firedCall = null;
+      targetIdx = -1;
       view.refreshCue();
       if (match.phase === 'option') {
         if (match.current.kind === 'ai') void aiTurn();
@@ -744,16 +1210,18 @@ export function matchScreen(opts: MatchOptions) {
         return;
       }
       if (match.phase !== 'aim') return;
+      const side = match.turn;
+      const changed = lastTurnSide !== side;
+      lastTurnSide = side;
       if (match.current.kind === 'ai') {
         void aiTurn();
       } else {
         aim.side = 0;
         aim.vert = 0;
         updateSpinDot();
-        aimAtNearestTarget();
-        const twoHumans = match.setup.players.every((p) => p.kind === 'human');
-        if (twoHumans) toast(`Lượt của ${match.current.name}`, 'gold');
-        if (match.canMoveCue) toast('Bi trong tay: đẩy cần điều khiển (hoặc kéo bi) để di bi, rồi bấm ĐẶT BI', 'gold');
+        aimFirstTarget();
+        if (match.canMoveCue) herald({ side, title: changed ? `Lượt của ${nameOf(side)}` : 'Bi trong tay', line: 'Bi trong tay — kéo bi hoặc dùng mũi tên, rồi ĐẶT BI' });
+        else if (changed) herald({ side, title: `Lượt của ${nameOf(side)}`, line: match.objective() });
         coachTurn();
       }
     }
@@ -765,8 +1233,8 @@ export function matchScreen(opts: MatchOptions) {
       const player = match.setup.players[side];
       aiActing = true;
       showAiCue = false;
-      thinking.style.display = '';
-      (thinking.lastElementChild as HTMLElement).textContent = `${player.name} đang tính`;
+      setFocus(side, true);
+      setThinking(side);
       renderHud();
       const view0 = match.aiView();
       const req: AiRequest = {
@@ -783,23 +1251,25 @@ export function matchScreen(opts: MatchOptions) {
       const wait = minThink - (performance.now() - started);
       if (wait > 0) await sleep(wait);
       if (disposed || token !== aiToken) return;
-      thinking.style.display = 'none';
+      setThinking(null);
       if (match.phase === 'option') {
         const choice = decision.option ?? 'play';
-        toast(`${player.name} chọn ${choice === 'play' ? 'đánh tiếp' : match.state.pendingOption === 'illegal-break-8' ? 'xếp lại bi' : 'nhường lại'}`, 'gold');
+        herald({ side, title: `${player.name} chọn ${choice === 'play' ? 'đánh tiếp' : match.state.pendingOption === 'illegal-break-8' ? 'xếp lại bi' : 'nhường lại'}` });
         aiActing = false;
+        setFocus(side, false);
         match.chooseOption(choice);
         return;
       }
       const shot = decision.shot;
       if (!shot) {
         aiActing = false;
+        setFocus(side, false);
         return;
       }
       if (shot.call) {
         aiCall = shot.call;
         const ballTxt = match.callType() === 'ball-pocket' || shot.call.ball !== 8 ? `bi ${shot.call.ball}` : 'bi 8';
-        toast(`${player.name} gọi ${ballTxt} → ${POCKET_NAMES[shot.call.pocket]}`, 'gold');
+        herald({ side, expr: 'focus', icon: 'target', title: `${player.name} gọi ${ballTxt}`, line: POCKET_NAMES[shot.call.pocket] });
       }
       if (decision.skill !== undefined && match.canUseSkill(side, decision.skill)) {
         match.useSkill(side, decision.skill);
@@ -837,20 +1307,37 @@ export function matchScreen(opts: MatchOptions) {
       charging = false;
       if (disposed || token !== aiToken) return;
       aiActing = false;
+      setFocus(side, false);
       // The AI's call comes from its plan, not from the human aim helpers.
       fire(shot.angle, shot.power, shot.side, shot.vert, shot.call);
     }
 
+    // Presentation waits use active match time so an AI cannot strike behind the pause sheet.
     function sleep(ms: number) {
-      return new Promise<void>((r) => setTimeout(r, ms));
+      return new Promise<void>((resolve) => {
+        let elapsed = 0;
+        let last = performance.now();
+        const step = () => {
+          const now = performance.now();
+          if (!paused) elapsed += now - last;
+          last = now;
+          if (disposed || elapsed >= ms) resolve();
+          else requestAnimationFrame(step);
+        };
+        requestAnimationFrame(step);
+      });
     }
 
     function animate(ms: number, fn: (k: number) => void, ease = (k: number) => k * k * (3 - 2 * k)) {
       return new Promise<void>((resolve) => {
-        const t0 = performance.now();
+        let elapsed = 0;
+        let last = performance.now();
         const stepFn = () => {
           if (disposed) return resolve();
-          const k = Math.min(1, (performance.now() - t0) / ms);
+          const now = performance.now();
+          if (!paused) elapsed += now - last;
+          last = now;
+          const k = Math.min(1, elapsed / ms);
           fn(ease(k));
           if (k < 1) requestAnimationFrame(stepFn);
           else resolve();
@@ -862,7 +1349,7 @@ export function matchScreen(opts: MatchOptions) {
     // ---------- Dialogs ----------
     function openOption() {
       const kind = match.state.pendingOption;
-      const prev = match.setup.players[other(match.turn)].name;
+      const prev = nameOf(other(match.turn));
       const text = {
         'push-out': `${prev} vừa đẩy bi (push-out). Bạn muốn tự đánh từ vị trí này hay bắt ${prev} đánh?`,
         'wrong-call': `${prev} làm bi vào không đúng lời gọi. Bạn đánh tiếp hay bắt ${prev} đánh lại?`,
@@ -870,9 +1357,9 @@ export function matchScreen(opts: MatchOptions) {
         'illegal-break-8': 'Cú phá không hợp lệ. Bạn nhận bàn như hiện tại, hay xếp lại bi và tự phá?',
       }[kind ?? 'push-out'];
       const passLabel = kind === 'illegal-break-8' ? 'Xếp lại & tự phá' : 'Nhường lại';
-      modal((close) => h('div.modal', null,
+      modal((close) => h('div.modal.mx-modal', null,
         h('h2', null, 'Quyền chọn'),
-        h('div', { style: 'font-weight:600;line-height:1.5' }, text),
+        h('p.mx-mtext', null, text),
         h('div.actions', null,
           btn(passLabel, () => {
             close();
@@ -886,20 +1373,26 @@ export function matchScreen(opts: MatchOptions) {
       ));
     }
 
+    /** Result sheet with the champion's art on the left. */
+    function artModal(art: string, build: (close: () => void) => (Node | null)[]) {
+      return modal((close) => h('div.modal.mx-modal.mx-result', null,
+        h('div.mx-res-art', null, h('img', { src: art, alt: '', draggable: false })),
+        h('div.mx-res-body', null, ...build(close))));
+    }
+
     function onRackOver(winner: Side) {
       if (disposed) return;
       if (opts.challenge) {
         const ok = winner === 0;
         const r = opts.challenge.onResult(ok, attempt);
-        if (ok) {
-          sound.win();
-          banner('Thành công!');
-        } else sound.lose();
+        if (ok) sound.win();
+        else sound.lose();
+        setExpr(0, ok ? 'joy' : 'sad', 6000);
         const triesLeft = opts.challenge.tries - attempt;
-        modal((close) => h('div.modal', null,
+        artModal(ok ? winUrl(champOf(0)) : exprUrl(champOf(0), 'sad'), (close) => [
           h('h2', null, ok ? 'Hoàn thành!' : 'Chưa được'),
-          h('div', { style: 'font-weight:600' }, match.lastRes?.messages[0] ?? ''),
-          ok ? h('div', { style: 'display:flex;justify-content:center' }, starsBig(r.stars)) : h('div.muted', null, triesLeft > 0 ? `Còn ${triesLeft} lượt thử` : 'Hết lượt thử — thử lại từ đầu nhé'),
+          h('p.mx-mtext', null, match.lastRes?.messages[0] ?? ''),
+          ok ? stars(r.stars) : h('p.muted', null, triesLeft > 0 ? `Còn ${triesLeft} lượt thử` : 'Hết lượt thử — thử lại từ đầu nhé'),
           h('div.actions', null,
             btn('Về danh sách', () => {
               close();
@@ -913,10 +1406,11 @@ export function matchScreen(opts: MatchOptions) {
               close();
               attempt = ok || triesLeft <= 0 ? 1 : attempt + 1;
               match.retryLayout();
-              aimAtNearestTarget();
+              aimFirstTarget();
+              renderHud();
             }, ok ? 'ghost' : ''),
           ),
-        ));
+        ]);
         return;
       }
       if (match.phase === 'match-over') return onMatchOver(winner);
@@ -925,16 +1419,17 @@ export function matchScreen(opts: MatchOptions) {
       const humanLost = hs !== null && winner !== hs && match.setup.players[other(hs)].kind === 'ai';
       if (hs !== null && winner === hs) sound.win();
       else if (humanLost) sound.lose();
-      banner(`${match.setup.players[winner].name} thắng ván`, humanLost);
       const rewindSlot = hs === null ? -1 : match.skills(hs).findIndex((sk) => sk.kinds[0] === 'rewind');
       const canRewind = humanLost && rewindSlot >= 0 && match.canUseSkill(hs!, rewindSlot);
       setTimeout(() => {
         if (disposed || match.phase !== 'rack-over') return;
-        modal((close) => h('div.modal', null,
-          h('h2', null, `Ván ${match.rackNo} · ${match.rackWins[0]} – ${match.rackWins[1]}`),
-          h('div', { style: 'font-weight:600' }, `${match.setup.players[winner].name} thắng ván này. ${match.lastRes?.messages.join(' ') ?? ''}`),
+        artModal(exprUrl(champOf(winner), 'joy'), (close) => [
+          h('div.mx-res-kicker', null, `Ván ${match.rackNo}`),
+          h('h2', null, `${nameOf(winner)} thắng ván`),
+          h('div.mx-res-score.num', null, `${match.rackWins[0]} – ${match.rackWins[1]}`),
+          h('p.mx-mtext', null, match.lastRes?.messages.join(' ') ?? ''),
           h('div.actions', null,
-            canRewind ? btn(h('span', null, icon('rewind'), ` ${match.skills(hs!)[rewindSlot].name}`), () => {
+            canRewind ? btn(frag(icon('rewind'), match.skills(hs!)[rewindSlot].name), () => {
               close();
               match.useSkill(hs!, rewindSlot);
             }, 'ghost') : null,
@@ -943,18 +1438,8 @@ export function matchScreen(opts: MatchOptions) {
               match.nextRack();
             }),
           ),
-        ));
+        ]);
       }, 900);
-    }
-
-    function starsBig(n: number) {
-      const s = h('div', { style: 'display:flex;gap:6px' });
-      for (let i = 0; i < 3; i++) {
-        const st = icon('star');
-        st.setAttribute('style', `width:44px;height:44px;color:${i < n ? '#f5c542' : 'rgba(255,255,255,0.15)'};animation:pop-in .4s ${i * 0.12}s both`);
-        s.append(st);
-      }
-      return s;
     }
 
     function onMatchOver(winner: Side) {
@@ -965,112 +1450,136 @@ export function matchScreen(opts: MatchOptions) {
       else sound.lose();
       const end = opts.onEnd?.({ won, match }) ?? { lines: [] };
       keepAwake(false);
+      const me = hs ?? 0;
       setTimeout(() => {
         if (disposed) return;
-        modal(() => h('div.modal', null,
-          h('h2', null, vsAi ? (won ? 'Chiến thắng!' : 'Thất bại') : `${match.setup.players[winner].name} thắng!`),
-          h('div.row', { style: 'gap:16px;align-items:center' },
-            h('div', { style: 'width:72px;height:72px;border-radius:18px;overflow:hidden;flex-shrink:0' }, avatar(opts.setup.players[winner].champion)),
-            h('div.grow', null,
-              h('div', { style: 'font-size:28px;font-weight:900' }, `${match.rackWins[0]} – ${match.rackWins[1]}`),
-              h('div.muted.small', null, `${match.stats[0].pots} bi · loạt dài nhất ${match.stats[0].bestRun} · ${match.stats[0].fouls} lỗi`),
-            ),
-          ),
-          ...end.lines.map((l) => h('div.kv', null, h('span', null, l))),
+        artModal(winUrl(champOf(winner)), () => [
+          h('div.mx-res-kicker', null, `${opts.label} · ${MODE_NAMES[match.setup.mode]}`),
+          h('h2', null, vsAi ? (won ? 'Chiến thắng!' : 'Thất bại') : `${nameOf(winner)} thắng!`),
+          h('div.mx-res-score.num', null, `${match.rackWins[0]} – ${match.rackWins[1]}`),
+          h('p.muted', null, `${match.stats[me].pots} bi · loạt dài nhất ${match.stats[me].bestRun} · ${match.stats[me].fouls} lỗi`),
+          end.lines.length ? h('div.mx-res-lines', null, ...end.lines.map((l) => h('div.kv', null, h('span', null, l)))) : null,
           h('div.actions', null,
             btn('Về menu', () => opts.onExit(), 'ghost'),
             end.again ? btn('Đấu lại', () => end.again!()) : null,
           ),
-        ));
+        ]);
       }, 1200);
     }
 
     function openPause() {
       if (paused) return;
+      closeSheets();
       paused = true;
       cancelCharge();
-      modal((close) => {
-        const done = () => {
-          paused = false;
-          close();
-          renderHud();
-        };
-        return h('div.modal', { style: 'width:min(380px,100%)' },
-          h('h2', null, 'Tạm dừng'),
-          h('div.muted.small', null, `${opts.label} · ${MODE_NAMES[match.setup.mode]}${match.setup.mutator ? ' · có biến thể bàn' : ''}`),
-          btn('Tiếp tục', done),
-          isTouchDevice() ? null : btn('Bật / tắt toàn màn hình', () => void toggleFullscreen(), 'ghost'),
-          btn('Luật chơi', () => {
-            done();
-            openRules();
-          }, 'ghost'),
-          btn('Hướng dẫn điều khiển', () => {
-            done();
-            openHelp();
-          }, 'ghost'),
-          btn('Thoát trận', () => {
-            close();
-            paused = false;
-            opts.onExit();
-          }, 'red'),
+      const s = app.profile.settings;
+      const done = () => {
+        paused = false;
+        pauseWrap = null;
+        closePause();
+        renderHud();
+      };
+      const closePause = modal((close) => {
+        const box = h('div.modal.mx-modal.mx-pausebox', null,
+          h('div.mx-pause-head', null,
+            h('h2', null, 'Tạm dừng'),
+            h('div.muted.small', null, `${opts.label} · ${MODE_NAMES[match.setup.mode]}${match.setup.mutator ? ' · có biến thể bàn' : ''}`)),
+          h('div.mx-pause-grid', null,
+            h('div.mx-pause-col', null,
+              btn(frag(icon('play'), 'Tiếp tục'), done, 'block big'),
+              btn(frag(icon('scroll'), 'Luật chơi'), () => {
+                done();
+                openRules();
+              }, 'ghost block'),
+              btn(frag(icon('hint'), 'Cách điều khiển'), () => {
+                done();
+                openHelp();
+              }, 'ghost block'),
+            ),
+            h('div.mx-pause-col', null,
+              h('div.list', null,
+                item('Âm thanh', toggle(s.sfx > 0, (on) => {
+                  s.sfx = on ? 0.9 : 0;
+                  app.applySettings();
+                  app.save();
+                }, 'Âm thanh'), { icon: 'sound' }),
+                item('Nhạc nền', toggle(s.music > 0, (on) => {
+                  s.music = on ? 0.3 : 0;
+                  app.applySettings();
+                  if (on) sound.startMusic();
+                  else sound.stopMusic();
+                  app.save();
+                }, 'Nhạc nền'), { icon: 'music' }),
+              ),
+              isTouchDevice() ? null : btn(frag(icon('fullscreen'), 'Toàn màn hình'), () => void toggleFullscreen(), 'ghost block small'),
+              btn(frag(icon('back'), 'Thoát trận'), () => {
+                close();
+                paused = false;
+                pauseWrap = null;
+                opts.onExit();
+              }, 'ghost block small mx-leave'),
+            ),
+          ),
         );
+        queueMicrotask(() => (pauseWrap = box.parentElement));
+        return box;
       });
     }
 
     function openRules() {
       const r = RULES_TEXT[match.setup.mode];
-      modal((close) => h('div.modal.scroll', { style: 'width:min(640px,100%);max-height:calc(100dvh - 24px)' },
+      modal((close) => h('div.modal.scroll.mx-modal.mx-rules', null,
         h('h2', null, `Luật ${MODE_NAMES[match.setup.mode]}`),
-        h('div', { style: 'font-weight:700' }, r.goal),
-        h('ul.rules-list', null, ...r.points.map((t) => h('li', null, t))),
-        match.setup.classic ? null : h('div', null, h('div.section-title', null, 'Tiên Đạo'), h('ul.rules-list', null, ...SKILL_RULES.map((t) => h('li', null, t)))),
+        h('p.mx-mtext', null, r.goal),
+        h('ul.mx-list', null, ...r.points.map((t) => h('li', null, t))),
+        match.setup.classic ? null : h('div', null, h('div.section-title', null, 'Tiên Đạo'), h('ul.mx-list', null, ...SKILL_RULES.map((t) => h('li', null, t)))),
         h('div.actions', null, btn('Đã hiểu', close)),
       ), { dismissable: true });
     }
 
     function openHelp() {
-      const tip = (ic: Parameters<typeof icon>[0], title: string, text: string) =>
-        h('div.row', { style: 'align-items:flex-start;gap:10px' },
-          h('div', { style: 'width:34px;height:34px;flex-shrink:0;border-radius:10px;display:grid;place-items:center;background:rgba(245,197,66,0.15);color:var(--gold)' }, icon(ic)),
-          h('div', null, h('div', { style: 'font-weight:800;font-size:13.5px' }, title), h('div.muted', { style: 'font-size:12.5px;font-weight:600;line-height:1.4' }, text)));
-      modal((close) => h('div.modal', { style: 'width:min(720px,100%)' },
-        h('h2', null, 'Cách chơi'),
-        h('div', { style: 'display:grid;grid-template-columns:1fr 1fr;gap:12px 18px' },
-          tip('hand', 'Ngắm', 'Chạm/kéo trên bàn để chỉ hướng, hoặc nắm bất kỳ đâu trên cây cơ kéo xoay quanh bi cái (càng xa càng tinh).'),
-          tip('rotR', 'Cần điều khiển', 'Đẩy cần sang trái/phải để xoay cơ: đẩy nhẹ xoay rất chậm để tinh chỉnh, đẩy hết xoay nhanh.'),
-          tip('target', 'Điểm áp phê', 'Giữ quả bi ÁP PHÊ rồi đẩy như cần điều khiển: lên = theo, xuống = kéo, trái/phải = áp phê ngang. Chạm đúp về giữa.'),
-          tip('play', 'Nạp lực', 'GIỮ nút ĐÁNH, thả đúng lúc. Mạnh và giữ lâu thì tay run. Kéo ra xa để hủy.'),
-          tip('hand', 'Bi trong tay', 'Đẩy cần điều khiển (hoặc kéo bi cái) để di bi, bấm ĐẶT BI để chốt rồi mới ngắm.'),
-          tip('spin2', 'Gọi lỗ & kỹ năng', 'Khi phải gọi: chạm bi rồi chạm lỗ. Nút bát giác là kỹ năng, tiêu năng lượng.'),
+      const tip = (ic: IconName, title: string, text: string) =>
+        h('div.mx-help-item', null, h('span.mx-help-ic', null, icon(ic)), h('div', null, h('b', null, title), h('div', null, text)));
+      modal((close) => h('div.modal.scroll.mx-modal.mx-help', null,
+        h('h2', null, 'Cách điều khiển'),
+        h('div.mx-help-grid', null,
+          tip('rotate-right', 'Ngắm', 'Kéo trên bàn để xoay cơ; kéo xa bi cái thì xoay chậm, tinh. Chạm một bi để ngắm thẳng. Nút xoay: chạm = 0,1°, giữ = xoay nhanh dần.'),
+          tip('switch-target', 'Đổi mục tiêu', 'Nhảy lần lượt qua các bi hợp lệ: bi nhỏ nhất ở 9/10 bi, bi nhóm mình ở 8 bi.'),
+          tip('spin', 'Áp phê', 'Chạm bi cái nhỏ để mở bi lớn, chạm điểm đánh hoặc chọn nhanh Giữa, Trô, Cule, Giật, Trái, Phải.'),
+          tip('power', 'Lực', 'Kéo thanh lực để chọn lực rồi chạm ĐÁNH. Hoặc giữ ĐÁNH cho lực dao động, thả đúng lúc; trượt ra xa để huỷ.'),
+          tip('place', 'Bi trong tay', 'Kéo bi cái, chạm chỗ muốn đặt, hoặc dùng 4 nút mũi tên; bấm ĐẶT BI để chốt.'),
+          tip('energy', 'Chiêu và năng lượng', 'Chạm ô chiêu để đọc rồi bấm Dùng. Năng lượng tăng mỗi cú đánh, mỗi bi vào và khi đối thủ lỗi; đầy thì dùng được tuyệt chiêu.'),
+          tip('target', 'Gọi lỗ', 'Khi phải gọi: chạm bi (nếu cần) rồi chạm lỗ trên bàn trước khi đánh.'),
+          tip('settings', 'Bàn phím', 'Mũi tên xoay (Shift = tinh), lên/xuống chỉnh lực, Tab đổi mục tiêu, Enter đánh, giữ Space nạp lực, lăn chuột xoay tinh.'),
         ),
         h('div.actions', null, btn('Đã hiểu', () => {
           close();
           app.profile.tutorialSeen = true;
           app.save();
         })),
-      ));
+      ), { dismissable: true });
     }
 
     // ---------- Called-shot marker ----------
-    const callTag = h('div.call-tag');
-    callTag.style.display = 'none';
-    el.append(callTag);
     let callTagKey = '';
+    let callTagPos = '';
 
     function currentCall(): { ball: number | null; pocket: number } | null {
       if (match.phase === 'rolling') return firedCall;
       if (match.phase !== 'aim' || match.callType() === 'none') return null;
       if (aiActing || match.current.kind === 'ai') return aiCall;
-      const pk = effectiveCallPocket();
       const ball = match.callType() === 'ball-pocket' ? callBallId() : 8;
-      return pk === null && callBall === null ? null : { ball, pocket: pk ?? -1 };
+      return callPocket === null && callBall === null ? null : { ball, pocket: callPocket ?? -1 };
     }
 
     function placeCallTag() {
       const cs = view.calledShot;
       if (!cs || cs.pocket < 0) {
-        callTag.style.display = 'none';
-        callTagKey = '';
+        if (callTagKey) {
+          callTag.style.display = 'none';
+          callTagKey = '';
+          callTagPos = '';
+        }
         return;
       }
       const p = match.table.pockets[cs.pocket];
@@ -1078,25 +1587,42 @@ export function matchScreen(opts: MatchOptions) {
       // Push the tag toward the table centre so it never sits off-screen.
       const dirX = -Math.sign(p.hx) || 0;
       const dirY = -Math.sign(p.hy);
-      const off = (p.hr + 0.07) * view.pxPerM;
-      callTag.style.left = `${sp.x + dirX * off}px`;
-      callTag.style.top = `${sp.y + dirY * off}px`;
+      const offPx = (p.hr + 0.07) * view.pxPerM;
+      const pos = `${Math.round(sp.x + dirX * offPx)},${Math.round(sp.y + dirY * offPx)}`;
+      if (pos !== callTagPos) {
+        callTagPos = pos;
+        const [x, y] = pos.split(',');
+        callTag.style.left = `${x}px`;
+        callTag.style.top = `${y}px`;
+      }
       const key = `${cs.ball}|${cs.pocket}|${match.turn}`;
       if (key !== callTagKey) {
         callTagKey = key;
-        callTag.replaceChildren(h('span.ct-label', null, 'Gọi'));
-        if (cs.ball !== null) callTag.append(miniBall(cs.ball, false), h('b', null, String(cs.ball)));
+        callTag.replaceChildren(h('span.mx-ct-label', null, 'Gọi'));
+        if (cs.ball !== null) callTag.append(miniBall(cs.ball), h('b', null, String(cs.ball)));
+        callTag.style.display = '';
         callTag.classList.remove('pop');
         void callTag.offsetWidth;
         callTag.classList.add('pop');
       }
-      callTag.style.display = '';
     }
 
-    // ---------- Frame loop ----------
+    // ---------- Frame loop (no DOM writes unless something changed) ----------
     const tick = (ticker: Ticker) => {
       const dt = Math.min(0.05, ticker.deltaMS / 1000);
       if (!paused) match.update(dt);
+      // The pause sheet can be closed by the system back gesture too.
+      if (paused && pauseWrap && !pauseWrap.isConnected) {
+        paused = false;
+        pauseWrap = null;
+        renderHud();
+      }
+      // A held ĐÁNH turns into the swinging meter.
+      if (strikePress && !charging && performance.now() - strikePress.t0 > 260 && canAct()) {
+        startCharge();
+        if (!charging) strikePress = null;
+      }
+      if (paused) return;
       // Charging meter: triangle wave that speeds up each half cycle.
       if (charging && match.current.kind === 'human') {
         holdT += dt;
@@ -1116,28 +1642,36 @@ export function matchScreen(opts: MatchOptions) {
       if (placingNow()) {
         const c = match.cueBall();
         const sp = view.toScreen(c.x, c.y);
-        handCue.style.display = '';
-        handCue.style.transform = `translate(${sp.x}px, ${sp.y}px)`;
-      } else {
-        handCue.style.display = 'none';
+        const hw = hand.offsetWidth;
+        const key = `${Math.round(sp.x * 2)},${Math.round(sp.y * 2)},${hw}`;
+        if (key !== handKey) {
+          handKey = key;
+          hand.style.display = '';
+          hand.style.transform = `translate(${sp.x - hw * HAND.cx}px, ${sp.y - hand.offsetHeight * HAND.cy}px)`;
+        }
+      } else if (handKey !== 'off') {
+        handKey = 'off';
+        hand.style.display = 'none';
       }
       if (strikeT > 0) {
         strikeT += dt / 0.09;
         if (strikeT >= 1.6) {
           strikeT = 0;
           power = 0;
+          renderControls();
         }
       }
       const humanAim = match.phase === 'aim' && (isHumanTurn() || showAiCue);
       // While the cue ball is being placed there is nothing to aim yet.
-      const showCue = ((match.phase === 'aim' && (isHumanTurn() || showAiCue)) || strikeT > 0) && !placingNow();
+      const showCue = (humanAim || strikeT > 0) && !placingNow();
       const ct = match.callType();
+      const pull = strikeT > 0 ? strikePull : charging ? power : barActive ? preset : 0;
       const av: AimView | null = humanAim || strikeT > 0 ? {
         angle: aim.angle + wobbleNow(),
-        pull: strikeT > 0 ? strikePull : power,
+        pull,
         side: aim.side,
         vert: aim.vert,
-        power: Math.max(power, 0.5),
+        power: Math.max(charging ? power : preset, 0.5),
         showCue,
         showGuide: humanAim && isHumanTurn() && match.tremorNow === 1 && strikeT === 0,
         guideScale: guideScale(),
@@ -1148,25 +1682,29 @@ export function matchScreen(opts: MatchOptions) {
       view.calledShot = currentCall();
       placeCallTag();
       view.update(dt, av);
-      // Power UI.
-      const shown = strikeT > 0 ? strikePull : power;
-      powerFill.style.height = `calc(${shown * 100}% - 6px)`;
-      powerFill.style.setProperty('--h', `${powerBar.clientHeight}px`);
-      powerPct.textContent = shown > 0 ? `${Math.round(shown * 100)}` : '';
-      powerBar.classList.toggle('hot', shown > 0.85);
+      // Power UI: the live charge while swinging, otherwise the set power.
+      const shown = strikeT > 0 ? strikePull : charging ? power : preset;
+      const pk = `${Math.round(shown * 100)}|${charging}`;
+      if (pk !== powerKey) {
+        powerKey = pk;
+        powerFill.style.transform = `scaleY(${shown})`;
+        powerPct.textContent = String(Math.round(shown * 100));
+        powerBar.setAttribute('aria-valuenow', String(Math.round(shown * 100)));
+        powerBar.classList.toggle('hot', shown > 0.85);
+        powerBar.classList.toggle('live', charging);
+      }
     };
     app.pixi.ticker.add(tick);
 
     // ---------- Start ----------
     function showVs(done: () => void) {
-      const [a, b] = opts.setup.players;
       const t = opts.titles ?? ['', ''];
-      const vs = h('div.vs', null,
-        h('div.side', null, h('div.av', null, avatar(opts.setup.players[0].champion)), h('div.nm', null, a.name), h('div.tt', null, t[0])),
-        h('div.mid', null, 'VS'),
-        h('div.side.r', null, h('div.av', null, avatar(opts.setup.players[1].champion)), h('div.nm', null, b.name), h('div.tt', null, t[1])),
-        opts.quote ? h('div.quote', null, `“${opts.quote}”`) : null,
-      );
+      const side = (s: Side) => h('div.mx-vs-side', { class: s ? 'r' : '' },
+        h('div.mx-vs-av', null, avatar(champOf(s))),
+        h('div.mx-vs-name', null, nameOf(s)),
+        h('div.mx-vs-title', null, t[s] || champion(champOf(s)).name));
+      const vs = h('div.mx-vs', null, side(0), h('div.mx-vs-mid', null, 'VS'), side(1),
+        opts.quote ? h('div.mx-vs-quote', null, `“${opts.quote}”`) : null);
       el.append(vs);
       const finish = () => {
         vs.remove();
@@ -1181,7 +1719,7 @@ export function matchScreen(opts: MatchOptions) {
     renderHud();
     const begin = () => {
       if (disposed) return;
-      // First-time guidance now arrives as one-time hints during play (coachTurn).
+      begun = true;
       onTurn();
       renderHud();
     };
@@ -1192,6 +1730,10 @@ export function matchScreen(opts: MatchOptions) {
       el,
       usesStage: true,
       onBack: () => {
+        if (skillSheet || spinSheet) {
+          closeSheets();
+          return true;
+        }
         openPause();
         return true;
       },
@@ -1199,6 +1741,9 @@ export function matchScreen(opts: MatchOptions) {
         disposed = true;
         aiToken++;
         off();
+        clearTimeout(heraldTimer);
+        for (const c of cards) clearTimeout(c.timer);
+        clearHints();
         app.ai.cancelAll();
         app.pixi.ticker.remove(tick);
         window.removeEventListener('resize', onResize);
@@ -1218,4 +1763,3 @@ export function matchScreen(opts: MatchOptions) {
     };
   };
 }
-

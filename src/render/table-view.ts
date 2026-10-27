@@ -495,6 +495,15 @@ export class TableView {
       g.moveTo(pred.gx - sx, pred.gy - sx).lineTo(pred.gx + sx, pred.gy + sx).moveTo(pred.gx + sx, pred.gy - sx).lineTo(pred.gx - sx, pred.gy + sx).stroke({ width: 2, color: 0xff4d4d });
       return;
     }
+    // The same prediction applies to pool and carom, including the player's yellow cue ball.
+    // Show the tangent after a cut, or the rebound after first meeting a cushion.
+    if (pred.cueDir) {
+      const len = R * (4 + 3 * aim!.guideScale);
+      const { x: ux, y: uy } = pred.cueDir;
+      g.moveTo(pred.gx + ux * R, pred.gy + uy * R)
+        .lineTo(pred.gx + ux * len, pred.gy + uy * len)
+        .stroke({ width: 1.6, color: 0xffffff, alpha: 0.65 });
+    }
     const obj = pred.hitBall !== null ? m.balls.find((b) => b.id === pred.hitBall) : null;
     if (obj && pred.objDir) {
       const ux = pred.objDir.x;
