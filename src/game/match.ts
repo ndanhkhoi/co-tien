@@ -77,6 +77,7 @@ interface Snapshot {
   bombId: number;
   bombUsed: boolean;
   pushOutAvailable: boolean;
+  potted: [number[], number[]];
 }
 
 const ENERGY_MAX = 100;
@@ -95,6 +96,8 @@ export class Match {
   breaker: Side;
   energy: [number, number] = [0, 0];
   stats: [PlayerStats, PlayerStats];
+  /** Object balls each side has pocketed this rack, in order (respotted balls excluded). */
+  potted: [number[], number[]] = [[], []];
   /** Ball-in-hand mode for the shooter right now ('nudge' = Thổi Bi radius around origin). */
   placing: BallInHand | 'nudge' = 'kitchen';
   nudgeOrigin: { x: number; y: number } | null = null;
@@ -195,6 +198,7 @@ export class Match {
     this.energy = [Math.min(ENERGY_MAX, 20 + bonus), Math.min(ENERGY_MAX, 20 + bonus)];
     this.shield = [false, false];
     this.tremor = [false, false];
+    this.potted = [[], []];
     this.snapshot = null;
     this.lastRes = null;
     this.rollGhost();
@@ -286,6 +290,7 @@ export class Match {
       bombId: this.bombId,
       bombUsed: this.bombUsed,
       pushOutAvailable: this.state.pushOutAvailable,
+      potted: [[...this.potted[0]], [...this.potted[1]]],
     };
     this.shotTargets = this.legalTargets(side);
     this.shotInput = input;
@@ -397,6 +402,7 @@ export class Match {
     // Stats and energy.
     const s = this.stats[side];
     const potted = shot.pocketed.filter((p) => p.id !== 0 && !res.respot.includes(p.id));
+    for (const p of potted) this.potted[side].push(p.id);
     const ownPots = this.ownPots(side, potted.map((p) => p.id));
     if (res.foul) s.fouls++;
     s.pots += ownPots + res.points;
@@ -569,6 +575,7 @@ export class Match {
     this.world.extraSegments = s.closed.map((i) => this.table.pockets[i].mouth);
     this.bombId = s.bombId;
     this.bombUsed = s.bombUsed;
+    this.potted = s.potted;
     this.snapshot = null;
     this.lastRes = null;
     this.phase = 'aim';

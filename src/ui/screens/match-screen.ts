@@ -116,9 +116,11 @@ export function matchScreen(opts: MatchOptions) {
       const nm = h('div.nm', null, opts.setup.players[side].name);
       const score = h('div.score');
       const sub = h('div.sub');
+      // Balls this player has pocketed this rack, in order.
+      const potted = h('div.potted', { 'aria-label': 'Bi đã ăn' });
       const energy = h('div.energy', null, h('i'));
-      const e = h('div.scard', null, h('div.scard-head', null, av, score), nm, sub, energy);
-      return { el: e, sub, score, energy: energy.firstElementChild as HTMLElement };
+      const e = h('div.scard', null, h('div.scard-head', null, av, score), nm, sub, potted, energy);
+      return { el: e, sub, potted, score, energy: energy.firstElementChild as HTMLElement };
     }
 
     // ---------- Layout ----------
@@ -176,12 +178,8 @@ export function matchScreen(opts: MatchOptions) {
             c.sub.append(h('span.muted', null, st.isBreak ? (match.breaker === s ? 'Phá bi' : '') : 'Bàn mở'));
           } else {
             const ids = g === 'solid' ? [1, 2, 3, 4, 5, 6, 7] : [9, 10, 11, 12, 13, 14, 15];
-            for (const id of ids) {
-              const b = match.balls.find((x) => x.id === id);
-              c.sub.append(miniBall(id, !b || !b.onTable));
-            }
-            const left8 = ids.every((id) => !match.balls.find((x) => x.id === id)?.onTable);
-            if (left8) c.sub.append(miniBall(8, false));
+            const left = ids.filter((id) => match.balls.find((x) => x.id === id)?.onTable).length;
+            c.sub.append(h('span.grp', { class: g }, g === 'solid' ? 'Trơn' : 'Sọc'), h('span.muted', null, left ? `còn ${left}` : 'tới bi 8'));
           }
         } else if (carom) {
           c.sub.append(h('span.muted', null, `ván ${match.rackWins[s]}/${match.setup.raceTo}`));
@@ -193,6 +191,8 @@ export function matchScreen(opts: MatchOptions) {
             if (lo) c.sub.append(h('span.muted', null, 'Bi'), miniBall(lo, false));
           }
         }
+        c.potted.replaceChildren(...(carom || opts.challenge ? [] : match.potted[s].map((id) => miniBall(id, false))));
+        c.potted.style.display = c.potted.childElementCount ? '' : 'none';
         c.energy.style.width = `${match.energy[s]}%`;
       }
       objective.replaceChildren(

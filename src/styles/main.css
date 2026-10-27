@@ -802,3 +802,10 @@ button.profile-chip:active, button.profile-chip.pressed { background: var(--surf
 .pm-preview { width: 120px; height: 120px; border-radius: var(--r-md); overflow: hidden; border: 3px solid var(--accent); }
 .pm-char { font-family: var(--display); font-weight: 800; font-style: italic; font-size: 20px; text-transform: uppercase; }
 .pm-right { flex: 1; min-width: 0; max-height: 52vh; }
+
+/* Pocketed-balls tray on each player card. */
+.scard .potted { display: flex; flex-wrap: wrap; gap: 2px; padding: 3px; background: rgba(0, 0, 0, 0.35); border-radius: 4px; }
+.scard .potted .mini-ball { width: 10px; height: 10px; animation: pot-in 0.3s var(--ease) both; }
+@keyframes pot-in { from { opacity: 0; transform: scale(0.3); } }
+.scard .grp { padding: 0 5px; font-family: var(--display); font-weight: 800; font-style: italic; font-size: 11px; text-transform: uppercase; color: var(--accent-ink); background: var(--accent); }
+.scard .grp.stripe { background: #f4f1e6; }
