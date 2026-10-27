@@ -1,3 +1,4 @@
+import { sound } from '../../audio/sound';
 import { CHAPTERS as LANDS } from '../../game/content/career';
 import story from '../../game/content/story.json';
 import { screenEl, type App, type Screen } from '../app';
@@ -71,6 +72,7 @@ function openReader(app: App, c: Chapter) {
   const go = (n: number) => {
     if (n < 0) return;
     if (n >= c.pages.length) return close();
+    if (n !== i) sound.page();
     i = n;
     const page = c.pages[i];
     // Pages without their own picture keep the previous one, dimmed, so the scene carries over.

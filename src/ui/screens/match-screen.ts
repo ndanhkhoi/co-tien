@@ -653,7 +653,7 @@ export function matchScreen(opts: MatchOptions) {
           haptic([40, 20, 80]);
           break;
         case 'skill': {
-          sound.skill();
+          if (e.slot !== 2) sound.skill(); // the ultimate cut-in plays its own gong
           const who = match.setup.players[e.side].name;
           if (e.slot === 2) playCutIn(champion(e.champion), e.skill, e.side === 1);
           else toast(`${who}: ${e.skill.name}`, 'gold');
@@ -664,6 +664,7 @@ export function matchScreen(opts: MatchOptions) {
           break;
         }
         case 'omen':
+          sound.omen();
           hintOnce(app, 'omen', 'Thiên Tượng', 'Bàn của mỗi môn phái thỉnh thoảng nổi hiện tượng (gió, tuyết, nghiêng bàn…) cho đúng một cú đánh. Nó được vẽ lên bàn: tính vào đường bi! Tướng đánh trên bàn môn phái mình (Địa Lợi) không gặp Thiên Tượng.');
           banner(e.omen.name);
           toast(`${e.omen.name}: ${e.omen.desc}`, 'gold');

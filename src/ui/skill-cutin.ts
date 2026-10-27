@@ -1,3 +1,4 @@
+import { sound } from '../audio/sound';
 import { cutoutUrl, sect, sectArtUrl, type Champion, type SkillDef } from '../game/content/sects';
 import { h } from './dom';
 
@@ -9,6 +10,7 @@ const hex6 = (n: number) => '#' + n.toString(16).padStart(6, '0');
  * Purely decorative (pointer-events: none), so play never waits on it.
  */
 export function playCutIn(c: Champion, skill: SkillDef, fromRight: boolean) {
+  sound.ultimate();
   const s = sect(c.sect);
   const el = h('div.cutin', {
     class: fromRight ? 'rtl' : '',
