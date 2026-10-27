@@ -43,7 +43,7 @@ async function boot() {
 }
 
 /**
- * Check for a new version every 30 minutes and whenever the app comes back to the
+ * Check for a new version every 15 minutes and whenever the app comes back to the
  * foreground. A new version installs right away from menus; during a match it waits
  * until the player leaves the table so a rack is never cut off.
  */
@@ -58,7 +58,7 @@ function setupUpdates(app: App) {
       const check = () => {
         if (navigator.onLine) void reg.update().catch(() => undefined);
       };
-      setInterval(check, 30 * 60 * 1000);
+      setInterval(check, 15 * 60 * 1000);
       document.addEventListener('visibilitychange', () => {
         if (!document.hidden) check();
       });

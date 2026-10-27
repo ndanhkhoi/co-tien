@@ -104,7 +104,8 @@ export class App {
   /** A new version is ready: apply now from menus, or after the current match. */
   setPendingUpdate(apply: () => void) {
     this.pendingUpdate = apply;
-    if (this.current?.usesStage) toast('Có bản mới — sẽ cập nhật khi bạn về menu', 'gold');
+    // Updates are mandatory: right away from menus, and the moment the current match ends.
+    if (this.current?.usesStage) toast('Có bản mới — game sẽ tự cập nhật ngay khi hết trận', 'gold');
     else this.applyUpdate();
   }
 
@@ -112,7 +113,8 @@ export class App {
     const apply = this.pendingUpdate;
     if (!apply) return;
     this.pendingUpdate = null;
-    toast('Đang cập nhật bản mới…', 'gold');
+    // A blocking sheet: nothing can be tapped while the new version loads.
+    document.body.append(h('div.update-sheet', { role: 'alert' }, h('div.us-seal'), h('b', null, 'Đang cập nhật bản mới…')));
     setTimeout(apply, 700);
   }
 

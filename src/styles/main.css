@@ -1221,3 +1221,9 @@ body.vp-resize .size-hint { display: flex; }
 .sr-dots i { width: 7px; height: 7px; border-radius: 50%; background: var(--line-strong); }
 .sr-dots i.on { background: var(--accent); }
 @media (orientation: portrait) { .sr-page { grid-template-columns: 1fr; grid-template-rows: auto 1fr; } .sr-art-wrap { height: auto; max-height: 34vh; } }
+
+/* Mandatory update sheet: blocks input while the new version loads. */
+.update-sheet { position: fixed; inset: 0; z-index: 9999; display: grid; place-content: center; justify-items: center; gap: 14px; background: var(--paper, #efe8da); color: var(--ink, #1d1a17); font: 600 18px/1.4 'Noto Serif', serif; }
+.update-sheet .us-seal { width: 56px; height: 56px; border-radius: 12px; background: #b23a26; animation: us-pulse 1.2s ease-in-out infinite; }
+@keyframes us-pulse { 50% { transform: scale(0.88); opacity: 0.7; } }
+@media (prefers-reduced-motion: reduce) { .update-sheet .us-seal { animation: none; } }
