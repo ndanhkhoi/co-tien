@@ -38,11 +38,31 @@ export interface TableArt {
   hy: number;
 }
 
+const images = new Map<string, HTMLImageElement | 'loading' | 'missing'>();
+
+/** Painted art for canvas drawing: returns the image once loaded, else starts loading and calls onReady later. */
+export function artImage(url: string, onReady: () => void): HTMLImageElement | null {
+  const got = images.get(url);
+  if (got instanceof HTMLImageElement) return got;
+  if (got === undefined) {
+    images.set(url, 'loading');
+    const img = new Image();
+    img.decoding = 'async';
+    img.onload = () => {
+      images.set(url, img);
+      onReady();
+    };
+    img.onerror = () => images.set(url, 'missing');
+    img.src = url;
+  }
+  return null;
+}
+
 /**
  * Paints the whole table: wooden frame, cloth bed with lamp falloff, pocket holes,
  * cloth-covered cushions with a lit nose, diamonds and the foot spot.
  */
-export function paintTable(t: TableGeom, skin: TableSkin, pxPerM: number): TableArt {
+export function paintTable(t: TableGeom, skin: TableSkin, pxPerM: number, railImg: HTMLImageElement | null = null): TableArt {
   const rail = t.railWidth;
   const hx = t.L / 2 + rail;
   const hy = t.W / 2 + rail;
@@ -57,15 +77,40 @@ export function paintTable(t: TableGeom, skin: TableSkin, pxPerM: number): Table
   g.save();
   g.beginPath();
   g.roundRect(0, 0, c.width, c.height, corner);
+  // Ink-washed wood: matte, a little lighter at the top like a brush wash.
   const wood = g.createLinearGradient(0, 0, 0, c.height);
-  wood.addColorStop(0, hex(mix(skin.rail, 0xffffff, 0.12)));
+  wood.addColorStop(0, hex(mix(skin.rail, 0xffffff, 0.06)));
   wood.addColorStop(0.5, hex(skin.rail));
   wood.addColorStop(1, hex(skin.railDark));
   g.fillStyle = wood;
   g.fill();
   g.clip();
-  // Grain streaks.
-  for (let i = 0; i < 260; i++) {
+  if (railImg) {
+    // The sect's painted rail strip, tiled along each side (rotated for the short rails).
+    const th = S(rail);
+    const tw = th * (railImg.width / railImg.height);
+    const strip = (len: number) => {
+      for (let x = 0; x < len; x += tw) g.drawImage(railImg, x, 0, tw, th);
+    };
+    strip(c.width);
+    g.save();
+    g.translate(c.width, c.height);
+    g.rotate(Math.PI);
+    strip(c.width);
+    g.restore();
+    g.save();
+    g.translate(0, c.height);
+    g.rotate(-Math.PI / 2);
+    strip(c.height);
+    g.restore();
+    g.save();
+    g.translate(c.width, 0);
+    g.rotate(Math.PI / 2);
+    strip(c.height);
+    g.restore();
+  }
+  // Grain streaks (only on the plain wood frame).
+  for (let i = 0; i < (railImg ? 0 : 260); i++) {
     const y = rnd() * c.height;
     const x = rnd() * c.width;
     const len = S(0.2 + rnd() * 0.9);
@@ -78,7 +123,7 @@ export function paintTable(t: TableGeom, skin: TableSkin, pxPerM: number): Table
   }
   // Polished top highlight and inner bevel.
   const sheen = g.createLinearGradient(0, 0, 0, S(rail));
-  sheen.addColorStop(0, 'rgba(255,255,255,0.18)');
+  sheen.addColorStop(0, 'rgba(255,255,255,0.05)');
   sheen.addColorStop(1, 'rgba(255,255,255,0)');
   g.fillStyle = sheen;
   g.fillRect(0, 0, c.width, S(rail));
@@ -109,9 +154,9 @@ export function paintTable(t: TableGeom, skin: TableSkin, pxPerM: number): Table
   g.putImageData(img, bx0, by0);
   // Lamp falloff: bright centre, darker edges.
   const lamp = g.createRadialGradient(X(0), Y(0), S(0.1), X(0), Y(0), S(t.L * 0.62));
-  lamp.addColorStop(0, 'rgba(255,255,240,0.10)');
-  lamp.addColorStop(0.6, 'rgba(0,0,0,0)');
-  lamp.addColorStop(1, hex(skin.clothDark, 0.55));
+  lamp.addColorStop(0, 'rgba(0,0,0,0)');
+  lamp.addColorStop(0.65, 'rgba(0,0,0,0)');
+  lamp.addColorStop(1, hex(skin.clothDark, 0.35));
   g.fillStyle = lamp;
   g.fillRect(bx0, by0, bw, bh);
 
@@ -133,9 +178,10 @@ export function paintTable(t: TableGeom, skin: TableSkin, pxPerM: number): Table
   // --- Pocket holes ---
   for (const p of t.pockets) {
     const hole = g.createRadialGradient(X(p.hx), Y(p.hy), S(p.hr * 0.1), X(p.hx), Y(p.hy), S(p.hr));
-    hole.addColorStop(0, '#000');
-    hole.addColorStop(0.75, '#050505');
-    hole.addColorStop(1, '#1a1a1a');
+    // Ink pooled in the hole, feathering out at the rim.
+    hole.addColorStop(0, '#0b0a09');
+    hole.addColorStop(0.8, '#14110f');
+    hole.addColorStop(1, 'rgba(20,17,15,0.85)');
     g.fillStyle = hole;
     g.beginPath();
     g.arc(X(p.hx), Y(p.hy), S(p.hr), 0, Math.PI * 2);
@@ -159,7 +205,7 @@ export function paintTable(t: TableGeom, skin: TableSkin, pxPerM: number): Table
       g.closePath();
       g.fill();
       // Lit nose line.
-      g.strokeStyle = hex(mix(skin.cloth, 0xffffff, 0.22), 0.9);
+      g.strokeStyle = hex(mix(skin.cloth, 0xffffff, 0.18), 0.55);
       g.lineWidth = Math.max(1, S(0.004));
       g.beginPath();
       g.moveTo(X(jp.bx), Y(jp.by));
@@ -201,29 +247,18 @@ export function paintTable(t: TableGeom, skin: TableSkin, pxPerM: number): Table
     g.beginPath();
     g.arc(X(p.hx), Y(p.hy), S(p.hr + 0.004), 0, Math.PI * 2);
     g.stroke();
-    g.strokeStyle = 'rgba(255,255,255,0.12)';
+    g.strokeStyle = 'rgba(255,255,255,0.05)';
     g.lineWidth = Math.max(1, S(0.003));
     g.beginPath();
     g.arc(X(p.hx), Y(p.hy), S(p.hr + 0.011), Math.PI * 1.1, Math.PI * 1.9);
     g.stroke();
   }
 
-  // --- Diamonds (mother-of-pearl) ---
+  // --- Diamonds: vermilion seal dots, like the red marks on an ink painting ---
   for (const dm of t.diamonds) {
-    const cx = X(dm.x);
-    const cy = Y(dm.y);
-    const r = Math.max(2, S(0.009));
-    const pearl = g.createRadialGradient(cx - r * 0.3, cy - r * 0.3, 0, cx, cy, r * 1.2);
-    pearl.addColorStop(0, '#fffdf6');
-    pearl.addColorStop(0.6, '#d9d2c2');
-    pearl.addColorStop(1, '#8a826f');
-    g.fillStyle = pearl;
+    g.fillStyle = '#b23a26';
     g.beginPath();
-    g.moveTo(cx, cy - r * 1.25);
-    g.lineTo(cx + r * 0.8, cy);
-    g.lineTo(cx, cy + r * 1.25);
-    g.lineTo(cx - r * 0.8, cy);
-    g.closePath();
+    g.arc(X(dm.x), Y(dm.y), Math.max(1.6, S(0.0055)), 0, Math.PI * 2);
     g.fill();
   }
 
@@ -240,7 +275,7 @@ export function paintNumberAtlas(): Texture {
   for (let n = 1; n <= 15; n++) {
     const cx = ((n - 1) % 4) * cell + cell / 2;
     const cy = Math.floor((n - 1) / 4) * cell + cell / 2;
-    g.font = `800 ${n >= 10 ? 74 : 86}px "Barlow Condensed", system-ui, sans-serif`;
+    g.font = `600 ${n >= 10 ? 70 : 82}px "Be Vietnam Pro", system-ui, sans-serif`;
     g.fillText(String(n), cx, cy + 4);
     if (n === 6 || n === 9) g.fillRect(cx - 18, cy + 38, 36, 7);
   }
@@ -274,11 +309,11 @@ export function paintGlow(): Texture {
 }
 
 /**
- * Cue stick drawn horizontally with the tip at x = 0 (pointing left), 1.45 m long.
+ * Cue stick drawn horizontally with the tip at x = 0 (pointing left), 1.47 m (58 in) long.
  * Returns texture plus the pixel scale so the view can size it in metres.
  */
-export function paintCue(cue: CueDef, pxPerM: number): { texture: Texture; length: number; thick: number } {
-  const L = 1.45;
+export function paintCue(cue: CueDef, pxPerM: number, img: HTMLImageElement | null = null): { texture: Texture; length: number; thick: number } {
+  const L = 1.47;
   const tipR = 0.0065;
   const buttR = 0.0145;
   const w = L * pxPerM;
@@ -286,6 +321,20 @@ export function paintCue(cue: CueDef, pxPerM: number): { texture: Texture; lengt
   const [c, g] = canvas(w, h);
   const cy = h / 2;
   const rAt = (u: number) => (tipR + (buttR - tipR) * Math.pow(u, 0.8)) * pxPerM;
+  if (img) {
+    // Painted sect cue: tip on the left like the procedural one, squeezed to the real taper.
+    g.save();
+    g.beginPath();
+    g.moveTo(0, cy - rAt(0));
+    g.lineTo(w, cy - rAt(1));
+    g.lineTo(w, cy + rAt(1));
+    g.lineTo(0, cy + rAt(0));
+    g.closePath();
+    g.clip();
+    g.drawImage(img, 0, cy - rAt(1), w, rAt(1) * 2);
+    g.restore();
+    return { texture: Texture.from(c), length: L, thick: buttR * 2 + 4 / pxPerM };
+  }
   const col = cue.colors;
   const band = (u0: number, u1: number, fill: string | CanvasGradient) => {
     g.fillStyle = fill;

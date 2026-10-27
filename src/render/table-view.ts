@@ -3,9 +3,12 @@ import { predictAim } from '../core/aim';
 import { ballStyle } from '../core/ball-styles';
 import { cloneBalls, step, strike, type Ball } from '../core/physics';
 import { powerToSpeed } from '../core/cue-power';
+import { champion, sectArtUrl, type SkillDef } from '../game/content/sects';
+import type { CueDef } from '../game/content/gear';
 import type { Match } from '../game/match';
-import { paintCue, paintGlow, paintNumberAtlas, paintShadow, paintTable } from './art';
+import { artImage, paintCue, paintGlow, paintNumberAtlas, paintShadow, paintTable } from './art';
 import { BallMesh } from './ball-mesh';
+import { SkillFx } from './skill-fx';
 
 export interface AimView {
   angle: number;
@@ -16,8 +19,10 @@ export interface AimView {
   power: number;
   showCue: boolean;
   showGuide: boolean;
-  /** Fraction of the normal guide length (fog, cue aim stat). */
+  /** Cue aim stat as a 0.6–1.2 factor: longer object-ball hint for better cues. */
   guideScale: number;
+  /** Fog mutator: the aim line stops short and the ghost ball is hidden. */
+  fog: boolean;
   /** Pockets the player may tap when calling. */
   pocketChoices: boolean;
   /** Strike animation 0..1 (cue moving through). */
@@ -51,7 +56,7 @@ class MetreGraphics {
   lineTo(x: number, y: number) { this.g.lineTo(x * this.k, y * this.k); return this; }
   circle(x: number, y: number, r: number) { this.g.circle(x * this.k, y * this.k, r * this.k); return this; }
   rect(x: number, y: number, w: number, h: number) { this.g.rect(x * this.k, y * this.k, w * this.k, h * this.k); return this; }
-  stroke(style: { width: number; color: number; alpha?: number }) { this.g.stroke(style); return this; }
+  stroke(style: { width: number; color: number; alpha?: number; cap?: 'round' | 'butt' | 'square'; join?: 'round' | 'miter' | 'bevel' }) { this.g.stroke(style); return this; }
   fill(style: { color: number; alpha?: number }) { this.g.fill(style); return this; }
 }
 
@@ -80,6 +85,7 @@ export class TableView {
   private numbers: Texture;
   private shadowTex: Texture;
   private glowTex: Texture;
+  private skills: SkillFx;
   private scale = 100;
   private artScale = 0;
   private shake = 0;
@@ -95,6 +101,7 @@ export class TableView {
     this.numbers = paintNumberAtlas();
     this.shadowTex = paintShadow();
     this.glowTex = paintGlow();
+    this.skills = new SkillFx(this.fxLayer, this.glowTex);
     this.root.addChild(this.world);
     this.pxLayer.addChild(this.guideG);
     this.pxTop.addChild(this.overlayG);
@@ -133,26 +140,35 @@ export class TableView {
     this.world.scale.set(scale);
     const res = this.app.renderer.resolution;
     const want = scale * res;
-    if (Math.abs(want - this.artScale) / Math.max(1, this.artScale) > 0.08) {
-      this.artScale = want;
-      const art = paintTable(this.match.table, this.match.setup.tableSkin, want);
-      this.tableSprite.texture?.destroy(true);
-      this.tableSprite.texture = art.texture;
-      this.tableSprite.scale.set(1 / want);
-      const cue = paintCue(this.match.current.cue, want);
-      this.cue.texture = cue.texture;
-      this.cueShadow.texture = cue.texture;
-      this.cue.scale.set(1 / want);
-      this.cueShadow.scale.set(1 / want);
-      this.paintFog(want);
-    }
+    if (Math.abs(want - this.artScale) / Math.max(1, this.artScale) > 0.08) this.paintArt(want);
     for (const m of this.meshes.values()) m.setPixelRadius(this.match.table.R * scale * res);
+  }
+
+  /** Table and cue textures at the current pixel density; painted art is used once it has loaded. */
+  private paintArt(want: number) {
+    this.artScale = want;
+    const skin = this.match.setup.tableSkin;
+    const rail = artImage(sectArtUrl(skin.sect, 'rail'), () => this.paintArt(this.artScale));
+    const art = paintTable(this.match.table, skin, want, rail);
+    this.tableSprite.texture?.destroy(true);
+    this.tableSprite.texture = art.texture;
+    this.tableSprite.scale.set(1 / want);
+    this.cue.scale.set(1 / want);
+    this.cueShadow.scale.set(1 / want);
+    this.refreshCue();
+    this.paintFog(want);
+  }
+
+  private cueImage(c: CueDef): HTMLImageElement | null {
+    if (!c.sect) return null;
+    return artImage(sectArtUrl(c.sect, c.id.endsWith('-b') ? 'cue-b' : 'cue-a'), () => this.refreshCue());
   }
 
   /** Cue texture follows whoever is shooting. */
   refreshCue() {
     const want = this.artScale || this.scale;
-    const cue = paintCue(this.match.current.cue, want);
+    const c = this.match.current.cue;
+    const cue = paintCue(c, want, this.cueImage(c));
     this.cue.texture = cue.texture;
     this.cueShadow.texture = cue.texture;
   }
@@ -204,12 +220,18 @@ export class TableView {
         m.setAlpha(1);
         m.mesh.scale.set(this.match.table.R);
       }
+      const sh = this.shadowSprites.get(b.id);
+      if (sh) {
+        sh.visible = b.onTable;
+        sh.alpha = 1;
+      }
     }
     this.falling = [];
   }
 
   update(dt: number, aim: AimView | null) {
     this.time += dt;
+    this.skills.update(dt);
     const t = this.match.table;
     const R = t.R;
     // Balls.
@@ -220,6 +242,10 @@ export class TableView {
       const was = this.onTable.get(b.id);
       if (was && !b.onTable) this.startFall(b, mesh, sh);
       if (!was && b.onTable) {
+        // A ball can come back (scratch respot) before its drop animation ends: cancel the
+        // drop, or it would finish by shrinking the ball into the pocket and hiding it.
+        this.falling = this.falling.filter((f) => f.mesh !== mesh);
+        sh.alpha = 1;
         mesh.mesh.visible = true;
         mesh.setAlpha(1);
         mesh.mesh.scale.set(R);
@@ -264,7 +290,7 @@ export class TableView {
     const tx = pk ? pk.hx : mesh.mesh.position.x;
     const ty = pk ? pk.hy : mesh.mesh.position.y;
     this.falling.push({ mesh, shadow: sh, fx: mesh.mesh.position.x, fy: mesh.mesh.position.y, tx, ty, t: 0 });
-    if (pk) this.burst(pk.hx, pk.hy, 0xfff3c4, 10, 0.25);
+    if (pk) this.burst(pk.hx, pk.hy, 0xefe8da, 10, 0.25);
   }
 
   private updateFalling(dt: number) {
@@ -317,6 +343,46 @@ export class TableView {
       g.circle(p.hx, p.hy, p.hr * 0.95).stroke({ width: 2, color: 0xb57bff, alpha: 0.6 + 0.3 * Math.sin(this.time * 4) });
       const s = p.hr * 0.4;
       g.moveTo(p.hx - s, p.hy - s).lineTo(p.hx + s, p.hy + s).moveTo(p.hx + s, p.hy - s).lineTo(p.hx - s, p.hy + s).stroke({ width: 2.5, color: 0xd8b4ff });
+    }
+    // Thiên Tượng: show exactly where and which way the land acts on this shot.
+    const tr = m.omen?.terrain;
+    if (tr) {
+      const pulse = 0.5 + 0.5 * Math.sin(this.time * 2.5);
+      for (const pa of tr.patches ?? []) {
+        if (pa.r > t.L) continue; // table-wide sand: the banner says it
+        const col = pa.slide > pa.roll ? 0x8cff5a : 0xeaf6ff;
+        g.circle(pa.x, pa.y, pa.r).fill({ color: col, alpha: 0.16 + 0.05 * pulse });
+        g.circle(pa.x, pa.y, pa.r).stroke({ width: 1.5, color: col, alpha: 0.55 });
+      }
+      for (const wl of tr.wells ?? []) {
+        for (let i = 0; i < 3; i++) {
+          g.circle(wl.x, wl.y, wl.r * ((i + ((this.time * 0.6) % 1)) / 3)).stroke({ width: 1.5, color: 0xb9a8ff, alpha: 0.6 * (1 - i / 3) });
+        }
+      }
+      if (tr.force) {
+        // Wind / tilt: arrows streaming across the cloth, scaled by the gust right now.
+        const k = tr.gust ? 1 - tr.gust.amp + tr.gust.amp * Math.sin(tr.gust.omega * this.time) : 1;
+        const len = Math.hypot(tr.force.x, tr.force.y) || 1;
+        const ux = (tr.force.x / len) * Math.sign(k || 1);
+        const uy = (tr.force.y / len) * Math.sign(k || 1);
+        const a = 0.25 + 0.5 * Math.abs(k);
+        for (let i = -2; i <= 2; i++) {
+          for (let j = -1; j <= 1; j++) {
+            const drift = ((this.time * 0.25) % 0.4) - 0.2;
+            const cx = (i * t.L) / 5 + ux * drift;
+            const cy = (j * t.W) / 3 + uy * drift;
+            const s = 0.05;
+            g.moveTo(cx - ux * s, cy - uy * s).lineTo(cx + ux * s, cy + uy * s)
+              .moveTo(cx + ux * s - (ux * 0.4 - uy * 0.3) * s, cy + uy * s - (uy * 0.4 + ux * 0.3) * s).lineTo(cx + ux * s, cy + uy * s)
+              .lineTo(cx + ux * s - (ux * 0.4 + uy * 0.3) * s, cy + uy * s - (uy * 0.4 - ux * 0.3) * s)
+              .stroke({ width: 2, color: 0xffffff, alpha: a * 0.6 });
+          }
+        }
+      }
+    }
+    for (const sg of m.omen?.segments ?? []) {
+      g.moveTo(sg.ax, sg.ay).lineTo(sg.bx, sg.by).stroke({ width: 7, color: 0x5a3b1d, alpha: 0.95 });
+      g.moveTo(sg.ax, sg.ay).lineTo(sg.bx, sg.by).stroke({ width: 2, color: 0x9c7a4a, alpha: 0.9 });
     }
     // Challenge goal.
     if (this.goal) {
@@ -408,23 +474,42 @@ export class TableView {
       this.drawEagle(aim!);
       return;
     }
-    // Line to the first thing the cue ball meets and the ghost ball there. Where the
-    // object ball goes afterwards is left to the player's judgement.
-    const pred = predictAim(t, m.balls, m.cueId(), aim!.angle, m.closedPockets.map((i) => t.pockets[i].mouth));
+    // Line to the first thing the cue ball meets and the ghost ball there, plus a short
+    // chevron hint of where the object ball leaves: enough to read the cut, never a full path.
+    const pred = predictAim(t, m.balls, m.cueId(), aim!.angle, m.obstacles());
     const legal = m.legalTargets();
     const illegal = pred.hitBall !== null && legal.length > 0 && !legal.includes(pred.hitBall) && !m.state.pushOutAvailable;
-    const maxLen = 0.35 + 1.1 * aim!.guideScale;
-    const dist = Math.hypot(pred.gx - cue.x, pred.gy - cue.y);
-    if (dist > maxLen) {
-      // Fog / short-sighted cues: the line fades out before reaching the target.
-      g.moveTo(cue.x + dx * R, cue.y + dy * R).lineTo(cue.x + dx * maxLen, cue.y + dy * maxLen).stroke({ width: 1.6, color: 0xffffff, alpha: 0.6 });
-      return;
+    if (aim!.fog) {
+      // Fog: the line fades out before reaching anything, no ghost ball.
+      const maxLen = 0.35 + 0.5 * aim!.guideScale;
+      const dist = Math.hypot(pred.gx - cue.x, pred.gy - cue.y);
+      if (dist > maxLen) {
+        g.moveTo(cue.x + dx * R, cue.y + dy * R).lineTo(cue.x + dx * maxLen, cue.y + dy * maxLen).stroke({ width: 1.6, color: 0xffffff, alpha: 0.6 });
+        return;
+      }
     }
     g.moveTo(cue.x + dx * R, cue.y + dy * R).lineTo(pred.gx - dx * R, pred.gy - dy * R).stroke({ width: 1.6, color: 0xffffff, alpha: 0.85 });
     g.circle(pred.gx, pred.gy, R).stroke({ width: 1.6, color: illegal ? 0xff4d4d : 0xffffff, alpha: 0.9 });
     if (illegal) {
       const sx = R * 0.55;
       g.moveTo(pred.gx - sx, pred.gy - sx).lineTo(pred.gx + sx, pred.gy + sx).moveTo(pred.gx + sx, pred.gy - sx).lineTo(pred.gx - sx, pred.gy + sx).stroke({ width: 2, color: 0xff4d4d });
+      return;
+    }
+    const obj = pred.hitBall !== null ? m.balls.find((b) => b.id === pred.hitBall) : null;
+    if (obj && pred.objDir) {
+      const ux = pred.objDir.x;
+      const uy = pred.objDir.y;
+      const n = aim!.guideScale >= 1 ? 4 : 3;
+      for (let i = 0; i < n; i++) {
+        const d = R * (1.55 + i * 0.95);
+        const tipX = obj.x + ux * (d + R * 0.32);
+        const tipY = obj.y + uy * (d + R * 0.32);
+        const bx = obj.x + ux * d;
+        const by = obj.y + uy * d;
+        const w = R * 0.5;
+        g.moveTo(bx - uy * w, by + ux * w).lineTo(tipX, tipY).lineTo(bx + uy * w, by - ux * w)
+          .stroke({ width: 2.2, color: 0xffc531, alpha: 0.95 - i * 0.22, cap: 'round', join: 'round' });
+      }
     }
   }
 
@@ -437,7 +522,7 @@ export class TableView {
       const cue = balls.find((b) => b.id === m.cueId())!;
       const power = Math.max(aim.power, 0.35);
       strike(cue, m.table.R, { angle: aim.angle, speed: powerToSpeed(power, m.vmax()), side: aim.side, vert: aim.vert });
-      const world = { table: m.table, balls, params: m.params, closedPockets: m.closedPockets, extraSegments: m.closedPockets.map((i) => m.table.pockets[i].mouth) };
+      const world = { table: m.table, balls, params: m.params, closedPockets: m.closedPockets, extraSegments: m.obstacles(), terrain: m.omen?.terrain ?? null, time: 0 };
       const paths = new Map<number, number[]>();
       for (const b of balls) paths.set(b.id, [b.x, b.y]);
       for (let i = 0; i < 600; i++) {
@@ -466,7 +551,7 @@ export class TableView {
       const s = new Sprite(this.glowTex);
       s.anchor.set(0.5);
       s.tint = color;
-      s.blendMode = 'add';
+      s.blendMode = 'normal'; // ink droplets, not light
       s.width = s.height = size * (0.6 + Math.random());
       s.position.set(x, y);
       const a = Math.random() * Math.PI * 2;
@@ -481,11 +566,29 @@ export class TableView {
     const s = new Sprite(this.glowTex);
     s.anchor.set(0.5);
     s.tint = color;
-    s.blendMode = 'add';
+    s.blendMode = 'normal';
     s.width = s.height = size * 0.3;
     s.position.set(x, y);
     this.fxLayer.addChild(s);
     this.particles.push({ s, vx: 0, vy: 0, life: 0, max: 0.45, grow: size * 6 });
+  }
+
+  /** Cast animation on the table in the caster's sect style. */
+  skillFx(championId: string, skill: SkillDef, _side: number) {
+    const m = this.match;
+    const kinds = skill.kinds.map((k) => m.effectiveKind(k));
+    const pockets = m.table.pockets.map((p) => ({ x: p.hx, y: p.hy }));
+    // Seals show on the pockets they close; pocket-boosting skills on the open ones.
+    const sealed = m.closedPockets.map((i) => pockets[i]);
+    const open = pockets.filter((_, i) => !m.closedPockets.includes(i));
+    const cue = () => {
+      const c = m.cueBall();
+      return { x: c.x, y: c.y };
+    };
+    for (const k of kinds) {
+      this.skills.play([k], champion(championId).sect, skill.slot === 2, cue, k === 'seal' ? (sealed.length ? sealed : open) : open);
+    }
+    if (skill.slot === 2) this.addShake(0.8);
   }
 
   addShake(k: number) {
