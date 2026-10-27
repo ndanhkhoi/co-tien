@@ -10,16 +10,17 @@ import {
   type BallInHand, type GameMode, type GameState, type OptionKind, type Resolution, type RuleSet, type ShotCall, type ShotSummary, type Side,
 } from '../core/rules/types';
 import { makeCaromTable, makePoolTable, type TableGeom } from '../core/table';
-import { skillDef, type CueDef, type MutatorId, type SkillId, type TableSkin } from './content/gear';
+import { champion, skillPower, type ClassId, type SkillDef, type SkillKind } from './content/sects';
+import type { CueDef, MutatorId, TableSkin } from './content/gear';
+import { OMEN_CHANCE, rollOmen, type Omen } from './terrain';
 
 export interface PlayerSetup {
   name: string;
   kind: 'human' | 'ai';
   ai?: AiProfile;
   cue: CueDef;
-  skills: SkillId[];
-  /** Avatar key (NPC id or 'player'). */
-  avatar: string;
+  /** Champion id: portrait, class passive and the three skills this player can cast. */
+  champion: string;
 }
 
 export interface MatchSetup {
@@ -28,6 +29,8 @@ export interface MatchSetup {
   players: [PlayerSetup, PlayerSetup];
   mutator: MutatorId | null;
   tableSkin: TableSkin;
+  /** Cổ Điển: pure billiards — no skills, no class passives, no table character. */
+  classic?: boolean;
   seed?: number;
   caromTarget?: number;
   firstBreaker?: Side;
@@ -53,7 +56,8 @@ export type MatchEvent =
   | { type: 'explode'; x: number; y: number }
   | { type: 'resolved'; res: Resolution; side: Side }
   | { type: 'turn'; side: Side }
-  | { type: 'skill'; side: Side; id: SkillId }
+  | { type: 'skill'; side: Side; champion: string; slot: number; skill: SkillDef }
+  | { type: 'omen'; side: Side; omen: Omen }
   | { type: 'rack-over'; winner: Side }
   | { type: 'match-over'; winner: Side }
   | { type: 'new-rack' };
@@ -80,7 +84,8 @@ interface Snapshot {
   potted: [number[], number[]];
 }
 
-const ENERGY_MAX = 100;
+export const ENERGY_MAX = 100;
+const ENERGY_START = 20;
 
 export class Match {
   readonly setup: MatchSetup;
@@ -95,6 +100,8 @@ export class Match {
   rackWins: [number, number] = [0, 0];
   breaker: Side;
   energy: [number, number] = [0, 0];
+  /** Own shots left before each basic skill (slot 0, 1) can be cast again. */
+  cooldown: [[number, number], [number, number]] = [[0, 0], [0, 0]];
   stats: [PlayerStats, PlayerStats];
   /** Object balls each side has pocketed this rack, in order (respotted balls excluded). */
   potted: [number[], number[]] = [[], []];
@@ -104,13 +111,30 @@ export class Match {
   closedPockets: number[] = [];
   bombId = -1;
   bombUsed = false;
-  /** Shot-scoped skill flags. */
+  /** Shot-scoped buffs from the shooter's own skill. */
   eagle = false;
-  spin2 = false;
+  reveal = false;
+  spinBoost = 1;
+  powerBoost = 1;
+  blast: { radius: number; force: number; done: boolean } | null = null;
+  mawScale = 1;
+  pull = 0;
+  secondChance = false;
+  nudgeRadius = 0.12;
+  /** Lasting effects. */
   shield: [boolean, boolean] = [false, false];
-  tremor: [boolean, boolean] = [false, false];
-  /** The tremor that applies to the current shot (consumed on shoot). */
-  tremorNow = false;
+  /** Debuffs waiting for each side's next turn (tremor multiplier, power multiplier, pockets sealed). */
+  tremor: [number, number] = [1, 1];
+  freeze: [number, number] = [1, 1];
+  seal: [number, number] = [0, 0];
+  /** Debuffs on the shot being lined up now. */
+  tremorNow = 1;
+  freezeNow = 1;
+  /** Pocket capture size from the table's character (Hư Không), on every shot. */
+  private baseCapture = 1;
+  /** Thiên Tượng waiting on the shot being lined up, and the pocket it closed. */
+  omen: Omen | null = null;
+  private omenPocket: number | null = null;
   lastRes: Resolution | null = null;
   lastShooter: Side = 0;
   private snapshot: Snapshot | null = null;
@@ -131,6 +155,13 @@ export class Match {
     this.params = setup.mutator === 'ice'
       ? { ...DEFAULT_PHYS, muRoll: 0.0045, muSlide: 0.13, spinDecel: 18 }
       : { ...DEFAULT_PHYS };
+    const ph = setup.classic ? undefined : setup.tableSkin.phys;
+    if (ph) {
+      this.params.muRoll *= ph.muRoll ?? 1;
+      this.params.muSlide *= ph.muSlide ?? 1;
+      this.params.eCushion = Math.min(0.92, this.params.eCushion * (ph.eCushion ?? 1));
+      this.baseCapture = ph.capture ?? 1;
+    }
     this.breaker = setup.firstBreaker ?? 0;
     this.state = newGameState(setup.mode, this.breaker, setup.caromTarget ?? 10);
     this.stats = [this.blankStats(), this.blankStats()];
@@ -173,8 +204,70 @@ export class Match {
     return this.balls.find((b) => b.id === this.cueId(side))!;
   }
 
+  /** Class whose passive applies to `side` (none in Cổ Điển or challenges). */
+  passive(side: Side): ClassId | null {
+    if (this.setup.classic || this.setup.judge) return null;
+    return champion(this.setup.players[side].champion).cls;
+  }
+
+  /** Địa Lợi: a champion playing on their own sect's table. */
+  homeSide(side: Side): boolean {
+    if (this.setup.classic || this.setup.judge) return false;
+    return champion(this.setup.players[side].champion).sect === this.setup.tableSkin.sect;
+  }
+
+  /** Every fixed obstacle on the cloth right now: closed pocket mouths and Thiên Tượng pieces. */
+  obstacles() {
+    return [...this.closedPockets.map((i) => this.table.pockets[i].mouth), ...(this.omen?.segments ?? [])];
+  }
+
+  private syncObstacles() {
+    this.world.closedPockets = this.closedPockets;
+    this.world.extraSegments = this.obstacles();
+  }
+
+  private rollOmenFor(side: Side) {
+    this.omen = null;
+    if (this.setup.classic || this.setup.judge || this.homeSide(side) || this.rng.next() >= OMEN_CHANCE) return;
+    const omen = rollOmen(this.setup.tableSkin.sect, this.rng, this.table, this.balls);
+    if (!omen) return;
+    this.omen = omen;
+    if (omen.closePocket) {
+      const open = this.table.pockets.map((_, i) => i).filter((i) => !this.closedPockets.includes(i));
+      if (open.length > 1) {
+        this.omenPocket = this.rng.pick(open);
+        this.closedPockets = [...this.closedPockets, this.omenPocket];
+      }
+    }
+    this.syncObstacles();
+    this.emit({ type: 'omen', side, omen });
+  }
+
+  /** Lift this shot's Thiên Tượng once the balls have stopped. */
+  private endOmen() {
+    if (this.omenPocket !== null) this.closedPockets = this.closedPockets.filter((i) => i !== this.omenPocket);
+    this.omen = null;
+    this.omenPocket = null;
+    this.world.terrain = null;
+    this.syncObstacles();
+  }
+
   vmax(side: Side = this.state.turn): number {
-    return maxSpeed(this.table.kind, this.setup.players[side].cue.power);
+    const base = maxSpeed(this.table.kind, this.setup.players[side].cue.power) * (this.passive(side) === 'cuongchien' ? 1.05 : 1);
+    return side === this.state.turn ? base * this.powerBoost * this.freezeNow : base;
+  }
+
+  private clearShotBuffs() {
+    this.eagle = false;
+    this.reveal = false;
+    this.spinBoost = 1;
+    this.powerBoost = 1;
+    this.blast = null;
+    this.mawScale = 1;
+    this.pull = 0;
+    this.secondChance = false;
+    this.world.captureScale = this.baseCapture;
+    this.world.pocketPull = 0;
   }
 
   startRack() {
@@ -194,10 +287,17 @@ export class Match {
       const ids = this.balls.filter((b) => b.id !== 0 && b.id !== key && b.id !== 1).map((b) => b.id);
       this.bombId = this.rng.pick(ids);
     }
-    const bonus = this.setup.tableSkin.energyBonus;
-    this.energy = [Math.min(ENERGY_MAX, 20 + bonus), Math.min(ENERGY_MAX, 20 + bonus)];
-    this.shield = [false, false];
-    this.tremor = [false, false];
+    this.energy = [ENERGY_START, ENERGY_START];
+    this.cooldown = [[0, 0], [0, 0]];
+    // Hộ Pháp: the first foul of every rack is forgiven.
+    this.shield = [this.passive(0) === 'hophap', this.passive(1) === 'hophap'];
+    this.tremor = [1, 1];
+    this.freeze = [1, 1];
+    this.seal = [0, 0];
+    this.clearShotBuffs();
+    this.omen = null;
+    this.omenPocket = null;
+    this.world.terrain = null;
     this.potted = [[], []];
     this.snapshot = null;
     this.lastRes = null;
@@ -212,8 +312,7 @@ export class Match {
     if (this.setup.mutator === 'ghost' && this.table.pockets.length) {
       this.closedPockets = [this.rng.int(0, this.table.pockets.length - 1)];
     }
-    this.world.closedPockets = this.closedPockets;
-    this.world.extraSegments = this.closedPockets.map((i) => this.table.pockets[i].mouth);
+    this.syncObstacles();
   }
 
   legalTargets(side: Side = this.state.turn): number[] {
@@ -239,7 +338,7 @@ export class Match {
     if (this.placing === 'none') return false;
     if (this.placing === 'nudge') {
       const o = this.nudgeOrigin!;
-      if (Math.hypot(x - o.x, y - o.y) > 0.12) return false;
+      if (Math.hypot(x - o.x, y - o.y) > this.nudgeRadius) return false;
     }
     return canPlaceCue(this.table, this.balls, this.cueId(), x, y, this.placing === 'kitchen');
   }
@@ -250,9 +349,10 @@ export class Match {
     if (this.placing === 'nudge') {
       const o = this.nudgeOrigin!;
       const d = Math.hypot(x - o.x, y - o.y);
-      if (d > 0.12) {
-        x = o.x + ((x - o.x) / d) * 0.12;
-        y = o.y + ((y - o.y) / d) * 0.12;
+      const r = this.nudgeRadius;
+      if (d > r) {
+        x = o.x + ((x - o.x) / d) * r;
+        y = o.y + ((y - o.y) / d) * r;
       }
       if (!canPlaceCue(this.table, this.balls, cue.id, x, y, false)) return { x: cue.x, y: cue.y };
       cue.x = x;
@@ -268,7 +368,7 @@ export class Match {
 
   /** Miscue chance for a tip offset (normalised) and power. */
   miscueChance(side: number, vert: number, power: number): number {
-    if (this.spin2) return 0;
+    if (this.spinBoost > 1) return 0;
     const off = Math.hypot(side, vert);
     if (off <= 0.82) return 0;
     return Math.min(0.9, (off - 0.82) * 3.2 * (0.35 + power));
@@ -300,7 +400,7 @@ export class Match {
     let { angle, power, side: sp, vert } = input;
     const cueDef = this.setup.players[side].cue;
     // Cue spin stat sets how far the tip can reach before the miscue zone.
-    const reach = Math.min(1, 0.72 + 0.07 * cueDef.spin) * (this.spin2 ? 1.5 : 1);
+    const reach = Math.min(1, 0.72 + 0.07 * cueDef.spin) * this.spinBoost * (this.passive(side) === 'phaptu' ? 1.1 : 1);
     sp *= reach;
     vert *= reach;
     let speed = powerToSpeed(power, this.vmax(side));
@@ -312,9 +412,29 @@ export class Match {
       vert = 0;
     }
     strike(cue, this.table.R, { angle, speed, side: sp, vert });
+    // Shot buffs that act while the balls roll stay on until the shot resolves.
+    this.world.captureScale = this.mawScale * this.baseCapture * (this.omen?.capture ?? 1);
+    this.world.terrain = this.omen?.terrain ?? null;
+    this.world.time = 0;
+    if (this.omen?.jitter) {
+      for (const b of this.balls) {
+        if (!b.onTable || b.id === cue.id) continue;
+        const a = this.rng.range(0, Math.PI * 2);
+        const v = this.omen.jitter * this.rng.range(0.4, 1);
+        b.vx += Math.cos(a) * v;
+        b.vy += Math.sin(a) * v;
+      }
+    }
+    const cd = this.cooldown[side];
+    cd[0] = Math.max(0, cd[0] - 1);
+    cd[1] = Math.max(0, cd[1] - 1);
+    this.world.pocketPull = this.pull;
+    this.world.pullExempt = cue.id;
     this.eagle = false;
-    this.spin2 = false;
-    this.tremorNow = false;
+    this.reveal = false;
+    this.spinBoost = 1;
+    this.tremorNow = 1;
+    this.freezeNow = 1;
     this.placing = 'none';
     this.nudgeOrigin = null;
     this.phase = 'rolling';
@@ -332,8 +452,28 @@ export class Match {
       if (e.t === 'ball' && !this.bombUsed && (e.a === this.bombId || e.b === this.bombId) && e.speed > 1.1) {
         this.explode();
       }
+      const cueId = this.cueId();
+      if (e.t === 'ball' && this.blast && !this.blast.done && (e.a === cueId || e.b === cueId)) {
+        this.blast.done = true;
+        this.blastAt(e.x, e.y, this.blast.radius, this.blast.force);
+      }
     }
     if (!moving) this.finishShot();
+  }
+
+  /** Skill explosion at a contact point: pushes every ball in range away from it. */
+  private blastAt(x: number, y: number, radius: number, force: number) {
+    for (const b of this.balls) {
+      if (!b.onTable) continue;
+      const dx = b.x - x;
+      const dy = b.y - y;
+      const d = Math.hypot(dx, dy);
+      if (d > radius || d < 1e-6) continue;
+      const k = ((radius - d) / radius) * force;
+      b.vx += (dx / d) * k;
+      b.vy += (dy / d) * k;
+    }
+    this.emit({ type: 'explode', x, y });
   }
 
   private explode() {
@@ -375,10 +515,16 @@ export class Match {
     }
     const res = this.rules.resolve(this.state, this.balls, shot);
     const st = this.state;
+    this.endOmen();
 
+    if (!res.foul && !res.keepTurn && !res.option && res.winner === null && this.secondChance) {
+      res.keepTurn = true;
+      res.messages.unshift('Tái chiến — được đánh tiếp!');
+    }
+    this.clearShotBuffs();
     if (res.foul && this.shield[side] && res.winner === null) {
       this.shield[side] = false;
-      res.messages.unshift('Bảo Hộ đỡ lỗi — không mất bi trong tay');
+      res.messages.unshift('Hộ thể đỡ lỗi — không mất bi trong tay');
       res.ballInHand = 'none';
       res.option = undefined;
       res.foul = null;
@@ -406,9 +552,14 @@ export class Match {
     const ownPots = this.ownPots(side, potted.map((p) => p.id));
     if (res.foul) s.fouls++;
     s.pots += ownPots + res.points;
-    const gain = (ownPots + res.points) * 12 * (0.8 + 0.1 * this.setup.players[side].cue.energy);
+    let gain = (ownPots + res.points) * 14 * (0.8 + 0.1 * this.setup.players[side].cue.energy);
+    // Ảnh Sát: every ball in a run adds a little extra.
+    if (this.passive(side) === 'anhsat' && res.keepTurn) gain += 5 * (ownPots + res.points);
+    // Chú Sư slows the opponent's charge.
+    if (this.passive(opp) === 'chusu') gain *= 0.85;
+    if (this.homeSide(side)) gain *= 1.2;
     this.energy[side] = Math.min(ENERGY_MAX, this.energy[side] + gain);
-    if (res.foul) this.energy[opp] = Math.min(ENERGY_MAX, this.energy[opp] + 6);
+    if (res.foul) this.energy[opp] = Math.min(ENERGY_MAX, this.energy[opp] + 8);
     if (res.keepTurn && (ownPots > 0 || res.points > 0)) {
       s.run++;
       s.bestRun = Math.max(s.bestRun, s.run);
@@ -461,8 +612,16 @@ export class Match {
     const side = this.state.turn;
     if (side !== this.lastShooter) this.rollGhost();
     this.tremorNow = this.tremor[side];
-    this.tremor[side] = false;
+    this.tremor[side] = 1;
+    this.freezeNow = this.freeze[side];
+    this.freeze[side] = 1;
+    if (this.seal[side] > 0) {
+      this.sealPockets(side, this.seal[side]);
+      this.seal[side] = 0;
+    }
     this.phase = 'aim';
+    // Roll first: the AI plans its shot as soon as it hears about the turn.
+    this.rollOmenFor(side);
     this.emit({ type: 'turn', side });
   }
 
@@ -499,8 +658,7 @@ export class Match {
     this.placing = 'none';
     this.phase = 'aim';
     this.lastRes = null;
-    this.eagle = false;
-    this.spin2 = false;
+    this.clearShotBuffs();
     this.emit({ type: 'new-rack' });
     this.emit({ type: 'turn', side: 0 });
   }
@@ -514,50 +672,127 @@ export class Match {
 
   // ---- Skills ----
 
-  canUseSkill(side: Side, id: SkillId): boolean {
-    const p = this.setup.players[side];
-    if (!p.skills.includes(id)) return false;
-    if (this.energy[side] < skillDef(id).cost) return false;
-    switch (id) {
+  skills(side: Side): SkillDef[] {
+    return champion(this.setup.players[side].champion).skills;
+  }
+
+  /** Seal the pockets most useful to `side` (closest to its legal targets). */
+  private sealPockets(side: Side, count: number) {
+    if (!this.table.pockets.length) return;
+    const targets = this.legalTargets(side);
+    const balls = this.balls.filter((b) => b.onTable && b.id !== this.cueId(side) && (!targets.length || targets.includes(b.id)));
+    const score = this.table.pockets.map((p, i) => ({
+      i, v: balls.reduce((acc, b) => acc + 1 / (0.15 + Math.hypot(b.x - p.ax, b.y - p.ay)), 0),
+    }));
+    score.sort((a, b) => b.v - a.v);
+    this.closedPockets = [...new Set([...this.closedPockets, ...score.slice(0, count).map((x) => x.i)])];
+    this.syncObstacles();
+  }
+
+  /** Whether one effect family can take effect for `side` right now. */
+  private kindReady(kind: SkillKind, side: Side): boolean {
+    const myAim = this.phase === 'aim' && this.state.turn === side;
+    const opp = other(side);
+    const live = this.phase === 'aim' || this.phase === 'option';
+    switch (kind) {
       case 'rewind':
         return !!this.snapshot && this.snapshot.side === side && this.lastShooter === side &&
-          (this.phase === 'rack-over' ? this.lastRes?.winner !== side : (this.phase === 'aim' || this.phase === 'option') && this.state.turn !== side);
-      case 'eagle':
-        return this.phase === 'aim' && this.state.turn === side && !this.eagle;
-      case 'spin2':
-        return this.phase === 'aim' && this.state.turn === side && !this.spin2;
-      case 'nudge':
-        return this.phase === 'aim' && this.state.turn === side && this.placing === 'none';
-      case 'shield':
-        return (this.phase === 'aim' || this.phase === 'option') && !this.shield[side];
-      case 'tremor':
-        return (this.phase === 'aim' || this.phase === 'option') && !this.tremor[other(side)] && !(this.tremorNow && this.state.turn === other(side));
+          (this.phase === 'rack-over' ? this.lastRes?.winner !== side : live && this.state.turn !== side);
+      case 'vision': return myAim && !this.eagle;
+      case 'reveal': return myAim && !this.reveal;
+      case 'spin': return myAim && this.spinBoost === 1;
+      case 'power': return myAim && this.powerBoost === 1;
+      case 'blast': return myAim && !this.blast && !this.isCarom;
+      case 'maw': return myAim && this.mawScale === 1 && !this.isCarom;
+      case 'gravity': return myAim && this.pull === 0 && !this.isCarom;
+      case 'second': return myAim && !this.secondChance;
+      case 'nudge': return myAim && this.placing === 'none';
+      case 'teleport': return myAim && this.placing !== 'anywhere' && !this.isCarom;
+      case 'shield': return live && !this.shield[side];
+      case 'drain': return live && this.energy[opp] > 0;
+      case 'chill': return live && this.tremor[opp] === 1 && !(this.state.turn === opp && this.tremorNow > 1);
+      case 'freeze': return live && this.freeze[opp] === 1 && !(this.state.turn === opp && this.freezeNow < 1);
+      case 'seal': return live && this.seal[opp] === 0 && !this.isCarom;
     }
   }
 
-  useSkill(side: Side, id: SkillId): boolean {
-    if (!this.canUseSkill(side, id)) return false;
-    this.energy[side] -= skillDef(id).cost;
-    switch (id) {
-      case 'eagle': this.eagle = true; break;
-      case 'spin2': this.spin2 = true; break;
+  /**
+   * Carom tables have no pockets: pocket families turn into their nearest table effect so
+   * every champion keeps three working skills in every game type.
+   */
+  effectiveKind(kind: SkillKind): SkillKind {
+    if (!this.isCarom) return kind;
+    const swap: Partial<Record<SkillKind, SkillKind>> = { seal: 'chill', maw: 'spin', gravity: 'vision', blast: 'power', teleport: 'nudge' };
+    return swap[kind] ?? kind;
+  }
+
+  /** 0 = ready, otherwise own shots left (basic) or energy missing (ultimate, negative). */
+  skillWait(side: Side, slot: number): number {
+    if (slot === 2) return this.energy[side] >= ENERGY_MAX ? 0 : this.energy[side] - ENERGY_MAX;
+    return this.cooldown[side][slot];
+  }
+
+  canUseSkill(side: Side, slot: number): boolean {
+    if (this.setup.judge || this.setup.classic) return false;
+    if (this.skillWait(side, slot) !== 0) return false;
+    return this.kindReady(this.effectiveKind(this.skills(side)[slot].kinds[0]), side);
+  }
+
+  useSkill(side: Side, slot: number): boolean {
+    if (!this.canUseSkill(side, slot)) return false;
+    const sk = this.skills(side)[slot];
+    if (slot === 2) this.energy[side] = 0;
+    else this.cooldown[side][slot] = sk.cooldown;
+    // The first family is guaranteed ready; the others apply when they can.
+    sk.kinds.map((k) => this.effectiveKind(k)).forEach((k, i) => {
+      if (i === 0 || this.kindReady(k, side)) this.applyKind(k, sk.tier, side);
+    });
+    this.emit({ type: 'skill', side, champion: this.setup.players[side].champion, slot, skill: sk });
+    return true;
+  }
+
+  private applyKind(kind: SkillKind, tier: number, side: Side) {
+    const pw = skillPower(kind, tier) as Record<string, number>;
+    const opp = other(side);
+    const oppNow = this.state.turn === opp && this.phase === 'aim';
+    switch (kind) {
+      case 'vision': this.eagle = true; break;
+      case 'reveal': this.reveal = true; break;
+      case 'spin': this.spinBoost = pw.spin; break;
+      case 'power': this.powerBoost = pw.speed; break;
+      case 'blast': this.blast = { radius: pw.radius, force: pw.force, done: false }; break;
+      case 'maw': this.mawScale = pw.scale; break;
+      case 'gravity': this.pull = pw.pull; break;
+      case 'second': this.secondChance = true; break;
       case 'shield': this.shield[side] = true; break;
       case 'nudge': {
         const c = this.cueBall();
         this.placing = 'nudge';
+        this.nudgeRadius = pw.radius;
         this.nudgeOrigin = { x: c.x, y: c.y };
         break;
       }
-      case 'tremor': {
-        const opp = other(side);
-        if (this.state.turn === opp && this.phase === 'aim') this.tremorNow = true;
-        else this.tremor[opp] = true;
+      case 'teleport': this.placing = 'anywhere'; break;
+      case 'drain': {
+        const take = Math.min(this.energy[opp], pw.amount);
+        this.energy[opp] -= take;
+        this.energy[side] = Math.min(ENERGY_MAX, this.energy[side] + take);
         break;
       }
+      case 'chill':
+        if (oppNow) this.tremorNow = pw.tremor;
+        else this.tremor[opp] = pw.tremor;
+        break;
+      case 'freeze':
+        if (oppNow) this.freezeNow = pw.power;
+        else this.freeze[opp] = pw.power;
+        break;
+      case 'seal':
+        if (oppNow) this.sealPockets(opp, pw.pockets);
+        else this.seal[opp] = pw.pockets;
+        break;
       case 'rewind': this.rewind(); break;
     }
-    this.emit({ type: 'skill', side, id });
-    return true;
   }
 
   private rewind() {
@@ -571,8 +806,9 @@ export class Match {
     this.energy = [s.side === 0 ? energyNow[0] : s.energy[0], s.side === 1 ? energyNow[1] : s.energy[1]];
     this.placing = s.ballInHand;
     this.closedPockets = s.closed;
-    this.world.closedPockets = s.closed;
-    this.world.extraSegments = s.closed.map((i) => this.table.pockets[i].mouth);
+    this.omen = null;
+    this.omenPocket = null;
+    this.syncObstacles();
     this.bombId = s.bombId;
     this.bombUsed = s.bombUsed;
     this.potted = s.potted;

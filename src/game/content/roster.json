@@ -1,0 +1,2438 @@
+{
+  "sects": [
+    {
+      "id": "thienquang",
+      "name": "Thiên Quang Kiếm Tông",
+      "main": "#e9d27a",
+      "glow": "#9cd3ff",
+      "motifs": "flying swords, sun halo, white marble terraces, cranes",
+      "element": "golden sword light",
+      "felt": "deep royal blue",
+      "rail": "white marble with gold sword inlays",
+      "emblem": "a golden flying sword crossing a radiant sun halo",
+      "cues": [
+        "white-jade cue with a gold sword-guard collar",
+        "gold-and-ivory cue with a sun-disc butt"
+      ]
+    },
+    {
+      "id": "huyetsat",
+      "name": "Huyết Sát Ma Môn",
+      "main": "#c1272d",
+      "glow": "#ff7a45",
+      "motifs": "black iron spikes, chains, war banners, blood moon",
+      "element": "blood-red demonic flame",
+      "felt": "dark crimson",
+      "rail": "black spiked iron with blood-red runes",
+      "emblem": "a blood moon pierced by a black iron halberd",
+      "cues": [
+        "black-iron cue wrapped in red chains",
+        "obsidian cue with a crimson flame tip"
+      ]
+    },
+    {
+      "id": "hoalinh",
+      "name": "Hoa Linh Tiên Đảo",
+      "main": "#e07aa5",
+      "glow": "#b8f0e0",
+      "motifs": "peach blossoms, spirit foxes, wind ribbons, floating islands",
+      "element": "peach blossom petals and spirit wind",
+      "felt": "jade mint green",
+      "rail": "cherry wood carved with peach blossoms",
+      "emblem": "a five-petal peach blossom with a curled fox tail",
+      "cues": [
+        "peach-wood cue with blossom carvings",
+        "pale jade cue with ribbon tassel"
+      ]
+    },
+    {
+      "id": "bangphach",
+      "name": "Băng Phách Tuyết Cung",
+      "main": "#6cc4ef",
+      "glow": "#e6fbff",
+      "motifs": "ice lotus, snowflakes, crystal palace, northern lights",
+      "element": "frost and ice crystals",
+      "felt": "pale icy blue-white",
+      "rail": "carved translucent ice with snowflake engravings",
+      "emblem": "a six-petal ice lotus inside a crescent moon",
+      "cues": [
+        "crystal ice cue with a lotus tip",
+        "silver-and-ice cue with snowflake rings"
+      ]
+    },
+    {
+      "id": "thienco",
+      "name": "Thiên Cơ Các",
+      "main": "#d9a441",
+      "glow": "#7fe3ff",
+      "motifs": "brass gears, wooden puppets, sky lanterns, clockwork",
+      "element": "electric cyan sparks and brass gears",
+      "felt": "deep teal green",
+      "rail": "polished brass with interlocking gears",
+      "emblem": "a brass gear with a cyan lightning core",
+      "cues": [
+        "polished brass-and-teak cue with fine interlocking gear inlays on the butt",
+        "teak cue with small spinning gyroscope rings at the joint"
+      ]
+    },
+    {
+      "id": "docvu",
+      "name": "Độc Vụ Cốc",
+      "main": "#7ccd3c",
+      "glow": "#d8ff6a",
+      "motifs": "poison mist, gu insects, potion vials, mushrooms, snakes",
+      "element": "toxic green mist and venom",
+      "felt": "murky dark green",
+      "rail": "mossy rotten wood with mushrooms",
+      "emblem": "a coiled green snake around a potion gourd",
+      "cues": [
+        "gnarled poison-wood cue dripping venom",
+        "bamboo cue with a jade gourd"
+      ]
+    },
+    {
+      "id": "hailong",
+      "name": "Hải Long Bang",
+      "main": "#e0782f",
+      "glow": "#5fd7c8",
+      "motifs": "ocean waves, anchors, dragon ships, gold coins",
+      "element": "sea water and foam",
+      "felt": "sea teal",
+      "rail": "weathered ship timber with brass nails",
+      "emblem": "a sea dragon coiled around an anchor",
+      "cues": [
+        "teak-and-brass cue like a spyglass",
+        "coral cue with an anchor butt"
+      ]
+    },
+    {
+      "id": "uminh",
+      "name": "U Minh Đảo",
+      "main": "#2fd6a7",
+      "glow": "#9dffe3",
+      "motifs": "spirit lanterns, mist, bones, river of oblivion",
+      "element": "ghostly jade soul fire",
+      "felt": "ashen grey",
+      "rail": "black bone-wood with ghost lanterns",
+      "emblem": "a jade ghost lantern with a soul flame",
+      "cues": [
+        "bone cue with ghost-fire rings",
+        "black wood cue with a lantern hook"
+      ]
+    },
+    {
+      "id": "tinhtu",
+      "name": "Tinh Tú Thần Sơn",
+      "main": "#8a7cf0",
+      "glow": "#ffe9a3",
+      "motifs": "constellations, sun and moon discs, star maps",
+      "element": "starlight and cosmic dust",
+      "felt": "midnight violet with faint stars",
+      "rail": "mountain stone carved with constellations",
+      "emblem": "a seven-star constellation around a moon disc",
+      "cues": [
+        "silver cue of condensed starlight",
+        "violet cue with a crescent-moon tip"
+      ]
+    },
+    {
+      "id": "kimsa",
+      "name": "Kim Sa Hoàng Triều",
+      "main": "#e8b84a",
+      "glow": "#4fe0d0",
+      "motifs": "golden dunes, sun disc, ancient tombs, scarabs",
+      "element": "golden sand and sunlight",
+      "felt": "sand gold",
+      "rail": "sandstone inlaid with gold and turquoise",
+      "emblem": "a golden sun disc with turquoise wings",
+      "cues": [
+        "golden cue with a sun tip",
+        "sandstone cue with turquoise bands"
+      ]
+    },
+    {
+      "id": "vanthu",
+      "name": "Vạn Thú Lâm",
+      "main": "#3fae6a",
+      "glow": "#ffb04d",
+      "motifs": "ancient trees, spirit beasts, roots, thunder birds",
+      "element": "leaves, vines and amber lightning",
+      "felt": "forest moss green",
+      "rail": "ancient tree bark with living roots",
+      "emblem": "a leaf crown with a beast claw mark",
+      "cues": [
+        "living-wood cue with leaves",
+        "amber-and-bone cue with feathers"
+      ]
+    },
+    {
+      "id": "hukhong",
+      "name": "Hư Không Uyên",
+      "main": "#b44fe0",
+      "glow": "#ff5fe0",
+      "motifs": "cracks in reality, eyes, maws, floating rocks",
+      "element": "void energy and reality cracks",
+      "felt": "void purple",
+      "rail": "cracked black obsidian leaking magenta light",
+      "emblem": "a single void eye inside a cracked ring",
+      "cues": [
+        "black spike cue leaking magenta light",
+        "chitin cue with a void eye"
+      ]
+    },
+    {
+      "id": "thienhuong",
+      "name": "Thiên Hương Các",
+      "main": "#d6407a",
+      "glow": "#ffd1a8",
+      "motifs": "silk ribbons, folding fans, peonies, lanterns over a moonlit pavilion",
+      "element": "rose-gold silk ribbons and drifting petals",
+      "felt": "deep plum",
+      "rail": "red lacquered wood with gold peony inlays",
+      "emblem": "a folding fan open over a peony",
+      "cues": [
+        "red lacquer cue with a gold peony collar and a silk tassel",
+        "ivory cue painted with a dancing crane and gold leaf"
+      ]
+    }
+  ],
+  "classes": [
+    {
+      "id": "thanxa",
+      "name": "Thần Xạ",
+      "passive": "Đường ngắm dài thêm 25%."
+    },
+    {
+      "id": "cuongchien",
+      "name": "Cuồng Chiến",
+      "passive": "Lực tối đa +5%."
+    },
+    {
+      "id": "phaptu",
+      "name": "Pháp Tu",
+      "passive": "Áp phê mạnh thêm 10%."
+    },
+    {
+      "id": "hophap",
+      "name": "Hộ Pháp",
+      "passive": "Lỗi đầu tiên mỗi ván không trao bi trong tay."
+    },
+    {
+      "id": "chusu",
+      "name": "Chú Sư",
+      "passive": "Đối thủ hồi năng lượng chậm 15%."
+    },
+    {
+      "id": "anhsat",
+      "name": "Ảnh Sát",
+      "passive": "Mỗi bi vào liên tiếp thêm 5 năng lượng."
+    },
+    {
+      "id": "luanhoi",
+      "name": "Luân Hồi",
+      "passive": "Chiêu cơ bản hồi nhanh hơn 1 lượt."
+    }
+  ],
+  "champions": [
+    {
+      "id": "tokiemnhi",
+      "name": "Tô Kiếm Nhi",
+      "sect": "thienquang",
+      "tier": 1,
+      "cls": "thanxa",
+      "look": "a sporty 14-year-old tomboy girl with short cropped jet-black hair, a white headband, a small bandage on her cheek, white-and-gold short robes with a gold sash, a small flying sword hovering at her shoulder, slim white-jade cue",
+      "pose": "aiming the cue like a sword thrust",
+      "expr": "eager grin",
+      "skills": [
+        {
+          "name": "Kiếm Chỉ Đường",
+          "kinds": [
+            "reveal"
+          ],
+          "icon": "a small flying sword pointing along a glowing dotted line"
+        },
+        {
+          "name": "Phi Kiếm Dò Lối",
+          "kinds": [
+            "vision"
+          ],
+          "icon": "a flying sword tracing a curved golden path"
+        },
+        {
+          "name": "Vạn Kiếm Quy Tông",
+          "kinds": [
+            "vision",
+            "power"
+          ],
+          "icon": "hundreds of golden flying swords converging into one point"
+        }
+      ]
+    },
+    {
+      "id": "macthietson",
+      "name": "Mạc Thiết Sơn",
+      "sect": "thienquang",
+      "tier": 2,
+      "cls": "hophap",
+      "look": "a stocky middle-aged sect gate guardian, white-gold plate armour over white robes, square jaw, short black beard, a tall sword-shaped tower shield, a thick ivory cue",
+      "pose": "guardian bracing behind the shield, cue planted",
+      "expr": "steady stern look",
+      "skills": [
+        {
+          "name": "Kim Chung Tráo",
+          "kinds": [
+            "shield"
+          ],
+          "icon": "a translucent golden bell barrier"
+        },
+        {
+          "name": "Trấn Sơn Thủ",
+          "kinds": [
+            "nudge"
+          ],
+          "icon": "a broad palm pushing a white ball with golden force"
+        },
+        {
+          "name": "Thiết Bích Sơn Môn",
+          "kinds": [
+            "shield",
+            "seal"
+          ],
+          "icon": "a golden mountain gate slamming shut over a round hole"
+        }
+      ]
+    },
+    {
+      "id": "bachvankhanh",
+      "name": "Bạch Vân Khanh",
+      "sect": "thienquang",
+      "tier": 3,
+      "cls": "phaptu",
+      "look": "a graceful young male scholar-swordsman, flowing white robes with cloud embroidery, long black hair half-tied under a small silver crown, a white-jade cue wrapped in wisps of cloud",
+      "pose": "mage casting, cue held across the body, clouds spiralling",
+      "expr": "serene faint smile",
+      "skills": [
+        {
+          "name": "Vân Toàn Kiếm",
+          "kinds": [
+            "spin"
+          ],
+          "icon": "white clouds spiralling around a white ball"
+        },
+        {
+          "name": "Lưu Vân Bộ",
+          "kinds": [
+            "nudge"
+          ],
+          "icon": "glowing cloud footsteps"
+        },
+        {
+          "name": "Thiên Kiếm Vân Hải",
+          "kinds": [
+            "gravity",
+            "spin"
+          ],
+          "icon": "a sea of clouds swirling into a round hole with swords"
+        }
+      ]
+    },
+    {
+      "id": "langthienky",
+      "name": "Lăng Thiên Kỳ",
+      "sect": "thienquang",
+      "tier": 4,
+      "cls": "cuongchien",
+      "look": "a stern woman around 28 with an ash-blonde undercut hairstyle and a long vertical scar through her left eye, tanned skin, white-gold battle robes with golden pauldrons, a crimson sash, a broad greatsword-like cue",
+      "pose": "warrior swinging the cue in a wide arc",
+      "expr": "fierce confident smirk",
+      "skills": [
+        {
+          "name": "Kiếm Ý Bạo Phát",
+          "kinds": [
+            "power"
+          ],
+          "icon": "a sword aura flaring upward"
+        },
+        {
+          "name": "Chấn Kiếm Âm",
+          "kinds": [
+            "chill"
+          ],
+          "icon": "a ringing sword sending sonic rings"
+        },
+        {
+          "name": "Thiên Kiếm Trảm",
+          "kinds": [
+            "blast"
+          ],
+          "icon": "a giant golden sword crashing down"
+        }
+      ]
+    },
+    {
+      "id": "diephuyenquang",
+      "name": "Kiếm Thánh Diệp Huyền Quang",
+      "sect": "thienquang",
+      "tier": 5,
+      "cls": "thanxa",
+      "look": "a legendary sword saint, an ageless man with a calm, clearly masculine face and strong jaw, long white hair and golden eyes, white robe with gold trim, a radiant sun halo behind him, nine small flying swords orbiting, a radiant golden cue",
+      "pose": "calm stance, cue pointed forward, swords orbiting",
+      "expr": "calm all-knowing look",
+      "skills": [
+        {
+          "name": "Huệ Nhãn",
+          "kinds": [
+            "reveal"
+          ],
+          "icon": "a golden third eye opening"
+        },
+        {
+          "name": "Kiếm Tâm Thông Minh",
+          "kinds": [
+            "spin"
+          ],
+          "icon": "a radiant sword-shaped heart"
+        },
+        {
+          "name": "Cửu Kiếm Quy Nhất",
+          "kinds": [
+            "vision",
+            "second"
+          ],
+          "icon": "nine swords merging into a sun"
+        }
+      ]
+    },
+    {
+      "id": "haclang",
+      "name": "Hắc Lang",
+      "sect": "huyetsat",
+      "tier": 1,
+      "cls": "anhsat",
+      "look": "a lean young male assassin in a wolf-ear hood, black leather armour with a crimson scarf, red eyes, twin hooked daggers at the hips, a black-iron cue",
+      "pose": "assassin lunging low",
+      "expr": "sly grin",
+      "skills": [
+        {
+          "name": "Lang Nhãn",
+          "kinds": [
+            "reveal"
+          ],
+          "icon": "a red wolf eye glowing in shadow"
+        },
+        {
+          "name": "Huyết Trảo",
+          "kinds": [
+            "power"
+          ],
+          "icon": "three red claw slashes"
+        },
+        {
+          "name": "Lang Vương Tập Kích",
+          "kinds": [
+            "second",
+            "power"
+          ],
+          "icon": "a shadow wolf leaping with red eyes"
+        }
+      ]
+    },
+    {
+      "id": "docuong",
+      "name": "Đồ Cuồng",
+      "sect": "huyetsat",
+      "tier": 2,
+      "cls": "cuongchien",
+      "look": "a massive brutish man with a long crimson mohawk braid and an iron jaw-guard mask over his mouth and chin, heavy chains wrapped around his forearms, black spiked iron armour, no facial paint, a cue shaped like an iron mace",
+      "pose": "warrior roaring with the mace-cue raised",
+      "expr": "wild grin",
+      "skills": [
+        {
+          "name": "Cuồng Huyết",
+          "kinds": [
+            "power"
+          ],
+          "icon": "a pulsing red heart wrapped in chains"
+        },
+        {
+          "name": "Chấn Địa",
+          "kinds": [
+            "chill"
+          ],
+          "icon": "a stomp cracking the ground with red cracks"
+        },
+        {
+          "name": "Huyết Chiến Bộc Phá",
+          "kinds": [
+            "blast"
+          ],
+          "icon": "a red explosion of iron shards"
+        }
+      ]
+    },
+    {
+      "id": "huyetcominuong",
+      "name": "Huyết Cơ Mị Nương",
+      "sect": "huyetsat",
+      "tier": 3,
+      "cls": "chusu",
+      "look": "an alluring blood sorceress woman around 25 with wavy crimson-red hair piled in a high bun, dark smoky eye makeup, a black lace veil, a crimson-and-black gown with a high collar, a thin crimson cue with a rose tip",
+      "pose": "hexer channelling a swirl of blood petals",
+      "expr": "mysterious smile",
+      "skills": [
+        {
+          "name": "Huyết Chú",
+          "kinds": [
+            "chill"
+          ],
+          "icon": "a blood rune over a trembling hand"
+        },
+        {
+          "name": "Hấp Huyết",
+          "kinds": [
+            "drain"
+          ],
+          "icon": "red energy being siphoned into a rose"
+        },
+        {
+          "name": "Huyết Nguyệt Phong Ấn",
+          "kinds": [
+            "freeze",
+            "drain"
+          ],
+          "icon": "a blood moon above red chains"
+        }
+      ]
+    },
+    {
+      "id": "tudoliet",
+      "name": "Tư Đồ Liệt",
+      "sect": "huyetsat",
+      "tier": 4,
+      "cls": "cuongchien",
+      "look": "a scarred war general around 40, heavy black-iron armour, crimson cape, a small war banner on his back, grey topknot, a halberd-shaped cue",
+      "pose": "commanding charge, cue swung forward",
+      "expr": "battle-hardened glare",
+      "skills": [
+        {
+          "name": "Hành Quân Lệnh",
+          "kinds": [
+            "power"
+          ],
+          "icon": "a crimson war banner"
+        },
+        {
+          "name": "Phá Trận",
+          "kinds": [
+            "nudge"
+          ],
+          "icon": "an iron battering ram"
+        },
+        {
+          "name": "Thiết Kỵ Phá Thành",
+          "kinds": [
+            "blast",
+            "power"
+          ],
+          "icon": "iron cavalry charging through a wall"
+        }
+      ]
+    },
+    {
+      "id": "matoncuuu",
+      "name": "Ma Tôn Cửu U",
+      "sect": "huyetsat",
+      "tier": 5,
+      "cls": "luanhoi",
+      "look": "the demon lord, a tall pale man with sharp masculine features and a strong jaw, short slicked-back black hair, two curved crimson horns, layered black-and-red robes trailing shadow flames, violet-red eyes, an obsidian cue crackling with dark lightning",
+      "pose": "time-mage weaving dark energy, cue raised",
+      "expr": "cold arrogant smile",
+      "skills": [
+        {
+          "name": "Ma Ảnh Độn",
+          "kinds": [
+            "teleport"
+          ],
+          "icon": "a dark shadow portal"
+        },
+        {
+          "name": "Hút Hồn",
+          "kinds": [
+            "drain"
+          ],
+          "icon": "a dark hand pulling glowing souls"
+        },
+        {
+          "name": "Cửu U Nghịch Thiên",
+          "kinds": [
+            "rewind",
+            "freeze"
+          ],
+          "icon": "a black hourglass turning backwards with red flames"
+        }
+      ]
+    },
+    {
+      "id": "daotieumuoi",
+      "name": "Đào Tiểu Muội",
+      "sect": "hoalinh",
+      "tier": 1,
+      "cls": "phaptu",
+      "look": "a chubby round-faced 12-year-old girl with bright peach-pink hair in two big twin buns, rosy cheeks, a pink peach-blossom dress, a tiny white spirit fox riding on her head, a peach-wood cue with a blossom tip",
+      "pose": "mage twirling the cue, petals spiralling",
+      "expr": "happy open smile",
+      "skills": [
+        {
+          "name": "Hoa Toàn",
+          "kinds": [
+            "spin"
+          ],
+          "icon": "peach petals spiralling around a white ball"
+        },
+        {
+          "name": "Hoa Lộ",
+          "kinds": [
+            "nudge"
+          ],
+          "icon": "a path of floating pink petals"
+        },
+        {
+          "name": "Đào Hoa Nguyên",
+          "kinds": [
+            "gravity"
+          ],
+          "icon": "a whirl of blossoms around a round hole"
+        }
+      ]
+    },
+    {
+      "id": "phonglinhtu",
+      "name": "Phong Linh Tử",
+      "sect": "hoalinh",
+      "tier": 2,
+      "cls": "anhsat",
+      "look": "a lanky young man around 22 with messy sandy-blond hair tied with a small bell, sleepy half-closed eyes, a blade of grass in his mouth, an open jade-green robe with wind ribbons, a long bamboo cue",
+      "pose": "assassin dashing forward with wind trails",
+      "expr": "relaxed smirk",
+      "skills": [
+        {
+          "name": "Phong Ảnh",
+          "kinds": [
+            "second"
+          ],
+          "icon": "a gust of wind shaped like a running silhouette"
+        },
+        {
+          "name": "Phong Nhận",
+          "kinds": [
+            "power"
+          ],
+          "icon": "crescent wind blades"
+        },
+        {
+          "name": "Tật Phong Liên Trảm",
+          "kinds": [
+            "second",
+            "reveal"
+          ],
+          "icon": "a tornado of wind blades"
+        }
+      ]
+    },
+    {
+      "id": "hotiennguyetly",
+      "name": "Hồ Tiên Nguyệt Ly",
+      "sect": "hoalinh",
+      "tier": 3,
+      "cls": "chusu",
+      "look": "an elegant nine-tailed fox spirit woman, white fox ears, nine white-pink tails, lilac-and-white robes, golden eyes, a moonstone cue",
+      "pose": "hexer casting with tails fanned out",
+      "expr": "playful sly smile",
+      "skills": [
+        {
+          "name": "Mê Hồn",
+          "kinds": [
+            "chill"
+          ],
+          "icon": "a pink charm orb with a heart glow"
+        },
+        {
+          "name": "Hồ Hỏa",
+          "kinds": [
+            "drain"
+          ],
+          "icon": "three pink fox-fire wisps"
+        },
+        {
+          "name": "Cửu Vĩ Mê Trận",
+          "kinds": [
+            "chill",
+            "seal"
+          ],
+          "icon": "nine fox tails forming a ring maze"
+        }
+      ]
+    },
+    {
+      "id": "thanhliendaisu",
+      "name": "Thanh Liên Đại Sư",
+      "sect": "hoalinh",
+      "tier": 4,
+      "cls": "hophap",
+      "look": "a calm old monk with long white eyebrows, jade-green monk robes, wooden prayer beads, standing on a floating lotus, a staff-like jade cue",
+      "pose": "guardian meditating stance, palm raised",
+      "expr": "peaceful closed eyes",
+      "skills": [
+        {
+          "name": "Liên Hoa Hộ Thể",
+          "kinds": [
+            "shield"
+          ],
+          "icon": "a green lotus-petal shield"
+        },
+        {
+          "name": "Tâm Tĩnh Như Thủy",
+          "kinds": [
+            "nudge"
+          ],
+          "icon": "a calm water ripple around a ball"
+        },
+        {
+          "name": "Thiên Liên Kết Giới",
+          "kinds": [
+            "shield",
+            "seal"
+          ],
+          "icon": "a giant lotus barrier dome"
+        }
+      ]
+    },
+    {
+      "id": "daochumonghoa",
+      "name": "Đảo Chủ Mộng Hoa",
+      "sect": "hoalinh",
+      "tier": 5,
+      "cls": "luanhoi",
+      "look": "the dreamy island mistress around 30, flowing pink-and-mint gown with floating petals, long pastel-pink hair, glowing butterflies, a crystal cue with a butterfly ornament",
+      "pose": "time-mage weaving butterflies, cue raised",
+      "expr": "dreamy half-closed eyes",
+      "skills": [
+        {
+          "name": "Mộng Điệp",
+          "kinds": [
+            "teleport"
+          ],
+          "icon": "a butterfly-wing portal"
+        },
+        {
+          "name": "Hồi Mộng",
+          "kinds": [
+            "rewind"
+          ],
+          "icon": "an hourglass filled with petals"
+        },
+        {
+          "name": "Hoa Mộng Luân Hồi",
+          "kinds": [
+            "rewind",
+            "second"
+          ],
+          "icon": "a circle of petals and butterflies cycling"
+        }
+      ]
+    },
+    {
+      "id": "tuyetnhi",
+      "name": "Tuyết Nhi",
+      "sect": "bangphach",
+      "tier": 1,
+      "cls": "thanxa",
+      "look": "a cheerful 15-year-old girl disciple of the Ice Palace sect, white fur-trimmed hooded cloak over ice-blue robes, silver hair in two short braids, a small crystal bow on her back, slim ice cue",
+      "pose": "archer-like aiming, cue drawn back like an arrow, one eye closed",
+      "expr": "bright cheeky grin",
+      "skills": [
+        {
+          "name": "Băng Tiễn Chỉ Lộ",
+          "kinds": [
+            "reveal"
+          ],
+          "icon": "an ice arrow pointing along a glowing dotted path"
+        },
+        {
+          "name": "Hàn Mục",
+          "kinds": [
+            "vision"
+          ],
+          "icon": "a frost-rimmed eye seeing a faint trail"
+        },
+        {
+          "name": "Vạn Tiễn Băng Vũ",
+          "kinds": [
+            "vision",
+            "spin"
+          ],
+          "icon": "a rain of many small ice arrows from above"
+        }
+      ]
+    },
+    {
+      "id": "hanthach",
+      "name": "Hàn Thạch",
+      "sect": "bangphach",
+      "tier": 2,
+      "cls": "hophap",
+      "look": "a huge broad-shouldered young man guardian, rough armour of blue ice plates over dark wool, short spiky black hair, a large round ice shield on one arm, a thick heavy ice cue",
+      "pose": "guardian bracing, shield forward, cue planted on the ground",
+      "expr": "calm determined look",
+      "skills": [
+        {
+          "name": "Băng Giáp",
+          "kinds": [
+            "shield"
+          ],
+          "icon": "a heavy ice armour breastplate"
+        },
+        {
+          "name": "Trấn Thủ",
+          "kinds": [
+            "nudge"
+          ],
+          "icon": "a stout guardian palm pushing a white billiard ball"
+        },
+        {
+          "name": "Băng Thành Bất Phá",
+          "kinds": [
+            "shield",
+            "seal"
+          ],
+          "icon": "an ice fortress wall with a sealed circular hole"
+        }
+      ]
+    },
+    {
+      "id": "lacsuong",
+      "name": "Lạc Sương",
+      "sect": "bangphach",
+      "tier": 3,
+      "cls": "phaptu",
+      "look": "an elegant fairy maiden woman of 20 with very long straight jet-black hair and a straight fringe, ice-blue eyes, a single ice-lotus crystal hairpin, flowing white and pale-blue layered hanfu with sheer ribbons, slender crystal cue with a lotus tip",
+      "pose": "mage casting, one hand weaving a swirl of frost petals, cue held vertically",
+      "expr": "gentle serene smile",
+      "skills": [
+        {
+          "name": "Sương Liên Áp Phê",
+          "kinds": [
+            "spin"
+          ],
+          "icon": "a swirling frost-petal spiral around a white billiard ball"
+        },
+        {
+          "name": "Băng Lộ",
+          "kinds": [
+            "nudge"
+          ],
+          "icon": "a glittering ice road sliding forward"
+        },
+        {
+          "name": "Băng Liên Nở Rộ",
+          "kinds": [
+            "maw",
+            "gravity"
+          ],
+          "icon": "a giant ice lotus blooming over a dark hole"
+        }
+      ]
+    },
+    {
+      "id": "bacminh",
+      "name": "Bắc Minh Cuồng Hùng",
+      "sect": "bangphach",
+      "tier": 4,
+      "cls": "cuongchien",
+      "look": "a hulking berserker man who is half polar bear: a HUMAN face (human nose, mouth and skin) with white bear ears, a mane of white fur and bear claws, frost-crusted fur mantle, tribal blue war paint, a massive club-like cue made of glacier ice and bone",
+      "pose": "warrior swinging the cue overhead",
+      "expr": "fierce playful roar",
+      "skills": [
+        {
+          "name": "Hùng Lực",
+          "kinds": [
+            "power"
+          ],
+          "icon": "a bear claw fist bursting with frost power"
+        },
+        {
+          "name": "Chấn Băng",
+          "kinds": [
+            "chill"
+          ],
+          "icon": "a ground-shaking stomp with ice cracks"
+        },
+        {
+          "name": "Băng Sơn Bộc Phá",
+          "kinds": [
+            "blast"
+          ],
+          "icon": "a glacier exploding into shards"
+        }
+      ]
+    },
+    {
+      "id": "hannguyet",
+      "name": "Cung Chủ Hàn Nguyệt",
+      "sect": "bangphach",
+      "tier": 5,
+      "cls": "chusu",
+      "look": "the regal ice-palace mistress, tall woman about 30, crescent-moon ice crown, long silver-white hair, cold pale-violet eyes, long trailing cloak of frost silk with snowflake embroidery, an ornate moon-crested ice cue",
+      "pose": "hexer channelling, cue raised, free hand casting a freezing moon sigil",
+      "expr": "cold regal half-smile",
+      "skills": [
+        {
+          "name": "Hàn Khí Xâm Cốt",
+          "kinds": [
+            "chill"
+          ],
+          "icon": "creeping cold mist biting a trembling hand"
+        },
+        {
+          "name": "Phong Băng Khẩu",
+          "kinds": [
+            "seal"
+          ],
+          "icon": "a chained ice seal over a round hole"
+        },
+        {
+          "name": "Vạn Lý Băng Phong",
+          "kinds": [
+            "freeze",
+            "seal"
+          ],
+          "icon": "a full moon freezing everything below into crystal"
+        }
+      ]
+    },
+    {
+      "id": "tieuban",
+      "name": "Tiểu Ban",
+      "sect": "thienco",
+      "tier": 1,
+      "cls": "thanxa",
+      "look": "a 14-year-old apprentice tinkerer boy, brass goggles, oil-stained bronze apron over a teal tunic, a small clockwork bird perched on his shoulder, a slim brass-ringed billiard cue with a tiny spyglass clipped to the butt",
+      "pose": "bent low over an imaginary table lining up a billiards shot, eye along the cue",
+      "expr": "focused tongue-out grin",
+      "skills": [
+        {
+          "name": "Kính Ngắm Đồng",
+          "kinds": [
+            "reveal"
+          ],
+          "icon": "a brass spyglass lens showing a glowing dotted path"
+        },
+        {
+          "name": "Tính Quỹ Đạo",
+          "kinds": [
+            "vision"
+          ],
+          "icon": "a blueprint with a glowing trajectory"
+        },
+        {
+          "name": "Liên Nỏ Thần Cơ",
+          "kinds": [
+            "vision",
+            "power"
+          ],
+          "icon": "a clockwork bird flying along a glowing cyan trajectory"
+        }
+      ]
+    },
+    {
+      "id": "mocnguu",
+      "name": "Mộc Ngưu",
+      "sect": "thienco",
+      "tier": 2,
+      "cls": "hophap",
+      "look": "a giant wooden mechanical ox golem, brass gears and joints, a glowing cyan core in its chest, carved wooden armour plates, holding a log-like cue",
+      "pose": "guardian bracing on hind legs, cue held like a barrier",
+      "expr": "glowing cyan eyes",
+      "skills": [
+        {
+          "name": "Cơ Giáp",
+          "kinds": [
+            "shield"
+          ],
+          "icon": "a wooden-and-brass armour plate"
+        },
+        {
+          "name": "Đẩy Bánh Răng",
+          "kinds": [
+            "nudge"
+          ],
+          "icon": "a brass gear pushing a white ball"
+        },
+        {
+          "name": "Thành Lũy Cơ Quan",
+          "kinds": [
+            "shield",
+            "seal"
+          ],
+          "icon": "a mechanical gate of gears locking a round hole"
+        }
+      ]
+    },
+    {
+      "id": "lodieudieu",
+      "name": "Lỗ Diệu Diệu",
+      "sect": "thienco",
+      "tier": 3,
+      "cls": "phaptu",
+      "look": "a clever puppeteer girl of 19, bronze-and-teal coat with gear buttons, goggles on her head, red bob hair, controlling a small wooden puppet with glowing strings, a brass cue with gyroscope rings",
+      "pose": "mage pulling puppet strings with one hand",
+      "expr": "smug clever smile",
+      "skills": [
+        {
+          "name": "Con Quay Thần",
+          "kinds": [
+            "spin"
+          ],
+          "icon": "a spinning brass gyroscope"
+        },
+        {
+          "name": "Rối Gỗ Dời Bi",
+          "kinds": [
+            "nudge"
+          ],
+          "icon": "a wooden puppet hand on strings moving a ball"
+        },
+        {
+          "name": "Thiên Cơ Từ Trường",
+          "kinds": [
+            "gravity"
+          ],
+          "icon": "a brass magnetic coil pulling sparks into a hole"
+        }
+      ]
+    },
+    {
+      "id": "hoaloitiensinh",
+      "name": "Hoả Lôi Tiên Sinh",
+      "sect": "thienco",
+      "tier": 4,
+      "cls": "cuongchien",
+      "look": "an eccentric bearded inventor around 45, wild grey hair, brass armour with a back-mounted fantasy cannon, a bandolier of round firework bombs, a cue shaped like a cannon barrel",
+      "pose": "warrior bracing the cannon-cue like a bazooka",
+      "expr": "manic laugh",
+      "skills": [
+        {
+          "name": "Thuốc Nổ",
+          "kinds": [
+            "power"
+          ],
+          "icon": "a round black firework bomb with a lit fuse"
+        },
+        {
+          "name": "Pháo Chấn",
+          "kinds": [
+            "chill"
+          ],
+          "icon": "a cannon blast shockwave"
+        },
+        {
+          "name": "Thần Hoả Lôi Pháo",
+          "kinds": [
+            "blast"
+          ],
+          "icon": "a giant brass cannon firing a fireball"
+        }
+      ]
+    },
+    {
+      "id": "giacatvan",
+      "name": "Thần Toán Gia Cát Vân",
+      "sect": "thienco",
+      "tier": 5,
+      "cls": "luanhoi",
+      "look": "the master strategist around 35, elegant blue-and-brass scholar robes, a white feather fan, a brass astrolabe floating beside him, long black hair in a scholar cap, an astrolabe-ringed cue",
+      "pose": "time-mage calmly fanning, astrolabe spinning",
+      "expr": "knowing calm smile",
+      "skills": [
+        {
+          "name": "Thần Toán",
+          "kinds": [
+            "vision"
+          ],
+          "icon": "an abacus made of glowing light"
+        },
+        {
+          "name": "Bát Môn Trận",
+          "kinds": [
+            "teleport"
+          ],
+          "icon": "an eight-gate glowing formation circle"
+        },
+        {
+          "name": "Thiên Cơ Đoán Mệnh",
+          "kinds": [
+            "rewind",
+            "vision"
+          ],
+          "icon": "a brass astrolabe clock turning backwards"
+        }
+      ]
+    },
+    {
+      "id": "lucxa",
+      "name": "Lục Xà",
+      "sect": "docvu",
+      "tier": 1,
+      "cls": "anhsat",
+      "look": "a slender snake girl assassin of 18, green scale-pattern outfit under a dark hooded cloak, slit-pupil amber eyes, a small green snake on her shoulder, a venom-green cue",
+      "pose": "assassin coiled low ready to strike",
+      "expr": "sly hiss smile",
+      "skills": [
+        {
+          "name": "Xà Nhãn",
+          "kinds": [
+            "reveal"
+          ],
+          "icon": "a green snake eye with slit pupil"
+        },
+        {
+          "name": "Xà Ảnh",
+          "kinds": [
+            "second"
+          ],
+          "icon": "a striking snake shadow"
+        },
+        {
+          "name": "Vạn Xà Quấn",
+          "kinds": [
+            "second",
+            "drain"
+          ],
+          "icon": "many green snakes coiling around a ball"
+        }
+      ]
+    },
+    {
+      "id": "docthulaoquai",
+      "name": "Độc Thủ Lão Quái",
+      "sect": "docvu",
+      "tier": 2,
+      "cls": "chusu",
+      "look": "a hunched old poison master, long stringy beard, green-black robes, a poison gourd at his belt, green-stained hands, a gnarled poison-wood cue dripping venom",
+      "pose": "hexer stirring a green mist with the cue",
+      "expr": "creepy cackle",
+      "skills": [
+        {
+          "name": "Độc Vụ",
+          "kinds": [
+            "chill"
+          ],
+          "icon": "a green poison cloud with a skull shape"
+        },
+        {
+          "name": "Phong Độc Khẩu",
+          "kinds": [
+            "seal"
+          ],
+          "icon": "a toxic green seal over a round hole"
+        },
+        {
+          "name": "Vạn Độc Phệ Tâm",
+          "kinds": [
+            "freeze",
+            "chill"
+          ],
+          "icon": "a poisoned heart wrapped in green vines"
+        }
+      ]
+    },
+    {
+      "id": "ngudocdongtu",
+      "name": "Ngũ Độc Đồng Tử",
+      "sect": "docvu",
+      "tier": 3,
+      "cls": "phaptu",
+      "look": "a mischievous 12-year-old boy with a shaved head and a single topknot, green dot face paint, a gap-toothed grin, five cute venomous critters (centipede, toad, spider, scorpion, snake) crawling on him, a green tunic with pouches, a cue with a glass insect jar",
+      "pose": "mage holding up the jar, critters swirling",
+      "expr": "mischievous grin",
+      "skills": [
+        {
+          "name": "Cổ Trùng Dẫn Bi",
+          "kinds": [
+            "nudge"
+          ],
+          "icon": "a glowing gu insect carrying a ball"
+        },
+        {
+          "name": "Kim Tằm Xoáy",
+          "kinds": [
+            "spin"
+          ],
+          "icon": "a golden silkworm spiralling"
+        },
+        {
+          "name": "Vạn Cổ Hút Lỗ",
+          "kinds": [
+            "gravity",
+            "maw"
+          ],
+          "icon": "a swarm of insects swirling into a hole"
+        }
+      ]
+    },
+    {
+      "id": "huyetlangnhan",
+      "name": "Huyết Lang Nhân",
+      "sect": "docvu",
+      "tier": 4,
+      "cls": "anhsat",
+      "look": "a feral alchemy-mutated wolfman, glass tubes of green serum on his back, glowing green veins, torn dark trousers, long claws, a cue wrapped in chains",
+      "pose": "assassin pouncing on all fours",
+      "expr": "snarling",
+      "skills": [
+        {
+          "name": "Khát Máu",
+          "kinds": [
+            "drain"
+          ],
+          "icon": "a fanged maw dripping green"
+        },
+        {
+          "name": "Cuồng Lang",
+          "kinds": [
+            "power"
+          ],
+          "icon": "a wolf head howling with green aura"
+        },
+        {
+          "name": "Săn Mồi",
+          "kinds": [
+            "second",
+            "power"
+          ],
+          "icon": "claw marks over a target circle"
+        }
+      ]
+    },
+    {
+      "id": "quyyduocvuong",
+      "name": "Quỷ Y Dược Vương",
+      "sect": "docvu",
+      "tier": 5,
+      "cls": "luanhoi",
+      "look": "the ghost-doctor queen, ageless woman, a long beaked plague-doctor mask pushed up on her head, emerald-and-black robes with herb pouches, glowing vials orbiting, a cue like a long silver acupuncture needle",
+      "pose": "time-mage holding a glowing vial aloft",
+      "expr": "knowing smirk",
+      "skills": [
+        {
+          "name": "Hồi Xuân Đan",
+          "kinds": [
+            "rewind"
+          ],
+          "icon": "a glowing green pill with a clock"
+        },
+        {
+          "name": "Kim Châm Hộ Mạch",
+          "kinds": [
+            "shield"
+          ],
+          "icon": "silver needles forming a shield"
+        },
+        {
+          "name": "Cải Tử Hoàn Sinh",
+          "kinds": [
+            "rewind",
+            "second"
+          ],
+          "icon": "a phoenix-like green flame rising from a vial"
+        }
+      ]
+    },
+    {
+      "id": "tieungu",
+      "name": "Tiểu Ngư",
+      "sect": "hailong",
+      "tier": 1,
+      "cls": "anhsat",
+      "look": "a tiny agile 14-year-old pirate girl with dark tanned skin, short messy sea-green hair, a leather eyepatch, a gap-tooth grin, an orange bandana, a striped teal shirt, a parrot on her shoulder, a fish-shaped cue",
+      "pose": "assassin leaping with the cue",
+      "expr": "cocky grin",
+      "skills": [
+        {
+          "name": "Lướt Sóng",
+          "kinds": [
+            "second"
+          ],
+          "icon": "a surfing wave with foam"
+        },
+        {
+          "name": "Mắt Vẹt",
+          "kinds": [
+            "reveal"
+          ],
+          "icon": "a parrot eye with a sparkle"
+        },
+        {
+          "name": "Cá Chuồn Liên Hoàn",
+          "kinds": [
+            "second",
+            "spin"
+          ],
+          "icon": "flying fish leaping in an arc"
+        }
+      ]
+    },
+    {
+      "id": "sadaidao",
+      "name": "Sa Đại Đao",
+      "sect": "hailong",
+      "tier": 2,
+      "cls": "cuongchien",
+      "look": "a big shark-toothed pirate brute with a shark-fin mohawk, coral-orange vest, tattooed arms, a huge cleaver-shaped cue",
+      "pose": "warrior swinging the cleaver-cue",
+      "expr": "toothy shark grin",
+      "skills": [
+        {
+          "name": "Cá Mập Cắn",
+          "kinds": [
+            "power"
+          ],
+          "icon": "a shark jaw biting"
+        },
+        {
+          "name": "Sóng Dữ",
+          "kinds": [
+            "chill"
+          ],
+          "icon": "a crashing rogue wave"
+        },
+        {
+          "name": "Vây Mập Phá Sóng",
+          "kinds": [
+            "blast"
+          ],
+          "icon": "a shark fin bursting through water"
+        }
+      ]
+    },
+    {
+      "id": "luuhuong",
+      "name": "Thuyền Nương Lưu Hương",
+      "sect": "hailong",
+      "tier": 3,
+      "cls": "thanxa",
+      "look": "a confident pirate captain woman of 26, feathered tricorn hat, coral long coat, teal sash, gold earrings, wavy auburn hair, a long brass-and-teak cue like a spyglass",
+      "pose": "aiming the cue like a spyglass toward the horizon",
+      "expr": "confident wink",
+      "skills": [
+        {
+          "name": "Ống Nhòm Vàng",
+          "kinds": [
+            "reveal"
+          ],
+          "icon": "a brass spyglass"
+        },
+        {
+          "name": "Gió Thuận Buồm",
+          "kinds": [
+            "spin"
+          ],
+          "icon": "a billowing sail with wind"
+        },
+        {
+          "name": "Mưa Tiền Vàng",
+          "kinds": [
+            "vision",
+            "power"
+          ],
+          "icon": "a rain of gold coins"
+        }
+      ]
+    },
+    {
+      "id": "thietneo",
+      "name": "Thiết Neo Lão Kình",
+      "sect": "hailong",
+      "tier": 4,
+      "cls": "hophap",
+      "look": "an old giant sailor with a white beard and a whale-like build, brass diving helm under one arm, a huge anchor chained to his back, a cue fused with a small anchor",
+      "pose": "guardian planting the anchor-cue",
+      "expr": "gruff kind smile",
+      "skills": [
+        {
+          "name": "Neo Thép",
+          "kinds": [
+            "shield"
+          ],
+          "icon": "a steel anchor glowing teal"
+        },
+        {
+          "name": "Kéo Neo",
+          "kinds": [
+            "nudge"
+          ],
+          "icon": "an anchor chain pulling a ball"
+        },
+        {
+          "name": "Neo Trấn Biển",
+          "kinds": [
+            "seal",
+            "gravity"
+          ],
+          "icon": "an anchor slamming into a whirlpool"
+        }
+      ]
+    },
+    {
+      "id": "donghailongvuong",
+      "name": "Đông Hải Long Vương",
+      "sect": "hailong",
+      "tier": 5,
+      "cls": "chusu",
+      "look": "the sea dragon king, a mature broad-shouldered man with a long flowing teal beard, curved dragon horns, teal scale patches on his cheeks, a coral crown, sea-green robes patterned with waves, a trident-like cue",
+      "pose": "hexer raising the trident-cue, waves rising",
+      "expr": "imperious stare",
+      "skills": [
+        {
+          "name": "Thủy Triều",
+          "kinds": [
+            "chill"
+          ],
+          "icon": "a rising tide wave"
+        },
+        {
+          "name": "Xoáy Nước",
+          "kinds": [
+            "gravity"
+          ],
+          "icon": "a deep whirlpool"
+        },
+        {
+          "name": "Long Vương Hải Khiếu",
+          "kinds": [
+            "freeze",
+            "gravity"
+          ],
+          "icon": "a sea dragon rising from a tsunami"
+        }
+      ]
+    },
+    {
+      "id": "danghondongtu",
+      "name": "Đăng Hồn Đồng Tử",
+      "sect": "uminh",
+      "tier": 1,
+      "cls": "chusu",
+      "look": "a little ghost boy with a translucent pale-green glowing body, round empty white eyes, a yellow paper talisman stuck on his forehead, oversized grey robes, holding a jade spirit lantern, a cue like a lantern pole",
+      "pose": "hexer holding the lantern up",
+      "expr": "shy blank-eyed smile",
+      "skills": [
+        {
+          "name": "Hồn Đăng",
+          "kinds": [
+            "chill"
+          ],
+          "icon": "a jade spirit lantern"
+        },
+        {
+          "name": "Dẫn Hồn",
+          "kinds": [
+            "drain"
+          ],
+          "icon": "a ghost wisp being led on a thread"
+        },
+        {
+          "name": "Bách Quỷ Dạ Hành",
+          "kinds": [
+            "chill",
+            "seal"
+          ],
+          "icon": "a parade of ghost lanterns"
+        }
+      ]
+    },
+    {
+      "id": "cotkiem",
+      "name": "Cốt Kiếm",
+      "sect": "uminh",
+      "tier": 2,
+      "cls": "anhsat",
+      "look": "a skeleton swordsman with jade ghost flames in his eye sockets, tattered grey cloak, a straw hat, a bone cue",
+      "pose": "assassin drawing the cue like a sword",
+      "expr": "eerie glow eyes",
+      "skills": [
+        {
+          "name": "Cốt Ảnh",
+          "kinds": [
+            "second"
+          ],
+          "icon": "a skeletal afterimage"
+        },
+        {
+          "name": "Xương Vụn",
+          "kinds": [
+            "power"
+          ],
+          "icon": "shattering bone shards"
+        },
+        {
+          "name": "Vạn Cốt Kiếm",
+          "kinds": [
+            "second",
+            "blast"
+          ],
+          "icon": "many bone swords bursting outward"
+        }
+      ]
+    },
+    {
+      "id": "vongxuyenbaba",
+      "name": "Vong Xuyên Bà Bà",
+      "sect": "uminh",
+      "tier": 3,
+      "cls": "luanhoi",
+      "look": "a kind but eerie old granny ferrywoman of the river of oblivion, hooded grey-jade robes, a ladle and a steaming bowl of soup, a cue like a boat oar",
+      "pose": "time-mage offering the steaming bowl",
+      "expr": "gentle mysterious smile",
+      "skills": [
+        {
+          "name": "Canh Lãng Quên",
+          "kinds": [
+            "rewind"
+          ],
+          "icon": "a steaming bowl of glowing soup"
+        },
+        {
+          "name": "Đò Qua Sông",
+          "kinds": [
+            "teleport"
+          ],
+          "icon": "a small ferry boat on misty water"
+        },
+        {
+          "name": "Cầu Luân Hồi",
+          "kinds": [
+            "rewind",
+            "second"
+          ],
+          "icon": "a ghostly arched bridge over a river"
+        }
+      ]
+    },
+    {
+      "id": "cauhonsu",
+      "name": "Câu Hồn Sứ",
+      "sect": "uminh",
+      "tier": 4,
+      "cls": "chusu",
+      "look": "a tall soul-reaper envoy in robes split black and white, a tall hat, chains of soul hooks around him, long tongue-like red ribbon, a cue ending in a hook",
+      "pose": "hexer throwing a hooked chain",
+      "expr": "unsettling grin",
+      "skills": [
+        {
+          "name": "Xích Câu Hồn",
+          "kinds": [
+            "seal"
+          ],
+          "icon": "a soul hook on a chain"
+        },
+        {
+          "name": "Hồn Hàn",
+          "kinds": [
+            "freeze"
+          ],
+          "icon": "a frozen ghostly hand"
+        },
+        {
+          "name": "Âm Ty Phong Lỗ",
+          "kinds": [
+            "seal",
+            "drain"
+          ],
+          "icon": "chains sealing a round hole with ghost fire"
+        }
+      ]
+    },
+    {
+      "id": "uminhquyde",
+      "name": "U Minh Quỷ Đế",
+      "sect": "uminh",
+      "tier": 5,
+      "cls": "cuongchien",
+      "look": "the underworld emperor, a towering armoured ghost king (a man) with a broad masculine jaw, glowing jade eyes, jade flames for hair, a bone crown, a spectral cape, a cue like a great bone sceptre",
+      "pose": "warrior slamming the sceptre-cue down",
+      "expr": "menacing laugh",
+      "skills": [
+        {
+          "name": "Quỷ Lực",
+          "kinds": [
+            "power"
+          ],
+          "icon": "a ghost fist of jade fire"
+        },
+        {
+          "name": "Âm Phong",
+          "kinds": [
+            "chill"
+          ],
+          "icon": "a howling ghost wind"
+        },
+        {
+          "name": "Địa Ngục Bộc Liệt",
+          "kinds": [
+            "blast",
+            "freeze"
+          ],
+          "icon": "jade hellfire erupting from cracks"
+        }
+      ]
+    },
+    {
+      "id": "laclac",
+      "name": "Lạc Lạc Tinh Linh",
+      "sect": "tinhtu",
+      "tier": 1,
+      "cls": "phaptu",
+      "look": "a tiny star fairy with glowing pale-blue skin, star-shaped pupils, short spiky lavender hair, big translucent dragonfly wings, a violet starry cape, a wand-like cue with a star tip",
+      "pose": "mage twirling the star cue",
+      "expr": "sparkly excited smile",
+      "skills": [
+        {
+          "name": "Tinh Toàn",
+          "kinds": [
+            "spin"
+          ],
+          "icon": "stars spiralling around a white ball"
+        },
+        {
+          "name": "Sao Băng Dẫn",
+          "kinds": [
+            "nudge"
+          ],
+          "icon": "a small shooting star"
+        },
+        {
+          "name": "Tinh Vân Hấp Dẫn",
+          "kinds": [
+            "gravity"
+          ],
+          "icon": "a violet nebula spiralling into a hole"
+        }
+      ]
+    },
+    {
+      "id": "tinhquanthuve",
+      "name": "Tinh Quan Thủ Vệ",
+      "sect": "tinhtu",
+      "tier": 2,
+      "cls": "hophap",
+      "look": "a stern knight, a man with a square jaw and a short silver-blue crew cut, violet armour engraved with constellations, a visored helmet tucked under one arm, a starlit cape, a round star shield, a silver cue",
+      "pose": "guardian raising the star shield",
+      "expr": "noble resolve",
+      "skills": [
+        {
+          "name": "Tinh Thuẫn",
+          "kinds": [
+            "shield"
+          ],
+          "icon": "a round shield with a constellation"
+        },
+        {
+          "name": "Chòm Sao Trấn",
+          "kinds": [
+            "seal"
+          ],
+          "icon": "a constellation net over a round hole"
+        },
+        {
+          "name": "Bắc Đẩu Thất Tinh Trận",
+          "kinds": [
+            "shield",
+            "seal"
+          ],
+          "icon": "a seven-star formation of light"
+        }
+      ]
+    },
+    {
+      "id": "nguyethoa",
+      "name": "Nguyệt Hoa Tiên Tử",
+      "sect": "tinhtu",
+      "tier": 3,
+      "cls": "thanxa",
+      "look": "a moon fairy archer woman of 20 with long dark-navy hair in a single thick braid, pale moonlit skin, a glowing crescent mark on her forehead, a silver-violet layered dress, a moon bow on her back, a moonlight cue",
+      "pose": "archer aiming the cue along a moonbeam",
+      "expr": "focused gentle look",
+      "skills": [
+        {
+          "name": "Ánh Trăng Soi",
+          "kinds": [
+            "reveal"
+          ],
+          "icon": "a crescent moon casting a beam"
+        },
+        {
+          "name": "Nguyệt Quang Lộ",
+          "kinds": [
+            "vision"
+          ],
+          "icon": "a silver path of moonlight"
+        },
+        {
+          "name": "Mãn Nguyệt Tiễn",
+          "kinds": [
+            "vision",
+            "spin"
+          ],
+          "icon": "an arrow fired from a full moon"
+        }
+      ]
+    },
+    {
+      "id": "nhatdieu",
+      "name": "Nhật Diệu Chiến Thần",
+      "sect": "tinhtu",
+      "tier": 4,
+      "cls": "cuongchien",
+      "look": "a sun war goddess, golden sun-disc armour, red-gold cape, bronze skin, fiery orange hair, a solar spear-like cue",
+      "pose": "warrior thrusting the spear-cue skyward",
+      "expr": "fierce joyful shout",
+      "skills": [
+        {
+          "name": "Nhật Quang Lực",
+          "kinds": [
+            "power"
+          ],
+          "icon": "a blazing sun fist"
+        },
+        {
+          "name": "Liệt Dương Chấn",
+          "kinds": [
+            "chill"
+          ],
+          "icon": "a sun flare shockwave"
+        },
+        {
+          "name": "Thái Dương Bộc Phát",
+          "kinds": [
+            "blast"
+          ],
+          "icon": "a sun exploding in rays"
+        }
+      ]
+    },
+    {
+      "id": "tinhde",
+      "name": "Tinh Đế Thiên Xu",
+      "sect": "tinhtu",
+      "tier": 5,
+      "cls": "phaptu",
+      "look": "the star emperor, a mature man with a strong masculine face and short beard, robes showing a swirling galaxy, long silver-violet hair, a crown of floating stars, a cue made of condensed starlight",
+      "pose": "mage holding a miniature galaxy in one hand",
+      "expr": "serene cosmic gaze",
+      "skills": [
+        {
+          "name": "Tinh Hà Toàn",
+          "kinds": [
+            "spin"
+          ],
+          "icon": "a spiral galaxy"
+        },
+        {
+          "name": "Hố Sao",
+          "kinds": [
+            "maw"
+          ],
+          "icon": "a black hole ringed with light"
+        },
+        {
+          "name": "Thiên Xu Hấp Tinh",
+          "kinds": [
+            "gravity",
+            "maw"
+          ],
+          "icon": "stars being pulled into a black hole"
+        }
+      ]
+    },
+    {
+      "id": "saho",
+      "name": "Sa Hồ",
+      "sect": "kimsa",
+      "tier": 1,
+      "cls": "anhsat",
+      "look": "a fennec-fox-eared desert thief girl, sand-gold scarf and wraps, turquoise jewels, a curved dagger at her hip, a sandstone cue",
+      "pose": "assassin sliding through sand",
+      "expr": "mischievous wink",
+      "skills": [
+        {
+          "name": "Sa Ảnh",
+          "kinds": [
+            "second"
+          ],
+          "icon": "a sand silhouette dissolving"
+        },
+        {
+          "name": "Mắt Cáo Sa Mạc",
+          "kinds": [
+            "reveal"
+          ],
+          "icon": "a fox eye glinting gold"
+        },
+        {
+          "name": "Bão Cát Liên Hoàn",
+          "kinds": [
+            "second",
+            "power"
+          ],
+          "icon": "a swirling sandstorm"
+        }
+      ]
+    },
+    {
+      "id": "thachtuong",
+      "name": "Thạch Tượng Hộ Lăng",
+      "sect": "kimsa",
+      "tier": 2,
+      "cls": "hophap",
+      "look": "a living lion-headed sandstone tomb guardian statue with turquoise inlays and glowing golden runes, holding an obelisk-shaped cue",
+      "pose": "guardian standing firm with the obelisk-cue",
+      "expr": "stoic glowing eyes",
+      "skills": [
+        {
+          "name": "Thạch Hoá",
+          "kinds": [
+            "shield"
+          ],
+          "icon": "a stone skin shield with runes"
+        },
+        {
+          "name": "Trấn Lăng",
+          "kinds": [
+            "seal"
+          ],
+          "icon": "a stone slab sealing a round hole"
+        },
+        {
+          "name": "Lăng Mộ Phong Ấn",
+          "kinds": [
+            "seal",
+            "shield"
+          ],
+          "icon": "a golden tomb door with turquoise locks"
+        }
+      ]
+    },
+    {
+      "id": "kimnhan",
+      "name": "Kim Nhãn Tế Ti",
+      "sect": "kimsa",
+      "tier": 3,
+      "cls": "chusu",
+      "look": "an elderly bald sun priest, a thin old man with a long grey goatee and a full golden eye-mask covering the upper half of his face, white-gold linen robes, a turquoise collar, a sun-disc staff cue",
+      "pose": "hexer raising the sun-disc cue",
+      "expr": "masked solemn",
+      "skills": [
+        {
+          "name": "Nắng Thiêu",
+          "kinds": [
+            "chill"
+          ],
+          "icon": "a scorching sun ray on a hand"
+        },
+        {
+          "name": "Kim Nhãn Hút",
+          "kinds": [
+            "drain"
+          ],
+          "icon": "a golden eye drawing in light"
+        },
+        {
+          "name": "Nhật Thực",
+          "kinds": [
+            "freeze",
+            "drain"
+          ],
+          "icon": "a solar eclipse with a golden ring"
+        }
+      ]
+    },
+    {
+      "id": "savuong",
+      "name": "Sa Vương Kim Giáp",
+      "sect": "kimsa",
+      "tier": 4,
+      "cls": "cuongchien",
+      "look": "a muscular bearded man, the sand king warrior, in crocodile-scale golden armour, a turquoise cape, a golden crown with a sun crest, a massive golden cue",
+      "pose": "warrior smashing the cue into sand",
+      "expr": "proud roar",
+      "skills": [
+        {
+          "name": "Kim Giáp Lực",
+          "kinds": [
+            "power"
+          ],
+          "icon": "a golden armoured fist"
+        },
+        {
+          "name": "Sa Mạc Chấn",
+          "kinds": [
+            "chill"
+          ],
+          "icon": "a quaking desert floor"
+        },
+        {
+          "name": "Hoàng Sa Bão Tố",
+          "kinds": [
+            "blast",
+            "power"
+          ],
+          "icon": "a golden sand explosion"
+        }
+      ]
+    },
+    {
+      "id": "thaiduong",
+      "name": "Thái Dương Nữ Hoàng",
+      "sect": "kimsa",
+      "tier": 5,
+      "cls": "thanxa",
+      "look": "the sun empress, a regal dark-skinned woman with tightly braided black hair, gold face-paint lines under her eyes, a tall golden sun crown, a white-and-gold gown, turquoise jewellery, a sun disc blazing behind her, a golden cue with a sun tip",
+      "pose": "archer aiming the cue with sunlight streaming",
+      "expr": "majestic confident look",
+      "skills": [
+        {
+          "name": "Nhật Quang Chỉ Lộ",
+          "kinds": [
+            "reveal"
+          ],
+          "icon": "a sunbeam pointing a path"
+        },
+        {
+          "name": "Thiên Nhãn",
+          "kinds": [
+            "vision"
+          ],
+          "icon": "a radiant sun eye"
+        },
+        {
+          "name": "Thái Dương Thần Xạ",
+          "kinds": [
+            "vision",
+            "second"
+          ],
+          "icon": "a sun spear piercing"
+        }
+      ]
+    },
+    {
+      "id": "moclinh",
+      "name": "Mộc Linh",
+      "sect": "vanthu",
+      "tier": 1,
+      "cls": "phaptu",
+      "look": "a small leafy forest sprite with green leaf-textured skin, no human hair but a round acorn-cap hat, big amber eyes, a cape of leaves, a twig cue",
+      "pose": "mage waving the twig cue, leaves swirling",
+      "expr": "curious smile",
+      "skills": [
+        {
+          "name": "Lá Xoáy",
+          "kinds": [
+            "spin"
+          ],
+          "icon": "green leaves spiralling around a ball"
+        },
+        {
+          "name": "Rễ Dẫn Lối",
+          "kinds": [
+            "nudge"
+          ],
+          "icon": "a root nudging a ball"
+        },
+        {
+          "name": "Rừng Nuốt",
+          "kinds": [
+            "maw"
+          ],
+          "icon": "a ring of roots widening a hole"
+        }
+      ]
+    },
+    {
+      "id": "baonu",
+      "name": "Báo Nữ A Man",
+      "sect": "vanthu",
+      "tier": 2,
+      "cls": "anhsat",
+      "look": "a fierce jungle huntress with leopard ears and tail, spotted fur wraps, green war paint, a spear-like cue",
+      "pose": "assassin crouched ready to pounce",
+      "expr": "predatory grin",
+      "skills": [
+        {
+          "name": "Vồ Mồi",
+          "kinds": [
+            "second"
+          ],
+          "icon": "a leopard pouncing"
+        },
+        {
+          "name": "Mắt Báo",
+          "kinds": [
+            "reveal"
+          ],
+          "icon": "a leopard eye glowing amber"
+        },
+        {
+          "name": "Báo Vương Liên Kích",
+          "kinds": [
+            "second",
+            "power"
+          ],
+          "icon": "leopard claw marks in a circle"
+        }
+      ]
+    },
+    {
+      "id": "thachquylao",
+      "name": "Thạch Quy Lão",
+      "sect": "vanthu",
+      "tier": 3,
+      "cls": "hophap",
+      "look": "an ancient turtle sage with a mossy stone shell, a long white beard, small spectacles, a walking-stick cue",
+      "pose": "guardian leaning on the cue, shell glowing",
+      "expr": "wise sleepy smile",
+      "skills": [
+        {
+          "name": "Mai Rùa",
+          "kinds": [
+            "shield"
+          ],
+          "icon": "a mossy stone turtle shell"
+        },
+        {
+          "name": "Chậm Mà Chắc",
+          "kinds": [
+            "nudge"
+          ],
+          "icon": "a slow turtle pushing a ball"
+        },
+        {
+          "name": "Huyền Vũ Trấn",
+          "kinds": [
+            "shield",
+            "seal"
+          ],
+          "icon": "a turtle-and-serpent seal of stone"
+        }
+      ]
+    },
+    {
+      "id": "loiung",
+      "name": "Lôi Ưng Vũ Vương",
+      "sect": "vanthu",
+      "tier": 4,
+      "cls": "thanxa",
+      "look": "a thunder-eagle birdman king, broad feathered wings, amber-and-green plumage, lightning crackling around him, a cue like a lightning rod",
+      "pose": "archer diving with the cue aimed",
+      "expr": "piercing glare",
+      "skills": [
+        {
+          "name": "Ưng Nhãn",
+          "kinds": [
+            "reveal"
+          ],
+          "icon": "an eagle eye with lightning"
+        },
+        {
+          "name": "Lôi Quang Áp Phê",
+          "kinds": [
+            "spin"
+          ],
+          "icon": "a ball spinning with amber lightning"
+        },
+        {
+          "name": "Lôi Ưng Giáng",
+          "kinds": [
+            "vision",
+            "blast"
+          ],
+          "icon": "a thunder eagle striking down"
+        }
+      ]
+    },
+    {
+      "id": "thumau",
+      "name": "Thụ Mẫu Thanh Long",
+      "sect": "vanthu",
+      "tier": 5,
+      "cls": "chusu",
+      "look": "the great tree mother, a tall serene woman with bark-textured green skin and hair made of leafy branches with small white flowers, a green dragon coiled around her shoulders, amber eyes, a cue grown from living wood",
+      "pose": "hexer raising both arms, vines rising",
+      "expr": "gentle but powerful",
+      "skills": [
+        {
+          "name": "Dây Leo Trói",
+          "kinds": [
+            "freeze"
+          ],
+          "icon": "vines binding a hand"
+        },
+        {
+          "name": "Rễ Phong Lỗ",
+          "kinds": [
+            "seal"
+          ],
+          "icon": "roots covering a round hole"
+        },
+        {
+          "name": "Thanh Long Thụ Giới",
+          "kinds": [
+            "seal",
+            "chill"
+          ],
+          "icon": "a green dragon coiling around a great tree"
+        }
+      ]
+    },
+    {
+      "id": "hutrung",
+      "name": "Hư Trùng",
+      "sect": "hukhong",
+      "tier": 1,
+      "cls": "anhsat",
+      "look": "a small void bug creature with a purple carapace, glowing magenta eyes, many little legs, cute but creepy, a stinger-tipped cue",
+      "pose": "assassin skittering forward",
+      "expr": "chittering cute",
+      "skills": [
+        {
+          "name": "Đào Hư Không",
+          "kinds": [
+            "second"
+          ],
+          "icon": "a burrow hole in a purple void"
+        },
+        {
+          "name": "Cắn Năng Lượng",
+          "kinds": [
+            "drain"
+          ],
+          "icon": "mandibles biting a glowing orb"
+        },
+        {
+          "name": "Bầy Hư Trùng",
+          "kinds": [
+            "second",
+            "drain"
+          ],
+          "icon": "a swarm of void bugs"
+        }
+      ]
+    },
+    {
+      "id": "phehonthu",
+      "name": "Phệ Hồn Thú",
+      "sect": "hukhong",
+      "tier": 2,
+      "cls": "cuongchien",
+      "look": "a big void beast with a gaping fanged maw on its belly, purple spikes, magenta glow, holding a bone cue",
+      "pose": "warrior roaring with the belly maw open",
+      "expr": "hungry roar",
+      "skills": [
+        {
+          "name": "Gầm Hư Không",
+          "kinds": [
+            "chill"
+          ],
+          "icon": "a void roar shockwave"
+        },
+        {
+          "name": "Hư Lực",
+          "kinds": [
+            "power"
+          ],
+          "icon": "a purple clawed fist"
+        },
+        {
+          "name": "Nuốt Trời Bộc",
+          "kinds": [
+            "blast",
+            "maw"
+          ],
+          "icon": "a fanged maw exploding with void"
+        }
+      ]
+    },
+    {
+      "id": "vodienkhach",
+      "name": "Vô Diện Khách",
+      "sect": "hukhong",
+      "tier": 3,
+      "cls": "luanhoi",
+      "look": "a faceless wanderer in a deep purple cloak, a smooth mask showing a starry void, floating above the ground, a cue fading into nothing",
+      "pose": "time-mage floating, cue dissolving into particles",
+      "expr": "no face, void mask",
+      "skills": [
+        {
+          "name": "Độn Hư Không",
+          "kinds": [
+            "teleport"
+          ],
+          "icon": "a purple rift portal"
+        },
+        {
+          "name": "Xé Thời Gian",
+          "kinds": [
+            "rewind"
+          ],
+          "icon": "a torn clock face"
+        },
+        {
+          "name": "Vô Diện Luân Chuyển",
+          "kinds": [
+            "teleport",
+            "second"
+          ],
+          "icon": "a mask surrounded by orbiting rifts"
+        }
+      ]
+    },
+    {
+      "id": "maohoang",
+      "name": "Hư Không Mẫu Hoàng",
+      "sect": "hukhong",
+      "tier": 4,
+      "cls": "chusu",
+      "look": "the void broodmother queen, an insectoid woman with violet chitin plates on her skin, a short black bob, three glowing eyes on her forehead, long antennae, a purple chitin armour-gown, translucent wings, a sceptre cue",
+      "pose": "hexer commanding with the sceptre",
+      "expr": "cold imperious smile",
+      "skills": [
+        {
+          "name": "Thôi Miên Hư Không",
+          "kinds": [
+            "chill"
+          ],
+          "icon": "a spiral hypnotic void eye"
+        },
+        {
+          "name": "Ấn Hư Không",
+          "kinds": [
+            "seal"
+          ],
+          "icon": "a void sigil over a round hole"
+        },
+        {
+          "name": "Hư Không Giáng Lâm",
+          "kinds": [
+            "freeze",
+            "seal"
+          ],
+          "icon": "a void queen's crown of eyes"
+        }
+      ]
+    },
+    {
+      "id": "thonthien",
+      "name": "Thôn Thiên Ma Vương",
+      "sect": "hukhong",
+      "tier": 5,
+      "cls": "cuongchien",
+      "look": "the sky-devouring void titan, enormous purple demon with a cosmic maw, cracks of magenta light across its body, curved horns, a cue like a black spike",
+      "pose": "warrior towering, maw open, cue raised",
+      "expr": "devouring roar",
+      "skills": [
+        {
+          "name": "Hư Lực Bạo",
+          "kinds": [
+            "power"
+          ],
+          "icon": "a void fist cracking reality"
+        },
+        {
+          "name": "Miệng Hư Vô",
+          "kinds": [
+            "maw"
+          ],
+          "icon": "a cosmic maw widening a hole"
+        },
+        {
+          "name": "Thôn Thiên",
+          "kinds": [
+            "maw",
+            "gravity"
+          ],
+          "icon": "a titanic maw swallowing stars"
+        }
+      ]
+    },
+    {
+      "id": "honglien",
+      "name": "Hồng Liên",
+      "tier": 1,
+      "cls": "anhsat",
+      "look": "a confident dancer, a woman around 22 with a curvy figure, long glossy black hair in a high ponytail with red ribbons, a red-and-gold dance costume with a bare midriff, bare shoulders and long silk sleeves, little golden bells at her wrists, a slim red lacquer cue",
+      "pose": "mid-spin dance step with silk sleeves flowing, cue twirled behind her",
+      "expr": "playful wink",
+      "skills": [
+        {
+          "name": "Vũ Ảnh",
+          "kinds": [
+            "second"
+          ],
+          "icon": "a twirling silk sleeve leaving afterimages"
+        },
+        {
+          "name": "Lụa Hút Hồn",
+          "kinds": [
+            "drain"
+          ],
+          "icon": "a red silk ribbon pulling a glowing orb"
+        },
+        {
+          "name": "Hồng Liên Loạn Vũ",
+          "kinds": [
+            "second",
+            "drain"
+          ],
+          "icon": "a whirlwind of red silk and lotus petals"
+        }
+      ],
+      "sect": "thienhuong"
+    },
+    {
+      "id": "tutrinh",
+      "name": "Tử Trinh",
+      "tier": 2,
+      "cls": "chusu",
+      "look": "a sultry perfumer, a woman around 26 with a voluptuous figure, wavy violet hair over one shoulder, half-lidded lilac eyes, a beauty mark under her eye, a plunging violet silk qipao with a high thigh slit, a smoking perfume censer at her hip, a thin violet cue",
+      "pose": "leaning back gracefully, blowing a stream of violet perfume smoke",
+      "expr": "knowing seductive smile",
+      "skills": [
+        {
+          "name": "Mê Hương",
+          "kinds": [
+            "chill"
+          ],
+          "icon": "a curl of violet perfume smoke shaped like a heart"
+        },
+        {
+          "name": "Hương Đoạt Khí",
+          "kinds": [
+            "drain"
+          ],
+          "icon": "a perfume bottle drawing in light"
+        },
+        {
+          "name": "Tử Vụ Mê Thành",
+          "kinds": [
+            "chill",
+            "freeze"
+          ],
+          "icon": "a violet haze swallowing a city of lanterns"
+        }
+      ],
+      "sect": "thienhuong"
+    },
+    {
+      "id": "ngancam",
+      "name": "Ngân Cầm",
+      "tier": 3,
+      "cls": "phaptu",
+      "look": "the most captivating courtesan musician of the pavilion, a woman around 25 with a striking hourglass figure and graceful curvy hips, platinum-white hair in a loose ornate updo with white peonies and a few strands falling across her face, half-lidded silver-grey eyes with a teasing knowing look, full glossy lips, gold drop earrings, a form-fitting off-shoulder white-and-gold silk gown with a high side slit, a guzheng zither slung on her back, an ivory cue painted with a crane",
+      "pose": "seated sideways on a low silk cushion, leaning back on one hand to show her graceful silhouette, plucking a single note in the air, cue resting across her knee",
+      "expr": "sultry confident half-smile with half-lidded eyes",
+      "skills": [
+        {
+          "name": "Cầm Âm Áp Phê",
+          "kinds": [
+            "spin"
+          ],
+          "icon": "zither strings curving around a white ball"
+        },
+        {
+          "name": "Khúc Nhạc Dẫn Bi",
+          "kinds": [
+            "nudge"
+          ],
+          "icon": "musical notes guiding a ball"
+        },
+        {
+          "name": "Thiên Hương Cầm Khúc",
+          "kinds": [
+            "gravity",
+            "spin"
+          ],
+          "icon": "waves of music drawing balls into a hole"
+        }
+      ],
+      "sect": "thienhuong"
+    },
+    {
+      "id": "kimphuong",
+      "name": "Kim Phượng",
+      "tier": 4,
+      "cls": "cuongchien",
+      "look": "a fierce fan-blade duelist, an athletic woman around 28 with fiery golden-orange hair in a long braid, golden eyes, a golden phoenix hair crown, a red-and-gold armoured bodice with bare arms, two steel war fans at her belt, a cue with a phoenix-tail butt",
+      "pose": "lunging with the cue like a spear, a war fan snapped open in the other hand",
+      "expr": "fierce confident grin",
+      "skills": [
+        {
+          "name": "Phượng Vũ Lực",
+          "kinds": [
+            "power"
+          ],
+          "icon": "a golden phoenix wing"
+        },
+        {
+          "name": "Thiết Phiến Chấn",
+          "kinds": [
+            "chill"
+          ],
+          "icon": "a steel war fan sending a shockwave"
+        },
+        {
+          "name": "Kim Phượng Liệt Diễm",
+          "kinds": [
+            "blast",
+            "power"
+          ],
+          "icon": "a golden phoenix bursting in flame"
+        }
+      ],
+      "sect": "thienhuong"
+    },
+    {
+      "id": "mico",
+      "name": "Mị Cơ Các Chủ",
+      "tier": 5,
+      "cls": "luanhoi",
+      "look": "the pavilion mistress, a breathtaking mature woman around 32 with a voluptuous figure, very long wavy rose-pink hair, golden eyes, an ornate gold-and-pearl headdress, a deep red silk gown with a sheer gold-embroidered shawl slipping off her shoulders, a golden folding fan, a ruby-tipped cue",
+      "pose": "standing regally, half-hiding her face behind the open fan, cue held loosely",
+      "expr": "captivating confident smile",
+      "skills": [
+        {
+          "name": "Kính Hoa Thuỷ Nguyệt",
+          "kinds": [
+            "teleport"
+          ],
+          "icon": "a mirror reflecting a moon and flower"
+        },
+        {
+          "name": "Mộng Hồi Cung",
+          "kinds": [
+            "rewind"
+          ],
+          "icon": "a fan closing over a turning hourglass"
+        },
+        {
+          "name": "Khuynh Quốc Khuynh Thành",
+          "kinds": [
+            "freeze",
+            "seal"
+          ],
+          "icon": "a beauty's silhouette behind a fan freezing everything in rose light"
+        }
+      ],
+      "sect": "thienhuong"
+    }
+  ]
+}
