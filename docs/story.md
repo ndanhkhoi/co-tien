@@ -145,6 +145,8 @@ Theo đúng thứ tự Hành trình trong game. Mỗi chương: một vùng đ�
   Thiên Hương Các giữ phần tên; Long Vương bán tên chuộc lại cho họ.
 - **Thời gian dưới Hư Không** không trôi như trên đời: bốn mươi năm trên bờ là một đêm dưới đó. Bà Bà chỉ vớt
   được người khi Hư Không chịu nhả; tấm thẻ nhẹ hơn nên nổi lên trước gần bốn mươi năm.
+- **Linh Đài cuối cùng** chỉ có một lỗ: miệng Hư Không, nở ra và khép lại theo nhịp thở của Thôn Thiên. Cú Thả Thiên là
+  cú phá nhẹ có đi theo: bi rơi theo thứ tự chạm, bi cái chạm quả thứ chín ở miệng lỗ rồi rơi theo.
 - **Ma Tôn tua thời gian** chỉ lùi được ba nhịp thở mỗi lần — đủ để nhìn lại, không đủ để đến kịp.
 - **Định Thiên làm cạn, không làm ngừng:** hạt vẫn nảy nhưng ít dần, Thôn Thiên "chưa được ăn đủ" chứ không
   phải chưa từng ăn.

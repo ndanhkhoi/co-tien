@@ -2,138 +2,670 @@
   "title": "Cơ Tiên Truyện",
   "chapters": [
     {
-      "id": "mo-dau", "title": "Mở đầu · Bờ Vong Xuyên", "land": null, "unlock": null,
+      "id": "mo-dau",
+      "title": "Mở đầu · Bờ Vong Xuyên",
+      "land": null,
+      "unlock": null,
       "pages": [
-        { "art": "prologue-ferry", "text": "Nước sông Vong Xuyên không có tiếng. Người ta bảo đó là vì mọi thứ trôi trên nó đều đã được quên.\n\nNgười lạ tỉnh dậy trên một con đò, áo ướt, tay nắm chặt một cây cơ bằng gỗ không ai nhận ra. Không nhớ mình là ai. Không nhớ vì sao tay lại nắm chặt đến thế." },
-        { "text": "Bà lão chèo đò đưa một bát canh còn bốc khói.\n\n— Uống đi con. Không phải để quên. Để khỏi nhớ quá nhiều một lúc.\n\nNgười lạ uống. Canh nhạt như nước mưa, nhưng cái lạnh trong ngực dịu đi một chút." },
-        { "art": "prologue-shore", "text": "Đò cập bến khi trời hửng. Phía xa, trên những đỉnh núi trắng, cờ của Thiên Hạ Đệ Nhất Cơ Hội đang được kéo lên — mười năm mới có một lần.\n\n— Đi đi, — bà lão nói, mắt nhìn đi chỗ khác. — Lần này đánh cho xong." },
-        { "text": "Người lạ bước lên bờ, rồi quay lại định hỏi “lần này” là sao.\n\nNhưng con đò đã tan vào sương, như chưa từng có ai chèo nó." }
+        {
+          "art": "prologue-ferry",
+          "text": "Nước sông Vong Xuyên trôi mà không có tiếng. Người ta bảo thế là vì mọi thứ trôi trên nó đều đã được quên. Một chiếc lá nằm nghiêng bên mạn đò, đi mãi chẳng vượt lên trước, cũng chẳng tụt lại sau. Xa xa, mấy ngọn đèn lồng màu ngọc bích chập chờn sau những thân lau. Không thấy bến đâu, chỉ thấy bóng bến in mờ vào sương.\n\nNgười lạ tỉnh dậy trên con đò ấy, áo ướt sũng, tay nắm chặt một cây cơ bằng thứ gỗ không ai nhận ra. Không nhớ mình là ai, cũng không hiểu vì sao tay lại nắm chặt đến thế. Khi gỡ từng ngón ra, lòng bàn tay nhức buốt như vừa giữ một vật rất nặng suốt cả đêm dài.\n\nNơi móng tay còn mắc một sợi chỉ trắng, mảnh đến nỗi chỉ một hơi thở cũng làm nó run. Người lạ muốn giữ lấy sợi chỉ, mà không biết phải giữ bằng cách nào."
+        },
+        {
+          "text": "Bà lão chèo đò không hỏi tên. Mái chèo của bà xuống nước rồi nhấc lên mà chẳng kéo theo một giọt nào. Dưới vành mũ trùm, gương mặt nhăn nheo chỉ hiện ra từng phần mỗi khi đèn trên bờ hắt sáng. Người lạ muốn hỏi mình đã lên đò từ bến nào, nhưng cổ họng khô khốc, câu hỏi mắc lại như hạt thóc chưa giã.\n\nBà gác mái chèo ngang hai mạn thuyền, lấy từ chiếc giỏ dưới chân ra một tấm khăn vá. Khăn còn ấm. Bà bảo lau tóc trước đã, đừng để cái rét ngấm xuống lưng.\n\nNhững lời rất thường ấy lại khiến người lạ phải cúi đầu. Hình như ở một nơi nào đó, đã có người dặn đúng như vậy. Nhưng càng cố nhìn vào chỗ ấy trong trí nhớ, khoảng tối càng khép chặt. Người lạ quay mặt ra sông, áp tấm khăn lên tóc, mãi đến khi khăn ướt đẫm mới biết mình đã ngồi lặng đi bao lâu."
+        },
+        {
+          "text": "Bà lão múc một bát canh còn bốc khói, đỡ đáy bát bằng cả bàn tay, đợi đến khi những ngón tay người khách thôi run mới buông. Trong bát không có bóng trăng, chỉ có một mẩu hành nhỏ xoay chầm chậm.\n\n— Uống đi con. Không phải để quên. Để khỏi nhớ quá nhiều một lúc.\n\n— Con đã uống thứ này bao giờ chưa? — người lạ hỏi. Bà lấy khăn lau miệng nồi đất, lau rất kỹ một chỗ vốn chẳng bẩn, rồi chỉ đáp: — Cứ uống từng ngụm. Đừng vội.\n\nCanh nhạt như nước mưa, nhưng cái lạnh trong ngực dịu đi đôi chút. Sau ngụm thứ ba, tiếng ai gọi ở rất xa thôi giằng giật sau vầng trán. Bà cất bát, xếp đôi đũa lại cho ngay ngắn. Cây cơ vẫn nằm trong tay người lạ, nhưng hơi ấm của bát canh chưa lan được tới đầu ngón."
+        },
+        {
+          "text": "Trong khoang đò có một chiếc bàn con, thấp gần sát ván sàn, mặt bọc thứ vải sẫm đã sờn. Hai quả bi nằm trong túi lưới. Người lạ nhận ra chúng trước cả khi hiểu chiếc bàn dùng để làm gì. Cây cơ tựa vào hõm ngón tay vừa khít, như cán cuốc quen tay người làm ruộng.\n\nBà hỏi có biết đánh không. Người lạ đáp chắc là biết. Bà bảo biết thì đánh thử bà xem, rồi đặt quả trắng và quả vàng lên mặt vải. Không có lỗ nào, chỉ có một khúc gỗ kê làm băng. Người lạ đánh rất nhẹ. Quả trắng chạm quả vàng, quả vàng chạm gỗ rồi nằm yên. Bàn tay vẫn muốn đưa theo đường bi. Bà đặt một ngón tay lên đầu cơ.\n\n— Nó đi rồi. Con đuổi theo làm gì nữa.\n\nNgười lạ nhấc đầu cơ lên, để vệt bi lăn trên vải tự tan vào màu sẫm."
+        },
+        {
+          "text": "Người lạ xin đánh lại, lần này muốn quả vàng trở về đúng chỗ cũ. Cú đánh mạnh hơn một chút. Quả vàng dội khỏi khúc gỗ, lăn về quá nửa gang rồi dừng. Sau đó chẳng có gì xảy ra. Không ai cười, không ai đòi một lời xin lỗi. Bà chỉ đợi bi đứng hẳn mới đưa tay nhặt.\n\n— Nếu đánh hỏng thì sao, bà?\n\n— Thì đến lượt người khác.\n\nBà cất quả vàng trước, quả trắng sau. Người lạ nhìn khoảng trống giữa hai túi lưới, nghe trong lòng dấy lên một nỗi bồn chồn không rõ từ đâu. Có lẽ đã từng có một ván mà mình không thể để người khác đánh tiếp. Cũng có lẽ chỉ tại tiếng ván đò cọt kẹt. Bà kéo lại vạt áo ướt cho người khách, gỡ ra một mảnh dằm gỗ. Dưới lớp vải, một góc túi áo đã rách, nhưng chẳng còn gì để rơi ra nữa."
+        },
+        {
+          "art": "prologue-shore",
+          "text": "Đò cập bến khi trời vừa hửng. Phía xa, trên những đỉnh núi trắng, người ta đang kéo cờ của Thiên Hạ Đệ Nhất Cơ Hội — mười năm mới có một lần. Từ bờ sông nhìn lên, mỗi lá cờ chỉ nhỏ bằng móng tay, vậy mà tiếng mõ trên núi đã theo gió xuống tận bậc đá. Dưới mái quán ven bến, một người bán hàng vừa đặt thúng bánh nóng xuống.\n\nBà buộc dây đò vào chiếc cọc xiêu. — Trên ấy có người đánh cơ. Có cơm ăn, có chỗ trú. Người lạ nhìn túi áo trống không. Bà bỏ vào đó một gói muối vừng, buộc bằng sợi lạt mềm. Không giống lộ phí cho người sắp đi xa; giống phần ăn để dành cho người về muộn hơn.\n\n— Đi đi, — bà lão nói, mắt nhìn đi chỗ khác. — Lần này đánh cho xong.\n\nRồi bàn tay bà trở về cán chèo, ngón cái miết lên một vết lõm đã mòn nhẵn."
+        },
+        {
+          "text": "Người lạ bước lên bậc đá. Đá khô ráo, vậy mà lòng bàn chân vẫn thấy chòng chành như còn đứng trên ván đò. Bên quán, người bán bánh hỏi tên để ghi nợ bữa sáng. Câu hỏi dễ đến thế, mà không sao trả lời được. Ngập ngừng một lát, người bán bánh gác que cời than xuống, bảo cứ ăn đã: tên ghi sau cũng được, bánh nguội thì phí.\n\nNgười lạ đặt cây cơ ngang hai đầu gối. Trên thân gỗ không có chữ, cũng không mang dấu của tông môn nào. Hơi nóng của chiếc bánh toả vào những ngón tay còn nhăn nheo vì ngâm nước. Người lạ bẻ đôi chiếc bánh, để dành một nửa định đem xuống cho bà.\n\nĐúng lúc ấy, hai tiếng “lần này” chợt trở lại trong đầu. Người lạ đứng bật dậy, đi nhanh xuống bến: một câu hỏi vừa tìm được lời, phải hỏi trước khi đò rời đi. Người bán bánh gọi với theo, dặn gói nửa còn lại vào lá, nhưng tiếng cuối đã chìm trong hồi mõ."
+        },
+        {
+          "text": "Xuống đến bến, người lạ định hỏi “lần này” nghĩa là sao. Nhưng con đò đã tan vào sương, như chưa từng có ai chèo nó. Chỉ còn chiếc cọc với một vệt dây ướt. Người lạ đứng đợi đến khi nửa chiếc bánh nguội hẳn trong tay, không cất tiếng gọi. Giữa mặt sông không tiếng ấy, biết gọi tên ai bây giờ?\n\nTrên núi, một hồi mõ nữa nổi lên. Người bán bánh đem lá xuống gói phần bánh còn lại, rồi chỉ con đường men theo khe đá trắng. Người lạ cảm ơn, đeo cây cơ lên vai. Đến khúc quanh đầu tiên vẫn còn ngoái nhìn xuống bến; sương đã phủ kín cả quán lẫn cọc buộc đò.\n\nGói muối vừng khẽ chạm vào ngực theo từng bước chân — một vật rất nhỏ, níu người đi trên con đường còn chưa có tên. Nửa chiếc bánh dành cho bà nằm ở trong cùng, chỗ ít bị xóc nhất."
+        }
       ]
     },
     {
-      "id": "thienquang", "title": "Chương 1 · Đỉnh trắng", "land": "thienquang", "unlock": "thienquang",
+      "id": "thienquang",
+      "title": "Chương 1 · Đỉnh trắng",
+      "land": "thienquang",
+      "unlock": "thienquang",
       "pages": [
-        { "art": "c1-gate", "text": "Thiên Quang Kiếm Tông nằm nơi mặt trời mọc đầu tiên, trên những bậc đá trắng mà viên nào cũng được mài phẳng tuyệt đối. Ở đây người ta tin rằng một cú đánh đẹp phải thẳng như kiếm.\n\nMột cô bé má dán băng chặn người lạ ở cổng.\n\n— Không có tên thì không được vào Cơ Hội. Trừ khi thắng ta." },
-        { "text": "Người lạ thắng — không đẹp, không thẳng, bi lăn lòng vòng như con mèo say rồi mới chịu rơi.\n\nTô Kiếm Nhi nhìn chằm chằm, rồi bóc một miếng băng mới dán lên má.\n\n— Được. Không có tên thì ta gọi ngươi là Vô Danh. Ta là người đầu tiên thua ngươi, nên ta được quyền đặt tên." },
-        { "art": "c1-saint", "text": "Trên lầu cao, Kiếm Thánh Diệp Huyền Quang đặt chén trà xuống. Chín thanh phi kiếm quanh ông bỗng đứng yên — lần đầu sau nhiều năm, các đệ tử thấy chúng không xoay.\n\nÔng nhìn Vô Danh rất lâu. Lâu đến mức Lăng Thiên Kỳ phải ho khẽ." },
-        { "text": "— Cho người này vào Cơ Hội, — ông nói. — Không cần thi tuyển.\n\n— Sư tôn, luật của tông môn…\n\n— Luật do ta viết, Thiên Kỳ. — Ông mỉm cười, một nụ cười rất mệt. — Ta biết lúc nào nên để một quả bi tự lăn." }
+        {
+          "art": "c1-gate",
+          "text": "Thiên Quang Kiếm Tông nằm ở nơi mặt trời mọc đầu tiên, trên những bậc đá trắng mà viên nào cũng được mài phẳng không sai một li. Người ở đây tin rằng một cú đánh đẹp phải thẳng như đường kiếm. Trên tường cổng treo một tấm bảng ghi danh tính, không có dòng nào chừa cho kẻ chưa biết tên mình.\n\nMột cô bé má dán băng chặn người lạ ngay trước cổng.\n\n— Không có tên thì không được vào Cơ Hội. Trừ khi thắng ta.\n\nCô để tóc ngắn, dải băng trán trắng buộc hơi lệch, một thanh phi kiếm nhỏ lơ lửng bên vai. Nói xong, cô liếc sang người giữ cổng, như biết mình vừa tự đặt thêm một điều lệ. Mạc Thiết Sơn chống tấm khiên dài hình thanh kiếm xuống đất, chưa gật đầu mà cũng chưa ngăn."
+        },
+        {
+          "text": "— Muốn vào núi, hãy thắng ta trước, — Mạc Thiết Sơn nói với cô bé. — Câu ấy là của ta, Kiếm Nhi.\n\nÔng chỉ vào thế bi bày sẵn trên bàn canh cổng: một đường bị chặn mà ông đã bắt cô giải suốt ba ngày vẫn chưa xong. Tô Kiếm Nhi nhăn mũi, bảo hôm nay cô muốn đổi người giải. Mạc Thiết Sơn nhìn vạt áo người khách còn dính bùn sông, rồi vào bếp gác bưng ra một bát cháo kê, đặt cách xa mép nỉ.\n\nNgười lạ đứng mà ăn, vội đến bỏng lưỡi. Giữ cổng hai mươi năm, Mạc Thiết Sơn đã quen phân biệt kẻ muốn xông vào với người chưa biết đi đâu; có điều, tên vẫn phải có trong sổ. Kiếm Nhi gõ đầu cơ vào mũi giày, hỏi có dám nhận một ván chín bi không. Người lạ nhìn những quả bi, gật đầu trước khi kịp nghĩ nếu thua thì lấy gì mà trả."
+        },
+        {
+          "text": "Mạc Thiết Sơn xếp bi thành hình thoi, quả số một ở đỉnh, quả chín nằm giữa. Ông giảng chậm rãi: bi trắng phải chạm quả mang số nhỏ nhất trên bàn trước; sau va chạm phải có bi rơi lỗ, hoặc có bi chạm băng. Bi trắng rơi lỗ là phạm lỗi, đối thủ được cầm bi trong tay, muốn đặt đâu tuỳ ý. Kiếm Nhi sốt ruột, nhưng vẫn đợi khách nhắc lại đủ.\n\nCô phá bi. Quả một rơi lỗ góc, bi trắng dừng giữa bàn. Tiếng rơi gọn đến mức đám đệ tử ngoài sân cùng quay đầu lại; cô gọi đó là tiếng kiếm về vỏ. Nhưng đến quả hai, cô đánh quá dày. Quả hai đập vào hàm lỗ, dội sang băng bên kia.\n\nNgười lạ cúi xuống ngắm, thấy đường thẳng tới quả hai đã bị quả sáu chắn mất. Mạc Thiết Sơn không chỉ chỗ. Bát cháo trên ghế còn bốc hơi; một giọt mồ hôi lăn dọc thái dương người khách."
+        },
+        {
+          "text": "Người lạ không đánh thẳng mà cho bi trắng đá băng dài trước. Bi trắng dội ra, chạm mỏng vào quả hai, đẩy nó về cuối bàn, rồi chính bi trắng dừng lại nấp sau quả sáu. Không bi nào rơi, nhưng quả hai đã chạm băng: cú thủ hợp lệ. Kiếm Nhi đi quanh bàn hai lượt, môi mím chặt: cô muốn một cú đẹp, mà người này cứ trả cho cô một thế khó chịu.\n\n— Ngươi chỉ biết trốn thôi sao? — Ta chưa nhìn thấy lỗ. — Thì tìm đi. — Ta đang tìm.\n\nBạch Vân Khanh, chàng thư sinh áo thêu mây vừa từ trên núi xuống, dừng chân bên cổng. Y không cười cuộc đối đáp ấy. Y nhặt chiếc lá rơi trên mặt nỉ, rồi bảo Kiếm Nhi hãy ngắm cả chỗ bi trắng sẽ dừng, đừng chỉ ngắm mỗi cái lỗ. Cô xoay lại thân cơ, lần này chịu hạ người xuống ngang mặt bàn."
+        },
+        {
+          "text": "Kiếm Nhi đá băng thoát thế khó, chạm trúng quả hai. Nhưng cú đánh quá mạnh, bi trắng chạy tuột vào lỗ giữa. Cô đứng thẳng dậy, tay vẫn giữ nguyên tư thế cũ. Chưa đợi Mạc Thiết Sơn lên tiếng, cô đã nhặt bi trắng dưới máng, đặt vào lòng bàn tay người khách.\n\n— Ta phạm lỗi. Bi trong tay ngươi.\n\nNgười lạ không đặt bi trắng sát quả hai mà lùi ra một gang, chừa sẵn góc cho quả ba. Bạch Vân Khanh khẽ gật. Quả hai vào lỗ; bi trắng chạy tới đúng chỗ đã ngắm, chỉ quá thêm nửa tấc. Vì nửa tấc ấy, cú kế tiếp thành một đường cắt mỏng.\n\nHai ngón tay làm cầu cơ run lên. Người lạ đứng dậy thở một hơi rồi mới cúi xuống lần nữa. Trong đầu chẳng có bí quyết nào hiện về, chỉ có mép bát canh, giọng bà lão và lời dặn đợi bi đứng hẳn."
+        },
+        {
+          "text": "Cú cắt đưa quả ba lướt qua miệng lỗ, chạm băng ngắn rồi dội về sát góc. Nhưng sau khi chạm quả ba, bi trắng lăn tiếp và đẩy quả năm vào lỗ giữa. Chạm đúng bi trước, lại có bi rơi, nên lượt vẫn thuộc về người khách. Kiếm Nhi cúi nhìn máng bi, không nói một chữ “may”. Bạch Vân Khanh lấy ngón tay vẽ lại đường vòng ấy lên lớp bụi ngoài thành bàn: điểm chạm dày hơn dự tính, áp phê bên đã kéo lệch góc bật băng.\n\nĐến cuối ván, quả chín nằm cách lỗ góc một gang, còn bi trắng thì nằm sát băng đối diện. Người lạ không cố đánh thẳng qua một đường đã bị khuất. Một cú băng chéo đưa quả chín vòng sang bên, chạm hàm lỗ rồi mới chịu rơi.\n\nNgười lạ thắng — không đẹp, không thẳng, bi lăn lòng vòng như con mèo say rồi mới chịu rơi. Kiếm Nhi nhìn cái lỗ rất lâu, như đợi nó trả lại một lời giải khác."
+        },
+        {
+          "text": "Tô Kiếm Nhi nhìn chằm chằm, rồi bóc một miếng băng mới dán lên má.\n\n— Được. Không có tên thì ta gọi ngươi là Vô Danh. Ta là người đầu tiên thua ngươi, nên ta được quyền đặt tên.\n\nCô giật lấy cây bút trong tay Mạc Thiết Sơn, viết hai chữ vào dòng trống ông vừa kẻ thêm. Mực thấm vào mặt gỗ cũ, nét đầu tiên hơi run. Vô Danh đọc thầm cái tên. Không có cánh cửa nào trong trí nhớ mở ra; chỉ thấy vẻ thách thức trên mặt cô bé dịu hẳn đi khi được gọi lại bằng chính tên mình: Kiếm Nhi.\n\nMạc Thiết Sơn bảo ván này chỉ mở được cổng ngoài, muốn vào Cơ Hội vẫn phải thi tuyển. Kiếm Nhi định cãi, nhưng vội ngậm miệng khi thấy một dải thắt lưng đỏ thẫm đang đi tới."
+        },
+        {
+          "text": "Lăng Thiên Kỳ xem sổ trước, rồi mới xem bàn. Dưới nắng sớm, vết sẹo chạy dọc mắt trái của nàng hằn rõ.\n\n— Ai cho phép đổi điều kiện nhập môn?\n\nKiếm Nhi đứng nghiêm, nhận là do mình. Lăng Thiên Kỳ quay sang hỏi người khách thuộc tông nào. Vô Danh nâng cây cơ trên hai bàn tay, đáp không biết. Những ngón tay của vị chấp pháp dừng lại ở chỗ thân gỗ không có dấu khắc.\n\nNàng không coi hai chữ “không biết” là tấm thông hành. Cơ Hội có chỗ cho tán tu, nhưng ai cũng phải vào danh sách và qua lượt tuyển. Kiếm Nhi nói người này đã có tên rồi. Lăng Thiên Kỳ nhìn xuống dòng mực còn ướt: — Có tên rồi thì càng phải chịu luật. Vô Danh gật đầu, không muốn điều đầu tiên được ghi cho mình lại thành cái cớ để người vừa đặt tên bị phạt. Lăng Thiên Kỳ trả lại cây cơ, ra hiệu cho khách đợi ngoài sân."
+        },
+        {
+          "art": "c1-saint",
+          "text": "Trên lầu cao, Kiếm Thánh Diệp Huyền Quang đặt chén trà xuống. Chín thanh phi kiếm quanh ông bỗng đứng yên — lần đầu sau nhiều năm, các đệ tử thấy chúng ngừng xoay. Ông nhìn xuống người đứng giữa sân rất lâu. Lâu đến mức Lăng Thiên Kỳ, vừa lên trình sổ, phải ho khẽ. Rồi ông cho gọi Vô Danh lên lầu.\n\nVô Danh không đếm đủ chín thanh kiếm; mắt cứ quay về bàn tay ông đặt cạnh chén trà, nơi một ngón tay khẽ cong như đang giữ một vật không ai nhìn thấy. Kiếm Thánh chỉ hỏi một câu bình thường đến lạ: đường từ bến sông lên núi có khó đi không. Vô Danh đáp có người chỉ lối. Ông gật đầu, đưa tay về phía chén trà rồi lại thôi.\n\nNgoài cửa, Tô Kiếm Nhi cố đứng thật im, nhưng thanh phi kiếm nhỏ trên vai cô vẫn chao lên một lần."
+        },
+        {
+          "text": "— Cho người này vào Cơ Hội, — ông nói. — Không cần thi tuyển.\n\n— Sư tôn, luật của tông môn… — Luật do ta viết, Thiên Kỳ.\n\nÔng mỉm cười, một nụ cười rất mệt. — Ta biết lúc nào nên để một quả bi tự lăn.\n\nLăng Thiên Kỳ cúi đầu, nhưng bàn tay giữ sổ không hề thả lỏng. Vô Danh hỏi mình có phải người ông từng gặp không. Một tiếng chuông ngoài sân chen vào giữa câu hỏi và lời đáp. Kiếm Thánh chỉ bảo có những người phải đi rất xa mới trở về đúng một chỗ, rồi hỏi cơm cho khách đã dọn chưa. Ông không nói ra một cái tên, cũng không phủ nhận. Lúc rời lầu, Vô Danh ngoái lại: những thanh kiếm đã xoay trở lại, chậm đến mức phải nhìn bóng chúng trên cột mới biết chúng đang chuyển."
+        },
+        {
+          "text": "Bữa tối có đậu hấp, rau cải và một nồi cháo kê loãng. Kiếm Nhi mang phần bánh riêng tới, hỏi khi vòng đấu bắt đầu, Vô Danh sẽ đi đâu. Vô Danh muốn tìm người biết thứ gỗ làm nên cây cơ, muốn hỏi về cái tên có trước hai chữ vừa nhận. Kiếm Nhi bẻ bánh làm đôi, bảo ở Hoa Linh có người nhớ được cả những giấc mơ.\n\n— Nếu tìm lại được tên cũ, ngươi có quên cái tên ta đặt không?\n\nHỏi xong, cô cúi xuống nhặt vụn bánh. Vô Danh không thể hứa một điều chính mình chưa biết, chỉ hứa sẽ viết thư về núi. Kiếm Nhi bảo cứ đề tên cô ngoài bì, người đưa thư trên núi ai cũng biết, rồi đưa một cuộn băng sạch thay cho lời đáp.\n\nBên ngoài tường bếp có tiếng giày rất nhẹ rút khỏi lối sỏi. Qua khe cửa, Vô Danh chỉ kịp thấy một vệt khăn đỏ, rồi nó lẫn ngay vào bóng tối và tiếng gió."
+        },
+        {
+          "text": "Sáng hôm sau, Mạc Thiết Sơn trả lại gói muối vừng đã được phơi khô. Bạch Vân Khanh chỉ cách bọc đầu cơ khi qua sông. Lăng Thiên Kỳ trao tờ giấy dự hội có đóng dấu son, nhắc rằng thắng thua đều phải có người giữ bàn xác nhận. Kiếm Nhi chạy theo đến bậc đá cuối, dặn đừng thắng mãi bằng những cú quanh co, rồi tự sửa: cần thì cứ đánh.\n\nDưới một gốc tùng ở chân núi, một người đội mũ trùm đen có hai chóp nhọn như tai sói đang cúi xuống buộc dây giày, dù dây chẳng hề tuột. Vô Danh nhận ra màu khăn đỏ đã thoáng thấy ngoài bếp đêm qua, nhưng khi nhìn lại thì chỉ còn bóng lá.\n\nTrên tờ giấy dự hội, hai chữ Vô Danh nằm ngay ngắn bên dấu son. Đỉnh trắng không trả lại quá khứ cho người lữ khách. Đổi lại, giờ đã có một nơi biết Vô Danh rời đi vào buổi sáng nào, và một người sẽ đợi thư."
+        }
       ]
     },
     {
-      "id": "hoalinh", "title": "Chương 2 · Hòn đảo biết mơ", "land": "hoalinh", "unlock": "hoalinh",
+      "id": "hoalinh",
+      "title": "Chương 2 · Hòn đảo biết mơ",
+      "land": "hoalinh",
+      "unlock": "hoalinh",
       "pages": [
-        { "art": "c2-island", "text": "Đảo Hoa Linh không neo vào đâu cả. Nó trôi giữa mây như một cánh hoa lớn, và người trên đảo đi đứng nhẹ như sợ đánh thức ai.\n\nĐào Tiểu Muội kéo tay Vô Danh qua cầu, con hồ ly nhỏ trên đầu cô ngáp dài.\n\n— Đảo Chủ muốn gặp ngươi. Đảo Chủ ít khi muốn gặp ai còn thức." },
-        { "text": "Đảo Chủ Mộng Hoa ngồi giữa một rừng bướm, mắt khép hờ.\n\n— Ở lại đây, — nàng nói, — và ngươi sẽ có một cái tên. Một ngôi nhà. Một người chờ ngươi về ăn cơm. Tất cả đều thật, chừng nào ngươi còn chưa tỉnh." },
-        { "art": "c2-dream", "text": "Trong mơ có một ngôi nhà nhỏ trên sườn núi trắng. Có người đứng ở cửa gọi tên Vô Danh — một cái tên rất quen, nhưng cứ sắp nghe rõ thì nó lại nhoè như mực gặp nước.\n\nỞ trong mơ đã ba ngày. Ngoài kia, Phong Linh Tử kể sau này, đã ba tháng — đủ để vòng đấu thứ hai của Cơ Hội khai cuộc mà không có tên Vô Danh trên bảng." },
-        { "text": "Vô Danh đặt cây cơ xuống bàn và đánh một cú — cú đánh không ai trong mơ đỡ được, vì trong mơ chẳng ai từng thua.\n\nGiấc mơ vỡ như mặt hồ bị ném đá. Đảo Chủ mở mắt, lần đầu sau rất lâu.\n\n— Ngươi chọn thức dậy, dù đã lỡ ba tháng, dù ngoài kia không ai gọi tên ngươi. — Nàng nghiêng đầu. — Lạ thật. Hay là ta mới là người đang mơ?" }
+        {
+          "art": "c2-island",
+          "text": "Đảo Hoa Linh không neo vào đâu cả. Nó trôi giữa mây như một cánh hoa khổng lồ, và người trên đảo đi đứng nhẹ nhàng như sợ đánh thức ai. Cầu dây đung đưa, vậy mà chén trà trên tay người bán hàng vẫn đầy tới mép, không sánh ra giọt nào. Dưới chân cầu không có vực nào nhìn thấy đáy, chỉ có những tầng mây lướt ngang, thỉnh thoảng để lọt lên tiếng chuông của một ngôi chùa dưới mặt đất.\n\nĐào Tiểu Muội nắm tay Vô Danh kéo qua cầu, con hồ ly nhỏ ngồi trên đầu cô bé ngáp dài.\n\n— Đảo Chủ muốn gặp ngươi. Đảo Chủ ít khi muốn gặp ai còn đang thức lắm.\n\nTiểu Muội xách theo một rổ bánh hoa đào. Vô Danh hỏi đường xuống đảo. Cô bé chỉ ra sau lưng, nơi đầu cầu vừa khuất vào mây, bảo lúc về nó sẽ nằm ở một chỗ khác."
+        },
+        {
+          "text": "Người Hoa Linh không tính giờ theo bóng nắng mà theo những lần thay hoa trong bình. Quán trọ mỗi sớm treo một cành mới trước cửa; khách nào ở lâu, muốn biết đã bao ngày thì cứ đếm hoa. Chủ quán không hỏi khách định ở mấy đêm, chỉ hỏi bên ngoài có ai đang chờ không. Vô Danh lấy giấy ra, viết tên Tô Kiếm Nhi ở đầu thư, rồi dừng bút ngay câu đầu tiên.\n\nĐào Tiểu Muội ghé qua vai đọc trộm, bị hồ ly cắn nhẹ vào búi tóc. Cô bé bảo thư cứ nhét vào hốc cầu, người đưa thư theo gió sẽ mang xuống. Cô cũng muốn được nhận thư lắm, nhưng chưa rời đảo bao giờ nên chẳng có ai để viết cho. Vô Danh hứa thư sau sẽ kể cho cô nghe về bến sông, rồi tự ngạc nhiên: mới qua một ngọn núi, đã có hai nơi cần báo tin. Tiểu Muội đẩy chiếc bánh cuối cùng trong rổ sang phía khách, rồi làm như không thấy."
+        },
+        {
+          "text": "Phong Linh Tử nằm ngủ trên lan can cạnh bàn bi, miệng ngậm lệch một cọng cỏ, chiếc chuông buộc trên tóc im lìm. Tiểu Muội kéo áo, hắn mới mở một mắt, hỏi đã đến lượt mình chưa. Bàn này đánh tám bi. Tiểu Muội dùng đầu cơ gỗ đào vẽ đường trong không khí rồi phá: một quả trơn, một quả sọc cùng rơi, tóc cô rung lên làm hồ ly phải bám cả bốn chân. Cú tiếp theo cô gọi quả ba nhưng trượt.\n\nVô Danh chưa đánh vội, hỏi giờ mình thuộc nhóm nào. Phong Linh Tử ngồi dậy, giải thích bi rơi lúc phá chưa tính; bàn vẫn còn mở, ai đưa được một quả đã gọi vào lỗ thì nhận nhóm ấy. Tiểu Muội chống nạnh, bảo thế nào cũng được, miễn đừng ai gọi cô là trẻ con.\n\nVô Danh gọi quả mười một, lỗ góc trái. Bi vào, nhóm sọc thuộc về khách. Bi trắng dừng giữa bàn. Trên mặt nỉ, những cánh hoa rơi đều được nhặt đi trước mỗi cú đánh."
+        },
+        {
+          "text": "Băng bàn Hoa Linh trả bi mềm hơn tưởng. Vô Danh đánh quả mười ba theo một đường băng, nhưng nó dừng lại thiếu một gang. Tiểu Muội được lượt, không vội ăn quả gần nhất mà đẩy quả bốn ra chắn lối về quả tám, để bi trắng nấp sau quả hai. Phong Linh Tử ngáp dài, bảo hoa rơi cũng biết chọn chỗ khó quét.\n\nHồ Tiên Nguyệt Ly bước đến bên bàn, chín cái đuôi thu gọn lại để khỏi chạm vào người xem.\n\n— Ngươi đang nhìn bi, hay nhìn bóng hoa dưới bi?\n\nNắng xuyên qua tán lá in những vệt sáng lên mặt nỉ, dễ khiến mắt nhận nhầm mép quả cầu. Vô Danh nhắm một mắt, rồi vòng sang phía đối diện. Nguyệt Ly không đưa lời giải, chỉ lặng lẽ đứng tránh khỏi nguồn sáng. Cú đá băng sau đó chạm trúng một quả sọc, bi trắng quay về chỗ thoáng. Tiểu Muội thở dài rất khẽ."
+        },
+        {
+          "text": "Ván đấu khép lại sau một hồi đổi thế thủ rất dài. Vô Danh không thắng bằng đường bi đẹp nhất: đợi Tiểu Muội tự mở quả bốn, đưa từng quả sọc vào lỗ, cuối cùng gọi rõ lỗ cho quả tám. Cô bé đếm bi dưới máng, đòi mai phải đánh lại, lần này sẽ không chừa đường cho người lớn nữa. Phong Linh Tử nhắc: trên bàn chẳng có người lớn trẻ con gì, chỉ có người đang tới lượt.\n\nThanh Liên Đại Sư chờ ở bậc thềm, tay bưng một bát cơm sen. Ông hỏi Vô Danh muốn gặp Đảo Chủ để cầu điều gì.\n\n— Một cái tên. — Nếu có người cho ngươi một cái tên đẹp, ngươi có biết nó là của mình không?\n\nVô Danh đỡ bát bằng hai tay. Trong cơm có một hạt sen chưa bỏ tâm, đắng ngắt. Nuốt xong, khách mới đáp rằng ít ra cũng muốn được nghe nó một lần. Đại Sư nhích chiếc bồ đoàn ra, nhường chỗ cho khách ngồi."
+        },
+        {
+          "text": "Đảo Chủ Mộng Hoa ngồi giữa một rừng bướm, mắt khép hờ. Nàng nghe chuyện con đò, đầu ngón tay lần theo vân gỗ trên tay ghế. Không ai gọi người hầu, vậy mà một chén trà vừa độ ấm đã đặt sẵn trước mặt khách. Bên cửa sổ, một nhành đào nghiêng xuống rồi lại nâng lên, như bàn tay ngập ngừng muốn chạm vào vai người.\n\n— Ở lại đây, — nàng nói, — và ngươi sẽ có một cái tên. Một ngôi nhà. Một người chờ ngươi về ăn cơm. Tất cả đều thật, chừng nào ngươi còn chưa tỉnh.\n\nVô Danh hỏi người chờ ấy có biết khách chẳng còn nhớ gì không. Nàng đáp trên đảo này, không ai trách người về muộn. Bướm đậu kín miệng chén. Trà thơm mùi gạo rang, mùi của một gian bếp chưa từng thấy bao giờ mà bỗng thèm được ngồi trong đó."
+        },
+        {
+          "art": "c2-dream",
+          "text": "Trong mơ có một ngôi nhà nhỏ trên sườn núi trắng. Có người đứng ở cửa gọi tên Vô Danh — một cái tên rất quen, nhưng cứ sắp nghe rõ thì nó lại nhoè đi như mực gặp nước. Bên hiên phơi ba chiếc áo, một chiếc còn nhỏ. Dưới bếp, ai đó cời tro bằng que tre, trách nhẹ rằng giá về sớm hơn thì canh đã không cạn.\n\nVô Danh đưa tay đón bát. Lần này không thấy lạnh, không phải hỏi đường, không phải chịu những ánh mắt dừng lâu trên cây cơ lạ. Ngôi nhà có cả mảnh dằm trên bậc cửa, cả vết cháy dưới đáy nồi; nó không đẹp đến mức khiến người ta nghi là mơ. Chỉ có tiếng gọi là cứ vỡ ra đúng ở một âm.\n\nVô Danh muốn nghe cho trọn, nên ngồi xích lại gần người trong nhà hơn. Chiều đến, cái tên lại vọng lên từ cuối vườn, và đôi chân cứ thế tự đi theo."
+        },
+        {
+          "text": "Ngày thứ hai trong mơ, Vô Danh sửa lại cánh cổng. Ngày thứ ba, có người rủ đánh một ván sau bữa cơm. Bàn bi kê dưới giàn cây, những quả bi chẳng bao giờ bám bụi. Người trong nhà đánh hỏng một cú rồi bật cười, và quả bi tự lăn về đúng chỗ cũ. Không ai phải cúi xuống máng nhặt; nó cứ thế trở lại, như chuyện đã định sẵn.\n\nVô Danh hỏi nếu thua thì sao. Người kia đáp ở nhà thì chẳng ai phải thua cả. Câu ấy êm như một tấm chăn. Nhưng dưới tấm chăn ấy, những ngón tay vẫn nhớ cảm giác trao bi trắng vào tay người khác. Kiếm Nhi đã đứng thẳng nhận lỗi trước cả khi bị nhắc.\n\nVô Danh nhìn bàn tay người đối diện, mong tìm thấy một vệt phấn, một vết chai, một chỗ nào đó không chiều theo ý mình. Bàn tay ấy sạch trơn; đặt xuống mặt bàn mà không phát ra một tiếng động."
+        },
+        {
+          "text": "Về sau Phong Linh Tử mới kể: ngoài đời khi ấy đã ba tháng trôi qua — đủ để vòng đấu thứ hai của Cơ Hội khai cuộc mà trên bảng không có tên Vô Danh. Trong mơ thì mới ba ngày. Thanh Liên Đại Sư thay nước ở đầu giường. Đào Tiểu Muội cất thư vào hộp, sáng sáng không còn đếm hoa nữa. Nguyệt Ly lấy lá che mặt người ngủ khỏi nắng chiều.\n\nCó một người đội mũ trùm đen cứ ít hôm lại lên đảo, hỏi người khách kia còn sống không. Phong Linh Tử dẫn hắn vào xem nhịp thở đều đều dưới lớp chăn. Có lần hắn đứng ngoài phòng suốt một đêm, sáng ra để lại một túi gạo rồi xuống đảo; mấy hôm sau lại thấy hắn ở đầu cầu. Không ai hỏi danh tính hắn. Ở đây người ta quen để người khác giữ riêng một phần đời mình.\n\nChỉ có Tiểu Muội giấu trong tay áo một lá thư nét chữ cứng cỏi. Cô bé sợ đưa nó vào giấc mơ sẽ làm người trong ấy đau đầu."
+        },
+        {
+          "text": "Vô Danh đặt cây cơ lên bàn và đánh một cú — cú đánh không ai trong mơ đỡ được, vì trong mơ chưa ai từng thua. Đó không phải một cú mạnh. Bi trắng chỉ đẩy một quả màu tới sát mép lỗ rồi dừng. Vô Danh mời người kia vào đánh tiếp, chấp nhận để nguyên đường bi vừa hỏng. Người bên kia bàn vẫn mỉm cười, chờ được làm lại từ đầu.\n\n— Ta không đánh lại cú ấy.\n\nLời vừa dứt, một vết nứt chạy dọc chân bàn. Người trong nhà gọi tên thêm lần nữa, rõ hơn bất cứ lần nào trước đó. Vô Danh vẫn giữ tay trên thành bàn, không bước về phía tiếng gọi. Nếu phải ngủ mãi mới biết được một cái tên, thì những người đang đợi thư sẽ chỉ nhận về im lặng.\n\nGiấc mơ vỡ như mặt hồ bị ném đá. Bát cơm, giàn cây, tiếng gọi, tất cả cùng chìm xuống một vòng nước đen."
+        },
+        {
+          "text": "Đảo Chủ mở mắt, lần đầu sau rất lâu.\n\n— Ngươi chọn thức dậy, dù đã lỡ ba tháng, dù ngoài kia không ai gọi tên ngươi. — Nàng nghiêng đầu. — Lạ thật. Hay là ta mới là người đang mơ?\n\nVô Danh ngồi bên cửa sổ, uống nước lọc vì vị ngọt của trà vẫn còn đọng nơi cổ họng. Khách không nói giấc mơ ấy là giả; ngôi nhà kia vẫn khiến những đầu ngón tay nhức nhối. — Có người đã gọi, — Vô Danh đáp. — Ta còn chưa viết thư cho người ấy.\n\nMộng Hoa khẽ đưa mắt về phía hộp thư. Tiểu Muội mang hộp tới, giải thích ba tháng bằng ba cành hoa khô buộc chung. Vô Danh đọc một dòng của Kiếm Nhi: không đến lượt thì báo, đừng để người giữ bảng phải đợi. Dưới dòng chữ, có chỗ ngòi bút ấn thủng cả giấy. Khách đặt lá thư lên đầu gối, vuốt phẳng mép rách, chưa viết trả lời ngay."
+        },
+        {
+          "text": "Phong Linh Tử tiễn khách xuống cầu; lần này chiếc chuông trên tóc hắn đã có tiếng. Hắn bảo những vòng đấu đã lỡ thì đành là lỡ, nhưng giấy của Kiếm Thánh vẫn còn giá trị ở các bàn ngoài vòng chính. Mộng Hoa không trả lại ba tháng ấy cho ai. Nàng chỉ mở lối xuống đảo sớm hơn thường lệ.\n\nVô Danh viết thư ngay trên bậc cầu, nhận mình đã quên mất thời gian, nhờ Kiếm Nhi giữ hộ cái tên trên bảng nếu còn chỗ. Nguyệt Ly đưa một túi bánh sen. Đại Sư dặn gặp vị đắng thì cứ nhai, không phải thứ đắng nào cũng cần nhả bỏ. Tiểu Muội đòi lần sau phải kể chuyện bến sông bằng một lá thư thật.\n\nQua lớp mây cuối cùng, một bóng mũ trùm đứng trên con đường xuống biển, rồi biến mất. Vô Danh cất lá thư vừa viết, bước theo con đường nắng chói đến đau mắt."
+        }
       ]
     },
     {
-      "id": "hailong", "title": "Chương 3 · Sổ âm của Long Vương", "land": "hailong", "unlock": "hailong",
+      "id": "hailong",
+      "title": "Chương 3 · Sổ âm của Long Vương",
+      "land": "hailong",
+      "unlock": "hailong",
       "pages": [
-        { "art": "c3-harbour", "text": "Bến Hải Long được dựng trên lưng một con rồng biển đang ngủ. Mỗi khi nó trở mình, cả cảng nghiêng theo — vì thế dân ở đây đánh bida giỏi nhất thiên hạ, họ đã quen với mặt bàn không bao giờ phẳng.\n\nTiểu Ngư nhảy lên vai Vô Danh như leo cột buồm.\n\n— Ván này cược bằng gì? Bọn ta chỉ nhận vàng. Hoặc hồn." },
-        { "text": "Đông Hải Long Vương ngồi trên ngai san hô, trước mặt là một cuốn sổ dày như tảng đá. Mỗi hồn trôi từ sông Vong Xuyên ra biển đều phải đóng một đồng qua cửa, và tên được chép vào đó. Vài trang có những cái tên bị gạch bằng mực vàng.\n\n— Thiên Hương Các chuộc lại, — ông nói, không chút ngượng. — Bổn vương thu phí của người chết, bán tên cho người sống. Ngươi là loại nào?" },
-        { "art": "c3-ledger", "text": "Long Vương lật sổ tìm. Lật mãi. Rồi gấp lại, cau mày đến mức vảy trên má dựng lên.\n\n— Lạ. Ngươi đi ra từ hướng Vong Xuyên, mùi sông còn trên áo. Nhưng ngươi không có trong sổ âm. Như thể ngươi chưa từng chết… hoặc đã chết mà chưa ai thu được phí." },
-        { "text": "Thuyền Nương Lưu Hương bật cười, xoay ống nhòm.\n\n— Một kẻ trốn được Long Vương. Trên biển này, ta gọi đó là may mắn.\n\nVô Danh không cười. Nước dưới chân đang dâng — như mọi năm, biển lại dâng về phía núi Thiên Quang, như muốn đòi lại phần biển đã mất trong Đại Kiếp." }
+        {
+          "art": "c3-harbour",
+          "text": "Bến Hải Long dựng trên lưng một con rồng biển đang ngủ. Mỗi lần nó trở mình, cả cảng nghiêng theo — vì thế dân ở đây đánh bida giỏi nhất thiên hạ: họ đã quen với mặt bàn chẳng bao giờ phẳng. Trên bến, nồi canh cá được treo bằng ba sợi dây cho khỏi đổ. Những xâu tiền đồng gõ vào cột lanh canh, báo gió trước cả lá cờ.\n\nTiểu Ngư nhảy phốc lên vai Vô Danh như leo cột buồm.\n\n— Ván này cược bằng gì? Bọn ta chỉ nhận vàng. Hoặc hồn.\n\nCon vẹt trên vai cô bé nghiêng đầu nhìn gói bánh sen. Vô Danh đưa một chiếc thay cho câu trả lời. Tiểu Ngư nhảy xuống, nhận bánh và gọi đó là tiền hỏi đường. Chiếc bánh biến vào túi chứ không vào miệng: ở đầu cầu tàu có một đứa bé đang đợi mẹ về, mắt không rời những thúng cá."
+        },
+        {
+          "text": "Tiểu Ngư dẫn khách tới một quán có bàn bi đóng bằng ván thuyền cũ. Người ta chọn lúc cảng yên mới khai cuộc, và người giữ bàn gõ mõ báo trước mỗi khi rồng sắp trở mình. Bi đang nằm yên thì vẫn nằm yên; chỉ những đường lăn chậm mới bị độ nghiêng kéo dạt sang một bên.\n\nSa Đại Đao xách cây cơ như xách một thanh đao lớn, cười nhe hàm răng nhọn hoắt. Hắn không nhận bánh, muốn cược một buổi chèo thuyền. Vô Danh hỏi cược việc lau bàn thay được không. Hắn nhìn bàn tay chai sạn của khách, gật đầu, bảo đằng nào cũng là sức người.\n\nTiểu Ngư ngồi vắt vẻo trên lan can, giục phá thật mạnh cho nghe bi nổ. Nhưng người giữ mõ bắt đợi qua hết một đợt nghiêng. Ở biển, kẻ nóng ruột phải học chờ trước tiên."
+        },
+        {
+          "text": "Sa Đại Đao phá cụm chín bi. Quả một rơi, bi trắng chạy ngang bàn rồi dừng cách băng dài một gang. Hắn đánh tiếp quả hai bằng một cú thật mạnh, mong tách luôn cụm bốn và sáu. Quả hai vào lỗ, nhưng bi trắng va quá dày vào quả bốn, mất hẳn đường tới quả ba. Tiếng “Ngoạm!” đã lên tới môi hắn bỗng hoá thành một tiếng thở dài; Tiểu Ngư cười đến mức phải ôm lấy con vẹt.\n\nHắn chuyển sang đánh thủ: chạm quả ba hợp lệ rồi đưa bi trắng về nấp sau quả chín. Vô Danh buộc phải đá hai băng. Góc ngắm quen tay trên Thiên Quang ở đây sẽ sai, vì băng ván thuyền mềm, ăn mất lực. Thiết Neo Lão Kình đặt chiếc mũ lặn xuống ghế, khuyên khách nghe tiếng bi chạm băng trước đã. Ông không chỉ điểm ngắm, chỉ gõ khớp tay lên thành gỗ cho biết đoạn nào mới thay."
+        },
+        {
+          "text": "Cú đá hai băng chạm được quả ba, đủ đẩy nó tới băng ngắn. Không bi nào rơi, lượt trở về tay Sa Đại Đao. Hắn gầm lên khoái chí, cắt quả ba vào góc, rồi phải tự hãm lực khi tới quả bốn. Lần này hắn hạ tay cầu cơ thấp hơn. Lưu Hương vừa đến đã nhận ra, cười bảo cá mập cũng có lúc phải lách qua khe đá.\n\nĐến quả sáu, Sa Đại Đao trượt, vì cố giữ bi trắng sát lỗ cho thuận đường sang quả bảy. Vô Danh nhận một thế bàn thoáng nhưng không dễ: quả sáu sát băng, quả bảy ở tít đầu kia, quả chín nằm chắn giữa đường. Khách đưa quả sáu vào lỗ bằng một cú đánh theo vừa đủ lực, để bi trắng lăn theo, chạm một băng rồi dội ra giữa bàn. Bi trắng hụt chỗ mong muốn, nhưng vẫn còn một góc cắt mỏng cho quả bảy.\n\nKhông có tiếng vỗ tay. Trên bến này, người ta nhìn chỗ bi trắng dừng nhiều hơn là nghe tiếng bi rơi."
+        },
+        {
+          "text": "Vô Danh khép ván bằng một đường cắt ngắn cho quả chín. Sa Đại Đao xắn tay áo đi lấy giẻ, không cãi một câu nào về may rủi. Hắn hỏi vì sao ở quả sáu khách không dùng lực mạnh. Vô Danh đáp đã từng đánh quá tay ở một bàn khác, lần này muốn chừa lại đường về. Sa Đại Đao ngẫm nghĩ, lau một vệt nhựa cá đến hai lần.\n\nThiết Neo Lão Kình dẫn họ sang bàn tập trên cầu tàu thấp. Ông đặt bi trắng sát băng, đánh một cú thật nhẹ cho nó lăn tới giữa bàn rồi dừng, ví như thả neo đúng chỗ để tránh xoáy. Quả bi đã nằm yên thì độ nghiêng chẳng làm nó bò được; chỉ khi nó lăn, người xem mới thấy đường đi bị bẻ cong. Vô Danh thử ba lần, đến lần cuối mới giữ được đúng khoảng cách. Lưu Hương đứng xa nhìn qua ống nhòm, bảo khoảng ấy vừa đủ cho một con thuyền quay mũi."
+        },
+        {
+          "text": "Trong bữa canh cá, Lưu Hương hỏi người khách đến biển tìm gì. Vô Danh nói muốn xem sổ ghi những người đã qua sông. Nàng buông thìa.\n\n— Ngươi tìm người thân, hay tìm chính mình?\n\nBến vẫn ồn ã, vậy mà câu hỏi ấy làm cả bàn ăn lặng đi. Tiểu Ngư bẻ bánh khô cho vẹt ăn, lần đầu tiên không chen lời. Bên cạnh, một người chèo đò ôm khư khư túi tiền.\n\nLưu Hương kể sổ ấy nằm trong điện san hô, muốn xem thì thường phải trả phí. Thiết Neo Lão Kình nhớ có lần kéo được một tấm ván khắc tên trôi ra từ cửa sông; mấy năm sau đã không ai đọc nổi chữ. Người mất đi không bị quên hết cùng một lúc. Thoạt đầu người ta còn nhớ tên, về sau chỉ còn nhớ rằng trên thuyền từng có một chỗ bị hụt. Vô Danh sờ mép tờ giấy dự hội trong áo. Cái tên mới đã nằm trên giấy; còn cái tên cũ, biết đâu đang ở một nơi bắt người sống phải bỏ tiền ra mua lại."
+        },
+        {
+          "text": "Đông Hải Long Vương ngồi trên ngai san hô, trước mặt là cuốn sổ dày như một tảng đá. Mỗi hồn trôi từ sông Vong Xuyên ra biển đều phải nộp một đồng qua cửa, và tên được chép vào đó. Vài trang có những cái tên bị gạch bằng mực vàng. Trên án đặt một chiếc cân nhỏ, một đĩa đựng tiền, đĩa kia đặt vỏ trai.\n\n— Thiên Hương Các chuộc lại, — ông nói, không chút ngượng ngùng. — Bổn vương thu phí của người chết, bán tên cho người sống. Ngươi thuộc loại nào?\n\nVô Danh đáp mình đang đứng trước mặt ông, vẫn còn hơi thở, nhưng không biết đã qua những cửa nào. Long Vương sai người đi lấy những quyển sổ cũ hơn. Lưu Hương không ngồi, tay đặt trên chiếc ống nhòm giắt ở thắt lưng. Nàng biết tiền phí thì còn mặc cả được; một câu hỏi về sổ âm thường đắt hơn tiền."
+        },
+        {
+          "text": "Vô Danh hỏi một cái tên đã bị gạch thì có còn đọc lại được không. Long Vương bảo bản sao nằm trong tay người mua; không ai bán một món hàng hai lần. Ông gọi đó là chữ tín. Lưu Hương gọi đó là buôn luôn cả phần mà người chết không mang theo được. Bộ râu xanh của ông khẽ động, nhưng ông không đuổi nàng ra: thuyền của nàng vẫn chở dầu đèn tới các bến hồn.\n\n— Không có đèn của bổn vương, họ còn trôi đến bao giờ? — Long Vương hỏi. — Có đèn đâu có nghĩa là phải bán tên, — Lưu Hương đáp.\n\nNgười chèo đò ôm túi tiền đứng ngoài cửa nghe đến đó thì ngẩng lên. Vô Danh không biết phải đứng về bên nào cho phải, chỉ xin được trả phí xem phần sổ liên quan đến mình bằng một ván bi. Long Vương nhìn cây cơ lạ, đồng ý một ván thử, nhưng không đem quyền thu phí qua cửa ra cược. Lưu Hương quay sang dặn khách phải nói rõ điều mình được nhận trước khi cúi xuống cơ."
+        },
+        {
+          "text": "Bàn trong điện bày chín bi. Long Vương không đặt điều kiện phải thua mới cho xem; ông cho mở sổ ngay, còn ván đấu chỉ để quyết ai trả tiền công cho người chép. Cú phá của ông đưa quả một vào lỗ, để quả hai bị quả sáu che khuất. Ông đá băng, bi trắng uốn theo dòng xoáy nhẹ đã báo trước trên mặt nỉ, chạm quả hai rồi dừng. Vô Danh nhận lượt.\n\nKhách đưa quả hai vào lỗ góc, dùng áp phê phải cho bi trắng bật băng tránh quả sáu. Cú sau không thuận như tính toán, khách đành đánh một cú thủ. Hai bên đổi lượt nhiều lần; không phép thuật nào kéo được một quả bi đã dừng. Rồi Long Vương, vì ham một đường cắt quá mỏng, tự đánh bi trắng rơi lỗ. Ông nén tiếng cáu, đưa bi trắng cho đối thủ cầm trong tay. Vô Danh kết thúc ván ngay sau đó, chỉ xin người chép sổ được trả đủ công. Long Vương phẩy tay, bảo khoản ấy điện vẫn chi."
+        },
+        {
+          "art": "c3-ledger",
+          "text": "Long Vương lật sổ tìm. Lật mãi. Rồi gấp lại, cau mày đến nỗi lớp vảy trên má dựng cả lên.\n\n— Lạ. Ngươi đi ra từ phía Vong Xuyên, mùi sông còn vương trên áo. Nhưng ngươi không có trong sổ âm. Như thể ngươi chưa từng chết… hoặc đã chết mà chưa ai thu được phí.\n\nÔng sai người thay đèn, ngờ rằng ngọn đèn cũ làm mờ nét mực. Không có tên Vô Danh thì cũng dễ hiểu. Nhưng dấu tay, dấu nước, ngày qua cửa, cách đối chiếu nào cũng hụt. Người giữ sổ rửa tay cẩn thận rồi mới lật đến những trang của bốn mươi năm trước, vẫn không tìm thấy.\n\nVô Danh nhìn những dòng chữ, thấy lòng nhẹ đi trong chốc lát, rồi trống rỗng. Nếu cả cuốn sổ này cũng không có mình, thì việc mình đang ngồi đây biết dựa vào đâu? Long Vương giữ lại tờ giấy ghi nét cơ của khách, bảo lần sau gặp lại sẽ nhận ra."
+        },
+        {
+          "text": "Thuyền Nương Lưu Hương bật cười, xoay xoay chiếc ống nhòm.\n\n— Một kẻ trốn được Long Vương. Trên biển này, ta gọi đó là may mắn.\n\nVô Danh không cười. Nước dưới chân đang dâng lên — như mọi năm, biển lại dâng về phía núi Thiên Quang, như muốn đòi lại phần biển đã mất trong Đại Kiếp. Ngoài bến, người ta khuân những bao gạo lên cầu cao. Tiểu Ngư giúp một bà già bê rổ cá; Sa Đại Đao gánh hai thùng, Thiết Neo Lão Kình giữ dây neo. Vô Danh xắn tay áo làm cùng họ, đến khi những ngón tay hết lạnh. Giữa cảnh nước xô ấy, không ai hỏi người khách có tên trong sổ hay không.\n\nLưu Hương để một phần cá khô trên bậc đá cạnh kho. Lúc quay lại thì nó đã biến mất, chỉ còn một vệt giày hẹp bên sợi dây buộc thuyền."
+        },
+        {
+          "text": "Lưu Hương cho khách đi nhờ chuyến thuyền chở đồng tới Thiên Cơ. Long Vương gửi theo một tờ xác nhận không tìm thấy dấu qua cửa, đóng ấn đậm hơn mức cần thiết; ông nhất định không chịu gọi đó là sai sót của điện. Người chép sổ thức khuya ngần ngừ một lúc, rồi buộc thêm một sợi dây chống ẩm quanh tờ giấy.\n\nTrước khi lên thuyền, Vô Danh gửi về Thiên Quang một lá thư kèm gói cá khô, nhờ Kiếm Nhi chia cho người giữ cổng. Tiểu Ngư hỏi nếu không ai ghi nợ thì khách có bỏ đi luôn không. Vô Danh đưa cô chiếc bánh sen cuối cùng, nhắc rằng mình vẫn còn nợ một buổi giúp chèo. Cô bảo thế thì cứ để đấy, lần về hẵng tính.\n\nPhía đuôi thuyền, xa xa có một chiếc thuyền nhỏ không cờ lặng lẽ theo sau, giữ nguyên một quãng cách. Vô Danh nhìn nước dạt qua mạn, thôi tìm bóng mình dưới mặt biển. Không cuốn sổ nào ghi hết những người đang giữ cho mình một chỗ; nhưng điều ấy vẫn chưa trả lời được vì sao dòng sông đã không giữ mình lại."
+        }
       ]
     },
     {
-      "id": "thienco", "title": "Chương 4 · Chiếc kim chỉ sai", "land": "thienco", "unlock": "thienco",
+      "id": "thienco",
+      "title": "Chương 4 · Chiếc kim chỉ sai",
+      "land": "thienco",
+      "unlock": "thienco",
       "pages": [
-        { "art": "c4-workshop", "text": "Thiên Cơ Các nghe như một chiếc đồng hồ khổng lồ: tiếng bánh răng, tiếng búa, và thỉnh thoảng có ai đó hét “lại nổ rồi!”.\n\nHoả Lôi Tiên Sinh, râu cháy xém một bên, kéo Vô Danh vào xưởng như kéo một con chuột thí nghiệm hiếm.\n\n— Ta chế được cái này. Nó đo Hư Không. Nó chưa bao giờ sai. Chỉ hay nổ thôi." },
-        { "text": "Cỗ máy có một chiếc kim đồng, lẽ ra phải chỉ về phía Tây, nơi vực Hư Không nằm. Khi Vô Danh bước vào, chiếc kim run lên, quay trọn một vòng rồi chỉ thẳng vào ngực người lạ.\n\nTiểu Ban thì thầm, giọng như sợ cái máy nghe thấy:\n\n— Hư Không… ở đây sao?" },
-        { "art": "c4-explosion", "text": "Rồi nó nổ. Lần thứ tư trong tháng.\n\nKhi khói tan, Thần Toán Gia Cát Vân đã đứng ở cửa, quạt lông phe phẩy, như thể ông biết trước — dĩ nhiên là ông biết trước.\n\n— Đừng sửa nó, lão Hoả Lôi. Nó không chỉ sai. Chỉ là ngươi chưa muốn tin." },
-        { "text": "Gia Cát Vân bày một ván bida, không phải để thắng mà để tính.\n\n— Cú thứ nhất của ngươi, ta tính đúng, — ông nói khi bi dừng. — Cú thứ hai lăn đúng đường ta vẽ, rồi lệch nửa tấc ở miệng lỗ. Ta tính trước được mười cú của bất kỳ ai. Trừ ngươi. Đường bi của ngươi giống như… đã từng rơi một lần, rồi được ai đó đặt lại lên bàn.\n\nÔng gấp quạt. — Có những thứ bàn tính không đếm được. Ta ghét điều đó." }
+        {
+          "art": "c4-workshop",
+          "text": "Thiên Cơ Các nghe như một chiếc đồng hồ khổng lồ: tiếng bánh răng, tiếng búa, và thỉnh thoảng có ai đó hét lên “Lại nổ rồi!”. Hoả Lôi Tiên Sinh thò mái đầu tóc xám bù xù ra khỏi cửa xưởng, chỉ tay vào cỗ máy đồng đang chờ thử, rồi lại biến vào làn khói. Khách từ bến lên phải qua ba cây cầu kéo, cầu nào cũng treo biển ghi số người được đứng cùng một lúc. Tiểu Ban đếm luôn cả con chim cơ quan trên vai mình, rồi tự gạch đi, vì biển ghi người chứ không ghi vật.\n\nVô Danh mang theo tờ xác nhận của Hải Long, muốn hỏi xem có món đồ nào tìm lại được một đường đã mất. Tiểu Ban dẫn khách ra bồn rửa bụi đồng, dặn đừng chạm vào những sợi dây treo thấp. Một con trâu gỗ khổng lồ đi ngang qua, chân sau kêu kẽo kẹt. Nó dừng trước cửa kho bản vẽ, nghiêng đầu nhìn cây cơ lạ. Tiểu Ban giải thích Mộc Ngưu không chào đâu; nó đang cân xem khách có mang vật gì không được phép vào kho."
+        },
+        {
+          "text": "Bữa trưa trong xưởng dọn ngay bên cửa sổ: bánh bột hấp, củ cải muối, nước gạo rang đựng trong những chiếc cốc có khắc vạch. Thợ thuyền vừa ăn vừa cãi nhau xem quả bi bật băng sai là do gỗ ẩm hay do điểm chạm. Lỗ Diệu Diệu điều khiển con rối gỗ gắp một mẩu đinh ra khỏi chiếc bánh, giơ lên trước mặt Tiểu Ban. Cậu đỏ mặt, nhận mình đã để khay ăn quá gần hộp đồ nghề.\n\nVô Danh kể chuyện sổ âm, nhưng giấu đi điều mình sợ nhất. Diệu Diệu hỏi khách muốn máy móc tìm ra một cái tên, hay muốn nó bảo đảm cái tên ấy là đúng. Hai việc ấy khác nhau xa. Con rối của nàng có thể nhại lại bất cứ tiếng nào, nhưng tiếng gọi từ miệng nó chẳng bao giờ khiến người bị gọi thấy quen.\n\nTiểu Ban thì vẫn tin số đo sẽ tìm ra chỗ khuyết. Cậu đòi đo cây cơ trước, rồi phát hiện cán gỗ không lọt vừa chiếc vòng chuẩn nào, phải đi đổi thước."
+        },
+        {
+          "text": "Tiểu Ban mang ra một bàn tập, băng nào cũng có nét khắc nhỏ bên ngoài ghi độ nảy. Cậu chọn một đường hai băng, tuyên bố: góc ba mươi bảy độ, lực sáu phần. Vô Danh hỏi sáu phần là của tay ai. Cậu đứng sững, rồi lôi ra một quả cân dùng để so lực. Diệu Diệu bật cười, nhưng không cười lâu: chính con rối của nàng cũng từng giật mạnh khi sợi tơ ngấm nước.\n\nHọ không cược, chỉ cùng thử một cú. Lần đầu bi đi thiếu. Lần sau lau sạch bi, đường đi đúng hơn. Lần thứ ba Tiểu Ban dời chỗ đặt bi trắng đi một móng tay, kết quả đổi hẳn. Vô Danh ghi lên giấy: phải nhìn thứ đang nằm trên bàn, không chỉ nhìn thứ được vẽ ra. Tiểu Ban đọc qua, viết thêm bên cạnh: và phải ghi lại để người khác làm theo được. Hai nét chữ khác nhau chen kín mép tờ giấy dầu."
+        },
+        {
+          "text": "Mộc Ngưu canh kho bằng cách đứng chắn lối chứ không húc ai. Vô Danh muốn xem tấm bản đồ các Linh Đài, nhưng không có dấu của Các Chủ. Diệu Diệu lấy ra một tờ giấy mượn, bắt ghi rõ ngày trả. Vô Danh hỏi nếu chưa xem xong thì sao.\n\n— Thì xin gia hạn. Đừng để người khác đi tìm một món đồ mà không biết nó còn hay mất.\n\nCâu ấy khiến Vô Danh nhớ đến lá thư ở Hoa Linh. Khách ngồi viết ngay cho Kiếm Nhi, kể đã qua Hải Long và sắp được xem máy đo, không hứa ngày về vì chưa chắc giữ được lời. Tiểu Ban buộc thư vào ống đưa tin. Kho bản vẽ thì vẫn đóng, Mộc Ngưu kẽo kẹt quay về chỗ cũ. Ở đây, sự chờ đợi có giấy tờ, có tiếng bánh răng và có người chịu trách nhiệm. Vô Danh thấy khó chịu, rồi nhận ra một phần nỗi khó chịu ấy là vì chính mình muốn đi tắt."
+        },
+        {
+          "text": "Hoả Lôi Tiên Sinh, râu cháy xém một bên, kéo Vô Danh vào xưởng như kéo một mẫu vật hiếm có.\n\n— Ta chế được cái này. Nó đo Hư Không. Nó chưa bao giờ sai. Chỉ hay nổ thôi.\n\nÔng nói bằng giọng của người vừa có tin vui, chân đẩy chậu nước đặt sẵn vào sát chân bàn. Diệu Diệu níu tay áo ông, hỏi đã ghi lại lần sửa gần nhất chưa. Ông rút ra một tờ giấy cháy đen ở mép, quả quyết phần cháy không liên quan.\n\nVô Danh chưa bước vào vòng đồng ngay. Khách muốn biết máy đo cái gì, và người đứng trong đó có bị đau không. Hoả Lôi phải đặt cây cơ hình nòng pháo xuống, giải thích rằng chiếc kim chỉ theo lực kéo của vực sâu, không lấy máu, không trói hồn ai. Tiểu Ban dời chậu nước ra xa dây lửa rồi mới cho khách bước qua ngưỡng cửa."
+        },
+        {
+          "text": "Cỗ máy có một chiếc kim đồng, lẽ ra phải chỉ về phía Tây, nơi vực Hư Không nằm. Khi Vô Danh bước vào, chiếc kim run lên, quay trọn một vòng rồi chỉ thẳng vào ngực người khách. Tiểu Ban thì thầm, như sợ cái máy nghe thấy:\n\n— Hư Không… ở đây sao?\n\nCon chim trên vai cậu ngừng vỗ cánh vì dây cót đã hết. Hoả Lôi bảo khách đổi chỗ đứng. Chiếc kim đổi theo. Ông che cửa sổ, tháo chiếc nhẫn đồng trên tay, dẹp mọi đồ sắt ra xa. Kim vẫn tìm về đúng một điểm ấy. Vô Danh đặt cây cơ xuống rồi đứng riêng ra, mong thứ máy nhận ra chỉ là khúc gỗ lạ. Chiếc kim bỏ mặc cây cơ.\n\nTrong đầu Vô Danh chợt vang lên tiếng vải bị xé, rất ngắn. Khách hỏi có thể dừng được chưa. Diệu Diệu cắt dây kéo ngay, nhưng một bánh răng đã nghiến vào chốt quá sâu."
+        },
+        {
+          "art": "c4-explosion",
+          "text": "Rồi nó nổ. Lần thứ tư — ba phòng thí nghiệm trước của Hoả Lôi cũng đã nổ tung theo cách ấy. Mộc Ngưu lao vai chắn những mảnh đồng văng về phía cửa; tiếng gỗ nứt át cả tiếng người. Diệu Diệu kéo Tiểu Ban nấp sau bàn, Hoả Lôi chụp lấy tấm chăn dập lửa. Vô Danh bò ra ngoài bằng khuỷu tay, tay kia vẫn ôm cây cơ theo một thói quen không hiểu từ đâu.\n\nKhi khói tan, Thần Toán Gia Cát Vân đã đứng ở cửa, quạt lông phe phẩy, như thể ông biết trước — mà dĩ nhiên là ông biết trước. Ông đã xem những lần kim lệch ghi trong sổ, biết bánh răng sẽ quá tải, chỉ là không đến kịp để ngăn.\n\n— Đừng sửa nó, lão Hoả Lôi. Nó không chỉ sai. Chỉ là ngươi chưa muốn tin.\n\nÔng gập quạt, ngồi xuống xem tay khách có bị rách không, rồi mới nhặt mảnh đồng ghi số trên sàn."
+        },
+        {
+          "text": "Hoả Lôi muốn ráp lại ngay, bảo phải thử thêm một lần để loại trừ sai số. Vô Danh nói không. Cả xưởng im bặt trong chốc lát: người khách xưa nay vẫn dễ dàng nghe theo, giờ lại cầm cây cơ chắn ngang cửa.\n\n— Nếu ông muốn thử, hãy nói hết những gì ông đã biết từ trước. Ta không phải một quả cân.\n\nGia Cát Vân kéo ghế mời khách ngồi, bảo lời ấy đúng. Chiếc máy chỉ cho thấy một dấu vết dính dáng tới Hư Không; chừng ấy chưa đủ để gọi một con người là vực sâu. Diệu Diệu nhặt tờ ghi chép từ trong khói ra, đặt cạnh tờ xác nhận của Hải Long, không cho Hoả Lôi cất làm của riêng. Hoả Lôi nhìn chòm râu cháy, lầm bầm nhận lỗi, rồi bưng tới một chậu nước sạch. Tiểu Ban cúi xuống vá lại cánh chim. Vô Danh rửa bụi trên cổ tay, nhận ra mình đã biết nói chữ “dừng”, dù vẫn chưa biết thứ gì đang nằm trong ngực mình."
+        },
+        {
+          "text": "Gia Cát Vân bày một ván bi, không phải để thắng mà để tính. Ông vẽ những đường dự kiến lên tờ giấy đặt ngoài bàn, không đánh dấu lên nỉ. Ván mười bi: phải gọi quả và gọi lỗ; khi không có đường chắc thì được đánh an toàn và nhường lượt. Vô Danh hỏi vì sao ông muốn tính mình. Ông đáp vì những con số không khép lại được khiến ông mất ngủ.\n\nCú thứ nhất, khách đưa quả một vào lỗ góc, bi trắng dừng ngay cạnh vạch ông đã vẽ. Cú thứ hai, khách gọi quả hai vào lỗ giữa, cắt mỏng, thêm chút áp phê để tránh cụm quả ba. Quả hai lăn đúng nét vẽ, nhưng tới miệng lỗ thì chạm hàm, lệch đi nửa tấc. Vô Danh ngẩng lên nhận mình đã trượt, không xin đánh lại. Gia Cát Vân quỳ xuống soi mép bi, xem bụi phấn, đo lại băng, không vội gán đường lệch ấy cho một điều huyền bí."
+        },
+        {
+          "text": "— Cú thứ nhất của ngươi, ta tính đúng, — ông nói khi bi đã dừng. — Cú thứ hai lăn đúng đường ta vẽ, rồi lệch nửa tấc ở miệng lỗ. Ta tính trước được mười cú của bất kỳ ai. Trừ ngươi. Đường bi của ngươi giống như… đã từng rơi một lần, rồi được ai đó đặt lại lên bàn.\n\nÔng gấp quạt. — Có những thứ bàn tính không đếm được. Ta ghét điều đó.\n\nVô Danh hỏi ông ghét người, hay ghét chỗ mình không biết. Ông trả lời chậm hơn mọi câu trước: ghét chỗ không biết, nhưng đôi khi kẻ đứng đúng vào chỗ ấy lại phải chịu oan. Rồi ông cầm bút, viết một chữ “chưa” bên cạnh bản tính. Ván bi không đánh tiếp; nó vốn chẳng được bày ra để phân thắng thua.\n\nNgoài sân, Tiểu Ban đang đo lại vòng cổ trục của Mộc Ngưu, kê dưới chân nó một miếng gỗ."
+        },
+        {
+          "text": "Đêm ấy khách ngủ trong kho giấy sạch. Qua vách, Gia Cát Vân tranh luận với Hoả Lôi, giọng trầm thấp, lâu lâu lại nghe tiếng hạt bàn tính bị gảy mạnh. Cái tên Tinh Đế được nhắc đến một lần rồi bỏ lửng. Vô Danh không nghe tiếp, khoác chăn lên vai đi ra sân.\n\nDiệu Diệu đang ngồi nối tơ cho con rối. Nàng hỏi khách có sợ thứ chiếc kim vừa chỉ không. Vô Danh đáp sợ người khác nhìn vào mình rồi chỉ thấy mỗi thứ đó. Nàng đưa con rối gỗ, nhờ giữ hộ trong lúc thắt nút. Không có tơ, con rối nặng và thô, một chân dài hơn chân kia. Vô Danh giữ yên cho đến khi nàng thắt xong.\n\nDưới mái kho đằng xa, một bóng mũ trùm đen ló ra sau cột. Diệu Diệu không quay lại, chỉ nói to rằng nếu có ai muốn hỏi khách đã qua nạn chưa, cửa bếp vẫn mở. Một lát sau, có tiếng bước chân lùi xa dần."
+        },
+        {
+          "text": "Sáng hôm sau, Hoả Lôi trao cho khách một mảnh vỏ kim đã tháo, dặn rằng nó không còn đo được gì, chỉ để nhớ có người đang tìm cách làm cho máy an toàn hơn. Tiểu Ban đưa tấm bản đồ, giờ mới được đóng dấu; Mộc Ngưu tránh lối cho qua, cái chân sau vừa thay trục kêu một tiếng khác hẳn. Gia Cát Vân viết thư giới thiệu khách tới Băng Phách, nơi mặt bàn trơn sẽ buộc người đánh phải xét lại lực tay.\n\nVô Danh nhận thư, nhưng xin giữ một bản ghi vụ nổ cho riêng mình. Gia Cát Vân đưa cả hai bản để khách chọn. Tờ giấy Hải Long trước kia chỉ là một khoảng trống; giờ có thêm một dấu hiệu chưa ai giải nghĩa. Vô Danh không thấy nhẹ lòng hơn, chỉ là từ nay thôi chịu mọi phép thử như thể mình không có quyền từ chối.\n\nTrên đường ra, một chiếc đinh đồng rơi khỏi gói đồ. Người đội mũ trùm nhặt lên trả, đưa bằng ống tay áo che kín cổ tay, rồi rẽ sang một cây cầu khác trước khi kịp bị hỏi tên."
+        }
       ]
     },
     {
-      "id": "bangphach", "title": "Chương 5 · Bông sen không tàn", "land": "bangphach", "unlock": "bangphach",
+      "id": "bangphach",
+      "title": "Chương 5 · Bông sen không tàn",
+      "land": "bangphach",
+      "unlock": "bangphach",
       "pages": [
-        { "art": "c5-lotus", "text": "Ở Băng Phách Tuyết Cung không có mùa xuân. Không phải vì lạnh — mà vì Cung Chủ Hàn Nguyệt đã đóng băng thời gian quanh cung, để giữ một bông sen không bao giờ tàn.\n\nTuyết Nhi nheo mắt ngắm bi, rồi liếc Vô Danh.\n\n— Đừng hỏi Cung Chủ về bông sen. Người hỏi lần trước giờ vẫn đứng ngoài cổng. Thành tượng rồi." },
-        { "text": "Vô Danh hỏi.\n\nHàn Nguyệt không giận. Nàng chỉ nhìn bông sen trong lồng băng như nhìn một đứa trẻ đang ngủ.\n\n— Mẹ ta trồng nó. Ngày bà mất, nó vừa nở. Ta không cho nó tàn. Như thế, bà vẫn còn ở đây một chút." },
-        { "text": "Ván đấu kéo dài đến nửa đêm. Bàn băng trơn đến mức mỗi cú của Vô Danh đều lăn quá xa, như thể chính mặt bàn không muốn cho bi dừng.\n\nBắc Minh Cuồng Hùng đứng xem, gầm gừ, rồi bất chợt nói nhỏ:\n\n— Ở rừng của cha ta, hoa tàn thì hạt rơi. Ở đây chẳng có hạt nào cả." },
-        { "art": "c5-spring", "text": "Vô Danh thua ván ấy. Cú cuối lăn quá đà, trôi qua miệng lỗ, dừng sát mép bàn. Lần đầu tiên từ khi lên bờ, người lạ thua.\n\nHàn Nguyệt cầm cơ của người thắng, nhìn lồng băng rất lâu. Cuồng Hùng không nói gì thêm. Rồi nàng tự đánh một cú nhẹ vào lồng, chỉ đủ để nó nứt.\n\nBông sen tàn trong ba hơi thở. Sáng hôm sau, lần đầu sau một trăm năm, tuyết quanh Tuyết Cung tan thành nước. Dưới lớp băng có những mầm xanh nhỏ — mọc từ những hạt đã nằm chờ cả trăm năm." }
+        {
+          "art": "c5-lotus",
+          "text": "Ở Băng Phách Tuyết Cung không có mùa xuân. Không phải vì lạnh — mà vì Cung Chủ Hàn Nguyệt đã đóng băng thời gian quanh cung, để giữ một bông sen không bao giờ tàn. Người trong cung vẫn nấu cơm, đổi phiên gác như mọi nơi. Vô Danh bước qua cầu, thấy những giọt nước dưới mái ngói treo lơ lửng, như chưa quyết có nên rơi hay không.\n\nTuyết Nhi nheo một mắt ngắm bi trên chiếc bàn ngoài hiên, rồi liếc sang người lạ.\n\n— Đừng hỏi Cung Chủ về bông sen. Người hỏi lần trước giờ vẫn đứng ngoài cổng. Thành tượng rồi.\n\nNói xong cô bé phì cười, chỉ pho tượng tuyết người ta đắp để canh cổng. Hàn Thạch không cười. Chàng hộ vệ phủi tuyết trên vai pho tượng, bảo có chuyện gì thì vào trong mà nói, đừng bắt khách đứng rét."
+        },
+        {
+          "text": "Bếp Tuyết Cung thơm mùi cháo lúa mạch và cá khô nướng. Tuyết Nhi treo cây cung pha lê lên cao rồi rót cho khách một bát trà bơ mặn. Vô Danh uống vội, muối làm cổ họng càng khát. Cô bé bật cười, đưa sang bát nước trong, dặn rằng ở đây thứ gì cũng phải nếm chậm.\n\nHàn Thạch ngồi gọt lại một chiếc thìa gỗ nứt. Anh ít lời đến nỗi Vô Danh tưởng câu hỏi về bông sen đã bị bỏ qua. Mãi đến khi bát cháo vơi quá nửa, anh mới nói mấy bậc đá phía tây đã trăm năm không có dấu chân. Không ai cấm cả. Chỉ là chẳng còn ai lên đó tưới hoa nữa. Lạc Sương đi ngang, mái tóc đen dài vấn gọn cho khỏi quét xuống nền tuyết. Nàng gỡ một cọng cỏ khô mắc ở khe cửa, nhìn nó một lúc lâu rồi bỏ vào bếp lửa."
+        },
+        {
+          "text": "Lạc Sương dẫn khách tới bàn tập. Mặt nỉ lạnh làm bi trượt rất xa; sức tay đã quen với bàn ở Thiên Cơ, sang đây hoá thừa. Nàng bảo đánh thử một đường dọc bàn, không cần bi đích, chỉ để nhìn chỗ bi trắng dừng. Vô Danh đánh. Bi trắng vượt qua điểm đã định, chạy thẳng tới băng ngắn. Lần sau bớt đi nửa sức, vẫn quá. Nàng không nhắc chữ \"nhẹ\", chỉ đặt một chén nước ngoài thành bàn, bảo khách nhìn tay mình lúc nâng chén.\n\nTuyết Nhi muốn đấu ngay. Hàn Thạch ngăn lại: khách vừa leo núi, tay chưa quen hơi lạnh. Vô Danh cảm ơn, mà lòng không vui. Từ ngày lên bờ, những ván phân thắng thua đều xuôi cả; tưởng như chuyện thua còn lâu mới tới lượt mình. Ý nghĩ ấy thoáng qua rất nhanh, mà buốt hơn gió tuyết.\n\nKhách đánh thêm một cú, lại để bi trắng chạy quá xa. Lạc Sương chỉ đổi khăn lau bi, để khoảng lặng kéo dài cho tới khi Vô Danh tự đứng thẳng dậy."
+        },
+        {
+          "text": "Giữa bữa chiều, Bắc Minh Cuồng Hùng trở về, vai phủ đầy tuyết, dựng cây cơ làm bằng băng và xương cá voi vào cột. Hắn gọi một bát lớn, ngồi xuống làm chiếc ghế kêu răng rắc. Tuyết Nhi hỏi bên rừng có ấm không. Hắn kể cha hắn vẫn ngủ dưới gốc cây, còn mẹ hắn ngày trước từng đứng gác ở chính cung này; cả hai đều dặn hắn về thăm bên kia trước khi trời trở.\n\nMột người hầu ngập ngừng, không biết nên gọi cha hắn là người hay thú. Hàn Thạch kéo ghế cho Cuồng Hùng, gọi đúng tên hắn, rồi hỏi con đường băng ngoài biển có nứt không. Vô Danh thấy một câu hỏi nhỏ đã đưa người vừa về ngồi lại giữa bữa cơm như thế nào.\n\nCuồng Hùng cúi xuống ngửi tay áo Vô Danh, bảo có mùi một khu rừng mà người này chưa đi tới. Hắn không giải thích, ăn xong thì tự bưng bát đi rửa, móng gấu cầm đồ sành cẩn thận hơn người thường."
+        },
+        {
+          "text": "Vô Danh vẫn hỏi. Không phải giữa buổi chầu, mà vào lúc Hàn Nguyệt đứng một mình bên lồng băng, vạt áo choàng dài phủ xuống bậc. Cung Chủ không giận. Nàng nhìn bông sen trong lồng như nhìn một đứa trẻ đang ngủ.\n\n— Mẹ ta trồng nó. Ngày mẹ mất, nó vừa nở. Ta không cho nó tàn. Như thế, mẹ vẫn còn ở đây một chút.\n\nVô Danh định hỏi giữ được hoa thì có giữ được người không, nhưng thấy chiếc chén nhỏ đặt cạnh lồng thì thôi. Ngày nào cũng có người thay trà trong chén, dù chẳng ai uống. Câu hỏi kia nói ra thì dễ quá, nhất là từ miệng người không nhớ nổi gương mặt nào mình từng mất.\n\nHàn Nguyệt quay sang nhìn cây cơ của khách, hẹn mai đánh với nàng một ván. Nàng không đặt bông sen làm vật cược. Số phận của nó, nàng không giao cho người thắng một ván bida."
+        },
+        {
+          "text": "Đêm trước ván đấu, thư Kiếm Nhi tới, gói kín trong túi da. Cô kể Lăng Thiên Kỳ bắt cô tập lại cách đặt bi trắng sau khi đối thủ phạm lỗi, rồi hỏi Vô Danh đã nhớ đúng luật bi trong tay chưa. Vô Danh đọc hai lần, nhận ra có người đang nối những lá thư lại thành một chuyến đi.\n\nKhách viết thư trả lời, rằng mai sẽ đấu với Cung Chủ, rồi gạch đi câu \"chắc không khó\".\n\nNgoài cửa sổ, có hai hàng dấu chân đi tới hàng rào rồi vòng trở ra. Trước khi ngủ, khách đặt một cốc nước nóng lên bậu cửa, không biết là để cho ai. Sáng ra cốc đã nguội, nhưng đã được dời vào chỗ khuất gió, dưới đáy kê một mẩu gỗ cho khỏi dính chặt vào đá."
+        },
+        {
+          "text": "Ván đấu là chín bi. Hàn Nguyệt phá vừa đủ tách cụm, đưa quả một xuống lỗ góc; bi trắng dừng ngay trên đường tới quả hai, không một tiếng thừa. Nàng ăn quả hai bằng một cú đẩy ngắn, bỏ qua đường xa dễ hỏng, rồi ăn tiếp quả ba. Tuyết Nhi khều tay Lạc Sương, hất cằm bảo khách nhìn kỹ. Vô Danh nhìn rất rõ, vậy mà tay vẫn cứ muốn đánh mạnh hơn.\n\nĐến quả bốn, Hàn Nguyệt đánh an toàn: đẩy bốn về băng ngắn, giấu bi trắng sau quả bảy. Vô Danh đá băng, chạm đúng bốn, nhưng sức thừa làm nó chạy ngược ra giữa bàn, để lại cho đối thủ một đường thẳng. Nàng ăn bốn, ăn năm. Quả sáu nằm sát hàm lỗ, nhưng bi trắng không thuận; nàng không cố ăn mà đánh thủ, đẩy bi trắng về tận đầu bàn bên kia.\n\nKhách nhận lượt với một cú dài, miệng lỗ như ở ngay trước mặt, tự nhủ chỉ cần thật nhẹ. Quả sáu rơi. Nhưng đầu cơ vẫn đi dài hơn ý muốn; trên mặt băng, bi trắng trôi tuột ra xa, không còn đường tới quả bảy."
+        },
+        {
+          "text": "Ván đấu kéo dài tới nửa đêm. Bàn băng trơn đến mức cú nào của Vô Danh cũng lăn quá xa, như chính mặt bàn không muốn cho bi dừng lại. Hai người đổi lượt bằng những cú giấu bi; tiếng bi chạm nhau khẽ vang trong đại điện, nghe như ai gõ lên bát sứ. Trà bưng tới rồi bưng đi, mặt trà đóng một lớp váng lạnh.\n\nHàn Nguyệt không ngồi chờ đối thủ tự thua. Đến một lượt, nàng phải giải thế bi trắng nằm sát băng, quả bảy ở xa, đường đi bị quả tám che mất một nửa. Nàng cắt thật mỏng, đưa bảy vào lỗ, cho bi trắng chạy hai băng về phía thoáng. Lạc Sương đứng xem, hai bàn tay giấu trong ống tay áo. Bi trắng dừng xa hơn ý muốn một đốt ngón tay, và Cung Chủ cũng phải nhíu mày.\n\nLần đầu tiên Vô Danh thấy nàng phải sửa lại dự tính của mình. Thì ra mặt băng trơn chẳng nể ai, kể cả người đã sống trên nó cả đời."
+        },
+        {
+          "text": "Không có đường chắc cho quả tám, Hàn Nguyệt đánh thủ, đẩy tám về sát băng dài. Bắc Minh Cuồng Hùng đứng xem, trong cổ gầm gừ, rồi bỗng nói nhỏ:\n\n— Ở rừng của cha ta, hoa tàn thì hạt rơi. Ở đây chẳng có hạt nào cả.\n\nHàn Thạch ngước nhìn lồng băng, không bảo hắn im. Tuyết Nhi giữ chặt dây cung sau lưng, mắt vẫn bám theo bi.\n\nLời ấy lọt tới tai Vô Danh đúng lúc đang ngắm quả tám. Khách đứng thẳng dậy, đợi đến khi thôi nghe tiếng tim mình mới cúi xuống lại. Không thể lấy một câu nói đúng làm cách thắng người đối diện. Quả tám nằm sát băng; muốn đưa nó vào góc phải cắt mỏng mà vẫn giữ được bi trắng cho quả chín. Vô Danh bỏ ý ăn ngay, trả một cú an toàn. Hàn Nguyệt phải đá băng mới chạm được tám, và lần này quả tám dừng ở chỗ khách còn một cơ hội cuối."
+        },
+        {
+          "text": "Vô Danh thua ván ấy. Cú cuối đi quá đà: quả tám lăn ngang qua miệng lỗ mà không chịu rơi, dừng lại sát mép băng. Lần đầu tiên từ ngày lên bờ, người lạ thua. Hàn Nguyệt đưa nốt hai quả còn lại vào lỗ, đợi bi trắng đứng hẳn rồi mới dựng cơ. Người giữ bàn xướng tên người thắng, giọng đều đều. Hai chữ Vô Danh lần này được gọi ở phía người thua.\n\nKhông có vực nào mở ra dưới chân. Thế nhưng bàn tay trên cán cơ vẫn cứng đờ, chưa chịu buông để đón chén trà. Vô Danh phải gỡ từng ngón một.\n\nTuyết Nhi không nói lần sau sẽ thắng; cô chỉ kéo tới một chiếc ghế. Lạc Sương nhặt chiếc khăn rơi. Hàn Thạch đẩy lò than lại gần, tránh chân ghế khách ngồi. Cuồng Hùng cúi đầu uống trà, không nhắc lại chuyện hạt nữa. Trong khoảng lặng sau một ván đã xong, chỉ còn tiếng nước sôi lăn tăn rất nhỏ."
+        },
+        {
+          "art": "c5-spring",
+          "text": "Hàn Nguyệt cầm cây cơ của người vừa thắng, nhìn lồng băng rất lâu. Cuồng Hùng không nói thêm gì. Rồi nàng tự tay đánh một cú nhẹ vào lồng, vừa đủ cho nó nứt. Nàng chọn chỗ băng mỏng nhất — chỗ ngày nào bàn tay nàng cũng đặt vào để thử độ lạnh. Tiếng nứt còn nhỏ hơn tiếng hai quả bi chạm nhau, vậy mà lan khắp đại điện.\n\nBông sen tàn trong ba hơi thở. Một cánh rơi xuống chén trà của mẹ nàng.\n\nHàn Nguyệt ngồi xuống, không đưa tay đỡ. Vô Danh đứng phía sau, giữ nguyên khoảng cách. Không ai được nhận công đã khiến nàng làm điều ấy, và cũng không ai làm thay nàng được. Tuyết Nhi khóc trước tiên, lấy tay áo quệt vội. Cung Chủ chỉ bảo đem tới một chiếc đĩa sạch, để những cánh sen khỏi lẫn vào tro. Hàn Thạch đi lấy — lần đầu tiên người trong cung thấy anh bước vội."
+        },
+        {
+          "text": "Sáng hôm sau, lần đầu sau một trăm năm, tuyết quanh Tuyết Cung tan thành nước. Dưới lớp băng nhú lên những mầm xanh nhỏ — mọc từ những hạt đã nằm chờ suốt trăm năm ấy. Nước chảy tràn qua bậc đá phía tây, người hầu phải đi tìm chổi cũ khơi rãnh. Mùa xuân đầu tiên không đến như tấm lụa lành: có ngói vỡ, áo ướt, tiếng gọi nhau tránh chỗ trơn.\n\nHàn Nguyệt giữ lại chiếc chén, cất những cánh sen vào hộp, rồi nhờ Cuồng Hùng lần sau tiện đường thì mang ít đất rừng về. Vô Danh chào người thắng, không xin đấu lại để gỡ ngay ván thua. Trong thư gửi Kiếm Nhi, khách viết đúng kết quả, không gạch chữ nào.\n\nLúc xuống núi, một giọt nước từ mái hiên rơi trúng đầu cơ — lần này rơi thật. Vô Danh bọc cây cơ lại. Có những chỗ dừng không cần mình làm gì thêm. Khách bước tiếp, trước khi giọt nước kịp khô."
+        }
       ]
     },
     {
-      "id": "docvu", "title": "Chương 6 · Mạch đã ngừng một lần", "land": "docvu", "unlock": "docvu",
+      "id": "docvu",
+      "title": "Chương 6 · Mạch đã ngừng một lần",
+      "land": "docvu",
+      "unlock": "docvu",
       "pages": [
-        { "art": "c6-valley", "text": "Thung lũng Độc Vụ thở ra sương xanh. Người ngoài gọi nó là độc, người trong cốc gọi nó là thuốc.\n\nQuỷ Y Dược Vương đẩy chiếc mặt nạ mỏ chim lên trán, nắm cổ tay Vô Danh như nắm một nhành cây cần chẩn bệnh.\n\n— Cả thiên hạ mua Hồi Xuân Đan của ta, — bà nói. — Nên ta thuộc mạch của cả thiên hạ." },
-        { "text": "Bà im lặng rất lâu. Ngón tay đè xuống mạnh hơn, rồi nhẹ đi, rồi rời ra như vừa chạm phải lửa.\n\n— Mạch này đã ngừng một lần, — bà nói. — Không phải ngất. Không phải chết giả. Ngừng hẳn. Rồi đập lại.\n\nNgũ Độc Đồng Tử há miệng. Con cóc trên vai cậu cũng há theo." },
-        { "text": "— Bà biết tôi là ai? — Vô Danh hỏi.\n\nQuỷ Y nhìn những lọ thuốc lấp lánh quanh mình — những lọ đã giữ cho bao nhiêu người không phải chết.\n\n— Mạch này ta từng bắt một lần, bốn mươi năm trước, trên Linh Đài. Người ta bắt mạch đêm ấy đã rơi khỏi tay ta. Ta không nói điều ta không chắc. Đánh với ta một ván. Thắng thì ta trả lời một câu khác." },
-        { "art": "c6-healer", "text": "Vô Danh thắng. Câu hỏi khác là: “Vì sao bà không để ai chết?”\n\nQuỷ Y cười, nụ cười của người đã thức quá lâu.\n\n— Vì một nghìn năm trước có người bảo ta rằng không ai cần phải chết nữa. Ta mất bảy trăm năm mới luyện được Hồi Xuân Đan. Ba trăm năm sau đó, ta không dám ngừng tay." }
+        {
+          "art": "c6-valley",
+          "text": "Thung lũng Độc Vụ thở ra sương xanh. Người ngoài gọi đó là độc, người trong cốc gọi đó là thuốc. Dọc đường xuống có những phiến đá khắc hình lá, chỉ lối tránh các vũng nước không được uống. Bà bán bánh khoai gói hàng bằng thứ lá nhám, để trẻ con khỏi nhầm với lá thuốc đang phơi.\n\nVô Danh chưa kịp ngồi hẳn xuống ghế, Quỷ Y Dược Vương đã đẩy chiếc mặt nạ mỏ chim lên trán, nắm lấy cổ tay khách như nắm một nhành cây cần xem bệnh. Cây cơ bạc dài như một mũi kim châm của bà tựa bên án, đầu quấn vải sạch.\n\n— Cả thiên hạ mua Hồi Xuân Đan của ta, — bà nói, mắt đã dừng trên những mạch máu nhỏ dưới da. — Nên ta thuộc mạch của cả thiên hạ."
+        },
+        {
+          "text": "Bà im lặng rất lâu. Ngón tay đè xuống mạnh hơn, rồi nhẹ đi, rồi rời ra như vừa chạm phải lửa.\n\n— Mạch này đã ngừng một lần, — bà nói. — Không phải ngất. Không phải chết giả. Ngừng hẳn. Rồi đập lại.\n\nNgũ Độc Đồng Tử há hốc miệng. Con cóc trên vai cậu cũng há theo. Một giọt thuốc rơi khỏi đầu muỗng, loang tròn trên tờ giấy.\n\nVô Danh nhìn chỗ cổ tay bà vừa buông, tưởng sẽ thấy một dấu vết gì hiện lên. Da vẫn như cũ, chỉ có vệt ngón tay nhạt dần. Khách hỏi phải chăng cỗ máy ở Thiên Cơ đã làm lệch nhịp tim. Quỷ Y lắc đầu. Bà đậy hộp gối bắt mạch, ra hiệu cho Đồng Tử đưa người bệnh kế tiếp vào. Người ấy đã chờ từ sáng; phòng thuốc không thể đứng lại vì một câu hỏi chưa có lời đáp."
+        },
+        {
+          "text": "Ngũ Độc Đồng Tử dẫn khách ra giếng rửa tay. Cậu mang theo năm con cổ trùng, cúi xuống múc nước là phải đếm lại từng con. Lục Xà đứng dưới giàn phơi, đôi mắt hổ phách con ngươi dọc dõi theo một đàn ruồi trên nong. Nàng nhắc cậu đừng để con cóc chạm vào bát của người bệnh. Cậu cãi nó sạch lắm, rồi vẫn đi lấy bát khác.\n\nVô Danh ăn bánh khoai mà không biết vị gì. Nàng bảo người lần đầu nghe tin bệnh thường hỏi sai thứ tự: hỏi bao giờ khỏi trước khi biết mình mắc bệnh gì.\n\n— Vậy ta mắc bệnh gì?\n\n— Phải hỏi người đã bắt mạch. Ta chỉ biết chờ.\n\nNàng chờ một con sâu rơi khỏi lá rồi bắt gọn, bỏ riêng vào hộp. Ở Hoa Linh người ta chờ để ngủ quên; ở đây người ta chờ cho đến khi thấy một dấu hiệu đủ chắc."
+        },
+        {
+          "text": "Đến khi phòng khám đã vắng, Vô Danh mới hỏi:\n\n— Bà biết tôi là ai?\n\nQuỷ Y nhìn những lọ thuốc lấp lánh quanh mình — những lọ đã giữ cho bao nhiêu người khỏi phải chết.\n\n— Mạch này ta từng bắt một lần, bốn mươi năm trước, trên Linh Đài. Người ta bắt mạch đêm ấy đã rơi khỏi tay ta. Ta không nói điều ta không chắc. Đánh với ta một ván. Thắng thì ta trả lời một câu khác.\n\n— Sao lại là câu khác?\n\n— Vì ta không đem điều mình chưa biết ra làm vật cược.\n\nVô Danh đặt lên án tờ xác nhận của Hải Long và bản đo của Thiên Cơ. Bà đọc cả hai, không đẩy trả, cũng không gom chúng thành một kết luận. Tay bà chạm tới ngăn kéo đựng một cuộn băng vải rất cũ, rồi lại đóng ngăn ấy lại. Khách muốn giữ bàn tay bà ở đó, nhưng rốt cuộc chỉ hỏi bao giờ thì đánh được, giọng khàn đi vì cả buổi quên uống nước."
+        },
+        {
+          "text": "Độc Thủ Lão Quái trông bàn cơ cạnh vườn thuốc, bộ râu dài buộc gọn cho khỏi nhúng vào bát. Lão mở bầu độc ra ngửi, liền bị Lục Xà nhắc đậy nút lại: người bệnh sắp đi ngang qua đây. Lão cười khà, lấy ra bầu trà gừng, bảo hai bầu buộc dây khác màu, không lẫn được. Vô Danh nhìn kỹ hai cái nút, lần đầu muốn biết rõ những điều thật nhỏ trước khi đặt tay vào.\n\nNỉ ở đây dày rêu, bi chậm hơn ở Băng Phách nhiều. Khách thử lại cú quen tay trên bàn băng; bi trắng đi được nửa đường đã nằm im. Lão Quái cho lau một khoảnh nỉ bám bụi, rồi bảo: lực đánh phải đủ, thuốc phải đúng liều, mà cả hai thứ ấy đem từ nơi này sang nơi khác thì không còn nguyên như cũ.\n\nCuối vườn, Huyết Lang Nhân đánh một cú mạnh đến nỗi bi chạm ba băng, rồi đứng thở dốc, mấy ống thuốc sau lưng hắn khẽ va vào nhau."
+        },
+        {
+          "text": "Huyết Lang Nhân đòi đánh thêm một lượt, dù tay run đến mức đầu cơ gõ cả xuống nỉ. Ngũ Độc Đồng Tử đã nhặt sẵn bi trắng, chờ lệnh. Quỷ Y bước ra sân, không cho hắn dùng thêm thuốc trong buổi ấy. Hắn gầm lên: chính bà từng bảo thuốc sẽ giữ cho hắn đủ sức đánh mãi. Bà không chối lời cũ, chỉ đặt một chiếc ghế xuống, đợi hắn ngồi.\n\nVô Danh không chen vào, chỉ nhìn chiếc ghế đứng đó mãi mà không được nhận. Một lúc sau, Huyết Lang Nhân ngồi xuống, quay mặt về phía hàng cây thuốc để không ai thấy mặt mình. Lục Xà đem một tấm khăn rộng phủ lên vai hắn, không cố gỡ những ngón tay đang co quắp.\n\nVô Danh chợt hiểu câu hỏi về cái chết không thể chỉ nằm chờ ở cuối một ván thắng. Ở đây nó có cơn khát, cái đau lưng, mùi mồ hôi, và một người sợ mất cả quyền được đòi thêm."
+        },
+        {
+          "text": "Ván với Quỷ Y là mười bi, phải gọi quả gọi lỗ. Bà xem đầu cơ đã sạch chưa rồi mới phá, không để chút bột thuốc nào rơi lên mặt bàn. Quả một vào lỗ góc, nhưng đường tới quả hai bị quả sáu chắn. Bà báo đánh an toàn, đưa hai về sát băng rồi giấu bi trắng sau quả bốn. Vô Danh đi một vòng quanh bàn, tìm một đường đá hai băng thay vì liều chạm vào sáu trước.\n\nCú thoát chạm đúng quả hai. Không quả nào rơi, nhưng hai đã chạm băng nên không phạm lỗi. Quỷ Y gọi hai vào góc phải, ăn gọn, giữ bi trắng cho quả ba. Đến quả ba, bà đánh thiếu lực vì khoảnh rêu sẫm gần lỗ giữa; quả bi nằm lại ngay trên miệng lỗ. Bà cúi sát xem mặt nỉ, nhưng không xin nhặt rêu giữa ván.\n\nVô Danh nhận bàn, gọi quả ba vào đúng lỗ ấy. Một cú đẩy ngắn là đủ, có điều bi trắng dừng sát quả bốn hơn dự tính, buộc khách phải đổi đường đi tiếp theo."
+        },
+        {
+          "text": "Vô Danh không dọn được bàn một mạch. Quả năm kẹt giữa tám và chín; khách đành chạm năm cho hợp lệ rồi nhường lượt. Quỷ Y có thể thử một đường cắt khó, nhưng bà chọn tách cụm, để bi trắng lại ở chỗ thật khó chịu cho khách. Bà báo an toàn trước khi đánh, người giữ bàn nhắc lại lời báo ấy, và quả tám lăn vào lỗ.\n\nĐồng Tử thấy có quả rơi mà lượt vẫn đổi, bèn hỏi nhỏ. Lục Xà giải thích: đã báo an toàn thì bi có rơi cũng không được đánh tiếp. Không phải tiếng rơi nào cũng cho người ta đi tiếp.\n\nKhách nhận một bi trắng bị che kín, đá băng chạm năm, rồi để bi trắng nấp sau quả chín. Đó là cú đầu tiên trong ngày Vô Danh không tiếc vì không ăn được bi. Quỷ Y giải được thế ấy, rồi ở lượt sau ăn năm, nhưng trượt quả sáu vì cố giữ đường cho bảy. Bà đứng thẳng lên, xoa mấy ngón tay vẫn dùng để bắt mạch. Vô Danh thấy cử chỉ ấy, nhớ lại bàn tay đã rời cổ tay mình như chạm phải lửa, nhưng không hỏi gì khi bà đang chờ nhận lượt."
+        },
+        {
+          "text": "Đến cuối ván, Vô Danh gọi quả mười vào góc xa; bi trắng phải chạm băng ngắn để tránh lỗ giữa. Khách lau đầu cơ, bớt chút áp phê, vì nỉ nặng giữ đường bi khác hẳn bàn Hải Long. Quả mười rơi. Bi trắng lăn thêm một quãng rồi dừng ngoài miệng lỗ một gang tay. Trong sân bệnh xá không ai hò reo. Đồng Tử toét miệng cười, giơ con cóc lên rồi vội cất đi.\n\nVô Danh thắng. Câu hỏi khác ấy là: \"Vì sao bà không để ai chết?\"\n\nQuỷ Y cười, nụ cười của người đã thức quá lâu.\n\n— Vì một nghìn năm trước, có người bảo ta rằng không ai cần phải chết nữa. Ta mất bảy trăm năm mới luyện được Hồi Xuân Đan. Ba trăm năm sau đó, ta không dám dừng tay.\n\nNói xong, bà xoay chiếc cốc rỗng giữa hai bàn tay, như còn tìm chút hơi ấm của thứ đã uống cạn từ lâu."
+        },
+        {
+          "art": "c6-healer",
+          "text": "Đêm xuống, Quỷ Y ngồi một mình giữa những ngăn thuốc, nhìn các lọ đan đã vơi. Vô Danh gõ cửa, rồi ngồi lại trong phòng khi đèn ngoài vườn lần lượt tắt.\n\nBà kể về những ngày đầu hành nghề sau Đại Kiếp: cáng đặt kín đường, bà phải chọn người còn thở để cứu trước. Luyện được đan rồi, những gương mặt ngày ấy vẫn không rời khỏi tay bà. Mỗi lần có một mạch yếu dần dưới ngón tay, bà lại nghe tiếng ai gọi mình từ sau tấm rèm vải năm nào.\n\n— Tôi không hỏi để bà thôi chữa bệnh cho người ta.\n\n— Ta biết. Nhưng nếu ta ngừng một viên, ai sẽ chịu quyết rằng đó là viên cuối?\n\nVô Danh không đem chuyện sen tàn ra làm lời khuyên. Khách chỉ kể lại ván mình đã thua, kể Hàn Nguyệt ngồi nhặt từng cánh sen bỏ vào đĩa, và không ai giành được của nàng quyền chọn lựa ấy. Quỷ Y nhìn ngón tay mình, ngắt một mẩu chỉ thừa trên tay áo. Ngoài cửa, Huyết Lang Nhân đã ngủ trên ghế; lần đầu trong ngày, hắn không xin thêm một ống thuốc."
+        },
+        {
+          "text": "Sáng lên đường, Lục Xà đưa cho khách mấy cuộn băng sạch và dặn cách giặt, nhưng không cho mang theo thứ lá nào chưa biết liều. Lão Quái buộc bầu trà gừng bằng sợi dây trắng, dặn đi dặn lại. Ngũ Độc Đồng Tử đòi theo tới Kim Sa, bị cả ba người giữ lại. Quỷ Y đứng ở cuối lối, đưa cho khách một tờ ghi nhịp mạch, không viết tên bệnh nào.\n\nBà kể có một người áo đen đã tới hỏi mua thuốc chống say nắng cho một người sắp qua sa mạc, trả tiền rồi bỏ đi, không lấy tiền thừa. Vô Danh nhìn về phía đường rừng, không thấy ai. Khách trả tiền thuốc mấy ngày qua; Quỷ Y nhận đủ, không biến lời thật thành món nợ.\n\n— Nếu bà nhớ thêm điều gì, xin gửi thư cho tôi.\n\n— Nếu chắc, ta sẽ gửi.\n\nHai người chia tay bằng đúng điều kiện ấy. Trong ngực Vô Danh, tim vẫn đập đều, nhưng từ nay mỗi nhịp đập không còn là chuyện vô tình."
+        },
+        {
+          "text": "Ra khỏi cốc, Vô Danh dừng ở quán bánh khoai đầu đường. Bà bán hàng hỏi có gói thêm phần cho người đi cùng không. Khách quay lại, thấy bóng áo đen đứng dưới một gốc cây xa; lần này người ấy không kịp khuất hẳn. Vô Danh mua hai phần, đặt một phần lên tảng đá bên lối, rồi đi thật chậm, chậm đến mức nghe được tiếng người kia cúi nhặt.\n\nKhông có lời cảm ơn nào vọng tới. Chỉ khi qua khúc quanh, Vô Danh mới thấy một gói lá chống say nắng đặt ở chỗ dễ nhìn. Khách không đuổi theo để hỏi. Chuyện mạch đã ngừng một lần vẫn nằm trước mặt như một cánh cửa đóng kín. Còn chuyện một người không chịu lên tiếng mà vẫn đi mua thuốc cho mình thì nhỏ thôi, và hiểu được ngay.\n\nKhách buộc gói lá vào túi, viết thêm cho Kiếm Nhi một dòng: đừng gửi thư tới cốc nữa. Đường sắp vào sa mạc; thư sau hãy gửi tới Kim Sa."
+        }
       ]
     },
     {
-      "id": "kimsa", "title": "Chương 7 · Mặt trời không lặn", "land": "kimsa", "unlock": "kimsa",
+      "id": "kimsa",
+      "title": "Chương 7 · Mặt trời không lặn",
+      "land": "kimsa",
+      "unlock": "kimsa",
       "pages": [
-        { "art": "c7-sun", "text": "Ở Kim Sa, mặt trời đứng yên giữa đỉnh trời đã ba trăm năm. Bóng người co lại dưới gót chân. Không có đêm. Trẻ con ở đây chưa từng thấy một vì sao.\n\nSa Hồ dắt Vô Danh qua chợ, khéo léo lấy của mỗi sạp một quả chà là.\n\n— Đừng thương hại bọn ta, — cô nói. — Bọn ta có ánh sáng mãi mãi. Chỉ là chưa ai được ngủ ngon." },
-        { "text": "Thái Dương Nữ Hoàng ngồi trên ngai vàng, sau lưng là vầng mặt trời bị ghim bằng những sợi xích sáng.\n\n— Một nghìn năm trước, Hư Không nuốt nửa đất này, — bà kể. — Sa mạc xanh của tổ tiên ta mất trong một đêm. Ta thề không để dân ta sống thêm một đêm nào nữa." },
-        { "text": "— Đêm Đại Kiếp, — Nữ Hoàng nói tiếp, giọng trầm như đọc kinh, — có một kiếm khách trẻ đứng trên đỉnh núi trắng, cầm cây cơ đầu tiên của thế gian, đánh một cú lên trời. Mọi vì sao đứng yên. Hư Không ngừng nuốt.\n\nNgười ta gọi đó là Cú Định Thiên. Ta chỉ học theo người ấy, trên một vì sao nhỏ hơn." },
-        { "art": "c7-balcony", "text": "Vô Danh nhìn về phía Đông, nơi đỉnh núi trắng của Thiên Quang nhô lên khỏi chân trời.\n\nMột kiếm khách trẻ. Một nghìn năm trước. Chín thanh kiếm đứng yên.\n\nKim Nhãn Tế Ti, đứng sau ngai, khẽ nói bằng giọng chỉ đủ một người nghe:\n\n— Ngươi bắt đầu hiểu rồi. Mặt trời cũng biết mệt." }
+        {
+          "art": "c7-sun",
+          "text": "Ở Kim Sa, mặt trời đứng yên giữa đỉnh trời đã ba trăm năm. Bóng người co lại dưới gót chân. Không có đêm. Trẻ con ở đây chưa từng thấy một vì sao. Người bán nước gõ bát báo giờ đổi phiên; thợ dệt buông rèm dày để giả làm bóng tối. Hũ sữa chua được vùi xuống cát dưới tấm vải ướt — một góc mát nhỏ giữ bằng bao công sức.\n\nSa Hồ dắt Vô Danh qua chợ, khéo léo lấy ở mỗi sạp một quả chà là.\n\n— Đừng thương hại bọn ta, — cô nói. — Bọn ta có ánh sáng mãi mãi. Chỉ là chưa ai được ngủ ngon.\n\nĐôi tai cáo của cô nghiêng nghiêng dưới khăn vàng. Qua đến sạp cuối, cô thả vào bát cân một món tiền vừa đủ, không để Vô Danh kịp gọi việc ấy là trộm hay là mua."
+        },
+        {
+          "text": "Vô Danh muốn tìm người biết chuyện một nghìn năm trước. Sa Hồ nhận dẫn đường, đổi lại khách phải đứng ra mua hộ ở hai sạp mà cô không được bén mảng tới — cô đã bị cấm vì tráo những quả cân. Cô bảo tiền thì trả đủ rồi, còn lời xin lỗi thì chưa biết đặt lên quả cân nào.\n\nHai người chia nhau chiếc bánh dẹt và mấy quả chà là dưới vòm cửa. Sa Hồ kể trẻ con ở đây học gọi \"phiên ngủ\" thay cho buổi tối; có đứa em nhỏ từng hỏi mặt trăng có phải cái bánh bị nướng cháy không. Vô Danh nhớ đến cơn buồn ngủ êm ái ở Hoa Linh, nhưng không đem ra kể để so sánh. Khách mua thêm nước, rót đầy bình của cô trước.\n\nTrên bức tường ngoài lăng, một con sư tử đá chậm rãi quay đầu nhìn theo họ, những đường khảm ngọc lam trên trán bám đầy cát trắng."
+        },
+        {
+          "text": "Thạch Tượng Hộ Lăng không nói. Nó đặt cây cơ như một cột đá ngang lối vào vườn bia, cát nghiến ken két dưới chân. Sa Hồ bảo muốn qua thì phải giải thế bàn ngoài cổng. Không cần thắng tượng, chỉ cần đưa một quả bi vượt qua đường bị chặn, đúng luật. Vô Danh nhìn ba quả nằm sát nhau, mặt nỉ dày đến mức vết chổi quét còn hằn thành vệt.\n\nCú đầu là cú thử được phép: bi trắng chạy thiếu, dừng giữa bàn. Vô Danh xin thêm một lần thử lực; pho tượng không nhúc nhích. Sa Hồ chỉ tấm bảng: ở đây chỉ được tập một lần.\n\nKhách phải chọn đường băng ngắn hơn, tăng lực nhưng không thúc thẳng vào cụm. Bi trắng chạm băng rồi cắt mỏng bi đích, đưa nó sang tới băng đối diện. Đủ điều kiện, không cần vào lỗ. Thạch Tượng nhấc cơ cho qua, tiếng đá cọ xuống nền như một cánh cửa lâu ngày không mở. Sa Hồ nín thở tới tận lúc ấy."
+        },
+        {
+          "text": "Trong vườn bia không có cây, chỉ có những gốc cây hoá đá được đặt lại đúng chỗ chúng từng mọc. Sa Vương Kim Giáp đứng dưới mái lụa, bắt khách đọc bia trước rồi mới được nói chuyện thiếu đêm. Ông râu quai nón, bộ giáp vảy cá sấu nóng đến mức người hầu phải liên tục thay khăn lót vai. Ông bảo cát này là đất của người sống, không phải chỗ để khách lạ thương xót rồi bỏ đi.\n\nVô Danh đọc tên những giếng nước đã mất trong Đại Kiếp. Bên mỗi giếng có một con số: bao nhiêu nhà, bao nhiêu gia súc, bao nhiêu người không trở về. Chỗ chữ mờ để trống, không ai khắc lại bằng phỏng đoán. Khách xin được nghe chính người ở đây kể. Sa Vương nhìn bầu nước khách tự mang theo, bớt nghi ngại, nhưng chưa cho vào điện. Muốn bàn về cái giá của việc giữ nắng, trước hết phải biết bàn Kim Sa bắt người ta trả giá ra sao cho mỗi cú dùng sức mà thiếu suy nghĩ."
+        },
+        {
+          "text": "Ván thử chín bi với Sa Vương diễn ra ở bàn ngoài hành lang. Ông phá thật mạnh; bi bung ra nhưng mất sức rất nhanh trên lớp nỉ phủ cát. Không quả nào rơi, bốn quả chạm băng, cú phá hợp lệ, lượt sang khách. Vô Danh thấy quả một nằm sát quả hai, bèn không cố ăn mà đẩy một chạy dọc băng, giấu bi trắng sau cụm. Sa Vương xắn tay áo, bảo khách giỏi giấu thì ông giỏi tìm.\n\nÔng đá băng chạm quả một, đưa nó ra sát miệng lỗ góc, còn bi trắng lại nấp sau quả bốn. Vô Danh đành giải bằng một cú không để lại thế tốt cho lượt sau. Qua mấy lần đổi lượt, Sa Vương đánh bi trắng rơi xuống lỗ giữa, vì lực quá mạnh mà áp phê lại sai bên. Ông gọi người nhặt, rồi tự tay đặt bi trắng vào tay khách.\n\n— Cát không nể cả chủ đất, — ông nói.\n\nCó bi trong tay, Vô Danh không đặt sát quả một cho dễ ăn, mà lùi ra xa một chút, để sau cú ăn còn góc sang quả hai."
+        },
+        {
+          "text": "Khách ăn quả một, quả hai, rồi dừng lại ở quả ba bị quả bảy chặn. Trên nỉ nặng, cú cu-lê cần đủ lực để bi trắng còn lăn sau va chạm; đánh nhẹ như ở Tuyết Cung thì nó chỉ nằm chết giữa đường. Vô Danh nhớ lời Lão Quái về liều thuốc, chọn một cú tách có đường lui. Quả ba chạm băng, bi trắng chạy về đầu bàn, để lại cho đối thủ một lựa chọn khó.\n\nSa Vương cười qua bộ râu, lần đầu tỏ ra thích ván đấu hơn việc tra xét khách. Vô Danh thắng nhờ một đường chín thẳng và ngắn, sau một cú ông để sai vị trí, chứ không phải nhờ có sức mạnh vượt được bàn cát.\n\nÔng viết giấy cho vào điện, thêm riêng một dòng: phải nghe Nữ Hoàng nói hết. Sa Hồ liếc nét chữ, bảo dòng ấy ông viết cho tất cả những ai đến đây, kể cả kẻ chỉ xin mua muối. Ông không chối."
+        },
+        {
+          "text": "Kim Nhãn Tế Ti chờ ngoài hành lang, chiếc mặt nạ mắt vàng che nửa trên khuôn mặt. Ông không hỏi đã thắng chưa, chỉ hỏi nước còn đủ uống không. Phía sau ông, những người chép lịch dùng hạt để đếm phiên làm, cứ đủ một bình thì đổi ca. Vô Danh hỏi mặt trời không đổi thì cần lịch làm gì. Ông đáp người ta vẫn phải nhớ mình đã hẹn gặp nhau lúc nào.\n\nÔng cho khách xem một bức tranh cũ: vườn xanh bên bờ nước, thời con lạc đà còn chưa phải con vật quen thuộc nhất. Màu xanh đã nhạt, nhưng không ai tô đè. Sa Hồ đứng rất yên, không chạm vào khung.\n\nVô Danh thấy một vệt đen trên tranh chạy ngang qua chỗ từng có nhà cửa, rồi bị gập ra mặt sau. Tế Ti mở phần gập cho khách xem trọn vẹn — để những mái nhà kia không bị cắt khỏi đất, chỉ vì người xem muốn một bức tranh đẹp và dễ hiểu."
+        },
+        {
+          "text": "Thái Dương Nữ Hoàng ngồi trên ngai vàng, sau lưng là vầng mặt trời bị ghim lại bằng những sợi xích sáng.\n\n— Một nghìn năm trước, Hư Không nuốt nửa đất này, — bà kể. — Sa mạc xanh của tổ tiên ta mất trong một đêm. Ta thề không để dân ta phải sống thêm một đêm nào nữa.\n\nBà không nói mình đã sống từ đêm Đại Kiếp. Những lời ấy đi qua nhiều đời người, được giữ trong chính điện, và bà kể lại như kể chuyện của dòng họ mình.\n\nBa trăm năm trước, khi những đêm lạnh lại bắt đầu cướp đi người yếu, bà đã giữ mặt trời lại trên Kim Sa. Những ngôi làng sống sót, trẻ nhỏ có nước ấm, người già không phải đốt đến món đồ gỗ cuối cùng. Vô Danh nhìn đôi mắt bà dưới vương miện, hiểu rằng một lời đòi buông nắng ngay lúc này sẽ giẫm lên những phần đời có thật ấy. Nhưng ngoài chợ vẫn có người phải mua rèm dày để đổi lấy giấc ngủ. Cả hai điều cùng nằm trên bàn, không điều nào chịu lăn đi."
+        },
+        {
+          "text": "Vô Danh hỏi bà định giữ đến bao giờ. Sa Vương đứng cạnh bước lên một bước; Nữ Hoàng giơ tay bảo ông dừng. Bà hỏi lại người khách có dám hứa rằng khi đêm trở về, nó sẽ không mang ai đi không. Không câu trả lời nào đủ thật để nói \"có\". Vô Danh chỉ kể đã thấy những mầm xanh chờ dưới lớp băng Tuyết Cung, và nói rõ đó không phải bằng chứng rằng đất nào cũng sẽ được cứu như nhau.\n\nNữ Hoàng rời ngai, xem tờ xác nhận của Hải Long. Biển cũng mất một phần, bà biết; nhưng kẻ đòi biển thường quên rằng cát xanh không tự dời đi đâu được. Kim Nhãn đặt hai tấm bản đồ cạnh nhau, không để tấm này đè lên tấm kia.\n\nỞ cửa, Sa Hồ mở bình, nghe chỉ còn vài giọt, lặng lẽ đi xin nước cho cả đoàn. Vô Danh nhìn theo. Lần đầu tiên khách hiểu: lắng nghe một nỗi đau khác không bắt mình phải xếp các nỗi đau thành hơn kém."
+        },
+        {
+          "text": "— Đêm Đại Kiếp, — Nữ Hoàng kể tiếp, giọng trầm như tụng kinh, — có một kiếm khách trẻ đứng trên đỉnh núi trắng, cầm cây cơ đầu tiên của thế gian, đánh một cú lên trời. Mọi vì sao đứng yên. Hư Không ngừng nuốt. Người ta gọi đó là Cú Định Thiên. Ta chỉ học theo người ấy, trên một vì sao nhỏ hơn.\n\nBà chỉ vào cuối bản chép, nơi người giữ sử ghi rõ: cơn nuốt lớn đã dừng, nhưng đất không vì thế mà thôi hao mòn. Mỗi năm hạt giống ít đi, giếng phải đào sâu thêm, cuộc sống tiếp diễn bằng những món vay không ai nhìn thấy.\n\nVô Danh hỏi kiếm khách ấy giờ ở đâu. Nữ Hoàng không gọi tên, chỉ nhìn thẳng về phía cửa đông. Bà vẫn tưởng người ấy đã tìm ra cách giữ trời bền hơn, nên suốt mấy trăm năm chưa từng viết thư hỏi bao giờ mình mới được thả mặt trời của mình."
+        },
+        {
+          "art": "c7-balcony",
+          "text": "Từ ban công cạnh Nữ Hoàng, Vô Danh nhìn về phía Đông, nơi đỉnh núi trắng của Thiên Quang nhô lên khỏi chân trời. Một kiếm khách trẻ. Một nghìn năm trước. Chín thanh kiếm đứng yên.\n\nKim Nhãn Tế Ti đứng sau ngai, khẽ nói, giọng chỉ đủ cho một người nghe:\n\n— Ngươi bắt đầu hiểu rồi. Mặt trời cũng biết mệt.\n\nÔng không vội đưa ra kết luận nào khác thay cho điều khách vừa tự thấy.\n\nTrên lan can có một chậu đất, hạt mới nhú một mầm mảnh như sợi tóc. Nữ Hoàng vẫn sai người tưới mỗi ngày, dù chẳng ai chắc nó sẽ thành cây. Vô Danh nhìn chậu đất lâu hơn nhìn những sợi xích sáng. Nếu người cứu đất năm xưa vẫn đang giữ một việc chưa xong, thì không thể chỉ hỏi vì sao ông làm thế. Phải hỏi làm sao để ông dừng tay mà không đẩy mọi người về lại cái đêm đầu tiên. Khách cất tờ giấy đã thấm mồ hôi, xin mang theo một bản chép sử, để hỏi những người biết đọc đường sao."
+        },
+        {
+          "text": "Sa Hồ tiễn khách qua sạp hàng cô từng tráo quả cân. Cô đặt xuống một quả chà là thật đẹp, nói một câu xin lỗi rất nhanh, rồi kéo khăn che kín mặt. Chủ sạp bổ đôi quả chà là chia lại cho cô, nhưng không xoá món nợ một trò nghịch khác cô còn thiếu. Vô Danh cầm phần mình, lần đầu thấy vị ngọt trôi qua được cổ họng khô.\n\nNgoài cổng đất, người đội mũ trùm đứng chờ dưới một mảnh bóng không lớn hơn bàn tay. Vô Danh chìa bình nước còn thừa. Người ấy ngập ngừng rồi nhận, uống một ngụm, định trả lại; khách không cầm, bảo cứ giữ lấy. Lần này Vô Danh không hỏi tên, chỉ nói phía trước là rừng, nếu muốn thì có thể đi gần hơn. Người kia không đáp. Nhưng khi đường cát chuyển thành đất cứng, khoảng cách giữa hai hàng dấu chân đã ngắn lại.\n\nSau lưng họ, kinh đô vẫn đổi phiên dưới nắng. Trong điện, Tế Ti đặt trước mặt Nữ Hoàng giấy bút và một lá thư viết dở, hỏi về hoàng hôn."
+        }
       ]
     },
     {
-      "id": "vanthu", "title": "Chương 8 · Rừng sợ không được chết", "land": "vanthu", "unlock": "vanthu",
+      "id": "vanthu",
+      "title": "Chương 8 · Rừng sợ không được chết",
+      "land": "vanthu",
+      "unlock": "vanthu",
       "pages": [
-        { "art": "c8-roots", "text": "Vạn Thú Lâm đang lún. Không ai nhận ra ngay, vì cây ở đây cao đến mức muốn nhìn ngọn phải ngửa cổ cả buổi. Nhưng rễ của chúng đang chìm dần vào một vết nứt đen dưới đáy rừng.\n\nBáo Nữ A Man ngồi xổm bên vết nứt, đuôi quất qua quất lại.\n\n— Hư Không. Nó đang ăn rễ của mẹ." },
-        { "text": "Thụ Mẫu không đứng dậy chào khách. Bà đã không đứng dậy suốt ba trăm năm; rễ của bà ăn sâu vào lòng đất như sợi chỉ khâu cả khu rừng lại với nhau.\n\nCon thanh long quấn quanh vai bà ngóc đầu nhìn Vô Danh, rồi lại nằm xuống — như vừa nhận ra một mùi quen." },
-        { "art": "c8-mother", "text": "— Ngươi tưởng rừng sợ chết? — Thụ Mẫu hỏi. — Không. Rừng sợ không được chết.\n\nBà chỉ quanh mình: những thân cây đổ từ trăm năm trước vẫn nằm nguyên như mới đổ hôm qua, không mục, không thành đất.\n\n— Hạt vẫn nảy. Nhưng mỗi mùa một ít đi, vì đất không được trả lại những gì đã nuôi cây. Một nghìn năm nay, rừng của ta già nhanh hơn nó trẻ lại." },
-        { "text": "Thạch Quy Lão, chậm rãi như một buổi chiều, đẩy cặp kính lên mũi.\n\n— Hư Không không phải kẻ thù đâu, cháu ạ. Nó chỉ là cái lỗ cuối bàn. Bàn nào không có lỗ thì ván đấu không bao giờ hết." }
+        {
+          "art": "c8-roots",
+          "text": "Vạn Thú Lâm đang lún. Không ai nhận ra ngay, vì cây ở đây cao đến mức muốn thấy ngọn phải ngửa cổ cả buổi. Nhưng rễ của chúng đang chìm dần vào một vết nứt đen dưới đáy rừng. Mưa xuống không lấp nổi chỗ tối ấy; nước chỉ chảy vòng qua, cuốn theo chút đất, làm những vạch khắc đo độ lún trên thân cây cứ cao dần.\n\nBáo Nữ A Man ngồi xổm bên vết nứt, cái đuôi quất qua quất lại.\n\n— Hư Không. Nó đang ăn rễ của mẹ.\n\nNàng gọi \"mẹ\" mà không cần chỉ ai, như người trong nhà gọi vọng vào gian bếp. Vô Danh đặt bầu nước xuống, quỳ xem vạch đo. Ở Kim Sa, khách đã thấy những tấm bản đồ đất mất; giờ thì đất đang mất ngay dưới đầu gối mình. Vô Danh muốn cùng kéo một chiếc rễ lên, nhưng A Man giữ tay lại: chỗ đất ấy không chịu thêm sức nặng nào nữa."
+        },
+        {
+          "text": "Người rừng mời khách ăn hạt nướng và canh nấm đựng trong những chiếc bát khoét từ vỏ quả khô. Trước khi ăn, họ đặt một phần nhỏ xuống đất, xa chỗ rễ non — không phải để cúng xin cây sống mãi, chỉ để thú nhỏ cũng có phần. Mộc Linh đội chiếc mũ quả sồi, da xanh như lá, nghiêng đầu hỏi cây cơ của khách ngày trước có phải một cành cây biết mọc không. Vô Danh đáp không biết. Mộc Linh sờ vào thân gỗ rồi rụt tay lại, bảo không nghe thấy tiếng nước chảy bên trong, nhưng sự im lặng ấy không giống gỗ chết.\n\nA Man hỏi khách từ đâu tới. Vô Danh kể về nắng Kim Sa, ván thua ở Băng Phách, những người ở Độc Vụ. Nghe đến Cuồng Hùng, nàng thôi quất đuôi, bảo hắn hay mang cá biển băng tới đổi mật ong. Ở nơi khác có người gọi hắn là đồ lai; ở đây người ta chỉ tranh nhau xem nên nấu cá bằng nồi nào."
+        },
+        {
+          "text": "Lôi Ưng Vũ Vương đáp xuống một cành thấp, đôi cánh xếp lại, một chiếc lông rơi vào bát canh. Ông đã nhìn vết nứt từ trên cao, bảo nó lan qua mỏm đá phía bắc rồi. A Man muốn dời cả bãi ở đi nơi khác. Ông hỏi dời đến đâu, khi đường nứt chạy ngầm dưới lòng đất. Mộc Linh ôm hạt sồi chờ hai người nói hết, chiếc mũ lệch hẳn sang bên.\n\nVô Danh muốn giúp, đưa ra bản chép sử Kim Sa. Vũ Vương đọc, nhưng không coi đó là lời giải ngay. Một vùng đất có nắng không chịu tắt, một khu rừng có cây không chịu mục — có thể chung một gốc, cũng có thể còn điều chưa ai thấy.\n\nÔng đưa khách lên đài quan sát, chỉ cho xem một thân cây đổ đang chắn mất lối sống của đám cây con. Dưới bóng gỗ cũ, những mầm non nghiêng mình về một khe sáng rất nhỏ. Vô Danh thôi nghĩ rằng chỉ cần kéo được một cái rễ là đủ giữ cả khu rừng đứng lại."
+        },
+        {
+          "text": "Thạch Quy Lão trông chiếc bàn đặt giữa hai gốc cây; trên lớp rêu phủ mai ông mắc mấy chiếc lá mới rụng. Bàn này không giống bàn trong điện: băng mềm, vài đoạn rễ trồi lên làm chướng ngại, đã được báo trước bằng vạch đất ngoài thành bàn. Người chơi chỉ được tính đường theo những gì đang nằm đó; không ai được nhổ rễ giữa lượt.\n\nA Man thách một ván chín bi, muốn xem kẻ đã qua nhiều vùng đất học được gì ngoài chuyện viết thư. Nàng rình quả một như rình thú, cả người hạ thấp, cái đuôi đứng im hẳn trước cú đánh. Phá xong, nàng ăn liền hai quả rồi đánh thủ, giấu bi trắng sau cụm.\n\nVô Danh phải đá một băng, tránh đoạn rễ; nếu lấy góc như trên bàn cứng thì sẽ hụt, vì băng ở đây bật yếu. Thạch Quy Lão kê ghế cho Mộc Linh, bảo nó xem bi trắng còn đi được bao xa sau khi chạm."
+        },
+        {
+          "text": "Cú giải chạm đúng quả ba nhưng đẩy nó vào rễ, bật ra nằm sát miệng lỗ giữa. A Man không vồ ngay quả trước mắt. Nàng ăn ba sao cho bi trắng mở được đường tới quả bốn, ăn bốn, ăn năm. Đến quả sáu, nàng cắt quá mỏng, bi chạm hàm lỗ bật ra. Tiếng tặc lưỡi vừa buột khỏi miệng, nàng đã lùi ra khỏi đường ngắm của khách.\n\nVô Danh ăn quả sáu, nhưng thấy quả bảy bị rễ che, không thể lách bi trắng qua một khe hẹp hơn cả quả bi. Khách chọn đánh an toàn, đẩy bảy ra băng, cho bi trắng nấp sau quả tám.\n\nVũ Vương trên đài cao nhìn ra đường hai băng, nhưng không nói: đây là ván của hai người dưới đất. A Man tự tìm ra, chạm bảy hợp lệ, có điều bi trắng lăn ra chỗ trống. Nàng không thích phải chịu thế, nhưng cũng không vì thế mà đánh bừa vào chướng ngại."
+        },
+        {
+          "text": "Ván kết thúc khi Vô Danh đưa quả chín vào lỗ góc. A Man gõ cán cơ xuống đất, bảo khách đã biết sợ những chỗ trên bàn mình chưa nhìn hết. Không phải lời khen ngọt ngào, nhưng nàng tự tay bưng tới một bát nước lá.\n\nThạch Quy Lão hỏi vì sao lúc giải quả bảy, khách không thử một đường may rủi. Vô Danh đáp đường may ấy dễ làm bi trắng lọt lỗ; đánh thủ thì ít nhất còn giữ được bàn. Ông nhìn khách qua cặp kính, hỏi nếu không giữ được thì sao. Vô Danh nghĩ đến Tuyết Cung, đáp lúc ấy thì phải chịu mất lượt. Câu ấy nói ra đã dễ hơn, nhưng chưa hết nặng.\n\nMộc Linh đem hạt sồi đặt cạnh một thân gỗ đổ, mong mai nó nảy mầm. A Man nhặt lên, bảo chỗ ấy không có đất mới. Nó hỏi sao có gỗ mà lại không có đất. Không ai trả lời ngay. Tiếng côn trùng trong lòng thân cây cũ thưa thớt đến lạ."
+        },
+        {
+          "art": "c8-mother",
+          "text": "Thụ Mẫu không đứng dậy chào khách. Bà đã không đứng dậy suốt ba trăm năm; rễ bà ăn sâu vào lòng đất như sợi chỉ khâu cả khu rừng lại với nhau. Con thanh long quấn quanh vai bà ngóc đầu nhìn Vô Danh, rồi lại nằm xuống — như vừa nhận ra một mùi quen. Trên mái tóc cành lá của bà điểm những bông hoa trắng nhỏ, gió lay mà không rụng.\n\nVô Danh đặt cơ xuống trước khi đến gần, để hai bàn tay rảnh mà chào. Bà nhìn vào lòng bàn tay ấy. Bà không nói mình biết người khách là ai, chỉ bảo trong đó có dấu một dòng chảy từng đi xuống nơi không gì quay lại — vậy mà đã quay lại.\n\nA Man xin bà xem bản chép sử Kim Sa, nói nếu tìm ra nguồn cơn thì có thể giữ được rễ. Thụ Mẫu lắc một cành nhỏ. Lá trên cành cùng động, nhưng rễ dưới chân không hề nhúc nhích. Bà không thể bắt khu rừng trẻ lại chỉ bằng ý muốn của mình."
+        },
+        {
+          "text": "— Ngươi tưởng rừng sợ chết? — Thụ Mẫu hỏi. — Không. Rừng sợ không được chết.\n\nBà chỉ quanh mình: những thân cây đổ từ trăm năm trước vẫn nằm nguyên như mới ngã hôm qua, không mục, không hoá thành đất. Mưa chảy qua mà không mang theo được mùi mùn; nấm mọc lên thành từng đốm nhỏ rồi chẳng còn chỗ mà sống.\n\n— Hạt vẫn nảy. Nhưng mỗi mùa một ít đi, vì đất không được trả lại những gì đã nuôi cây. Một nghìn năm nay, rừng của ta già nhanh hơn nó kịp trẻ lại.\n\nBà đặt vào tay Vô Danh hai hạt giống, một hạt lép, một hạt chắc, không bảo phải mang theo hạt nào. Khách giữ cả hai. A Man quay nhìn thân gỗ đổ nơi nàng từng trú mưa suốt thuở nhỏ. Nghĩ đến chuyện nó sẽ mục đi, nàng bấm móng vào vỏ cây bên cạnh, rồi buông ra trước khi làm rách thêm một vệt."
+        },
+        {
+          "text": "A Man hỏi chẳng lẽ cứ đứng nhìn cái vực ăn dần mẹ mình. Vũ Vương bảo những tổ đang có trứng thì vẫn phải dời ngay. Thụ Mẫu đồng ý, chỉ dặn đừng lấy cớ trả đất về cho vực mà bỏ mặc những con còn sống được. Mộc Linh nắm chặt hạt sồi, hỏi nếu một cái cây chết thì có phải thôi gọi nó là mẹ không. Bà cúi một nhánh xuống vừa tầm tay nó, để nó tự chạm vào.\n\nVô Danh ngồi bên rễ cây, kể chuyện Hàn Nguyệt tự tay làm nứt lồng băng sau ván nàng thắng. A Man nghe hết, rồi bảo đừng ai mong Thụ Mẫu phải làm giống một người xa lạ.\n\n— Ta không mong bà chết, — Vô Danh nói. — Ta chỉ muốn biết vì sao bà phải một mình giữ lấy đất.\n\nLời ấy khiến A Man quay lại nhìn. Lần đầu tiên nàng không thấy người khách như kẻ mang theo một cách hiểu đã làm sẵn. Nàng kéo bát hạt nướng ra giữa hai người, bỏ thêm một hạt chắc, không nói đó là phần thưởng."
+        },
+        {
+          "text": "Đêm trong rừng nhiều tiếng hơn mọi nơi: lá chạm lá, thú gọi bầy, nước lách qua kẽ rễ. Giữa ngần ấy âm thanh, tiếng mối mọt gặm gỗ — thứ lẽ ra phải có — lại mỏng đến lạ. Thạch Quy Lão ngồi chậm rãi như một buổi chiều, đẩy cặp kính lên sống mũi.\n\n— Hư Không không phải kẻ thù đâu, cháu ạ. Nó chỉ là cái lỗ cuối bàn. Bàn nào không có lỗ thì ván đấu không bao giờ hết.\n\nVô Danh hỏi vậy sao nó lại cắn cả rễ cây còn sống. Ông đáp cái miệng bị bỏ đói phần đáng của nó lâu quá thì sẽ đi tìm phần khác. Nhưng không vì thế mà kẻ có tổ trên cây phải chịu mất tổ. Vẫn phải cứu tổ, và vẫn phải tìm cách trả những gì đã hết về đúng chỗ của nó.\n\nKhách nhìn hai hạt giống trong lòng tay, chưa biết đời nào thuộc về phần nào. Ông không bắt phải biết ngay. Bếp còn than; ông gắp củ nướng ra, bẻ đôi cho khỏi bỏng."
+        },
+        {
+          "text": "Người đội mũ trùm bị A Man bắt gặp khi đang cắt dây cứu một tổ chim sắp nghiêng xuống vực. Nàng chặn lối xuống, hỏi theo khách để làm gì. Người ấy không rút dao, chỉ nâng tổ chim lên cho Vũ Vương đỡ lấy trước. Vô Danh nhận ra chiếc bình nước Kim Sa buộc bên hông hắn.\n\n— Người này đã đi cùng ta một quãng, — khách nói, chưa dám gọi là bạn.\n\nHắn bảo không cần ai bênh, rồi chìa cổ tay cho A Man xem không giấu vũ khí. Thụ Mẫu cho hắn ở lại ăn, không tra hỏi trước mặt mọi người. Trong bữa, hắn ngồi xa ánh lửa, mũ trùm vẫn không bỏ. Vô Danh đặt hạt lép xuống cạnh bát hắn, kể rằng bà cho giữ cả hai.\n\n— Sao không vứt hạt hỏng đi?\n\n— Ta chưa biết hết việc của nó.\n\nHắn nhìn vật nhỏ trên chiếc lá, cuối cùng gói lại, cất vào túi trong — chỗ mà khách chưa từng thấy ai chạm tới."
+        },
+        {
+          "text": "Sáng ra, Vô Danh cùng mọi người đưa tổ chim cuối cùng lên bãi cao. A Man trao cho khách một cành khô làm mốc đo nước, dặn khi gặp người giúp được thì phải nói đúng độ lún, đừng chỉ nói rừng sắp chết. Vũ Vương gửi theo bản vẽ vết nứt nhìn từ trên cao. Thạch Quy Lão viết thư chậm đến mức ai cũng phải đợi, nhưng chẳng ai giục. Mộc Linh cho một hạt sồi, lần này đã hỏi trước xem gieo ở đâu được.\n\nRa khỏi lối rễ, người đội mũ trùm đứng chắn đường. Hắn không còn đi sau cách một khúc quanh nữa. Trên chiếc khăn đỏ có giọt nhựa cây đen, trên tay vết cào hôm cứu tổ chim vẫn còn mới.\n\n— Ta phải đưa ngươi tới Huyết Sát.\n\nVô Danh siết túi hạt, nghe tiếng A Man xa dần sau lưng. Mới hôm qua khách còn muốn gọi người này ngồi lại gần lửa hơn. Giờ phải nhìn thẳng vào phần đường hắn đã chọn mà chưa từng kể. Bình nước giữa hai người đã cạn, không ai chìa ra trước."
+        }
       ]
     },
     {
-      "id": "huyetsat", "title": "Chương 9 · Đêm Huyết Nguyệt", "land": "huyetsat", "unlock": "huyetsat",
+      "id": "huyetsat",
+      "title": "Chương 9 · Đêm Huyết Nguyệt",
+      "land": "huyetsat",
+      "unlock": "huyetsat",
       "pages": [
-        { "art": "c9-throne", "text": "Huyết Sát không mời. Họ bắt.\n\nHắc Lang — kẻ đã lặng lẽ bám theo Vô Danh từ chân núi Thiên Quang — là người tra xích vào cổ tay người lạ, và cũng là người khẽ nói “xin lỗi” khi làm vậy.\n\nMa Tôn Cửu U ngồi trên ngai sắt, nhìn Vô Danh như nhìn một bóng ma." },
-        { "text": "— Bốn mươi năm trước, giữa Thiên Hạ Đệ Nhất Cơ Hội, — Ma Tôn kể, — Hư Không mở ra ngay trên Linh Đài. Nhạn, người ta yêu nhất, rơi xuống.\n\nTa tua lại thời gian. Mỗi lần chỉ lùi được ba nhịp thở — không đủ để đến bên nàng. Một lần. Mười lần. Ba trăm bảy mươi hai lần. Lần nào nàng cũng rơi." },
-        { "art": "c9-memory", "text": "Hắn đứng dậy, bước đến thật gần, nâng cằm Vô Danh xoay về phía ánh đuốc.\n\n— Ở lần tua thứ ba trăm, ta mới để ý có người nhảy theo nàng. Lần nào cũng có. Chỉ là trước đó ta chưa từng nhìn ai khác ngoài nàng. Một đệ tử áo trắng. Người của Thiên Quang.\n\nTrên áo Vô Danh có mùi sông Vong Xuyên, lẫn mùi trầm của Linh Đài đêm ấy. Mí mắt hắn giật khẽ. — Là nàng sao? Nàng quay về rồi sao?" },
-        { "text": "Rồi hắn buông tay, lùi lại, cười một tiếng khô khốc.\n\n— Không. Nàng không có cái nhìn này. Nàng đã không quay về. — Hắn quay lưng. — Ta tua thời gian ba trăm bảy mươi hai lần chỉ để học một điều, kẻ vô danh ạ: có những quả bi đã rơi thì không ai đánh lại được.\n\nHắn ra lệnh mở xích. Hắc Lang tháo xích, rồi lặng lẽ xoa vết hằn trên cổ tay người khách." }
+        {
+          "art": "c9-throne",
+          "text": "Huyết Sát không mời. Họ bắt. Hắc Lang — kẻ đã lặng lẽ bám theo Vô Danh từ chân núi Thiên Quang — là người tra xích vào cổ tay người lạ, và cũng là người khẽ nói \"xin lỗi\" khi làm việc ấy. Xích lạnh; vết cào trên tay hắn vẫn còn rịn máu. Vô Danh nhìn cái nút hắn thắt, nhận ra đúng kiểu buộc gói lá chống say nắng ở Độc Vụ.\n\nMa Tôn Cửu U ngồi trên ngai sắt, nhìn Vô Danh như nhìn một bóng ma. Lá cờ son sau lưng hắn rách một mép, không được thay, dù cột sắt nào cũng lau sáng bóng. Cây cơ đen đặt ngang gối. Hắn chưa cho khách lại gần, chỉ hỏi Hắc Lang đã theo từ lúc nào.\n\n— Từ Thiên Quang.\n\n— Có lúc nào mất dấu không?\n\nHắc Lang đáp có: suốt ba tháng người ấy ngủ trong mơ ở Hoa Linh, hắn chỉ biết chờ ở bến dưới đảo, cho tới ngày người ấy tỉnh."
+        },
+        {
+          "text": "Vô Danh đòi tháo xích trước rồi mới nói chuyện. Ma Tôn hỏi tháo ra rồi có chạy không.\n\n— Muốn nghe lời thật thì ngươi phải chịu nghe cả những câu ta không muốn nói.\n\nHắc Lang vừa đưa tay định nới vòng xích thì Tư Đồ Liệt bước ra ngăn. Vị tướng già đeo lá cờ nhỏ trên lưng không quát, chỉ nhắc: chưa có lệnh thì kẻ thi hành không được tự ý đổi.\n\nVô Danh nhận ra tờ giấy có ấn Kiếm Thánh chẳng giúp được gì ở đây. Tư Đồ Liệt gấp trả giấy đúng nếp cũ, bảo có giấy không có nghĩa là được miễn nghi. Khách hỏi nghi điều gì; ông chưa trả lời. Ma Tôn cho dẫn khách sang phòng bên chứ không giải xuống ngục. Xích vẫn ở cổ tay. Chỗ nằm có chăn sạch và một bát cháo nóng, khiến cơn giận khó tìm ra một hình thù rõ ràng."
+        },
+        {
+          "text": "Đồ Cuồng mang nước tới, bộ giáp gai cạ vào khung cửa, mấy vòng xích quấn tay kêu loảng xoảng. Hắn đặt thùng mạnh đến nước bắn tung, rồi cúi xuống lau. Vô Danh hỏi khách nào tới đây cũng phải đeo xích sao. Hắn đáp không phải khách nào cũng được Ma Tôn đích thân chờ. Câu trả lời chẳng dễ chịu hơn, và hắn biết thế, đứng gãi gáy.\n\nHuyết Cơ Mị Nương đến sau, tóc đỏ búi cao dưới tấm mạng đen. Nàng không mở hẳn cửa, chỉ hỏi:\n\n— Tay ngươi… đang run đấy à?\n\nVô Danh giơ cả hai cổ tay lên cho nàng xem. — Xích nặng.\n\nNàng sai mang tới một vòng rộng hơn, rồi nói nàng hỏi phần run không phải do xích. Khách đáp mình đang giận một người từng nhận bình nước của mình mà không nói sẽ đưa mình đi đâu. Nàng gật đầu, không gọi đó là mềm lòng. Trước khi đi, nàng để lọ thuốc bôi trong tầm tay, không bắt ai phải mang ơn."
+        },
+        {
+          "text": "Hắc Lang đứng ngoài cửa cho tới khi Vô Danh gọi. Hắn đã bỏ túi đồ xuống, nhưng vẫn đội mũ trùm. Người bị giữ hỏi: những bữa ăn, gói thuốc, cốc nước để lại trên đường, có phải đều là lệnh không. Hắn đáp lệnh chỉ là theo dõi, không được mất dấu, và đưa về khi có xác nhận.\n\n— Còn chuyện cứu tổ chim?\n\nHắn nhìn bàn tay bị cào, đáp chuyện ấy không dính gì tới lệnh.\n\nVô Danh không nói như thế là đủ. Hắn kể Ma Tôn nhận tin có một người áo ướt từ Vong Xuyên lên Thiên Quang, không tên, mang một cây cơ lạ. Hắn được sai đi nhìn cho rõ; rồi lần nào định quay về báo tin, hắn lại thấy người kia sắp bước vào một nơi không biết đường ra.\n\n— Ngươi đã có thể nói với ta.\n\n— Có.\n\nHắn chỉ đáp một tiếng ấy, không tìm cớ. Trong góc phòng, hắn đặt chiếc bình nước Kim Sa xuống đất, ngoài tầm tay của cả hai."
+        },
+        {
+          "text": "Tư Đồ Liệt cho khiêng bàn cơ ra khoảng sân có mái, bảo không ai bị tra hỏi suốt đêm mà không được duỗi tay. Xích được tháo một đầu, đầu kia buộc vào cây cột ngay cạnh đường đánh. Vô Danh không chịu cầm cơ khi vẫn còn bị nối. Ông nhìn khoảng cách, thừa nhận như thế là mất thế, ra lệnh tháo hẳn xích trong lúc đánh. Hắc Lang nhận canh, không để ai đụng vào đồ của khách.\n\nĐồ Cuồng phá chín bi, sức mạnh làm cờ trên vách rung lên. Bi văng tứ tung nhưng không quả nào rơi, bi trắng còn kẹt sau quả bốn. Hắn không biết áp phê, chỉ biết đánh mạnh hơn nữa. Vô Danh đánh thủ trả lại, rồi chỉ chỗ bi trắng kẹt khi nãy, hỏi đánh mạnh như thế là để tới đâu.\n\nĐồ Cuồng cau mày. Lượt này hắn đánh một đường không xoáy, chạm quả một rồi cho bi trắng chạm băng, nấp sau quả bảy. Cú thủ vụng về nhưng hợp lệ. Tư Đồ Liệt gật đầu, gọi đó là giữ hậu quân, và không bảo đánh mạnh là sai trong mọi thế trận."
+        },
+        {
+          "text": "Vô Danh giải bằng hai băng, bi trắng chạm quả một rồi về gần lỗ góc. Đồ Cuồng ăn được một, nhưng chạm quả hai quá dày, để bi trắng lăn theo xuống lỗ. Hắn vung tay định đập cán cơ, chợt nhớ bàn là đồ mượn, bèn đứng im. Khách nhận bi trong tay, đặt bi trắng ở góc vừa đủ mở đường tới quả ba. Huyết Cơ Mị Nương ngồi xem, lúc ấy mới bảo tay khách đã hết run.\n\nKhách không dọn hết bàn, mà đánh thủ ở quả năm bị cụm bi cản. Đồ Cuồng nghĩ lâu hơn trước mỗi cú, rồi trả một cú an toàn thay vì cố đập vỡ cụm. Rốt cuộc Vô Danh thắng. Hắn đòi đánh một ván nữa khi mọi chuyện xong xuôi. Không ai coi ván ấy là cái giá đổi lấy tự do.\n\nHắc Lang mang vòng xích trở lại, nhưng chưa tra vào ngay. Tư Đồ Liệt nhìn hai cổ tay đỏ ửng, cho để trần như thế đến lúc vào điện. Đó là một quyền nhỏ, khách đã phải đòi bằng cách không chịu cúi xuống bàn khi còn bị xích."
+        },
+        {
+          "text": "Ma Tôn cho tắt bớt đuốc. Trên nền sắt có một vệt tròn sẫm màu không sao cọ sạch, và hắn đứng ngay bên mép vệt ấy.\n\n— Bốn mươi năm trước, giữa Thiên Hạ Đệ Nhất Cơ Hội, Hư Không mở ra ngay trên Linh Đài. Nhạn, người ta yêu nhất, rơi xuống.\n\nĐó là lần đầu cái tên được nói ra. Những người trong điện đều đưa mắt nhìn sang chỗ khác.\n\n— Ta tua lại thời gian. Mỗi lần chỉ lùi được ba nhịp thở — không đủ để đến bên nàng. Một lần. Mười lần. Ba trăm bảy mươi hai lần. Lần nào nàng cũng rơi.\n\nHắn đặt tay lên án, ba đầu ngón tay lần lượt gõ xuống, vừa đủ một hơi thở dài. Không có bốn mươi năm nào quay lại, không có lối nào làm lại từ đầu buổi hội. Chỉ ba nhịp thở, lặp đi lặp lại cho đến khi bàn tay hắn thuộc trước cả chỗ bóng người sẽ rời khỏi mặt đá. Vậy mà hắn vẫn không tới kịp."
+        },
+        {
+          "text": "Vô Danh nhìn vệt tròn dưới chân hắn, chợt hiểu vì sao lá cờ rách không ai thay. Ma Tôn kể Huyết Sát đã đánh vào giữa buổi hội để ép Thiên Quang nói ra điều họ giấu về cái vực. Hắn không đổ cho số mệnh việc mình kéo người tới trận ấy. Người của hắn mang cơ như mang vũ khí, người bên kia giữ cửa như giữ thành. Vết sẹo trên mắt Lăng Thiên Kỳ không phải lời đồn.\n\nTư Đồ Liệt đứng sau cột, hai tay đặt trên cán cơ. Đêm ấy chính ông dẫn quân. Huyết Cơ nhìn qua tấm mạng, nói người còn nhớ được tên Nhạn giờ ít dần; không chép lại thì sẽ có ngày lời kể chỉ còn một chữ \"nàng\".\n\nMa Tôn quay lại, giọng lạnh băng: hắn vẫn nhớ. Huyết Cơ đáp nhớ có khi là việc phải làm mỗi ngày, không phải thứ chứng minh được bằng cơn giận. Hắn không đuổi nàng ra. Cả điện đều biết câu ấy có lẽ chỉ mình nàng dám nói."
+        },
+        {
+          "art": "c9-memory",
+          "text": "Hắn đứng dậy, bước tới thật gần, nâng cằm Vô Danh xoay về phía ánh đuốc.\n\n— Đến lần tua thứ ba trăm, ta mới để ý có người nhảy theo nàng. Lần nào cũng có. Chỉ là trước đó, ta chưa từng nhìn ai khác ngoài nàng. Một đệ tử áo trắng. Người của Thiên Quang.\n\nVô Danh vẫn nhìn thẳng, không liếc xuống bàn tay đang chạm vào mình. Trên áo người lạ còn mùi sông Vong Xuyên, và lẫn trong đó, như có cả mùi trầm của Linh Đài đêm nào. Mí mắt Ma Tôn khẽ giật.\n\n— Là nàng sao? Nàng quay về rồi sao?\n\nCâu hỏi không lớn, nhưng khiến Hắc Lang bước ra khỏi bóng cột. Vô Danh muốn đáp mình không biết, rồi nhận ra câu hỏi kia đi xuyên qua mặt mình để tìm một người khác. Sau trán, một khoảng tối cuộn lên: có vải trắng, có một bàn tay với hụt, nhưng không có gương mặt nào đủ rõ để nhận hay chối bằng trí nhớ."
+        },
+        {
+          "text": "Rồi hắn buông tay, lùi lại, bật một tiếng cười khô khốc.\n\n— Không. Nàng không có cái nhìn này. Nàng đã không quay về.\n\nHắn quay lưng đi.\n\n— Ta tua thời gian ba trăm bảy mươi hai lần chỉ để học được một điều, kẻ vô danh ạ: có những quả bi đã rơi thì không ai đánh lại được.\n\nKhông ai trong điện nói một lời an ủi thế chỗ cho cái tên vừa mất thêm lần nữa. Ma Tôn ra lệnh mở xích. Hắc Lang tháo chiếc vòng còn cầm trong tay, rồi lặng lẽ xoa vết hằn trên cổ tay khách. Vô Danh rút tay về, không mạnh. Ma Tôn thấy, nhưng không ra lệnh phải nhận lời xin lỗi.\n\nHắn bảo nếu muốn biết về người áo trắng thì đi tìm bà lão chèo đò. Hắn chỉ nhìn được từ trên mặt bàn; phần dưới miệng vực không chịu lùi theo ba nhịp thở của hắn. Câu ấy khó nói hơn cả chuyện đánh vào Thiên Quang, vì nó không chừa lại ai để mà ép phải trả lời."
+        },
+        {
+          "text": "Đêm ấy cửa phòng không khoá. Vô Danh chưa đi, ngồi ở bậc thềm nghe lò rèn thay than. Hắc Lang đặt bình nước giữa sân rồi ngồi cách ra một quãng.\n\n— Ta không xin ngươi gọi ta là bạn.\n\n— Ta cũng chưa biết nên gọi ngươi là gì.\n\nHắn gật đầu. Vô Danh hỏi tên hắn. Lần này hắn đáp ngay, không kèm chức phận gì: Hắc Lang.\n\nKhách nói mình nhớ từng gói thuốc, nhưng cũng sẽ nhớ chiếc xích. Hắn bảo cả hai đều do tay hắn làm; một việc tốt không xoá được việc xấu chỉ vì được bỏ chung một túi. Vô Danh không nói câu tha thứ mà hắn đang chờ. Khách đẩy bình nước sang giữa hai bậc thềm, để hắn uống trước rồi mới uống phần còn lại.\n\nTrong áo Hắc Lang, hạt lép từ khu rừng vẫn được gói riêng. Hắn lấy ra đặt trên lòng bàn tay, hỏi liệu nó có được trả về đất ở một nơi khác không. Lần này cả hai cùng nhìn vật nhỏ ấy."
+        },
+        {
+          "text": "Sáng hôm sau, cổng thành mở cho một người đi ra. Đồ Cuồng mang tới mấy chiếc bánh lúa mạch, dặn đừng quên ván đã hẹn. Tư Đồ Liệt trả lại mọi giấy tờ, đúng thứ tự. Huyết Cơ đưa một phong thư không niêm, bên trong chỉ có tên Nhạn, viết bằng nét chữ rõ ràng.\n\n— Mang theo đi. Để nếu gặp ai biết nàng, họ khỏi phải đoán nàng từng được gọi bằng tên gì.\n\nMa Tôn không ra tiễn. Hắc Lang đi cùng tới bến, dừng lại trước tấm ván bắc xuống đò, hỏi có muốn hắn đi theo nữa không. Vô Danh nghĩ rất lâu, rồi bảo nếu theo thì từ nay hãy đi ở chỗ có thể nhìn thấy. Hắn nhận lời, nhưng phải ở lại để trả cho xong cái lệnh cũ; hẹn gặp lại trên đường mà không cần thề.\n\nKhách xuống bến một mình, cổ tay đã hết vướng mà vẫn còn đau. Trong túi giờ có thêm tên Nhạn, còn tên của chính mình thì vẫn chưa. Lần đầu tiên, Vô Danh muốn tìm ra sự thật, dù biết nó có thể lấy đi một điều mình đang mong."
+        }
       ]
     },
     {
-      "id": "uminh", "title": "Chương 10 · Bạch Cầu", "land": "uminh", "unlock": "uminh",
+      "id": "uminh",
+      "title": "Chương 10 · Bạch Cầu",
+      "land": "uminh",
+      "unlock": "uminh",
       "pages": [
-        { "art": "c10-pier", "text": "Đảo U Minh không có ngày. Chỉ có sương, đèn lồng ngọc bích và dòng Vong Xuyên trôi qua không một tiếng động.\n\nCon đò quen đã chờ sẵn ở bến, như biết trước. Lần này, Vong Xuyên Bà Bà không bưng canh.\n\n— Ngồi xuống đi con. Lần trước con bỏ dở ván để nhảy theo một người. Bà không trách. Nhưng ván ấy vẫn chưa xong. Lần này bà kể." },
-        { "text": "— Đêm Huyết Nguyệt, bà đang chèo đò ở đáy Hư Không thì thấy một người áo trắng rơi xuống, tay vẫn nắm chặt vạt áo của một người khác. Người kia trôi đi. Người áo trắng thì không.\n\nỞ dưới đó, mọi thứ rơi xuống đều ở lại. Trừ một loại." },
-        { "art": "c10-cueball", "text": "— Con nhớ những ván bi có lỗ chứ? — bà hỏi. — Bi màu rơi xuống thì nằm lại. Chỉ bi cái là được đặt lại lên bàn.\n\nBà lão chạm vào ngực Vô Danh.\n\n— Ở U Minh, người ta gọi những người như con là Bạch Cầu. Kẻ bị Hư Không trả lại. Không có tên trong sổ âm, vì chưa từng được thu. Không có chỗ trong đời, vì đã từng rời đi." },
-        { "text": "— Thời gian dưới đó không trôi như trên này. Con chìm bốn mươi năm, mà với con chỉ như một đêm. Bà phải chờ đến khi Hư Không chịu nhả con ra mới vớt được. Bà cho con uống canh để con sống lại mà không vỡ ra — ký ức của người từng rơi xuống đó nặng lắm.\n\nCốt Kiếm, bộ xương đội nón lá, lặng lẽ đẩy về phía Vô Danh một tấm thẻ đệ tử bằng ngọc trắng, nứt một góc. Thẻ nhẹ hơn người, nổi lên trước — hắn vớt được nó bên bờ từ ba mươi chín năm trước.\n\nTrên thẻ có hình phi kiếm của Thiên Quang. Tên đã bị nước sông xoá mất." }
+        {
+          "text": "Đảo U Minh không có ngày. Chỉ có sương, những ngọn đèn lồng ngọc bích treo dọc bến gỗ, và dòng Vong Xuyên trôi qua không một tiếng động. Con đò quen đã buộc sẵn ở cọc, như biết trước có khách về.\n\nLần này Vong Xuyên Bà Bà không bưng canh. Bà ngồi trên bậc gỗ vá túi đựng mái chèo. Thấy cổ tay Vô Danh còn hằn vết xích, bà cất kim đi, không hỏi ai đã làm.\n\n— Ngồi xuống đi con. Lần trước con bỏ dở ván để nhảy theo một người… Bà không trách. Nhưng ván ấy vẫn chưa xong. Lần này, bà kể.\n\nVô Danh chưa ngồi, hỏi vì sao hôm ở bến đầu bà không kể. Bà kéo chiếc ghế thấp ra khỏi chỗ đọng sương. — Hôm ấy con còn chưa cầm nổi cái bát bằng hai tay. Người khách nhìn lòng bàn tay mình, nơi chai mới và sẹo mới đã chen quanh chỗ đau cũ, rồi mới ngồi.",
+          "art": "c10-pier"
+        },
+        {
+          "text": "Đăng Hồn Đồng Tử mang đèn tới. Lá bùa vàng trên trán cậu ướt sương, và qua tấm thân trong suốt của cậu, người ta nhìn thấy cả chân ghế phía sau. Cậu hỏi có cần soi gần hơn không, tưởng khách không thấy bậc thềm. Vô Danh bảo thế là đủ. Cậu bèn đứng chếch sang bên cho đèn khỏi chói mắt, cẩn thận như đứa trẻ đã quen dẫn đường cho nhiều người sợ tối.\n\nỞ đầu bến có một quán cháo. Không phải ai cũng ăn, nhưng ai cũng được ngồi. Cốt Kiếm đội chiếc nón lá vá, ôm bát cháo chỉ để sưởi mấy đốt tay xương. Thấy Vô Danh, hắn dừng lại; ngọn lửa ngọc trong hốc mắt hắn khẽ nghiêng. Dưới tấm áo choàng xám có một vật bọc nhiều lớp vải, nhưng hắn chưa lấy ra.\n\nVô Danh định hỏi. Bà Bà lắc đầu: chuyện nào cũng có đầu có đuôi, đừng mở hết mọi ngăn cùng một lúc. Hơi cháo bốc lên đều, cho người nghe một chỗ để nhìn khi chưa đủ sức nhìn bà."
+        },
+        {
+          "text": "— Đêm Huyết Nguyệt, — bà kể, — bà đang chèo đò dưới đáy Hư Không thì thấy một người áo trắng rơi xuống. Tay người ấy vẫn nắm chặt vạt áo của một người khác. Người kia trôi đi. Người áo trắng thì không. Ở dưới đó, cái gì rơi xuống cũng ở lại. Trừ một thứ.\n\nNói đến đây, bà đặt cả hai bàn tay lên gối, như để người nghe thấy không còn điều gì giấu trong tay áo.\n\nVô Danh lại nghe tiếng vải rách từng vẳng lên ở Thiên Cơ, lần này gần như ngay bên tai.\n\n— Con có giữ được người ấy không?\n\n— Bà thấy tay con nắm vải. Bà không thấy con kéo được ai lên. Vô Danh cúi nhìn những ngón tay mình, không hỏi Nhạn đã trôi về đâu nữa. Ma Tôn đã trả lời câu ấy bằng một lời phủ nhận đau đớn; Bà Bà cũng không hứa người đã mất đang chờ ở cuối dòng. Sau lưng, mặt sông vẫn im như buổi sáng đầu tiên, nhưng giờ trong khoảng im ấy có một vật đã chìm xuống đáy."
+        },
+        {
+          "text": "Câu Hồn Sứ đến đúng lúc Bà Bà ngừng lời. Áo hắn nửa đen nửa trắng; những sợi xích móc câu hồn đã được quấn vải cho khỏi vướng người qua lại. Hắn nói chuyện người được trả về không nên kể giữa bến: có những hồn nghe xong sẽ ngồi chờ mãi một lối không dành cho mình. Vô Danh đứng dậy, bảo mình sẵn lòng vào chỗ kín. Bà Bà gật đầu; bà không coi nỗi lo của hắn là chuyện cản đường.\n\nU Minh Quỷ Đế cho mượn gian bàn đá phía trong, nhưng đòi khách đánh với hắn một ván, để xem người vừa đi xa về có còn phân biệt được luật của bàn hay không. Đăng Hồn Đồng Tử định xin miễn cho khách. Quỷ Đế nện cây quyền trượng xương xuống nền đá.\n\n— Ở đây, ta là luật.\n\nBà Bà nhìn hắn, hỏi luật ấy có chừa một cái ghế cho người vừa đi xa về không. Quỷ Đế im một lúc, rồi tự tay kéo ghế, sau đó mới cho bày bi. Vô Danh ngồi xuống, nhận mình chưa đủ sức đứng lâu, không gắng gượng để chứng tỏ điều gì."
+        },
+        {
+          "text": "Cốt Kiếm xếp chín bi, đốt ngón tay xương chạm mặt nỉ lách cách. Hắn bảo mình đã quên tên, nhưng chưa quên cách xếp một cụm cho khít. Vô Danh hỏi hắn có muốn lấy một cái tên khác không. Hắn nghiêng nón: Cốt Kiếm cũng là tên người bên bến gọi, dùng trăm năm rồi, không đến nỗi tệ. Vô Danh nhớ Kiếm Nhi cầm bút viết hai chữ lên bảng ở cổng núi, và thấy hơi thở mình dễ hơn một chút.\n\nQuỷ Đế phá. Quả một vào lỗ, quả hai chạy sát băng. Trước lượt kế, Câu Hồn Sứ chỉ vào một lỗ góc: hắn đã dùng xích phong lỗ ấy, miệng lỗ giờ bị một vành cứng bịt kín, ai nhìn cũng thấy. Không thể đánh vào đó rồi đòi nó nhận bi. Quỷ Đế không dùng uy của mình để mở; hắn đổi đường quả hai sang góc khác. Vô Danh lặng nhìn một kẻ tự xưng là luật vẫn phải cúi xuống đo từng khe hở như mọi người. Cây cơ xương đi mạnh nhưng có chừng mực; bi trắng bật băng về giữa bàn, để lại một đường tiếp chưa thật thuận."
+        },
+        {
+          "text": "Đến quả bốn, Quỷ Đế đánh trượt, để lại một thế bị quả năm che. Vô Danh đá một băng: trắng chạm bốn rồi dừng cạnh quả sáu. Một quả khác rơi ngoài dự tính, nhưng cú chạm đầu hợp lệ nên khách được đánh tiếp — và phải tự tìm đường cho quả năm, thay vì trông vào tiếng bi rơi.\n\nLượt sau, Vô Danh phạm lỗi: bi trắng rơi lỗ. Câu Hồn Sứ cúi xuống máng nhặt quả trắng, trao cho Quỷ Đế đặt lại lên bàn. Cử chỉ đã thấy trên mọi bàn, hôm nay Vô Danh nhìn mãi không rời. Những bi màu dưới máng không ai nhặt lên cùng.\n\nQuỷ Đế đánh thêm hai cú rồi dừng ván tập, theo lời Bà Bà: đây không phải chỗ phân xử sống chết bằng thắng thua. Vô Danh vẫn nhìn quả trắng. Nghĩ đến cuốn sổ âm thiếu một người, đến chiếc kim đồng bỏ cây cơ để quay vào ngực mình, đến mạch đã ngừng một lần. Những dấu vết rời rạc bắt đầu nằm trên cùng một đường."
+        },
+        {
+          "text": "Bà Bà nhặt quả trắng khỏi bàn, bước ra mép bến, thả nó xuống mặt Vong Xuyên. Quả bi không chìm. Nó nằm trên làn nước tối như nằm trên nỉ, tỏa một quầng sáng mờ. Bà đưa mái chèo xuống, nhẹ nhàng đỡ nó lên.\n\n— Con nhớ những ván bi có lỗ chứ? — bà hỏi. — Bi màu rơi xuống thì nằm lại. Chỉ bi cái là được đặt trở lên bàn.\n\nBà lão chạm ngón tay vào ngực Vô Danh.\n\n— Ở U Minh, người ta gọi những người như con là Bạch Cầu. Kẻ bị Hư Không trả lại. Không có tên trong sổ âm, vì chưa từng được thu. Không có chỗ trong đời, vì đã từng rời đi.\n\nVô Danh không thấy mình được chọn vì một tài năng nào. Chỉ là một người bị trả về giữa một ván dang dở, tay còn nắm cây cơ, miệng không biết gọi tên mình. — Vì sao lại là con? Bà bảo không phải điều gì bà cũng hiểu. Có những người chìm xuống rồi không lên nữa, và bà không đổi được ai lấy ai. Vô Danh gật đầu, giữ câu hỏi ấy lại cho mình, không ép bà biến một luật lệ thành lời hứa cứu được tất cả.",
+          "art": "c10-cueball"
+        },
+        {
+          "text": "— Thời gian dưới đó không trôi như trên này. Con chìm bốn mươi năm, mà với con chỉ như một đêm. Bà phải chờ đến khi Hư Không chịu nhả con ra mới vớt được. Bà cho con uống canh để con sống lại mà không vỡ ra — ký ức của người từng rơi xuống đó nặng lắm.\n\nVô Danh hỏi bà đã chèo qua chỗ ấy bao nhiêu lần. Bà kéo mép áo vá, đáp: nhiều đến mức không nên đếm, đếm rồi lại oán dòng sông. Có đêm bà thấy một vạt áo trắng, có đêm chỉ thấy một đầu cơ; nhưng mái chèo vừa chạm tới là cả hai lại trượt xa. — Lần đầu con tỉnh dậy là lúc bà vừa đưa được con lên. Vô Danh nhớ nửa chiếc bánh mang xuống bến quá muộn, và giờ mới hiểu vì sao hôm ấy bà nhìn đi chỗ khác."
+        },
+        {
+          "text": "Cốt Kiếm lặng lẽ mở gói vải. Từng lớp, từng lớp; lớp trong cùng vẫn khô, không có mùi mốc. Hắn đẩy về phía Vô Danh một tấm thẻ đệ tử bằng ngọc trắng, nứt một góc. Thẻ nhẹ hơn người nên nổi lên trước; hắn vớt được nó bên bờ từ ba mươi chín năm trước. Trên mặt ngọc còn khắc hình phi kiếm của Thiên Quang. Cái tên thì nước sông đã xoá mất.\n\nVô Danh cầm lên. Cạnh nứt vừa khít một vết hằn trong lòng bàn tay. Không có cái tên nào hiện ra chỉ vì người cầm muốn nhớ đến cháy lòng. Đăng Hồn Đồng Tử nâng đèn lại gần, rồi hạ xuống khi thấy khách nhắm mắt.\n\nCốt Kiếm nói giữ một vật nhỏ lâu ngày khiến hắn nhớ rằng vẫn còn người chưa tới nhận. Chính hắn không biết tên mình, nhưng không vì thế mà coi nhẹ cái tên của người khác. Vô Danh cảm ơn, không hứa tìm lại tên cho hắn để trả ơn. Có những món quà không nhận bằng một lời quá lớn."
+        },
+        {
+          "text": "Vô Danh lấy ra phong thư Huyết Cơ đã trao, bên trong chỉ có tên Nhạn. Bà Bà đọc rất lâu, rồi đặt nó cạnh tấm thẻ, cẩn thận không để hai vật chạm vào nhau.\n\n— Con không phải nàng. Nhưng con đã nhảy theo nàng.\n\nCâu trước giữ cho người đã mất khỏi bị nhận nhầm. Câu sau để lại một việc mà người trở về phải mang. Vô Danh hỏi bà có biết ngày trước mình là người tốt không. Bà nhặt mái chèo, chỉ nói bà đã thấy một bàn tay cố giữ.\n\nBên ngoài, Quỷ Đế gọi người treo đèn lên cao: một đoàn hồn mới vừa tới bến. Câu Hồn Sứ tháo vải bọc xích, đi làm việc của mình; hắn không nhìn người khách bằng ánh mắt thèm một lối về. Cốt Kiếm quay lại bàn, xếp đủ những quả đã lấy ra trong ván tập. Sau một câu chuyện lớn, ai cũng còn việc của mình. Vô Danh ngồi thêm một lúc rồi đứng dậy giúp Đăng Hồn buộc dây đèn. Cậu không hỏi Bạch Cầu có biết bay không; cậu chỉ hỏi khách có với tới đầu cột không."
+        },
+        {
+          "text": "Bà Bà không cho thêm canh. Bà đưa một chén nước ấm, để người uống tự quyết khi nào đặt xuống. Vô Danh hỏi nếu một ngày phải xuống vực lần nữa, bà có vớt được không. Mái chèo trong tay bà dừng giữa chừng.\n\n— Bà chỉ vớt được khi nó chịu nhả. Đừng mang lời bà xuống dưới ấy làm sợi dây buộc sẵn.\n\nVô Danh gật đầu. Lần này không thể chỉ nghe phần mình muốn nghe rồi bỏ phần còn lại.\n\nỞ U Minh không có ngày để hết đêm, nhưng ngoài bến người ta vẫn đổi ca. Vô Danh viết thư cho Kiếm Nhi: có một tấm thẻ mang dấu Thiên Quang, chưa đọc được tên; sẽ lên Tinh Tú xem trời trước. Câu cuối định viết rằng mình từng chết, rồi dừng bút. Không phải muốn giấu; chỉ chưa tìm được cách viết để người nhận khỏi chạy ngay xuống bến giữa đêm. Vô Danh viết thay: gặp nhau sẽ kể hết. Bà Bà ngồi bên kia cánh cửa, không sửa một chữ nào."
+        },
+        {
+          "text": "Đăng Hồn Đồng Tử tiễn khách ra đò, cho mượn một ngọn đèn không cần dầu. Cốt Kiếm dặn giữ thẻ trong lớp vải, đừng mài chỗ chữ, kẻo mất nốt những nét còn sót. Quỷ Đế đứng xa, bảo người rời đảo vẫn phải trả ghế về đúng chỗ, khiến Đồng Tử bật cười. Vô Danh quay lại đẩy chiếc ghế vào dưới mái — một việc nhỏ, vừa tay.\n\nBà Bà chèo đến bờ có đường lên Tinh Tú. Lần này Vô Danh không đợi bà quay đò rồi mới nói.\n\n— Con sẽ quay lại thăm bà. Không phải chỉ khi cần một câu trả lời.\n\nBà bảo nếu có mang bánh thì đừng để nguội quá. Vô Danh bước lên bờ, đặt tay lên tấm thẻ một lần rồi buông. Phía trước vẫn chưa có tên thật, nhưng đã có một đêm thật, không còn phải tự bịa ra để lấp khoảng tối. Con đò lùi vào sương; người trên bờ đứng nhìn theo cho đến khi khuất cả bóng mái chèo."
+        }
       ]
     },
     {
-      "id": "tinhtu", "title": "Chương 11 · Trời không quay", "land": "tinhtu", "unlock": "tinhtu",
+      "id": "tinhtu",
+      "title": "Chương 11 · Trời không quay",
+      "land": "tinhtu",
+      "unlock": "tinhtu",
       "pages": [
-        { "art": "c11-observatory", "text": "Lần đầu sau mười năm, Thần Toán Gia Cát Vân leo lên đài quan tinh của người thầy cũ. Tinh Đế Thiên Xu không nói gì, chỉ dịch sang một bên cho học trò đứng cạnh kính thiên văn.\n\nHọ đã cãi nhau mười năm về chuyện số mệnh có viết sẵn hay không. Đêm nay, cả hai cùng im lặng nhìn lên." },
-        { "text": "— Các vì sao không đi, — Tinh Đế nói. — Ta đã ngỡ đó là ý trời. Bàn tính của ngươi bảo sao, Vân?\n\nGia Cát Vân lật bàn tính, gảy rất lâu.\n\n— Nó bảo các vì sao không phải không đi. Chúng bị giữ. Từ cùng một điểm. Cùng một lực. Suốt một nghìn năm. Và năm ấy, chòm sao kia rơi lệch không phải vì nó hư. Đường của nó bị một chòm khác chắn — một chòm chưa chịu rơi." },
-        { "art": "c11-threads", "text": "Nguyệt Hoa Tiên Tử xoay ống kính về phía Đông. Từ đỉnh núi trắng của Thiên Quang, chín sợi sáng mảnh như tơ kéo thẳng lên trời, buộc vào chín chòm sao.\n\n— Cú Định Thiên chưa bao giờ kết thúc, — nàng thì thầm. — Ông ấy vẫn đang giữ cú đánh đó. Bằng chính tuổi thọ của cả thế gian." },
-        { "text": "Lạc Lạc Tinh Linh, bé tí và hay cười, lần này không cười.\n\n— Vậy là thế giới không bị nguyền, — cô nói. — Thế giới chỉ đang được thương quá lâu.\n\nGia Cát Vân gảy thêm một hàng. — Thả cùng lúc, chúng sẽ đâm nhau như đêm Đại Kiếp. Phải thả như gỡ một cụm bi: quả nào chạm trước, rơi trước.\n\nVô Danh nhớ lại chín thanh phi kiếm đứng yên trên lầu cao, và một ông già biết lúc nào nên để một quả bi tự lăn — nhưng chưa bao giờ dám buông cây cơ của chính mình." }
+        {
+          "text": "Lần đầu sau mười năm, Thần Toán Gia Cát Vân leo lên đài quan tinh của người thầy cũ. Tinh Đế Thiên Xu không nói gì, chỉ dịch sang một bên, chừa cho học trò một chỗ đứng cạnh kính thiên văn. Mười năm qua, hai thầy trò cãi nhau không dứt về chuyện số mệnh có được viết sẵn hay không. Đêm nay cả hai cùng im lặng nhìn lên. Hơi thở thành những làn khói ngắn dưới vành kính.\n\nVô Danh đứng ngoài cửa, không bước vào giữa hai người. Từ U Minh, khách mang theo một tấm thẻ đã mất tên; từ Thiên Cơ, một tờ tính còn chữ “chưa”. Điều cần tìm là chỗ hai thứ ấy gặp nhau, không phải thêm một lời phán. Lạc Lạc Tinh Linh bay thấp bên bậc đá, đôi cánh chuồn chuồn trong suốt rung lên trong gió.\n\n— Hai người ấy im lâu hơn mọi trận cãi trước, — cô thì thầm. — Chắc lần này khó thật rồi.",
+          "art": "c11-observatory"
+        },
+        {
+          "text": "Tinh Quan Thủ Vệ xem giấy tờ ở ngưỡng cửa. Bộ giáp khắc chòm sao của anh không một vết gỉ. Anh đã đứng gác ba trăm năm, nhìn vị trí các vì sao để biết lúc nào cần quay đầu. Vô Danh hỏi anh có từng thấy chúng dời chỗ không. Anh đáp: nếu chỉ nhìn trong một đời mình thì khó biết có khác trước hay không; mà những gì không nhúc nhích thường dễ bị gọi là đúng.\n\nAnh không cho khách chạm vào kính ngay, bắt rửa tay và bọc cạnh thẻ ngọc cho khỏi cào mặt án. Lạc Lạc bay trước dẫn lối, nghiêm trang được ba bước thì quên, quay lại khoe một vệt sao mờ dính trên áo. Nhật Diệu Chiến Thần bưng nồi cháo hạt nóng lên đài; tấm giáp đĩa mặt trời của nàng đã phủ khăn để khỏi lóa mắt người đo. Nàng đặt nồi xuống hơi mạnh tay, bị nhắc, lập tức xin lỗi. Đài cao có những phép lịch sự nhỏ dành cho công việc của người khác, chứ không chỉ có phép nhìn trời."
+        },
+        {
+          "text": "Tinh Đế hỏi Gia Cát Vân vì sao trở lại. Người học trò đặt những bản đo của Thiên Cơ lên án, đáp: vì số cũ không đủ. Gia Cát Vân chưa nói thầy đúng, cũng không đòi thầy nhận sai. Tinh Đế mở tấm phủ trên hộp ghi sao đã dùng hàng trăm năm. Chỗ tay thường đặt đã bóng lên, mép giấy vẫn khô ráo — thứ tư liệu được dùng thật, không phải để khoe.\n\nVô Danh đưa bản chép Đại Kiếp từ Kim Sa, bản ghi vết nứt từ Vạn Thú, và chuyện đất rừng không nhận lại cây đổ. Tinh Đế lật theo thứ tự ngày tháng, hỏi kỹ từng nguồn, không gạt đi như tin đồn. Gia Cát Vân gảy bàn tính, sửa lại một hàng khi nghe đến hai chữ “ít dần” chứ không phải “ngừng hẳn”.\n\n— Ghi sai một chữ ấy thì ta sẽ tính ra một thế giới chết đứng, — ông nói, — trong khi thứ trước mặt là một thế giới đang cạn.\n\nVô Danh chép lại, không giấu chỗ mình đã nói sai."
+        },
+        {
+          "text": "Nguyệt Hoa Tiên Tử ngồi đợi bên ô cửa trông ra phía trăng, bím tóc màu đêm buông dọc sống lưng. Nàng canh một gốc cây dưới trăng, chờ một vì sao không bao giờ rơi. Vô Danh hỏi nếu nó rơi thật thì nàng sẽ làm gì. Nàng không có sẵn câu trả lời. Chưa bao giờ nàng phải nghĩ mình sẽ đứng đâu sau khi điều mình chờ đã đến.\n\nNàng dẫn khách đến chiếc bàn tập bằng đá khắc chòm sao. Mặt bàn ở đây cho bi trượt rất lâu rồi mới lăn; chạm cao hay chạm thấp vào bi trắng làm đường đi sau va chạm đổi khác rõ hơn người mới tưởng. Nhật Diệu muốn đánh một ván chín bi cho đỡ rét. Nguyệt Hoa bắt ăn cháo xong đã, tay còn dính mỡ thì không được cầm cơ. Lạc Lạc mang khăn đến cho từng người, Tinh Quan xếp cụm bi ngay ngắn giữa bàn. Giữa những bản tính nghìn năm, nồi cháo vẫn phải chia cho đủ; một cái bát đặt lệch vẫn có thể làm người khác vướng tay."
+        },
+        {
+          "text": "Nhật Diệu phá. Quả một rơi, trắng chạy dài nhưng không lọt lỗ.\n\n— Ha! Ánh dương không biết lùi bước!\n\nĐến quả ba, nàng muốn giữ trắng lại bằng một cú kéo lùi, nhưng đặt điểm chạm thấp quá trong khi đầu cơ lại không đủ phấn. Đầu cơ trượt qua mép bi; trắng chỉ nhúc nhích, không chạm tới bi đích. Nàng nhận lỗi trước cả khi Tinh Quan kịp đọc, rồi trao bi trắng cho khách bằng cả lòng bàn tay.\n\nVô Danh đặt bi để ăn quả ba, chọn điểm chạm gần tâm hơn. Cú đánh không đẹp như đường vừa định, nhưng trắng dừng ở chỗ có ích. Quả bốn nằm sát băng; khách cắt mỏng, cho trắng chạy hai băng ra giữa để ngắm quả năm. Nguyệt Hoa nhìn theo góc thật trên bàn, không ngửa lên trời tìm lời bảo đảm. Lạc Lạc muốn rắc một vệt sao giúp bi đi, Tinh Quan nhắc mọi phép làm thay đổi mặt bàn phải báo trước lượt. Cô rụt tay, ngồi lên chiếc ghế cao, tự xem một đường bi không có mình nhúng vào."
+        },
+        {
+          "text": "Đến cụm sáu, bảy, tám, Vô Danh muốn phá thẳng, rồi dừng lại vì thấy quả bảy sẽ chắn đường ra lỗ của quả sáu. Khách đánh một cú thủ, chờ một đường tách chéo. Nhật Diệu không chịu lùi, nhưng chịu đổi góc: nàng đưa sáu sang băng, giấu trắng sau quả chín. Hai người đổi lượt qua lại cho đến khi cụm bi mở ra, không ai coi một cú chưa ăn được là phí.\n\nGia Cát Vân đứng ở cửa nhìn cụm cuối, lấy một mẩu than vẽ lên giấy: đường ra của quả này có khi lại chính là chỗ đang đứng của quả kia. Tinh Đế đến bên, không chê học trò mượn trò chơi để giải chuyện trời; ông chỉ nhấc ngọn đèn lại gần cho dễ nhìn. Vô Danh thắng ván tập khi Nhật Diệu để quả chín lại ở miệng lỗ góc. Nàng đòi hôm khác đấu lại, rồi tự cất bi khi nghe người giữ kính gọi. Trong gian chính, có một phép đối chiếu cần tất cả cùng nhìn."
+        },
+        {
+          "text": "— Các vì sao không đi, — Tinh Đế nói. — Ta đã ngỡ đó là ý trời. Bàn tính của ngươi bảo sao, Vân? Gia Cát Vân lật bàn tính, gảy rất lâu.\n\n— Nó bảo các vì sao không phải không đi. Chúng bị giữ. Từ cùng một điểm. Bằng cùng một lực. Suốt một nghìn năm.\n\nGiọng ông không có chút gì của người vừa thắng một cuộc cãi kéo dài mười năm. Ông đặt bản đồ sao cũ cạnh bản mới, chỉ một vệt đường bị đứt từ trước Đại Kiếp.\n\n— Và năm ấy, chòm sao kia rơi lệch không phải vì nó hỏng. Đường của nó bị một chòm khác chắn — một chòm chưa chịu rơi.\n\nNhật Diệu cúi xuống xem, giáp chạm mép án, nàng vội lùi lại. Vô Danh nhìn chỗ hai đường cắt nhau. Trên giấy, cái điểm đã làm biến mất một nửa sa mạc nhỏ đến nỗi một hạt bụi cũng che được. Nhưng nó nhỏ không có nghĩa người ở đầu kia phải chịu ít hơn."
+        },
+        {
+          "text": "Nguyệt Hoa Tiên Tử xoay ống kính về phía Đông. Từ đỉnh núi trắng của Thiên Quang, chín sợi sáng mảnh như tơ kéo thẳng lên trời, buộc vào chín chòm sao.\n\n— Cú Định Thiên chưa bao giờ kết thúc, — nàng thì thầm. — Ông ấy vẫn đang giữ cú đánh đó. Bằng chính tuổi thọ của cả thế gian.\n\nTinh Quan tháo găng, dùng tay trần giữ chân kính cho khỏi rung. Vô Danh lần lượt nhìn qua ống kính. Sau những sợi sáng không có hình thù quỷ dữ nào. Chỉ có một điểm trên đỉnh núi, nơi từng có một chén trà và một người hỏi đường từ bến lên có khó đi không. Tinh Đế xác nhận những dòng lực đều quy về đó; không thể nói ý trời tự nằm yên được nữa. Gia Cát Vân thôi gảy bàn tính, nhường thầy nhìn trước. Trong khoảng lặng ấy không có người thắng mười năm trước, cũng không có người thua đêm nay; chỉ có hai thầy trò đã xa nhau quá lâu, nay mới đứng cùng một phía ống kính.",
+          "art": "c11-threads"
+        },
+        {
+          "text": "Lạc Lạc Tinh Linh, bé tí và hay cười, lần này không cười.\n\n— Vậy là thế giới không bị nguyền, — cô nói. — Thế giới chỉ đang được thương quá lâu.\n\nTinh Đế đưa tay chặn cánh cửa bị gió đẩy, không để luồng rét quét qua giấy. Ông bảo thương một điều không miễn cho người ta trách nhiệm về điều mình giữ.\n\nVô Danh nhớ chín thanh phi kiếm đứng yên trên lầu cao, nhớ một ông già biết lúc nào nên để quả bi tự lăn — mà chưa bao giờ dám buông cây cơ của chính mình. Khách hỏi nếu bảo ông thả ngay bây giờ thì chuyện gì sẽ xảy ra. Gia Cát Vân đặt chín hạt tròn lên sơ đồ rồi rút một thanh gỗ chặn. Chín hạt cùng dồn vào một đường, va bật vào nhau loạn xạ. Ông không dùng cảnh ấy để dọa ai; ông làm lại thật chậm, cho mọi người thấy rõ đường nào bị đường nào cắt. Vô Danh đặt tay trên gối, không hỏi dồn thêm."
+        },
+        {
+          "text": "Gia Cát Vân gảy thêm một hàng.\n\n— Thả cùng lúc, chúng sẽ đâm nhau như đêm Đại Kiếp. Phải thả như gỡ một cụm bi: quả nào chạm trước thì rơi trước.\n\nÔng và Tinh Đế đánh số các đường sao theo thứ tự lối trống có thể mở ra. Chòm này đi hết mới để lại khoảng cho chòm sau; không phải sợi nào dễ tháo thì tháo trước.\n\nTrên bàn phụ, Nguyệt Hoa xếp chín quả thành một cụm thử, không giả vờ cả Thiên Bàn đang nằm trong phòng. Vô Danh thử một cú tách mỏng. Ba quả mở đường, một quả bị kẹt lại, bi trắng hết đà quá sớm. Gia Cát Vân ghi cả chỗ trắng dừng, chứ không chỉ ghi bi màu. Tinh Đế nói phép tính còn phải đối chiếu trên Linh Đài cuối cùng; chưa ai ở đây đủ dữ kiện để gọi một đường nào là an toàn tuyệt đối. Vô Danh nhìn quả trắng nằm lại trên bàn, chợt hiểu vì sao Bà Bà không chịu buộc sẵn một lời hứa dưới vực."
+        },
+        {
+          "text": "Gần sáng, Gia Cát Vân rửa chén trà cho thầy, như những ngày chưa bỏ núi. Ông nói đã giận thầy, vì câu hỏi nào cũng bị trả về hai chữ số mệnh. Tinh Đế đáp mình cũng đã giận trò, vì tưởng kẻ hay hỏi là kẻ không chịu học cách nhìn. Không ai xin xoá đi mười năm. Người học trò chỉ đặt thêm một chiếc chén cạnh chén của thầy, để lần sau khỏi phải uống một mình.\n\nNguyệt Hoa ra đứng bên gốc cây, lần này không chỉ nhìn chỗ vì sao được chờ. Nàng đo lại rãnh thoát nước quanh rễ, để khi trời chuyển, cây khỏi ngập. Nhật Diệu giúp khiêng đá; Tinh Quan lần đầu giao ca gác cho người khác để nghỉ một khắc. Lạc Lạc ngồi trên vai Vô Danh, hỏi nếu sao rơi hết thì cô còn được vui không. Vô Danh bảo lúc nào vui thì cứ vui lúc ấy, chưa cần tập khóc trước. Cô nghĩ rất lâu, rồi nhặt một mẩu giấy rách lên, giữ nguyên như thế, không biến nó thành một ngôi sao cho đẹp."
+        },
+        {
+          "text": "Thư từ Thiên Quang đến khi bản thứ tự đã chép xong. Kiếm Nhi nghe tin về tấm thẻ, muốn đi ngay nhưng bị Lăng Thiên Kỳ giữ lại, chờ đường đi cho chắc. Cuối thư có mấy dòng chính tay vị chấp pháp viết: nếu chuyện liên quan đến tông môn, nàng sẽ đích thân nghe. Vô Danh viết trả lời rằng đã thấy những sợi giữ trời, và xin đừng ép Kiếm Thánh trả lời trước đám đông khi chưa tìm ra cách tháo.\n\nTinh Đế chỉ đường tới Thiên Hương Các, nơi có thể còn giữ phần tên đã mất trên ngọc. Gia Cát Vân muốn đi theo, rồi ở lại cùng thầy đo khoảng trống đầu tiên. Vô Danh mang theo bản thứ tự, không mang một bản cáo trạng viết sẵn. Tinh Quan mở cổng, Nhật Diệu trao nồi cháo gói kín cho đường xuống núi, Nguyệt Hoa giữ hộ chiếc khăn khỏi bị gió cuốn. Xa dưới chân núi, Hắc Lang đứng ngoài tầm lính gác, lần này giơ tay lên cho khách thấy. Vô Danh chạm tay vào túi đựng thẻ, bước xuống phía có người đang gọi mình bằng cái tên đã quen."
+        }
       ]
     },
     {
-      "id": "thienhuong", "title": "Chương 12 · Khúc đàn chứa tên", "land": "thienhuong", "unlock": "thienhuong",
+      "id": "thienhuong",
+      "title": "Chương 12 · Khúc đàn chứa tên",
+      "land": "thienhuong",
+      "unlock": "thienhuong",
       "pages": [
-        { "art": "c12-pavilion", "text": "Thiên Hương Các rực rỡ đến mức người ta quên mất nó nằm sát bờ Hư Không. Khách đến đây vì rượu, vì vũ điệu của Hồng Liên, vì hương của Tử Trinh — và chẳng ai để ý rằng lầu các này chưa từng đóng cửa một đêm nào.\n\nMị Cơ Các Chủ đón Vô Danh sau tấm quạt vàng.\n\n— Bọn ta chờ ngươi lâu rồi. Đừng nhìn ta như thế. Ở đây ai cũng tưởng bọn ta chỉ biết làm đẹp." },
-        { "text": "— Người bị Hư Không nuốt không biến mất ngay đâu, — Mị Cơ nói. — Người ta còn nhớ đã mất một người. Nhưng tên người ấy, rồi giọng nói, rồi khuôn mặt, cứ mờ dần. Bọn ta giữ lấy những gì còn giữ được.\n\nNàng gấp quạt, chỉ về cuối lầu, nơi Ngân Cầm đang lên dây đàn.\n\n— Mỗi khúc nàng đàn là tên một người đã mất. Bốn mươi năm nay chưa ai nghe ra lời. Người ta chỉ khen là hay." },
-        { "art": "c12-zither", "text": "Ngân Cầm ngước lên, đôi mắt bạc lim dim như vừa tỉnh một giấc dài.\n\n— Người nghe đàn mà khóc thì nhiều, — nàng nói. — Người nghe ra tên thì chưa có ai.\n\nRồi nàng đàn. Tiếng đàn trôi trên mặt hồ như mực loang trong nước. Vô Danh nghe ra một người đánh cá ở Hải Long, rồi một cô bé bán chà là ở Kim Sa — rõ như có người đang gọi. Rồi hàng nghìn cái tên. Ở nốt cuối cùng: Tạ Thanh Ca." },
-        { "text": "Ký ức trở về như nước vỡ bờ. Tạ Thanh Ca, đệ tử áo trắng của Thiên Quang. Những buổi chiều trốn tập kiếm, ra sau núi đánh bi với Nhạn — cô gái Huyết Sát lúc nào cũng thắng ván cuối, vì biết Thanh Ca sẽ nhường. Hai người lẽ ra là kẻ thù. Đêm trăng đỏ, khi Hư Không mở trên Linh Đài, chính Thanh Ca đã nhảy xuống, nắm được vạt áo nàng — và không giữ nổi.\n\nNgân Cầm dừng tay, giọng nhỏ như chỉ dành cho một người:\n\n— Ta tưởng sẽ chẳng còn ai nghe ra." }
+        {
+          "text": "Thiên Hương Các rực rỡ đến mức người ta quên rằng nó nằm sát bờ Hư Không. Khách đến vì rượu, vì điệu múa của Hồng Liên, vì hương của Tử Trinh — và chẳng ai để ý lầu các này chưa từng đóng cửa một đêm nào. Đèn lụa soi xuống hồ sen; tiếng chuông nhỏ nơi cổ tay vũ cơ luôn đến trước bước chân nàng một chút, vừa đủ khiến khách quay đầu.\n\nMị Cơ Các Chủ đón Vô Danh sau tấm quạt vàng. Chỉ một đôi mắt màu mật lộ ra trên mép quạt, mà cả gian khách như chậm lại.\n\n— Bọn ta chờ ngươi lâu rồi. Đừng nhìn ta như thế. Ở đây ai cũng tưởng bọn ta chỉ biết làm đẹp.\n\nNàng dẫn khách đi qua gian ca, không giấu công việc của các nàng như điều gì đáng hổ: người rót rượu nhớ khách nào không uống được cay, người đánh đàn chờ tiếng chuyện trò lắng xuống mới nhấn dây. Vô Danh tháo túi cơ khỏi vai, theo nàng lên chiếc cầu thang mòn một vệt ở giữa.",
+          "art": "c12-pavilion"
+        },
+        {
+          "text": "Hắc Lang muốn đứng đợi dưới mái hiên ngoài. Hồng Liên đưa hắn một chiếc khăn lau giày, bảo người đứng canh cũng không được mang bùn vào nhà. Rồi nàng buộc gọn đôi tay áo dài để lên thang; chuông ở cổ tay lập tức im bặt. Vô Danh nhận ra thứ khiến cả gian khách say mê có thể cất đi bằng một nút thắt rất thường.\n\nTrong phòng ăn của các nàng có canh củ sen, cơm nóng và một đĩa đậu chiên đã nguội vì buổi diễn kéo dài. Kim Phượng lấy đôi quạt thép chặn cửa khỏi gió, gắp phần đậu kém giòn nhất về mình. Tử Trinh rửa tay ba lượt cho hết mùi hương rồi mới chạm vào cơm, hỏi khách đi đường núi có nhức đầu không. Không ai nhắc đến thân phận. Mị Cơ kê thêm một chiếc ghế, để Vô Danh tự chọn ngồi nhìn ra cửa hay quay lưng về cửa. Hắc Lang vẫn ở ngoài; có một phần cơm được mang xuống cho hắn, không kèm câu hỏi nào."
+        },
+        {
+          "text": "— Người bị Hư Không nuốt không biến mất ngay đâu, — Mị Cơ nói. — Người ta vẫn nhớ mình đã mất một người. Nhưng tên người ấy, rồi giọng nói, rồi khuôn mặt, cứ mờ dần. Bọn ta giữ lấy những gì còn giữ được.\n\nNàng kéo một ngăn tủ: không phải châu báu, mà là giấy vụn, mảnh buồm, lưng thư, nét chữ nào cũng sắp phai. Rồi nàng gập quạt, chỉ về cuối lầu, nơi Ngân Cầm đang lên dây đàn.\n\n— Mỗi khúc nàng ấy đàn là tên một người đã mất. Bốn mươi năm nay chưa ai nghe ra lời. Người ta chỉ khen hay.\n\nVô Danh nhớ những cái tên bị gạch mực vàng trong sổ của Long Vương, bèn đặt tờ xác nhận lên bàn. Mị Cơ kể có những cái tên phải chuộc bằng tiền của cả một mùa diễn, có cái chỉ đổi được bằng một câu người thân còn nhớ. Các nàng không trả tiền để hồn được qua sông; các nàng trả để người trên bờ khỏi mất thêm phần tên."
+        },
+        {
+          "text": "Ngân Cầm không đến góp lời. Nàng ngồi bên cửa sau, mái tóc bạch kim búi lỏng vướng một sợi tơ đứt, móng tay đang nắn lại một con nhạn đàn. Lưng đàn có một chỗ vá khác màu. Thấy Vô Danh nhìn, nàng bảo gỗ nứt vì một mùa mưa, chẳng phải vì khúc nhạc nào buồn quá. Lời khô nhẹ ấy khiến khách thôi đứng trước nàng như trước một vật linh thiêng.\n\nNàng từng muốn soạn một bản chỉ có tiếng mưa trên tàu lá — không tên người, không lời tiễn. Mới được bốn câu thì một phong thư chuộc tên gửi tới, và mặt sau tờ nhạc riêng bị lấy ra chép tên. Bốn câu ấy nàng vẫn thuộc. Đôi khi nàng giận một người đã chết, chỉ vì người ấy đến đúng lúc nàng muốn được nghỉ.\n\nNói đến đó, nàng ngước lên nhìn khách, đôi mắt bạc nửa khép, như chờ một lời trách. Vô Danh chỉ hỏi tờ nhạc ấy còn không. Nàng gật, tay tìm đến một ngăn kéo nhưng chưa mở."
+        },
+        {
+          "text": "Hồng Liên mời khách đánh thử ở chiếc bàn gỗ sơn son, bảo ai muốn ngồi nghe trọn đêm thì phải biết thả lỏng người trước. Nàng đo khoảng cách tới bàn bằng bước chân, không múa để làm đối thủ hoa mắt. Một vạt lụa trải trên mặt nỉ được báo trước khi vào lượt: bi lăn qua đó giữ đường lâu hơn, chứ không tự tìm lỗ theo tiếng nhạc.\n\nVán tám bi mở đầu bằng cú phá của Kim Phượng. Nàng thích đánh thẳng — mạnh, nhưng biết chỗ dừng — và quả trắng về đúng giữa bàn. Một quả rơi; Hồng Liên nhắc bàn vẫn còn mở, có bi rơi lúc phá chưa có nghĩa là đã nhận nhóm. Kim Phượng đánh tiếp một cú dài, trượt. Vô Danh gọi quả mười hai vào lỗ góc, ăn đúng, rồi mới nhận nhóm sọc. Tử Trinh dời lư hương ra xa luồng gió. Nàng hỏi có muốn mở cửa sổ không. Vô Danh gật, và tiếng nước dưới chân cầu thang nghe rõ hơn."
+        },
+        {
+          "text": "Kim Phượng có đường ăn quả trơn nhưng vướng quả tám giữa cụm. Nàng đánh một cú thủ, đẩy quả ba sát băng, giấu trắng sau quả bảy. Thấy khách cứ nhìn đôi quạt thép chặn cửa, nàng hất bím tóc lửa:\n\n— Mê ta à? Thử đỡ cú này trước đã.\n\nRồi chính nàng bật cười, dời đôi quạt lên ghế cho khỏi vướng mắt. Vô Danh cúi xuống ngắm một đường đá băng.\n\nTrắng chạm đúng quả sọc khách định giải. Ở luật tám bi, không cần chạm quả số nhỏ nhất, chỉ cần đúng nhóm mình — Tử Trinh nhắc điều ấy cho Hồng Liên đang tập ghi ván, không chen vào lựa chọn của người đánh. Vô Danh trả một thế thủ khác: đưa quả sọc về gần góc, giữ trắng ở xa. Kim Phượng không thích đánh vòng, nhưng vẫn chịu đi đường băng khi đường thẳng bị che. Nàng đánh hỏng, đứng tránh sang bên ngay. Giữa những người đã quen để khách nhìn mình, mỗi lượt cơ vẫn có một khoảng riêng không ai giành."
+        },
+        {
+          "text": "Đến quả tám, Vô Danh gọi lỗ góc trái và chọn một cú kéo lùi, để trắng khỏi theo bi xuống lỗ. Trên đoạn lụa, trắng trượt khác hẳn khoảng nỉ vừa qua; khách bớt xoáy, giữ đầu cơ thật ngang, chấp nhận trắng dừng xa hơn nhưng an toàn. Quả tám rơi đúng lỗ đã gọi. Kim Phượng gõ nhẹ cán cơ xuống sàn, bảo ván sau sẽ bỏ lụa đi, xem khách còn khéo được không.\n\nNgân Cầm đã đứng ở cửa từ lúc nào. Nàng hỏi khách có nghe tiếng bi trắng chạy từ nỉ sang lụa không. Vô Danh đáp chỉ nghe thấy tiếng nhỏ đi, không chắc thế đã gọi là nghe rõ chưa.\n\n— Người ta thường chỉ nghe tiếng bi rơi, rồi tưởng mình đã nghe cả cú đánh.\n\nCâu ấy không chỉ nói về đàn, nhưng nàng không giải thích thêm. Mị Cơ đưa chìa khóa phòng tên, hỏi nàng có muốn nghỉ một đêm rồi hãy đàn cho khách không. Ngân Cầm nhìn đôi bàn tay mình, xin một khắc để uống trà. Lần này nàng không nhận lời làm ngay."
+        },
+        {
+          "text": "Trong một khắc ấy, Tử Trinh xoa thuốc vào đầu ngón tay Ngân Cầm, chỗ da cứ nứt mãi dưới dây đàn. Hồng Liên khâu cổ tay áo, Kim Phượng mang đèn tới. Không ai giục. Vô Danh ngồi ngoài ngưỡng cửa, nghe Ngân Cầm hỏi: nếu đã có người nghe ra, thì những cái tên kia còn phải nằm mãi trong tay nàng nữa không. Mị Cơ đáp sẽ chép lại, sẽ chia cho nhiều người cùng giữ, không đặt cả tòa lầu lên một cây đàn nữa.\n\n— Ta sợ có ngày mình đàn như làm một việc đã thuộc lòng, — Ngân Cầm nói. — Tên người đi qua tay mà lòng chẳng còn biết là ai.\n\nVô Danh đáp chưa chắc phải đau đủ từng lần mới gọi là giữ. Nàng không đồng ý ngay. Nàng bóp nhẹ đầu ngón tay, thử một tiếng khô trên mặt đàn, rồi nhờ Tử Trinh mang tờ nhạc bốn câu mưa vào phòng riêng. Đó là một điều nhỏ nàng muốn lấy lại cho mình, trước khi cho đi thêm một đêm nữa."
+        },
+        {
+          "text": "Ngân Cầm ra ngồi ở hiên đá sát mặt hồ, đặt đàn lên gối. Nàng ngước lên, đôi mắt bạc lim dim như vừa tỉnh một giấc dài.\n\n— Người nghe đàn mà khóc thì nhiều, — nàng nói. — Người nghe ra tên thì chưa có ai.\n\nRồi nàng đàn. Tiếng đàn trôi trên mặt hồ như mực loang vào nước. Vô Danh nghe ra một người đánh cá ở Hải Long, rồi một cô bé bán chà là ở Kim Sa — rõ như có ai đang gọi họ. Khách nói lại hai cái tên ấy; Tử Trinh dò sổ rồi gật đầu. Ngân Cầm khựng lại trên một sợi dây, rồi đàn tiếp, lần này không nhìn xuống tay nữa.\n\nMột tên, rồi một tên nữa. Rồi hàng nghìn cái tên. Mỗi tên có một chỗ ngừng vừa đủ để người nghe nhận ra, không tan vào một tiếng khóc chung.\n\nỞ nốt cuối cùng: Tạ Thanh Ca. Nước mắt Vô Danh rơi trước khi kịp hiểu vì sao. Khách cúi đầu; tấm thẻ ngọc trong áo chạm vào thành ghế, một tiếng rất mảnh cắt qua dư âm và không chìm đi.",
+          "art": "c12-zither"
+        },
+        {
+          "text": "Ký ức trở về như nước vỡ bờ. Tạ Thanh Ca, đệ tử áo trắng của Thiên Quang. Những buổi chiều trốn tập kiếm, lẻn ra sau núi đánh bi với Nhạn — cô gái Huyết Sát lúc nào cũng thắng ván cuối, vì biết Thanh Ca sẽ nhường. Hai người lẽ ra là kẻ thù. Nhạn hay giấu bánh trong ống đựng cơ; lần nào mở ra bánh cũng vỡ vụn, vậy mà nàng vẫn chia cho bạn phần lớn hơn.\n\nKhông phải ván nào cũng nhường. Có hôm hai người cãi nhau vì một cú trắng chạm nhầm bi trước: Nhạn đòi đặt lại theo luật, Thanh Ca không chịu mất một lượt đã tính rất lâu. Nhạn bỏ về, ba ngày sau mới quay lại, mang theo một hộp phấn mới.\n\nNhạn yêu Ma Tôn. Nàng kể về hắn từ những ngày hắn còn biết hỏi người khác đã ăn cơm chưa; Thanh Ca ngồi nghe, mũi chân gạt một hòn sỏi dưới ghế. Những buổi chiều ấy không giấu một mối tình nào khác. Chúng chỉ giấu một điều: hai người thuộc hai tông thù nhau vẫn có thể ngồi chung một bàn."
+        },
+        {
+          "text": "Đêm trăng đỏ, khi Hư Không mở ra trên Linh Đài, chính Thanh Ca đã nhảy xuống theo, nắm được vạt áo Nhạn — và không giữ nổi. Quỷ Y cũng có mặt đêm ấy; bàn tay bà với theo mép đá mà hụt. Tiếng gọi bị gió nuốt mất nửa cuối. Trong ký ức, Nhạn đã nắm lại rất chặt; rồi chỉ còn mảnh vải rách giữa những ngón tay không chịu mở.\n\nVô Danh ngồi bất động. Ở đây không có đường bi nào để sửa, cũng không cần mượn một giấc mơ để có mái nhà. Những gì trở về có cả việc đã không cứu được, cả những ván thua cãi nhau, và một người bạn — không phải một món nợ để hai tông giành giật.\n\nNgân Cầm dừng tay. Giọng nàng nhỏ như chỉ dành cho một người:\n\n— Ta cứ tưởng sẽ chẳng còn ai nghe ra.\n\nVô Danh ngẩng lên, gọi tên nàng trước khi nói lời cảm ơn. Nàng nhìn xuống bàn tay mình, và lần đầu trong đêm, không đặt nó trở lại dây đàn."
+        },
+        {
+          "text": "Vô Danh nhờ Mị Cơ viết gửi Thiên Quang những điều vừa nhớ ra, rồi đọc lại từng chữ, không để chuyện nhảy xuống cứu Nhạn thành một bản kể mà Thanh Ca không có lỗi gì. Hắc Lang ngồi ngoài, nghe đến cái tên cũ, hỏi từ nay nên gọi thế nào. Vô Danh đáp cứ gọi Vô Danh, ít nhất cho đến lúc tự biết mình phải giữ phần nào. Hắn nhận phong thư mang đi, nhưng không nhận thay ai lời tha thứ.\n\nKhuya, khi phòng tên đã đóng, Ngân Cầm lấy tờ nhạc mưa ra, đàn bốn câu của riêng mình. Không ai khóc. Hồng Liên gõ nhịp bằng móng tay, Kim Phượng bảo câu thứ ba nên chậm lại, Tử Trinh cãi rằng mưa đâu có đợi ai. Mị Cơ tháo trâm, cười sau chén trà. Vô Danh nghe trọn, không tìm một cái tên nào ẩn trong đó. Trước ngày ra vực, khách có được một đêm không phải giải câu đố của chính mình. Ngoài hồ, vệt đèn vẫn rung trên nước, và cây đàn trên gối Ngân Cầm đã nhẹ đi, đủ để nàng muốn đàn thêm cho chính mình."
+        }
       ]
     },
     {
-      "id": "hukhong", "title": "Chương 13 · Cú Thả Thiên", "land": "hukhong", "unlock": "hukhong",
+      "id": "hukhong",
+      "title": "Chương 13 · Cú Thả Thiên",
+      "land": "hukhong",
+      "unlock": "hukhong",
       "pages": [
-        { "art": "c13-void", "text": "Hư Không không có đáy, không có trời. Chỉ có những tảng đá trôi, và một cơn đói lớn đến mức thành hình: Thôn Thiên Ma Vương, cái miệng của thế giới.\n\nNó không gầm. Nó thở ra — một hơi thở dài một nghìn năm của kẻ chưa được ăn đủ." },
-        { "text": "Diệp Huyền Quang đã đứng đó, bên một Linh Đài cuối cùng trôi giữa khoảng không. Trên tay ông, cây cơ đầu tiên của thế gian rung lên, chín sợi sáng từ đầu cơ kéo thẳng lên trời.\n\n— Ta biết sẽ có ngày này, — ông nói, không quay lại. — Ta lập Cơ Hội để tìm một người đủ gan làm việc ta không làm nổi. Ta không ngờ đó lại là học trò cũ của mình." },
-        { "art": "c13-table", "text": "Trên Linh Đài là chín quả bi, xếp khít như một cụm chưa phá, mỗi quả buộc một sợi sáng.\n\n— Đánh mạnh, chúng văng như đêm Đại Kiếp, — ông nói. — Đánh khéo, chúng rơi lần lượt. Nhưng muốn chạm đủ chín quả, bi cái phải theo chúng xuống lỗ. Ta tính cú ấy một nghìn năm. Lần nào cũng thấy bi cái rơi. Ta không dám.\n\n— Nếu buông, mặt trời Kim Sa sẽ lặn. Những người chỉ còn sống nhờ đan dược sẽ được đi. Đảo Hoa Linh sẽ tỉnh mộng. Và ta sẽ già. — Ông đặt cây cơ vào tay Vô Danh. — Người đời sẽ gọi nó là gì nhỉ… Cú Thả Thiên." },
-        { "text": "Vô Danh nhớ cú bi trôi qua miệng lỗ ở Băng Phách. Thua một lượt, hoá ra cũng chỉ là thua một lượt.\n\nBi rời đầu cơ, chạm quả đầu cụm. Từng quả một rơi xuống, quả nào chạm trước rơi trước. Chín sợi sáng đứt như dây đàn. Trên trời, các vì sao — đứng yên một nghìn năm — bắt đầu lăn, mỗi chòm theo đường của mình. Rồi bi cái lăn theo quả cuối cùng, xuống lỗ.\n\nBi cái rơi thì lượt về tay người khác. Thôn Thiên Ma Vương khép miệng lại, chậm rãi, như một đứa trẻ cuối cùng cũng được ăn no, rồi tan ra thành một bầu trời đêm." }
+        {
+          "text": "Hư Không không có đáy, cũng không có trời. Chỉ có những tảng đá trôi lơ lửng, và một cơn đói lớn đến mức đã thành hình: Thôn Thiên Ma Vương, cái miệng của thế giới. Nó không gầm. Nó thở ra — một hơi thở dài một nghìn năm của kẻ chưa bao giờ được ăn cho đủ. Vô Danh nghe nó bằng lồng ngực hơn là bằng tai, như đứng trước cửa hang đang hút gió.\n\nHư Trùng bò thành hàng trên mép đá, những con mắt hồng khép mở, chân nhỏ gõ lên đá kèn kẹt. Chúng gặm những vệt sáng rơi vãi quanh các đường nứt, không đáp lại tiếng gọi của khách. Hắc Lang gạt một con khỏi cổ áo Vô Danh. Vô Danh muốn đến chiếc bàn cuối cùng, nhưng chưa biết lối nào đủ vững cho sức người. Sau lưng là bản đồ sao, những lá thư, cái tên Thanh Ca đã rõ. Không thứ nào tự bắc lên một cây cầu.",
+          "art": "c13-void"
+        },
+        {
+          "text": "Phệ Hồn Thú chắn ngang khối đá nối hai bờ hẹp, cái miệng đầy răng nanh giữa bụng há ra theo từng nhịp thở. Nó gầm lên; đá dưới chân rung bần bật, một mảnh vụn rơi khỏi mép. Hắc Lang đặt tay lên chuôi dao. Vô Danh giữ cổ tay hắn lại. Tiếng gầm ấy không báo trước một đòn đánh; nó chỉ cho biết có một sinh vật đang đói và không chịu nhường chỗ.\n\nHư Không Mẫu Hoàng bước ra khỏi bóng tối, ba con mắt trên trán lần lượt nhìn từng người. Đôi râu côn trùng của bà rung lên khi bầy Hư Trùng kéo đến.\n\n— Con của ta đói rồi.\n\nVô Danh hỏi chúng cần gì. Bà chỉ lên những vệt sáng đang bị kéo căng trên cao. Không túi lương khô nào thay được phần của cả thế giới; Vô Danh không hứa điều ấy, chỉ xin một lối tới nơi phần ấy đang bị giữ. Mẫu Hoàng nhìn bản đồ sao, rồi lùi lại vừa đủ một bước. Phệ Hồn Thú vẫn gầm, nhưng thôi chặn khối đá giữa."
+        },
+        {
+          "text": "Vô Diện Khách hiện ra ở chỗ con đường đứt hẳn. Chiếc mặt nạ trơn của hắn phản chiếu cả bầu trời sao đứng im. — Ta là không ai cả. Hắn nói như đọc lại một câu đã dùng rất lâu, không mong ai sửa. Vô Danh hỏi người không là ai cả có biết lối tới Linh Đài không. Hắn chỉ một chuỗi đá vụn, không thẳng hàng, mỗi mảnh dịch đi rất chậm theo sức hút của vực.\n\nPhải đợi đến khi khoảng hở vừa một bước chân, không thể nhảy qua lúc nào tùy ý. Hắc Lang sang trước, quay lại chìa tay. Vô Danh nắm lấy — lần đầu từ sau chiếc xích, nhận một bàn tay mà không rút ra ngay. Đến khối đá cuối, Vô Diện nhìn tấm thẻ ngọc lộ ra bên vạt áo, hỏi một cái tên vừa tìm lại có làm người ta nặng thêm không. — Có thêm điều phải nhớ. — Vậy thì nhớ cả bước chân đang đi.\n\nHắn quay mặt nạ về phía bóng tối. Không khuôn mặt nào được lật ra, không lời giải nào về đời hắn để khách mang theo như chiến lợi phẩm."
+        },
+        {
+          "text": "Diệp Huyền Quang đã đứng đó, bên Linh Đài cuối cùng trôi giữa khoảng không. Trong tay ông, cây cơ đầu tiên của thế gian rung khẽ; chín sợi sáng từ đầu cơ kéo thẳng lên trời.\n\n— Ta biết sẽ có ngày này, — ông nói, không quay lại. — Ta lập Cơ Hội để tìm một người đủ gan làm việc ta không làm nổi. Ta không ngờ đó lại là học trò cũ của mình.\n\nVô Danh đặt tấm thẻ lên mép đá, mặt khắc phi kiếm hướng về phía ông. Chỗ tên đã bị nước sông xoá trắng. Kiếm Thánh nhìn khoảng trống ấy rất lâu, rồi tự mình đọc lên cái tên không còn trên ngọc: Thanh Ca. Rồi ông chờ. Vô Danh đáp đã nhớ, nhưng không nói từ đây mọi chuyện sẽ dễ hơn. Bàn tay ông vẫn nắm cán cơ chặt đến trắng cả khớp. Hắc Lang dừng ngoài vòng bàn: không bỏ đi, cũng không bước vào phần việc của người khác."
+        },
+        {
+          "text": "Vô Danh hỏi vì sao ông đã nhận ra mà không nói từ ngày trên đỉnh núi trắng. Kiếm Thánh đáp hôm ấy ông chỉ nhận ra dáng cầm cơ, một thế đứng quen, không đủ chắc để trao cả một đời người cho kẻ vừa từ dưới sông lên. Còn điều ông biết chắc — về bầu trời — thì ông đã giấu. Nói ra, ông sẽ phải thừa nhận có người khác đủ quyền đòi ông dừng tay.\n\n— Ta đã cứu được họ, — ông nói. — Ta nhìn những mái nhà còn đỏ lửa bếp, rồi cứ nghĩ: thêm một ngày nữa thì có gì sai.\n\nVô Danh đặt lên mép bàn những bản ghi về rễ cây, về đất, về những mạch bệnh, không cần đọc lại từng nỗi đau. Kiếm Thánh nhìn hết. Lăng Thiên Kỳ đến từ phía sau — nàng đã nhận được thư — và vết sẹo dọc mắt trái co lại khi nàng nghe. Nàng không quỳ. Ông cũng không đòi. Một nghìn năm không làm phần sai ít đi; nhưng cũng không xoá được cái đêm ông từng đứng một mình giữa bầu trời đang vỡ."
+        },
+        {
+          "text": "Gia Cát Vân và Tinh Đế gửi bản đo cuối cùng qua người đưa tin. Thứ tự các đường mở đã được xác nhận từ hai phía. Lăng Thiên Kỳ đọc từng dấu, hỏi nếu cắt tất cả các sợi cùng một lúc thì sao. Kiếm Thánh chỉ vào chỗ hai đường cắt nhau — đúng cái vệt đã gây ra Đại Kiếp. Nàng gấp giấy lại. Không thể dùng cơn giận làm một nhát cắt.\n\n— Ta đã giữ luật của người, — nàng nói. — Có những lúc ta dùng nó để ngăn người khác đặt câu hỏi.\n\nÔng bảo nàng có quyền sửa luật. Nàng lắc đầu: chuyện ấy để sau, lúc này nàng không cần ông ban thêm quyền gì nữa. Vô Danh đứng bên, không đứng hẳn về phía ai để làm người kia nhẹ tội. Lăng Thiên Kỳ trải bản đo lên một chỗ phẳng, tìm vật chặn mép cho khỏi rung — việc trước mắt cần cả bàn tay đang giận. Hắc Lang đưa thêm một hòn đá. Nàng nhận, không hỏi nó từ tay Huyết Sát hay Thiên Quang."
+        },
+        {
+          "text": "Trên Linh Đài là chín quả bi xếp khít thành một cụm chưa phá, mỗi quả buộc một sợi sáng chạy lên một chòm sao. Mặt bàn chỉ có một lỗ: miệng Hư Không, co giãn theo hơi thở của Thôn Thiên. Kiếm Thánh chìa cây cơ về phía Vô Danh, nhưng bàn tay vẫn chưa rời cán.\n\n— Đánh mạnh, chúng sẽ văng như đêm Đại Kiếp, — ông nói. — Đánh khéo, chúng rơi lần lượt. Nhưng muốn chạm đủ cả chín quả, bi cái phải theo chúng xuống lỗ. Ta tính cú ấy một nghìn năm. Lần nào cũng thấy bi cái rơi. Ta không dám.\n\nĐây không phải ván chín bi tranh thắng thua, mà là cú phá một cụm chín quả để mở chín con đường. Vô Danh cúi sát mặt nỉ, nhìn từng điểm tiếp xúc: quả này nhích ra thì quả sau mới có chỗ, đường này rơi hết thì đường kia mới đi qua được. Không có sợi sáng nào kéo bi thay cho đầu cơ. Nhịp co giãn của miệng lỗ phải được nhìn trước, để đánh đúng lúc nó mở rộng nhất. Kiếm Thánh chỉ đường bi trắng phải lăn theo, không được kéo về để giữ lượt cho mình.",
+          "art": "c13-table"
+        },
+        {
+          "text": "Vô Danh đi quanh bàn hai vòng. Những bài học dọc đường không ghép lại thành một phép lạ: độ nảy mềm của bàn trong rừng, mặt nỉ nặng ở xứ cát, cú lăn quá đà trên bàn băng — chúng chỉ dạy rằng phải đo chính mặt bàn đang ở trước mắt. Khách vung cơ thử lực, hỏi độ nảy từng băng. Kiếm Thánh đáp từng điều một, không còn dùng câu “khi tâm đã thấy” để lấp chỗ mắt chưa thấy.\n\nĐường phá phải lệch khỏi tâm cụm vừa đủ, để lực truyền dọc theo các điểm tiếp xúc thay vì đâm thẳng làm cả chín quả văng tung. Trắng cần một cú cu-lê, để sau va chạm vẫn tiếp tục lăn tới, chạm những quả còn vướng đúng lúc chỗ trống mở ra. Một cú kéo lùi có thể giữ trắng ở lại trên bàn, nhưng sẽ bỏ dở đường cuối cùng chưa tháo. Hắc Lang hỏi dùng quả khác thay bi trắng được không; Kiếm Thánh lắc đầu, chỉ chỗ lực sẽ cạn. Vô Danh không vì là Bạch Cầu mà tin chắc mình sẽ được trả về."
+        },
+        {
+          "text": "— Nếu buông, mặt trời Kim Sa sẽ lặn. Những người chỉ còn sống nhờ đan dược sẽ được ra đi. Đảo Hoa Linh sẽ tỉnh mộng. Và ta sẽ già.\n\nÔng đặt cây cơ vào tay Vô Danh, mấy ngón tay vẫn còn chạm hờ trên cán.\n\n— Người đời sẽ gọi nó là gì nhỉ… Cú Thả Thiên.\n\nCán cơ nặng. Không phải cái nặng của một vật người ta sợ lỡ tay bỏ quên, mà của một thứ chưa từng được đặt xuống, dù chỉ một lần.\n\nVô Danh hỏi những người già trên giường bệnh ở Độc Vụ có còn được uống thuốc hạ sốt không. — Còn. Chỉ có phép cưỡng giữ một đời đã hết là không giữ được nữa. Vô Danh gật. Lăng Thiên Kỳ hỏi người đánh còn đường về không. Vô Danh nhớ mái chèo dừng giữa chừng khi Bà Bà nói chỉ vớt được nếu vực chịu nhả, nên không hứa chắc điều gì với nàng hay với Hắc Lang. Chỉ nhờ họ, nếu không về, hãy kể cả ván thua ở Băng Phách, đừng chỉ kể mỗi cú đánh này."
+        },
+        {
+          "text": "Kiếm Nhi đã đến khối đá ngoài cùng; lối đi quá hẹp giữ cô lại ở đó. Cô gọi to từ xa — gọi “Vô Danh”, không gọi “Thanh Ca”. Hắc Lang bước sang một bên để khách nhìn thấy cô, tay vẫn ôm cái gói đồ sẽ không mang xuống vực. Kiếm Nhi muốn nói rất nhiều, rốt cuộc chỉ hỏi đã bôi phấn chưa. Vô Danh giơ đầu cơ lên cho cô thấy: một vệt phấn nhỏ, vừa đủ cho lời chào ấy.\n\nVô Danh nhớ bát canh, nhớ nửa chiếc bánh nguội, những lá thư đã gửi, bản nhạc mưa không chứa tên ai. Nhớ quả bi trôi qua miệng lỗ trên bàn băng. Thua một lượt, hoá ra cũng chỉ là thua một lượt. Nhưng lần này, có thể sẽ không còn được đứng dậy sau bàn, ngồi vào chiếc ghế người khác kéo cho.\n\nNỗi sợ không bớt đi chỉ vì đã hiểu. Vô Danh đặt tay cầu xuống nỉ, thấy ngón trỏ run, đứng yên thêm một hơi thở rồi mới hạ người. Kiếm Thánh rời tay khỏi cán cơ, lần này hoàn toàn. Chín sợi sáng căng lên lần cuối; không còn ai cố giữ hộ cú đánh nữa."
+        },
+        {
+          "text": "Bi trắng rời đầu cơ, chạm vào quả đầu cụm. Rồi từng quả, từng quả rơi xuống — quả nào bị chạm trước thì rơi trước. Quả đầu rời khỏi đường thì quả thứ hai mới có chỗ trống để qua; những va chạm nối nhau, lực nhỏ dần nhưng vẫn đủ đưa từng quả tới miệng lỗ. Không quả nào cắt ngang đường của quả khác. Những tiếng chạm tách rời, đếm được — khác hẳn tiếng vỡ dồn một lượt của đêm Đại Kiếp.\n\nChín sợi sáng đứt như dây đàn. Trên trời, những vì sao đứng yên suốt một nghìn năm bắt đầu lăn, mỗi chòm theo đường của mình. Bi trắng vẫn giữ đà cu-lê, lăn tiếp qua chỗ cụm vừa mở, chạm quả thứ chín ở mép lỗ, rồi theo nó xuống. Vô Danh thấy cạnh tấm thẻ ngọc trong áo sáng lên một lần; rồi dưới tay không còn mặt bàn nữa.\n\nKiếm Nhi gọi thất thanh. Hắc Lang lao tới, rồi dừng lại ngay mép vực, không ném mình xuống để biến điều người kia đã chọn thành thêm một lần với hụt. Lăng Thiên Kỳ giữ lấy vai hắn. Cả hai vẫn nhìn xuống."
+        },
+        {
+          "text": "Bi cái rơi thì lượt về tay người khác.\n\nThôn Thiên Ma Vương khép miệng lại, chậm rãi, như một đứa trẻ cuối cùng cũng được ăn no, rồi tan ra thành một bầu trời đêm. Không có tiếng reo mừng diệt được ma vương. Bầy Hư Trùng tản đi; Mẫu Hoàng gọi con bằng tiếng râu cánh khô xào xạc. Phệ Hồn Thú cúi đầu, thôi gầm vào những khối đá. Vô Diện Khách ngẩng mặt nạ lên bầu trời giờ đã có đường chuyển động.\n\nKiếm Thánh khuỵu một gối: đôi chân ông bỗng phải mang sức nặng của những năm tháng bị giữ lại. Lăng Thiên Kỳ đỡ ông đứng dậy. Kiếm Nhi cầm cuộn băng định trả, cuộn lại thật chặt rồi lại nới ra. Hắc Lang đặt cây cơ gỗ cũ của Vô Danh cạnh tấm bản đồ sao, chặn cho khỏi lăn. Ở bên dưới, nơi họ không nhìn thấy, một mái chèo vẫn chưa chạm được tới người đang chìm. Trên cao, khoảng trống giữa hai chòm sao vừa mở ra, đủ rộng cho chòm kế tiếp đi qua. Thế gian nhận lượt."
+        }
       ]
     },
     {
-      "id": "vi-thanh", "title": "Vĩ thanh · Hoàng hôn đầu tiên", "land": null, "unlock": "hukhong:5",
+      "id": "vi-thanh",
+      "title": "Vĩ thanh · Hoàng hôn đầu tiên",
+      "land": null,
+      "unlock": "hukhong:5",
       "pages": [
-        { "art": "epi-sunset", "text": "Ở Kim Sa, mặt trời bắt đầu nghiêng. Cả kinh đô đổ ra cồn cát. Trẻ con đuổi theo những cái bóng lần đầu dài hơn người.\n\nThái Dương Nữ Hoàng tháo vương miện, đứng như mọi người dân, nhìn vầng mặt trời đỏ dần rồi chìm xuống. Bà khóc. Không ai biết vì mất hay vì được." },
-        { "art": "epi-saint", "text": "Trên đỉnh núi trắng, Diệp Huyền Quang ngồi trước chén trà nguội. Chín thanh phi kiếm nằm yên trên đất. Chỉ trong một buổi chiều, tóc ông bạc thêm một nghìn năm.\n\nLăng Thiên Kỳ quỳ bên cạnh, không hỏi gì. Lần này, ông không giấu vẻ mệt nữa.\n\n— Thiên Kỳ, luật của tông môn… sửa đi. Ta viết sai nhiều chỗ lắm. Bắt đầu từ điều cấm đệ tử đánh bi với người Huyết Sát." },
-        { "text": "Ở Huyết Sát, Ma Tôn Cửu U đọc một bức thư từ Thiên Quang, viết về một đệ tử áo trắng tên Tạ Thanh Ca và những buổi chiều sau núi. Hắn nhìn trăng đến sáng. Không tua lại. Sáng hôm sau, cổng thành phía Đông mở — lần đầu sau bốn mươi năm.\n\nỞ Tuyết Cung, hoa nở rồi tàn rồi lại nở. Ở Vạn Thú, những cây đổ đã bắt đầu mục. Ở Độc Vụ, Quỷ Y vẫn mở cửa. Hôm ấy, lần đầu bà hỏi một người bệnh muốn được chữa tiếp, hay muốn bà ngồi lại bên giường. Ông lão xin một ấm trà. Bà ngồi lại." },
-        { "art": "epi-name", "text": "Lần thứ hai, Vong Xuyên Bà Bà vớt người ấy lên từ dòng sông. Bà đưa lại tấm thẻ ngọc; trên đó, ba chữ Tạ Thanh Ca đã hiện rõ.\n\n— Con có thể lấy lại tên mình.\n\nVô Danh nhìn cái tên rất lâu.\n\n— Con nhớ người ấy rồi, bà ạ. Nhưng tên Vô Danh là người trên bờ này đặt cho con. Con xin giữ. — Rồi thả tấm thẻ xuống dòng nước, như tiễn một người bạn.\n\nTrên trời, một vì sao rơi — lần đầu sau một nghìn năm. Và ở đâu đó, một vì sao mới bắt đầu sáng." }
+        {
+          "text": "Ở Kim Sa, mặt trời bắt đầu nghiêng. Cả kinh đô đổ ra cồn cát. Trẻ con đuổi theo những cái bóng lần đầu dài hơn người. Sa Hồ chạy trước, định nhảy qua bóng mình thì ngã, vì cái bóng đã vươn xa hơn cô tưởng. Cô ngồi bệt trên cát, cười to, rồi lặng đi. Người bán chà là kéo xe khỏi chỗ râm ba trăm năm, chưa biết đặt đâu mới phải.\n\nThái Dương Nữ Hoàng tháo vương miện, đứng lẫn giữa dân mình như mọi người khác, nhìn vầng mặt trời đỏ dần rồi chìm xuống. Bà khóc. Không ai biết bà khóc vì mất hay vì được. Kim Nhãn Tế Ti đã sai chuẩn bị củi lửa, chăn, nước ấm: hoàng hôn đẹp đến đâu cũng không phải cớ để quên cái rét sắp tới. Sa Vương mở lối cho người già xuống cát, Thạch Tượng Hộ Lăng đứng chắn gió. Đêm đầu tiên không bắt ai phải một mình trả giá để chứng tỏ mình đã biết buông.",
+          "art": "epi-sunset"
+        },
+        {
+          "text": "Bóng tối xuống chậm, đủ để những người sợ nó kịp nhìn nhau. Lũ trẻ hỏi sao chưa thấy sao; Tế Ti bảo mắt còn phải quen, đừng giơ đuốc thẳng lên trời. Sa Hồ chia đống chà là — lần này mua thật — không quên phần của người giữ lửa. Nữ Hoàng ngồi xuống cạnh một bà bán sữa, nghe bà kể lần đầu tiên có thể tháo rèm ra mà ngủ.\n\nSáng mai vẫn phải dẫn nước vào vườn; những hạt lép không vì trời đổi mà hoá chắc. Nhưng người chép lịch đã có việc mới: ghi giờ mặt trời lặn, chừa chỗ cho giờ mặt trời mọc. Nữ Hoàng đặt vương miện cạnh bếp. Bà chưa bỏ việc trị nước, chỉ thôi đội nó những lúc nhìn trời. Từ bến xa báo về: sóng đã bắt đầu rút đúng nhịp cũ. Long Vương sai người đo lại, nhất định không nhận là biển đã thua núi; Lưu Hương đọc thư, bảo thế càng hay, thuyền khỏi phải chèo trong một cuộc hơn thua không bao giờ hết."
+        },
+        {
+          "text": "Trên đỉnh núi trắng, Diệp Huyền Quang ngồi trước một chén trà nguội. Chín thanh phi kiếm nằm yên trên nền đá. Chỉ trong một buổi chiều, khuôn mặt ông già đi một nghìn năm. Lăng Thiên Kỳ quỳ bên cạnh, không hỏi gì. Lần này ông không giấu vẻ mệt mỏi nữa. Lúc đỡ ông lên bậc, nàng đã thấy xương vai dưới lớp áo gầy hơn mình từng biết.\n\n— Thiên Kỳ, luật của tông môn… sửa đi. Ta viết sai nhiều chỗ lắm. Bắt đầu từ điều cấm đệ tử đánh bi với người Huyết Sát.\n\nÔng mỉm cười — không còn là nụ cười mệt mỏi hôm nào. Nàng lấy sổ, gạch đúng dòng ấy, chừa một khoảng trống bên dưới cho những điều còn phải xét. Không nét mực nào xoá được vết sẹo nơi mắt trái. Ông nhìn nàng, bảo nàng cứ giận lâu hơn hôm nay cũng được. Nàng rót chén trà mới, đáp: sửa luật thì phải làm ngay, còn giận thì đâu phải thứ hẹn được giờ dừng.",
+          "art": "epi-saint"
+        },
+        {
+          "text": "Mạc Thiết Sơn hạ tấm bảng tên cũ xuống, lau lớp bụi sau tấm gỗ lần đầu sau nhiều năm. Bạch Vân Khanh giúp viết lại dòng tiếp khách các tông, nhưng giữ nguyên chỗ hai chữ Vô Danh do Kiếm Nhi viết. Cô bé đã về núi và nhất định không cho ai tô lại nét chữ xấu ấy. Trên bàn đá cạnh cổng, một đệ tử Huyết Sát được mời đặt cơ xuống; cả hai bên đều còn hơi ngượng.\n\nỞ Huyết Sát, Ma Tôn Cửu U đọc một lá thư từ Thiên Quang, kể về một đệ tử áo trắng tên Tạ Thanh Ca và những buổi chiều sau núi. Hắn ngồi nhìn trăng đến sáng. Không tua lại. Sáng hôm sau, cổng thành phía Đông mở — lần đầu sau bốn mươi năm. Tư Đồ Liệt cho lính dọn đường, Đồ Cuồng khiêng bàn cơ ra giữa sân. Huyết Cơ chép tên Nhạn vào một trang mới, không thay nàng bằng hai chữ “người mất”. Hắc Lang vùi hạt lép xuống đất bên cổng, phủ một lớp mỏng vừa đủ rồi đứng dậy."
+        },
+        {
+          "text": "Ở Tuyết Cung, hoa nở, tàn, rồi lại nở. Hàn Nguyệt đặt chén trà của mẹ bên cửa sổ, không bắt bông nào phải ở lại trong đó. Tuyết Nhi bưng chậu đất Cuồng Hùng mang từ rừng về; Lạc Sương dạy cô phân biệt tưới đủ với tưới quá tay. Hàn Thạch cởi bớt một lớp giáp khi nắng lên, nhưng vẫn giữ đúng giờ canh cửa.\n\nỞ Vạn Thú, những thân cây đổ đã bắt đầu mục. A Man đặt tay lên một thân gỗ đang mềm đi, đau như từ biệt chỗ trú mưa thuở nhỏ, rồi giúp Mộc Linh gieo hạt sồi bên cạnh. Thạch Quy Lão chậm rãi đi qua khoảnh đất mới; Vũ Vương dời tổ về chỗ đã vững. Ở Hoa Linh, những người tỉnh mộng phải học lại tuổi của con mình; có những cuộc gặp không thể vui ngay được. Mộng Hoa mở những căn phòng không kê giường, mời người ta ở lại uống trà mà vẫn tỉnh. Phong Linh Tử đem thư xuống đảo đúng hẹn, không để ai phải đoán thêm một mùa hoa."
+        },
+        {
+          "text": "Ở Độc Vụ, Quỷ Y vẫn mở cửa. Hôm ấy, lần đầu tiên bà hỏi một người bệnh: ông muốn được chữa tiếp, hay muốn bà ngồi lại bên giường? Ông lão xin một ấm trà. Bà ngồi lại. Lục Xà sắc thuốc giảm đau, Ngũ Độc Đồng Tử đem lũ cổ trùng ra sân cho ông khỏi mệt. Độc Thủ Lão Quái đậy nắp bầu độc, quay sang pha một ấm nước gừng.\n\nHuyết Lang Nhân vẫn cần thuốc. Bà hỏi từng ống thuốc trên lưng hắn giúp được gì: bỏ thứ chỉ khiến hắn thức lâu hơn để đau nhiều hơn, giữ thứ giúp hắn ngủ được, ăn được. Hắn không lành lặn lại chỉ trong một buổi trời đổi. Nhưng lần đầu tiên, hắn có thể nói “hôm nay đủ rồi” mà không thấy mình phụ công người chữa.\n\nTừ Tinh Tú gửi tới một tờ lịch mới, có chữ ký của cả thầy lẫn trò. Ở Thiên Hương, những cái tên được chép ra thành nhiều bản; Ngân Cầm đàn khúc mưa cho một buổi không ai đặt trước. Người nghe vẫn khen hay. Lần này nàng nhận lời khen ấy, không chờ họ tìm thêm ai trong tiếng đàn."
+        },
+        {
+          "text": "Lần thứ hai, Vong Xuyên Bà Bà vớt người ấy lên từ dòng sông. Như lần trước, tấm thẻ ngọc nhẹ hơn nên nổi lên trước; bà giữ nó trong giỏ, và đêm nào cũng chèo qua chỗ ấy. Bà không gọi trước khi mái chèo chạm được vào vai, không tự cho mình chắc chắn chỉ vì đã đợi đủ lâu. Hư Không nhả ra; bà đỡ lấy. Con đò chìm xuống một chút rồi lại nổi lên. Mở mắt ra, Vô Danh nhận ngay mùi chiếc khăn phơi cạnh bếp, không cần hỏi mình đang ở đâu.\n\nBà đưa lại tấm thẻ ngọc. Trên mặt ngọc, ba chữ Tạ Thanh Ca đã hiện rõ.\n\n— Con có thể lấy lại tên mình.\n\nVô Danh nhìn cái tên rất lâu. Nhớ ngọn núi, những buổi trốn tập, bàn tay Nhạn và việc đã không giữ nổi. Cũng nhớ Kiếm Nhi, bình nước của Hắc Lang, những bát canh ở từng căn bếp đã đi qua. Không phần nào buộc phần kia phải mất đi.\n\n— Con nhớ người ấy rồi, bà ạ. Nhưng tên Vô Danh là người trên bờ này đặt cho con. Con xin giữ."
+        },
+        {
+          "text": "Bà Bà không bảo giữ tên nào mới là đúng. Bà đưa bát canh. Lần này người khách hỏi có hành không, khiến bà bật cười rất khẽ. Vô Danh uống cho ấm, không phải để giấu đi những gì vừa nhớ. Đò cập bến. Dưới ngọn đèn có một gói bánh còn nóng và một cuộn băng sạch. Không thấy người để lại, nhưng nét chữ xấu ngoài gói thì không thể nhận nhầm.\n\nVô Danh đứng ở đầu bến, thả tấm thẻ nứt xuống dòng nước, như tiễn một người bạn. Không phải thả cái tên Nhạn, những buổi chiều sau núi hay việc Thanh Ca từng làm ra khỏi trí nhớ. Chỉ là thôi cần nắm ngọc trong tay mới tin những điều ấy đã có thật. Tấm thẻ chìm dần, không một tiếng động.\n\nTrên trời, một vì sao rơi — lần đầu tiên sau một nghìn năm. Và ở đâu đó, một vì sao mới bắt đầu sáng.\n\nVô Danh đợi vệt sáng tắt hẳn mới bẻ bánh, đưa nửa còn nóng cho bà. Đằng xa, có tiếng ai gọi “Vô Danh” vọng qua sương. Lần này, người được gọi quay lại ngay.",
+          "art": "epi-name"
+        }
       ]
     }
   ],
@@ -171,32 +703,103 @@
     "epi-name": "a stranger at the misty river pier releasing a cracked white jade token into the water, an old ferrywoman watching, a falling star in the sky"
   },
   "cast": {
-    "prologue-ferry": ["vongxuyenbaba", "vodanh"],
-    "prologue-shore": ["vodanh"],
-    "c1-gate": ["tokiemnhi", "vodanh"],
-    "c1-saint": ["diephuyenquang"],
-    "c2-island": ["daotieumuoi", "vodanh"],
-    "c3-harbour": ["tieungu"],
-    "c3-ledger": ["donghailongvuong"],
-    "c4-workshop": ["hoaloitiensinh"],
-    "c4-explosion": ["giacatvan"],
-    "c5-lotus": ["hannguyet"],
-    "c6-valley": ["quyyduocvuong", "vodanh"],
-    "c6-healer": ["quyyduocvuong"],
-    "c7-sun": ["saho"],
-    "c7-balcony": ["thaiduong", "vodanh"],
-    "c8-roots": ["baonu"],
-    "c8-mother": ["thumau"],
-    "c9-throne": ["matoncuuu", "haclang", "vodanh"],
-    "c10-pier": ["vongxuyenbaba"],
-    "c10-cueball": ["vongxuyenbaba"],
-    "c11-observatory": ["tinhde", "giacatvan"],
-    "c12-pavilion": ["mico", "honglien", "tutrinh"],
-    "c12-zither": ["ngancam", "vodanh"],
-    "c13-void": ["thonthien"],
-    "c13-table": ["diephuyenquang", "vodanh"],
-    "epi-sunset": ["thaiduong"],
-    "epi-saint": ["diephuyenquang", "langthienky"],
-    "epi-name": ["vodanh", "vongxuyenbaba"]
+    "prologue-ferry": [
+      "vongxuyenbaba",
+      "vodanh"
+    ],
+    "prologue-shore": [
+      "vodanh"
+    ],
+    "c1-gate": [
+      "tokiemnhi",
+      "vodanh"
+    ],
+    "c1-saint": [
+      "diephuyenquang"
+    ],
+    "c2-island": [
+      "daotieumuoi",
+      "vodanh"
+    ],
+    "c3-harbour": [
+      "tieungu"
+    ],
+    "c3-ledger": [
+      "donghailongvuong"
+    ],
+    "c4-workshop": [
+      "hoaloitiensinh"
+    ],
+    "c4-explosion": [
+      "giacatvan"
+    ],
+    "c5-lotus": [
+      "hannguyet"
+    ],
+    "c6-valley": [
+      "quyyduocvuong",
+      "vodanh"
+    ],
+    "c6-healer": [
+      "quyyduocvuong"
+    ],
+    "c7-sun": [
+      "saho"
+    ],
+    "c7-balcony": [
+      "thaiduong",
+      "vodanh"
+    ],
+    "c8-roots": [
+      "baonu"
+    ],
+    "c8-mother": [
+      "thumau"
+    ],
+    "c9-throne": [
+      "matoncuuu",
+      "haclang",
+      "vodanh"
+    ],
+    "c10-pier": [
+      "vongxuyenbaba"
+    ],
+    "c10-cueball": [
+      "vongxuyenbaba"
+    ],
+    "c11-observatory": [
+      "tinhde",
+      "giacatvan"
+    ],
+    "c12-pavilion": [
+      "mico",
+      "honglien",
+      "tutrinh"
+    ],
+    "c12-zither": [
+      "ngancam",
+      "vodanh"
+    ],
+    "c13-void": [
+      "thonthien"
+    ],
+    "c13-table": [
+      "diephuyenquang",
+      "vodanh"
+    ],
+    "epi-sunset": [
+      "thaiduong"
+    ],
+    "epi-saint": [
+      "diephuyenquang",
+      "langthienky"
+    ],
+    "epi-name": [
+      "vodanh",
+      "vongxuyenbaba"
+    ],
+    "c5-spring": [
+      "hannguyet"
+    ]
   }
 }
