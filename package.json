@@ -1,21 +1,20 @@
 {
-  "name": "than-cong-bida",
+  "name": "co-tien",
   "version": "3.0.0",
   "private": true,
   "type": "module",
-  "description": "THẦN CÔNG — game bida kỹ năng cho mobile & desktop (PWA)",
+  "description": "Cơ Tiên — bida tu tiên cho mobile & desktop (PWA)",
   "scripts": {
     "dev": "vite --host",
     "build": "tsc --noEmit && vite build",
     "preview": "vite preview --host",
     "test": "vitest run",
     "typecheck": "tsc --noEmit && tsc --noEmit -p tsconfig.tools.json",
-    "gen:challenges": "vite-node tools/gen-challenges.ts",
-    "gen:icons": "node tools/gen-icons.mjs"
+    "gen:challenges": "vite-node tools/gen-challenges.ts"
   },
   "dependencies": {
-    "@fontsource/barlow": "^5.2.6",
-    "@fontsource/barlow-condensed": "^5.2.6",
+    "@fontsource/be-vietnam-pro": "^5.3.0",
+    "@fontsource/noto-serif": "^5.3.0",
     "pixi.js": "^8.22.0"
   },
   "devDependencies": {
