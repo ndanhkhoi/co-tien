@@ -5,7 +5,7 @@
  */
 
 .screen.game.mx {
-  --top-h: 78px;
+  --top-h: 72px;
   --face: 56px;
   --colL: 88px;
   --colR: 112px;
@@ -14,13 +14,13 @@
   --col-top: calc(var(--st) + 6px + var(--top-h) + var(--gap));
 }
 @media (max-height: 430px) {
-  .screen.game.mx { --top-h: 76px; --face: 56px; --gap: 7px; }
+  .screen.game.mx { --top-h: 72px; --face: 56px; --gap: 7px; }
 }
 @media (max-height: 380px) {
-  .screen.game.mx { --top-h: 76px; --face: 56px; --colR: 104px; --btn: 48px; }
+  .screen.game.mx { --top-h: 72px; --face: 56px; --colR: 104px; --btn: 48px; }
 }
 @media (min-height: 560px) and (min-width: 900px) {
-  .screen.game.mx { --top-h: 84px; --face: 64px; --colL: 104px; --colR: 128px; --btn: 60px; --gap: 10px; }
+  .screen.game.mx { --top-h: 80px; --face: 64px; --colL: 104px; --colR: 128px; --btn: 60px; --gap: 10px; }
 }
 
 /* Layers that must let touches through to the table canvas. */
@@ -465,8 +465,12 @@
 .coach {
   position: fixed;
   z-index: 45;
-  width: min(300px, calc(100vw - 32px));
-  padding: 12px 14px;
+  width: min(260px, calc(100vw - 16px));
+  max-width: 260px;
+  max-height: calc(100dvh - 16px);
+  overflow-y: auto;
+  pointer-events: auto;
+  padding: 8px 10px;
   background: var(--sheet);
   border: 1px solid var(--line);
   border-left: 5px solid var(--accent);
@@ -478,8 +482,8 @@
 .coach.leaving { opacity: 0; transition: opacity 0.18s; }
 @keyframes mx-coach-in { from { opacity: 0; transform: scale(0.96); } }
 .coach-head { display: flex; align-items: center; gap: 8px; }
-.coach-head .ico { width: 28px; height: 28px; }
-.coach-title { font: 700 17px/1.2 var(--display); }
+.coach-head .ico { width: 20px; height: 20px; }
+.coach-title { font: 700 14px/1.2 var(--display); }
 .coach-text { margin-top: 4px; font-size: 14px; line-height: 1.45; color: var(--ink); }
 .coach-actions { display: flex; justify-content: flex-end; margin-top: 8px; }
 .coach-target { outline: 3px solid var(--accent); outline-offset: 3px; border-radius: var(--r-2); animation: mx-target 1.2s ease-in-out infinite; }

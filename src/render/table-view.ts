@@ -130,6 +130,17 @@ export class TableView {
     return { w: t.L + 2 * t.railWidth, h: t.W + 2 * t.railWidth };
   }
 
+  /** Fit the entire rail inside the space left by the measured HUD, preserving table proportions. */
+  fit(width: number, height: number, insets: { left: number; right: number; top: number; bottom: number }) {
+    const w = Math.max(1, width - insets.left - insets.right);
+    const h = Math.max(1, height - insets.top - insets.bottom);
+    const scale = Math.min(w / this.outer.w, h / this.outer.h);
+    const cx = insets.left + w / 2;
+    const cy = insets.top + h / 2;
+    this.layout(cx, cy, scale);
+    return { cx, cy, scale };
+  }
+
   layout(cx: number, cy: number, scale: number) {
     this.scale = scale;
     this.pxLayer.scale.set(1 / scale);

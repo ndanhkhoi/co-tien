@@ -9,6 +9,10 @@ export interface HintOptions {
   place?: 'left' | 'right' | 'above' | 'below' | 'over';
   /** Outline the anchor (default). Off when the anchor only gives the card a place to sit. */
   highlight?: boolean;
+  /** Keep a dock explanation within the near half of the table. */
+  rail?: boolean;
+  /** Align with the portrait's top rather than vertically centring the card. */
+  alignTop?: boolean;
 }
 
 /**
@@ -80,6 +84,10 @@ function next(app: App) {
     }
     const W = window.innerWidth;
     const H = window.innerHeight;
+    if (it.rail) {
+      const available = it.place === 'left' ? r.left - W / 2 - 10 : W / 2 - r.right - 10;
+      card.style.width = `${Math.max(1, Math.min(260, available))}px`;
+    }
     const cw = card.offsetWidth;
     const ch = card.offsetHeight;
     const gap = 10;
@@ -90,7 +98,7 @@ function next(app: App) {
       above: r.top - gap - ch > 8,
     };
     const order = [it.place ?? 'right', 'right', 'left', 'below', 'above'] as const;
-    const side = it.place === 'over' ? 'over' : order.find((s) => s !== 'over' && fits[s]) ?? 'below';
+    const side = it.rail ? (it.place === 'left' ? 'left' : 'right') : it.place === 'over' ? 'over' : order.find((s) => s !== 'over' && fits[s]) ?? 'below';
     let x = 0;
     let y = 0;
     if (side === 'over') {
@@ -98,13 +106,10 @@ function next(app: App) {
       y = r.top;
     } else if (side === 'right' || side === 'left') {
       x = side === 'right' ? r.right + gap : r.left - gap - cw;
-      y = r.top + r.height / 2 - ch / 2;
+      y = it.alignTop ? r.top : r.top + r.height / 2 - ch / 2;
     } else {
       x = r.left + r.width / 2 - cw / 2;
       y = side === 'below' ? r.bottom + gap : r.top - gap - ch;
-    }
-    if (document.querySelector('.screen.game')) {
-      x = r.left + r.width / 2 < W / 2 ? 8 : W - cw - 8;
     }
     x = Math.max(8, Math.min(W - cw - 8, x));
     y = Math.max(8, Math.min(H - ch - 8, y));

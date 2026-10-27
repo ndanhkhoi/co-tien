@@ -146,11 +146,19 @@ h1, h2, h3, p { margin: 0; }
 .scroll[data-more*='b'] { -webkit-mask-image: linear-gradient(180deg, #000 calc(100% - 36px), transparent); mask-image: linear-gradient(180deg, #000 calc(100% - 36px), transparent); }
 .scroll[data-more='r'] { -webkit-mask-image: linear-gradient(90deg, #000 calc(100% - 36px), transparent); mask-image: linear-gradient(90deg, #000 calc(100% - 36px), transparent); }
 .more-chevron {
-  position: absolute; z-index: 5; width: 14px; height: 14px; margin-left: -7px; pointer-events: none;
-  border-right: 3px solid var(--accent); border-bottom: 3px solid var(--accent); transform: rotate(45deg);
-  animation: more-bounce 1.2s ease-in-out infinite;
+  position: absolute; z-index: 5; width: 32px; height: 32px; margin-left: -16px;
+  pointer-events: none; display: grid; place-items: center;
+  border: 1px solid var(--line-2); border-radius: 50%;
+  background: var(--sheet); box-shadow: var(--sh-1);
+  animation: more-bounce 1.4s ease-in-out infinite;
 }
-@keyframes more-bounce { 50% { translate: 3px 3px; } }
+.more-chevron::after {
+  content: ''; width: 9px; height: 9px; margin-top: -4px;
+  border-right: 2px solid var(--accent); border-bottom: 2px solid var(--accent);
+  transform: rotate(45deg);
+}
+@keyframes more-bounce { 50% { translate: 0 3px; } }
+@media (prefers-reduced-motion: reduce) { .more-chevron { animation: none !important; } }
 
 /* ---------- Icons ---------- */
 

@@ -78,11 +78,11 @@ export function journeyScreen(app: App): Screen {
     const done = beaten === ch.npcs.length;
     const state = !open ? 'locked' : i === current ? 'current' : done ? 'done' : '';
     const pin = h('button.land-pin', {
-      class: state, style: `left:${x * 100}%;top:${y * 100}%;--ax:${x < 0.2 ? 26 : x > 0.8 ? 74 : 50}%;--sect:${hex6(sect(ch.id).main)}`,
+      class: state, style: `left:clamp(77px, ${x * 100}%, calc(100% - 77px));top:${y * 100}%;--pin-y:${y > 0.85 ? -100 : 0}%;--sect:${hex6(sect(ch.id).main)}`,
       'aria-label': open ? `${ch.name}: ${beaten}/${ch.npcs.length} cao thủ, ${solved}/${tasks.length} thử thách` : `${ch.name}: chưa mở`,
     },
     i === current ? h('span.lp-flag', null, 'Đi tiếp') : null,
-    h('span.lp-emblem', null, h('img', { src: sectArtUrl(ch.id, 'emblem'), alt: '' }), open ? null : h('span.lp-lock', null, icon('lock'))),
+    h('span.lp-emblem', null, h('img', { src: sectArtUrl(ch.id, 'emblem'), alt: '' })),
     h('span.lp-text', null,
       h('span.lp-name', null, ch.name),
       open

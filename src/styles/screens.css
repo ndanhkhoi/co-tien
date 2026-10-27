@@ -536,29 +536,32 @@ textarea.code-box:focus { border-color: var(--accent); }
 .land-pin {
   position: absolute;
   z-index: 1;
-  translate: calc(var(--ax, 50%) * -1) -50%;
-  display: flex;
+  translate: -50% var(--pin-y, 0%);
+  display: grid;
+  grid-template-columns: 20px minmax(0, 1fr);
   align-items: center;
-  gap: 7px;
-  min-height: 52px;
-  width: max-content;
-  max-width: 172px;
-  padding: 4px 12px 4px 4px;
-  background: var(--sheet);
+  gap: 5px;
+  min-height: 44px;
+  width: 150px;
+  max-width: 150px;
+  padding: 4px 6px;
+  background: color-mix(in srgb, var(--sheet) 94%, transparent);
   color: var(--ink);
-  border: 2px solid var(--ink);
-  border-radius: 999px;
-  box-shadow: 0 3px 0 rgba(26, 23, 19, 0.25), var(--sh-2);
+  border: 1px solid var(--line-2);
+  border-radius: var(--r-1);
+  box-shadow: var(--sh-1);
   text-align: left;
   transition: transform 0.12s var(--ease);
 }
 .land-pin.pressed { transform: scale(0.95); }
-.lp-emblem { position: relative; width: 42px; height: 42px; flex-shrink: 0; border-radius: 50%; overflow: hidden; box-shadow: 0 0 0 2px var(--sect, var(--ink)); }
+.lp-emblem { position: relative; width: 20px; height: 20px; align-self: flex-start; margin-top: 2px; flex-shrink: 0; border-radius: 50%; overflow: hidden; }
 .lp-emblem img { width: 100%; height: 100%; display: block; }
-.lp-text { display: flex; flex-direction: column; min-width: 0; gap: 1px; }
-.lp-name { font: 700 var(--fs-m)/1.15 var(--display); }
-.lp-prog { display: flex; align-items: center; gap: 3px; font-size: var(--fs-xs); line-height: 1.2; }
-.lp-prog .ico { width: 18px; height: 18px; }
+.lp-text { display: contents; }
+.lp-name { grid-column: 2; min-width: 0; }
+.lp-prog { grid-column: 2; }
+.lp-name { font: 700 14px/1.3 var(--display); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.lp-prog { display: flex; align-items: center; gap: 3px; font-size: 11px; line-height: 1.2; white-space: nowrap; }
+.lp-prog .ico { width: 14px; height: 14px; }
 .lp-prog b { margin-right: 5px; }
 .land-pin.done { border-color: var(--ok); }
 .land-pin.current { border-color: var(--accent); box-shadow: 0 0 0 4px rgba(176, 53, 34, 0.3), var(--sh-2); animation: pin-pulse 2s ease-in-out infinite; }
@@ -577,7 +580,7 @@ textarea.code-box:focus { border-color: var(--accent); }
   white-space: nowrap;
 }
 /* Locked lands: a solid ink plate, clearly closed. */
-.land-pin.locked { background: var(--sheet-3); color: var(--ink-2); border-color: var(--muted); box-shadow: var(--sh-1); }
+.land-pin.locked { background: color-mix(in srgb, var(--sheet) 94%, transparent); color: var(--ink-2); border-color: var(--line-2); box-shadow: var(--sh-1); }
 .land-pin.locked .lp-emblem { box-shadow: 0 0 0 2px var(--muted); }
 .land-pin.locked .lp-emblem img { filter: grayscale(1) brightness(0.5); }
 .lp-lock { position: absolute; inset: 0; display: grid; place-items: center; }
@@ -878,9 +881,6 @@ body.vp-rotate .rotate-hint, body.vp-resize .size-hint { display: flex; }
   .vs-gear { display: none; }
 }
 
-/* Painted scroll mark replaces the old CSS chevron. */
-.more-chevron { width: 32px; height: 32px; margin-left: -16px; border: 0; transform: none; display: grid; place-items: center; border-radius: 50%; background: var(--sheet); box-shadow: var(--sh-1); }
-.more-chevron .ico { width: 24px; height: 24px; }
 .lp-lock { inset: auto 0 0 auto; width: 26px; height: 26px; border-radius: 50%; background: var(--sheet); }
 .lp-lock .ico { width: 22px; height: 22px; filter: none; }
 @media (max-height: 450px) {

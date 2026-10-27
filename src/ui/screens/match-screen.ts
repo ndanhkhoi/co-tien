@@ -232,18 +232,14 @@ export function matchScreen(opts: MatchOptions) {
       const leftEdge = !live ? 104 : colL.offsetWidth ? colL.offsetLeft + colL.offsetWidth : insetL + (!lefty && targetWidth ? targetWidth + 8 : 4);
       const rightEdge = !live ? W - 128 : colR.offsetWidth ? colR.offsetLeft : W - insetR - (lefty && targetWidth ? targetWidth + 8 : 4);
       const top = live ? topBar.offsetTop + topBar.offsetHeight : 84;
+      const bounds = {
+        left: leftEdge + 2,
+        right: W - rightEdge + 2,
+        top: top + 2,
+        bottom: insetB + 2,
+      };
+      const { cx, cy, scale } = view.fit(W, H, bounds);
       const t = match.table;
-      // Only the outer lip of the wooden rail may slide under the columns; pocket holes stay clear.
-      const tuck = 0.004;
-      const x0 = leftEdge + 4;
-      const x1 = rightEdge - 4;
-      const aw = x1 - x0;
-      const y0 = top + 2;
-      const ah = H - insetB - 4 - y0;
-      const scale = Math.min(aw / (t.L + 2 * (t.railWidth - tuck)), ah / (t.W + 2 * t.railWidth));
-      const cx = x0 + aw / 2;
-      const cy = y0 + ah / 2;
-      view.layout(cx, cy, scale);
       // Chips sit on the bottom rail, between the side pocket and a corner, never on the cloth.
       const railMid = (t.W / 2 + t.railWidth / 2) * scale;
       chips.style.left = `${cx}px`;
@@ -473,7 +469,7 @@ export function matchScreen(opts: MatchOptions) {
       }
       if (begun && anyReady && isHumanTurn()) {
         hintOnce(app, 'skill-dock', 'Chiêu thức', 'Ô sáng viền đỏ là chiêu dùng được. Chạm một ô để đọc mô tả, rồi bấm Dùng. Hai chiêu đầu hồi lại sau vài lượt; tuyệt chiêu cần đầy năng lượng.',
-          { anchor: () => dock, place: lefty ? 'left' : 'right' });
+          { anchor: () => dock, place: lefty ? 'left' : 'right', rail: true });
       }
     }
 
@@ -1085,7 +1081,7 @@ export function matchScreen(opts: MatchOptions) {
           floatGain(e.side, e.gain);
           if (hasSkills && match.setup.players[e.side].kind === 'human') {
             hintOnce(app, 'energy', 'Năng lượng', 'Vòng quanh chân dung là năng lượng: +8 mỗi cú đánh, +14 mỗi bi của mình vào lỗ, +12 khi đối thủ phạm lỗi. Đầy vòng thì tuyệt chiêu (ô thứ ba) dùng được.',
-              { anchor: () => cards[e.side].ringWrap, place: 'below' });
+              { anchor: () => cards[e.side].ringWrap, place: e.side === 0 ? 'right' : 'left', alignTop: true });
           }
           break;
         case 'skill': {
@@ -1101,7 +1097,7 @@ export function matchScreen(opts: MatchOptions) {
         case 'omen':
           sound.omen();
           hintOnce(app, 'omen', 'Thiên Tượng', 'Bàn của mỗi môn phái thỉnh thoảng nổi hiện tượng (gió, tuyết, nghiêng bàn…) cho đúng một cú đánh. Nó được vẽ lên bàn: tính vào đường bi! Tướng đánh trên bàn môn phái mình không gặp Thiên Tượng.',
-            { anchor: () => (lefty ? ctrl : dock), place: 'over', highlight: false });
+            { anchor: () => (lefty ? ctrl : dock), place: 'right', highlight: false, rail: true });
           herald({ side: null, icon: 'warning', title: e.omen.name, line: e.omen.desc, ms: 4200 });
           view.addShake(e.omen.jitter ? 0.6 : 0.2);
           break;
@@ -1146,7 +1142,7 @@ export function matchScreen(opts: MatchOptions) {
         setExpr(side, 'sad', 3000);
         herald({ side, expr: 'sad', tone: 'red', title: r.ballInHand !== 'none' ? 'Lỗi — bi trong tay' : 'Phạm lỗi', line: r.foul, ms: 3400 });
         hintOnce(app, 'foul', 'Phạm lỗi', 'Khi một bên phạm lỗi, đối thủ được "bi trong tay": đặt bi cái ở chỗ cho phép rồi mới đánh. Lý do lỗi hiện ở dải trên cùng.',
-          { anchor: () => (lefty ? ctrl : dock), place: 'over', highlight: false });
+          { anchor: () => (lefty ? ctrl : dock), place: 'right', highlight: false, rail: true });
       } else if (r.winner === null && (potN > 0 || r.points > 0) && r.keepTurn) {
         sound.good();
         setExpr(side, 'joy');
@@ -1175,10 +1171,10 @@ export function matchScreen(opts: MatchOptions) {
       if (hasSkills) {
         const side = humanSide() ?? match.turn;
         hintOnce(app, 'energy', 'Năng lượng', 'Vòng quanh chân dung: +8 mỗi cú đánh, +14 mỗi bi của mình vào lỗ, +12 khi đối thủ phạm lỗi. Đầy 100 năng lượng thì dùng được tuyệt chiêu ở ô thứ ba.',
-          { anchor: () => cards[side].ringWrap, place: 'below' });
+          { anchor: () => cards[side].ringWrap, place: side === 0 ? 'right' : 'left', alignTop: true });
       }
       const beside = lefty ? 'right' : 'left';
-      hintOnce(app, `rules-${mode}`, `Luật ${MODE_NAMES[mode]}`, `${RULES_TEXT[mode].goal} Xem đầy đủ trong menu tạm dừng → Luật chơi.`, { anchor: () => (lefty ? ctrl : dock), place: 'over', highlight: false });
+      hintOnce(app, `rules-${mode}`, `Luật ${MODE_NAMES[mode]}`, `${RULES_TEXT[mode].goal} Xem đầy đủ trong menu tạm dừng → Luật chơi.`, { anchor: () => (lefty ? ctrl : dock), place: 'right', highlight: false, rail: true });
       hintOnce(app, 'ctl-aim', 'Ngắm', 'Kéo trên bàn để xoay cơ — kéo xa bi cái thì xoay chậm, tinh hơn. Chạm một bi để ngắm thẳng vào nó. Hai nút xoay chỉnh từng chút (giữ để xoay nhanh), nút đổi mục tiêu nhảy qua các bi hợp lệ, bi cái nhỏ là áp phê.',
         { anchor: () => aimPad, place: beside });
       hintOnce(app, 'ctl-power', 'Lực và đánh', 'Kéo thanh lực để chọn lực, rồi chạm ĐÁNH. Hoặc giữ ĐÁNH cho lực tự dao động và thả đúng lúc; trượt ngón ra xa để huỷ.',
