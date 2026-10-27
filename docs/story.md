@@ -112,16 +112,16 @@ Theo đúng thứ tự Hành trình trong game. Mỗi chương: một vùng đ�
 | 2 | Hoa Linh | Đảo Chủ Mộng Hoa mời ở lại: trong mơ, người chơi có tên, có nhà. Từ chối giấc mơ là phép thử đầu tiên. | Gieo: trong mơ, người chơi có một cái tên bị xoá nhoè |
 | 3 | Hải Long | Long Vương thu phí qua cửa với các hồn. Người chơi thấy hồn mình *không có trong sổ* — như chưa từng chết. | Gieo: "Ngươi không có trong sổ âm" |
 | 4 | Thiên Cơ | Hoả Lôi Tiên Sinh cho xem thiết bị đo Hư Không: kim chỉ thẳng vào người chơi. Phòng thí nghiệm nổ lần thứ tư. | Gieo: người chơi *mang dấu Hư Không* |
-| 5 | Băng Phách | Hàn Nguyệt đóng băng thời gian ở Tuyết Cung để giữ một bông sen không tàn. Người chơi để sen tàn — và Tuyết Cung lần đầu có mùa xuân. | Chủ đề rõ dần: buông là sống |
+| 5 | Băng Phách | Hàn Nguyệt đóng băng thời gian ở Tuyết Cung để giữ một bông sen không tàn. Người chơi **thua** ván đầu tiên trên bàn băng; Hàn Nguyệt, người thắng, tự tay làm nứt lồng băng — và Tuyết Cung lần đầu có mùa xuân. | Chủ đề rõ dần: buông là sống. Gieo: người chơi học cách chấp nhận mất lượt |
 | 6 | Độc Vụ | Quỷ Y bắt mạch người chơi và tái mặt: "Mạch này đã ngừng một lần." Bà im lặng, đổi lấy một ván đấu. | **Gần lộ:** người chơi từng chết |
 | 7 | Kim Sa | Mặt trời không lặn; Thái Dương Nữ Hoàng kể về Đại Kiếp và "Cú Định Thiên" của một kiếm khách trẻ. | Gieo: kẻ cứu thế chính là Kiếm Thánh |
 | 8 | Vạn Thú | Rễ cổ thụ lún vào Hư Không. Thụ Mẫu: "Rừng không sợ chết. Rừng sợ không được chết." | Câu chủ đề nói thẳng lần đầu |
 | 9 | Huyết Sát | Ma Tôn giam người chơi và kể Trận Huyết Nguyệt — hắn đã tua lại hàng trăm lần. Hắn nói người chơi *là người hắn mất*… rồi tự bác bỏ: "Không. Người ấy đã không quay về." | **Nút thắt 1 (giả):** người chơi có phải người yêu của Ma Tôn? Không — nhưng cùng đêm ấy rơi lỗ |
 | 10 | U Minh | Vong Xuyên Bà Bà kể thật: bà vớt người chơi lên từ Hư Không đêm Huyết Nguyệt — một **Bạch Cầu**, bi cái được trả về. | **Nút thắt 2:** người chơi là bi cái của thế giới |
 | 11 | Tinh Tú | Tinh Đế và Gia Cát Vân hợp sức đọc trời: các sao bị ghim đứng một nghìn năm — Cú Định Thiên chưa bao giờ kết thúc. Kiếm Thánh vẫn đang giữ cú đánh đó, bằng chính tuổi thọ của cả thế gian. | **Nút thắt 3:** đấng cứu thế là gốc rễ của tai hoạ — nhưng vì thương, không vì ác |
-| 12 | Thiên Hương | Ngân Cầm đàn khúc tên người đã mất; ở cuối khúc có tên người chơi. Người chơi nhớ lại: đêm Huyết Nguyệt, chính mình là đệ tử Thiên Quang đã nhảy vào Hư Không để kéo người yêu của Ma Tôn ra — và thất bại. | **Nút thắt 4:** người chơi từng là người của cả hai phe thù |
-| 13 | Hư Không | Thôn Thiên Ma Vương không phải để đánh bại. Ván cuối không có đối thủ: người chơi phải đánh Cú Thả Thiên — cú đánh để các vì sao lăn lại. Kiếm Thánh, cuối cùng, buông cơ. | **Kết** |
-| Vĩ thanh | Kim Sa | Lần đầu sau một nghìn năm, mặt trời lặn. Dân sa mạc đứng xem hoàng hôn và khóc. Diệp Huyền Quang già đi trong một buổi chiều và mỉm cười. Người chơi nhận lại tên — và chọn không dùng nó. | |
+| 12 | Thiên Hương | Ngân Cầm đàn khúc tên người đã mất; ở cuối khúc có tên người chơi: **Tạ Thanh Ca**. Người chơi nhớ lại: đệ tử Thiên Quang hay trốn tập ra sau núi đánh bi với **Nhạn**, cô gái Huyết Sát mà Ma Tôn yêu; đêm Huyết Nguyệt, Thanh Ca nhảy vào Hư Không để kéo Nhạn ra — và thất bại. | **Nút thắt 4:** người chơi từng là người của cả hai phe thù |
+| 13 | Hư Không | Thôn Thiên Ma Vương không phải để đánh bại. Ván cuối là một cụm chín quả bi buộc chín chòm sao: đánh mạnh thì chúng văng như Đại Kiếp, đánh khéo thì rơi lần lượt — nhưng bi cái phải rơi theo. Kiếm Thánh tính cú ấy một nghìn năm mà không dám đánh; người chơi đánh, và rơi lỗ lần thứ hai. | **Kết** |
+| Vĩ thanh | Kim Sa | Lần đầu sau một nghìn năm, mặt trời lặn. Diệp Huyền Quang già đi trong một buổi chiều và bảo sửa luật cấm đánh bi với Huyết Sát; Ma Tôn đọc thư về Thanh Ca và mở cổng thành. Quỷ Y vẫn chữa bệnh, nhưng lần đầu hỏi người bệnh muốn gì. Bà Bà vớt người chơi lên lần thứ hai; người chơi nhớ lại tên — và chọn giữ tên Vô Danh. | |
 
 ## Các cú ngoặt — vì sao không sáo rỗng
 
@@ -134,7 +134,22 @@ Theo đúng thứ tự Hành trình trong game. Mỗi chương: một vùng đ�
 4. **Thân phận người chơi** nối hai phe thù: người Thiên Quang chết khi cố cứu người của Huyết Sát. Hoà giải
    Thiên Quang – Huyết Sát không đến từ trận đánh mà từ một ký ức.
 5. **Không có trùm cuối để giết.** Kết thúc là một cú đánh thả, không phải một chiêu mạnh hơn — đúng chủ đề,
-   ngược với lối "đánh bại đại ma đầu".
+   ngược với lối "đánh bại đại ma đầu". Cú ấy có hình dạng bida thật (phá cụm, bi rơi theo thứ tự, bi cái
+   rơi theo) và có giá: "bi cái rơi thì lượt về tay người khác" — người chơi trao lượt lại cho thế giới.
+
+## Luật thế giới (giữ cho các chương không mâu thuẫn)
+
+- **Vì sao Đại Kiếp xảy ra:** một chòm sao rơi lệch vì đường của nó bị một chòm khác *chưa chịu rơi* chắn. Thả
+  tất cả cùng lúc sẽ lặp lại va chạm; thả theo thứ tự thì không (chương 11 gieo, chương 13 thực hiện).
+- **Ký ức về người rơi vào Hư Không:** người ta vẫn nhớ *đã mất một người*, nhưng tên rồi giọng rồi mặt mờ dần.
+  Thiên Hương Các giữ phần tên; Long Vương bán tên chuộc lại cho họ.
+- **Thời gian dưới Hư Không** không trôi như trên đời: bốn mươi năm trên bờ là một đêm dưới đó. Bà Bà chỉ vớt
+  được người khi Hư Không chịu nhả; tấm thẻ nhẹ hơn nên nổi lên trước gần bốn mươi năm.
+- **Ma Tôn tua thời gian** chỉ lùi được ba nhịp thở mỗi lần — đủ để nhìn lại, không đủ để đến kịp.
+- **Định Thiên làm cạn, không làm ngừng:** hạt vẫn nảy nhưng ít dần, Thôn Thiên "chưa được ăn đủ" chứ không
+  phải chưa từng ăn.
+- **Quỷ Y:** hành nghề từ Đại Kiếp, mất bảy trăm năm mới luyện được Hồi Xuân Đan (~300 năm trước). Kết thúc
+  không cấm chữa bệnh; chỉ phép cưỡng giữ một đời đã hết là chấm dứt.
 
 ## Tự rà lối mòn
 
@@ -149,6 +164,8 @@ Theo đúng thứ tự Hành trình trong game. Mỗi chương: một vùng đ�
 
 ## Dùng trong game
 
-Tính năng đề xuất: **Truyện** — mỗi chương mở khoá khi thắng cao thủ bậc 5 của vùng tương ứng trên Hành trình;
-mỗi chương 4–6 trang tranh thuỷ mặc kèm lời văn ngắn. Dữ liệu sẽ nằm ở `src/game/content/story.json`; tranh
-minh hoạ vẽ theo skill `game-art`.
+**Cơ Tiên Truyện** trong menu Truyện: mỗi chương mở khi thắng một cao thủ của vùng tương ứng trên Hành trình
+(chương Hư Không và Vĩ thanh cần cao thủ bậc 5). Dữ liệu ở `src/game/content/story.json`: `chapters` (lời văn),
+`scenes` (đề bài tranh), `cast` (ai xuất hiện trong tranh). Tranh vẽ bằng
+`.claude/skills/game-art/scripts/gen-story-art.sh`, gửi kèm ảnh gốc của từng tướng để giữ đúng thiết kế; Vô
+Danh dùng `references/story-vodanh.webp`.
