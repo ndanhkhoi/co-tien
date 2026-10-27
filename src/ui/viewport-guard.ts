@@ -1,3 +1,4 @@
+import { mustInstall } from '../platform/install';
 import { toggleFullscreen } from '../platform/device';
 import { btn, h } from './dom';
 
@@ -15,6 +16,8 @@ export const MAX_RATIO = 13 / 5;
 const COARSE = '(pointer: coarse)';
 
 export function viewportBlocked(): 'rotate' | 'resize' | null {
+  // The install screen comes first and is laid out for any orientation; rotation only matters once installed.
+  if (mustInstall()) return null;
   const w = window.innerWidth;
   const hgt = window.innerHeight;
   if (matchMedia(COARSE).matches) return hgt > w ? 'rotate' : null;
