@@ -4,20 +4,18 @@ import { CUES, TABLES } from '../../game/content/gear';
 import lore from '../../game/content/lore.json';
 import { RULES_TEXT, SKILL_RULES } from '../../game/content/rules-text';
 import {
-  CHAMPIONS, CLASSES, champion, classInfo, cutoutUrl, exprUrl, sect, sectArtUrl, SECTS, skillIconUrl, winUrl,
+  CHAMPIONS, CLASSES, classInfo, cutoutUrl, exprUrl, sect, sectArtUrl, SECTS, winUrl,
   type Champion, type SectId,
 } from '../../game/content/sects';
 import { cueStats, tableStats } from '../../game/content/stat-text';
 import { OMEN_INFO } from '../../game/terrain';
 import { screenEl, type App, type Screen } from '../app';
-import { avatar } from '../avatar';
-import { btn, h, modal, tap } from '../dom';
-import { cueArt } from '../icons';
-import { seg, statRows, topbar } from './menus';
+import { btn, h, modal, tabs, tap, toast } from '../dom';
+import { champCard, closeX, cueArtEl, hex6, skillRow, statChip, statRows, tablePreview, topbar } from './menus';
 
 /**
  * Cơ Tiên Lục — the world's library. Lands, champions, classes and rules. Champions the
- * player has never faced stay as ink silhouettes; meeting one opens their page, recruiting one
+ * player has never faced keep a portrait and unlock hint; meeting one opens their page, recruiting one
  * opens their full gallery, so there is always something left to discover.
  */
 type Tab = 'land' | 'champ' | 'class' | 'rules';
@@ -29,46 +27,40 @@ function known(app: App, id: string) {
 }
 
 export function codexScreen(app: App): Screen {
-  const el = screenEl();
+  const el = screenEl('codex');
   let tab: Tab = 'land';
   const discovered = CHAMPIONS.filter((c) => known(app, c.id)).length;
-  const content = h('div.scroll.codex', { style: 'flex:1;min-height:0' });
+  const content = h('div.scroll.codex-scroll');
   const render = () => {
-    content.replaceChildren();
-    if (tab === 'land') content.append(landList(app));
-    else if (tab === 'champ') content.append(champGrid(app));
-    else if (tab === 'class') content.append(classList());
-    else content.append(rulesPage());
+    content.scrollTop = 0;
+    content.replaceChildren(tab === 'land' ? landList(app) : tab === 'champ' ? champGrid(app) : tab === 'class' ? classList() : rulesPage());
   };
   el.append(
-    topbar(app, 'Cơ Tiên Lục'),
-    h('div.body', { style: 'flex-direction:column;gap:10px' },
-      h('div.codex-progress', null,
-        h('span', null, `Đã khám phá ${discovered}/${CHAMPIONS.length} tướng`),
-        h('div.xpbar', { style: 'width:160px' }, h('i', { style: `width:${(discovered / CHAMPIONS.length) * 100}%` })),
-      ),
-      seg([['land', 'Vùng đất'], ['champ', 'Tướng'], ['class', 'Hệ'], ['rules', 'Luật chơi']], tab, (v) => {
-        tab = v;
-        render();
-      }),
-      content,
-    ),
+    topbar(app, 'Cơ Tiên Lục', true, statChip('codex', `${discovered}/${CHAMPIONS.length}`, `Đã khám phá ${discovered}/${CHAMPIONS.length} tướng`)),
+    h('div.sub-bar', null, tabs<Tab>([
+      { id: 'land', label: 'Vùng đất', icon: 'journey' }, { id: 'champ', label: 'Tướng', icon: 'users' },
+      { id: 'class', label: 'Hệ', icon: 'shield' }, { id: 'rules', label: 'Luật chơi', icon: 'scroll' },
+    ], tab, (v) => {
+      tab = v;
+      render();
+    })),
+    content,
   );
   render();
   return { el };
 }
 
 function landList(app: App): HTMLElement {
-  return h('div.codex-lands', null,
-    h('p.codex-world', null, LORE.world),
-    ...SECTS.map((s) => {
+  return h('div.col', { style: 'gap:12px' },
+    h('div.sheet.prose', null, h('h2.h3', null, 'Cơ Tiên Giới'), h('p', null, LORE.world)),
+    h('div.land-grid', null, ...SECTS.map((s) => {
       const champs = CHAMPIONS.filter((c) => c.sect === s.id);
       const met = champs.filter((c) => known(app, c.id)).length;
-      return tap(h('button.codex-land', null,
-        h('img', { src: sectArtUrl(s.id, 'emblem'), alt: '' }),
-        h('div.grow', null, h('b', null, s.name), h('div.small.muted', null, `${met}/${champs.length} tướng đã gặp`)),
+      return tap(h('button.land-card', { style: `--sect:${hex6(s.main)}` },
+        h('img', { src: sectArtUrl(s.id, 'emblem'), alt: '', loading: 'lazy' }),
+        h('span.grow', null, h('b', null, s.name), h('span.lc-sub', null, `${met}/${champs.length} tướng đã gặp · ${OMEN_INFO[s.id].name}`)),
       ), () => landPage(app, s.id));
-    }),
+    })),
   );
 }
 
@@ -77,37 +69,40 @@ function landPage(app: App, id: SectId) {
   const table = TABLES.find((t) => t.sect === id)!;
   const cues = CUES.filter((c) => c.sect === id);
   const omen = OMEN_INFO[id];
-  modal((close) => h('div.modal.codex-page.scroll', null,
+  modal((close) => h('div.modal.codex-page.scroll', { style: `--sect:${hex6(s.main)}` },
     h('img.codex-banner', { src: sectArtUrl(id, 'splash'), alt: '', onerror: (e: Event) => (e.target as HTMLElement).remove() }),
-    h('h2', null, s.name),
-    h('p', null, LORE.sects[id]),
-    h('div.section-title', null, 'Tướng'),
-    h('div.codex-row', null, ...CHAMPIONS.filter((c) => c.sect === id).map((c) => champThumb(app, c, () => {
+    h('div.cp-head', null, h('img', { src: sectArtUrl(id, 'emblem'), alt: '' }), h('h2', null, s.name)),
+    h('p.prose-p', null, LORE.sects[id]),
+    h('h3.section-title', null, 'Tướng'),
+    h('div.cc-grid', null, ...CHAMPIONS.filter((c) => c.sect === id).map((c) => thumb(app, c, () => {
       close();
       champPage(app, c);
     }))),
-    h('div.section-title', null, `Linh Đài · Thiên Tượng: ${omen.name}`),
-    h('p.small', null, `${table.desc} ${omen.desc}`),
+    h('h3.section-title', null, `Linh Đài · Thiên Tượng: ${omen.name}`),
+    h('div.cp-table', null, tablePreview(table), h('p', null, `${table.desc} ${omen.desc}`)),
     statRows(tableStats(table)),
-    h('div.section-title', null, 'Cơ của môn phái'),
-    ...cues.map((c) => h('div.codex-cue', null, h('b', null, c.name), h('div', { style: 'margin:6px 0' }, cueArt(c.colors)), statRows(cueStats(c)))),
-    h('div.actions', null, btn('Đóng', close)),
+    h('h3.section-title', null, 'Cơ của môn phái'),
+    ...cues.map((c) => h('div.cp-cue', null, h('b', null, c.name), cueArtEl(c), statRows(cueStats(c)))),
+    h('div.actions', null, btn('Đóng', close, 'ghost')),
+    closeX(close),
   ), { dismissable: true });
 }
 
-function champThumb(app: App, c: Champion, open: () => void): HTMLElement {
+function thumb(app: App, c: Champion, open: () => void): HTMLElement {
   const k = known(app, c.id);
-  return tap(h('button.codex-thumb', { class: k ? '' : 'unknown', 'aria-label': k ? c.name : 'Chưa khám phá' },
-    h('div.av', null, avatar(c.id)),
-    h('span', null, k ? c.name : '???'),
-  ), () => (k ? open() : undefined));
+  return champCard(c, { locked: !k, name: c.name, sub: k ? classInfo(c.cls).name : 'Gặp ở Hành trình để mở' },
+    () => (k ? open() : toast('Gặp tướng này ở Hành trình hoặc Đấu nhanh để mở trang', 'bad')));
 }
 
 function champGrid(app: App): HTMLElement {
-  return h('div.col', { style: 'gap:14px' }, ...SECTS.map((s) => h('div', null,
-    h('div.section-title', null, s.name),
-    h('div.codex-row', null, ...CHAMPIONS.filter((c) => c.sect === s.id).map((c) => champThumb(app, c, () => champPage(app, c)))),
-  )));
+  return h('div.sect-groups', null, ...SECTS.map((s) => {
+    const list = CHAMPIONS.filter((c) => c.sect === s.id);
+    const met = list.filter((c) => known(app, c.id)).length;
+    return h('section.sect-group', null,
+      h('div.sg-head', null, h('img', { src: sectArtUrl(s.id, 'emblem'), alt: '', loading: 'lazy' }), h('b', null, s.name), h('span.badge', null, `${met}/${list.length}`)),
+      h('div.cc-grid', null, ...list.map((c) => thumb(app, c, () => champPage(app, c)))),
+    );
+  }));
 }
 
 function champPage(app: App, c: Champion) {
@@ -118,43 +113,42 @@ function champPage(app: App, c: Champion) {
     ? h('div.codex-gallery', null,
       ...(['focus', 'joy', 'sad', 'cast'] as const).map((e) => h('img', { src: exprUrl(c.id, e), alt: '', loading: 'lazy' })),
       h('img.win', { src: winUrl(c.id), alt: '', loading: 'lazy' }))
-    : h('p.small.muted', null, 'Chiêu mộ tướng này (thắng ở Hành trình hoặc mua trong Bộ sưu tập) để mở bộ tranh đầy đủ.');
-  modal((close) => h('div.modal.codex-page.scroll', null,
+    : h('p.locked-note', null, 'Chiêu mộ tướng này (thắng ở Hành trình hoặc mua trong Bộ sưu tập) để mở bộ tranh đầy đủ.');
+  modal((close) => h('div.modal.codex-page.scroll', { style: `--sect:${hex6(sect(c.sect).main)}` },
     h('div.codex-champ', null,
-      h('img.cut', { src: cutoutUrl(c.id), alt: '' }),
-      h('div', null,
-        h('div.small.muted', null, `${sect(c.sect).name} · bậc ${c.tier} · ${cls.name}`),
+      h('div.cc-cut', null, h('img', { src: cutoutUrl(c.id), alt: '' })),
+      h('div.grow', null,
+        h('div.cp-meta', null, `${sect(c.sect).name} · bậc ${c.tier} · ${cls.name}`),
         h('h2', null, c.name),
-        info ? h('blockquote', null, `“${info.quote}”`) : null,
-        info ? h('p', null, info.bio) : null,
+        info ? h('blockquote.nm-quote', null, info.quote) : null,
+        info ? h('p.prose-p', null, info.bio) : null,
       ),
     ),
-    h('div.section-title', null, 'Nội tại'),
-    h('p.small', null, `${cls.name}: ${cls.passive}`),
-    h('div.section-title', null, 'Chiêu thức'),
-    ...c.skills.map((sk) => h('div.cm-skill', { class: sk.slot === 2 ? 'ult' : '' },
-      h('img', { src: skillIconUrl(c.id, sk.slot), alt: '' }),
-      h('div.grow', null, h('b', null, `${sk.name}${sk.slot === 2 ? ' · tuyệt chiêu' : ` · hồi ${sk.cooldown} cú`}`), h('div.small', null, sk.desc)))),
-    h('div.section-title', null, 'Tranh'),
+    h('h3.section-title', null, 'Nội tại'),
+    h('div.cm-passive', null, h('b', null, cls.name), h('p', null, cls.passive)),
+    h('h3.section-title', null, 'Chiêu thức'),
+    ...c.skills.map((sk) => skillRow(c, sk)),
+    h('h3.section-title', null, 'Tranh'),
     gallery,
-    h('div.actions', null, btn('Đóng', close)),
+    h('div.actions', null, btn('Đóng', close, 'ghost')),
+    closeX(close),
   ), { dismissable: true });
 }
 
 function classList(): HTMLElement {
-  return h('div.col', { style: 'gap:10px' }, ...CLASSES.map((cl) => h('div.card', null,
-    h('b', null, cl.name),
-    h('p.small', { style: 'margin:4px 0 8px' }, cl.passive),
-    h('div.small.muted', null, CHAMPIONS.filter((c) => c.cls === cl.id).map((c) => champion(c.id).name).join(' · ')),
+  return h('div.class-grid', null, ...CLASSES.map((cl) => h('div.sheet.prose', null,
+    h('h2.h3', null, cl.name),
+    h('p', null, cl.passive),
+    h('p.muted.small', null, CHAMPIONS.filter((c) => c.cls === cl.id).map((c) => c.name).join(' · ')),
   )));
 }
 
 function rulesPage(): HTMLElement {
   return h('div.col', { style: 'gap:12px' },
-    ...(Object.keys(RULES_TEXT) as GameMode[]).map((m) => h('div.card', null,
-      h('b', null, MODE_NAMES[m]),
-      h('p', { style: 'margin:6px 0' }, RULES_TEXT[m].goal),
+    ...(Object.keys(RULES_TEXT) as GameMode[]).map((m) => h('div.sheet.prose', null,
+      h('h2.h3', null, MODE_NAMES[m]),
+      h('p', null, RULES_TEXT[m].goal),
       h('ul.rules-list', null, ...RULES_TEXT[m].points.map((t) => h('li', null, t))))),
-    h('div.card', null, h('b', null, 'Tiên Đạo'), h('ul.rules-list', null, ...SKILL_RULES.map((t) => h('li', null, t)))),
+    h('div.sheet.prose', null, h('h2.h3', null, 'Tiên Đạo'), h('ul.rules-list', null, ...SKILL_RULES.map((t) => h('li', null, t)))),
   );
 }

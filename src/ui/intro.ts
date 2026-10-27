@@ -14,11 +14,11 @@ export function showIntro(app: App, onDone?: () => void) {
     },
     {
       img: 'art/ui/home-bg.webp', title: 'Tiên Đạo hay Cổ Điển',
-      text: 'Tiên Đạo: mỗi tướng có nội tại, 2 chiêu nhỏ và 1 tuyệt chiêu nạp bằng năng lượng khi vào bi. Cổ Điển: bida thuần theo luật WPA, không chiêu. Cả hai chơi được 8 bi, 9 bi, 10 bi và phăng.',
+      text: 'Tiên Đạo: mỗi tướng có nội tại, 2 chiêu và 1 tuyệt chiêu; cú đánh nào cũng nạp năng lượng, vào bi nạp nhiều hơn. Cổ Điển: bida thuần theo luật WPA, không chiêu. Cả hai chơi được 8 bi, 9 bi, 10 bi và phăng.',
     },
     {
       img: 'art/ui/keyart-portrait.webp', title: 'Điều khiển',
-      text: 'Kéo trên bàn hoặc đẩy cần XOAY CƠ để ngắm — đẩy nhẹ để tinh chỉnh. Giữ quả bi ÁP PHÊ rồi đẩy để chọn điểm đánh. GIỮ nút ĐÁNH để nạp lực, thả để đánh. Gợi ý sẽ hiện đúng lúc khi bạn chơi.',
+      text: 'Kéo trên bàn để xoay cơ, chạm một bi để ngắm thẳng vào bi đó, dùng nút tinh chỉnh để chỉnh từng chút. Chạm bi cái nhỏ để chọn điểm áp phê. Chọn lực rồi bấm ĐÁNH. Gợi ý sẽ hiện đúng lúc khi bạn chơi.',
     },
   ];
   let i = 0;
@@ -26,7 +26,8 @@ export function showIntro(app: App, onDone?: () => void) {
     const img = h('img.intro-img', { alt: '', draggable: false });
     const title = h('h2');
     const text = h('p.intro-text');
-    const dots = h('div.intro-dots', null, ...pages.map(() => h('i')));
+    const count = h('span.intro-count.num');
+    const dots = h('div.intro-dots', { 'aria-hidden': 'true' }, ...pages.map(() => h('i')));
     const next = btn('Tiếp', () => go(i + 1));
     const finish = () => {
       app.profile.introSeen = true;
@@ -40,11 +41,14 @@ export function showIntro(app: App, onDone?: () => void) {
       img.src = base + pages[i].img;
       title.textContent = pages[i].title;
       text.textContent = pages[i].text;
+      count.textContent = `${i + 1}/${pages.length}`;
       [...dots.children].forEach((d, k) => d.classList.toggle('on', k === i));
       next.textContent = i === pages.length - 1 ? 'Bắt đầu' : 'Tiếp';
     };
     go(0);
-    return h('div.modal.intro', null, img, h('div.intro-body', null, title, text,
-      h('div.intro-foot', null, dots, h('div.grow'), btn('Bỏ qua', finish, 'ghost small'), next)));
+    return h('div.modal.intro', null,
+      h('div.intro-art', null, img),
+      h('div.intro-body', null, h('div.intro-scroll.scroll', null, count, title, text),
+        h('div.intro-foot', null, dots, h('div.grow'), btn('Bỏ qua', finish, 'ghost small'), next)));
   });
 }

@@ -9,24 +9,33 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <meta name="apple-mobile-web-app-title" content="Cơ Tiên" />
     <meta name="format-detection" content="telephone=no" />
-    <meta name="description" content="Cơ Tiên — bida tu tiên: 12 môn phái, 60 tướng, vật lý và luật bida thật. 8 bi, 9 bi, 10 bi, phăng. Chơi offline trên điện thoại." />
+    <meta name="description" content="Cơ Tiên — bida tu tiên: 13 môn phái, 65 tướng, vật lý và luật bida thật. 8 bi, 9 bi, 10 bi, phăng. Chơi offline trên điện thoại." />
     <link rel="icon" href="./favicon.ico" sizes="any" />
     <link rel="icon" href="./icons/icon-32.png" type="image/png" sizes="32x32" />
     <link rel="apple-touch-icon" href="./icons/icon-180.png" />
     <title>Cơ Tiên</title>
     <style>
-      html, body { margin: 0; height: 100%; background: #efe8da; }
-      #boot { position: fixed; inset: 0; display: grid; place-items: center; color: #1c1a17; font: 500 14px Georgia, serif; letter-spacing: .3em; }
+      html, body { margin: 0; height: 100%; background: #e9e1d0; }
+      .rotate-hint { display: none; }
+      #boot { position: fixed; inset: 0; z-index: 2; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 18px; background: #e9e1d0; color: #1a1713; font: 600 16px/1.4 Georgia, serif; }
+      #boot img { width: min(70vw, 420px); height: auto; }
+      #boot .boot-seal { width: 14px; height: 14px; border-radius: 3px; background: #b03522; animation: boot-pulse 1s ease-in-out infinite; }
+      @keyframes boot-pulse { 50% { transform: scale(0.6) rotate(45deg); opacity: 0.6; } }
+      @media (prefers-reduced-motion: reduce) { #boot .boot-seal { animation: none; } }
     </style>
   </head>
   <body>
-    <div id="boot">Đang tải…</div>
+    <div id="boot" role="status"><img src="./art/ui/logo.webp" alt="Cơ Tiên" /><span class="boot-seal"></span><span>Đang tải…</span></div>
     <div id="stage"></div>
     <div id="ui"></div>
-    <div class="rotate-hint">
-      <div class="rh-stage"><img class="rh-arrow" src="./art/ui/arrow.webp" alt="" /><img class="rh-tablet" src="./art/ui/tablet.webp" alt="" /></div>
-      <div class="rh-title">Xoay ngang để chơi</div>
-      <div class="rh-sub">Cơ Tiên được vẽ cho khung ngang</div>
+    <div class="rotate-hint" role="alert">
+      <div class="rh-card">
+        <div class="rh-stage" aria-hidden="true"><img class="rh-phone" src="./art/ui/phone.webp" alt="" /><img class="rh-arrow" src="./art/ui/rotate-arrow.webp" alt="" /></div>
+        <div class="rh-copy">
+          <div class="rh-title">Xoay ngang để chơi</div>
+          <div class="rh-sub">Cơ Tiên được vẽ cho màn hình ngang. Nếu máy không tự xoay, hãy tắt khoá xoay màn hình.</div>
+        </div>
+      </div>
     </div>
     <script type="module" src="/src/main.ts"></script>
   </body>

@@ -2,16 +2,15 @@ import { CHAPTERS, LEVEL_NAMES, type Npc } from '../../game/content/career';
 import { CHALLENGES, FAMILY_INFO, type ChallengeDef, type ChallengeFamily } from '../../game/content/challenges';
 import { TABLES } from '../../game/content/gear';
 import lore from '../../game/content/lore.json';
-import { sectArtUrl, type SectId } from '../../game/content/sects';
+import { champion, sect, sectArtUrl, type SectId } from '../../game/content/sects';
 import { MODE_NAMES } from '../../core/rules';
 import { screenEl, type App, type Screen } from '../app';
-import { avatar } from '../avatar';
 import { btn, h, modal, stars, tap, toast } from '../dom';
 import { icon } from '../icons';
-import { npcModal, startChallenge, topbar } from './menus';
+import { artUrl, champCard, closeX, hex6, npcModal, startChallenge, statChip, topbar } from './menus';
 
 /**
- * Hành trình: one painted map of Cơ Tiên Giới shared by career and challenges. Each land has
+ * Hành trình: one painted map of Cơ Tiên Giới shared by duels and challenges. Each land has
  * two gates — duel its five masters, or solve its trick shots — and the cloud path opens the
  * next land once the first master of the previous one has been beaten.
  */
@@ -25,6 +24,7 @@ const PINS: Record<SectId, [number, number]> = {
 };
 
 const FAMILIES = Object.keys(FAMILY_INFO) as ChallengeFamily[];
+const ALL_NPCS = CHAPTERS.flatMap((c) => c.npcs);
 
 /**
  * Challenges dealt along the route: interleave the five families level by level (so every
@@ -49,67 +49,117 @@ function landOpen(app: App, i: number): boolean {
   return i === 0 || app.profile.career[CHAPTERS[i - 1].npcs[0].id] !== undefined;
 }
 
+const npcOpen = (app: App, n: Npc) => {
+  const chapter = CHAPTERS.find((c) => c.id === n.sect)!;
+  const i = chapter.npcs.indexOf(n);
+  return i === 0 || app.profile.career[chapter.npcs[i - 1].id] !== undefined;
+};
+
+const taskOpen = (app: App, task: ChallengeDef) => {
+  const family = CHALLENGES.filter((c) => c.family === task.family);
+  const i = family.indexOf(task);
+  return i === 0 || (app.profile.challenges[family[i - 1].id] ?? 0) > 0;
+};
+
 export function journeyScreen(app: App): Screen {
-  const el = screenEl();
-  const base = new URL(import.meta.env.BASE_URL, document.baseURI).href;
-  const map = h('div.journey-map', null, h('img.journey-art', { src: `${base}art/ui/map.webp`, alt: 'Bản đồ Cơ Tiên Giới', draggable: false }));
+  const el = screenEl('journey');
+  const p = app.profile;
+  const byLand = challengesByLand();
+  const map = h('div.journey-map', null, h('img.journey-art', { src: artUrl('ui/map.webp'), alt: 'Bản đồ Cơ Tiên Giới', draggable: false }));
+  // The land to go next: the first open land with a master still unbeaten.
+  const current = CHAPTERS.findIndex((ch, i) => landOpen(app, i) && ch.npcs.some((n) => p.career[n.id] === undefined));
+  let focus: HTMLElement | null = null;
   CHAPTERS.forEach((ch, i) => {
     const [x, y] = PINS[ch.id];
     const open = landOpen(app, i);
-    const beaten = ch.npcs.filter((n) => app.profile.career[n.id] !== undefined).length;
-    const pin = h('button.journey-pin', { class: open ? '' : 'locked', style: `left:${x * 100}%;top:${y * 100}%`, 'aria-label': ch.name },
-      h('img', { src: sectArtUrl(ch.id, 'emblem'), alt: '' }),
-      h('span.jp-name', null, ch.name),
-      open ? h('span.jp-prog', null, `${beaten}/${ch.npcs.length}`) : h('span.jp-prog', null, icon('lock')),
+    const beaten = ch.npcs.filter((n) => p.career[n.id] !== undefined).length;
+    const tasks = byLand.get(ch.id) ?? [];
+    const solved = tasks.filter((t) => (p.challenges[t.id] ?? 0) > 0).length;
+    const done = beaten === ch.npcs.length;
+    const state = !open ? 'locked' : i === current ? 'current' : done ? 'done' : '';
+    const pin = h('button.land-pin', {
+      class: state, style: `left:${x * 100}%;top:${y * 100}%;--ax:${x < 0.2 ? 26 : x > 0.8 ? 74 : 50}%;--sect:${hex6(sect(ch.id).main)}`,
+      'aria-label': open ? `${ch.name}: ${beaten}/${ch.npcs.length} cao thủ, ${solved}/${tasks.length} thử thách` : `${ch.name}: chưa mở`,
+    },
+    i === current ? h('span.lp-flag', null, 'Đi tiếp') : null,
+    h('span.lp-emblem', null, h('img', { src: sectArtUrl(ch.id, 'emblem'), alt: '' }), open ? null : h('span.lp-lock', null, icon('lock'))),
+    h('span.lp-text', null,
+      h('span.lp-name', null, ch.name),
+      open
+        ? h('span.lp-prog', null, icon('users'), h('b.num', null, `${beaten}/${ch.npcs.length}`), icon('target'), h('b.num', null, `${solved}/${tasks.length}`))
+        : h('span.lp-prog.lp-closed', null, icon('lock'), 'Chưa mở'),
+    ),
     );
-    tap(pin, () => (open ? landSheet(app, ch.id) : toast(`Thắng ${CHAPTERS[i - 1].npcs[0].name} ở ${CHAPTERS[i - 1].name} để mở đường`, 'bad')));
+    tap(pin, () => (open ? landSheet(app, ch.id) : toast(`Thắng ${CHAPTERS[i - 1].npcs[0].name} ở ${CHAPTERS[i - 1].name} để mở đường tới đây`, 'bad')));
+    if (i === current) focus = pin;
     map.append(pin);
   });
-  el.append(topbar(app, 'Hành trình'), h('div.journey-wrap.scroll', null, map));
+  const beatenAll = Object.keys(p.career).length;
+  const solvedAll = Object.values(p.challenges).filter((v) => v > 0).length;
+  const scroller = h('div.scroll.journey-scroll', null, map);
+  el.append(
+    topbar(app, 'Hành trình', true,
+      statChip('users', `${beatenAll}/${ALL_NPCS.length}`, `Đã thắng ${beatenAll}/${ALL_NPCS.length} cao thủ`),
+      statChip('target', `${solvedAll}/${CHALLENGES.length}`, `Đã giải ${solvedAll}/${CHALLENGES.length} thử thách`)),
+    scroller,
+  );
+  // Bring the land to play next into view once the map has its size.
+  requestAnimationFrame(() => requestAnimationFrame(() => {
+    const f = focus as HTMLElement | null;
+    if (!f) return;
+    scroller.scrollTop = Math.max(0, f.offsetTop - scroller.clientHeight / 2);
+  }));
   return { el };
 }
 
 function landSheet(app: App, id: SectId) {
   const ch = CHAPTERS.find((c) => c.id === id)!;
-  const all = CHAPTERS.flatMap((c) => c.npcs);
-  const npcOpen = (n: Npc) => {
-    const i = all.indexOf(n);
-    return i === 0 || app.profile.career[all[i - 1].id] !== undefined;
-  };
+  const p = app.profile;
   const tasks = challengesByLand().get(id) ?? [];
   const table = TABLES.find((t) => t.sect === id) ?? app.tableSkin;
-  modal((close) => h('div.modal.land-sheet.scroll', null,
-    h('div.ls-head', null, h('img', { src: sectArtUrl(id, 'emblem'), alt: '' }),
-      h('div', null, h('h2', null, ch.name), h('p.small.muted', null, ch.desc))),
-    h('p.small', null, (lore as { sects: Record<string, string> }).sects[id]),
-    h('div.section-title', null, 'Thách đấu'),
-    h('div.col', { style: 'gap:6px' }, ...ch.npcs.map((n) => {
-      const open = npcOpen(n);
-      const best = app.profile.career[n.id] ?? 0;
-      return tap(h('button.npc', { class: open ? '' : 'locked' },
-        h('div.av', null, avatar(n.id)),
-        h('div.grow', null, h('div.nm', null, n.name), h('div.tt', null, `${n.title} · ${MODE_NAMES[n.mode]} · ${LEVEL_NAMES[n.level]}`)),
-        open ? stars(best) : icon('lock'),
-      ), () => {
-        if (!open) return toast('Thắng cao thủ trước để mở', 'bad');
-        close();
-        npcModal(app, n);
-      });
-    })),
-    tasks.length ? h('div.section-title', null, 'Thử thách') : null,
-    h('div.ls-tasks', null, ...tasks.map((c, i) => {
-      const best = app.profile.challenges[c.id] ?? 0;
-      const open = i === 0 || (app.profile.challenges[tasks[i - 1].id] ?? 0) > 0;
-      return tap(h('button.ls-task', { class: open ? '' : 'locked' },
-        h('b', null, `${i + 1}. ${FAMILY_INFO[c.family].name}`),
-        open ? stars(best) : icon('lock'),
-      ), () => {
-        if (!open) return toast('Hoàn thành thử thách trước để mở', 'bad');
-        close();
-        startChallenge(app, c, table);
-      });
-    })),
-    h('div.small.muted', { style: 'margin-top:6px' }, `Chơi trên ${table.name}. Thử thách dùng vật lý chuẩn để mọi bài đều có lời giải.`),
-    h('div.actions', null, btn('Đóng', close, 'ghost')),
+  const beaten = ch.npcs.filter((n) => p.career[n.id] !== undefined).length;
+  const solved = tasks.filter((t) => (p.challenges[t.id] ?? 0) > 0).length;
+  const nextNpc = ch.npcs.find((n) => npcOpen(app, n) && p.career[n.id] === undefined);
+  modal((close) => h('div.modal.land-sheet', { style: `--sect:${hex6(sect(id).main)}` },
+    h('div.ls-art', null, h('img', { src: sectArtUrl(id, 'splash'), alt: '', onerror: (e: Event) => ((e.target as HTMLElement).style.display = 'none') })),
+    h('div.ls-body.scroll', null,
+      h('div.ls-head', null, h('img', { src: sectArtUrl(id, 'emblem'), alt: '' }),
+        h('div.grow', null, h('h2', null, ch.name), h('p.ls-desc', null, ch.desc))),
+      h('div.row.wrap', { style: 'gap:8px' },
+        statChip('users', `${beaten}/${ch.npcs.length} cao thủ`),
+        statChip('target', `${solved}/${tasks.length} thử thách`)),
+      h('h3.section-title', null, 'Cao thủ'),
+      h('div.ls-masters', null, ...ch.npcs.map((n) => {
+        const open = npcOpen(app, n);
+        const best = p.career[n.id];
+        return champCard(champion(n.id), {
+          locked: !open, name: n.name, cls: n === nextNpc ? 'next' : '',
+          sub: open ? `${MODE_NAMES[n.mode]} · ${LEVEL_NAMES[n.level]}` : 'Thắng cao thủ trước để mở',
+          foot: best !== undefined ? stars(best) : n === nextNpc ? h('span.cc-cta', null, 'Thách đấu') : null,
+        }, () => {
+          if (!open) return toast('Thắng cao thủ trước để mở', 'bad');
+          close();
+          npcModal(app, n);
+        });
+      })),
+      tasks.length ? h('h3.section-title', null, 'Thử thách') : null,
+      h('div.ls-tasks', null, ...tasks.map((c, i) => {
+        const best = p.challenges[c.id] ?? 0;
+        const open = taskOpen(app, c);
+        return tap(h('button.task-card', { class: `${open ? '' : 'locked'} ${best ? 'done' : ''}` },
+          h('span.tk-num', null, String(i + 1)),
+          h('span.tk-text', null, h('b', null, FAMILY_INFO[c.family].name), h('span', null, FAMILY_INFO[c.family].desc)),
+          open ? stars(best) : icon('lock'),
+        ), () => {
+          if (!open) return toast(`Giải bài trước trong nhóm ${FAMILY_INFO[c.family].name} ở Thử thách để mở`, 'bad');
+          close();
+          startChallenge(app, c, table);
+        });
+      })),
+      h('details.ls-lore', null, h('summary', null, 'Truyền thuyết vùng đất'), h('p', null, (lore as { sects: Record<string, string> }).sects[id])),
+      h('p.ls-note', null, `Đấu trên ${table.name}. Thử thách dùng vật lý chuẩn để bài nào cũng có lời giải.`),
+      h('div.actions', null, btn('Đóng', close, 'ghost')),
+    ),
+    closeX(close),
   ), { dismissable: true });
 }
