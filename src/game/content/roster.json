@@ -240,7 +240,7 @@
       "sect": "thienquang",
       "tier": 1,
       "cls": "thanxa",
-      "look": "a sporty 14-year-old tomboy girl with short cropped jet-black hair, a white headband, a small bandage on her cheek, white-and-gold short robes with a gold sash, a small flying sword hovering at her shoulder, slim white-jade cue",
+      "look": "a sporty 14-year-old tomboy girl with short cropped jet-black hair, a white headband, a small bandage on her cheek, white-and-gold short robes with a gold sash, a small flying sword hovering at her shoulder, slim white-jade cue; must clearly show: a clearly visible white bandage plaster on her cheek",
       "pose": "aiming the cue like a sword thrust",
       "expr": "eager grin",
       "skills": [
@@ -274,7 +274,7 @@
       "sect": "thienquang",
       "tier": 2,
       "cls": "hophap",
-      "look": "a stocky middle-aged sect gate guardian, white-gold plate armour over white robes, square jaw, short black beard, a tall sword-shaped tower shield, a thick ivory cue",
+      "look": "a short, very stocky gate warden around 50 with a cleanly SHAVED bald head, a thick drooping white moustache and NO beard, a round weathered sun-tanned face, bushy white eyebrows, a quilted white-and-gold padded gambeson (not plate armour), bare forearms, a huge sword-shaped tower shield, a thick ivory cue",
       "pose": "guardian bracing behind the shield, cue planted",
       "expr": "steady stern look",
       "skills": [
@@ -342,7 +342,7 @@
       "sect": "thienquang",
       "tier": 4,
       "cls": "cuongchien",
-      "look": "a stern woman around 28 with an ash-blonde undercut hairstyle and a long vertical scar through her left eye, tanned skin, white-gold battle robes with golden pauldrons, a crimson sash, a broad greatsword-like cue",
+      "look": "a stern woman around 28 with tanned skin, a SHORT ash-blonde undercut: the left temple visibly shaved and a short crest of hair on top (no long hair), a deep vertical scar running through her left eye, angular white-and-gold battle armour with golden pauldrons, a single crimson sash, a broad greatsword-like cue",
       "pose": "warrior swinging the cue in a wide arc",
       "expr": "fierce confident smirk",
       "skills": [
@@ -375,7 +375,7 @@
       "sect": "thienquang",
       "tier": 5,
       "cls": "thanxa",
-      "look": "a legendary sword saint, an ageless man with a calm, clearly masculine face and strong jaw, long white hair and golden eyes, white robe with gold trim, a radiant sun halo behind him, nine small flying swords orbiting, a radiant golden cue",
+      "look": "a legendary sword saint, an ageless man with a calm, clearly masculine face and strong jaw, long white hair and golden eyes, white robe with gold trim, a radiant sun halo behind him, nine small flying swords orbiting, a radiant golden cue; must clearly show: exactly NINE small flying swords around him, all nine visible and countable",
       "pose": "calm stance, cue pointed forward, swords orbiting",
       "expr": "calm all-knowing look",
       "skills": [
@@ -544,7 +544,7 @@
       "sect": "huyetsat",
       "tier": 5,
       "cls": "luanhoi",
-      "look": "the demon lord, a tall pale man with sharp masculine features and a strong jaw, short slicked-back black hair, two curved crimson horns, layered black-and-red robes trailing shadow flames, violet-red eyes, an obsidian cue crackling with dark lightning",
+      "look": "the demon lord, a tall pale man with sharp masculine features and a strong jaw, short slicked-back black hair, two curved crimson horns, layered black-and-red robes trailing shadow flames, violet-red eyes, an obsidian cue crackling with dark lightning; must clearly show: short hair slicked straight back off the forehead (no fringe, no bangs)",
       "pose": "time-mage weaving dark energy, cue raised",
       "expr": "cold arrogant smile",
       "skills": [
@@ -611,7 +611,7 @@
       "sect": "hoalinh",
       "tier": 2,
       "cls": "anhsat",
-      "look": "a lanky young man around 22 with messy sandy-blond hair tied with a small bell, sleepy half-closed eyes, a blade of grass in his mouth, an open jade-green robe with wind ribbons, a long bamboo cue",
+      "look": "a lanky young man around 22 with messy sandy-blond hair tied with a small bell, sleepy half-closed eyes, a blade of grass in his mouth, an open jade-green robe with wind ribbons, a long bamboo cue; must clearly show: a green blade of grass held in his mouth",
       "pose": "assassin dashing forward with wind trails",
       "expr": "relaxed smirk",
       "skills": [
@@ -815,7 +815,7 @@
       "sect": "bangphach",
       "tier": 3,
       "cls": "phaptu",
-      "look": "an elegant fairy maiden woman of 20 with very long straight jet-black hair and a straight fringe, ice-blue eyes, a single ice-lotus crystal hairpin, flowing white and pale-blue layered hanfu with sheer ribbons, slender crystal cue with a lotus tip",
+      "look": "an elegant fairy maiden woman of 20 with very long straight jet-black hair and a straight fringe, ice-blue eyes, a single ice-lotus crystal hairpin, flowing white and pale-blue layered hanfu with sheer ribbons, slender crystal cue with a lotus tip; must clearly show: sleek perfectly straight hair (no waves) with a blunt straight-cut fringe",
       "pose": "mage casting, one hand weaving a swirl of frost petals, cue held vertically",
       "expr": "gentle serene smile",
       "skills": [
@@ -849,7 +849,7 @@
       "sect": "bangphach",
       "tier": 4,
       "cls": "cuongchien",
-      "look": "a hulking berserker man who is half polar bear: a HUMAN face (human nose, mouth and skin) with white bear ears, a mane of white fur and bear claws, frost-crusted fur mantle, tribal blue war paint, a massive club-like cue made of glacier ice and bone",
+      "look": "a hulking berserker MAN, half polar bear: a fully HUMAN man's face (human nose, human mouth, human skin, a short white beard, NOT a bear head, NO snout) with small white bear ears on top of his head, a mane of white fur, a shaggy white fur mantle, tribal blue war paint on his face, huge bear-claw gauntlets, a massive club-like cue made of glacier ice and bone",
       "pose": "warrior swinging the cue overhead",
       "expr": "fierce playful roar",
       "skills": [
@@ -882,7 +882,7 @@
       "sect": "bangphach",
       "tier": 5,
       "cls": "chusu",
-      "look": "the regal ice-palace mistress, tall woman about 30, crescent-moon ice crown, long silver-white hair, cold pale-violet eyes, long trailing cloak of frost silk with snowflake embroidery, an ornate moon-crested ice cue",
+      "look": "the regal ice-palace mistress, tall woman about 30, crescent-moon ice crown, long silver-white hair, cold pale-violet eyes, long trailing cloak of frost silk with snowflake embroidery, an ornate moon-crested ice cue; must clearly show: pale-violet eyes",
       "pose": "hexer channelling, cue raised, free hand casting a freezing moon sigil",
       "expr": "cold regal half-smile",
       "skills": [
@@ -916,8 +916,8 @@
       "sect": "thienco",
       "tier": 1,
       "cls": "thanxa",
-      "look": "a 14-year-old apprentice tinkerer boy, brass goggles, oil-stained bronze apron over a teal tunic, a small clockwork bird perched on his shoulder, a slim brass-ringed billiard cue with a tiny spyglass clipped to the butt",
-      "pose": "bent low over an imaginary table lining up a billiards shot, eye along the cue",
+      "look": "a 14-year-old apprentice tinkerer boy, brass goggles, oil-stained bronze apron over a teal tunic, a small clockwork bird perched on his shoulder, a slim brass-ringed billiard cue with a tiny spyglass clipped to the butt; must clearly show: the clockwork bird on his shoulder and the spyglass on the cue butt",
+      "pose": "crouched low over an imaginary billiard table, one eye sighting along the cue (not jumping)",
       "expr": "focused tongue-out grin",
       "skills": [
         {
@@ -950,7 +950,7 @@
       "sect": "thienco",
       "tier": 2,
       "cls": "hophap",
-      "look": "a giant wooden mechanical ox golem, brass gears and joints, a glowing cyan core in its chest, carved wooden armour plates, holding a log-like cue",
+      "look": "a giant wooden mechanical ox golem, brass gears and joints, a glowing cyan core in its chest, carved wooden armour plates, holding a log-like cue; must clearly show: a cue shaped like a rough thick tree log (not a slim polished cue)",
       "pose": "guardian bracing on hind legs, cue held like a barrier",
       "expr": "glowing cyan eyes",
       "skills": [
@@ -984,7 +984,7 @@
       "sect": "thienco",
       "tier": 3,
       "cls": "phaptu",
-      "look": "a clever puppeteer girl of 19, bronze-and-teal coat with gear buttons, goggles on her head, red bob hair, controlling a small wooden puppet with glowing strings, a brass cue with gyroscope rings",
+      "look": "a clever puppeteer girl of 19, bronze-and-teal coat with gear buttons, goggles on her head, red bob hair, controlling a small wooden puppet with glowing strings, a brass cue with gyroscope rings; must clearly show: red hair cut in a short chin-length bob (no ponytail, no bun) and the wooden puppet on glowing strings beside her",
       "pose": "mage pulling puppet strings with one hand",
       "expr": "smug clever smile",
       "skills": [
@@ -1084,7 +1084,7 @@
       "sect": "docvu",
       "tier": 1,
       "cls": "anhsat",
-      "look": "a slender snake girl assassin of 18, green scale-pattern outfit under a dark hooded cloak, slit-pupil amber eyes, a small green snake on her shoulder, a venom-green cue",
+      "look": "a slender snake girl assassin of 18, green scale-pattern outfit under a dark hooded cloak, slit-pupil amber eyes, a small green snake on her shoulder, a venom-green cue; must clearly show: the small green snake coiled on her shoulder",
       "pose": "assassin coiled low ready to strike",
       "expr": "sly hiss smile",
       "skills": [
@@ -1118,7 +1118,7 @@
       "sect": "docvu",
       "tier": 2,
       "cls": "chusu",
-      "look": "a hunched old poison master, long stringy beard, green-black robes, a poison gourd at his belt, green-stained hands, a gnarled poison-wood cue dripping venom",
+      "look": "a hunched old poison master, long stringy beard, green-black robes, a poison gourd at his belt, green-stained hands, a gnarled poison-wood cue dripping venom; must clearly show: green-stained hands",
       "pose": "hexer stirring a green mist with the cue",
       "expr": "creepy cackle",
       "skills": [
@@ -1152,7 +1152,7 @@
       "sect": "docvu",
       "tier": 3,
       "cls": "phaptu",
-      "look": "a mischievous 12-year-old boy with a shaved head and a single topknot, green dot face paint, a gap-toothed grin, five cute venomous critters (centipede, toad, spider, scorpion, snake) crawling on him, a green tunic with pouches, a cue with a glass insect jar",
+      "look": "a mischievous 12-year-old boy with a shaved head and a single topknot, green dot face paint, a gap-toothed grin, five cute venomous critters (centipede, toad, spider, scorpion, snake) crawling on him, a green tunic with pouches, a cue with a glass insect jar; must clearly show: all five critters visible (centipede, toad, spider, scorpion, snake), the glass insect jar, and a gap between his front teeth (no fangs)",
       "pose": "mage holding up the jar, critters swirling",
       "expr": "mischievous grin",
       "skills": [
@@ -1186,8 +1186,8 @@
       "sect": "docvu",
       "tier": 4,
       "cls": "anhsat",
-      "look": "a feral alchemy-mutated wolfman, glass tubes of green serum on his back, glowing green veins, torn dark trousers, long claws, a cue wrapped in chains",
-      "pose": "assassin pouncing on all fours",
+      "look": "a feral alchemy-mutated wolfman, glass tubes of green serum on his back, glowing green veins, torn dark trousers, long claws, a cue wrapped in chains; must clearly show: a hunched four-legged stance",
+      "pose": "pouncing forward low on all four limbs, the chained cue strapped across his back",
       "expr": "snarling",
       "skills": [
         {
@@ -1220,7 +1220,7 @@
       "sect": "docvu",
       "tier": 5,
       "cls": "luanhoi",
-      "look": "the ghost-doctor queen, ageless woman, a long beaked plague-doctor mask pushed up on her head, emerald-and-black robes with herb pouches, glowing vials orbiting, a cue like a long silver acupuncture needle",
+      "look": "the ghost-doctor queen, a severe mature woman physician around 45 with angular features and fine lines, black hair pinned into a tight high coil (no loose long hair, no hood), a LARGE ivory beaked plague-doctor mask raised on top of her head, structured high-collared emerald-and-black physician robes, round spectacles, a rectangular lacquered medicine case on her back with an orderly rack of herb vials, a cue like a long silver acupuncture needle",
       "pose": "time-mage holding a glowing vial aloft",
       "expr": "knowing smirk",
       "skills": [
@@ -1254,7 +1254,7 @@
       "sect": "hailong",
       "tier": 1,
       "cls": "anhsat",
-      "look": "a tiny agile 14-year-old pirate girl with dark tanned skin, short messy sea-green hair, a leather eyepatch, a gap-tooth grin, an orange bandana, a striped teal shirt, a parrot on her shoulder, a fish-shaped cue",
+      "look": "a tiny agile 14-year-old pirate girl with dark tanned skin, short messy sea-green hair, a leather eyepatch, a gap-tooth grin, an orange bandana, a striped teal shirt, a parrot on her shoulder, a fish-shaped cue; must clearly show: a plain brown leather eyepatch and a visible gap between her front teeth (no fangs)",
       "pose": "assassin leaping with the cue",
       "expr": "cocky grin",
       "skills": [
@@ -1491,7 +1491,7 @@
       "sect": "uminh",
       "tier": 3,
       "cls": "luanhoi",
-      "look": "a kind but eerie old granny ferrywoman of the river of oblivion, hooded grey-jade robes, a ladle and a steaming bowl of soup, a cue like a boat oar",
+      "look": "a kind but eerie old granny ferrywoman of the river of oblivion, hooded grey-jade robes, a ladle and a steaming bowl of soup, a cue like a boat oar; must clearly show: a clearly elderly wrinkled face",
       "pose": "time-mage offering the steaming bowl",
       "expr": "gentle mysterious smile",
       "skills": [
@@ -1559,7 +1559,7 @@
       "sect": "uminh",
       "tier": 5,
       "cls": "cuongchien",
-      "look": "the underworld emperor, a towering armoured ghost king (a man) with a broad masculine jaw, glowing jade eyes, jade flames for hair, a bone crown, a spectral cape, a cue like a great bone sceptre",
+      "look": "the underworld emperor, a towering mature ghost king (a man around 50) with a broad square masculine jaw and a short black beard, stern glowing jade eyes, upright jade flames instead of hair, a tall bone crown, heavy rectangular black-and-jade plate armour, a straight spectral mantle, a cue like a great bone sceptre",
       "pose": "warrior slamming the sceptre-cue down",
       "expr": "menacing laugh",
       "skills": [
@@ -1626,7 +1626,7 @@
       "sect": "tinhtu",
       "tier": 2,
       "cls": "hophap",
-      "look": "a stern knight, a man with a square jaw and a short silver-blue crew cut, violet armour engraved with constellations, a visored helmet tucked under one arm, a starlit cape, a round star shield, a silver cue",
+      "look": "a stern knight, a man with a square jaw and a short silver-blue crew cut, violet armour engraved with constellations, a visored helmet tucked under one arm, a starlit cape, a round star shield, a silver cue; must clearly show: very short crew-cut hair (no spikes, no long hair) and the helmet tucked under his arm",
       "pose": "guardian raising the star shield",
       "expr": "noble resolve",
       "skills": [
@@ -1660,7 +1660,7 @@
       "sect": "tinhtu",
       "tier": 3,
       "cls": "thanxa",
-      "look": "a moon fairy archer woman of 20 with long dark-navy hair in a single thick braid, pale moonlit skin, a glowing crescent mark on her forehead, a silver-violet layered dress, a moon bow on her back, a moonlight cue",
+      "look": "a moon fairy archer woman of 20 with dark-navy hair in ONE thick braid down her back (no loose hair), pale moonlit skin, a clear silver crescent mark on her forehead, a compact silver-violet archer outfit with a short skirt and arm guards (no long flowing dress), a large moon bow on her back, a moonlight cue",
       "pose": "archer aiming the cue along a moonbeam",
       "expr": "focused gentle look",
       "skills": [
@@ -1694,7 +1694,7 @@
       "sect": "tinhtu",
       "tier": 4,
       "cls": "cuongchien",
-      "look": "a sun war goddess, golden sun-disc armour, red-gold cape, bronze skin, fiery orange hair, a solar spear-like cue",
+      "look": "a sun war goddess, golden sun-disc armour, red-gold cape, bronze skin, fiery orange hair, a solar spear-like cue; must clearly show: deep bronze-brown skin (not fair skin)",
       "pose": "warrior thrusting the spear-cue skyward",
       "expr": "fierce joyful shout",
       "skills": [
@@ -1795,7 +1795,7 @@
       "sect": "kimsa",
       "tier": 2,
       "cls": "hophap",
-      "look": "a living lion-headed sandstone tomb guardian statue with turquoise inlays and glowing golden runes, holding an obelisk-shaped cue",
+      "look": "a living lion-headed tomb guardian STATUE carved entirely from sandstone (no fur, no soft hair, no skin): a planar carved stone lion face, a rigid geometric carved mane, weathered cracks and chipped edges, turquoise inlays, faint golden runes, massive block-like stone shoulders and body, holding an obelisk-shaped cue",
       "pose": "guardian standing firm with the obelisk-cue",
       "expr": "stoic glowing eyes",
       "skills": [
@@ -1829,7 +1829,7 @@
       "sect": "kimsa",
       "tier": 3,
       "cls": "chusu",
-      "look": "an elderly bald sun priest, a thin old man with a long grey goatee and a full golden eye-mask covering the upper half of his face, white-gold linen robes, a turquoise collar, a sun-disc staff cue",
+      "look": "an elderly bald sun priest, a thin old man with a long grey goatee and a full golden eye-mask covering the upper half of his face, white-gold linen robes, a turquoise collar, a sun-disc staff cue; must clearly show: a completely bald head with no hair at all, and only a long thin grey goatee on the chin (no moustache, no full beard)",
       "pose": "hexer raising the sun-disc cue",
       "expr": "masked solemn",
       "skills": [
@@ -1964,7 +1964,7 @@
       "sect": "vanthu",
       "tier": 2,
       "cls": "anhsat",
-      "look": "a fierce jungle huntress with leopard ears and tail, spotted fur wraps, green war paint, a spear-like cue",
+      "look": "a fierce jungle huntress with leopard ears and tail, spotted fur wraps, green war paint, a spear-like cue; must clearly show: a cue shaped like a hunting spear with a stone spear-head tip",
       "pose": "assassin crouched ready to pounce",
       "expr": "predatory grin",
       "skills": [
@@ -2032,7 +2032,7 @@
       "sect": "vanthu",
       "tier": 4,
       "cls": "thanxa",
-      "look": "a thunder-eagle birdman king, broad feathered wings, amber-and-green plumage, lightning crackling around him, a cue like a lightning rod",
+      "look": "a thunder-eagle birdman king, broad feathered wings, amber-and-green plumage, lightning crackling around him, a cue like a lightning rod; must clearly show: both wings complete and inside the frame",
       "pose": "archer diving with the cue aimed",
       "expr": "piercing glare",
       "skills": [
@@ -2066,7 +2066,7 @@
       "sect": "vanthu",
       "tier": 5,
       "cls": "chusu",
-      "look": "the great tree mother, a tall serene woman with bark-textured green skin and hair made of leafy branches with small white flowers, a green dragon coiled around her shoulders, amber eyes, a cue grown from living wood",
+      "look": "the great tree mother, a tall serene woman with bark-textured green skin and hair made of leafy branches with small white flowers, a green dragon coiled around her shoulders, amber eyes, a cue grown from living wood; must clearly show: hair made of leafy branches (not hair), bark-textured green skin on face and arms, and the green dragon coiled on her shoulders",
       "pose": "hexer raising both arms, vines rising",
       "expr": "gentle but powerful",
       "skills": [
@@ -2100,7 +2100,7 @@
       "sect": "hukhong",
       "tier": 1,
       "cls": "anhsat",
-      "look": "a small void bug creature with a purple carapace, glowing magenta eyes, many little legs, cute but creepy, a stinger-tipped cue",
+      "look": "a small low-slung void beetle, about knee-high and cute but creepy, a smooth rounded violet shell with no spikes, two oversized round magenta eyes, six short jointed legs, tiny mandibles, a split fan-shaped tail, holding a slender stinger-tipped cue",
       "pose": "assassin skittering forward",
       "expr": "chittering cute",
       "skills": [
@@ -2134,7 +2134,7 @@
       "sect": "hukhong",
       "tier": 2,
       "cls": "cuongchien",
-      "look": "a big void beast with a gaping fanged maw on its belly, purple spikes, magenta glow, holding a bone cue",
+      "look": "a big void beast with a gaping fanged maw on its belly, purple spikes, magenta glow, holding a bone cue; must clearly show: a separate beast head with small eyes, and the fanged maw on its belly (not on the head)",
       "pose": "warrior roaring with the belly maw open",
       "expr": "hungry roar",
       "skills": [
@@ -2168,7 +2168,7 @@
       "sect": "hukhong",
       "tier": 3,
       "cls": "luanhoi",
-      "look": "a faceless wanderer in a deep purple cloak, a smooth mask showing a starry void, floating above the ground, a cue fading into nothing",
+      "look": "a faceless wanderer in a deep purple cloak, a smooth mask showing a starry void, floating above the ground, a cue fading into nothing; must clearly show: no facial features at all, only the smooth starry void mask",
       "pose": "time-mage floating, cue dissolving into particles",
       "expr": "no face, void mask",
       "skills": [
@@ -2202,7 +2202,7 @@
       "sect": "hukhong",
       "tier": 4,
       "cls": "chusu",
-      "look": "the void broodmother queen, an insectoid woman with violet chitin plates on her skin, a short black bob, three glowing eyes on her forehead, long antennae, a purple chitin armour-gown, translucent wings, a sceptre cue",
+      "look": "the void broodmother queen, an insectoid woman with violet chitin plates on her skin, a short black bob, three glowing eyes on her forehead, long antennae, a purple chitin armour-gown, translucent wings, a sceptre cue; must clearly show: THREE separate glowing eyes in a row on her forehead (eyes, not a gem)",
       "pose": "hexer commanding with the sceptre",
       "expr": "cold imperious smile",
       "skills": [
@@ -2236,7 +2236,7 @@
       "sect": "hukhong",
       "tier": 5,
       "cls": "cuongchien",
-      "look": "the sky-devouring void titan, enormous purple demon with a cosmic maw, cracks of magenta light across its body, curved horns, a cue like a black spike",
+      "look": "the sky-devouring void titan, an enormous broad-shouldered monolithic demon built like a mountain, a SMALL horned head sunk between huge shoulders, heavy slab-like dark purple armour plates, ONE vast cosmic maw across its whole torso showing stars inside, only a few thin magenta fissures, heavy pillar-like legs, no spikes on the back, a cue like a black stone spike",
       "pose": "warrior towering, maw open, cue raised",
       "expr": "devouring roar",
       "skills": [
@@ -2303,7 +2303,7 @@
       "name": "Tử Trinh",
       "tier": 2,
       "cls": "chusu",
-      "look": "a sultry perfumer, a woman around 26 with a voluptuous figure, wavy violet hair over one shoulder, half-lidded lilac eyes, a beauty mark under her eye, a plunging violet silk qipao with a high thigh slit, a smoking perfume censer at her hip, a thin violet cue",
+      "look": "a sultry perfumer, a woman around 26 with a voluptuous figure, wavy violet hair over one shoulder, half-lidded lilac eyes, a beauty mark under her eye, a plunging violet silk qipao with a high thigh slit, a smoking perfume censer at her hip, a thin violet cue; must clearly show: a small beauty mark under her eye and wavy violet hair draped over one shoulder",
       "pose": "leaning back gracefully, blowing a stream of violet perfume smoke",
       "expr": "knowing seductive smile",
       "skills": [
@@ -2337,7 +2337,7 @@
       "name": "Ngân Cầm",
       "tier": 3,
       "cls": "phaptu",
-      "look": "the most captivating courtesan musician of the pavilion, a woman around 25 with a slender upper body and a modest small bust, a narrow waist flaring into full, round, shapely hips and a curvy rear (an elegant pear-shaped figure), platinum-white hair in a loose ornate updo with white peonies and a few strands falling across her face, half-lidded silver-grey eyes with a teasing knowing look, full glossy lips, gold drop earrings, a form-fitting high-necked white-and-gold silk gown that hugs her hips, with a high side slit and a long sheer train, a guzheng zither slung on her back, an ivory cue painted with a crane",
+      "look": "the most captivating courtesan musician of the pavilion, a woman around 25 with a slender upper body and a modest small bust, a narrow waist flaring into full, round, shapely hips and a curvy rear (an elegant pear-shaped figure), platinum-white hair in a loose ornate updo with white peonies and a few strands falling across her face, half-lidded silver-grey eyes with a teasing knowing look, full glossy lips, gold drop earrings, a form-fitting white-and-gold silk gown with bare shoulders and a low open back that hugs her hips, with a high side slit and a long sheer train, a guzheng zither slung on her back, an ivory cue painted with a crane; must clearly show: silver-grey eyes and the guzheng zither on her back",
       "pose": "standing in a three-quarter back view with her weight on one leg and her hip cocked to the side, looking back over her shoulder with a teasing smile, one hand lifting the sheer train of her gown, the ivory cue held behind her at the small of her back, so the curve of her waist, hips and rear draws the silhouette",
       "expr": "sultry teasing half-smile, half-lidded silver-grey eyes glancing sideways",
       "skills": [
@@ -2371,7 +2371,7 @@
       "name": "Kim Phượng",
       "tier": 4,
       "cls": "cuongchien",
-      "look": "a fierce fan-blade duelist, an athletic woman around 28 with fiery golden-orange hair in a long braid, golden eyes, a golden phoenix hair crown, a red-and-gold armoured bodice with bare arms, two steel war fans at her belt, a cue with a phoenix-tail butt",
+      "look": "a fierce fan-blade duelist, an athletic woman around 28 with golden-orange hair in ONE thick braid hanging over her shoulder (no loose flowing hair, no sun halo, no crown), a low phoenix comb at the back of her head, golden eyes, compact crimson-lacquer and steel-silver armour over a short split coat (little gold, few ribbons), bare toned arms, two broad steel war fans as her signature weapons, a cue with a phoenix-tail butt",
       "pose": "lunging with the cue like a spear, a war fan snapped open in the other hand",
       "expr": "fierce confident grin",
       "skills": [
@@ -2405,7 +2405,7 @@
       "name": "Mị Cơ Các Chủ",
       "tier": 5,
       "cls": "luanhoi",
-      "look": "the pavilion mistress, a breathtaking mature woman around 32 with a voluptuous figure, very long wavy rose-pink hair, golden eyes, an ornate gold-and-pearl headdress, a deep red silk gown with a sheer gold-embroidered shawl slipping off her shoulders, a golden folding fan, a ruby-tipped cue",
+      "look": "the pavilion mistress, a breathtaking mature woman around 32 with a voluptuous figure, very long wavy rose-pink hair, golden eyes, an ornate gold-and-pearl headdress, a deep red silk gown with a sheer gold-embroidered shawl slipping off her shoulders, a golden folding fan, a ruby-tipped cue; must clearly show: golden eyes",
       "pose": "standing regally, half-hiding her face behind the open fan, cue held loosely",
       "expr": "captivating confident smile",
       "skills": [
