@@ -303,7 +303,8 @@ function setupScreen(app: App, local: boolean): Screen {
 
   function start() {
     // AI opponents: a champion whose tier fits the level, with a cue from their own sect.
-    const pool = CHAMPIONS.filter((c) => (local ? app.profile.champions.includes(c.id) && c.id !== me.id : Math.abs(c.tier - (st.level + 1)) <= 1));
+    // Never the player's own champion: no mirror matches.
+    const pool = CHAMPIONS.filter((c) => c.id !== me.id && (local ? app.profile.champions.includes(c.id) : Math.abs(c.tier - (st.level + 1)) <= 1));
     const foe = pool[Math.floor(Math.random() * pool.length)] ?? CHAMPIONS[1];
     const foeCue = local ? app.cue : CUES.find((c) => c.id === `${foe.sect}-${st.level >= 3 ? 'b' : 'a'}`) ?? CUES[0];
     const p1 = { name: app.profile.name, kind: 'human' as const, cue: app.cue, champion: me.id };
@@ -408,12 +409,18 @@ const tableOf = (n: Npc): TableSkin => TABLES.find((t) => t.id === n.sect) ?? TA
 
 function startCareer(app: App, n: Npc) {
   const cue = CUES.find((c) => c.id === n.cueId) ?? CUES[0];
+  // Facing the master you chose as your own champion: play this match with another champion instead.
+  let mine = app.profile.champion;
+  if (mine === n.id) {
+    mine = app.profile.champions.find((id) => id !== n.id) ?? CHAMPIONS.find((c) => c.id !== n.id)!.id;
+    toast(`Trận này ${champion(mine).name} ra trận thay — không ai đấu với chính mình`, 'gold');
+  }
   const launch = matchScreen({
     setup: {
       mode: n.mode, raceTo: n.raceTo, mutator: n.mutator, tableSkin: tableOf(n), caromTarget: n.caromTarget,
       firstBreaker: 0,
       players: [
-        { name: app.profile.name, kind: 'human', cue: app.cue, champion: app.profile.champion },
+        { name: app.profile.name, kind: 'human', cue: app.cue, champion: mine },
         { name: n.name, kind: 'ai', ai: { level: n.level, personality: n.personality }, cue, champion: n.id },
       ],
     },
