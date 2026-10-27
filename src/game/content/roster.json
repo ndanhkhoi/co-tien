@@ -342,7 +342,7 @@
       "sect": "thienquang",
       "tier": 4,
       "cls": "cuongchien",
-      "look": "a stern woman around 28 with tanned skin, a SHORT ash-blonde undercut: the left temple visibly shaved and a short crest of hair on top (no long hair), a deep vertical scar running through her left eye, angular white-and-gold battle armour with golden pauldrons, a single crimson sash, a broad greatsword-like cue",
+      "look": "a stern woman around 28 with tanned skin, a SHORT ash-blonde undercut: the left temple visibly shaved and a short crest of hair on top (no long hair), a deep vertical scar running through her left eye, angular white-and-gold battle armour with golden pauldrons, a single crimson sash, a broad greatsword-like cue; also clearly: a deep vertical scar through her LEFT eye and the LEFT temple shaved",
       "pose": "warrior swinging the cue in a wide arc",
       "expr": "fierce confident smirk",
       "skills": [
@@ -544,7 +544,7 @@
       "sect": "huyetsat",
       "tier": 5,
       "cls": "luanhoi",
-      "look": "the demon lord, a tall pale man with sharp masculine features and a strong jaw, short slicked-back black hair, two curved crimson horns, layered black-and-red robes trailing shadow flames, violet-red eyes, an obsidian cue crackling with dark lightning; must clearly show: short hair slicked straight back off the forehead (no fringe, no bangs)",
+      "look": "the demon lord, a tall pale man with sharp masculine features and a strong jaw, short slicked-back black hair, two curved crimson horns, layered black-and-red robes trailing shadow flames, violet-red eyes, an obsidian cue crackling with dark lightning; must clearly show: short hair slicked straight back off the forehead (no fringe, no bangs); also clearly: no loose strands on the forehead",
       "pose": "time-mage weaving dark energy, cue raised",
       "expr": "cold arrogant smile",
       "skills": [
@@ -815,7 +815,7 @@
       "sect": "bangphach",
       "tier": 3,
       "cls": "phaptu",
-      "look": "an elegant fairy maiden woman of 20 with very long straight jet-black hair and a straight fringe, ice-blue eyes, a single ice-lotus crystal hairpin, flowing white and pale-blue layered hanfu with sheer ribbons, slender crystal cue with a lotus tip; must clearly show: sleek perfectly straight hair (no waves) with a blunt straight-cut fringe",
+      "look": "an elegant fairy maiden woman of 20 with very long straight jet-black hair and a straight fringe, ice-blue eyes, a single ice-lotus crystal hairpin, flowing white and pale-blue layered hanfu with sheer ribbons, slender crystal cue with a lotus tip; must clearly show: sleek perfectly straight hair (no waves) with a blunt straight-cut fringe; also clearly: completely straight hair with no waves at all",
       "pose": "mage casting, one hand weaving a swirl of frost petals, cue held vertically",
       "expr": "gentle serene smile",
       "skills": [
@@ -1220,7 +1220,7 @@
       "sect": "docvu",
       "tier": 5,
       "cls": "luanhoi",
-      "look": "the ghost-doctor queen, a severe mature woman physician around 45 with angular features and fine lines, black hair pinned into a tight high coil (no loose long hair, no hood), a LARGE ivory beaked plague-doctor mask raised on top of her head, structured high-collared emerald-and-black physician robes, round spectacles, a rectangular lacquered medicine case on her back with an orderly rack of herb vials, a cue like a long silver acupuncture needle",
+      "look": "the ghost-doctor queen, a severe mature woman physician around 45 with angular features and fine lines, black hair pinned into a tight high coil (no loose long hair, no hood), a LARGE ivory beaked plague-doctor mask raised on top of her head, structured high-collared emerald-and-black physician robes, round spectacles, a rectangular lacquered medicine case on her back with an orderly rack of herb vials, a cue like a long silver acupuncture needle; also clearly: a clearly middle-aged face with visible fine lines around the eyes and mouth",
       "pose": "time-mage holding a glowing vial aloft",
       "expr": "knowing smirk",
       "skills": [
@@ -1254,7 +1254,7 @@
       "sect": "hailong",
       "tier": 1,
       "cls": "anhsat",
-      "look": "a tiny agile 14-year-old pirate girl with dark tanned skin, short messy sea-green hair, a leather eyepatch, a gap-tooth grin, an orange bandana, a striped teal shirt, a parrot on her shoulder, a fish-shaped cue; must clearly show: a plain brown leather eyepatch and a visible gap between her front teeth (no fangs)",
+      "look": "a tiny agile 14-year-old pirate girl with dark tanned skin, short messy sea-green hair, a leather eyepatch, a gap-tooth grin, an orange bandana, a striped teal shirt, a parrot on her shoulder, a fish-shaped cue; must clearly show: a plain brown leather eyepatch and a visible gap between her front teeth (no fangs); also clearly: a visible gap between her two front teeth when she grins",
       "pose": "assassin leaping with the cue",
       "expr": "cocky grin",
       "skills": [
@@ -1559,7 +1559,7 @@
       "sect": "uminh",
       "tier": 5,
       "cls": "cuongchien",
-      "look": "the underworld emperor, a towering mature ghost king (a man around 50) with a broad square masculine jaw and a short black beard, stern glowing jade eyes, upright jade flames instead of hair, a tall bone crown, heavy rectangular black-and-jade plate armour, a straight spectral mantle, a cue like a great bone sceptre",
+      "look": "the underworld emperor, a towering mature ghost king (a man around 50) with a broad square masculine jaw and a short black beard, stern glowing jade eyes, upright jade flames instead of hair, a tall bone crown, heavy rectangular black-and-jade plate armour, a straight spectral mantle, a cue like a great bone sceptre; also clearly: upright jade-green FLAMES instead of hair (no black hair)",
       "pose": "warrior slamming the sceptre-cue down",
       "expr": "menacing laugh",
       "skills": [
@@ -2032,7 +2032,7 @@
       "sect": "vanthu",
       "tier": 4,
       "cls": "thanxa",
-      "look": "a thunder-eagle birdman king, broad feathered wings, amber-and-green plumage, lightning crackling around him, a cue like a lightning rod; must clearly show: both wings complete and inside the frame",
+      "look": "a thunder-eagle birdman king, broad feathered wings, amber-and-green plumage, lightning crackling around him, a cue like a lightning rod; must clearly show: both wings complete and inside the frame; also clearly: the head of an EAGLE (hooked beak, feathered eagle head, NO human face)",
       "pose": "archer diving with the cue aimed",
       "expr": "piercing glare",
       "skills": [
@@ -2202,7 +2202,7 @@
       "sect": "hukhong",
       "tier": 4,
       "cls": "chusu",
-      "look": "the void broodmother queen, an insectoid woman with violet chitin plates on her skin, a short black bob, three glowing eyes on her forehead, long antennae, a purple chitin armour-gown, translucent wings, a sceptre cue; must clearly show: THREE separate glowing eyes in a row on her forehead (eyes, not a gem)",
+      "look": "the void broodmother queen, an insectoid woman with violet chitin plates on her skin, a short black bob, three glowing eyes on her forehead, long antennae, a purple chitin armour-gown, translucent wings, a sceptre cue; must clearly show: THREE separate glowing eyes in a row on her forehead (eyes, not a gem); also clearly: the three forehead eyes side by side in one straight horizontal row",
       "pose": "hexer commanding with the sceptre",
       "expr": "cold imperious smile",
       "skills": [
@@ -2236,7 +2236,7 @@
       "sect": "hukhong",
       "tier": 5,
       "cls": "cuongchien",
-      "look": "the sky-devouring void titan, an enormous broad-shouldered monolithic demon built like a mountain, a SMALL horned head sunk between huge shoulders, heavy slab-like dark purple armour plates, ONE vast cosmic maw across its whole torso showing stars inside, only a few thin magenta fissures, heavy pillar-like legs, no spikes on the back, a cue like a black stone spike",
+      "look": "the sky-devouring void titan, an enormous broad-shouldered monolithic demon built like a mountain, a SMALL horned head sunk between huge shoulders, heavy slab-like dark purple armour plates, ONE vast cosmic maw across its whole torso showing stars inside, only a few thin magenta fissures, heavy pillar-like legs, no spikes on the back, a cue like a black stone spike; also clearly: a smooth monolithic silhouette with almost no spikes and only a few magenta cracks",
       "pose": "warrior towering, maw open, cue raised",
       "expr": "devouring roar",
       "skills": [
@@ -2371,7 +2371,7 @@
       "name": "Kim Phượng",
       "tier": 4,
       "cls": "cuongchien",
-      "look": "a fierce fan-blade duelist, an athletic woman around 28 with golden-orange hair in ONE thick braid hanging over her shoulder (no loose flowing hair, no sun halo, no crown), a low phoenix comb at the back of her head, golden eyes, compact crimson-lacquer and steel-silver armour over a short split coat (little gold, few ribbons), bare toned arms, two broad steel war fans as her signature weapons, a cue with a phoenix-tail butt",
+      "look": "a fierce fan-blade duelist, an athletic woman around 28 with golden-orange hair in ONE thick braid hanging over her shoulder (no loose flowing hair, no sun halo, no crown), a low phoenix comb at the back of her head, golden eyes, compact crimson-lacquer and steel-silver armour over a short split coat (little gold, few ribbons), bare toned arms, two broad steel war fans as her signature weapons, a cue with a phoenix-tail butt; also clearly: BOTH steel war fans clearly visible, one in each hand, and few ribbons",
       "pose": "lunging with the cue like a spear, a war fan snapped open in the other hand",
       "expr": "fierce confident grin",
       "skills": [
