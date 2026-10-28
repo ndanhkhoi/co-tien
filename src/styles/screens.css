@@ -41,6 +41,13 @@
 .topbar > :first-child.tb-title { padding-left: 14px; }
 .tb-extra { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
 .tb-extra:empty { display: none; }
+.topbar.compact-nav { gap: 8px; }
+.topbar.compact-nav .tb-title { flex: 0 1 auto; padding: 8px 26px 10px; margin-right: 0; font-size: 21px; }
+.topbar.compact-nav .tb-extra { flex: 1; min-width: 0; justify-content: center; }
+.topbar.compact-nav .tabs { gap: 2px; padding: 2px; flex-shrink: 0; }
+.topbar.compact-nav .tab { padding-inline: 12px; white-space: nowrap; }
+.nav-caption { flex-shrink: 0; margin: 0 4px; font-size: var(--fs-s); line-height: 1.35; color: var(--ink-2); }
+.coll-note.nav-caption { flex: 0 0 auto; }
 .wallet .ico, .chip.stat .ico { width: 24px; height: 24px; }
 .chip.stat { cursor: default; }
 .chip.stat.accent { background: var(--accent); color: var(--on-accent); border-color: var(--accent); }
@@ -77,8 +84,16 @@
 .badge { font-size: var(--fs-xs); line-height: 1.5; }
 .badge.ok { background: var(--ok); color: var(--on-accent); }
 
-.btn.danger { background: var(--sheet); color: var(--bad); border: 1.5px solid var(--bad); box-shadow: none; }
-.btn.danger.pressed { background: #f6e3de; }
+#ui .btn.danger {
+  background: none;
+  color: var(--bad);
+  border: 14px solid transparent;
+  border-image: url('/art/ui/frame/btn-secondary.webp') 56 fill / 14px / 0 stretch;
+  box-shadow: none;
+  text-shadow: none;
+}
+#ui .btn.danger.small { border-width: 12px; border-image-width: 12px; padding-inline: 10px; }
+#ui .btn.danger.pressed { background: none; filter: brightness(0.9); }
 
 textarea.code-box {
   display: block;
@@ -432,7 +447,7 @@ textarea.code-box:focus { border-color: var(--accent); }
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  min-height: 46px;
+  min-height: max(46px, var(--touch-target, 44px));
   padding: 3px 12px 3px 3px;
   border-radius: 999px;
   border: 1.5px solid var(--line-2);
@@ -440,6 +455,15 @@ textarea.code-box:focus { border-color: var(--accent); }
   font-weight: 700;
 }
 .champ-pill .ico { width: 22px; height: 22px; }
+#ui .settings-col .set-name,
+#ui .settings-col input[type='range'] { min-height: var(--touch-target); }
+#ui .settings-col .switch::before {
+  top: 50%;
+  bottom: auto;
+  height: max(48px, var(--touch-target));
+  min-width: var(--touch-target);
+  transform: translateY(-50%);
+}
 .cp-av { width: 38px; height: 38px; border-radius: 50%; overflow: hidden; }
 
 /* ---------- Profile, champion and opponent sheets ---------- */
@@ -890,3 +914,46 @@ body.vp-rotate .rotate-hint, body.vp-resize .size-hint { display: flex; }
 .screen:not(.game) .tab { min-height: 44px; }
 .vs-side input { min-height: 44px; }
 .ls-body > *, .intro-scroll > * { flex-shrink: 0; }
+
+/* Compact painted skills; descriptions open on their own reading sheet. */
+.champion-skills {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  align-items: center;
+  flex: 1;
+  min-height: 0;
+  padding: 6px 0;
+}
+.champion-skill {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  min-width: 0;
+  min-height: max(64px, calc(44px / var(--ui-scale, 1)));
+  padding: 6px;
+  border: 0;
+  background: var(--sheet);
+  color: var(--ink);
+  font: 700 13px/1.2 var(--display);
+  cursor: pointer;
+}
+.champion-skill img { width: 56px; height: 56px; object-fit: contain; }
+.champion-skill.ult { color: var(--accent-2); }
+.champion-skill.pressed { background: var(--sheet-3); }
+.champion-skill:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.modal.champion-skill-detail {
+  width: min(580px, 100%);
+  max-height: 100%;
+  background: var(--sheet);
+  gap: 12px;
+}
+.champion-skill-heading { display: flex; align-items: center; gap: 12px; padding-right: 44px; }
+.champion-skill-heading img { width: 64px; height: 64px; object-fit: contain; flex-shrink: 0; }
+.champion-skill-heading h2 { margin: 3px 0 0; font-size: 23px; }
+.champion-skill-copy { min-height: 0; background: var(--sheet); }
+.champion-skill-copy p { margin: 0 0 10px; }
+.champion-skill-copy .champion-skill-cost { font-weight: 700; color: var(--accent-2); }
+.champion-skill-detail .actions { flex-shrink: 0; }

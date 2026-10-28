@@ -206,12 +206,6 @@ export function championModal(app: App, c: Champion, onChange?: () => void) {
         close();
         onChange?.();
       });
-    // A full champion page: art on the left; identity, passive and the three skills as cards on the right.
-    const skillCard = (sk: Champion['skills'][number]) => h('div.cp-skill', { class: sk.slot === 2 ? 'ult' : '', style: `--entry-delay:${sk.slot * 60}ms` },
-      h('img.cp-sk-icon', { src: skillIconUrl(c.id, sk.slot), alt: '', loading: 'lazy' }),
-      h('b.cp-sk-name', null, sk.name),
-      h('span.cp-sk-cd', null, sk.slot === 2 ? 'Cần đầy thanh năng lượng' : `Hồi chiêu: ${sk.cooldown} lượt`),
-      h('p.cp-sk-desc', null, sk.desc));
     return h('div.modal.champ-page', { style: `--sect:${hex6(s.main)}` },
       h('div.cp-art', null, h('img', { src: cutoutUrl(c.id), alt: '', draggable: false, decoding: 'async',
         // Wide action poses would shrink to fit the tall column: fill it instead and crop the sides.
@@ -224,7 +218,7 @@ export function championModal(app: App, c: Champion, onChange?: () => void) {
             owned ? h('span.badge.ok', null, 'Đã chiêu mộ') : h('span.badge.accent', null, 'Chưa chiêu mộ')),
           h('p.cp-passive', null, h('b', null, `Nội tại · ${cls.name}: `), cls.passive),
         ),
-        h('div.cp-skills.scroll', null, ...c.skills.map(skillCard)),
+        skillButtons(c),
         h('div.cp-foot', null, btn('Đóng', close, 'ghost'), action),
       ),
       closeX(close),
@@ -232,15 +226,48 @@ export function championModal(app: App, c: Champion, onChange?: () => void) {
   }, { dismissable: true });
 }
 
-/** Skill line with its painted icon, name, cooldown and description. */
-export function skillRow(c: Champion, sk: Champion['skills'][number]): HTMLElement {
-  return h('div.skill-row', { class: sk.slot === 2 ? 'ult' : '', style: `--entry-delay:${sk.slot * 60}ms` },
-    h('img.sk-icon', { src: skillIconUrl(c.id, sk.slot), alt: '', loading: 'lazy' }),
-    h('div.grow', null,
-      h('div.sk-head', null, h('b', null, sk.name), h('span.badge', { class: sk.slot === 2 ? 'accent' : '' }, sk.slot === 2 ? 'Cần đầy thanh năng lượng' : `Hồi chiêu: ${sk.cooldown} lượt`)),
-      h('p', null, sk.desc),
-    ),
-  );
+/** Three painted skill buttons share one detail presentation across champion pages. */
+export function skillButtons(c: Champion): HTMLElement {
+  return h('div.champion-skills', { role: 'group', 'aria-label': 'Chiêu thức · Chạm để xem chi tiết' },
+    ...c.skills.map((sk) => {
+      const label = sk.slot === 2 ? 'Tuyệt chiêu' : `Chiêu ${sk.slot + 1}`;
+      const button = tap(h('button.champion-skill', {
+        type: 'button', class: sk.slot === 2 ? 'ult' : '',
+        'aria-label': `${label} · ${sk.name} · Xem chi tiết`, 'aria-haspopup': 'dialog',
+      },
+      h('img', { src: skillIconUrl(c.id, sk.slot), alt: '', loading: 'lazy' }),
+      h('span', null, label)), () => open());
+      const open = () => {
+        modal((dismiss) => {
+          const close = () => { dismiss(); button.focus(); };
+          const titleId = `skill-detail-${c.id}-${sk.slot}`;
+          const back = btn('Về trang tướng', close, 'ghost');
+          const x = closeX(close);
+          const sheet = h('div.modal.champion-skill-detail', {
+            role: 'dialog', 'aria-modal': 'true', 'aria-labelledby': titleId,
+            onkeydown: (e: KeyboardEvent) => {
+              if (e.key === 'Escape') { e.stopPropagation(); close(); }
+              if (e.key === 'Tab') {
+                e.preventDefault();
+                const controls = [sheet.querySelector<HTMLElement>('.champion-skill-copy')!, back, x];
+                const index = controls.indexOf(document.activeElement as HTMLElement);
+                controls[(index + (e.shiftKey ? -1 : 1) + controls.length) % controls.length].focus();
+              }
+            },
+          },
+          h('div.champion-skill-heading', null,
+            h('img', { src: skillIconUrl(c.id, sk.slot), alt: '' }),
+            h('div', null, h('span.small', null, `${c.name} · ${label}`), h('h2', { id: titleId }, sk.name))),
+          h('div.champion-skill-copy.scroll', { tabindex: '0' },
+            h('p.champion-skill-cost', null, sk.slot === 2 ? 'Cần đầy thanh năng lượng (100 năng lượng)' : `Hồi chiêu: ${sk.cooldown} lượt đánh của chính mình`),
+            h('p', null, sk.desc)),
+          h('div.actions', null, back), x);
+          requestAnimationFrame(() => back.focus());
+          return sheet;
+        }, { dismissable: true, onClose: () => button.focus() });
+      };
+      return button;
+    }));
 }
 
 // ---------- Splash ----------
@@ -600,7 +627,7 @@ export function collectionScreen(app: App): Screen {
   const el = screenEl('collection');
   let tab: CollTab = 'champ';
   const content = h('div.scroll.coll-scroll');
-  const note = h('p.coll-note');
+  const note = h('p.coll-note.nav-caption');
   const lv = app.level;
   const p = app.profile;
   const refreshWallet = () => el.querySelector('.wallet')?.replaceWith(wallet(app));
@@ -664,7 +691,9 @@ export function collectionScreen(app: App): Screen {
     render();
   });
   render();
-  el.append(topbar(app, 'Tàng Các'), h('div.sub-bar', null, bar, note), content);
+  const header = topbar(app, 'Tàng Các', true, bar);
+  header.classList.add('compact-nav');
+  el.append(header, note, content);
   return { el };
 }
 
@@ -696,7 +725,7 @@ export function settingsScreen(app: App): Screen {
     modal((close) => h('div.modal', null,
       h('h2', null, 'Mã sao lưu'),
       h('p', null, 'Giữ mã này ở nơi an toàn. Trên máy khác, vào Cài đặt › Khôi phục và dán mã để lấy lại tiến trình.'),
-      h('textarea.code-box', { readOnly: true, value: code, rows: 4, 'aria-label': 'Mã sao lưu' }),
+      h('textarea.code-box', { readOnly: true, rows: 4, 'aria-label': 'Mã sao lưu' }, code),
       h('div.actions', null, btn('Đóng', close, 'ghost'), btn('Sao chép', () => {
         if (!navigator.clipboard) return toast('Máy không cho chép tự động — hãy chọn và chép mã', 'bad');
         void navigator.clipboard.writeText(code).then(() => toast('Đã chép mã sao lưu', 'good'), () => toast('Không chép được — hãy chọn và chép mã', 'bad'));

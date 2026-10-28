@@ -92,7 +92,7 @@ export class App {
   back() {
     if (document.querySelector('.modal-wrap')) {
       // Close the top modal first.
-      document.querySelectorAll('.modal-wrap').forEach((m, i, all) => i === all.length - 1 && (m.querySelector('.motion-sheet') ? m.dispatchEvent(new Event('motion-close')) : m.remove()));
+      document.querySelectorAll('.modal-wrap').forEach((m, i, all) => i === all.length - 1 && (m.querySelector('.motion-sheet') ? m.dispatchEvent(new Event('motion-close')) : m.dispatchEvent(new Event('modal-back'))));
       return;
     }
     if (this.current?.onBack?.()) return;
@@ -188,7 +188,7 @@ export function turnPage(el: HTMLElement, update: () => void, direction = 1, fad
 }
 
 /** Directional sheets, including backdrop and hardware-back dismissal. */
-export function motionModal(build: (close: () => void) => HTMLElement, opts: { dismissable?: boolean } = {}) {
+export function motionModal(build: (close: () => void) => HTMLElement, opts: { dismissable?: boolean; onClose?: () => void } = {}) {
   let box: HTMLElement;
   let closing = false;
   const close = () => {
@@ -204,7 +204,7 @@ export function motionModal(build: (close: () => void) => HTMLElement, opts: { d
     box = build(close);
     box.classList.add('motion-sheet');
     return box;
-  });
+  }, { onClose: opts.onClose });
   const wrap = box!.parentElement!;
   wrap.addEventListener('motion-close', close);
   if (opts.dismissable) wrap.addEventListener('pointerdown', (e) => { if (e.target === wrap) close(); });

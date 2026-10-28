@@ -62,6 +62,11 @@ export function tap<T extends HTMLElement>(el: T, fn: (e: PointerEvent) => void,
   el.addEventListener('pointerup', (e) => end(e, true));
   el.addEventListener('pointercancel', (e) => end(e, false));
   el.addEventListener('pointerleave', (e) => end(e, false));
+  el.addEventListener('click', (e) => {
+    if (e.detail !== 0 || (el as unknown as HTMLButtonElement).disabled) return;
+    if (opts.sound !== false) sound.tap();
+    fn(e as unknown as PointerEvent);
+  });
   return el;
 }
 
@@ -99,9 +104,16 @@ export function banner(text: string, bad = false) {
   setTimeout(() => b.remove(), 1650);
 }
 
-export function modal(build: (close: () => void) => HTMLElement, opts: { dismissable?: boolean } = {}): () => void {
+export function modal(build: (close: () => void) => HTMLElement, opts: { dismissable?: boolean; onClose?: () => void; backDismissable?: boolean } = {}): () => void {
   const wrap = h('div.modal-wrap');
-  const close = () => wrap.remove();
+  let closed = false;
+  const close = () => {
+    if (closed) return;
+    closed = true;
+    wrap.remove();
+    opts.onClose?.();
+  };
+  wrap.addEventListener('modal-back', () => { if (opts.backDismissable !== false) close(); });
   const box = build(close);
   wrap.append(box);
   if (opts.dismissable) {
@@ -166,5 +178,5 @@ export function chip(label: Child, selected: boolean, fn: () => void, ic?: IconN
 
 /** Scale of the #ui layer (see installUiScale in main.ts): screen px = layout px × uiScale(). */
 export function uiScale(): number {
-  return Number(document.documentElement.style.getPropertyValue('--ui-scale')) || 1;
+  return Number(document.getElementById('ui')?.style.getPropertyValue('--ui-scale')) || 1;
 }

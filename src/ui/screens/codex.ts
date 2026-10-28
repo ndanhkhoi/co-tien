@@ -11,7 +11,7 @@ import { cueStats, tableStats } from '../../game/content/stat-text';
 import { OMEN_INFO } from '../../game/terrain';
 import { motionModal as modal, screenEl, turnPage, type App, type Screen } from '../app';
 import { btn, h, tabs, tap, toast } from '../dom';
-import { champCard, closeX, cueArtEl, hex6, skillRow, statChip, statRows, tablePreview, topbar } from './menus';
+import { champCard, closeX, cueArtEl, hex6, skillButtons, statRows, tablePreview, topbar } from './menus';
 
 /**
  * Cơ Tiên Lục — the world's library. Lands, champions, classes and rules. Champions the
@@ -33,21 +33,24 @@ export function codexScreen(app: App): Screen {
   const content = h('div.scroll.codex-scroll');
   const render = () => {
     content.scrollTop = 0;
-    content.replaceChildren(tab === 'land' ? landList(app) : tab === 'champ' ? champGrid(app) : tab === 'class' ? classList() : rulesPage());
+    content.replaceChildren(
+      tab === 'land' ? landList(app) : tab === 'champ'
+        ? h('div.col', null, h('div.section-title', null, `Tướng · đã khám phá ${discovered}/${CHAMPIONS.length}`), champGrid(app))
+        : tab === 'class' ? classList() : rulesPage(),
+    );
   };
-  el.append(
-    topbar(app, 'Cơ Tiên Lục', true, statChip('codex', `${discovered}/${CHAMPIONS.length}`, `Đã khám phá ${discovered}/${CHAMPIONS.length} tướng`)),
-    h('div.sub-bar', null, tabs<Tab>([
-      { id: 'land', label: 'Vùng đất', icon: 'journey' }, { id: 'champ', label: 'Tướng', icon: 'users' },
-      { id: 'class', label: 'Hệ', icon: 'shield' }, { id: 'rules', label: 'Luật chơi', icon: 'scroll' },
-    ], tab, (v) => {
-      const order: Tab[] = ['land', 'champ', 'class', 'rules'];
-      const direction = order.indexOf(v) > order.indexOf(tab) ? 1 : -1;
-      tab = v;
-      turnPage(content, render, direction);
-    })),
-    content,
-  );
+  const bar = tabs<Tab>([
+    { id: 'land', label: 'Vùng đất', icon: 'journey' }, { id: 'champ', label: 'Tướng', icon: 'users' },
+    { id: 'class', label: 'Hệ', icon: 'shield' }, { id: 'rules', label: 'Luật chơi', icon: 'scroll' },
+  ], tab, (v) => {
+    const order: Tab[] = ['land', 'champ', 'class', 'rules'];
+    const direction = order.indexOf(v) > order.indexOf(tab) ? 1 : -1;
+    tab = v;
+    turnPage(content, render, direction);
+  });
+  const header = topbar(app, 'Cơ Tiên Lục', true, bar);
+  header.classList.add('compact-nav');
+  el.append(header, content);
   render();
   return { el };
 }
@@ -139,7 +142,7 @@ function champPage(app: App, c: Champion, page?: DetailPage, direction = 1) {
     h('h3.section-title', null, 'Nội tại'),
     h('div.cm-passive', null, h('b', null, cls.name), h('p', null, cls.passive)),
     h('h3.section-title', null, 'Chiêu thức'),
-    ...c.skills.map((sk) => skillRow(c, sk)),
+    skillButtons(c),
     h('h3.section-title', null, 'Tranh'),
     gallery,
     h('div.actions', null, ...detailButtons(index, entries.length, navigate), btn('Đóng', close, 'ghost')),

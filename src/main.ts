@@ -100,7 +100,7 @@ function installUiScale() {
     ui.style.width = `${width / s}px`;
     ui.style.height = `${height / s}px`;
     ui.style.transform = s === 1 ? '' : `scale(${s})`;
-    document.documentElement.style.setProperty('--ui-scale', String(s));
+    ui.style.setProperty('--ui-scale', String(s));
   };
   new ResizeObserver(apply).observe(viewport);
   addEventListener('resize', apply);

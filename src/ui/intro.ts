@@ -28,6 +28,7 @@ export function showIntro(app: App, onDone?: () => void) {
     const text = h('p.intro-text');
     const copy = h('div.intro-copy', null, title, text);
     const count = h('span.intro-count.num');
+    const scroll = h('div.intro-scroll.scroll', { tabindex: '0' }, copy);
     const dots = h('div.intro-dots', { 'aria-hidden': 'true' }, ...pages.map(() => h('i')));
     const next = btn('Tiếp', () => go(i + 1));
     const finish = () => {
@@ -43,7 +44,7 @@ export function showIntro(app: App, onDone?: () => void) {
       const direction = n >= i ? 1 : -1;
       i = n;
       turnPage(img, () => { img.src = base + pages[i].img; }, direction, true);
-      turnPage(copy, () => { title.textContent = pages[i].title; text.textContent = pages[i].text; }, direction);
+      turnPage(copy, () => { title.textContent = pages[i].title; text.textContent = pages[i].text; scroll.scrollTop = 0; }, direction);
       prev.disabled = i === 0;
       count.textContent = `${i + 1}/${pages.length}`;
       [...dots.children].forEach((d, k) => d.classList.toggle('on', k === i));
@@ -52,8 +53,8 @@ export function showIntro(app: App, onDone?: () => void) {
     go(0);
     const panel = h('div.modal.intro', null,
       h('div.intro-art', null, img),
-      h('div.intro-body', null, h('div.intro-scroll.scroll', null, count, copy),
-        h('div.intro-foot', null, dots, h('div.intro-actions', null, btn('Bỏ qua', finish, 'ghost'), prev, next))));
+      h('div.intro-body', null, h('div.intro-progress', null, count, dots), scroll,
+        h('div.intro-foot', null, h('div.intro-actions', null, btn('Bỏ qua', finish, 'ghost'), prev, next))));
     let start: { x: number; y: number } | null = null;
     panel.addEventListener('pointerdown', (e) => { start = { x: e.clientX, y: e.clientY }; });
     panel.addEventListener('pointercancel', () => { start = null; });

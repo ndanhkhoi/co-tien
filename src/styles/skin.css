@@ -96,11 +96,12 @@
   flex: 1;
   min-height: 0;
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   grid-auto-rows: 1fr;
   gap: 6px;
 }
 .home-tablet {
+  min-width: 0;
   min-height: 0;
   display: flex;
   flex-direction: column;
@@ -116,8 +117,8 @@
 .home-tablet.pressed { transform: scale(0.96); }
 .ht-icon { display: grid; place-items: center; height: 46px; }
 .ht-icon .ico { width: 44px; height: 44px; }
-.ht-name { font: 700 16px/1.15 var(--display); color: var(--ink); white-space: nowrap; }
-.ht-sub { font-size: 12.5px; line-height: 1.2; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
+.ht-name { max-width: 100%; font: 700 16px/1.15 var(--display); color: var(--ink); white-space: normal; text-align: center; }
+.ht-sub { font-size: 12.5px; line-height: 1.2; color: var(--muted); white-space: normal; text-align: center; max-width: 100%; }
 .player-card { border: 2px solid var(--ink); }
 
 /* Champion kind badges: ink seals, one tint per kind. */
@@ -159,14 +160,14 @@
 .vs-cut.me { left: -4%; object-position: left bottom; }
 .vs-cut.foe { right: -4%; object-position: right bottom; transform: scaleX(-1); }
 .vs-stage .vs-seal { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%) rotate(-6deg); z-index: 2; }
-.vs-plates { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
-.vs-plates .vs-side { min-height: 52px; padding: 6px 10px; background: var(--ink); color: var(--sheet); border-radius: var(--r-1); }
+.vs-plates { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; min-width: 0; }
+.vs-plates .vs-side { min-width: 0; min-height: max(52px, calc(44px / var(--ui-scale, 1))); padding: 6px 10px; background: var(--ink); color: var(--sheet); border-radius: var(--r-1); }
 .vs-plates .vs-side.foe { text-align: right; justify-content: flex-end; }
 .vs-plates .vs-name { color: #fbf6ec; font-size: 15px; display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .vs-plates .vs-sub { color: #d8cfbf; font-size: 12.5px; display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .vs-plates .vs-text { min-width: 0; flex: 1; }
 .vs-plates .vs-edit .ico { filter: brightness(0) invert(1); width: 20px; height: 20px; }
-.vs-plates input { min-height: 34px; padding: 0 8px; font-size: 14px; background: var(--sheet); color: var(--ink); }
+.vs-plates input { min-width: 0; max-width: 100%; min-height: max(34px, calc(44px / var(--ui-scale, 1))); padding: 0 8px; font-size: 14px; background: var(--sheet); color: var(--ink); }
 .versus > .btn { flex-shrink: 0; }
 .setup-opts .chip { min-height: 36px; padding: 0 9px; font-size: 13px; }
 .setup-opts .chips { gap: 4px; flex-wrap: nowrap; }
@@ -295,10 +296,16 @@
 .champ-page .cp-sk-icon { width: 34px; height: 34px; }
 .champ-page .cp-skill { gap: 1px; }
 
-/* First-run intro: dots on the left, two equal painted buttons on the right. */
-.intro-foot { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
-.intro-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; width: min(300px, 64%); }
-.intro-actions .btn { width: 100%; min-height: 52px; height: 52px; padding: 0 6px; font-size: 16px; }
+/* Keep navigation in one row so the introduction has room for its copy. */
+.modal.intro { grid-template-columns: minmax(0, 38%) minmax(0, 1fr); }
+.intro-body { min-width: 0; gap: 8px; padding: 12px 16px; }
+.intro-progress { display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-shrink: 0; }
+.intro-scroll { overflow-x: hidden; }
+.intro h2 { font-size: 22px; }
+.intro .intro-text { margin: 0; font: 400 16px/1.5 var(--body) !important; }
+.intro-foot { display: block; }
+.intro-actions { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; width: 100%; }
+.intro-actions .btn { width: 100%; min-width: 0; min-height: max(44px, calc(44px / var(--ui-scale, 1))); height: auto; padding: 0 4px; font-size: 15px; }
 
 /* Collection: five cards always fill the sect row. */
 .collection .cc-grid, .sect-group .cc-grid { grid-template-columns: repeat(5, minmax(0, 1fr)); }
@@ -375,7 +382,7 @@
 @keyframes ct-duel-foe { from { opacity: 0; translate: 60px 0; } to { opacity: 1; translate: 0 0; } }
 .vs-stage .vs-seal { animation: ct-seal-stamp 240ms 660ms var(--ease) both; }
 @keyframes ct-seal-stamp { from { opacity: 0; scale: 1.6; } to { opacity: 1; scale: 1; } }
-.intro-actions .btn { min-height: 44px; }
+
 @media (prefers-reduced-motion: reduce) {
   .screen, .screen.out, .motion-sheet, .home-hero, .cp-art img,
   .codex-champ .cc-cut img, .cp-skill, .skill-row, .champ-card,
@@ -387,43 +394,23 @@
 .pm-av img { animation: ct-art-rise 360ms var(--ease) both; }
 @media (prefers-reduced-motion: reduce) { .pm-av img { animation: none; } }
 
-/* ===== Duel and hero entrances, hand-tuned =====
- * Duel: the stage washes in like ink on wet paper, each champion is brushed in from their side
- * (clip reveal + travel + motion blur settling), the seal slams down with a small stage shake,
- * then the name plates rise. Total ≈ 1 s. */
-.vs-stage { animation: ct-stage-wash 420ms ease-out both; }
-@keyframes ct-stage-wash { from { clip-path: circle(0% at 50% 55%); } to { clip-path: circle(80% at 50% 55%); } }
-.vs-cut.me { animation: ct-brush-me 640ms 120ms cubic-bezier(0.16, 1, 0.3, 1) both; }
-.vs-cut.foe { animation: ct-brush-foe 640ms 260ms cubic-bezier(0.16, 1, 0.3, 1) both; }
-@keyframes ct-brush-me {
-  0% { clip-path: inset(0 100% 0 0); translate: -90px 0; filter: blur(6px) drop-shadow(0 6px 10px rgba(40, 30, 18, 0.3)); }
-  55% { clip-path: inset(0 0 0 0); filter: blur(0) drop-shadow(0 6px 10px rgba(40, 30, 18, 0.3)); }
-  100% { clip-path: inset(0 0 0 0); translate: 0 0; filter: blur(0) drop-shadow(0 6px 10px rgba(40, 30, 18, 0.3)); }
+/* Keep transparent champion art on a simple compositing layer on iOS.
+ * Combining animated blur and clip-path on large WebP cut-outs can produce opaque tiles. */
+.vs-cut.me { animation: ct-champion-left 520ms 80ms var(--ease) backwards; }
+.vs-cut.foe { animation: ct-champion-right 520ms 160ms var(--ease) backwards; }
+.home-hero { animation: ct-champion-right 580ms 60ms var(--ease) backwards; filter: none; }
+@keyframes ct-champion-left {
+  from { opacity: 0; translate: -28px 0; }
+  to { opacity: 1; translate: 0 0; }
 }
-@keyframes ct-brush-foe {
-  0% { clip-path: inset(0 100% 0 0); translate: 90px 0; filter: blur(6px) drop-shadow(0 6px 10px rgba(40, 30, 18, 0.3)); }
-  55% { clip-path: inset(0 0 0 0); filter: blur(0) drop-shadow(0 6px 10px rgba(40, 30, 18, 0.3)); }
-  100% { clip-path: inset(0 0 0 0); translate: 0 0; filter: blur(0) drop-shadow(0 6px 10px rgba(40, 30, 18, 0.3)); }
+@keyframes ct-champion-right {
+  from { opacity: 0; translate: 28px 0; }
+  to { opacity: 1; translate: 0 0; }
 }
-.vs-stage .vs-seal { animation: ct-seal-slam 300ms 820ms cubic-bezier(0.3, 1.4, 0.5, 1) both; }
-@keyframes ct-seal-slam {
-  0% { opacity: 0; scale: 2.6; rotate: -22deg; }
-  70% { opacity: 1; scale: 0.92; rotate: -4deg; }
-  100% { opacity: 1; scale: 1; rotate: 0deg; }
-}
-.versus { animation: ct-shake 220ms 1020ms linear both; }
-@keyframes ct-shake { 0%, 100% { translate: 0 0; } 25% { translate: -3px 1px; } 50% { translate: 3px -1px; } 75% { translate: -2px 0; } }
-.vs-plates .vs-side { animation: ct-plate-up 360ms 900ms var(--ease) both; }
-.vs-plates .vs-side.foe { animation-delay: 980ms; }
-@keyframes ct-plate-up { from { opacity: 0; translate: 0 14px; } to { opacity: 1; translate: 0 0; } }
+.vs-stage .vs-seal { animation: ct-seal-stamp 240ms 560ms var(--ease) backwards; }
+.vs-plates .vs-side { animation: ct-art-rise 280ms 620ms var(--ease) backwards; }
+.vs-plates .vs-side.foe { animation-delay: 680ms; }
 
-/* Home hero: brushed in from the right edge. */
-.home-hero { animation: ct-hero-brush 700ms 80ms cubic-bezier(0.16, 1, 0.3, 1) both; }
-@keyframes ct-hero-brush {
-  0% { clip-path: inset(0 0 0 100%); translate: 70px 0; filter: blur(5px) drop-shadow(0 10px 22px rgba(40, 30, 18, 0.25)); }
-  60% { clip-path: inset(0 0 0 0); filter: blur(0) drop-shadow(0 10px 22px rgba(40, 30, 18, 0.25)); }
-  100% { clip-path: inset(0 0 0 0); translate: 0 0; filter: blur(0) drop-shadow(0 10px 22px rgba(40, 30, 18, 0.25)); }
-}
 /* Home tablets drop in one after another. */
 .home-journey, .home-tablet { animation: ct-tile-in 380ms var(--ease) both; }
 .home-journey { animation-delay: 60ms; }

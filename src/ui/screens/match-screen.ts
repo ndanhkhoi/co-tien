@@ -106,12 +106,14 @@ export function matchScreen(opts: MatchOptions) {
     let strikePress: { id: number; t0: number } | null = null;
     let strikeT = 0;
     let strikePull = 0;
-    /** Ball in hand: the player moves the cue ball, then confirms with ĐẶT BI before aiming. */
+    /** Ball in hand permits a shot preview; ĐẶT BI still gates shooting. */
     let placeConfirmed = false;
+    let placementAim = false;
     let skillPlacement: { side: Side; slot: number; cast: SkillCast } | null = null;
-    const cancelCast = btn(frag(icon('close'), 'Huỷ'), () => {
+    const cancelPlacement = () => {
       skillPlacement = null; match.castPreview = []; cancelCast.hidden = true; castSense.hidden = true; renderHud();
-    });
+    };
+    const cancelCast = btn(frag(icon('close'), 'Huỷ'), cancelPlacement);
     cancelCast.hidden = true;
     cancelCast.classList.add('small', 'ghost');
     cancelCast.setAttribute('aria-label', 'Huỷ đặt chiêu');
@@ -164,6 +166,7 @@ export function matchScreen(opts: MatchOptions) {
     const isHumanTurn = () => match.current.kind === 'human' && !aiActing;
     const canAct = () => isHumanTurn() && match.phase === 'aim' && strikeT === 0 && !paused;
     const placingNow = () => canAct() && (!!skillPlacement || match.canMoveCue && !placeConfirmed);
+    const canAdjustAim = () => canAct() && !skillPlacement && (!placingNow() || placementAim);
     const nameOf = (s: Side) => match.setup.players[s].name;
     const champOf = (s: Side) => match.setup.players[s].champion;
 
@@ -216,6 +219,13 @@ export function matchScreen(opts: MatchOptions) {
     const leftB = arrow(180, 'Dời bi sang trái');
     const rightB = arrow(0, 'Dời bi sang phải');
     const dpad = h('div.mx-dpad', null, h('span'), upB, h('span'), leftB, h('span.mx-dpad-c', null, icon('place')), rightB, h('span'), downB, h('span'));
+    const placeMode = btn('Ngắm thử', () => {
+      if (!placingNow() || skillPlacement) return;
+      placementAim = !placementAim;
+      renderControls();
+    });
+    placeMode.classList.add('small', 'ghost', 'mx-place-mode');
+    placeMode.style.display = 'none';
     const powerFill = h('i.mx-pfill');
     const powerPct = h('span.mx-ppct.num');
     const powerTrack = h('div.mx-ptrack', null, powerFill);
@@ -238,7 +248,7 @@ export function matchScreen(opts: MatchOptions) {
       renderHud();
     });
     passiveChip.classList.add('mx-passive');
-    const ctrl = h('div.mx-col.mx-ctrl', null, aimPad, dpad, powerBar, strikeBtn, h('div.mx-castrow', null, cancelCast, castSense), passiveChip);
+    const ctrl = h('div.mx-col.mx-ctrl', null, placeMode, aimPad, dpad, powerBar, strikeBtn, h('div.mx-castrow', null, cancelCast, castSense), passiveChip);
 
     const chips = h('div.mx-chips');
     const callTag = h('div.mx-calltag');
@@ -378,13 +388,17 @@ export function matchScreen(opts: MatchOptions) {
       const act = canAct();
       const placing = placingNow();
       ctrl.classList.toggle('placing', placing);
+      ctrl.classList.toggle('preview-aim', placing && !skillPlacement && placementAim);
+      placeMode.style.display = placing && !skillPlacement ? '' : 'none';
+      placeMode.textContent = placementAim ? 'Dời bi' : 'Ngắm thử';
+      placeMode.setAttribute('aria-label', placementAim ? 'Chuyển sang dời bi cái' : 'Chuyển sang ngắm thử trước khi đặt bi');
       ctrl.classList.toggle('off', !act);
       for (const b of [rotL, rotR, switchBtn, spinBtn, upB, downB, leftB, rightB, strikeBtn]) b.disabled = !act;
       powerBar.classList.toggle('off', !act || placing);
       if (!charging) {
         strikeLabel.textContent = skillPlacement ? 'THI TRIỂN' : placing ? 'ĐẶT BI' : 'ĐÁNH';
         strikeIcon.src = icon(placing ? 'place' : 'strike').src;
-        strikeBtn.setAttribute('aria-label', placing ? 'Đặt bi cái tại đây' : 'Đánh');
+        strikeBtn.setAttribute('aria-label', skillPlacement ? 'Thi triển chiêu tại đây' : placing ? 'Đặt bi cái tại đây' : 'Đánh');
       }
       strikeBtn.classList.toggle('place', placing);
     }
@@ -723,7 +737,7 @@ export function matchScreen(opts: MatchOptions) {
     }
 
     function switchTarget() {
-      if (!canAct() || placingNow()) return;
+      if (!canAdjustAim()) return;
       const list = targetList();
       if (!list.length) return;
       targetIdx = (targetIdx + 1) % list.length;
@@ -733,7 +747,7 @@ export function matchScreen(opts: MatchOptions) {
     }
 
     function rotate(deg: number) {
-      if (!canAct() || placingNow()) return;
+      if (!canAdjustAim()) return;
       aim.angle += deg * DEG;
     }
 
@@ -896,7 +910,7 @@ export function matchScreen(opts: MatchOptions) {
       }
       const cue = match.cueBall();
       drag = {
-        id: e.pointerId, mode: placingNow() ? 'cue' : 'aim', sx: e.clientX, sy: e.clientY, moved: false,
+        id: e.pointerId, mode: placingNow() && (!placementAim || skillPlacement) ? 'cue' : 'aim', sx: e.clientX, sy: e.clientY, moved: false,
         lastA: Math.atan2(p.y - cue.y, p.x - cue.x), cue0: { x: cue.x, y: cue.y }, p0: p,
       };
       canvas.setPointerCapture(e.pointerId);
@@ -1074,7 +1088,7 @@ export function matchScreen(opts: MatchOptions) {
         return;
       }
       if (e.type === 'keydown') {
-        if (skillPlacement && e.code === 'Escape') { cancelCast.click(); return; }
+        if (skillPlacement && e.code === 'Escape') { cancelPlacement(); return; }
         if (skillPlacement && e.code === 'KeyR') {
           previewCast({ ...skillPlacement.cast, sense: skillPlacement.cast.sense === 'cw' ? 'ccw' : 'cw', hardness: skillPlacement.cast.hardness === 'soft' ? 'hard' : 'soft' });
           return;
@@ -1092,7 +1106,7 @@ export function matchScreen(opts: MatchOptions) {
           else if (!charging) fireAtPreset();
         }
         const fine = e.shiftKey ? 0.05 : 0.5;
-        if (placingNow()) {
+        if (placingNow() && (!placementAim || skillPlacement)) {
           const m = e.shiftKey ? 0.002 : 0.01;
           if (e.code === 'ArrowLeft') nudgeCue(-1, 0, m);
           if (e.code === 'ArrowRight') nudgeCue(1, 0, m);
@@ -1114,7 +1128,7 @@ export function matchScreen(opts: MatchOptions) {
       }
     };
     const onWheel = (e: WheelEvent) => {
-      if (!canAct()) return;
+      if (!canAdjustAim()) return;
       aim.angle += Math.sign(e.deltaY) * 0.06 * DEG;
     };
     // Rotating to portrait or squeezing the window hides the table: pause instead of playing blind.
@@ -1268,7 +1282,7 @@ export function matchScreen(opts: MatchOptions) {
       hintOnce(app, 'ctl-power', 'Lực và đánh', 'Kéo thanh lực rồi chạm ĐÁNH. Hoặc giữ ĐÁNH và thả đúng lực; trượt ngón ra xa để huỷ.',
         { anchor: () => powerBar, place: beside });
       if (match.canMoveCue) {
-        hintOnce(app, 'ctl-ballinhand', 'Bi trong tay', 'Kéo bi cái hoặc chạm bàn để dời bi. Dùng nút hướng để chỉnh nhỏ. Bấm ĐẶT BI rồi ngắm.',
+        hintOnce(app, 'ctl-ballinhand', 'Bi trong tay', 'Kéo bi cái hoặc chạm bàn để dời bi. Dùng nút hướng để chỉnh nhỏ. Chọn Ngắm thử để chỉnh hướng và xem đường bi trước khi bấm ĐẶT BI.',
           { anchor: () => dpad, place: beside });
       }
       if (match.callType() !== 'none') {
@@ -1279,6 +1293,7 @@ export function matchScreen(opts: MatchOptions) {
 
     function onTurn() {
       placeConfirmed = false;
+      placementAim = false;
       cancelCharge();
       closeSheets();
       pushOut = false;
@@ -1304,7 +1319,7 @@ export function matchScreen(opts: MatchOptions) {
         aim.vert = 0;
         updateSpinDot();
         aimFirstTarget();
-        if (match.canMoveCue) herald({ side, title: changed ? `Lượt của ${nameOf(side)}` : 'Bi trong tay', line: 'Bi trong tay — kéo bi hoặc dùng mũi tên, rồi ĐẶT BI' });
+        if (match.canMoveCue) herald({ side, title: changed ? `Lượt của ${nameOf(side)}` : 'Bi trong tay', line: 'Bi trong tay — dời bi, Ngắm thử, rồi ĐẶT BI' });
         else if (changed) herald({ side, title: `Lượt của ${nameOf(side)}`, line: match.objective() });
         coachTurn();
       }
@@ -1459,14 +1474,14 @@ export function matchScreen(opts: MatchOptions) {
             match.chooseOption('play');
           }),
         ),
-      ));
+      ), { backDismissable: false });
     }
 
     /** Result sheet with the champion's art on the left. */
     function artModal(art: string, build: (close: () => void) => (Node | null)[]) {
       return modal((close) => h('div.modal.mx-modal.mx-result', null,
         h('div.mx-res-art', null, h('img', { src: art, alt: '', draggable: false })),
-        h('div.mx-res-body', null, ...build(close))));
+        h('div.mx-res-body', null, ...build(close))), { backDismissable: false });
     }
 
     function onRackOver(winner: Side) {
@@ -1562,12 +1577,12 @@ export function matchScreen(opts: MatchOptions) {
       paused = true;
       cancelCharge();
       const s = app.profile.settings;
-      const done = () => {
+      const resume = () => {
         paused = false;
         pauseWrap = null;
-        closePause();
         renderHud();
       };
+      const done = () => closePause();
       const closePause = modal((close) => {
         const box = h('div.modal.mx-modal.mx-pausebox', null,
           h('div.mx-pause-head', null,
@@ -1577,11 +1592,9 @@ export function matchScreen(opts: MatchOptions) {
             h('div.mx-pause-col', null,
               btn(frag(icon('play'), 'Tiếp tục'), done, 'block big'),
               btn(frag(icon('scroll'), 'Luật chơi'), () => {
-                done();
                 openRules();
               }, 'ghost block'),
               btn(frag(icon('hint'), 'Cách điều khiển'), () => {
-                done();
                 openHelp();
               }, 'ghost block'),
             ),
@@ -1612,7 +1625,7 @@ export function matchScreen(opts: MatchOptions) {
         );
         queueMicrotask(() => (pauseWrap = box.parentElement));
         return box;
-      });
+      }, { onClose: resume });
     }
 
     function openRules() {
@@ -1636,7 +1649,7 @@ export function matchScreen(opts: MatchOptions) {
           tip('switch-target', 'Đổi mục tiêu', 'Nhảy lần lượt qua các bi hợp lệ: bi nhỏ nhất ở 9/10 bi, bi nhóm mình ở 8 bi.'),
           tip('spin', 'Áp phê', 'Chạm bi cái nhỏ để mở bi lớn, chạm điểm đánh hoặc chọn nhanh Giữa, Trô, Cule, Giật, Trái, Phải.'),
           tip('power', 'Lực', 'Kéo thanh lực để chọn lực rồi chạm ĐÁNH. Hoặc giữ ĐÁNH cho lực dao động, thả đúng lúc; trượt ra xa để huỷ.'),
-          tip('place', 'Bi trong tay', 'Kéo bi cái, chạm chỗ muốn đặt, hoặc dùng 4 nút mũi tên; bấm ĐẶT BI để chốt.'),
+          tip('place', 'Bi trong tay', 'Kéo bi cái, chạm chỗ muốn đặt, hoặc dùng 4 nút mũi tên. Chọn Ngắm thử để chỉnh hướng; Dời bi để quay lại. Bấm ĐẶT BI để chốt.'),
           tip('energy', 'Chiêu và năng lượng', 'Chạm ô chiêu để đọc rồi bấm Dùng. Năng lượng tăng mỗi cú đánh, mỗi bi vào và khi đối thủ lỗi; cần đầy thanh năng lượng để dùng tuyệt chiêu.'),
           tip('target', 'Gọi lỗ', 'Khi phải gọi: chạm bi (nếu cần) rồi chạm lỗ trên bàn trước khi đánh.'),
           tip('settings', 'Bàn phím', 'Mũi tên xoay (Shift = tinh), lên/xuống chỉnh lực, Tab đổi mục tiêu, Enter đánh, giữ Space nạp lực, lăn chuột xoay tinh.'),
@@ -1730,7 +1743,7 @@ export function matchScreen(opts: MatchOptions) {
       } else if (charging) {
         holdT += dt;
       }
-      if (placingNow() && !skillPlacement) {
+      if (placingNow() && !skillPlacement && !placementAim) {
         const c = match.cueBall();
         const k = uiScale();
         const sp0 = view.toScreen(c.x, c.y);
@@ -1755,8 +1768,8 @@ export function matchScreen(opts: MatchOptions) {
         }
       }
       const humanAim = match.phase === 'aim' && (isHumanTurn() || showAiCue);
-      // While the cue ball is being placed there is nothing to aim yet.
-      const showCue = (humanAim || strikeT > 0) && !placingNow();
+      // Preview the cue while aiming in hand, while confirmation still gates shooting.
+      const showCue = (humanAim || strikeT > 0) && (!placingNow() || !skillPlacement && placementAim);
       const ct = match.callType();
       const pull = strikeT > 0 ? strikePull : charging ? power : barActive ? preset : 0;
       if (match.aimLock) wobbleAmp();
