@@ -2,12 +2,11 @@
 # Repaint only the background of existing champion portraits / expression sheets, keeping the
 # character exactly (the old image is the reference). Old files move to raw/old/.
 #
-#   [GEN_TOOL=api] rebackground.sh WORK_DIR SECT_ID [champion ids…]   (no ids = every champion of the sect)
+#   rebackground.sh WORK_DIR SECT_ID [champion ids…]   (no ids = every champion of the sect)
 set -uo pipefail
 here="$(cd "$(dirname "$0")" && pwd)"
 repo="$(cd "$here/../../../.." && pwd)"
 work="$1/$2"; sect="$2"; shift 2
-tool="${GEN_TOOL:-api}"
 main=$(python3 -c "import json;print(next(s['main'] for s in json.load(open('$repo/src/game/content/roster.json'))['sects'] if s['id']=='$sect'))")
 ids=("$@")
 if [[ ${#ids[@]} -eq 0 ]]; then
@@ -32,7 +31,7 @@ raise SystemExit(0 if sum(c)/4 > 170 else 1)"; then continue; fi
       brief="Reproduce the reference image exactly: the same 2x2 expression sheet, the same chibi character and the same four expressions in the same cells, same framing. Change ONLY the background of every cell: replace it with $BG. No text, no grid lines."
     fi
     tmp="$work/raw/.rebg-$kind-$id.png"
-    if GEN_NO_FALLBACK=1 "$here/gen-image.sh" --tool "$tool" --out "$tmp" --prompt "$brief" --ref "$src" --size 1024x1024 --timeout 600; then
+    if "$here/gen-image.sh" --out "$tmp" --prompt "$brief" --ref "$src" --size 1024x1024 --timeout 600; then
       mv "$src" "$work/raw/old/$kind-$id.png"
       mv "$tmp" "$src"
     fi

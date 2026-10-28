@@ -13,7 +13,7 @@ assassin lunging / hexer channelling / time-mage weaving} pose, slightly 3/4 vie
 with margin, rim light in {glow hex} glow. Background: fully transparent (PNG alpha). If alpha is
 impossible, flat pure #00ff00 green with no shadow. No text, no logo, no frame.
 ```
-Tool: codex (real alpha). Slice: none; key with `--key alpha` (or `green`) through `slice-grid.py --rows 1 --cols 1 --trim --size 1024`.
+Generate through 9router with a transparent background. Slice: none; key with `--key alpha` (or `green`) through `slice-grid.py --rows 1 --cols 1 --trim --size 1024`.
 
 ## Chibi portrait (avatar) — pass the cut-out as `--ref`
 

@@ -44,8 +44,7 @@ npm run gen:challenges
    storage key `thancong.profile.v1`.
 8. **Painted assets only.** Every graphic must be a painted asset; no hand-drawn SVG, emoji or icon libraries.
    **Art via the skill.** Use `.claude/skills/game-art` (prompts, references, scripts). The image API key lives
-   in `.env.image-api` (gitignored) — never commit it. Use `--tool api` with only model `cx/gpt-6-sol-image`;
-   disable tool fallback.
+   in `.env.image-api` (gitignored) — never commit it. Generate through 9router with model `cx/gpt-6-sol-image`.
    **Vietnamese UI.** Write all player-facing UI copy in Vietnamese.
 9. Conventional commits, one concern per commit, no AI references in commit messages. Run `npm test` and
    `npm run build` first.

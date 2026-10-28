@@ -1,6 +1,6 @@
 ---
 name: game-art
-description: Vẽ mới hoặc vẽ lại tài sản nguyên bản cho Cơ Tiên qua image API, chỉ model cx/gpt-6-sol-image; cắt, tách nền và xuất webp vào public/art. Dùng cho nhân vật, cảnh truyện, icon, biểu tượng, VFX và giao diện.
+description: Vẽ mới hoặc vẽ lại tài sản nguyên bản cho Cơ Tiên qua 9router, chỉ model cx/gpt-6-sol-image; cắt, tách nền và xuất webp vào public/art. Dùng cho nhân vật, cảnh truyện, icon, biểu tượng, VFX và giao diện.
 ---
 
 # Game art pipeline
@@ -19,27 +19,36 @@ thư viện icon. Đây là quy tắc làm nội dung; mã hiện tại vẫn c�
 
 | Script | Công dụng |
 |---|---|
-| `scripts/gen-image.sh --tool api --out f.png --prompt-file p.txt [--ref r.png]` | sinh một ảnh, có thể gửi nhiều ảnh tham chiếu |
+| `scripts/gen-image.sh --out f.png --prompt-file p.txt [--ref r.png]` | sinh một ảnh, có thể gửi nhiều ảnh tham chiếu |
 | `scripts/gen-sect.sh SECT WORK` | sinh prompt và bộ ảnh môn phái, bỏ qua ảnh gốc đã có |
 | `scripts/rebackground.sh WORK SECT [ids]` | thay nền chân dung/biểu cảm thành giấy dó, giữ nhân vật; ảnh cũ vào `raw/old/`, bỏ qua ảnh đã trên giấy |
 | `scripts/gen-story-art.sh WORK [scenes]` | minh hoạ từ `story.json`, xuất `public/art/story/`; `REDO=1` để vẽ lại |
 | `scripts/slice-grid.py sheet.png --rows R --cols C --out dir --names a,b,… --key none\|black\|alpha\|green [--trim] --size N` | cắt lưới, tách nền, xuất webp |
 | `scripts/slice-ui-icons.py sheet.png OUT_DIR name1 … name16` | cắt bảng icon UI 4×4, xoá giấy bằng flood fill từ mép ô, giữ bi/bàn tay trắng trong viền mực; xuất tối đa 128 px |
 
-**Mặc định của quy trình là API, chỉ model `cx/gpt-6-sol-image`.** Cấu hình model này trong
-`.env.image-api` (gitignored), nơi giữ khoá API. Không ghi khoá, host hay vị trí thư mục riêng vào tài liệu.
-`codex` và `agy` vẫn là lựa chọn trong script, nhưng không dùng cho quy trình hiện tại; tài khoản agy
-không còn dùng được. Không đổi model hoặc tự chuyển công cụ khi lỗi.
+## Cài đặt và bắt đầu
 
-Hiện `gen-image.sh` vẫn mặc định `codex`; `gen-sect.sh` mặc định nhân vật `codex`, bảng ảnh `agy`.
-Vì vậy luôn truyền `--tool api` khi gọi trực tiếp, đặt `GEN_NO_FALLBACK=1`, và chạy cả môn phái bằng:
+Cài `bash`, `curl`, `jq`, ImageMagick (`magick`), Python 3 và Pillow cho các script sinh và xử lý ảnh.
+Từ thư mục gốc repo:
 
 ```bash
-GEN_NO_FALLBACK=1 GEN_CHAR_TOOL=api GEN_REF_TOOL=api GEN_SHEET_TOOL=api \
-  .claude/skills/game-art/scripts/gen-sect.sh SECT WORK
+cp .env.image-api.example .env.image-api
 ```
 
-`rebackground.sh` và `gen-story-art.sh` đã mặc định `GEN_TOOL=api`; vẫn đặt `GEN_NO_FALLBACK=1`.
+Điền `IMAGE_API_BASE` (URL API 9router, gồm `/v1`) và `IMAGE_API_KEY` vào `.env.image-api`.
+Model là `cx/gpt-6-sol-image`. File cấu hình được gitignore; không đưa khoá, host hay vị trí thư mục
+riêng vào tài liệu hoặc commit. Xem các thiết lập chất lượng, nền trong suốt và ảnh tham chiếu trong
+file mẫu.
+
+Sinh một ảnh từ prompt hoặc cả bộ môn phái:
+
+```bash
+.claude/skills/game-art/scripts/gen-image.sh --out /path/to/art/image.png --prompt-file /path/to/art/prompt.txt
+.claude/skills/game-art/scripts/gen-sect.sh SECT /path/to/art
+```
+
+Ảnh tham chiếu được gửi qua `--ref`; dùng `--style-ref` để khớp phong cách mà không sao chép nhân vật.
+Khi request lỗi, script trả mã lỗi và đường dẫn response để kiểm tra trước khi chạy lại.
 Ảnh gốc và prompt lưu ngoài repo; chỉ bản đã xử lý đi vào `public/art/`.
 
 ## Workflow per sect
@@ -64,7 +73,7 @@ GEN_NO_FALLBACK=1 GEN_CHAR_TOOL=api GEN_REF_TOOL=api GEN_SHEET_TOOL=api \
    cách; ảnh đẹp nhưng sai vẫn phải vẽ lại.
 
 Khi vẽ lại một tướng, tìm mọi cảnh có id đó trong `story.json` → `cast`, rồi **vẽ lại cả các cảnh ấy**:
-`GEN_NO_FALLBACK=1 REDO=1 scripts/gen-story-art.sh WORK scene1 scene2 …`.
+`REDO=1 scripts/gen-story-art.sh WORK scene1 scene2 …`.
 Script đọc `scenes` và `cast`, gửi cut-out của từng tướng cùng `look` làm tham chiếu; `vodanh` dùng
 `references/story-vodanh.webp`. Thiếu cut-out của bất kỳ tướng nào thì bỏ qua cảnh, báo chờ; chạy lại
 sau khi đã có ảnh. Mặc định bỏ qua PNG gốc đã có, xuất webp vào `public/art/story/`.

@@ -1,31 +1,21 @@
 #!/usr/bin/env bash
-# Generate one image with an external image model and save it to OUT.
+# Generate one image through 9router and save it to OUT.
 #
-#   gen-image.sh --tool codex|agy|api --out path/to/file.png (--prompt "..." | --prompt-file f.txt)
+#   gen-image.sh --out path/to/file.png (--prompt "..." | --prompt-file f.txt)
 #                [--ref char.png] [--style-ref style.png] [--size 1024x1536] [--timeout 400]
 #
-# --ref       the same character to keep (face, outfit, cue).
-# --style-ref rendering style to match only; its subject must not be copied.
-#
-# --tool api calls an OpenAI-compatible Images API (e.g. 9router) directly with curl; references
-# are sent as images[] data URLs on /images/generations (9router codex models support this). Settings come from
-# .env.image-api at the repo root (copy .env.image-api.example); the key never leaves that file.
-# Without --size the size follows the brief: wide (16:9, 3:1, 8:1…) → 1536x1024,
-# tall (9:16, full-body) → 1024x1536, otherwise square.
-#
-# --ref attaches reference images (same character / same style) so a set stays consistent.
-#
-# The prompt should describe only the picture; this script adds the "use your image tool,
-# save as <name>" wrapper. Runs the tool in a throwaway directory, then moves the file to OUT.
-# If the chosen tool fails, it retries once with the other tool (GEN_NO_FALLBACK=1 disables this).
+# --ref keeps the character design; --style-ref matches rendering without copying its subject.
+# Configure .env.image-api from .env.image-api.example. Requests use cx/gpt-6-sol-image
+# on /images/generations, with reference images attached as images[] data URLs.
+# Without --size, wide briefs use 1536x1024, full-body briefs use 1024x1536,
+# and other briefs use 1024x1024. Failed requests return a nonzero exit status.
 set -euo pipefail
 
-tool=api out="" prompt="" timeout=400 size=""
+out="" prompt="" timeout=400 size=""
 refs=()
 styles=()
 while [[ $# -gt 0 ]]; do
   case "$1" in
-    --tool) tool="$2"; shift 2 ;;
     --out) out="$2"; shift 2 ;;
     --prompt) prompt="$2"; shift 2 ;;
     --prompt-file) prompt="$(cat "$2")"; shift 2 ;;
@@ -40,7 +30,7 @@ done
 
 repo="$(cd "$(dirname "$0")/../../../.." && pwd)"
 
-# A tool that ran out of quota can still leave a placeholder file; only real images count.
+# Accept only real images with usable dimensions.
 big_enough() {
   local wh; wh=$(magick identify -format '%w %h' "$1" 2>/dev/null) || return 1
   set -- $wh
@@ -69,18 +59,20 @@ pick_size() {
   esac
 }
 
-# OpenAI-compatible Images API: /images/generations, or /images/edits when references are given.
+# 9router Images API, including reference images in the generation request.
 run_api() {
   local env="$repo/.env.image-api"
   [[ -f "$env" ]] || { echo "fail api (missing $env — copy .env.image-api.example)" >&2; return 2; }
   # shellcheck disable=SC1090
   set -a; source "$env"; set +a
   [[ -n "${IMAGE_API_KEY:-}" && -n "${IMAGE_API_BASE:-}" ]] || { echo "fail api (IMAGE_API_BASE / IMAGE_API_KEY not set in .env.image-api)" >&2; return 2; }
+  local model="${IMAGE_API_MODEL:-cx/gpt-6-sol-image}" sz
+  [[ "$model" == cx/gpt-6-sol-image ]] || { echo "IMAGE_API_MODEL must be cx/gpt-6-sol-image" >&2; return 2; }
+  sz="$(pick_size)"
   local dir; dir="$(mktemp -d)"
-  local model="${IMAGE_API_MODEL:-gpt-image-1}" sz; sz="$(pick_size)"
   local bg=""
   if [[ "${IMAGE_API_TRANSPARENT:-0}" == 1 && "$prompt" == *"fully transparent"* ]]; then bg=transparent; fi
-  # References ride in the generations call as data URLs (9router codex: images[] + image_detail).
+  # References ride in the generations call as data URLs (9router: images[] + image_detail).
   # Kept in a file: base64 images are far too long for a command-line argument.
   echo '[]' > "$dir/refs.json"
   if [[ $((${#refs[@]} + ${#styles[@]})) -gt 0 && "${IMAGE_API_EDITS:-1}" == 1 ]]; then
@@ -122,50 +114,4 @@ run_api() {
   return 1
 }
 
-run() {
-  [[ "$1" == api ]] && { run_api; return; }
-  local t="$1" dir name
-  dir="$(mktemp -d)"
-  name="image.png"
-  local refnote="" i=0 codexrefs=()
-  for r in "${refs[@]+"${refs[@]}"}" "${styles[@]+"${styles[@]}"}"; do
-    [[ -n "$r" ]] || continue
-    i=$((i + 1))
-    cp "$r" "$dir/ref-$i.png"
-    codexrefs+=(-i "$dir/ref-$i.png")
-  done
-  if [[ $i -gt 0 ]]; then
-    refnote="
-REFERENCE IMAGES: ref-1.png … ref-$i.png in the current directory (also attached), in this order.$(ref_note)
-Do not save over the reference files."
-  fi
-  local full="Use your built-in image generation tool to create exactly ONE image (do not write code to draw it, do not edit files other than saving the image). Save it as the PNG file ${name} in the current directory, then reply with just the word DONE.
-
-IMAGE BRIEF:
-${prompt}${refnote}"
-  (
-    cd "$dir"
-    if [[ "$t" == codex ]]; then
-      perl -e "alarm $timeout; exec @ARGV" codex exec --skip-git-repo-check --dangerously-bypass-approvals-and-sandbox "${codexrefs[@]+"${codexrefs[@]}"}" -- "$full" >"$dir/log.txt" 2>&1
-    else
-      perl -e "alarm $timeout; exec @ARGV" agy -p "$full" --dangerously-skip-permissions --add-dir "$dir" >"$dir/log.txt" 2>&1
-    fi
-  ) || true
-  # Tools occasionally pick their own file name; take the newest image they wrote.
-  local found
-  found="$(ls -t "$dir"/*.png "$dir"/*.jpg "$dir"/*.webp 2>/dev/null | grep -v '/ref-[0-9]*\.png$' | head -1 || true)"
-  if [[ -n "$found" ]] && big_enough "$found"; then
-    mkdir -p "$(dirname "$out")"
-    magick "$found" "$out"
-    rm -rf "$dir"
-    echo "ok $t $out"
-    return 0
-  fi
-  echo "fail $t (log: $dir/log.txt)" >&2
-  return 1
-}
-
-other=agy; [[ "$tool" == agy ]] && other=codex
-[[ "$tool" == api ]] && other=codex
-# A misconfigured API stops here; a failing call falls back to the other tool.
-run "$tool" || { rc=$?; [[ $rc == 2 || "${GEN_NO_FALLBACK:-0}" == 1 ]] && exit 1; run "$other"; }
+run_api

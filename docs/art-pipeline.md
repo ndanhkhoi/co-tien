@@ -4,24 +4,23 @@ Toàn bộ tranh trong game (tướng, môn phái, icon chiêu, hiệu ứng, b�
 được **vẽ bằng mô hình sinh ảnh AI** theo prompt riêng, rồi **duyệt nghiêm từng tấm**. Không tải ảnh từ
 internet hay lấy từ tác phẩm khác.
 
-## Công cụ
+## Cài đặt công cụ
 
-| Công cụ | Model | Dùng cho |
-|---|---|---|
-| Image API (`--tool api`) | **`cx/gpt-6-sol-image` duy nhất** | mọi tranh mới và tranh vẽ lại, có ảnh tham chiếu khi cần |
-| Codex CLI (`--tool codex`) | tuỳ cấu hình CLI | tuỳ chọn cũ còn trong script, không dùng trong quy trình hiện tại |
-| Antigravity CLI (`--tool agy`) | tuỳ cấu hình CLI | tuỳ chọn cũ; tài khoản agy không còn dùng được |
+Tranh được sinh qua **9router**, model **`cx/gpt-6-sol-image`**, bằng các script trong
+`.claude/skills/game-art/`. Cần Bash, curl, jq, ImageMagick (`magick`), Python 3 và Pillow.
 
-Script nằm trong `.claude/skills/game-art/`. API là lựa chọn mặc định của **quy trình**; hiện
-`gen-image.sh` và `gen-sect.sh` vẫn có mặc định công cụ cũ, nên phải truyền `--tool api` hoặc đặt biến:
+1. Sao chép `.env.image-api.example` thành `.env.image-api` tại gốc repo.
+2. Điền `IMAGE_API_BASE` (URL API 9router gồm `/v1`) và `IMAGE_API_KEY`; giữ
+   `IMAGE_API_MODEL=cx/gpt-6-sol-image`. File cấu hình được gitignore, không commit khoá API.
+3. Viết prompt và chọn ảnh tham chiếu theo `.claude/skills/game-art/SKILL.md`, rồi chạy:
 
 ```bash
-GEN_NO_FALLBACK=1 GEN_CHAR_TOOL=api GEN_REF_TOOL=api GEN_SHEET_TOOL=api \
-  .claude/skills/game-art/scripts/gen-sect.sh SECT WORK
+.claude/skills/game-art/scripts/gen-image.sh --out /path/to/art/image.png --prompt-file /path/to/art/prompt.txt
+.claude/skills/game-art/scripts/gen-sect.sh SECT /path/to/art
 ```
 
-Đặt `IMAGE_API_MODEL=cx/gpt-6-sol-image` trong `.env.image-api` (gitignored), nơi giữ khoá API.
-Không đổi model hay chuyển sang CLI khi lỗi; `GEN_NO_FALLBACK=1` tắt cơ chế chuyển công cụ dự phòng.
+`--ref` giữ tạo hình nhân vật; `--style-ref` giữ phong cách. Request lỗi trả mã lỗi và đường dẫn
+response để kiểm tra trước khi chạy lại.
 
 ## Quy trình
 
@@ -48,8 +47,8 @@ Không đổi model hay chuyển sang CLI khi lỗi; `GEN_NO_FALLBACK=1` tắt c
 7. **Tranh truyện** — `gen-story-art.sh WORK [scenes]` đọc `scenes` và `cast` trong `story.json`, gửi
    cut-out của từng tướng trong cảnh làm tham chiếu kèm `look`; `vodanh` dùng `references/story-vodanh.webp`
    trong skill. Nếu thiếu cut-out của bất kỳ tướng nào trong cảnh, script bỏ qua cảnh để chạy lại sau.
-   Mặc định dùng API và bỏ qua PNG gốc đã có; đặt `REDO=1` để vẽ lại các cảnh được chỉ định, xuất vào
-   `public/art/story/`. Khi chạy, đặt thêm `GEN_NO_FALLBACK=1`.
+   Bỏ qua PNG gốc đã có; đặt `REDO=1` để vẽ lại các cảnh được chỉ định, xuất vào
+   `public/art/story/`.
 
 ## Phong cách
 

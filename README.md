@@ -53,8 +53,8 @@ thanh. Tài liệu: [kiến trúc](docs/architecture.md) · [thế giới](docs/
   không dùng nội dung của bất kỳ game hay tác phẩm nào khác.
 - **Viết nội dung và code:** được phát triển cùng trợ lý AI (Claude, qua Claude Code) theo chỉ đạo của tác
   giả — trợ lý đề xuất và viết, tác giả chọn và duyệt.
-- **Đồ hoạ:** toàn bộ tranh được vẽ bằng mô hình sinh ảnh AI (model ảnh của Codex `gpt-6-sol-image` qua
-  9router/Codex CLI, và Gemini qua Antigravity CLI) theo prompt viết riêng cho game, rồi duyệt và chỉnh từng
+- **Đồ hoạ:** toàn bộ tranh được vẽ bằng mô hình sinh ảnh AI (`cx/gpt-6-sol-image` qua
+  9router) theo prompt viết riêng cho game, rồi duyệt và chỉnh từng
   tấm. Quy trình, công cụ và tiêu chí duyệt: [docs/art-pipeline.md](docs/art-pipeline.md) và skill
   `.claude/skills/game-art`.
 

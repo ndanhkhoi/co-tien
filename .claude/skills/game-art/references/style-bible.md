@@ -53,7 +53,7 @@ the master art folder.
 | asset | background to request | slice key |
 |---|---|---|
 | portrait (chibi avatar) | soft radial gradient of the sect main → dark navy, nothing else | none (kept) |
-| character cut-out (splash/cut-in) | **transparent** (codex) or flat pure green `#00ff00` | alpha / green |
+| character cut-out (splash/cut-in) | **transparent** or flat pure green `#00ff00` | alpha / green |
 | skill icons, emblems | pure black `#000000` | black (or kept for framed icons) |
 | VFX elements, flipbooks | pure black `#000000` (additive) | black |
 | scenes (splash bg, menu, cut-in strip) | full scene, no transparency | none |

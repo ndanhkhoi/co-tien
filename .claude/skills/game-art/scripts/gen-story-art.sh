@@ -3,7 +3,7 @@
 # Draws only scenes that are missing (REDO=1 redraws the given ones), then writes
 # public/art/story/<scene>.webp.
 #
-#   [GEN_TOOL=api] [REDO=1] gen-story-art.sh ART_DIR [scene keys…]
+#   [REDO=1] gen-story-art.sh ART_DIR [scene keys…]
 #
 # ART_DIR is the master-art folder that gen-sect.sh fills (ART_DIR/<sect>/raw/cut-<id>.png).
 # story.json "cast" lists who appears in each scene; their cut-outs go along as references so
@@ -18,7 +18,6 @@ repo="$(cd "$here/../../../.." && pwd)"
 art="$1"; shift
 work="$art/story"
 mkdir -p "$work/raw" "$repo/public/art/story"
-tool="${GEN_TOOL:-api}"
 story="$repo/src/game/content/story.json"
 keys=("$@")
 if [[ ${#keys[@]} -eq 0 ]]; then
@@ -67,7 +66,7 @@ for k in "${keys[@]}"; do
   while IFS= read -r ref; do [[ -n "$ref" ]] && args+=(--ref "$ref"); done < <(tail -n +2 <<< "$info")
   (
     tmp="$work/raw/.$k.png"
-    GEN_NO_FALLBACK=1 "$here/gen-image.sh" --tool "$tool" --out "$tmp" --size 1536x1024 --timeout 600 \
+    "$here/gen-image.sh" --out "$tmp" --size 1536x1024 --timeout 600 \
       "${args[@]+"${args[@]}"}" --prompt "$STYLE Scene: $scene" && mv "$tmp" "$work/raw/$k.png"
   ) &
   run=$((run + 1))
