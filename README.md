@@ -25,11 +25,28 @@ dụng (PWA), chơi offline.
 - **Cơ Tiên Truyện:** truyện chữ có tranh minh hoạ thuỷ mặc, 15 chương mở dần theo Hành trình — một câu
   chuyện riêng của Cơ Tiên Giới, lấy cảm hứng từ cách kể của truyện cổ Việt Nam và Trung Hoa.
 - **Cơ Tiên Lục:** wiki trong game về vùng đất, tướng, hệ và luật chơi; tướng chưa gặp hiện "???".
-- **Thao tác như game native:** joystick xoay cơ và di bi, quả bi áp phê dạng joystick, giữ để nạp lực có
-  thể "lỡ tay", rung, giữ màn hình sáng; bắt cài app và xoay ngang trên điện thoại, kiểm tra kích thước cửa
+- **Điều khiển cảm ứng:** kéo/chạm trên bàn và nút xoay để ngắm, kéo bi cái hoặc dùng nút hướng để
+  đặt bi; chuyển “Ngắm thử” để canh đường trước khi chốt. Chọn điểm áp phê trên bi, chỉnh thanh lực rồi
+  chạm ĐÁNH hoặc giữ–thả để nạp lực; rung, giữ màn hình sáng; bắt cài app và xoay ngang trên điện thoại, kiểm tra kích thước cửa
   sổ trên máy tính.
 - **AI 4 cấp, 4 lối đánh:** tìm cú đánh bằng chính bộ mô phỏng (kể cả địa thế), chạy trong Web Worker.
 - **Người mới:** giới thiệu thế giới, gợi ý đúng lúc, luật chơi đầy đủ trong menu tạm dừng.
+
+### Hình ảnh trong game
+
+Ảnh chụp ở 1280×720; giao diện ưu tiên chơi ngang trên điện thoại.
+
+| Trang chủ | Luận Cơ |
+| --- | --- |
+| ![Trang chủ](docs/screenshots/trang-chu.webp) | ![Chọn trận Luận Cơ](docs/screenshots/luan-co.webp) |
+| Thiên Tượng trên bàn | Đặt vùng thi triển |
+| ![Trận đấu có Thiên Tượng](docs/screenshots/thien-tuong.webp) | ![Đặt chiêu](docs/screenshots/dat-chieu.webp) |
+| Tuyệt chiêu | Trang tướng |
+| ![Tướng thi triển tuyệt chiêu](docs/screenshots/tuyet-chieu.webp) | ![Thông tin tướng và ba icon kỹ năng](docs/screenshots/trang-tuong.webp) |
+| Hành trình | Cơ Tiên Truyện |
+| ![Bản đồ Hành trình](docs/screenshots/hanh-trinh.webp) | ![Đọc Cơ Tiên Truyện](docs/screenshots/co-tien-truyen.webp) |
+
+![Màn tải tài nguyên](docs/screenshots/man-tai.webp)
 
 ## Phát triển
 
