@@ -625,3 +625,8 @@ body { background: linear-gradient(#e9e1d0d1, #e9e1d0d1), var(--paper, none) cen
 .cc-sub { font-size: 11px; line-height: 1.35; }
 .cutin .ci-kicker { color: var(--sheet); text-shadow: 0 1px 3px #000, 0 0 6px #000; }
 .mx-castrow .btn { height: max(44px, var(--touch-target)); min-height: var(--touch-target); }
+/* VS portraits use the full square aperture; the painted frame overlays the image without shrinking it. */
+.mx-vs-av { width: 156px; height: 156px; padding: 0; }
+.mx-vs-av img, .mx-vs-av > div { width: 100%; height: 100%; object-fit: cover; }
+.mx-vs-av::after { inset: 0; }
+.mx-vs-title { width: 210px; max-width: 100%; overflow-wrap: anywhere; }
