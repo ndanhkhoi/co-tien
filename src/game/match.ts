@@ -1,4 +1,4 @@
-import { buildCast, mergeTerrain, PLACED_KINDS, type SkillCast, type CastEffect } from './skill-cast';
+import { applySkillBlast, buildCast, mergeTerrain, PLACED_KINDS, type SkillCast, type CastEffect } from './skill-cast';
 import type { AiProfile } from '../ai/types';
 import { maxSpeed, powerToSpeed } from '../core/cue-power';
 import { cloneBalls, DEFAULT_PHYS, step, strike, type Ball, type PhysEvent, type PhysParams, type SimWorld } from '../core/physics';
@@ -118,7 +118,9 @@ export class Match {
   reveal = false;
   spinBoost = 1;
   powerBoost = 1;
-  blast: { radius: number; force: number; done: boolean } | null = null;
+  triplePreview = false;
+  previewSpread = 0.12;
+  blast: { radius: number; force: number; done: boolean; direction?: { x: number; y: number } } | null = null;
   mawScale = 1;
   pull = 0;
   secondChance = false;
@@ -145,10 +147,62 @@ export class Match {
   private shotTargets: number[] = [];
   activeEffects: (CastEffect & { target: Side })[] = [];
   castPreview: CastEffect[] = [];
-  strikePreview(cue: Ball, input: ShotInput) {
+  aimLock: { angle: number; band: number } | null = null;
+  spinAxis: ['side' | 'vert', 'side' | 'vert'] = ['side', 'side'];
+  guardUsed: [boolean, boolean] = [false, false];
+  assassinReady: [boolean, boolean] = [false, false];
+  assassinChoice: ['info' | 'power', 'info' | 'power'] = ['info', 'info'];
+  lastBasic: [number | null, number | null] = [null, null];
+
+  lockAim(angle: number, band: number): boolean {
+    if (this.phase !== 'aim' || this.passive(this.turn) !== 'thanxa') return false;
+    this.aimLock = { angle, band };
+    return true;
+  }
+
+  aimBand(angle: number, normal: number): number {
+    if (!this.aimLock) return normal;
+    const difference = Math.atan2(Math.sin(angle - this.aimLock.angle), Math.cos(angle - this.aimLock.angle));
+    if (Math.abs(difference) > 0.00001) { this.aimLock = null; return normal; }
+    this.aimLock.band = normal;
+    return normal;
+  }
+
+  choosePassive(choice: 'side' | 'vert' | 'info' | 'power', side = this.turn): boolean {
+    if (side !== this.turn || this.phase !== 'aim') return false;
+    if (this.passive(side) === 'phaptu' && (choice === 'side' || choice === 'vert')) {
+      this.spinAxis[side] = choice; return true;
+    }
+    if (this.passive(side) === 'anhsat' && this.assassinReady[side] && (choice === 'info' || choice === 'power')) {
+      this.assassinChoice[side] = choice; return true;
+    }
+    return false;
+  }
+
+  useGuard(cast?: SkillCast): boolean {
     const side = this.turn;
-    const reach = Math.min(1, 0.72 + 0.07 * this.setup.players[side].cue.spin) * this.spinBoost * (this.passive(side) === 'phaptu' ? 1.1 : 1);
-    strike(cue, this.table.R, { angle: input.angle, speed: powerToSpeed(input.power, this.vmax()), side: input.side * reach, vert: input.vert * reach });
+    if (this.phase !== 'aim' || this.passive(side) !== 'hophap' || this.guardUsed[side]) return false;
+    this.activeEffects.push({ ...buildCast('railcraft', 1, -1, this.table, this.balls, this.cueId(), { ...cast, hardness: 'soft' }), target: side });
+    this.guardUsed[side] = true;
+    return true;
+  }
+
+  get passiveInfo(): boolean {
+    return this.passive(this.turn) === 'anhsat' && this.assassinReady[this.turn] && this.assassinChoice[this.turn] === 'info';
+  }
+
+  spinReach(side = this.turn) {
+    const reach = Math.min(1, 0.72 + 0.07 * this.setup.players[side].cue.spin) * this.spinBoost;
+    const cls = this.passive(side);
+    return {
+      side: reach * (cls === 'cuongchien' ? 0.75 : cls === 'phaptu' ? this.spinAxis[side] === 'side' ? 1.2 : 0.8 : 1),
+      vert: reach * (cls === 'cuongchien' ? 0.75 : cls === 'phaptu' ? this.spinAxis[side] === 'vert' ? 1.2 : 0.8 : 1),
+    };
+  }
+
+  strikePreview(cue: Ball, input: ShotInput) {
+    const reach = this.spinReach();
+    strike(cue, this.table.R, { angle: input.angle, speed: powerToSpeed(input.power, this.vmax()), side: input.side * reach.side, vert: input.vert * reach.vert });
   }
   terrain() { return mergeTerrain(this.omen?.terrain, ...this.activeEffects.filter(e => e.target === this.turn).map(e => e.terrain)); }
   simulationWorld(): SimWorld {
@@ -266,12 +320,13 @@ export class Match {
   }
 
   vmax(side: Side = this.state.turn): number {
-    const base = maxSpeed(this.table.kind, this.setup.players[side].cue.power) * (this.passive(side) === 'cuongchien' ? 1.05 : 1);
-    return side === this.state.turn ? base * this.powerBoost * this.freezeNow : base;
+    const base = maxSpeed(this.table.kind, this.setup.players[side].cue.power) * (this.passive(side) === 'cuongchien' ? 1.1 : 1);
+    return side === this.state.turn ? base * this.powerBoost * this.freezeNow * (this.passive(side) === 'anhsat' && this.assassinReady[side] && this.assassinChoice[side] === 'power' ? 1.12 : 1) : base;
   }
 
   private clearShotBuffs() {
     this.eagle = false;
+    this.triplePreview = false;
     this.reveal = false;
     this.spinBoost = 1;
     this.powerBoost = 1;
@@ -304,8 +359,11 @@ export class Match {
     }
     this.energy = [ENERGY_START, ENERGY_START];
     this.cooldown = [[0, 0], [0, 0]];
-    // Hộ Pháp: the first foul of every rack is forgiven.
-    this.shield = [this.passive(0) === 'hophap', this.passive(1) === 'hophap'];
+    this.shield = [false, false];
+    this.guardUsed = [false, false];
+    this.assassinReady = [false, false];
+    this.lastBasic = [null, null];
+    this.aimLock = null;
     this.tremor = [1, 1];
     this.freeze = [1, 1];
     this.seal = [0, 0];
@@ -413,11 +471,10 @@ export class Match {
     this.stats[side].shots++;
 
     let { angle, power, side: sp, vert } = input;
-    const cueDef = this.setup.players[side].cue;
-    // Cue spin stat sets how far the tip can reach before the miscue zone.
-    const reach = Math.min(1, 0.72 + 0.07 * cueDef.spin) * this.spinBoost * (this.passive(side) === 'phaptu' ? 1.1 : 1);
-    sp *= reach;
-    vert *= reach;
+    if (this.blast?.direction) this.blast.direction = { x: Math.cos(angle), y: Math.sin(angle) };
+    const reach = this.spinReach(side);
+    sp *= reach.side;
+    vert *= reach.vert;
     let speed = powerToSpeed(power, this.vmax(side));
     const miscue = this.rng.next() < this.miscueChance(input.side, input.vert, power);
     if (miscue) {
@@ -453,6 +510,8 @@ export class Match {
     this.freezeNow = 1;
     this.placing = 'none';
     this.nudgeOrigin = null;
+    this.aimLock = null;
+    this.assassinReady[side] = false;
     this.phase = 'rolling';
     this.emit({ type: 'shot', side, speed, miscue });
   }
@@ -479,16 +538,7 @@ export class Match {
 
   /** Skill explosion at a contact point: pushes every ball in range away from it. */
   private blastAt(x: number, y: number, radius: number, force: number) {
-    for (const b of this.balls) {
-      if (!b.onTable) continue;
-      const dx = b.x - x;
-      const dy = b.y - y;
-      const d = Math.hypot(dx, dy);
-      if (d > radius || d < 1e-6) continue;
-      const k = ((radius - d) / radius) * force;
-      b.vx += (dx / d) * k;
-      b.vy += (dy / d) * k;
-    }
+    applySkillBlast(this.balls, x, y, radius, force, this.blast?.direction);
     this.emit({ type: 'explode', x, y });
   }
 
@@ -570,10 +620,10 @@ export class Match {
     if (res.foul) s.fouls++;
     s.pots += ownPots + res.points;
     let gain = (ownPots + res.points) * 14 * (0.8 + 0.1 * this.setup.players[side].cue.energy);
-    // Ảnh Sát: every ball in a run adds a little extra.
-    if (this.passive(side) === 'anhsat' && res.keepTurn) gain += 5 * (ownPots + res.points);
-    // Chú Sư slows the opponent's charge.
-    if (this.passive(opp) === 'chusu') gain *= 0.85;
+    this.assassinReady[side] = this.passive(side) === 'anhsat' && !res.foul && res.keepTurn && s.run >= 1 && ownPots + res.points > 0;
+    if (this.passive(side) === 'chusu' && !res.foul && !res.keepTurn && !res.option && res.winner === null) {
+      this.activeEffects.push({ ...buildCast('sand', 1, -1, this.table, this.balls, this.cueId(side), { point: { x: cue.x, y: cue.y } }), target: opp });
+    }
     if (this.homeSide(side)) gain *= 1.2;
     if (!this.setup.classic) {
       this.gainEnergy(side, gain + 8);
@@ -635,7 +685,8 @@ export class Match {
 
   private beginTurn() {
     const side = this.state.turn;
-    if (side !== this.lastShooter) this.rollGhost();
+    if (side !== this.lastShooter) { this.rollGhost(); this.guardUsed[side] = false; }
+    this.aimLock = null;
     this.tremorNow = this.tremor[side];
     this.tremor[side] = 1;
     this.freezeNow = this.freeze[side];
@@ -729,7 +780,7 @@ export class Match {
       case 'reveal': return myAim && !this.reveal;
       case 'spin': return myAim && this.spinBoost === 1;
       case 'power': return myAim && this.powerBoost === 1;
-      case 'blast': return myAim && !this.blast && !this.isCarom;
+      case 'blast': return myAim && !this.blast;
       case 'maw': return myAim && this.mawScale === 1 && !this.isCarom;
       case 'gravity': return myAim && this.pull === 0 && !this.isCarom;
       case 'second': return myAim && !this.secondChance;
@@ -750,7 +801,7 @@ export class Match {
    */
   effectiveKind(kind: SkillKind): SkillKind {
     if (!this.isCarom) return kind;
-    const swap: Partial<Record<SkillKind, SkillKind>> = { seal: 'chill', maw: 'spin', gravity: 'vision', blast: 'power', teleport: 'nudge' };
+    const swap: Partial<Record<SkillKind, SkillKind>> = { shield: 'railcraft', seal: 'chill', maw: 'spin', gravity: 'vision', teleport: 'nudge' };
     return swap[kind] ?? kind;
   }
 
@@ -770,18 +821,22 @@ export class Match {
     if (!this.canUseSkill(side, slot)) return false;
     const sk = this.skills(side)[slot];
     if (slot === 2) this.energy[side] = 0;
-    else this.cooldown[side][slot] = sk.cooldown;
+    else {
+      const alternate = this.passive(side) === 'luanhoi' && this.lastBasic[side] !== null && this.lastBasic[side] !== slot;
+      this.cooldown[side][slot] = Math.max(1, sk.cooldown - (alternate ? 1 : 0));
+      this.lastBasic[side] = slot;
+    }
     // Cast the entire package, including families already active.
     sk.kinds.map((k) => this.effectiveKind(k)).forEach((k) => {
-      this.applyKind(k, sk.tier, side, slot, cast, sk.target);
+      this.applyKind(k, sk.tier, side, slot, cast, sk.target, sk.ult, sk.shape);
     });
     this.emit({ type: 'skill', side, champion: this.setup.players[side].champion, slot, skill: sk });
     return true;
   }
 
-  private applyKind(kind: SkillKind, tier: number, side: Side, slot: number, cast?: SkillCast, target?: 'self' | 'opponent') {
+  private applyKind(kind: SkillKind, tier: number, side: Side, slot: number, cast?: SkillCast, target?: 'self' | 'opponent', ult?: SkillDef['ult'], shape?: SkillDef['shape']) {
     if (PLACED_KINDS.includes(kind)) {
-      this.activeEffects.push({ ...buildCast(kind, tier, slot, this.table, this.balls, this.cueId(side), cast), target: target === 'opponent' ? other(side) : side });
+      this.activeEffects.push({ ...buildCast(kind, tier, slot, this.table, this.balls, this.cueId(side), cast, ult, shape), target: target === 'opponent' ? other(side) : side });
       this.syncObstacles();
       return;
     }
@@ -789,11 +844,14 @@ export class Match {
     const opp = other(side);
     const oppNow = this.state.turn === opp && this.phase === 'aim';
     switch (kind) {
-      case 'vision': this.eagle = true; break;
+      case 'vision': this.eagle = true; this.triplePreview = champion(this.setup.players[side].champion).sect === 'thienquang'; this.previewSpread = ult === 'thienquang' ? 0.24 : 0.12; break;
       case 'reveal': this.reveal = true; break;
       case 'spin': this.spinBoost = pw.spin; break;
       case 'power': this.powerBoost = pw.speed; break;
-      case 'blast': this.blast = { radius: pw.radius, force: pw.force, done: false }; break;
+      case 'blast': {
+        const resolved = buildCast('wind', tier, slot, this.table, this.balls, this.cueId(side), cast).cast;
+        this.blast = { radius: pw.radius, force: pw.force, done: false, direction: champion(this.setup.players[side].champion).sect === 'huyetsat' ? resolved.direction : undefined }; break;
+      }
       case 'maw': this.mawScale = pw.scale; break;
       case 'gravity': this.pull = pw.pull; break;
       case 'second': this.secondChance = true; break;

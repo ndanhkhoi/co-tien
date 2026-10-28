@@ -109,20 +109,29 @@ export function matchScreen(opts: MatchOptions) {
     /** Ball in hand: the player moves the cue ball, then confirms with ĐẶT BI before aiming. */
     let placeConfirmed = false;
     let skillPlacement: { side: Side; slot: number; cast: SkillCast } | null = null;
-    const cancelCast = btn('Huỷ đặt chiêu', () => {
+    const cancelCast = btn(frag(icon('close'), 'Huỷ'), () => {
       skillPlacement = null; match.castPreview = []; cancelCast.hidden = true; castSense.hidden = true; renderHud();
     });
     cancelCast.hidden = true;
-    const castSense = btn('Đổi chiều / băng mềm–cứng', () => {
+    cancelCast.classList.add('small', 'ghost');
+    cancelCast.setAttribute('aria-label', 'Huỷ đặt chiêu');
+    const castSense = btn(frag(icon('replay'), 'Đổi'), () => {
       if (!skillPlacement) return;
       previewCast({ ...skillPlacement.cast, sense: skillPlacement.cast.sense === 'cw' ? 'ccw' : 'cw', hardness: skillPlacement.cast.hardness === 'soft' ? 'hard' : 'soft' });
     });
     castSense.hidden = true;
+    castSense.classList.add('small', 'ghost');
+    castSense.setAttribute('aria-label', 'Đổi chiều xoáy hoặc băng mềm/cứng');
     function previewCast(cast: SkillCast) {
       if (!skillPlacement) return;
       const { side, slot } = skillPlacement;
+      if (slot === -1) {
+        match.castPreview = [buildCast('railcraft', 1, -1, match.table, match.balls, match.cueId(side), { ...cast, hardness: 'soft' })];
+        skillPlacement.cast = match.castPreview[0].cast;
+        return;
+      }
       const sk = match.skills(side)[slot];
-      match.castPreview = sk.kinds.filter(k => PLACED_KINDS.includes(k)).map(k => buildCast(k, sk.tier, slot, match.table, match.balls, match.cueId(side), cast));
+      match.castPreview = sk.kinds.filter(k => PLACED_KINDS.includes(k)).map(k => buildCast(k, sk.tier, slot, match.table, match.balls, match.cueId(side), cast, sk.ult, sk.shape));
       skillPlacement.cast = match.castPreview[0]?.cast ?? cast;
     }
     function moveCast(x: number, y: number) {
@@ -216,7 +225,20 @@ export function matchScreen(opts: MatchOptions) {
     const strikeIcon = icon('strike');
     const strikeLabel = h('span.mx-st-label', null, 'ĐÁNH');
     const strikeBtn = h('button.mx-strike', { 'aria-label': 'Đánh' }, strikeIcon, strikeLabel);
-    const ctrl = h('div.mx-col.mx-ctrl', null, aimPad, dpad, powerBar, strikeBtn, cancelCast, castSense);
+    const passiveChip = btn('Nội tại', () => {
+      const cls = match.passive(match.turn);
+      if (cls === 'thanxa') match.aimLock ? match.aimLock = null : match.lockAim(aim.angle, wobbleAmp());
+      if (cls === 'phaptu') match.choosePassive(match.spinAxis[match.turn] === 'side' ? 'vert' : 'side');
+      if (cls === 'hophap') {
+        skillPlacement = { side: match.turn, slot: -1, cast: {} };
+        previewCast({ point: match.cueBall() });
+        cancelCast.hidden = false; castSense.hidden = true;
+      }
+      if (cls === 'anhsat') match.choosePassive(match.assassinChoice[match.turn] === 'info' ? 'power' : 'info');
+      renderHud();
+    });
+    passiveChip.classList.add('mx-passive');
+    const ctrl = h('div.mx-col.mx-ctrl', null, aimPad, dpad, powerBar, strikeBtn, h('div.mx-castrow', null, cancelCast, castSense), passiveChip);
 
     const chips = h('div.mx-chips');
     const callTag = h('div.mx-calltag');
@@ -286,6 +308,19 @@ export function matchScreen(opts: MatchOptions) {
 
     // ---------- HUD (event driven) ----------
     function renderHud() {
+      const cls = match.passive(match.turn);
+      passiveChip.hidden = !cls || match.current.kind !== 'human' || match.phase !== 'aim';
+      const passiveLabels: Record<string, string> = {
+        thanxa: match.aimLock ? 'Đã khoá ngắm · chạm để mở' : 'Khoá ngắm',
+        cuongchien: 'Đầu cơ cứng · lực ↑ xoáy ↓',
+        phaptu: match.spinAxis[match.turn] === 'side' ? 'Ưu tiên áp phê ngang' : 'Ưu tiên kéo / đẩy',
+        hophap: match.guardUsed[match.turn] ? 'Đã dùng băng mềm' : 'Đặt băng mềm',
+        chusu: 'Cú thủ hợp lệ để lại cát',
+        anhsat: match.assassinReady[match.turn] ? (match.assassinChoice[match.turn] === 'info' ? 'Liên hoàn · xem đường' : 'Liên hoàn · thêm lực') : 'Ăn liên tiếp để chọn lợi thế',
+        luanhoi: 'Luân phiên chiêu · hồi nhanh',
+      };
+      passiveChip.textContent = cls ? passiveLabels[cls] : '';
+      passiveChip.disabled = cls === 'cuongchien' || cls === 'chusu' || cls === 'luanhoi' || (cls === 'hophap' && match.guardUsed[match.turn]) || (cls === 'anhsat' && !match.assassinReady[match.turn]);
       const st = match.state;
       const carom = match.isCarom;
       for (const s of [0, 1] as Side[]) {
@@ -720,7 +755,7 @@ export function matchScreen(opts: MatchOptions) {
       const control = cueDef().control;
       const base = 0.0034 * (1.3 - control * 0.2);
       const fatigue = 1 + Math.max(0, holdT - 1.8) * 0.75;
-      return base * (0.2 + 1.7 * power * power) * fatigue * match.tremorNow;
+      return match.aimBand(aim.angle, base * (0.2 + 1.7 * (charging ? power : preset) ** 2) * fatigue * match.tremorNow);
     }
 
     function wobbleNow(): number {
@@ -730,8 +765,7 @@ export function matchScreen(opts: MatchOptions) {
     }
 
     function guideScale(): number {
-      // Thần Xạ passive: a quarter longer object-ball hint.
-      return (0.55 + 0.12 * cueDef().aim) * (match.passive(match.turn) === 'thanxa' ? 1.25 : 1);
+      return 0.55 + 0.12 * cueDef().aim;
     }
 
     // ---------- Shooting ----------
@@ -751,7 +785,7 @@ export function matchScreen(opts: MatchOptions) {
       if (!placingNow()) return;
       if (skillPlacement) {
         const { side, slot, cast } = skillPlacement;
-        match.useSkill(side, slot, cast);
+        if (slot === -1) match.useGuard(cast); else match.useSkill(side, slot, cast);
         skillPlacement = null; match.castPreview = []; cancelCast.hidden = true; castSense.hidden = true;
         renderHud();
         return;
@@ -1286,14 +1320,19 @@ export function matchScreen(opts: MatchOptions) {
       setFocus(side, true);
       setThinking(side);
       renderHud();
+      if (match.phase === 'aim') {
+        if (match.passive(side) === 'hophap') match.useGuard();
+        if (match.passive(side) === 'phaptu') match.choosePassive(match.isCarom ? 'side' : 'vert');
+        if (match.passive(side) === 'anhsat') match.choosePassive('power');
+      }
       const view0 = match.aiView();
       const req: AiRequest = {
-        balls: view0.balls, state: view0.state, side, profile: player.ai!, maxSpeed: match.vmax(side),
+        balls: view0.balls, state: view0.state, side, profile: player.ai!, maxSpeed: match.vmax(side), spinReach: match.spinReach(side), secondChance: match.secondChance, shield: match.shield[side], pocketPull: match.pull, blast: match.blast ? { radius: match.blast.radius, force: match.blast.force, directional: !!match.blast.direction } : undefined,
         ballInHand: match.placing === 'nudge' ? 'none' : match.placing, closedPockets: view0.closedPockets,
         params: match.params, terrain: match.terrain(),
         extraSegments: match.obstacles().slice(match.closedPockets.length), captureScale: match.simulationWorld().captureScale ?? 1, seed: (Math.random() * 1e9) | 0, option: match.phase === 'option',
         pushOutAvailable: match.state.pushOutAvailable, energy: match.energy[side],
-        skills: match.skills(side).filter((sk) => match.canUseSkill(side, sk.slot)).map((sk) => ({ slot: sk.slot, kind: match.effectiveKind(sk.kinds[0]), ultimate: sk.slot === 2, tier: sk.tier, kinds: sk.kinds.map(k => match.effectiveKind(k)), target: sk.target })),
+        skills: match.skills(side).filter((sk) => match.canUseSkill(side, sk.slot)).map((sk) => ({ slot: sk.slot, kind: match.effectiveKind(sk.kinds[0]), ultimate: sk.slot === 2, tier: sk.tier, kinds: sk.kinds.map(k => match.effectiveKind(k)), target: sk.target, ult: sk.ult, shape: sk.shape, directionalBlast: champion(match.current.champion).sect === 'huyetsat' })),
       };
       const started = performance.now();
       const decision = await app.ai.think(req);
@@ -1720,6 +1759,7 @@ export function matchScreen(opts: MatchOptions) {
       const showCue = (humanAim || strikeT > 0) && !placingNow();
       const ct = match.callType();
       const pull = strikeT > 0 ? strikePull : charging ? power : barActive ? preset : 0;
+      if (match.aimLock) wobbleAmp();
       const av: AimView | null = humanAim || strikeT > 0 ? {
         angle: aim.angle + wobbleNow(),
         pull,

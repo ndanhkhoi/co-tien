@@ -34,7 +34,12 @@ export interface ClassInfo {
   passive: string;
 }
 
+export type UltId = SectId;
+export type SkillShape = 'gate' | 'roots' | 'rim';
+
 export interface SkillDef {
+  ult?: UltId;
+  shape?: SkillShape;
   /** 0, 1 = basic skills (cooldown in own turns), 2 = ultimate (needs a full energy bar). */
   slot: 0 | 1 | 2;
   name: string;
@@ -57,7 +62,7 @@ export interface Champion {
   skills: [SkillDef, SkillDef, SkillDef];
 }
 
-interface RawSkill { name: string; kinds: string[] }
+interface RawSkill { name: string; kinds: string[]; ult?: UltId; shape?: SkillShape; target?: SkillDef['target'] }
 interface RawChampion { id: string; name: string; sect: string; tier: number; kind: ChampionKind; cls: string; skills: RawSkill[] }
 
 const hex = (s: string) => parseInt(s.slice(1), 16);
@@ -103,13 +108,15 @@ export function describeKind(kind: SkillKind, tier: number): string {
   const p = skillPower(kind, tier) as Record<string, number>;
   const pct = (x: number) => `${Math.round(x * 100)}%`;
   switch (kind) {
-    case 'slick': case 'sand': case 'spinwash':
-      return `${KIND_NAMES[kind]}: bán kính ${Math.round(p.radius * 100)} cm, ma sát ×${p.friction.toFixed(2)} trong cú kế tiếp.`;
-    case 'bumper': return `Vật chắn dài ${Math.round(p.length * 100)} cm, bật bi như băng trong cú kế tiếp.`;
-    case 'railcraft': return `Đoạn băng dài ${Math.round(p.length * 100)} cm, mềm hoặc cứng thêm ${pct(p.restitution)} trong cú kế tiếp.`;
-    case 'wind': return `Gió hướng chọn, gia tốc ${p.acceleration.toFixed(3)} m/s² trong cú kế tiếp.`;
-    case 'well': case 'vortex': return `${KIND_NAMES[kind]}: bán kính ${Math.round(p.radius * 100)} cm, gia tốc đỉnh ${p.acceleration.toFixed(3)} m/s² trong cú kế tiếp.`;
-    case 'vision': return 'Thấy trước toàn bộ đường đi của các bi trong cú này.';
+    case 'slick': return `Trải một vùng nỉ trơn (rộng ${Math.round(p.radius * 200)} cm): bi lăn qua đi xa và nhanh hơn.`;
+    case 'sand': return `Rải một vùng cát (rộng ${Math.round(p.radius * 200)} cm): bi lăn qua chậm hẳn lại.`;
+    case 'spinwash': return `Vùng mực tan xoáy (rộng ${Math.round(p.radius * 200)} cm): bi đi qua mất dần áp phê.`;
+    case 'bumper': return `Dựng một vật chắn dài ${Math.round(p.length * 100)} cm trên nỉ: bi chạm vào bật ra như chạm băng.`;
+    case 'railcraft': return `Yểm một đoạn băng dài ${Math.round(p.length * 100)} cm: chọn băng mềm để bi nảy ít, băng cứng để nảy mạnh.`;
+    case 'wind': return 'Gọi một luồng gió theo hướng chọn: bi đang lăn bị đẩy lệch dần theo gió.';
+    case 'well': return `Đặt một điểm hút trên nỉ (rộng ${Math.round(p.radius * 200)} cm): bi lăn gần bị kéo cong vào tâm.`;
+    case 'vortex': return `Tạo một dòng xoáy (rộng ${Math.round(p.radius * 200)} cm): bi lăn qua bị bẻ cong theo chiều xoáy.`;
+    case 'vision': return 'So sánh ba đường dự đoán theo lực đánh hoặc áp phê đã chọn trong cú này.';
     case 'rewind': return 'Đánh hỏng? Quay ngược thời gian và đánh lại cú vừa rồi.';
     case 'shield': return 'Lỗi kế tiếp của bạn không bị phạt bi trong tay.';
     case 'chill': return `Cú kế tiếp của đối thủ run tay gấp ${p.tremor.toFixed(1)} lần và mất đường ngắm.`;
@@ -117,7 +124,7 @@ export function describeKind(kind: SkillKind, tier: number): string {
     case 'nudge': return `Dời bi cái tối đa ${Math.round(p.radius * 100)} cm trước khi đánh.`;
     case 'reveal': return 'Hiện đường đi dài của bi mục tiêu và bi cái.';
     case 'power': return `Lực đánh tối đa tăng ${pct(p.speed - 1)}.`;
-    case 'blast': return `Bi cái nổ khi chạm bi đầu tiên, hất bi trong bán kính ${Math.round(p.radius * 100)} cm.`;
+    case 'blast': return `Bi cái phát xung theo hình quạt hướng đánh khi chạm bi đầu tiên, hất bi trong bán kính ${Math.round(p.radius * 100)} cm.`;
     case 'seal': return `Phong ấn ${p.pockets} lỗ trong lượt kế tiếp của đối thủ.`;
     case 'maw': return `Miệng lỗ rộng thêm ${pct(p.scale - 1)}.`;
     case 'drain': return `Hút ${p.amount} năng lượng của đối thủ.`;
@@ -136,14 +143,51 @@ export const KIND_NAMES: Record<SkillKind, string> = {
   teleport: 'Dịch chuyển', second: 'Tái chiến',
 };
 
-function makeSkill(raw: RawSkill, slot: 0 | 1 | 2, tier: number, cls: ClassId): SkillDef {
+export const SECT_SIGNATURES: Record<SectId, string> = {
+  thienquang: 'Kiếm nhãn: so sánh ba đường dự đoán theo lực đánh hoặc áp phê.',
+  huyetsat: 'Huyết bộc: xung lực hình quạt theo hướng đánh.',
+  hoalinh: 'Dẫn phong: chọn hướng gió tác động lên bi đang lăn.',
+  bangphach: 'Băng lộ: đặt vùng trơn để kéo dài đường lăn.',
+  thienco: 'Cơ quan: đặt vật phản xạ theo hướng chọn.',
+  docvu: 'Tán toàn: đặt vùng tiêu áp phê.',
+  hailong: 'Hải băng: chọn đoạn băng mềm hoặc cứng, kết hợp dòng chảy có hướng.',
+  uminh: 'Âm môn: đặt cặp vật chắn chừa cổng ở giữa.',
+  tinhtu: 'Tinh điểm: đặt giếng hút làm cong đường lăn.',
+  kimsa: 'Sa trận: đặt vùng cát hãm bi.',
+  vanthu: 'Mộc căn: đặt cặp rễ chắn hình chữ V.',
+  hukhong: 'Hư nhãn: hút sát miệng lỗ; bàn phăng dùng giếng hút trên nỉ.',
+  thienhuong: 'Toàn lưu: đặt dòng xoáy và chọn chiều thuận hoặc nghịch.',
+};
+
+export const ULT_DESCRIPTIONS: Record<UltId, string> = {
+  thienquang: 'Ba đường dự đoán để so sánh lực đánh hoặc áp phê trước khi ra cơ.',
+  huyetsat: 'Xung lực hình quạt chỉ hất những bi nằm phía trước hướng đánh.',
+  hoalinh: 'Hai vùng gió song song thổi ngược chiều nhau.',
+  bangphach: 'Hành lang trơn có vùng hãm ở hai đầu.',
+  thienco: 'Hai vật phản xạ đặt chéo góc để dẫn đường bi.',
+  docvu: 'Vành tán áp phê bao quanh lõi trơn.',
+  hailong: 'Dòng chảy hướng chọn kết hợp điểm hút ở cuối dòng và chỉnh băng.',
+  uminh: 'Hai vật chắn tạo cổng mở ở giữa.',
+  tinhtu: 'Hai giếng hút nằm ở hai đầu trục chọn.',
+  kimsa: 'Dải cát chia đôi, chừa khe giữa rộng hơn đường kính bi.',
+  vanthu: 'Hai rễ chắn hợp thành chữ V.',
+  hukhong: 'Các điểm hút nằm sát miệng lỗ; trên bàn phăng là một giếng hút đặt trên nỉ.',
+  thienhuong: 'Hai dòng xoáy ngược chiều nằm trên trục chọn.',
+};
+const SHAPE_DESCRIPTIONS: Record<SkillShape, string> = {
+  gate: 'Hai vật chắn tạo cổng mở ở giữa.',
+  roots: 'Hai rễ chắn hợp thành chữ V.',
+  rim: 'Điểm hút sát miệng lỗ; trên bàn phăng đặt giếng hút trên nỉ.',
+};
+
+function makeSkill(raw: RawSkill, slot: 0 | 1 | 2, tier: number): SkillDef {
   const kinds = raw.kinds as SkillKind[];
   const t = slot === 2 ? tier + 2 : tier;
   const base = KIND_COOLDOWN[kinds[0]];
   return {
-    slot, name: raw.name, kinds, tier: t,
-    cooldown: slot === 2 ? 0 : Math.max(1, base - (cls === 'luanhoi' ? 1 : 0)),
-    desc: kinds.map((k) => describeKind(k, t)).join(' '),
+    slot, name: raw.name, kinds, tier: t, ult: raw.ult, shape: raw.shape, target: raw.target,
+    cooldown: slot === 2 ? 0 : base,
+    desc: [raw.ult ? ULT_DESCRIPTIONS[raw.ult] : raw.shape ? SHAPE_DESCRIPTIONS[raw.shape] : '', ...kinds.map((k) => describeKind(k, t))].filter(Boolean).join(' '),
   };
 }
 
@@ -152,7 +196,7 @@ export const CHAMPIONS: Champion[] = (roster.champions as RawChampion[]).map((c)
   const tier = c.tier as Champion['tier'];
   return {
     id: c.id, name: c.name, sect: c.sect as SectId, tier, kind: c.kind, cls,
-    skills: [makeSkill(c.skills[0], 0, tier, cls), makeSkill(c.skills[1], 1, tier, cls), makeSkill(c.skills[2], 2, tier, cls)],
+    skills: [makeSkill(c.skills[0], 0, tier), makeSkill(c.skills[1], 1, tier), makeSkill(c.skills[2], 2, tier)],
   };
 });
 

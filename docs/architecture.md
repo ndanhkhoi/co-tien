@@ -46,7 +46,7 @@ UI (joystick, kéo bàn, nút ĐÁNH) ──► Match.shoot(input)
 ## `src/game` — trận đấu và nội dung
 
 - `match.ts`: máy trạng thái của một trận (`aim → rolling → option / rack-over / match-over`), năng lượng,
-  hồi chiêu, nội tại hệ, 16 nhóm cơ chế chiêu, Thiên Tượng, Địa Lợi, tua lại.
+  hồi chiêu, nội tại hệ, 24 nhóm cơ chế chiêu, Thiên Tượng, Địa Lợi, tua lại.
 - `terrain.ts`: Thiên Tượng của từng môn phái, biểu diễn bằng vật lý (`Terrain`, chướng ngại, rung).
 - `content/roster.json`: **nguồn sự thật** cho môn phái, hệ và tướng (tạo hình dùng để vẽ, chiêu).
 - `content/lore.json`: truyện thế giới, môn phái, tiểu sử và câu nói của tướng.
@@ -60,9 +60,9 @@ UI (joystick, kéo bàn, nút ĐÁNH) ──► Match.shoot(input)
 
 Trong Tiên Đạo, mỗi bên bắt đầu ván với **30 năng lượng**, tối đa **100** (`ENERGY_MAX`). Mỗi cú
 đánh được **+8**; mỗi bi của mình vào lỗ hoặc điểm carom có mức cơ sở **+14**, rồi điều chỉnh theo chỉ
-số năng lượng của cơ, nội tại và Địa Lợi. Đối thủ phạm lỗi thì được **+12**. `match.ts` phát sự kiện
+số năng lượng của cơ và Địa Lợi. Đối thủ phạm lỗi thì được **+12**. `match.ts` phát sự kiện
 `energy` với `side`, `gain` (phần tăng thực tế sau giới hạn) và `total`. Cổ Điển không cộng năng lượng.
-Hai chiêu thường hồi sau **2–3 lượt đánh của chính mình**; hệ Luân Hồi giảm một lượt (còn 1–2).
+Hai chiêu thường hồi sau **2–3 lượt đánh của chính mình**; hệ Luân Hồi chỉ giảm một lượt khi dùng luân phiên hai chiêu cơ bản.
 Tuyệt chiêu cần đầy thanh năng lượng.
 
 ## `src/ai`
@@ -70,7 +70,9 @@ Tuyệt chiêu cần đầy thanh năng lượng.
 `brain.ts` tìm cú đánh bằng chính bộ mô phỏng: liệt kê đường ăn thẳng / đánh băng, thử biến thể lực và áp
 phê, chấm điểm theo vị trí bi cái cho cú sau, chọn phòng thủ khi rủi ro; nhận cùng thông số bàn và Thiên
 Tượng như người chơi. `chooseSkill` trong `brain.ts` chọn chiêu ở cả bốn cấp AI, kể cả cấp 1;
-chỉ chọn trong các chiêu sẵn dùng được truyền vào. Chạy trong Web Worker (`ai-worker.ts`) qua `ai-client.ts` để không giật hình.
+chỉ chọn trong các chiêu sẵn dùng được truyền vào. Sau khi chọn chiêu, AI dựng lại đầy đủ gói hiệu ứng
+và tìm lại cú đánh; chiêu dời bi dùng vị trí được trận thật chấp nhận, trên cả bàn lỗ và bàn phăng.
+Metadata hình học và xung lực hình quạt đi cùng yêu cầu worker. Chạy trong Web Worker (`ai-worker.ts`) qua `ai-client.ts` để không giật hình.
 
 ## `src/render`
 
@@ -137,5 +139,8 @@ rồi tìm lại cú đánh; đường dự đoán dùng cùng world và tham s�
 
 Sau “Dùng”, chiêu có vị trí vào bước đặt: kéo/chạm bàn hoặc dùng mũi tên, “THI TRIỂN” xác nhận,
 “Huỷ đặt chiêu” huỷ mà không tiêu chiêu. Nút đổi chiều/băng (phím R) chọn chiều xoáy hoặc băng mềm/cứng.
-Các vùng và đoạn dùng tranh riêng trong `public/art/table/skills/`; preview có vòng đặt, điểm đặt, mũi tên và dấu chiều xoáy. Tám cơ chế đã có API; phân bổ vào 65 bộ chiêu
-và tuyệt chiêu riêng môn phái thuộc các phần tiếp theo.
+Các vùng và đoạn dùng tranh riêng trong `public/art/table/skills/`; preview có vòng đặt, điểm đặt, mũi tên và dấu chiều xoáy. Tám cơ chế được phân bổ vào 65 bộ chiêu khác nhau. `ult` định danh hình học riêng của tuyệt chiêu bậc 5 theo môn phái; `shape` chọn cổng, rễ chữ V hoặc hút vành lỗ. Các lựa chọn nội tại trên HUD đi qua `lockAim`, `choosePassive`, `useGuard`; `spinReach` được chia sẻ với AI và dự đoán.
+
+Trên bàn phăng, `effectiveKind` đổi hộ thể thành chỉnh băng, phong ấn lỗ thành làm run,
+nuốt lỗ thành tăng áp phê, hút lỗ thành tiên tri và dịch chuyển thành dời bi.
+Cổ Điển và thử thách không kích hoạt kỹ năng, nội tại hoặc Thiên Tượng.

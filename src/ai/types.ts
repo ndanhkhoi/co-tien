@@ -3,7 +3,7 @@ import type { Ball } from '../core/physics';
 import type { GameState, ShotCall, Side } from '../core/rules/types';
 import type { PhysParams, Terrain } from '../core/physics';
 import type { Segment } from '../core/table';
-import type { SkillKind } from '../game/content/sects';
+import type { SkillKind, SectId } from '../game/content/sects';
 
 export type Personality = 'balanced' | 'aggressive' | 'defensive' | 'trickster';
 
@@ -20,6 +20,12 @@ export interface AiRequest {
   profile: AiProfile;
   /** Maximum cue-ball speed this player's cue can produce (m/s). */
   maxSpeed: number;
+  spinReach?: { side: number; vert: number };
+  spinMultiplier?: number;
+  secondChance?: boolean;
+  shield?: boolean;
+  pocketPull?: number;
+  blast?: { radius: number; force: number; directional?: boolean };
   ballInHand: 'none' | 'kitchen' | 'anywhere';
   closedPockets: number[];
   /** The match's real physics: table character, mutators, this shot's Thiên Tượng. */
@@ -36,7 +42,7 @@ export interface AiRequest {
   pushOutAvailable: boolean;
   energy: number;
   /** Skills castable right now (checked by the match), with their leading effect family. */
-  skills: { slot: number; kind: SkillKind; ultimate: boolean; tier?: number; kinds?: SkillKind[]; target?: 'self' | 'opponent' }[];
+  skills: { slot: number; kind: SkillKind; ultimate: boolean; tier?: number; kinds?: SkillKind[]; target?: 'self' | 'opponent'; ult?: SectId; shape?: 'gate' | 'roots' | 'rim'; directionalBlast?: boolean }[];
 }
 
 export interface AiShot {

@@ -1,3 +1,4 @@
+import { applySkillBlast } from '../game/skill-cast';
 import { Container, Graphics, Sprite, Texture, type Application } from 'pixi.js';
 import { predictAim } from '../core/aim';
 import { ballStyle } from '../core/ball-styles';
@@ -448,7 +449,18 @@ export class TableView {
     }
     if (!aim!.showGuide || m.phase !== 'aim') return;
 
-    if (m.eagle || m.activeEffects.some(e => e.target === m.turn)) {
+    if (m.aimLock) {
+      // Fixed direction, live force/spin: show the two physical launch boundaries.
+      const band = m.aimLock.band;
+      for (const sign of [-1, 1]) {
+        const probe = { ...cue };
+        m.strikePreview(probe, { angle: m.aimLock.angle + sign * band, power: aim!.power, side: aim!.side, vert: aim!.vert, call: null, pushOut: false });
+        const length = Math.hypot(probe.vx, probe.vy) || 1;
+        g.moveTo(cue.x, cue.y).lineTo(cue.x + probe.vx / length * 0.65, cue.y + probe.vy / length * 0.65);
+        g.stroke({ width: 1, color: 0xffffff, alpha: 0.4 });
+      }
+    }
+    if (m.eagle || m.passiveInfo || m.activeEffects.some(e => e.target === m.turn)) {
       this.drawEagle(aim!);
       return;
     }
@@ -503,27 +515,40 @@ export class TableView {
   /** Thần Nhãn: simulate the exact shot and draw every moving ball's path. */
   private drawEagle(aim: AimView) {
     const m = this.match;
-    const key = `${aim.angle.toFixed(4)}|${aim.power.toFixed(2)}|${aim.side.toFixed(2)}|${aim.vert.toFixed(2)}|${m.cueBall().x.toFixed(3)}|${JSON.stringify(m.simulationWorld())}`;
+    const key = `${m.triplePreview}|${m.previewSpread}|${m.passiveInfo}|${aim.angle.toFixed(4)}|${aim.power.toFixed(2)}|${aim.side.toFixed(2)}|${aim.vert.toFixed(2)}|${m.cueBall().x.toFixed(3)}|${JSON.stringify(m.simulationWorld())}`;
     if (!this.eagleCache || this.eagleCache.key !== key) {
+      const allPaths: { id: number; pts: number[] }[] = [];
+      for (const offset of m.triplePreview ? [-m.previewSpread, 0, m.previewSpread] : [0]) {
       const balls = cloneBalls(m.balls);
       const cue = balls.find((b) => b.id === m.cueId())!;
-      const power = aim.power;
-      m.strikePreview(cue, { angle: aim.angle, power, side: aim.side, vert: aim.vert, call: null, pushOut: false });
+      const power = Math.max(0.05, Math.min(1, aim.power + offset));
+      m.strikePreview(cue, { angle: aim.angle, power, side: Math.max(-1, Math.min(1, aim.side + offset)), vert: Math.max(-1, Math.min(1, aim.vert - offset)), call: null, pushOut: false });
       const world = { ...m.simulationWorld(), balls };
       const paths = new Map<number, number[]>();
       for (const b of balls) paths.set(b.id, [b.x, b.y]);
+      let blastDone = false;
       for (let i = 0; i < 600; i++) {
-        const moving = step(world, 1 / 30, null);
+        const events: import('../core/physics').PhysEvent[] = [];
+        const moving = step(world, 1 / 30, events);
+        if (m.blast && !blastDone) {
+          const contact = events.find(e => e.t === 'ball' && (e.a === cue.id || e.b === cue.id));
+          if (contact && contact.t === 'ball') {
+            applySkillBlast(balls, contact.x, contact.y, m.blast.radius, m.blast.force, m.blast.direction ? { x: Math.cos(aim.angle), y: Math.sin(aim.angle) } : undefined); blastDone = true;
+          }
+        }
         for (const b of balls) {
           const p = paths.get(b.id)!;
           if (b.onTable && (p[p.length - 2] !== b.x || p[p.length - 1] !== b.y)) p.push(b.x, b.y);
         }
         if (!moving) break;
       }
-      this.eagleCache = { key, paths: [...paths.entries()].filter(([, p]) => p.length > 4).map(([id, pts]) => ({ id, pts })) };
+      allPaths.push(...[...paths.entries()].filter(([, p]) => p.length > 4).map(([id, pts]) => ({ id, pts })));
+      }
+      this.eagleCache = { key, paths: allPaths };
     }
     const g = this.guide;
     for (const p of this.eagleCache.paths) {
+      g.circle(p.pts[p.pts.length - 2], p.pts[p.pts.length - 1], m.table.R * 0.55).stroke({ width: 1, color: 0xffffff, alpha: 0.7 });
       const col = p.id === m.cueId() ? 0xffffff : 0xffd34d;
       g.moveTo(p.pts[0], p.pts[1]);
       for (let i = 2; i < p.pts.length; i += 2) g.lineTo(p.pts[i], p.pts[i + 1]);

@@ -13,7 +13,8 @@
       "cues": [
         "white-jade cue with a gold sword-guard collar",
         "gold-and-ivory cue with a sun-disc butt"
-      ]
+      ],
+      "signature": "vision"
     },
     {
       "id": "huyetsat",
@@ -28,7 +29,8 @@
       "cues": [
         "black-iron cue wrapped in red chains",
         "obsidian cue with a crimson flame tip"
-      ]
+      ],
+      "signature": "blast"
     },
     {
       "id": "hoalinh",
@@ -43,7 +45,8 @@
       "cues": [
         "peach-wood cue with blossom carvings",
         "pale jade cue with ribbon tassel"
-      ]
+      ],
+      "signature": "wind"
     },
     {
       "id": "bangphach",
@@ -58,7 +61,8 @@
       "cues": [
         "crystal ice cue with a lotus tip",
         "silver-and-ice cue with snowflake rings"
-      ]
+      ],
+      "signature": "slick"
     },
     {
       "id": "thienco",
@@ -73,7 +77,8 @@
       "cues": [
         "polished brass-and-teak cue with fine interlocking gear inlays on the butt",
         "teak cue with small spinning gyroscope rings at the joint"
-      ]
+      ],
+      "signature": "bumper"
     },
     {
       "id": "docvu",
@@ -88,7 +93,8 @@
       "cues": [
         "gnarled poison-wood cue dripping venom",
         "bamboo cue with a jade gourd"
-      ]
+      ],
+      "signature": "spinwash"
     },
     {
       "id": "hailong",
@@ -103,7 +109,8 @@
       "cues": [
         "teak-and-brass cue like a spyglass",
         "coral cue with an anchor butt"
-      ]
+      ],
+      "signature": "railcraft"
     },
     {
       "id": "uminh",
@@ -118,7 +125,8 @@
       "cues": [
         "bone cue with ghost-fire rings",
         "black wood cue with a lantern hook"
-      ]
+      ],
+      "signature": "bumper"
     },
     {
       "id": "tinhtu",
@@ -133,7 +141,8 @@
       "cues": [
         "silver cue of condensed starlight",
         "violet cue with a crescent-moon tip"
-      ]
+      ],
+      "signature": "well"
     },
     {
       "id": "kimsa",
@@ -148,7 +157,8 @@
       "cues": [
         "golden cue with a sun tip",
         "sandstone cue with turquoise bands"
-      ]
+      ],
+      "signature": "sand"
     },
     {
       "id": "vanthu",
@@ -163,7 +173,8 @@
       "cues": [
         "living-wood cue with leaves",
         "amber-and-bone cue with feathers"
-      ]
+      ],
+      "signature": "bumper"
     },
     {
       "id": "hukhong",
@@ -178,7 +189,8 @@
       "cues": [
         "black spike cue leaking magenta light",
         "chitin cue with a void eye"
-      ]
+      ],
+      "signature": "well"
     },
     {
       "id": "thienhuong",
@@ -193,44 +205,45 @@
       "cues": [
         "red lacquer cue with a gold peony collar and a silk tassel",
         "ivory cue painted with a dancing crane and gold leaf"
-      ]
+      ],
+      "signature": "vortex"
     }
   ],
   "classes": [
     {
       "id": "thanxa",
       "name": "Thần Xạ",
-      "passive": "Đường ngắm dài thêm 25%."
+      "passive": "Khoá hướng ngắm để xem dải lệch khi đổi lực; đổi hướng sẽ mở khoá."
     },
     {
       "id": "cuongchien",
       "name": "Cuồng Chiến",
-      "passive": "Lực tối đa +5%."
+      "passive": "Đầu cơ cứng truyền lực mạnh hơn 10%, nhưng tầm áp phê giảm 25%."
     },
     {
       "id": "phaptu",
       "name": "Pháp Tu",
-      "passive": "Áp phê mạnh thêm 10%."
+      "passive": "Trước mỗi cú chọn giữ áp phê ngang hoặc tiến/lùi; trục còn lại giảm."
     },
     {
       "id": "hophap",
       "name": "Hộ Pháp",
-      "passive": "Lỗi đầu tiên mỗi ván không trao bi trong tay."
+      "passive": "Mỗi lượt cơ được chọn một đoạn băng mềm cho cú của mình."
     },
     {
       "id": "chusu",
       "name": "Chú Sư",
-      "passive": "Đối thủ hồi năng lượng chậm 15%."
+      "passive": "Sau cú hợp lệ kết thúc lượt, để lại một vùng cát nhỏ tại điểm dừng bi cái cho cú kế của đối thủ."
     },
     {
       "id": "anhsat",
       "name": "Ảnh Sát",
-      "passive": "Mỗi bi vào liên tiếp thêm 5 năng lượng."
+      "passive": "Sau chuỗi ghi điểm, chọn soi đường hoặc tăng lực cho cú tiếp theo."
     },
     {
       "id": "luanhoi",
       "name": "Luân Hồi",
-      "passive": "Chiêu cơ bản hồi nhanh hơn 1 lượt."
+      "passive": "Hai chiêu cơ bản chung nhịp: dùng luân phiên hồi nhanh hơn một lượt; lặp lại hồi bình thường."
     }
   ],
   "champions": [
@@ -246,26 +259,26 @@
       "expr": "eager grin",
       "skills": [
         {
-          "name": "Kiếm Chỉ Đường",
-          "kinds": [
-            "reveal"
-          ],
-          "icon": "a small flying sword pointing along a glowing dotted line"
-        },
-        {
-          "name": "Phi Kiếm Dò Lối",
+          "name": "Quang Kiếm Dẫn Lộ",
           "kinds": [
             "vision"
           ],
-          "icon": "a flying sword tracing a curved golden path"
+          "icon": "Ink-wash painted icon on warm rice paper showing three branching cue-ball trajectories ending in three ink dots, restrained vermilion accent, no lettering."
         },
         {
-          "name": "Vạn Kiếm Quy Tông",
+          "name": "Quang Kiếm Minh Nhãn",
+          "kinds": [
+            "reveal"
+          ],
+          "icon": "Ink-wash painted icon on warm rice paper showing a cue guiding a billiard ball through flowing ink, restrained vermilion accent, no lettering."
+        },
+        {
+          "name": "Quang Kiếm Đại Trận",
           "kinds": [
             "vision",
-            "power"
+            "reveal"
           ],
-          "icon": "hundreds of golden flying swords converging into one point"
+          "icon": "Ink-wash painted icon on warm rice paper showing three branching cue-ball trajectories ending in three ink dots, restrained vermilion accent, no lettering."
         }
       ]
     },
@@ -281,26 +294,26 @@
       "expr": "steady stern look",
       "skills": [
         {
-          "name": "Kim Chung Tráo",
+          "name": "Quang Kiếm Dẫn Lộ",
           "kinds": [
-            "shield"
+            "vision"
           ],
-          "icon": "a translucent golden bell barrier"
+          "icon": "Ink-wash painted icon on warm rice paper showing three branching cue-ball trajectories ending in three ink dots, restrained vermilion accent, no lettering."
         },
         {
-          "name": "Trấn Sơn Thủ",
+          "name": "Quang Kiếm Nhu Bích",
           "kinds": [
-            "nudge"
+            "railcraft"
           ],
-          "icon": "a broad palm pushing a white ball with golden force"
+          "icon": "Ink-wash painted icon on warm rice paper showing a soft cushion strip beside a curling sea current, restrained vermilion accent, no lettering."
         },
         {
-          "name": "Thiết Bích Sơn Môn",
+          "name": "Quang Kiếm Đại Trận",
           "kinds": [
-            "shield",
-            "seal"
+            "vision",
+            "sand"
           ],
-          "icon": "a golden mountain gate slamming shut over a round hole"
+          "icon": "Ink-wash painted icon on warm rice paper showing three branching cue-ball trajectories ending in three ink dots, restrained vermilion accent, no lettering."
         }
       ]
     },
@@ -316,26 +329,26 @@
       "expr": "serene faint smile",
       "skills": [
         {
-          "name": "Vân Toàn Kiếm",
+          "name": "Quang Kiếm Dẫn Lộ",
+          "kinds": [
+            "vision"
+          ],
+          "icon": "Ink-wash painted icon on warm rice paper showing three branching cue-ball trajectories ending in three ink dots, restrained vermilion accent, no lettering."
+        },
+        {
+          "name": "Quang Kiếm Toàn Quyết",
           "kinds": [
             "spin"
           ],
-          "icon": "white clouds spiralling around a white ball"
+          "icon": "Ink-wash painted icon on warm rice paper showing a cue guiding a billiard ball through flowing ink, restrained vermilion accent, no lettering."
         },
         {
-          "name": "Lưu Vân Bộ",
+          "name": "Quang Kiếm Đại Trận",
           "kinds": [
-            "nudge"
+            "vision",
+            "slick"
           ],
-          "icon": "glowing cloud footsteps"
-        },
-        {
-          "name": "Thiên Kiếm Vân Hải",
-          "kinds": [
-            "gravity",
-            "spin"
-          ],
-          "icon": "a sea of clouds swirling into a round hole with swords"
+          "icon": "Ink-wash painted icon on warm rice paper showing three branching cue-ball trajectories ending in three ink dots, restrained vermilion accent, no lettering."
         }
       ]
     },
@@ -351,25 +364,26 @@
       "expr": "fierce confident smirk",
       "skills": [
         {
-          "name": "Kiếm Ý Bạo Phát",
+          "name": "Quang Kiếm Dẫn Lộ",
+          "kinds": [
+            "vision"
+          ],
+          "icon": "Ink-wash painted icon on warm rice paper showing three branching cue-ball trajectories ending in three ink dots, restrained vermilion accent, no lettering."
+        },
+        {
+          "name": "Quang Kiếm Cương Kình",
           "kinds": [
             "power"
           ],
-          "icon": "a sword aura flaring upward"
+          "icon": "Ink-wash painted icon on warm rice paper showing a cue guiding a billiard ball through flowing ink, restrained vermilion accent, no lettering."
         },
         {
-          "name": "Chấn Kiếm Âm",
+          "name": "Quang Kiếm Đại Trận",
           "kinds": [
-            "chill"
+            "vision",
+            "vortex"
           ],
-          "icon": "a ringing sword sending sonic rings"
-        },
-        {
-          "name": "Thiên Kiếm Trảm",
-          "kinds": [
-            "blast"
-          ],
-          "icon": "a giant golden sword crashing down"
+          "icon": "Ink-wash painted icon on warm rice paper showing three branching cue-ball trajectories ending in three ink dots, restrained vermilion accent, no lettering."
         }
       ]
     },
@@ -385,26 +399,27 @@
       "expr": "calm all-knowing look",
       "skills": [
         {
-          "name": "Huệ Nhãn",
+          "name": "Quang Kiếm Dẫn Lộ",
+          "kinds": [
+            "vision"
+          ],
+          "icon": "Ink-wash painted icon on warm rice paper showing three branching cue-ball trajectories ending in three ink dots, restrained vermilion accent, no lettering."
+        },
+        {
+          "name": "Quang Kiếm Minh Nhãn",
           "kinds": [
             "reveal"
           ],
-          "icon": "a golden third eye opening"
+          "icon": "Ink-wash painted icon on warm rice paper showing a cue guiding a billiard ball through flowing ink, restrained vermilion accent, no lettering."
         },
         {
-          "name": "Kiếm Tâm Thông Minh",
-          "kinds": [
-            "spin"
-          ],
-          "icon": "a radiant sword-shaped heart"
-        },
-        {
-          "name": "Cửu Kiếm Quy Nhất",
+          "name": "Tam Quang Chiếu Lộ",
           "kinds": [
             "vision",
-            "second"
+            "shield"
           ],
-          "icon": "nine swords merging into a sun"
+          "icon": "Ink-wash painted icon on warm rice paper showing three alternate billiard paths and three clear stopping dots, restrained vermilion accent, no lettering.",
+          "ult": "thienquang"
         }
       ]
     },
@@ -420,26 +435,26 @@
       "expr": "sly grin",
       "skills": [
         {
-          "name": "Lang Nhãn",
+          "name": "Huyết Kình Dẫn Lộ",
           "kinds": [
-            "reveal"
+            "blast"
           ],
-          "icon": "a red wolf eye glowing in shadow"
+          "icon": "Ink-wash painted icon on warm rice paper showing a crimson directional cone pushing three billiard balls forward, restrained vermilion accent, no lettering."
         },
         {
-          "name": "Huyết Trảo",
+          "name": "Huyết Kình Truy Ảnh",
           "kinds": [
-            "power"
+            "second"
           ],
-          "icon": "three red claw slashes"
+          "icon": "Ink-wash painted icon on warm rice paper showing a cue guiding a billiard ball through flowing ink, restrained vermilion accent, no lettering."
         },
         {
-          "name": "Lang Vương Tập Kích",
+          "name": "Huyết Kình Đại Trận",
           "kinds": [
-            "second",
-            "power"
+            "blast",
+            "railcraft"
           ],
-          "icon": "a shadow wolf leaping with red eyes"
+          "icon": "Ink-wash painted icon on warm rice paper showing a crimson directional cone pushing three billiard balls forward, restrained vermilion accent, no lettering."
         }
       ]
     },
@@ -455,25 +470,26 @@
       "expr": "wild grin",
       "skills": [
         {
-          "name": "Cuồng Huyết",
-          "kinds": [
-            "power"
-          ],
-          "icon": "a pulsing red heart wrapped in chains"
-        },
-        {
-          "name": "Chấn Địa",
-          "kinds": [
-            "chill"
-          ],
-          "icon": "a stomp cracking the ground with red cracks"
-        },
-        {
-          "name": "Huyết Chiến Bộc Phá",
+          "name": "Huyết Kình Dẫn Lộ",
           "kinds": [
             "blast"
           ],
-          "icon": "a red explosion of iron shards"
+          "icon": "Ink-wash painted icon on warm rice paper showing a crimson directional cone pushing three billiard balls forward, restrained vermilion accent, no lettering."
+        },
+        {
+          "name": "Huyết Kình Cương Kình",
+          "kinds": [
+            "power"
+          ],
+          "icon": "Ink-wash painted icon on warm rice paper showing a cue guiding a billiard ball through flowing ink, restrained vermilion accent, no lettering."
+        },
+        {
+          "name": "Huyết Kình Đại Trận",
+          "kinds": [
+            "blast",
+            "wind"
+          ],
+          "icon": "Ink-wash painted icon on warm rice paper showing a crimson directional cone pushing three billiard balls forward, restrained vermilion accent, no lettering."
         }
       ]
     },
@@ -489,26 +505,26 @@
       "expr": "mysterious smile",
       "skills": [
         {
-          "name": "Huyết Chú",
+          "name": "Huyết Kình Dẫn Lộ",
           "kinds": [
-            "chill"
+            "blast"
           ],
-          "icon": "a blood rune over a trembling hand"
+          "icon": "Ink-wash painted icon on warm rice paper showing a crimson directional cone pushing three billiard balls forward, restrained vermilion accent, no lettering."
         },
         {
-          "name": "Hấp Huyết",
+          "name": "Huyết Kình Sa Chú",
           "kinds": [
-            "drain"
+            "sand"
           ],
-          "icon": "red energy being siphoned into a rose"
+          "icon": "Ink-wash painted icon on warm rice paper showing a broken sand band with a narrow clear passage, restrained vermilion accent, no lettering."
         },
         {
-          "name": "Huyết Nguyệt Phong Ấn",
+          "name": "Huyết Kình Đại Trận",
           "kinds": [
-            "freeze",
-            "drain"
+            "blast",
+            "well"
           ],
-          "icon": "a blood moon above red chains"
+          "icon": "Ink-wash painted icon on warm rice paper showing a crimson directional cone pushing three billiard balls forward, restrained vermilion accent, no lettering."
         }
       ]
     },
@@ -524,26 +540,26 @@
       "expr": "battle-hardened glare",
       "skills": [
         {
-          "name": "Hành Quân Lệnh",
+          "name": "Huyết Kình Dẫn Lộ",
+          "kinds": [
+            "blast"
+          ],
+          "icon": "Ink-wash painted icon on warm rice paper showing a crimson directional cone pushing three billiard balls forward, restrained vermilion accent, no lettering."
+        },
+        {
+          "name": "Huyết Kình Cương Kình",
           "kinds": [
             "power"
           ],
-          "icon": "a crimson war banner"
+          "icon": "Ink-wash painted icon on warm rice paper showing a cue guiding a billiard ball through flowing ink, restrained vermilion accent, no lettering."
         },
         {
-          "name": "Phá Trận",
-          "kinds": [
-            "nudge"
-          ],
-          "icon": "an iron battering ram"
-        },
-        {
-          "name": "Thiết Kỵ Phá Thành",
+          "name": "Huyết Kình Đại Trận",
           "kinds": [
             "blast",
-            "power"
+            "spinwash"
           ],
-          "icon": "iron cavalry charging through a wall"
+          "icon": "Ink-wash painted icon on warm rice paper showing a crimson directional cone pushing three billiard balls forward, restrained vermilion accent, no lettering."
         }
       ]
     },
@@ -559,26 +575,27 @@
       "expr": "cold arrogant smile",
       "skills": [
         {
-          "name": "Ma Ảnh Độn",
+          "name": "Huyết Kình Dẫn Lộ",
           "kinds": [
-            "teleport"
+            "blast"
           ],
-          "icon": "a dark shadow portal"
+          "icon": "Ink-wash painted icon on warm rice paper showing a crimson directional cone pushing three billiard balls forward, restrained vermilion accent, no lettering."
         },
         {
-          "name": "Hút Hồn",
+          "name": "Huyết Kình Luân Chuyển",
           "kinds": [
-            "drain"
+            "spinwash"
           ],
-          "icon": "a dark hand pulling glowing souls"
+          "icon": "Ink-wash painted icon on warm rice paper showing an ink ring washing away spiral traces from a ball, restrained vermilion accent, no lettering."
         },
         {
-          "name": "Cửu U Nghịch Thiên",
+          "name": "Huyết Kình Phá Trận",
           "kinds": [
-            "rewind",
-            "freeze"
+            "blast",
+            "nudge"
           ],
-          "icon": "a black hourglass turning backwards with red flames"
+          "icon": "Ink-wash painted icon on warm rice paper showing a forward crimson cone pushing balls from a contact point, restrained vermilion accent, no lettering.",
+          "ult": "huyetsat"
         }
       ]
     },
@@ -594,25 +611,26 @@
       "expr": "happy open smile",
       "skills": [
         {
-          "name": "Hoa Toàn",
+          "name": "Hoa Phong Dẫn Lộ",
+          "kinds": [
+            "wind"
+          ],
+          "icon": "Ink-wash painted icon on warm rice paper showing two silk ribbons carrying wind across a billiard cloth, restrained vermilion accent, no lettering."
+        },
+        {
+          "name": "Hoa Phong Toàn Quyết",
           "kinds": [
             "spin"
           ],
-          "icon": "peach petals spiralling around a white ball"
+          "icon": "Ink-wash painted icon on warm rice paper showing a cue guiding a billiard ball through flowing ink, restrained vermilion accent, no lettering."
         },
         {
-          "name": "Hoa Lộ",
+          "name": "Hoa Phong Đại Trận",
           "kinds": [
-            "nudge"
+            "wind",
+            "sand"
           ],
-          "icon": "a path of floating pink petals"
-        },
-        {
-          "name": "Đào Hoa Nguyên",
-          "kinds": [
-            "gravity"
-          ],
-          "icon": "a whirl of blossoms around a round hole"
+          "icon": "Ink-wash painted icon on warm rice paper showing two silk ribbons carrying wind across a billiard cloth, restrained vermilion accent, no lettering."
         }
       ]
     },
@@ -628,26 +646,26 @@
       "expr": "relaxed smirk",
       "skills": [
         {
-          "name": "Phong Ảnh",
+          "name": "Hoa Phong Dẫn Lộ",
+          "kinds": [
+            "wind"
+          ],
+          "icon": "Ink-wash painted icon on warm rice paper showing two silk ribbons carrying wind across a billiard cloth, restrained vermilion accent, no lettering."
+        },
+        {
+          "name": "Hoa Phong Truy Ảnh",
           "kinds": [
             "second"
           ],
-          "icon": "a gust of wind shaped like a running silhouette"
+          "icon": "Ink-wash painted icon on warm rice paper showing a cue guiding a billiard ball through flowing ink, restrained vermilion accent, no lettering."
         },
         {
-          "name": "Phong Nhận",
+          "name": "Hoa Phong Đại Trận",
           "kinds": [
-            "power"
+            "wind",
+            "slick"
           ],
-          "icon": "crescent wind blades"
-        },
-        {
-          "name": "Tật Phong Liên Trảm",
-          "kinds": [
-            "second",
-            "reveal"
-          ],
-          "icon": "a tornado of wind blades"
+          "icon": "Ink-wash painted icon on warm rice paper showing two silk ribbons carrying wind across a billiard cloth, restrained vermilion accent, no lettering."
         }
       ]
     },
@@ -663,26 +681,26 @@
       "expr": "playful sly smile",
       "skills": [
         {
-          "name": "Mê Hồn",
+          "name": "Hoa Phong Dẫn Lộ",
           "kinds": [
-            "chill"
+            "wind"
           ],
-          "icon": "a pink charm orb with a heart glow"
+          "icon": "Ink-wash painted icon on warm rice paper showing two silk ribbons carrying wind across a billiard cloth, restrained vermilion accent, no lettering."
         },
         {
-          "name": "Hồ Hỏa",
+          "name": "Hoa Phong Sa Chú",
           "kinds": [
-            "drain"
+            "sand"
           ],
-          "icon": "three pink fox-fire wisps"
+          "icon": "Ink-wash painted icon on warm rice paper showing a broken sand band with a narrow clear passage, restrained vermilion accent, no lettering."
         },
         {
-          "name": "Cửu Vĩ Mê Trận",
+          "name": "Hoa Phong Đại Trận",
           "kinds": [
-            "chill",
-            "seal"
+            "wind",
+            "vortex"
           ],
-          "icon": "nine fox tails forming a ring maze"
+          "icon": "Ink-wash painted icon on warm rice paper showing two silk ribbons carrying wind across a billiard cloth, restrained vermilion accent, no lettering."
         }
       ]
     },
@@ -698,26 +716,26 @@
       "expr": "peaceful closed eyes",
       "skills": [
         {
-          "name": "Liên Hoa Hộ Thể",
+          "name": "Hoa Phong Dẫn Lộ",
           "kinds": [
+            "wind"
+          ],
+          "icon": "Ink-wash painted icon on warm rice paper showing two silk ribbons carrying wind across a billiard cloth, restrained vermilion accent, no lettering."
+        },
+        {
+          "name": "Hoa Phong Nhu Bích",
+          "kinds": [
+            "railcraft"
+          ],
+          "icon": "Ink-wash painted icon on warm rice paper showing a soft cushion strip beside a curling sea current, restrained vermilion accent, no lettering."
+        },
+        {
+          "name": "Hoa Phong Đại Trận",
+          "kinds": [
+            "wind",
             "shield"
           ],
-          "icon": "a green lotus-petal shield"
-        },
-        {
-          "name": "Tâm Tĩnh Như Thủy",
-          "kinds": [
-            "nudge"
-          ],
-          "icon": "a calm water ripple around a ball"
-        },
-        {
-          "name": "Thiên Liên Kết Giới",
-          "kinds": [
-            "shield",
-            "seal"
-          ],
-          "icon": "a giant lotus barrier dome"
+          "icon": "Ink-wash painted icon on warm rice paper showing two silk ribbons carrying wind across a billiard cloth, restrained vermilion accent, no lettering."
         }
       ]
     },
@@ -733,26 +751,27 @@
       "expr": "dreamy half-closed eyes",
       "skills": [
         {
-          "name": "Mộng Điệp",
+          "name": "Hoa Phong Dẫn Lộ",
           "kinds": [
-            "teleport"
+            "wind"
           ],
-          "icon": "a butterfly-wing portal"
+          "icon": "Ink-wash painted icon on warm rice paper showing two silk ribbons carrying wind across a billiard cloth, restrained vermilion accent, no lettering."
         },
         {
-          "name": "Hồi Mộng",
+          "name": "Hoa Phong Luân Chuyển",
           "kinds": [
-            "rewind"
+            "spinwash"
           ],
-          "icon": "an hourglass filled with petals"
+          "icon": "Ink-wash painted icon on warm rice paper showing an ink ring washing away spiral traces from a ball, restrained vermilion accent, no lettering."
         },
         {
-          "name": "Hoa Mộng Luân Hồi",
+          "name": "Lưỡng Nghi Hoa Phong",
           "kinds": [
-            "rewind",
+            "wind",
             "second"
           ],
-          "icon": "a circle of petals and butterflies cycling"
+          "icon": "Ink-wash painted icon on warm rice paper showing two opposing wind zones divided by blossom ribbons, restrained vermilion accent, no lettering.",
+          "ult": "hoalinh"
         }
       ]
     },
@@ -768,26 +787,26 @@
       "expr": "bright cheeky grin",
       "skills": [
         {
-          "name": "Băng Tiễn Chỉ Lộ",
+          "name": "Băng Lộ Dẫn Lộ",
+          "kinds": [
+            "slick"
+          ],
+          "icon": "Ink-wash painted icon on warm rice paper showing an icy corridor with dark braking pools at its ends, restrained vermilion accent, no lettering."
+        },
+        {
+          "name": "Băng Lộ Minh Nhãn",
           "kinds": [
             "reveal"
           ],
-          "icon": "an ice arrow pointing along a glowing dotted path"
+          "icon": "Ink-wash painted icon on warm rice paper showing a cue guiding a billiard ball through flowing ink, restrained vermilion accent, no lettering."
         },
         {
-          "name": "Hàn Mục",
+          "name": "Băng Lộ Đại Trận",
           "kinds": [
-            "vision"
+            "slick",
+            "wind"
           ],
-          "icon": "a frost-rimmed eye seeing a faint trail"
-        },
-        {
-          "name": "Vạn Tiễn Băng Vũ",
-          "kinds": [
-            "vision",
-            "spin"
-          ],
-          "icon": "a rain of many small ice arrows from above"
+          "icon": "Ink-wash painted icon on warm rice paper showing an icy corridor with dark braking pools at its ends, restrained vermilion accent, no lettering."
         }
       ]
     },
@@ -803,26 +822,26 @@
       "expr": "calm determined look",
       "skills": [
         {
-          "name": "Băng Giáp",
+          "name": "Băng Lộ Dẫn Lộ",
           "kinds": [
-            "shield"
+            "slick"
           ],
-          "icon": "a heavy ice armour breastplate"
+          "icon": "Ink-wash painted icon on warm rice paper showing an icy corridor with dark braking pools at its ends, restrained vermilion accent, no lettering."
         },
         {
-          "name": "Trấn Thủ",
+          "name": "Băng Lộ Nhu Bích",
           "kinds": [
-            "nudge"
+            "railcraft"
           ],
-          "icon": "a stout guardian palm pushing a white billiard ball"
+          "icon": "Ink-wash painted icon on warm rice paper showing a soft cushion strip beside a curling sea current, restrained vermilion accent, no lettering."
         },
         {
-          "name": "Băng Thành Bất Phá",
+          "name": "Băng Lộ Đại Trận",
           "kinds": [
-            "shield",
-            "seal"
+            "slick",
+            "well"
           ],
-          "icon": "an ice fortress wall with a sealed circular hole"
+          "icon": "Ink-wash painted icon on warm rice paper showing an icy corridor with dark braking pools at its ends, restrained vermilion accent, no lettering."
         }
       ]
     },
@@ -838,26 +857,26 @@
       "expr": "gentle serene smile",
       "skills": [
         {
-          "name": "Sương Liên Áp Phê",
+          "name": "Băng Lộ Dẫn Lộ",
+          "kinds": [
+            "slick"
+          ],
+          "icon": "Ink-wash painted icon on warm rice paper showing an icy corridor with dark braking pools at its ends, restrained vermilion accent, no lettering."
+        },
+        {
+          "name": "Băng Lộ Toàn Quyết",
           "kinds": [
             "spin"
           ],
-          "icon": "a swirling frost-petal spiral around a white billiard ball"
+          "icon": "Ink-wash painted icon on warm rice paper showing a cue guiding a billiard ball through flowing ink, restrained vermilion accent, no lettering."
         },
         {
-          "name": "Băng Lộ",
+          "name": "Băng Lộ Đại Trận",
           "kinds": [
-            "nudge"
+            "slick",
+            "spinwash"
           ],
-          "icon": "a glittering ice road sliding forward"
-        },
-        {
-          "name": "Băng Liên Nở Rộ",
-          "kinds": [
-            "maw",
-            "gravity"
-          ],
-          "icon": "a giant ice lotus blooming over a dark hole"
+          "icon": "Ink-wash painted icon on warm rice paper showing an icy corridor with dark braking pools at its ends, restrained vermilion accent, no lettering."
         }
       ]
     },
@@ -873,25 +892,26 @@
       "expr": "fierce playful roar",
       "skills": [
         {
-          "name": "Hùng Lực",
+          "name": "Băng Lộ Dẫn Lộ",
+          "kinds": [
+            "slick"
+          ],
+          "icon": "Ink-wash painted icon on warm rice paper showing an icy corridor with dark braking pools at its ends, restrained vermilion accent, no lettering."
+        },
+        {
+          "name": "Băng Lộ Cương Kình",
           "kinds": [
             "power"
           ],
-          "icon": "a bear claw fist bursting with frost power"
+          "icon": "Ink-wash painted icon on warm rice paper showing a cue guiding a billiard ball through flowing ink, restrained vermilion accent, no lettering."
         },
         {
-          "name": "Chấn Băng",
+          "name": "Băng Lộ Đại Trận",
           "kinds": [
-            "chill"
+            "slick",
+            "nudge"
           ],
-          "icon": "a ground-shaking stomp with ice cracks"
-        },
-        {
-          "name": "Băng Sơn Bộc Phá",
-          "kinds": [
-            "blast"
-          ],
-          "icon": "a glacier exploding into shards"
+          "icon": "Ink-wash painted icon on warm rice paper showing an icy corridor with dark braking pools at its ends, restrained vermilion accent, no lettering."
         }
       ]
     },
@@ -907,26 +927,27 @@
       "expr": "cold regal half-smile",
       "skills": [
         {
-          "name": "Hàn Khí Xâm Cốt",
+          "name": "Băng Lộ Dẫn Lộ",
           "kinds": [
-            "chill"
+            "slick"
           ],
-          "icon": "creeping cold mist biting a trembling hand"
+          "icon": "Ink-wash painted icon on warm rice paper showing an icy corridor with dark braking pools at its ends, restrained vermilion accent, no lettering."
         },
         {
-          "name": "Phong Băng Khẩu",
+          "name": "Băng Lộ Sa Chú",
           "kinds": [
-            "seal"
+            "sand"
           ],
-          "icon": "a chained ice seal over a round hole"
+          "icon": "Ink-wash painted icon on warm rice paper showing a broken sand band with a narrow clear passage, restrained vermilion accent, no lettering."
         },
         {
-          "name": "Vạn Lý Băng Phong",
+          "name": "Băng Hà Song Hãm",
           "kinds": [
-            "freeze",
-            "seal"
+            "slick",
+            "spin"
           ],
-          "icon": "a full moon freezing everything below into crystal"
+          "icon": "Ink-wash painted icon on warm rice paper showing an icy corridor between two sandy brake zones, restrained vermilion accent, no lettering.",
+          "ult": "bangphach"
         }
       ]
     },
@@ -942,26 +963,26 @@
       "expr": "focused tongue-out grin",
       "skills": [
         {
-          "name": "Kính Ngắm Đồng",
+          "name": "Cơ Trận Dẫn Lộ",
+          "kinds": [
+            "bumper"
+          ],
+          "icon": "Ink-wash painted icon on warm rice paper showing angled wooden barriers on a billiard cloth, restrained vermilion accent, no lettering."
+        },
+        {
+          "name": "Cơ Trận Minh Nhãn",
           "kinds": [
             "reveal"
           ],
-          "icon": "a brass spyglass lens showing a glowing dotted path"
+          "icon": "Ink-wash painted icon on warm rice paper showing a cue guiding a billiard ball through flowing ink, restrained vermilion accent, no lettering."
         },
         {
-          "name": "Tính Quỹ Đạo",
+          "name": "Cơ Trận Đại Trận",
           "kinds": [
-            "vision"
+            "bumper",
+            "slick"
           ],
-          "icon": "a blueprint with a glowing trajectory"
-        },
-        {
-          "name": "Liên Nỏ Thần Cơ",
-          "kinds": [
-            "vision",
-            "power"
-          ],
-          "icon": "a clockwork bird flying along a glowing cyan trajectory"
+          "icon": "Ink-wash painted icon on warm rice paper showing angled wooden barriers on a billiard cloth, restrained vermilion accent, no lettering."
         }
       ]
     },
@@ -977,26 +998,26 @@
       "expr": "glowing cyan eyes",
       "skills": [
         {
-          "name": "Cơ Giáp",
+          "name": "Cơ Trận Dẫn Lộ",
           "kinds": [
-            "shield"
+            "bumper"
           ],
-          "icon": "a wooden-and-brass armour plate"
+          "icon": "Ink-wash painted icon on warm rice paper showing angled wooden barriers on a billiard cloth, restrained vermilion accent, no lettering."
         },
         {
-          "name": "Đẩy Bánh Răng",
+          "name": "Cơ Trận Nhu Bích",
           "kinds": [
-            "nudge"
+            "railcraft"
           ],
-          "icon": "a brass gear pushing a white ball"
+          "icon": "Ink-wash painted icon on warm rice paper showing a soft cushion strip beside a curling sea current, restrained vermilion accent, no lettering."
         },
         {
-          "name": "Thành Lũy Cơ Quan",
+          "name": "Cơ Trận Đại Trận",
           "kinds": [
-            "shield",
-            "seal"
+            "bumper",
+            "vortex"
           ],
-          "icon": "a mechanical gate of gears locking a round hole"
+          "icon": "Ink-wash painted icon on warm rice paper showing angled wooden barriers on a billiard cloth, restrained vermilion accent, no lettering."
         }
       ]
     },
@@ -1012,25 +1033,26 @@
       "expr": "smug clever smile",
       "skills": [
         {
-          "name": "Con Quay Thần",
+          "name": "Cơ Trận Dẫn Lộ",
+          "kinds": [
+            "bumper"
+          ],
+          "icon": "Ink-wash painted icon on warm rice paper showing angled wooden barriers on a billiard cloth, restrained vermilion accent, no lettering."
+        },
+        {
+          "name": "Cơ Trận Toàn Quyết",
           "kinds": [
             "spin"
           ],
-          "icon": "a spinning brass gyroscope"
+          "icon": "Ink-wash painted icon on warm rice paper showing a cue guiding a billiard ball through flowing ink, restrained vermilion accent, no lettering."
         },
         {
-          "name": "Rối Gỗ Dời Bi",
+          "name": "Cơ Trận Đại Trận",
           "kinds": [
-            "nudge"
+            "bumper",
+            "shield"
           ],
-          "icon": "a wooden puppet hand on strings moving a ball"
-        },
-        {
-          "name": "Thiên Cơ Từ Trường",
-          "kinds": [
-            "gravity"
-          ],
-          "icon": "a brass magnetic coil pulling sparks into a hole"
+          "icon": "Ink-wash painted icon on warm rice paper showing angled wooden barriers on a billiard cloth, restrained vermilion accent, no lettering."
         }
       ]
     },
@@ -1046,25 +1068,26 @@
       "expr": "manic laugh",
       "skills": [
         {
-          "name": "Thuốc Nổ",
+          "name": "Cơ Trận Dẫn Lộ",
+          "kinds": [
+            "bumper"
+          ],
+          "icon": "Ink-wash painted icon on warm rice paper showing angled wooden barriers on a billiard cloth, restrained vermilion accent, no lettering."
+        },
+        {
+          "name": "Cơ Trận Cương Kình",
           "kinds": [
             "power"
           ],
-          "icon": "a round black firework bomb with a lit fuse"
+          "icon": "Ink-wash painted icon on warm rice paper showing a cue guiding a billiard ball through flowing ink, restrained vermilion accent, no lettering."
         },
         {
-          "name": "Pháo Chấn",
+          "name": "Cơ Trận Đại Trận",
           "kinds": [
-            "chill"
+            "bumper",
+            "second"
           ],
-          "icon": "a cannon blast shockwave"
-        },
-        {
-          "name": "Thần Hoả Lôi Pháo",
-          "kinds": [
-            "blast"
-          ],
-          "icon": "a giant brass cannon firing a fireball"
+          "icon": "Ink-wash painted icon on warm rice paper showing angled wooden barriers on a billiard cloth, restrained vermilion accent, no lettering."
         }
       ]
     },
@@ -1080,26 +1103,27 @@
       "expr": "knowing calm smile",
       "skills": [
         {
-          "name": "Thần Toán",
+          "name": "Cơ Trận Dẫn Lộ",
           "kinds": [
-            "vision"
+            "bumper"
           ],
-          "icon": "an abacus made of glowing light"
+          "icon": "Ink-wash painted icon on warm rice paper showing angled wooden barriers on a billiard cloth, restrained vermilion accent, no lettering."
         },
         {
-          "name": "Bát Môn Trận",
+          "name": "Cơ Trận Luân Chuyển",
           "kinds": [
-            "teleport"
+            "spinwash"
           ],
-          "icon": "an eight-gate glowing formation circle"
+          "icon": "Ink-wash painted icon on warm rice paper showing an ink ring washing away spiral traces from a ball, restrained vermilion accent, no lettering."
         },
         {
-          "name": "Thiên Cơ Đoán Mệnh",
+          "name": "Chiết Quang Song Kính",
           "kinds": [
-            "rewind",
-            "vision"
+            "bumper",
+            "power"
           ],
-          "icon": "a brass astrolabe clock turning backwards"
+          "icon": "Ink-wash painted icon on warm rice paper showing two short angled wooden reflectors, restrained vermilion accent, no lettering.",
+          "ult": "thienco"
         }
       ]
     },
@@ -1115,11 +1139,11 @@
       "expr": "sly hiss smile",
       "skills": [
         {
-          "name": "Xà Nhãn",
+          "name": "Độc Toàn Dẫn Lộ",
           "kinds": [
-            "reveal"
+            "spinwash"
           ],
-          "icon": "a green snake eye with slit pupil"
+          "icon": "Ink-wash painted icon on warm rice paper showing an ink ring washing away spiral traces from a ball, restrained vermilion accent, no lettering."
         },
         {
           "name": "Xà Ảnh",
@@ -1129,12 +1153,12 @@
           "icon": "a striking snake shadow"
         },
         {
-          "name": "Vạn Xà Quấn",
+          "name": "Độc Toàn Đại Trận",
           "kinds": [
-            "second",
-            "drain"
+            "spinwash",
+            "well"
           ],
-          "icon": "many green snakes coiling around a ball"
+          "icon": "Ink-wash painted icon on warm rice paper showing an ink ring washing away spiral traces from a ball, restrained vermilion accent, no lettering."
         }
       ]
     },
@@ -1150,26 +1174,26 @@
       "expr": "creepy cackle",
       "skills": [
         {
-          "name": "Độc Vụ",
+          "name": "Độc Toàn Dẫn Lộ",
           "kinds": [
-            "chill"
+            "spinwash"
           ],
-          "icon": "a green poison cloud with a skull shape"
+          "icon": "Ink-wash painted icon on warm rice paper showing an ink ring washing away spiral traces from a ball, restrained vermilion accent, no lettering."
         },
         {
-          "name": "Phong Độc Khẩu",
+          "name": "Độc Toàn Sa Chú",
           "kinds": [
-            "seal"
+            "sand"
           ],
-          "icon": "a toxic green seal over a round hole"
+          "icon": "Ink-wash painted icon on warm rice paper showing a broken sand band with a narrow clear passage, restrained vermilion accent, no lettering."
         },
         {
-          "name": "Vạn Độc Phệ Tâm",
+          "name": "Độc Toàn Đại Trận",
           "kinds": [
-            "freeze",
-            "chill"
+            "spinwash",
+            "nudge"
           ],
-          "icon": "a poisoned heart wrapped in green vines"
+          "icon": "Ink-wash painted icon on warm rice paper showing an ink ring washing away spiral traces from a ball, restrained vermilion accent, no lettering."
         }
       ]
     },
@@ -1185,11 +1209,11 @@
       "expr": "mischievous grin",
       "skills": [
         {
-          "name": "Cổ Trùng Dẫn Bi",
+          "name": "Độc Toàn Dẫn Lộ",
           "kinds": [
-            "nudge"
+            "spinwash"
           ],
-          "icon": "a glowing gu insect carrying a ball"
+          "icon": "Ink-wash painted icon on warm rice paper showing an ink ring washing away spiral traces from a ball, restrained vermilion accent, no lettering."
         },
         {
           "name": "Kim Tằm Xoáy",
@@ -1199,12 +1223,12 @@
           "icon": "a golden silkworm spiralling"
         },
         {
-          "name": "Vạn Cổ Hút Lỗ",
+          "name": "Độc Toàn Đại Trận",
           "kinds": [
-            "gravity",
-            "maw"
+            "spinwash",
+            "nudge"
           ],
-          "icon": "a swarm of insects swirling into a hole"
+          "icon": "Ink-wash painted icon on warm rice paper showing an ink ring washing away spiral traces from a ball, restrained vermilion accent, no lettering."
         }
       ]
     },
@@ -1220,26 +1244,26 @@
       "expr": "snarling",
       "skills": [
         {
-          "name": "Khát Máu",
+          "name": "Độc Toàn Dẫn Lộ",
           "kinds": [
-            "drain"
+            "spinwash"
           ],
-          "icon": "a fanged maw dripping green"
+          "icon": "Ink-wash painted icon on warm rice paper showing an ink ring washing away spiral traces from a ball, restrained vermilion accent, no lettering."
         },
         {
-          "name": "Cuồng Lang",
+          "name": "Độc Toàn Truy Ảnh",
           "kinds": [
-            "power"
+            "second"
           ],
-          "icon": "a wolf head howling with green aura"
+          "icon": "Ink-wash painted icon on warm rice paper showing a cue guiding a billiard ball through flowing ink, restrained vermilion accent, no lettering."
         },
         {
-          "name": "Săn Mồi",
+          "name": "Độc Toàn Đại Trận",
           "kinds": [
-            "second",
-            "power"
+            "spinwash",
+            "spin"
           ],
-          "icon": "claw marks over a target circle"
+          "icon": "Ink-wash painted icon on warm rice paper showing an ink ring washing away spiral traces from a ball, restrained vermilion accent, no lettering."
         }
       ]
     },
@@ -1255,11 +1279,11 @@
       "expr": "knowing smirk",
       "skills": [
         {
-          "name": "Hồi Xuân Đan",
+          "name": "Độc Toàn Dẫn Lộ",
           "kinds": [
-            "rewind"
+            "spinwash"
           ],
-          "icon": "a glowing green pill with a clock"
+          "icon": "Ink-wash painted icon on warm rice paper showing an ink ring washing away spiral traces from a ball, restrained vermilion accent, no lettering."
         },
         {
           "name": "Kim Châm Hộ Mạch",
@@ -1269,12 +1293,13 @@
           "icon": "silver needles forming a shield"
         },
         {
-          "name": "Cải Tử Hoàn Sinh",
+          "name": "Độc Hoàn Tán Toàn",
           "kinds": [
-            "rewind",
-            "second"
+            "spinwash",
+            "reveal"
           ],
-          "icon": "a phoenix-like green flame rising from a vial"
+          "icon": "Ink-wash painted icon on warm rice paper showing a spin-dissolving ring around a smooth icy core, restrained vermilion accent, no lettering.",
+          "ult": "docvu"
         }
       ]
     },
@@ -1290,26 +1315,27 @@
       "expr": "cocky grin",
       "skills": [
         {
-          "name": "Lướt Sóng",
+          "name": "Hải Triều Dẫn Lộ",
+          "kinds": [
+            "railcraft",
+            "wind"
+          ],
+          "icon": "Ink-wash painted icon on warm rice paper showing a soft cushion strip beside a curling sea current, restrained vermilion accent, no lettering."
+        },
+        {
+          "name": "Hải Triều Truy Ảnh",
           "kinds": [
             "second"
           ],
-          "icon": "a surfing wave with foam"
+          "icon": "Ink-wash painted icon on warm rice paper showing a cue guiding a billiard ball through flowing ink, restrained vermilion accent, no lettering."
         },
         {
-          "name": "Mắt Vẹt",
+          "name": "Hải Triều Đại Trận",
           "kinds": [
-            "reveal"
+            "railcraft",
+            "vortex"
           ],
-          "icon": "a parrot eye with a sparkle"
-        },
-        {
-          "name": "Cá Chuồn Liên Hoàn",
-          "kinds": [
-            "second",
-            "spin"
-          ],
-          "icon": "flying fish leaping in an arc"
+          "icon": "Ink-wash painted icon on warm rice paper showing a soft cushion strip beside a curling sea current, restrained vermilion accent, no lettering."
         }
       ]
     },
@@ -1325,25 +1351,27 @@
       "expr": "toothy shark grin",
       "skills": [
         {
-          "name": "Cá Mập Cắn",
+          "name": "Hải Triều Dẫn Lộ",
+          "kinds": [
+            "railcraft",
+            "wind"
+          ],
+          "icon": "Ink-wash painted icon on warm rice paper showing a soft cushion strip beside a curling sea current, restrained vermilion accent, no lettering."
+        },
+        {
+          "name": "Hải Triều Cương Kình",
           "kinds": [
             "power"
           ],
-          "icon": "a shark jaw biting"
+          "icon": "Ink-wash painted icon on warm rice paper showing a cue guiding a billiard ball through flowing ink, restrained vermilion accent, no lettering."
         },
         {
-          "name": "Sóng Dữ",
+          "name": "Hải Triều Đại Trận",
           "kinds": [
-            "chill"
+            "railcraft",
+            "shield"
           ],
-          "icon": "a crashing rogue wave"
-        },
-        {
-          "name": "Vây Mập Phá Sóng",
-          "kinds": [
-            "blast"
-          ],
-          "icon": "a shark fin bursting through water"
+          "icon": "Ink-wash painted icon on warm rice paper showing a soft cushion strip beside a curling sea current, restrained vermilion accent, no lettering."
         }
       ]
     },
@@ -1359,26 +1387,27 @@
       "expr": "confident wink",
       "skills": [
         {
-          "name": "Ống Nhòm Vàng",
+          "name": "Hải Triều Dẫn Lộ",
+          "kinds": [
+            "railcraft",
+            "wind"
+          ],
+          "icon": "Ink-wash painted icon on warm rice paper showing a soft cushion strip beside a curling sea current, restrained vermilion accent, no lettering."
+        },
+        {
+          "name": "Hải Triều Minh Nhãn",
           "kinds": [
             "reveal"
           ],
-          "icon": "a brass spyglass"
+          "icon": "Ink-wash painted icon on warm rice paper showing a cue guiding a billiard ball through flowing ink, restrained vermilion accent, no lettering."
         },
         {
-          "name": "Gió Thuận Buồm",
+          "name": "Hải Triều Đại Trận",
           "kinds": [
-            "spin"
+            "railcraft",
+            "second"
           ],
-          "icon": "a billowing sail with wind"
-        },
-        {
-          "name": "Mưa Tiền Vàng",
-          "kinds": [
-            "vision",
-            "power"
-          ],
-          "icon": "a rain of gold coins"
+          "icon": "Ink-wash painted icon on warm rice paper showing a soft cushion strip beside a curling sea current, restrained vermilion accent, no lettering."
         }
       ]
     },
@@ -1394,26 +1423,27 @@
       "expr": "gruff kind smile",
       "skills": [
         {
-          "name": "Neo Thép",
+          "name": "Hải Triều Dẫn Lộ",
+          "kinds": [
+            "railcraft",
+            "wind"
+          ],
+          "icon": "Ink-wash painted icon on warm rice paper showing a soft cushion strip beside a curling sea current, restrained vermilion accent, no lettering."
+        },
+        {
+          "name": "Hải Triều Hộ Quyết",
           "kinds": [
             "shield"
           ],
-          "icon": "a steel anchor glowing teal"
+          "icon": "Ink-wash painted icon on warm rice paper showing a cue guiding a billiard ball through flowing ink, restrained vermilion accent, no lettering."
         },
         {
-          "name": "Kéo Neo",
+          "name": "Hải Triều Đại Trận",
           "kinds": [
-            "nudge"
+            "railcraft",
+            "reveal"
           ],
-          "icon": "an anchor chain pulling a ball"
-        },
-        {
-          "name": "Neo Trấn Biển",
-          "kinds": [
-            "seal",
-            "gravity"
-          ],
-          "icon": "an anchor slamming into a whirlpool"
+          "icon": "Ink-wash painted icon on warm rice paper showing a soft cushion strip beside a curling sea current, restrained vermilion accent, no lettering."
         }
       ]
     },
@@ -1429,26 +1459,29 @@
       "expr": "imperious stare",
       "skills": [
         {
-          "name": "Thủy Triều",
+          "name": "Hải Triều Dẫn Lộ",
           "kinds": [
-            "chill"
+            "railcraft",
+            "wind"
           ],
-          "icon": "a rising tide wave"
+          "icon": "Ink-wash painted icon on warm rice paper showing a soft cushion strip beside a curling sea current, restrained vermilion accent, no lettering."
         },
         {
-          "name": "Xoáy Nước",
+          "name": "Hải Triều Sa Chú",
           "kinds": [
-            "gravity"
+            "sand"
           ],
-          "icon": "a deep whirlpool"
+          "icon": "Ink-wash painted icon on warm rice paper showing a broken sand band with a narrow clear passage, restrained vermilion accent, no lettering."
         },
         {
-          "name": "Long Vương Hải Khiếu",
+          "name": "Triều Hoàn Quy Uyên",
           "kinds": [
-            "freeze",
-            "gravity"
+            "railcraft",
+            "wind",
+            "vortex"
           ],
-          "icon": "a sea dragon rising from a tsunami"
+          "icon": "Ink-wash painted icon on warm rice paper showing an outer sea current curling into an inner ink well, restrained vermilion accent, no lettering.",
+          "ult": "hailong"
         }
       ]
     },
@@ -1464,26 +1497,28 @@
       "expr": "shy blank-eyed smile",
       "skills": [
         {
-          "name": "Hồn Đăng",
+          "name": "Minh Môn Dẫn Lộ",
           "kinds": [
-            "chill"
+            "bumper"
           ],
-          "icon": "a jade spirit lantern"
+          "icon": "Ink-wash painted icon on warm rice paper showing a pair of dark wooden gates closing a billiard corridor, restrained vermilion accent, no lettering.",
+          "shape": "gate"
         },
         {
-          "name": "Dẫn Hồn",
+          "name": "Minh Môn Sa Chú",
           "kinds": [
-            "drain"
+            "sand"
           ],
-          "icon": "a ghost wisp being led on a thread"
+          "icon": "Ink-wash painted icon on warm rice paper showing a broken sand band with a narrow clear passage, restrained vermilion accent, no lettering."
         },
         {
-          "name": "Bách Quỷ Dạ Hành",
+          "name": "Minh Môn Đại Trận",
           "kinds": [
-            "chill",
-            "seal"
+            "bumper",
+            "spinwash"
           ],
-          "icon": "a parade of ghost lanterns"
+          "icon": "Ink-wash painted icon on warm rice paper showing a pair of dark wooden gates closing a billiard corridor, restrained vermilion accent, no lettering.",
+          "shape": "gate"
         }
       ]
     },
@@ -1499,26 +1534,28 @@
       "expr": "eerie glow eyes",
       "skills": [
         {
-          "name": "Cốt Ảnh",
+          "name": "Minh Môn Dẫn Lộ",
+          "kinds": [
+            "bumper"
+          ],
+          "icon": "Ink-wash painted icon on warm rice paper showing a pair of dark wooden gates closing a billiard corridor, restrained vermilion accent, no lettering.",
+          "shape": "gate"
+        },
+        {
+          "name": "Minh Môn Truy Ảnh",
           "kinds": [
             "second"
           ],
-          "icon": "a skeletal afterimage"
+          "icon": "Ink-wash painted icon on warm rice paper showing a cue guiding a billiard ball through flowing ink, restrained vermilion accent, no lettering."
         },
         {
-          "name": "Xương Vụn",
+          "name": "Minh Môn Đại Trận",
           "kinds": [
-            "power"
+            "bumper",
+            "nudge"
           ],
-          "icon": "shattering bone shards"
-        },
-        {
-          "name": "Vạn Cốt Kiếm",
-          "kinds": [
-            "second",
-            "blast"
-          ],
-          "icon": "many bone swords bursting outward"
+          "icon": "Ink-wash painted icon on warm rice paper showing a pair of dark wooden gates closing a billiard corridor, restrained vermilion accent, no lettering.",
+          "shape": "gate"
         }
       ]
     },
@@ -1534,26 +1571,28 @@
       "expr": "gentle mysterious smile",
       "skills": [
         {
-          "name": "Canh Lãng Quên",
+          "name": "Minh Môn Dẫn Lộ",
           "kinds": [
-            "rewind"
+            "bumper"
           ],
-          "icon": "a steaming bowl of glowing soup"
+          "icon": "Ink-wash painted icon on warm rice paper showing a pair of dark wooden gates closing a billiard corridor, restrained vermilion accent, no lettering.",
+          "shape": "gate"
         },
         {
-          "name": "Đò Qua Sông",
+          "name": "Minh Môn Luân Chuyển",
           "kinds": [
-            "teleport"
+            "spinwash"
           ],
-          "icon": "a small ferry boat on misty water"
+          "icon": "Ink-wash painted icon on warm rice paper showing an ink ring washing away spiral traces from a ball, restrained vermilion accent, no lettering."
         },
         {
-          "name": "Cầu Luân Hồi",
+          "name": "Minh Môn Đại Trận",
           "kinds": [
-            "rewind",
-            "second"
+            "bumper",
+            "spin"
           ],
-          "icon": "a ghostly arched bridge over a river"
+          "icon": "Ink-wash painted icon on warm rice paper showing a pair of dark wooden gates closing a billiard corridor, restrained vermilion accent, no lettering.",
+          "shape": "gate"
         }
       ]
     },
@@ -1569,26 +1608,28 @@
       "expr": "unsettling grin",
       "skills": [
         {
-          "name": "Xích Câu Hồn",
+          "name": "Minh Môn Dẫn Lộ",
           "kinds": [
-            "seal"
+            "bumper"
           ],
-          "icon": "a soul hook on a chain"
+          "icon": "Ink-wash painted icon on warm rice paper showing a pair of dark wooden gates closing a billiard corridor, restrained vermilion accent, no lettering.",
+          "shape": "gate"
         },
         {
-          "name": "Hồn Hàn",
+          "name": "Minh Môn Sa Chú",
           "kinds": [
-            "freeze"
+            "sand"
           ],
-          "icon": "a frozen ghostly hand"
+          "icon": "Ink-wash painted icon on warm rice paper showing a broken sand band with a narrow clear passage, restrained vermilion accent, no lettering."
         },
         {
-          "name": "Âm Ty Phong Lỗ",
+          "name": "Minh Môn Đại Trận",
           "kinds": [
-            "seal",
-            "drain"
+            "bumper",
+            "reveal"
           ],
-          "icon": "chains sealing a round hole with ghost fire"
+          "icon": "Ink-wash painted icon on warm rice paper showing a pair of dark wooden gates closing a billiard corridor, restrained vermilion accent, no lettering.",
+          "shape": "gate"
         }
       ]
     },
@@ -1604,26 +1645,29 @@
       "expr": "menacing laugh",
       "skills": [
         {
-          "name": "Quỷ Lực",
+          "name": "Minh Môn Dẫn Lộ",
+          "kinds": [
+            "bumper"
+          ],
+          "icon": "Ink-wash painted icon on warm rice paper showing a pair of dark wooden gates closing a billiard corridor, restrained vermilion accent, no lettering.",
+          "shape": "gate"
+        },
+        {
+          "name": "Minh Môn Cương Kình",
           "kinds": [
             "power"
           ],
-          "icon": "a ghost fist of jade fire"
+          "icon": "Ink-wash painted icon on warm rice paper showing a cue guiding a billiard ball through flowing ink, restrained vermilion accent, no lettering."
         },
         {
-          "name": "Âm Phong",
+          "name": "U Môn Song Khoá",
           "kinds": [
-            "chill"
+            "bumper",
+            "sand"
           ],
-          "icon": "a howling ghost wind"
-        },
-        {
-          "name": "Địa Ngục Bộc Liệt",
-          "kinds": [
-            "blast",
-            "freeze"
-          ],
-          "icon": "jade hellfire erupting from cracks"
+          "icon": "Ink-wash painted icon on warm rice paper showing two parallel dark gates framing a narrow billiard corridor, restrained vermilion accent, no lettering.",
+          "shape": "gate",
+          "ult": "uminh"
         }
       ]
     },
@@ -1639,25 +1683,26 @@
       "expr": "sparkly excited smile",
       "skills": [
         {
-          "name": "Tinh Toàn",
+          "name": "Tinh Tuyền Dẫn Lộ",
+          "kinds": [
+            "well"
+          ],
+          "icon": "Ink-wash painted icon on warm rice paper showing a dark circular pool drawing curved ball trails inward, restrained vermilion accent, no lettering."
+        },
+        {
+          "name": "Tinh Tuyền Toàn Quyết",
           "kinds": [
             "spin"
           ],
-          "icon": "stars spiralling around a white ball"
+          "icon": "Ink-wash painted icon on warm rice paper showing a cue guiding a billiard ball through flowing ink, restrained vermilion accent, no lettering."
         },
         {
-          "name": "Sao Băng Dẫn",
+          "name": "Tinh Tuyền Đại Trận",
           "kinds": [
-            "nudge"
+            "well",
+            "shield"
           ],
-          "icon": "a small shooting star"
-        },
-        {
-          "name": "Tinh Vân Hấp Dẫn",
-          "kinds": [
-            "gravity"
-          ],
-          "icon": "a violet nebula spiralling into a hole"
+          "icon": "Ink-wash painted icon on warm rice paper showing a dark circular pool drawing curved ball trails inward, restrained vermilion accent, no lettering."
         }
       ]
     },
@@ -1673,26 +1718,26 @@
       "expr": "noble resolve",
       "skills": [
         {
-          "name": "Tinh Thuẫn",
+          "name": "Tinh Tuyền Dẫn Lộ",
           "kinds": [
-            "shield"
+            "well"
           ],
-          "icon": "a round shield with a constellation"
+          "icon": "Ink-wash painted icon on warm rice paper showing a dark circular pool drawing curved ball trails inward, restrained vermilion accent, no lettering."
         },
         {
-          "name": "Chòm Sao Trấn",
+          "name": "Tinh Tuyền Nhu Bích",
           "kinds": [
-            "seal"
+            "railcraft"
           ],
-          "icon": "a constellation net over a round hole"
+          "icon": "Ink-wash painted icon on warm rice paper showing a soft cushion strip beside a curling sea current, restrained vermilion accent, no lettering."
         },
         {
-          "name": "Bắc Đẩu Thất Tinh Trận",
+          "name": "Tinh Tuyền Đại Trận",
           "kinds": [
-            "shield",
-            "seal"
+            "well",
+            "second"
           ],
-          "icon": "a seven-star formation of light"
+          "icon": "Ink-wash painted icon on warm rice paper showing a dark circular pool drawing curved ball trails inward, restrained vermilion accent, no lettering."
         }
       ]
     },
@@ -1708,26 +1753,26 @@
       "expr": "focused gentle look",
       "skills": [
         {
-          "name": "Ánh Trăng Soi",
+          "name": "Tinh Tuyền Dẫn Lộ",
+          "kinds": [
+            "well"
+          ],
+          "icon": "Ink-wash painted icon on warm rice paper showing a dark circular pool drawing curved ball trails inward, restrained vermilion accent, no lettering."
+        },
+        {
+          "name": "Tinh Tuyền Minh Nhãn",
           "kinds": [
             "reveal"
           ],
-          "icon": "a crescent moon casting a beam"
+          "icon": "Ink-wash painted icon on warm rice paper showing a cue guiding a billiard ball through flowing ink, restrained vermilion accent, no lettering."
         },
         {
-          "name": "Nguyệt Quang Lộ",
+          "name": "Tinh Tuyền Đại Trận",
           "kinds": [
-            "vision"
+            "well",
+            "power"
           ],
-          "icon": "a silver path of moonlight"
-        },
-        {
-          "name": "Mãn Nguyệt Tiễn",
-          "kinds": [
-            "vision",
-            "spin"
-          ],
-          "icon": "an arrow fired from a full moon"
+          "icon": "Ink-wash painted icon on warm rice paper showing a dark circular pool drawing curved ball trails inward, restrained vermilion accent, no lettering."
         }
       ]
     },
@@ -1743,25 +1788,26 @@
       "expr": "fierce joyful shout",
       "skills": [
         {
-          "name": "Nhật Quang Lực",
+          "name": "Tinh Tuyền Dẫn Lộ",
+          "kinds": [
+            "well"
+          ],
+          "icon": "Ink-wash painted icon on warm rice paper showing a dark circular pool drawing curved ball trails inward, restrained vermilion accent, no lettering."
+        },
+        {
+          "name": "Tinh Tuyền Cương Kình",
           "kinds": [
             "power"
           ],
-          "icon": "a blazing sun fist"
+          "icon": "Ink-wash painted icon on warm rice paper showing a cue guiding a billiard ball through flowing ink, restrained vermilion accent, no lettering."
         },
         {
-          "name": "Liệt Dương Chấn",
+          "name": "Tinh Tuyền Đại Trận",
           "kinds": [
-            "chill"
+            "well",
+            "railcraft"
           ],
-          "icon": "a sun flare shockwave"
-        },
-        {
-          "name": "Thái Dương Bộc Phát",
-          "kinds": [
-            "blast"
-          ],
-          "icon": "a sun exploding in rays"
+          "icon": "Ink-wash painted icon on warm rice paper showing a dark circular pool drawing curved ball trails inward, restrained vermilion accent, no lettering."
         }
       ]
     },
@@ -1777,26 +1823,27 @@
       "expr": "serene cosmic gaze",
       "skills": [
         {
-          "name": "Tinh Hà Toàn",
+          "name": "Tinh Tuyền Dẫn Lộ",
+          "kinds": [
+            "well"
+          ],
+          "icon": "Ink-wash painted icon on warm rice paper showing a dark circular pool drawing curved ball trails inward, restrained vermilion accent, no lettering."
+        },
+        {
+          "name": "Tinh Tuyền Toàn Quyết",
           "kinds": [
             "spin"
           ],
-          "icon": "a spiral galaxy"
+          "icon": "Ink-wash painted icon on warm rice paper showing a cue guiding a billiard ball through flowing ink, restrained vermilion accent, no lettering."
         },
         {
-          "name": "Hố Sao",
+          "name": "Song Tinh Dẫn Độ",
           "kinds": [
-            "maw"
+            "well",
+            "wind"
           ],
-          "icon": "a black hole ringed with light"
-        },
-        {
-          "name": "Thiên Xu Hấp Tinh",
-          "kinds": [
-            "gravity",
-            "maw"
-          ],
-          "icon": "stars being pulled into a black hole"
+          "icon": "Ink-wash painted icon on warm rice paper showing twin star wells bending rolling ball trails, restrained vermilion accent, no lettering.",
+          "ult": "tinhtu"
         }
       ]
     },
@@ -1812,26 +1859,26 @@
       "expr": "mischievous wink",
       "skills": [
         {
-          "name": "Sa Ảnh",
+          "name": "Kim Sa Dẫn Lộ",
+          "kinds": [
+            "sand"
+          ],
+          "icon": "Ink-wash painted icon on warm rice paper showing a broken sand band with a narrow clear passage, restrained vermilion accent, no lettering."
+        },
+        {
+          "name": "Kim Sa Truy Ảnh",
           "kinds": [
             "second"
           ],
-          "icon": "a sand silhouette dissolving"
+          "icon": "Ink-wash painted icon on warm rice paper showing a cue guiding a billiard ball through flowing ink, restrained vermilion accent, no lettering."
         },
         {
-          "name": "Mắt Cáo Sa Mạc",
+          "name": "Kim Sa Đại Trận",
           "kinds": [
-            "reveal"
+            "sand",
+            "nudge"
           ],
-          "icon": "a fox eye glinting gold"
-        },
-        {
-          "name": "Bão Cát Liên Hoàn",
-          "kinds": [
-            "second",
-            "power"
-          ],
-          "icon": "a swirling sandstorm"
+          "icon": "Ink-wash painted icon on warm rice paper showing a broken sand band with a narrow clear passage, restrained vermilion accent, no lettering."
         }
       ]
     },
@@ -1847,26 +1894,26 @@
       "expr": "stoic glowing eyes",
       "skills": [
         {
-          "name": "Thạch Hoá",
+          "name": "Kim Sa Dẫn Lộ",
           "kinds": [
-            "shield"
+            "sand"
           ],
-          "icon": "a stone skin shield with runes"
+          "icon": "Ink-wash painted icon on warm rice paper showing a broken sand band with a narrow clear passage, restrained vermilion accent, no lettering."
         },
         {
-          "name": "Trấn Lăng",
+          "name": "Kim Sa Nhu Bích",
           "kinds": [
-            "seal"
+            "railcraft"
           ],
-          "icon": "a stone slab sealing a round hole"
+          "icon": "Ink-wash painted icon on warm rice paper showing a soft cushion strip beside a curling sea current, restrained vermilion accent, no lettering."
         },
         {
-          "name": "Lăng Mộ Phong Ấn",
+          "name": "Kim Sa Đại Trận",
           "kinds": [
-            "seal",
-            "shield"
+            "sand",
+            "spin"
           ],
-          "icon": "a golden tomb door with turquoise locks"
+          "icon": "Ink-wash painted icon on warm rice paper showing a broken sand band with a narrow clear passage, restrained vermilion accent, no lettering."
         }
       ]
     },
@@ -1882,26 +1929,26 @@
       "expr": "masked solemn",
       "skills": [
         {
-          "name": "Nắng Thiêu",
+          "name": "Kim Sa Dẫn Lộ",
           "kinds": [
-            "chill"
+            "sand"
           ],
-          "icon": "a scorching sun ray on a hand"
+          "icon": "Ink-wash painted icon on warm rice paper showing a broken sand band with a narrow clear passage, restrained vermilion accent, no lettering."
         },
         {
-          "name": "Kim Nhãn Hút",
+          "name": "Kim Sa Truy Ảnh",
           "kinds": [
-            "drain"
+            "second"
           ],
-          "icon": "a golden eye drawing in light"
+          "icon": "Ink-wash painted icon on warm rice paper showing a cue guiding a billiard ball through flowing ink, restrained vermilion accent, no lettering."
         },
         {
-          "name": "Nhật Thực",
+          "name": "Kim Sa Đại Trận",
           "kinds": [
-            "freeze",
-            "drain"
+            "sand",
+            "reveal"
           ],
-          "icon": "a solar eclipse with a golden ring"
+          "icon": "Ink-wash painted icon on warm rice paper showing a broken sand band with a narrow clear passage, restrained vermilion accent, no lettering."
         }
       ]
     },
@@ -1917,26 +1964,25 @@
       "expr": "proud roar",
       "skills": [
         {
-          "name": "Kim Giáp Lực",
+          "name": "Kim Sa Dẫn Lộ",
+          "kinds": [
+            "sand"
+          ],
+          "icon": "Ink-wash painted icon on warm rice paper showing a broken sand band with a narrow clear passage, restrained vermilion accent, no lettering."
+        },
+        {
+          "name": "Kim Sa Cương Kình",
           "kinds": [
             "power"
           ],
-          "icon": "a golden armoured fist"
+          "icon": "Ink-wash painted icon on warm rice paper showing a cue guiding a billiard ball through flowing ink, restrained vermilion accent, no lettering."
         },
         {
-          "name": "Sa Mạc Chấn",
+          "name": "Kim Sa Đại Trận",
           "kinds": [
-            "chill"
+            "sand"
           ],
-          "icon": "a quaking desert floor"
-        },
-        {
-          "name": "Hoàng Sa Bão Tố",
-          "kinds": [
-            "blast",
-            "power"
-          ],
-          "icon": "a golden sand explosion"
+          "icon": "Ink-wash painted icon on warm rice paper showing a broken sand band with a narrow clear passage, restrained vermilion accent, no lettering."
         }
       ]
     },
@@ -1952,26 +1998,27 @@
       "expr": "majestic confident look",
       "skills": [
         {
-          "name": "Nhật Quang Chỉ Lộ",
+          "name": "Kim Sa Dẫn Lộ",
+          "kinds": [
+            "sand"
+          ],
+          "icon": "Ink-wash painted icon on warm rice paper showing a broken sand band with a narrow clear passage, restrained vermilion accent, no lettering."
+        },
+        {
+          "name": "Kim Sa Minh Nhãn",
           "kinds": [
             "reveal"
           ],
-          "icon": "a sunbeam pointing a path"
+          "icon": "Ink-wash painted icon on warm rice paper showing a cue guiding a billiard ball through flowing ink, restrained vermilion accent, no lettering."
         },
         {
-          "name": "Thiên Nhãn",
+          "name": "Sa Mạc Khuyết Môn",
           "kinds": [
-            "vision"
+            "sand",
+            "slick"
           ],
-          "icon": "a radiant sun eye"
-        },
-        {
-          "name": "Thái Dương Thần Xạ",
-          "kinds": [
-            "vision",
-            "second"
-          ],
-          "icon": "a sun spear piercing"
+          "icon": "Ink-wash painted icon on warm rice paper showing a sand band with one clear central gap, restrained vermilion accent, no lettering.",
+          "ult": "kimsa"
         }
       ]
     },
@@ -1987,25 +2034,28 @@
       "expr": "curious smile",
       "skills": [
         {
-          "name": "Lá Xoáy",
+          "name": "Mộc Căn Dẫn Lộ",
+          "kinds": [
+            "bumper"
+          ],
+          "icon": "Ink-wash painted icon on warm rice paper showing living root barriers forming a V across a billiard cloth, restrained vermilion accent, no lettering.",
+          "shape": "roots"
+        },
+        {
+          "name": "Mộc Căn Toàn Quyết",
           "kinds": [
             "spin"
           ],
-          "icon": "green leaves spiralling around a ball"
+          "icon": "Ink-wash painted icon on warm rice paper showing a cue guiding a billiard ball through flowing ink, restrained vermilion accent, no lettering."
         },
         {
-          "name": "Rễ Dẫn Lối",
+          "name": "Mộc Căn Đại Trận",
           "kinds": [
-            "nudge"
+            "bumper",
+            "second"
           ],
-          "icon": "a root nudging a ball"
-        },
-        {
-          "name": "Rừng Nuốt",
-          "kinds": [
-            "maw"
-          ],
-          "icon": "a ring of roots widening a hole"
+          "icon": "Ink-wash painted icon on warm rice paper showing living root barriers forming a V across a billiard cloth, restrained vermilion accent, no lettering.",
+          "shape": "roots"
         }
       ]
     },
@@ -2021,26 +2071,29 @@
       "expr": "predatory grin",
       "skills": [
         {
-          "name": "Vồ Mồi",
+          "name": "Mộc Căn Dẫn Lộ",
+          "kinds": [
+            "bumper"
+          ],
+          "icon": "Ink-wash painted icon on warm rice paper showing living root barriers forming a V across a billiard cloth, restrained vermilion accent, no lettering.",
+          "shape": "roots"
+        },
+        {
+          "name": "Mộc Căn Truy Ảnh",
           "kinds": [
             "second"
           ],
-          "icon": "a leopard pouncing"
+          "icon": "Ink-wash painted icon on warm rice paper showing a cue guiding a billiard ball through flowing ink, restrained vermilion accent, no lettering."
         },
         {
-          "name": "Mắt Báo",
+          "name": "Mộc Căn Đại Trận",
           "kinds": [
-            "reveal"
+            "bumper",
+            "power",
+            "railcraft"
           ],
-          "icon": "a leopard eye glowing amber"
-        },
-        {
-          "name": "Báo Vương Liên Kích",
-          "kinds": [
-            "second",
-            "power"
-          ],
-          "icon": "leopard claw marks in a circle"
+          "icon": "Ink-wash painted icon on warm rice paper showing living root barriers forming a V across a billiard cloth, restrained vermilion accent, no lettering.",
+          "shape": "roots"
         }
       ]
     },
@@ -2056,26 +2109,28 @@
       "expr": "wise sleepy smile",
       "skills": [
         {
-          "name": "Mai Rùa",
+          "name": "Mộc Căn Dẫn Lộ",
           "kinds": [
-            "shield"
+            "bumper"
           ],
-          "icon": "a mossy stone turtle shell"
+          "icon": "Ink-wash painted icon on warm rice paper showing living root barriers forming a V across a billiard cloth, restrained vermilion accent, no lettering.",
+          "shape": "roots"
         },
         {
-          "name": "Chậm Mà Chắc",
+          "name": "Mộc Căn Nhu Bích",
           "kinds": [
-            "nudge"
+            "railcraft"
           ],
-          "icon": "a slow turtle pushing a ball"
+          "icon": "Ink-wash painted icon on warm rice paper showing a soft cushion strip beside a curling sea current, restrained vermilion accent, no lettering."
         },
         {
-          "name": "Huyền Vũ Trấn",
+          "name": "Mộc Căn Đại Trận",
           "kinds": [
-            "shield",
-            "seal"
+            "bumper",
+            "railcraft"
           ],
-          "icon": "a turtle-and-serpent seal of stone"
+          "icon": "Ink-wash painted icon on warm rice paper showing living root barriers forming a V across a billiard cloth, restrained vermilion accent, no lettering.",
+          "shape": "roots"
         }
       ]
     },
@@ -2091,26 +2146,28 @@
       "expr": "piercing glare",
       "skills": [
         {
-          "name": "Ưng Nhãn",
+          "name": "Mộc Căn Dẫn Lộ",
+          "kinds": [
+            "bumper"
+          ],
+          "icon": "Ink-wash painted icon on warm rice paper showing living root barriers forming a V across a billiard cloth, restrained vermilion accent, no lettering.",
+          "shape": "roots"
+        },
+        {
+          "name": "Mộc Căn Minh Nhãn",
           "kinds": [
             "reveal"
           ],
-          "icon": "an eagle eye with lightning"
+          "icon": "Ink-wash painted icon on warm rice paper showing a cue guiding a billiard ball through flowing ink, restrained vermilion accent, no lettering."
         },
         {
-          "name": "Lôi Quang Áp Phê",
+          "name": "Mộc Căn Đại Trận",
           "kinds": [
-            "spin"
+            "bumper",
+            "wind"
           ],
-          "icon": "a ball spinning with amber lightning"
-        },
-        {
-          "name": "Lôi Ưng Giáng",
-          "kinds": [
-            "vision",
-            "blast"
-          ],
-          "icon": "a thunder eagle striking down"
+          "icon": "Ink-wash painted icon on warm rice paper showing living root barriers forming a V across a billiard cloth, restrained vermilion accent, no lettering.",
+          "shape": "roots"
         }
       ]
     },
@@ -2126,26 +2183,29 @@
       "expr": "gentle but powerful",
       "skills": [
         {
-          "name": "Dây Leo Trói",
+          "name": "Mộc Căn Dẫn Lộ",
           "kinds": [
-            "freeze"
+            "bumper"
           ],
-          "icon": "vines binding a hand"
+          "icon": "Ink-wash painted icon on warm rice paper showing living root barriers forming a V across a billiard cloth, restrained vermilion accent, no lettering.",
+          "shape": "roots"
         },
         {
-          "name": "Rễ Phong Lỗ",
+          "name": "Mộc Căn Sa Chú",
           "kinds": [
-            "seal"
+            "sand"
           ],
-          "icon": "roots covering a round hole"
+          "icon": "Ink-wash painted icon on warm rice paper showing a broken sand band with a narrow clear passage, restrained vermilion accent, no lettering."
         },
         {
-          "name": "Thanh Long Thụ Giới",
+          "name": "Cổ Mộc Phân Căn",
           "kinds": [
-            "seal",
-            "chill"
+            "bumper",
+            "well"
           ],
-          "icon": "a green dragon coiling around a great tree"
+          "icon": "Ink-wash painted icon on warm rice paper showing two living root barriers meeting in a V, restrained vermilion accent, no lettering.",
+          "shape": "roots",
+          "ult": "vanthu"
         }
       ]
     },
@@ -2161,26 +2221,28 @@
       "expr": "chittering cute",
       "skills": [
         {
-          "name": "Đào Hư Không",
+          "name": "Hư Uyên Dẫn Lộ",
+          "kinds": [
+            "well"
+          ],
+          "icon": "Ink-wash painted icon on warm rice paper showing pocket mouths pulling curved rolling-ball trails inward, restrained vermilion accent, no lettering.",
+          "shape": "rim"
+        },
+        {
+          "name": "Hư Uyên Truy Ảnh",
           "kinds": [
             "second"
           ],
-          "icon": "a burrow hole in a purple void"
+          "icon": "Ink-wash painted icon on warm rice paper showing a cue guiding a billiard ball through flowing ink, restrained vermilion accent, no lettering."
         },
         {
-          "name": "Cắn Năng Lượng",
+          "name": "Hư Uyên Đại Trận",
           "kinds": [
-            "drain"
+            "well",
+            "spin"
           ],
-          "icon": "mandibles biting a glowing orb"
-        },
-        {
-          "name": "Bầy Hư Trùng",
-          "kinds": [
-            "second",
-            "drain"
-          ],
-          "icon": "a swarm of void bugs"
+          "icon": "Ink-wash painted icon on warm rice paper showing pocket mouths pulling curved rolling-ball trails inward, restrained vermilion accent, no lettering.",
+          "shape": "rim"
         }
       ]
     },
@@ -2196,11 +2258,12 @@
       "expr": "hungry roar",
       "skills": [
         {
-          "name": "Gầm Hư Không",
+          "name": "Hư Uyên Dẫn Lộ",
           "kinds": [
-            "chill"
+            "well"
           ],
-          "icon": "a void roar shockwave"
+          "icon": "Ink-wash painted icon on warm rice paper showing pocket mouths pulling curved rolling-ball trails inward, restrained vermilion accent, no lettering.",
+          "shape": "rim"
         },
         {
           "name": "Hư Lực",
@@ -2210,12 +2273,14 @@
           "icon": "a purple clawed fist"
         },
         {
-          "name": "Nuốt Trời Bộc",
+          "name": "Hư Uyên Đại Trận",
           "kinds": [
-            "blast",
-            "maw"
+            "well",
+            "reveal",
+            "sand"
           ],
-          "icon": "a fanged maw exploding with void"
+          "icon": "Ink-wash painted icon on warm rice paper showing pocket mouths pulling curved rolling-ball trails inward, restrained vermilion accent, no lettering.",
+          "shape": "rim"
         }
       ]
     },
@@ -2231,26 +2296,28 @@
       "expr": "no face, void mask",
       "skills": [
         {
-          "name": "Độn Hư Không",
+          "name": "Hư Uyên Dẫn Lộ",
           "kinds": [
-            "teleport"
+            "well"
           ],
-          "icon": "a purple rift portal"
+          "icon": "Ink-wash painted icon on warm rice paper showing pocket mouths pulling curved rolling-ball trails inward, restrained vermilion accent, no lettering.",
+          "shape": "rim"
         },
         {
-          "name": "Xé Thời Gian",
+          "name": "Hư Uyên Luân Chuyển",
           "kinds": [
-            "rewind"
+            "spinwash"
           ],
-          "icon": "a torn clock face"
+          "icon": "Ink-wash painted icon on warm rice paper showing an ink ring washing away spiral traces from a ball, restrained vermilion accent, no lettering."
         },
         {
-          "name": "Vô Diện Luân Chuyển",
+          "name": "Hư Uyên Đại Trận",
           "kinds": [
             "teleport",
-            "second"
+            "well"
           ],
-          "icon": "a mask surrounded by orbiting rifts"
+          "icon": "Ink-wash painted icon on warm rice paper showing pocket mouths pulling curved rolling-ball trails inward, restrained vermilion accent, no lettering.",
+          "shape": "rim"
         }
       ]
     },
@@ -2266,26 +2333,28 @@
       "expr": "cold imperious smile",
       "skills": [
         {
-          "name": "Thôi Miên Hư Không",
+          "name": "Hư Uyên Dẫn Lộ",
           "kinds": [
-            "chill"
+            "well"
           ],
-          "icon": "a spiral hypnotic void eye"
+          "icon": "Ink-wash painted icon on warm rice paper showing pocket mouths pulling curved rolling-ball trails inward, restrained vermilion accent, no lettering.",
+          "shape": "rim"
         },
         {
-          "name": "Ấn Hư Không",
+          "name": "Hư Uyên Sa Chú",
           "kinds": [
-            "seal"
+            "sand"
           ],
-          "icon": "a void sigil over a round hole"
+          "icon": "Ink-wash painted icon on warm rice paper showing a broken sand band with a narrow clear passage, restrained vermilion accent, no lettering."
         },
         {
-          "name": "Hư Không Giáng Lâm",
+          "name": "Hư Uyên Đại Trận",
           "kinds": [
-            "freeze",
-            "seal"
+            "well",
+            "slick"
           ],
-          "icon": "a void queen's crown of eyes"
+          "icon": "Ink-wash painted icon on warm rice paper showing pocket mouths pulling curved rolling-ball trails inward, restrained vermilion accent, no lettering.",
+          "shape": "rim"
         }
       ]
     },
@@ -2301,26 +2370,29 @@
       "expr": "devouring roar",
       "skills": [
         {
-          "name": "Hư Lực Bạo",
+          "name": "Hư Uyên Dẫn Lộ",
+          "kinds": [
+            "well"
+          ],
+          "icon": "Ink-wash painted icon on warm rice paper showing pocket mouths pulling curved rolling-ball trails inward, restrained vermilion accent, no lettering.",
+          "shape": "rim"
+        },
+        {
+          "name": "Hư Uyên Cương Kình",
           "kinds": [
             "power"
           ],
-          "icon": "a void fist cracking reality"
+          "icon": "Ink-wash painted icon on warm rice paper showing a cue guiding a billiard ball through flowing ink, restrained vermilion accent, no lettering."
         },
         {
-          "name": "Miệng Hư Vô",
+          "name": "Hư Uyên Nhiếp Khẩu",
           "kinds": [
-            "maw"
+            "well",
+            "vortex"
           ],
-          "icon": "a cosmic maw widening a hole"
-        },
-        {
-          "name": "Thôn Thiên",
-          "kinds": [
-            "maw",
-            "gravity"
-          ],
-          "icon": "a titanic maw swallowing stars"
+          "icon": "Ink-wash painted icon on warm rice paper showing six pocket rims pulling curved ball trails inward, restrained vermilion accent, no lettering.",
+          "shape": "rim",
+          "ult": "hukhong"
         }
       ]
     },
@@ -2335,26 +2407,26 @@
       "expr": "playful wink",
       "skills": [
         {
-          "name": "Vũ Ảnh",
+          "name": "Hương Lưu Dẫn Lộ",
+          "kinds": [
+            "vortex"
+          ],
+          "icon": "Ink-wash painted icon on warm rice paper showing two counter-rotating ink spirals around a billiard ball, restrained vermilion accent, no lettering."
+        },
+        {
+          "name": "Hương Lưu Truy Ảnh",
           "kinds": [
             "second"
           ],
-          "icon": "a twirling silk sleeve leaving afterimages"
+          "icon": "Ink-wash painted icon on warm rice paper showing a cue guiding a billiard ball through flowing ink, restrained vermilion accent, no lettering."
         },
         {
-          "name": "Lụa Hút Hồn",
+          "name": "Hương Lưu Đại Trận",
           "kinds": [
-            "drain"
+            "vortex",
+            "power"
           ],
-          "icon": "a red silk ribbon pulling a glowing orb"
-        },
-        {
-          "name": "Hồng Liên Loạn Vũ",
-          "kinds": [
-            "second",
-            "drain"
-          ],
-          "icon": "a whirlwind of red silk and lotus petals"
+          "icon": "Ink-wash painted icon on warm rice paper showing two counter-rotating ink spirals around a billiard ball, restrained vermilion accent, no lettering."
         }
       ],
       "sect": "thienhuong"
@@ -2370,26 +2442,26 @@
       "expr": "knowing seductive smile",
       "skills": [
         {
-          "name": "Mê Hương",
+          "name": "Hương Lưu Dẫn Lộ",
           "kinds": [
-            "chill"
+            "vortex"
           ],
-          "icon": "a curl of violet perfume smoke shaped like a heart"
+          "icon": "Ink-wash painted icon on warm rice paper showing two counter-rotating ink spirals around a billiard ball, restrained vermilion accent, no lettering."
         },
         {
-          "name": "Hương Đoạt Khí",
+          "name": "Hương Lưu Sa Chú",
           "kinds": [
-            "drain"
+            "sand"
           ],
-          "icon": "a perfume bottle drawing in light"
+          "icon": "Ink-wash painted icon on warm rice paper showing a broken sand band with a narrow clear passage, restrained vermilion accent, no lettering."
         },
         {
-          "name": "Tử Vụ Mê Thành",
+          "name": "Hương Lưu Đại Trận",
           "kinds": [
-            "chill",
-            "freeze"
+            "vortex",
+            "railcraft"
           ],
-          "icon": "a violet haze swallowing a city of lanterns"
+          "icon": "Ink-wash painted icon on warm rice paper showing two counter-rotating ink spirals around a billiard ball, restrained vermilion accent, no lettering."
         }
       ],
       "sect": "thienhuong"
@@ -2405,26 +2477,26 @@
       "expr": "sultry teasing half-smile, half-lidded silver-grey eyes glancing sideways",
       "skills": [
         {
-          "name": "Cầm Âm Áp Phê",
+          "name": "Hương Lưu Dẫn Lộ",
+          "kinds": [
+            "vortex"
+          ],
+          "icon": "Ink-wash painted icon on warm rice paper showing two counter-rotating ink spirals around a billiard ball, restrained vermilion accent, no lettering."
+        },
+        {
+          "name": "Hương Lưu Toàn Quyết",
           "kinds": [
             "spin"
           ],
-          "icon": "zither strings curving around a white ball"
+          "icon": "Ink-wash painted icon on warm rice paper showing a cue guiding a billiard ball through flowing ink, restrained vermilion accent, no lettering."
         },
         {
-          "name": "Khúc Nhạc Dẫn Bi",
+          "name": "Hương Lưu Đại Trận",
           "kinds": [
-            "nudge"
+            "vortex",
+            "wind"
           ],
-          "icon": "musical notes guiding a ball"
-        },
-        {
-          "name": "Thiên Hương Cầm Khúc",
-          "kinds": [
-            "gravity",
-            "spin"
-          ],
-          "icon": "waves of music drawing balls into a hole"
+          "icon": "Ink-wash painted icon on warm rice paper showing two counter-rotating ink spirals around a billiard ball, restrained vermilion accent, no lettering."
         }
       ],
       "sect": "thienhuong"
@@ -2440,26 +2512,25 @@
       "expr": "fierce confident grin",
       "skills": [
         {
-          "name": "Phượng Vũ Lực",
+          "name": "Hương Lưu Dẫn Lộ",
+          "kinds": [
+            "vortex"
+          ],
+          "icon": "Ink-wash painted icon on warm rice paper showing two counter-rotating ink spirals around a billiard ball, restrained vermilion accent, no lettering."
+        },
+        {
+          "name": "Hương Lưu Cương Kình",
           "kinds": [
             "power"
           ],
-          "icon": "a golden phoenix wing"
+          "icon": "Ink-wash painted icon on warm rice paper showing a cue guiding a billiard ball through flowing ink, restrained vermilion accent, no lettering."
         },
         {
-          "name": "Thiết Phiến Chấn",
+          "name": "Hương Lưu Đại Trận",
           "kinds": [
-            "chill"
+            "vortex"
           ],
-          "icon": "a steel war fan sending a shockwave"
-        },
-        {
-          "name": "Kim Phượng Liệt Diễm",
-          "kinds": [
-            "blast",
-            "power"
-          ],
-          "icon": "a golden phoenix bursting in flame"
+          "icon": "Ink-wash painted icon on warm rice paper showing two counter-rotating ink spirals around a billiard ball, restrained vermilion accent, no lettering."
         }
       ],
       "sect": "thienhuong"
@@ -2475,26 +2546,27 @@
       "expr": "captivating confident smile",
       "skills": [
         {
-          "name": "Kính Hoa Thuỷ Nguyệt",
+          "name": "Hương Lưu Dẫn Lộ",
           "kinds": [
-            "teleport"
+            "vortex"
           ],
-          "icon": "a mirror reflecting a moon and flower"
+          "icon": "Ink-wash painted icon on warm rice paper showing two counter-rotating ink spirals around a billiard ball, restrained vermilion accent, no lettering."
         },
         {
-          "name": "Mộng Hồi Cung",
+          "name": "Hương Lưu Luân Chuyển",
           "kinds": [
-            "rewind"
+            "spinwash"
           ],
-          "icon": "a fan closing over a turning hourglass"
+          "icon": "Ink-wash painted icon on warm rice paper showing an ink ring washing away spiral traces from a ball, restrained vermilion accent, no lettering."
         },
         {
-          "name": "Khuynh Quốc Khuynh Thành",
+          "name": "Song Vũ Nghịch Toàn",
           "kinds": [
-            "freeze",
-            "seal"
+            "vortex",
+            "spinwash"
           ],
-          "icon": "a beauty's silhouette behind a fan freezing everything in rose light"
+          "icon": "Ink-wash painted icon on warm rice paper showing twin vortices curling in opposite directions, restrained vermilion accent, no lettering.",
+          "ult": "thienhuong"
         }
       ],
       "sect": "thienhuong"

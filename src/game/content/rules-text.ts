@@ -52,7 +52,9 @@ export const RULES_TEXT: Record<GameMode, RulesText> = {
 
 export const SKILL_RULES = [
   'Tiên Đạo: mỗi tướng có nội tại theo hệ, 2 chiêu cơ bản (hồi chiêu theo lượt đánh của chính mình) và 1 tuyệt chiêu (cần đầy thanh năng lượng).',
-  'Năng lượng tăng khi bạn vào bi và khi đối thủ phạm lỗi.',
+  'Mỗi cú đánh tăng năng lượng; ghi điểm và lỗi của đối thủ cộng thêm năng lượng.',
+  'Mỗi môn phái có dấu ấn vật lý hoặc thông tin riêng; tuyệt chiêu bậc 5 có hình học riêng, dùng được cả trên bàn phăng.',
+  'Các lựa chọn nội tại nằm trên HUD: khoá ngắm, chọn trục áp phê, băng mềm hoặc soi đường/tăng lực. Luân phiên hai chiêu cơ bản giúp Luân Hồi hồi nhanh hơn.',
   'Bàn của mỗi môn phái có đặc tính riêng; thỉnh thoảng nổi Thiên Tượng (gió, tuyết, nghiêng bàn…) được báo trước và vẽ lên bàn.',
   'Địa Lợi: đánh trên bàn môn phái mình thì +20% năng lượng và không gặp Thiên Tượng.',
   'Cổ Điển: bida thuần, không chiêu, không địa thế, bàn chuẩn WPA.',

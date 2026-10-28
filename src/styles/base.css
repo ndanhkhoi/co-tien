@@ -79,6 +79,8 @@ input, textarea { -webkit-user-select: text; user-select: text; touch-action: ma
 button { font: inherit; color: inherit; border: 0; background: none; padding: 0; cursor: pointer; touch-action: manipulation; }
 :focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
 img, svg { pointer-events: none; }
+/* The hidden attribute always wins over component display rules. */
+[hidden] { display: none !important; }
 h1, h2, h3, p { margin: 0; }
 
 #stage { position: fixed; inset: 0; z-index: 0; background: var(--frame); }

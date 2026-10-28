@@ -52,7 +52,7 @@ export interface Terrain {
   gust?: { amp: number; omega: number };
   /** Friction patches (snow, sand, poison puddles): multipliers inside the circle. */
   patches?: { x: number; y: number; r: number; roll: number; slide: number; spin?: number }[];
-  forces?: { x: number; y: number; gust?: { amp: number; omega: number } }[];
+  forces?: { x: number; y: number; region?: { x: number; y: number; r: number }; gust?: { amp: number; omega: number } }[];
   vortices?: { x: number; y: number; r: number; a: number; sense: number }[];
   rails?: { ax: number; ay: number; bx: number; by: number; multiplier: number }[];
   /** Point attractors (m/s² at the centre, fading to 0 at radius r). */
@@ -483,6 +483,7 @@ function applyTerrain(w: SimWorld, tr: Terrain, h: number) {
       }
     }
     for (const f of tr.forces ?? []) {
+      if (f.region && Math.hypot(b.x - f.region.x, b.y - f.region.y) > f.region.r) continue;
       const k = f.gust ? 1 - f.gust.amp + f.gust.amp * Math.sin(f.gust.omega * (w.time ?? 0)) : 1;
       ax += f.x * k; ay += f.y * k;
     }

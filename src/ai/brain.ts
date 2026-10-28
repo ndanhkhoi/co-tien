@@ -1,4 +1,4 @@
-import { buildCast, mergeTerrain, PLACED_KINDS } from '../game/skill-cast';
+import { applySkillBlast, buildCast, mergeTerrain, PLACED_KINDS } from '../game/skill-cast';
 import { powerToSpeed, speedToPower } from '../core/cue-power';
 import { cloneBalls, step, strike, type Ball, type PhysEvent, type PhysParams, type SimWorld } from '../core/physics';
 import { canPlaceCue } from '../core/rack';
@@ -66,6 +66,7 @@ function makeWorld(ctx: Ctx, balls: Ball[]): SimWorld {
     extraSegments: [...closed.map((i) => ctx.table.pockets[i].mouth), ...ctx.req.extraSegments],
     terrain: ctx.req.terrain,
     captureScale: ctx.req.captureScale,
+    pocketPull: ctx.req.pocketPull, pullExempt: ctx.cueId,
   };
 }
 
@@ -79,17 +80,30 @@ function play(ctx: Ctx, start: Ball[], shot: AiShot, earlyStop?: (ev: PhysEvent[
     cue.onTable = true;
   }
   const targets = ctx.rules.legalTargets(ctx.req.state, start, ctx.side);
-  strike(cue, ctx.table.R, { angle: shot.angle, speed: powerToSpeed(shot.power, ctx.req.maxSpeed), side: shot.side * 0.86, vert: shot.vert * 0.86 });
+  strike(cue, ctx.table.R, { angle: shot.angle, speed: powerToSpeed(shot.power, ctx.req.maxSpeed), side: shot.side * (ctx.req.spinReach?.side ?? 0.86) * (ctx.req.spinMultiplier ?? 1), vert: shot.vert * (ctx.req.spinReach?.vert ?? 0.86) * (ctx.req.spinMultiplier ?? 1) });
   const w = makeWorld(ctx, balls);
   const events: PhysEvent[] = [];
+  let blasted = false;
   for (let t = 0; t < 25; t += 1 / 30) {
-    if (!step(w, 1 / 30, events)) break;
+    const from = events.length;
+    const moving = step(w, 1 / 30, events);
+    if (!blasted && ctx.req.blast) {
+      const hit = events.slice(from).find(e => e.t === 'ball' && (e.a === ctx.cueId || e.b === ctx.cueId));
+      if (hit && hit.t === 'ball') {
+        blasted = true;
+        applySkillBlast(balls, hit.x, hit.y, ctx.req.blast.radius, ctx.req.blast.force, ctx.req.blast.directional ? { x: Math.cos(shot.angle), y: Math.sin(shot.angle) } : undefined);
+      }
+    }
+    if (!moving && !blasted) break;
+    if (!moving && blasted && !balls.some(b => b.onTable && Math.hypot(b.vx,b.vy)>0)) break;
     if (earlyStop && earlyStop(events)) break;
   }
   const crossed = balls.filter((b) => b.onTable && b.id !== 0 && b.x < ctx.table.headStringX).length;
   const sum = summarize(events, ctx.cueId, ctx.req.state.isBreak, shot.call, shot.pushOut, targets, crossed);
   const state = structuredClone(ctx.req.state);
   const res = ctx.rules.resolve(state, balls, sum);
+  if (ctx.req.secondChance && !res.foul && !res.keepTurn && !res.option && res.winner === null) res.keepTurn = true;
+  if (ctx.req.shield && res.foul && res.winner === null) { res.foul = null; res.ballInHand = 'none'; res.option = undefined; }
   if (res.assignGroup) {
     state.groups[ctx.side] = res.assignGroup;
     state.groups[other(ctx.side)] = res.assignGroup === 'solid' ? 'stripe' : 'solid';
@@ -481,6 +495,8 @@ function chooseSkill(ctx: Ctx, confidence: number): AiDecision['skill'] {
     return usable.find((s) => !s.ultimate && (confidence < 0.5 ? RESCUE.includes(s.kind) : !HEX.includes(s.kind)))?.slot
       ?? usable.find((s) => !s.ultimate)?.slot;
   }
+  // Save basics for a deliberate opportunity rather than spending on every ready shot.
+  if (ctx.rng.next() > 0.42) return undefined;
   const rescue = usable.find((s) => !s.ultimate && RESCUE.includes(s.kind));
   if (rescue && confidence < 0.5) return rescue.slot;
   const hex = usable.find((s) => !s.ultimate && HEX.includes(s.kind));
@@ -564,15 +580,50 @@ function planShot(req: AiRequest): AiDecision {
 export function think(req: AiRequest): AiDecision {
   const decision = planShot(req);
   if (req.option || req.state.isBreak) return decision;
-  const selected = req.skills.find(s => s.slot === decision.skill);
-  if (selected && (selected.kinds ?? [selected.kind]).some(k => PLACED_KINDS.includes(k)) && decision.shot) {
+  const placement = req.skills.find(s => s.ultimate && (s.kind === 'teleport' || s.kind === 'nudge'))
+    ?? (decision.confidence < 0.5 && new Rng(req.seed + 17).next() < 0.42 ? req.skills.find(s => s.kind === 'teleport' || s.kind === 'nudge') : undefined);
+  const selected = placement ?? req.skills.find(s => s.slot === decision.skill);
+  if (selected && decision.shot) {
     const table = RULES[req.state.mode].table === 'pool' ? makePoolTable() : makeCaromTable();
     const cueId = RULES[req.state.mode].cueId(req.state, req.side);
     const cast = { direction: { x: Math.cos(decision.shot.angle), y: Math.sin(decision.shot.angle) } };
-    const effects = (selected.kinds ?? [selected.kind]).filter(k => PLACED_KINDS.includes(k)).map(k => buildCast(k, selected.tier ?? 1, selected.slot, table, req.balls, cueId, cast));
-    const planned = planShot({ ...req, skills: [], terrain: mergeTerrain(req.terrain, ...(selected.target === 'opponent' ? [] : effects.map(e => e.terrain))), extraSegments: [...req.extraSegments, ...(selected.target === 'opponent' ? [] : effects.flatMap(e => e.segments))] });
-    return { ...planned, skill: selected.slot, cast: effects[0].cast };
+    const kinds = selected.kinds ?? [selected.kind];
+    const tier = selected.tier ?? 1;
+    const positionSkill = kinds.includes('teleport') || kinds.includes('nudge');
+    const start = cloneBalls(req.balls);
+    const cue = start.find(b => b.id === cueId)!;
+    let cuePosition: {x:number;y:number} | undefined;
+    if (positionSkill) {
+      const radius = kinds.includes('teleport') ? table.L : (skillPower('nudge', tier) as {radius:number}).radius;
+      const target = start.filter(b => b.onTable && b.id !== cueId).sort((a,b) => Math.hypot(a.x-cue.x,a.y-cue.y)-Math.hypot(b.x-cue.x,b.y-cue.y))[0];
+      if (target) for (const sign of [-1,1]) {
+        const x = cue.x + sign * Math.sin(decision.shot.angle) * Math.min(radius * 0.9,0.25);
+        const y = cue.y - sign * Math.cos(decision.shot.angle) * Math.min(radius * 0.9,0.25);
+        if (canPlaceCue(table,start,cueId,x,y,false)) { cuePosition={x,y}; break; }
+      }
+      cuePosition ??= {x:cue.x,y:cue.y};
+      Object.assign(cue,cuePosition);
+    }
+    const effects = (selected.kinds ?? [selected.kind]).filter(k => PLACED_KINDS.includes(k)).map(k => buildCast(k, selected.tier ?? 1, selected.slot, table, req.balls, cueId, cast, selected.ult, selected.shape));
+    const submitted = effects[0]?.cast ?? cast;
+    const actualEffects = kinds.filter(k => PLACED_KINDS.includes(k)).map(k => buildCast(k,tier,selected.slot,table,req.balls,cueId,submitted,selected.ult,selected.shape));
+    const p = (kind: SkillKind) => skillPower(kind, tier) as Record<string, number>;
+    const planned = planShot({ ...req, balls: start, skills: [], ballInHand: positionSkill ? 'none' : req.ballInHand,
+      maxSpeed: req.maxSpeed * (kinds.includes('power') ? p('power').speed : 1),
+      spinMultiplier: kinds.includes('spin') ? p('spin').spin : req.spinMultiplier,
+      secondChance: req.secondChance || kinds.includes('second'),
+      shield: req.shield || kinds.includes('shield'),
+      captureScale: req.captureScale * (kinds.includes('maw') ? p('maw').scale : 1),
+      pocketPull: kinds.includes('gravity') ? p('gravity').pull : req.pocketPull,
+      blast: kinds.includes('blast') ? { radius: p('blast').radius, force: p('blast').force, directional: kinds.includes('blast') && selected.directionalBlast === true } : req.blast,
+      terrain: mergeTerrain(req.terrain, ...(selected.target === 'opponent' ? [] : actualEffects.map(e => e.terrain))),
+      extraSegments: [...req.extraSegments, ...(selected.target === 'opponent' ? [] : actualEffects.flatMap(e => e.segments))] });
+    return { ...planned, shot: planned.shot ? {...planned.shot, cue: cuePosition ?? planned.shot.cue} : null, skill: selected.slot, cast: submitted };
   }
+  return planPlacementUltimate(req, decision);
+}
+
+function planPlacementUltimate(req: AiRequest, decision: AiDecision): AiDecision {
   if (RULES[req.state.mode].table === 'carom') return decision;
   const placementUltimate = req.skills.some((s) => s.ultimate && (s.kind === 'nudge' || s.kind === 'teleport'));
   if (decision.skill !== undefined && !placementUltimate) return decision;

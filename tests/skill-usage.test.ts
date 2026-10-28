@@ -11,12 +11,12 @@ it('uses basic skills and ultimates across seeded AI 8-ball racks', () => {
   const started = performance.now();
   let uses = 0;
   let ultimates = 0;
-  const racks = 3;
+  const racks = 5;
   for (let g = 0; g < racks; g++) {
     const m = new Match({
       mode: 'eight', raceTo: 1, mutator: null, tableSkin: TABLES[0], seed: 100 + g,
       firstBreaker: (g % 2) as 0 | 1,
-      players: ['tokiemnhi', 'haclang'].map((id) => ({
+      players: (g < 3 ? ['tokiemnhi', 'haclang'] : ['daochumonghoa', 'giacatvan']).map((id) => ({
         name: id, kind: 'ai', ai: { level: 2, personality: 'balanced' }, cue: CUES[0], champion: id,
       })) as Match['setup']['players'],
     });
@@ -33,13 +33,13 @@ it('uses basic skills and ultimates across seeded AI 8-ball racks', () => {
       const request: AiRequest = {
         ...v, side, profile: m.current.ai!, maxSpeed: m.vmax(side),
         ballInHand: m.placing === 'nudge' ? 'none' : m.placing,
-        params: m.params, terrain: m.omen?.terrain ?? null,
-        extraSegments: m.omen?.segments ?? [], captureScale: m.omen?.capture ?? 1,
+        params: m.params, terrain: m.terrain(), spinReach: m.spinReach(side),
+        extraSegments: m.obstacles().slice(m.closedPockets.length), captureScale: m.simulationWorld().captureScale ?? 1,
         seed: shots * 31 + g, option: m.phase === 'option',
         pushOutAvailable: m.state.pushOutAvailable, energy: m.energy[side],
         skills: m.skills(side).filter((s) => m.canUseSkill(side, s.slot)).map((s) => ({
           slot: s.slot, kind: m.effectiveKind(s.kinds[0]), ultimate: s.slot === 2,
-          tier: s.tier,
+          tier: s.tier, kinds: s.kinds.map(k => m.effectiveKind(k)), ult: s.ult, shape: s.shape, target: s.target, directionalBlast: CHAMPIONS.find(c => c.id === m.current.champion)?.sect === 'huyetsat',
         })),
       };
       const d = think(request);
@@ -47,7 +47,7 @@ it('uses basic skills and ultimates across seeded AI 8-ball racks', () => {
         m.chooseOption(d.option ?? 'play');
         continue;
       }
-      if (d.skill !== undefined) expect(m.useSkill(side, d.skill)).toBe(true);
+      if (d.skill !== undefined) expect(m.useSkill(side, d.skill, d.cast)).toBe(true);
       expect(d.shot).not.toBeNull();
       if (d.shot!.cue) m.placeCue(d.shot!.cue.x, d.shot!.cue.y);
       m.shoot(d.shot!);
@@ -88,11 +88,11 @@ it('charges every shot, awards 12 on a foul, and reports capped gains', () => {
   ]);
 });
 
-it('keeps basic cooldowns at 2–3 own shots, with the Luan Hoi reduction', () => {
+it('keeps basic cooldowns at 2–3 own shots, before the alternating Luan Hoi reduction', () => {
   for (const c of CHAMPIONS) {
     for (const s of c.skills.slice(0, 2)) {
-      expect(s.cooldown).toBeGreaterThanOrEqual(c.cls === 'luanhoi' ? 1 : 2);
-      expect(s.cooldown).toBeLessThanOrEqual(c.cls === 'luanhoi' ? 2 : 3);
+      expect(s.cooldown).toBeGreaterThanOrEqual(2);
+      expect(s.cooldown).toBeLessThanOrEqual(3);
     }
   }
 });

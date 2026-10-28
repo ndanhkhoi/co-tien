@@ -125,7 +125,7 @@ export class OmenArt {
     for (const e of [...(m.activeEffects ?? []), ...(m.castPreview ?? [])]) {
       const preview = m.castPreview?.includes(e);
       const alpha = preview ? 0.65 : 0.4;
-      for (const p of e.terrain.patches ?? []) this.put(e.kind === 'slick' ? 'skill/slick' : e.kind === 'sand' ? 'skill/sand' : 'skill/spinwash', p.x, p.y, p.r * 2, p.r * 2, alpha);
+      for (const p of e.terrain.patches ?? []) this.put(p.roll < 1 ? 'skill/slick' : p.roll > 1 ? 'skill/sand' : 'skill/spinwash', p.x, p.y, p.r * 2, p.r * 2, alpha);
       for (const p of e.terrain.wells ?? []) this.put('skill/well', p.x, p.y, p.r * 2, p.r * 2, alpha);
       for (const p of e.terrain.vortices ?? []) {
         this.put('skill/vortex', p.x, p.y, p.r * 2, p.r * 2, alpha);
@@ -137,6 +137,10 @@ export class OmenArt {
       for (const s of e.terrain.rails ?? []) this.put(s.multiplier > 1 ? 'skill/rail-hard' : 'skill/rail-soft', (s.ax + s.bx) / 2, (s.ay + s.by) / 2, Math.hypot(s.bx - s.ax, s.by - s.ay), 0.06, alpha + 0.2, Math.atan2(s.by - s.ay, s.bx - s.ax));
       const point = e.cast.point;
       const direction = e.cast.direction;
+      for (const force of e.terrain.forces ?? []) {
+        const zone = force.region;
+        this.put('skill/wind', zone?.x ?? point?.x ?? 0, zone?.y ?? point?.y ?? 0, zone ? zone.r * 2 : 0.32, zone ? zone.r * 2 : 0.12, alpha, Math.atan2(force.y, force.x));
+      }
       if (e.terrain.force && point) this.put('skill/wind', point.x, point.y, 0.32, 0.12, alpha, Math.atan2(e.terrain.force.y, e.terrain.force.x));
       if (preview && point) {
         const radius = e.terrain.patches?.[0]?.r ?? e.terrain.wells?.[0]?.r ?? e.terrain.vortices?.[0]?.r ?? 0.07;
