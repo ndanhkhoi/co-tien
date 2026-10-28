@@ -76,7 +76,8 @@ export class OmenArt {
     const age = this.clock - this.started;
     const moving = !this.motion.matches;
     const phase = moving ? this.clock : 0;
-    const fade = moving ? Math.min(1, age / 0.6) : 1;
+    // Gameplay terrain must be readable immediately, including omens started mid-rack.
+    const fade = moving ? 0.75 + 0.25 * Math.min(1, age / 0.6) : 1;
     for (const i of m.closedPockets) {
       const p = t.pockets[i];
       this.put('gate-seal', p.hx, p.hy, p.hr * 2, p.hr * 2, 0.72, 0, false);
@@ -86,7 +87,7 @@ export class OmenArt {
         const name = o.id === 'snow' ? 'snow-drift' : o.id === 'sandstorm' ? 'sand' : o.id === 'silk' ? 'silk' : 'puddle';
         // Sand's radius exceeds the entire table; scale its painted coverage to the bed.
         const wide = p.r >= Math.hypot(t.L, t.W);
-        this.put(name, p.x, p.y, wide ? t.L : p.r * 2, wide ? t.W : p.r * 2, 0.32 * fade);
+        this.put(name, p.x, p.y, wide ? t.L : p.r * 2, wide ? t.W : p.r * 2, (o.id === 'snow' ? 0.8 : 0.32) * fade);
         if (o.id === 'snow') {
           for (let i = 0; i < 3; i++) {
             const a = i * 2.1 + phase * 0.16;
@@ -99,7 +100,7 @@ export class OmenArt {
         if (moving && age < 0.8) this.put('star-fall', w.x, w.y - (1 - age / 0.8) * w.r, w.r, w.r, 0.5 * (1 - age / 0.8));
       }
       for (const s of o.segments ?? []) {
-        this.put('roots', (s.ax + s.bx) / 2, (s.ay + s.by) / 2, Math.hypot(s.bx - s.ax, s.by - s.ay), t.R * 3.2, 0.95 * fade, Math.atan2(s.by - s.ay, s.bx - s.ax));
+        this.put('roots', (s.ax + s.bx) / 2, (s.ay + s.by) / 2, Math.hypot(s.bx - s.ax, s.by - s.ay), 0.16, 0.9 * fade, Math.atan2(s.by - s.ay, s.bx - s.ax));
       }
       const force = o.terrain?.force;
       if (force) {

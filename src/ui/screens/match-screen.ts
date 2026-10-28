@@ -468,7 +468,7 @@ export function matchScreen(opts: MatchOptions) {
         s.b.setAttribute('aria-label', `${sk.name}${ult ? ' (tuyệt chiêu)' : ''}: ${can ? 'sẵn sàng' : skillBlock(side, sk.slot) ?? ''}. Chạm để xem.`);
       }
       if (begun && anyReady && isHumanTurn()) {
-        hintOnce(app, 'skill-dock', 'Chiêu thức', 'Ô sáng viền đỏ là chiêu dùng được. Chạm một ô để đọc mô tả, rồi bấm Dùng. Hai chiêu đầu hồi lại sau vài lượt; tuyệt chiêu cần đầy năng lượng.',
+        hintOnce(app, 'skill-dock', 'Chiêu thức', 'Chạm ô sáng để đọc và dùng chiêu. Hai chiêu đầu có hồi lượt; tuyệt chiêu cần đầy năng lượng.',
           { anchor: () => dock, place: lefty ? 'left' : 'right', rail: true });
       }
     }
@@ -1080,7 +1080,7 @@ export function matchScreen(opts: MatchOptions) {
         case 'energy':
           floatGain(e.side, e.gain);
           if (hasSkills && match.setup.players[e.side].kind === 'human') {
-            hintOnce(app, 'energy', 'Năng lượng', 'Vòng quanh chân dung là năng lượng: +8 mỗi cú đánh, +14 mỗi bi của mình vào lỗ, +12 khi đối thủ phạm lỗi. Đầy vòng thì tuyệt chiêu (ô thứ ba) dùng được.',
+            hintOnce(app, 'energy', 'Năng lượng', 'Vòng chân dung là năng lượng: +8 mỗi cú đánh, +14 khi ăn bi, +12 khi đối thủ lỗi. Đầy 100 để dùng tuyệt chiêu.',
               { anchor: () => cards[e.side].ringWrap, place: e.side === 0 ? 'right' : 'left', alignTop: true });
           }
           break;
@@ -1096,7 +1096,7 @@ export function matchScreen(opts: MatchOptions) {
         }
         case 'omen':
           sound.omen();
-          hintOnce(app, 'omen', 'Thiên Tượng', 'Bàn của mỗi môn phái thỉnh thoảng nổi hiện tượng (gió, tuyết, nghiêng bàn…) cho đúng một cú đánh. Nó được vẽ lên bàn: tính vào đường bi! Tướng đánh trên bàn môn phái mình không gặp Thiên Tượng.',
+          hintOnce(app, 'omen', 'Thiên Tượng', 'Gió, tuyết, rễ cây… tác động đường bi trong một cú đánh. Quan sát dấu trên nỉ để tính đường cơ.',
             { anchor: () => (lefty ? ctrl : dock), place: 'right', highlight: false, rail: true });
           herald({ side: null, icon: 'warning', title: e.omen.name, line: e.omen.desc, ms: 4200 });
           view.addShake(e.omen.jitter ? 0.6 : 0.2);
@@ -1141,7 +1141,7 @@ export function matchScreen(opts: MatchOptions) {
         sound.foul();
         setExpr(side, 'sad', 3000);
         herald({ side, expr: 'sad', tone: 'red', title: r.ballInHand !== 'none' ? 'Lỗi — bi trong tay' : 'Phạm lỗi', line: r.foul, ms: 3400 });
-        hintOnce(app, 'foul', 'Phạm lỗi', 'Khi một bên phạm lỗi, đối thủ được "bi trong tay": đặt bi cái ở chỗ cho phép rồi mới đánh. Lý do lỗi hiện ở dải trên cùng.',
+        hintOnce(app, 'foul', 'Phạm lỗi', 'Đối thủ được bi trong tay sau lỗi: đặt bi cái vào vùng cho phép rồi đánh. Xem lý do lỗi ở dải trên.',
           { anchor: () => (lefty ? ctrl : dock), place: 'right', highlight: false, rail: true });
       } else if (r.winner === null && (potN > 0 || r.points > 0) && r.keepTurn) {
         sound.good();
@@ -1164,27 +1164,27 @@ export function matchScreen(opts: MatchOptions) {
       }
     }
 
-    /** First-time explanations, each shown once per player, beside the control they explain. */
+    /** First-time explanations, queued in the top strip, outside the playing surface. */
     function coachTurn() {
       if (opts.challenge) return;
       const mode = match.setup.mode;
       if (hasSkills) {
         const side = humanSide() ?? match.turn;
-        hintOnce(app, 'energy', 'Năng lượng', 'Vòng quanh chân dung: +8 mỗi cú đánh, +14 mỗi bi của mình vào lỗ, +12 khi đối thủ phạm lỗi. Đầy 100 năng lượng thì dùng được tuyệt chiêu ở ô thứ ba.',
+        hintOnce(app, 'energy', 'Năng lượng', 'Vòng chân dung là năng lượng: +8 mỗi cú đánh, +14 khi ăn bi, +12 khi đối thủ lỗi. Đầy 100 để dùng tuyệt chiêu.',
           { anchor: () => cards[side].ringWrap, place: side === 0 ? 'right' : 'left', alignTop: true });
       }
       const beside = lefty ? 'right' : 'left';
-      hintOnce(app, `rules-${mode}`, `Luật ${MODE_NAMES[mode]}`, `${RULES_TEXT[mode].goal} Xem đầy đủ trong menu tạm dừng → Luật chơi.`, { anchor: () => (lefty ? ctrl : dock), place: 'right', highlight: false, rail: true });
-      hintOnce(app, 'ctl-aim', 'Ngắm', 'Kéo trên bàn để xoay cơ — kéo xa bi cái thì xoay chậm, tinh hơn. Chạm một bi để ngắm thẳng vào nó. Hai nút xoay chỉnh từng chút (giữ để xoay nhanh), nút đổi mục tiêu nhảy qua các bi hợp lệ, bi cái nhỏ là áp phê.',
+      hintOnce(app, `rules-${mode}`, `Luật ${MODE_NAMES[mode]}`, `${RULES_TEXT[mode].goal} Xem menu tạm dừng, mục Luật chơi.`, { anchor: () => (lefty ? ctrl : dock), place: 'right', highlight: false, rail: true });
+      hintOnce(app, 'ctl-aim', 'Ngắm', h('span', null, 'Kéo trên bàn để xoay cơ, chạm bi để ngắm thẳng. ', icon('rotate-left'), icon('rotate-right'), ' chỉnh từng chút, ', icon('switch-target'), ' đổi mục tiêu.'),
         { anchor: () => ctrl, place: beside, rail: true, alignTop: true });
-      hintOnce(app, 'ctl-power', 'Lực và đánh', 'Kéo thanh lực để chọn lực, rồi chạm ĐÁNH. Hoặc giữ ĐÁNH cho lực tự dao động và thả đúng lúc; trượt ngón ra xa để huỷ.',
+      hintOnce(app, 'ctl-power', 'Lực và đánh', 'Kéo thanh lực rồi chạm ĐÁNH. Hoặc giữ ĐÁNH và thả đúng lực; trượt ngón ra xa để huỷ.',
         { anchor: () => powerBar, place: beside });
       if (match.canMoveCue) {
-        hintOnce(app, 'ctl-ballinhand', 'Bi trong tay', 'Kéo bi cái trên bàn, chạm chỗ muốn đặt, hoặc dùng 4 nút mũi tên để dời từng chút. Bấm ĐẶT BI để chốt rồi mới ngắm.',
+        hintOnce(app, 'ctl-ballinhand', 'Bi trong tay', 'Kéo bi cái hoặc chạm bàn để dời bi. Dùng nút hướng để chỉnh nhỏ. Bấm ĐẶT BI rồi ngắm.',
           { anchor: () => dpad, place: beside });
       }
       if (match.callType() !== 'none') {
-        hintOnce(app, 'call', 'Gọi lỗ', 'Cú này phải gọi: chạm vào lỗ bạn định đánh bi vào (và chạm bi nếu cần) trước khi đánh. Bi vào lỗ khác không được tính.',
+        hintOnce(app, 'call', 'Gọi lỗ', 'Chạm bi và lỗ định đánh trước khi ra cơ. Bi vào lỗ khác không được tính.',
           { anchor: () => chips, place: 'above' });
       }
     }

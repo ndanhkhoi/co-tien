@@ -22,12 +22,12 @@ export interface HintOptions {
 interface Item extends HintOptions {
   key: string;
   title: string;
-  text: string;
+  text: string | Node;
 }
 const queue: Item[] = [];
 let showing: { card: HTMLElement; item: Item; target: Element | null; cleanup: () => void } | null = null;
 
-export function hintOnce(app: App, key: string, title: string, text: string, opts: HintOptions = {}) {
+export function hintOnce(app: App, key: string, title: string, text: string | Node, opts: HintOptions = {}) {
   const seen = app.profile.hints;
   if (seen.includes(key) || queue.some((q) => q.key === key) || showing?.item.key === key) return;
   queue.push({ key, title, text, ...opts });
@@ -51,7 +51,11 @@ function next(app: App) {
     showing = null;
     return;
   }
+  const slot = document.querySelector<HTMLElement>('.screen.game.mx .mx-center');
+  let dismissed = false;
   const done = () => {
+    if (dismissed) return;
+    dismissed = true;
     if (!app.profile.hints.includes(item.key)) app.profile.hints.push(item.key);
     app.save();
     card.classList.add('leaving');
@@ -59,6 +63,7 @@ function next(app: App) {
     window.removeEventListener('resize', place);
     setTimeout(() => {
       card.remove();
+      slot?.classList.remove('coaching');
       if (showing?.card === card) next(app);
     }, 180);
   };
@@ -69,10 +74,15 @@ function next(app: App) {
   );
   const it = item;
   const target = item.anchor?.() ?? null;
-  showing = { card, item, target, cleanup: () => window.removeEventListener('resize', place) };
-  document.getElementById('ui')!.append(card);
+  showing = { card, item, target, cleanup: () => { window.removeEventListener('resize', place); slot?.classList.remove('coaching'); } };
+  if (slot) {
+    slot.classList.add('coaching');
+    card.classList.add('match-coach');
+    slot.append(card);
+  } else document.getElementById('ui')!.append(card);
   if (item.highlight !== false) target?.classList.add('coach-target');
   function place() {
+    if (slot) return;
     if (!target || !target.isConnected) {
       card.classList.add('floating');
       return;
