@@ -634,3 +634,9 @@ body { background: linear-gradient(#e9e1d0d1, #e9e1d0d1), var(--paper, none) cen
 .mx-obj { min-width: 0; max-width: min(360px, 100%); padding: 8px 28px; }
 .mx-obj-k { font-size: 11px; }
 .mx-obj-t { max-height: 2.45em; font-size: 13px; line-height: 1.22; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+
+/* Entry artwork is a viewport paint on desktop. The source key art carries a paper border;
+   a slight overscan removes that seam so browser letterboxing never reads as a second frame. */
+@media (orientation: landscape) and (min-width: 900px) {
+  .screen.splash { background-size: auto 118%; }
+}
