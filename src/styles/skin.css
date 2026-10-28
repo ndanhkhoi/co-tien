@@ -603,12 +603,12 @@ body { background: linear-gradient(#e9e1d0d1, #e9e1d0d1), var(--paper, none) cen
 #ui .mx-herald.red { background-image: url('/art/ui/frame/herald.webp'); }
 #ui .mx-herald.thinking { background-image: url('/art/ui/frame/herald.webp'); padding: 8px 14px; }
 
-.mx-obj { background: url('/art/ui/frame/quote-v2.webp') center / 100% 100% no-repeat; padding: 10px 22px; }
+.mx-obj { background: url('/art/ui/frame/quote-wide.webp') center / 100% 100% no-repeat; padding: 10px 22px; }
 .mx-vs-av { position: relative; width: 156px; padding: 18px; border: 0; border-radius: 0; background: transparent; box-shadow: none; overflow: visible; }
 .mx-vs-av::after { content: ''; position: absolute; inset: 0; background: url('/art/ui/frame/portrait-v2.webp') center / 100% 100% no-repeat; pointer-events: none; }
 .mx-vs-side { gap: 4px; min-width: 0; }
-.mx-vs-name { width: 270px; max-width: 100%; min-height: 52px; display: grid; place-items: center; padding: 10px 28px; border-radius: 0; background: url('/art/ui/frame/name-v2.webp') center / 100% 100% no-repeat; font-size: 24px; overflow-wrap: anywhere; }
-.mx-vs-title { max-width: 280px; padding: 10px 24px; min-height: 40px; border-radius: 0; background: url('/art/ui/frame/ink-v2.webp') center / 100% 100% no-repeat; text-align: center; font-size: 13px; }
-.mx-vs-quote { background: url('/art/ui/frame/quote-v2.webp') center / 100% 100% no-repeat; border-radius: 0; box-shadow: none; padding: 12px 30px; }
-.vs-plates .vs-side { background: url('/art/ui/frame/ink-v2.webp') center / 100% 100% no-repeat; border-radius: 0; padding: 10px 16px; }
+.mx-vs-name { width: 270px; max-width: 100%; min-height: 52px; display: grid; place-items: center; padding: 10px 28px; border-radius: 0; background: url('/art/ui/frame/name-wide.webp') center / 100% 100% no-repeat; font-size: 24px; overflow-wrap: anywhere; }
+.mx-vs-title { max-width: 280px; padding: 10px 24px; min-height: 40px; border-radius: 0; background: url('/art/ui/frame/ink-wide.webp') center / 100% 100% no-repeat; text-align: center; font-size: 13px; }
+.mx-vs-quote { background: url('/art/ui/frame/quote-wide.webp') center / 100% 100% no-repeat; border-radius: 0; box-shadow: none; padding: 12px 30px; }
+.vs-plates .vs-side { background: url('/art/ui/frame/ink-wide.webp') center / 100% 100% no-repeat; border-radius: 0; padding: 10px 16px; }
 .mx-res-art { border-radius: 0; border: 10px solid transparent; border-image: url('/art/ui/frame/portrait-v2.webp') 70 / 10px / 0 stretch; background: transparent; }
