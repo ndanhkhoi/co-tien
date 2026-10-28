@@ -60,6 +60,10 @@ function setupUpdates(app: App) {
       app.setPendingUpdate(() => void updateSW(true));
     },
     onRegisteredSW(_url, reg) {
+      // Drop art caches from older builds (images are redrawn in place, so old copies would stick).
+      void caches?.keys().then((keys) => keys
+        .filter((k) => (k === 'art' || k.startsWith('art-')) && k !== __ART_CACHE__)
+        .forEach((k) => void caches.delete(k))).catch(() => undefined);
       if (!reg) return;
       const check = () => {
         if (navigator.onLine) void reg.update().catch(() => undefined);

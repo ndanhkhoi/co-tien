@@ -2,9 +2,13 @@ import { defineConfig } from 'vitest/config';
 import pkg from './package.json' with { type: 'json' };
 import { VitePWA } from 'vite-plugin-pwa';
 
+// One id per build: art is cached under it, so redrawn images at the same path are refetched after an update.
+const BUILD_ID = Date.now().toString(36);
+
 export default defineConfig({
   base: './',
   define: {
+    __ART_CACHE__: JSON.stringify(`art-${BUILD_ID}`),
     __APP_VERSION__: JSON.stringify(`${pkg.version} · ${new Date().toISOString().slice(0, 16).replace('T', ' ')}`),
   },
   build: { target: 'es2022', chunkSizeWarningLimit: 1500 },
@@ -18,7 +22,7 @@ export default defineConfig({
         id: './',
         name: 'Cơ Tiên',
         short_name: 'Cơ Tiên',
-        description: 'Bida tiên hiệp: 12 môn phái, 60 tướng, 8 bi, 9 bi, 10 bi, phăng',
+        description: 'Bida tiên hiệp: 13 môn phái, 65 tướng, 8 bi, 9 bi, 10 bi, phăng',
         lang: 'vi',
         display: 'fullscreen',
         orientation: 'landscape',
@@ -35,12 +39,12 @@ export default defineConfig({
       workbox: {
         cleanupOutdatedCaches: true,
         // Precache code, UI art, portraits and skill icons; big art streams in and is cached on first view.
-        globPatterns: ['**/*.{js,css,html,png,svg,woff2,woff,json}', 'art/ui/*.webp', 'art/champions/*/portrait.webp', 'art/skills/*.webp', 'art/sects/*/emblem.webp'],
+        globPatterns: ['**/*.{js,css,html,png,svg,woff2,woff,json}', 'art/ui/**/*.webp', 'art/table/**/*.webp', 'art/champions/*/portrait.webp', 'art/skills/*.webp', 'art/sects/*/emblem.webp'],
         maximumFileSizeToCacheInBytes: 6_000_000,
         runtimeCaching: [{
           urlPattern: ({ url }) => url.pathname.includes('/art/'),
           handler: 'CacheFirst',
-          options: { cacheName: 'art', expiration: { maxEntries: 2500 } },
+          options: { cacheName: `art-${BUILD_ID}`, expiration: { maxEntries: 2500 } },
         }],
       },
     }),
