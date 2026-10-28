@@ -612,3 +612,16 @@ body { background: linear-gradient(#e9e1d0d1, #e9e1d0d1), var(--paper, none) cen
 .mx-vs-quote { background: url('/art/ui/frame/quote-wide.webp') center / 100% 100% no-repeat; border-radius: 0; box-shadow: none; padding: 12px 30px; }
 .vs-plates .vs-side { background: url('/art/ui/frame/ink-wide.webp') center / 100% 100% no-repeat; border-radius: 0; padding: 10px 16px; }
 .mx-res-art { border-radius: 0; border: 10px solid transparent; border-image: url('/art/ui/frame/portrait-v2.webp') 70 / 10px / 0 stretch; background: transparent; }
+/* Leave a dedicated gutter for the scroll affordance, clear of story copy. */
+.sr-sheet { padding-bottom: 30px; }
+.sr-text { padding-bottom: 12px; }
+.sr-sheet > .more-chevron { top: auto !important; bottom: 2px; }
+/* Let the painted route remain visible behind compact, readable landmarks. */
+.land-pin { width: 138px; max-width: 138px; padding: 3px 5px; gap: 3px; }
+.land-pin.locked { background: color-mix(in srgb, var(--sheet) 78%, transparent); box-shadow: none; }
+.lp-name { font-size: 11.5px; }
+/* Secondary copy is still legible at the design frame's native scale. */
+.ht-sub { font-size: 11px; line-height: 1.3; }
+.cc-sub { font-size: 11px; line-height: 1.35; }
+.cutin .ci-kicker { color: var(--sheet); text-shadow: 0 1px 3px #000, 0 0 6px #000; }
+.mx-castrow .btn { height: max(44px, var(--touch-target)); min-height: var(--touch-target); }
