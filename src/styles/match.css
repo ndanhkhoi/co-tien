@@ -740,3 +740,8 @@
   .screen.game.mx .mx-ctrl.placing:not(.preview-aim) .mx-place-mode { min-width: 128px; }
   .screen.game.mx .mx-ctrl { --colR: 112px; }
 }
+
+/* Group status is a decision-critical label. Never ellipsize Trơn/Sọc inside the
+   player plate; let the remaining-ball count yield space first. */
+.mx-sub { overflow: visible; white-space: nowrap; }
+.mx-grp { flex-shrink: 0; }
