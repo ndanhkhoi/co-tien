@@ -595,13 +595,13 @@ body { background: linear-gradient(#e9e1d0d1, #e9e1d0d1), var(--paper, none) cen
 
 /* Painted plates are the visual surface; layout remains semantic and responsive. */
 #ui .mx-herald {
-  background: var(--ink) url('/art/ui/frame/ink-v2.webp') center / 100% 100% no-repeat;
+  background: transparent url('/art/ui/frame/herald.webp') center / 100% 100% no-repeat;
   border: 0;
   padding: 20px 28px;
   box-shadow: none;
 }
-#ui .mx-herald.red { background-image: url('/art/ui/frame/ink-v2.webp'); }
-#ui .mx-herald.thinking { background-image: url('/art/ui/frame/ink-v2.webp'); padding: 8px 14px; }
+#ui .mx-herald.red { background-image: url('/art/ui/frame/herald.webp'); }
+#ui .mx-herald.thinking { background-image: url('/art/ui/frame/herald.webp'); padding: 8px 14px; }
 
 .mx-obj { background: url('/art/ui/frame/quote-v2.webp') center / 100% 100% no-repeat; padding: 10px 22px; }
 .mx-vs-av { position: relative; width: 156px; padding: 18px; border: 0; border-radius: 0; background: transparent; box-shadow: none; overflow: visible; }
