@@ -8,6 +8,12 @@ export type SectId =
   | 'hailong' | 'uminh' | 'tinhtu' | 'kimsa' | 'vanthu' | 'hukhong' | 'thienhuong';
 export type ClassId = 'thanxa' | 'cuongchien' | 'phaptu' | 'hophap' | 'chusu' | 'anhsat' | 'luanhoi';
 
+export type ChampionKind = 'hiepkhach' | 'nuhiep' | 'yeu' | 'linh' | 'co' | 'ma';
+export const KIND_LABEL: Record<ChampionKind, string> = {
+  hiepkhach: 'Hiệp Khách', nuhiep: 'Nữ Hiệp', yeu: 'Yêu Tộc',
+  linh: 'Tinh Linh', co: 'Cơ Quan', ma: 'Ma Vật',
+};
+
 /** Billiards effect families every skill is built from. */
 export type SkillKind =
   | 'vision' | 'rewind' | 'shield' | 'chill' | 'spin' | 'nudge' | 'reveal' | 'power'
@@ -44,12 +50,13 @@ export interface Champion {
   name: string;
   sect: SectId;
   tier: 1 | 2 | 3 | 4 | 5;
+  kind: ChampionKind;
   cls: ClassId;
   skills: [SkillDef, SkillDef, SkillDef];
 }
 
 interface RawSkill { name: string; kinds: string[] }
-interface RawChampion { id: string; name: string; sect: string; tier: number; cls: string; skills: RawSkill[] }
+interface RawChampion { id: string; name: string; sect: string; tier: number; kind: ChampionKind; cls: string; skills: RawSkill[] }
 
 const hex = (s: string) => parseInt(s.slice(1), 16);
 
@@ -120,7 +127,7 @@ export const CHAMPIONS: Champion[] = (roster.champions as RawChampion[]).map((c)
   const cls = c.cls as ClassId;
   const tier = c.tier as Champion['tier'];
   return {
-    id: c.id, name: c.name, sect: c.sect as SectId, tier, cls,
+    id: c.id, name: c.name, sect: c.sect as SectId, tier, kind: c.kind, cls,
     skills: [makeSkill(c.skills[0], 0, tier, cls), makeSkill(c.skills[1], 1, tier, cls), makeSkill(c.skills[2], 2, tier, cls)],
   };
 });
