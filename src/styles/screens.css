@@ -964,3 +964,12 @@ body.vp-rotate .rotate-hint, body.vp-resize .size-hint { display: flex; }
 .champion-skill-copy p { margin: 0 0 10px; }
 .champion-skill-copy .champion-skill-cost { font-weight: 700; color: var(--accent-2); }
 .champion-skill-detail .actions { flex-shrink: 0; }
+
+.practice-wrap { width: min(760px, 94%); margin: auto; display: grid; gap: 12px; justify-items: center; }
+.practice-tools, .practice-modes { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; justify-content: center; }
+.practice-tools label { display: inline-flex; align-items: center; gap: 6px; }
+.practice-tools input { width: 150px; }
+.practice-table { position: relative; width: min(720px, 92vw); aspect-ratio: 2 / 1; border: 18px solid #30241b; border-radius: 24px; background: #315b4a; box-shadow: inset 0 0 0 5px #142e27, 0 8px 20px #20180f55; touch-action: none; }
+.practice-ball { position: absolute; width: 28px; height: 28px; transform: translate(-50%, -50%); border: 2px solid #fff8; border-radius: 50%; background: #f6f0df; color: #17130f; font: 700 12px/24px var(--body); padding: 0; }
+.practice-ball:nth-child(odd) { background: #b83b28; color: #fff8ee; }.practice-ball.sel { outline: 3px solid #f4bd3d; }
+.practice-status { min-height: 24px; margin: 0; text-align: center; }

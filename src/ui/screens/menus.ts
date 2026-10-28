@@ -1,4 +1,6 @@
 import type { Personality } from '../../ai/types';
+import { makeBall } from '../../core/physics';
+import { makeCaromTable, makePoolTable } from '../../core/table';
 import { sound } from '../../audio/sound';
 import { preloadBackground } from '../../platform/preload';
 import { MODE_NAMES } from '../../core/rules';
@@ -341,6 +343,7 @@ export function homeScreen(app: App): Screen {
         tablet('quick-match', 'Luận Cơ', 'So tài cùng máy', () => app.go(quickScreen)),
         tablet('users', 'Song Đấu', 'Hai người · chung máy', () => app.go(localScreen)),
         tablet('target', 'Luyện Cơ', `Luyện cú · ${chDone}/${CHALLENGES.length}`, () => app.go(challengesScreen)),
+        tablet('place', 'Luyện thế', 'Tự dựng thế bi', () => app.go(practiceBuilderScreen)),
         tablet('collection', 'Tàng Các', `Chiêu mộ · ${p.champions.length}/${CHAMPIONS.length}`, () => app.go(collectionScreen)),
         tablet('story', 'Cơ Tiên Truyện', read ? `Đã đọc ${read} chương` : '15 chương', () => app.go(storyScreen)),
         tablet('codex', 'Cơ Tiên Lục', 'Bách khoa', () => app.go(codexScreen)),
@@ -487,6 +490,62 @@ function setupScreen(app: App, local: boolean): Screen {
   }
   return { el };
 }
+
+export const practiceBuilderScreen = (app: App): Screen => {
+  const el = screenEl('practice-builder');
+  let kind: 'pool' | 'carom' = 'pool';
+  let count = 3;
+  let selected = -1;
+  let balls: { id: number; x: number; y: number }[] = [];
+  const table = h('div.practice-table', { role: 'application', 'aria-label': 'Mặt bàn dựng thế bi' });
+  const status = h('p.practice-status', null);
+  const countLabel = h('output.num', null, String(count));
+  const modePool = btn('Bàn lỗ', () => { kind = 'pool'; selected = -1; render(); }, 'secondary');
+  const modeCarom = btn('Bàn phăng', () => { kind = 'carom'; count = Math.min(count, 3); selected = -1; render(); }, 'secondary');
+  const countInput = h('input', { type: 'range', min: '1', max: '16', value: String(count), 'aria-label': 'Số bi' }) as HTMLInputElement;
+  countInput.addEventListener('input', () => { count = Number(countInput.value); if (kind === 'carom') count = Math.min(count, 3); countLabel.textContent = String(count); render(); });
+  const reset = btn('Xóa hết', () => { balls = []; selected = -1; render(); }, 'ghost');
+  const start = btn('Bắt đầu luyện', () => {
+    if (!balls.length) { status.textContent = 'Hãy đặt ít nhất một bi lên bàn.'; return; }
+    const c = champion(app.profile.champion);
+    const p = { name: app.profile.name, kind: 'human' as const, cue: app.cue, champion: c.id };
+    const foe = { ...p, name: 'Luyện thế', kind: 'human' as const };
+    const launch = matchScreen({
+      setup: { mode: kind === 'pool' ? 'eight' : 'carom-libre', raceTo: 1, players: [p, foe], mutator: null, tableSkin: app.tableSkin, classic: true, layout: balls.map((b) => makeBall(b.id, b.x, b.y)) },
+      label: 'Luyện thế', titles: ['Tự dựng thế', 'Luyện thế'], onExit: () => app.back(),
+      onEnd: () => ({ lines: [], again: () => app.go(practiceBuilderScreen, { replace: true }) }),
+    });
+    app.go(launch);
+  }, 'big');
+  function render() {
+    const geom = kind === 'pool' ? makePoolTable() : makeCaromTable();
+    modePool.classList.toggle('sel', kind === 'pool'); modeCarom.classList.toggle('sel', kind === 'carom');
+    table.replaceChildren();
+    for (const b of balls) {
+      const dot = h('button.practice-ball', { class: b.id === selected ? 'sel' : '', 'aria-label': `Bi ${b.id}` }, String(b.id));
+      dot.style.left = `${((b.x / geom.L) + 0.5) * 100}%`;
+      dot.style.top = `${((b.y / geom.W) + 0.5) * 100}%`;
+      dot.addEventListener('pointerdown', (e) => { e.stopPropagation(); selected = b.id; render(); });
+      table.append(dot);
+    }
+    table.onpointerdown = (e) => {
+      const rect = table.getBoundingClientRect();
+      const x = ((e.clientX - rect.left) / rect.width - 0.5) * geom.L;
+      const y = ((e.clientY - rect.top) / rect.height - 0.5) * geom.W;
+      if (selected >= 0) { const b = balls.find((v) => v.id === selected); if (b) { b.x = x; b.y = y; } selected = -1; render(); return; }
+      if (balls.length >= count) { status.textContent = 'Đã đủ số bi; chạm bi để chọn rồi chạm vị trí mới để dời.'; return; }
+      const id = kind === 'carom' ? balls.length : balls.length === 0 ? 0 : balls.length;
+      balls.push({ id, x, y }); render();
+    };
+    status.textContent = `${balls.length}/${count} bi · ${selected >= 0 ? `Đã chọn bi ${selected}, chạm vị trí mới để dời` : 'Chạm mặt bàn để đặt bi'}`;
+  }
+  el.append(topbar(app, 'Luyện thế', true), h('div.practice-wrap', null,
+    h('div.practice-tools', null, h('div.practice-modes', null, modePool, modeCarom), h('label', null, 'Số bi ', countLabel, countInput), reset),
+    table, status, h('div.actions', null, start)),
+  );
+  render();
+  return { el };
+};
 
 export const quickScreen = (app: App) => setupScreen(app, false);
 export const localScreen = (app: App) => setupScreen(app, true);
