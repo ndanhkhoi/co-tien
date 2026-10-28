@@ -175,13 +175,15 @@
   align-items: center;
   gap: 10px;
   padding: 4px 14px 4px 4px;
-  border-radius: 999px var(--r-3) var(--r-3) 999px;
-  background: var(--ink);
-  color: var(--sheet);
-  box-shadow: var(--sh-2);
+  border-radius: var(--r-2);
+  border: 1px solid var(--ink);
+  border-left: 4px solid var(--accent);
+  background: var(--sheet);
+  color: var(--ink);
+  box-shadow: 0 3px 0 #201b1520;
 }
 .mx-herald.show { display: flex; animation: mx-herald-in 0.3s var(--ease) both; }
-.mx-herald.red { background: var(--accent); color: var(--on-accent); }
+.mx-herald.red { color: var(--accent); border-color: var(--accent); }
 @keyframes mx-herald-in { from { opacity: 0; transform: translateY(-10px) scale(0.98); } }
 .mx-h-face, .mx-h-icon { height: 100%; aspect-ratio: 1; flex-shrink: 0; border-radius: 50%; border: 2px solid var(--sheet); background: var(--sheet); }
 .mx-h-face { object-fit: cover; }
@@ -710,3 +712,23 @@
 @media (max-height: 430px) {
   .mx-ctrl { gap: 4px; }
 }
+
+.mx-elevation { display: grid; gap: 2px; font-size: 11px; }
+.mx-elevation input { width: 100%; min-height: var(--touch-target, 44px); accent-color: var(--accent); }
+.mx-jump-help { font-size: 10px; line-height: 1.35; margin: 0; }
+.cutin.paused, .cutin.paused * { animation-play-state: paused !important; }
+
+/* Keep the heading and completion action visible while the spin controls scroll. */
+.mx-spinsheet { overflow: hidden; align-items: stretch; }
+.mx-spinsheet .mx-sp-ballwrap { align-self: center; }
+.mx-sp-side { min-height: 0; gap: 6px; }
+.mx-sp-title { flex-shrink: 0; min-height: 32px; padding-right: var(--touch-target); }
+.mx-sp-body { flex: 1; min-height: 0; display: flex; flex-direction: column; gap: 6px; overflow-y: auto; padding-right: 4px; }
+.mx-sp-body > * { flex-shrink: 0; }
+.mx-sp-side > .btn { flex-shrink: 0; }
+.mx-sp-presets { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 4px; }
+.mx-spinsheet .mx-sc-x { width: var(--touch-target); height: var(--touch-target); top: 4px; right: 4px; }
+
+/* Cut-ins never capture controls, including the pause sheet above the table. */
+.cutin, .cutin * { pointer-events: none !important; }
+.cutin.paused { visibility: hidden; }

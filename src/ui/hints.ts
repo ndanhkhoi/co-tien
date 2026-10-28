@@ -61,6 +61,7 @@ function next(app: App) {
     card.classList.add('leaving');
     target?.classList.remove('coach-target');
     window.removeEventListener('resize', place);
+    window.removeEventListener('cotien:ui-resize', place);
     setTimeout(() => {
       card.remove();
       slot?.classList.remove('coaching');
@@ -74,7 +75,11 @@ function next(app: App) {
   );
   const it = item;
   const target = item.anchor?.() ?? null;
-  showing = { card, item, target, cleanup: () => { window.removeEventListener('resize', place); slot?.classList.remove('coaching'); } };
+  showing = { card, item, target, cleanup: () => {
+    window.removeEventListener('resize', place);
+    window.removeEventListener('cotien:ui-resize', place);
+    slot?.classList.remove('coaching');
+  } };
   if (slot) {
     slot.classList.add('coaching');
     card.classList.add('match-coach');
@@ -94,9 +99,11 @@ function next(app: App) {
       return;
     }
     // Tips live inside the scaled #ui: convert the screen rect to layout px.
-    const r = { left: sr.left / k, right: sr.right / k, top: sr.top / k, bottom: sr.bottom / k, width: sr.width / k, height: sr.height / k };
-    const W = window.innerWidth / k;
-    const H = window.innerHeight / k;
+    const ui = document.getElementById('ui')!;
+    const origin = ui.getBoundingClientRect();
+    const r = { left: (sr.left - origin.left) / k, right: (sr.right - origin.left) / k, top: (sr.top - origin.top) / k, bottom: (sr.bottom - origin.top) / k, width: sr.width / k, height: sr.height / k };
+    const W = ui.clientWidth;
+    const H = ui.clientHeight;
     if (it.rail) {
       const available = it.place === 'left' ? r.left - W / 2 - 10 : W / 2 - r.right - 10;
       card.style.width = `${Math.max(1, Math.min(240, available))}px`;
@@ -135,6 +142,7 @@ function next(app: App) {
   }
   place();
   window.addEventListener('resize', place);
+  window.addEventListener('cotien:ui-resize', place);
 }
 
 /** Forget every hint (Settings → "Xem lại hướng dẫn"). */

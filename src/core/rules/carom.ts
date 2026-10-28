@@ -38,6 +38,12 @@ function makeCarom(mode: GameMode, threeCushion: boolean): RuleSet {
     },
     resolve(state, _balls, shot) {
       const res: Resolution = { foul: null, keepTurn: false, ballInHand: 'none', respot: [], winner: null, messages: [], points: 0 };
+      if (shot.offTable?.length) {
+        res.foul = 'Bi văng khỏi bàn';
+        // UMB: replace displaced balls on their spots before the next inning.
+        res.respot = [...shot.offTable];
+        return res;
+      }
       if (state.isBreak && shot.firstHit !== null && shot.firstHit !== CAROM_RED) {
         res.foul = 'Cú mở phải chạm bi đỏ trước';
         return res;

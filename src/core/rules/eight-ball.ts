@@ -59,6 +59,19 @@ export const eightBall: RuleSet = {
     const eight = shot.pocketed.find((p) => p.id === 8);
     const objects = ids.filter((id) => id !== 0 && id !== 8);
 
+    if (shot.offTable?.length) {
+      res.foul = 'Bi văng khỏi bàn';
+      res.ballInHand = shot.isBreak ? 'kitchen' : 'anywhere';
+      if (shot.offTable.includes(8)) {
+        if (shot.isBreak) res.respot.push(8);
+        else { res.winner = opp; res.messages.push('Bi 8 văng khỏi bàn — thua ván'); }
+      } else if (eight) {
+        if (shot.isBreak) res.respot.push(8);
+        else { res.winner = opp; res.messages.push('Phạm lỗi khi ăn bi 8 — thua ván'); }
+      }
+      return res;
+    }
+
     if (shot.isBreak) {
       // WPA 4.3: the 8 on the break is spotted; a scratch gives ball in hand above the
       // head string; a break that neither pockets a ball nor drives four to a rail lets

@@ -7,7 +7,7 @@ import { ballCss } from '../../core/ball-styles';
 import { MODE_NAMES } from '../../core/rules';
 import { other, type Resolution, type ShotCall, type Side } from '../../core/rules/types';
 import { Rng } from '../../core/rng';
-import { champion, exprUrl, portraitUrl, sect, skillIconUrl, winUrl } from '../../game/content/sects';
+import { type SkillDef, champion, exprUrl, portraitUrl, sect, skillIconUrl, winUrl } from '../../game/content/sects';
 import { RULES_TEXT, SKILL_RULES } from '../../game/content/rules-text';
 import { ENERGY_MAX, Match, type MatchSetup } from '../../game/match';
 import { haptic, isTouchDevice, keepAwake, toggleFullscreen } from '../../platform/device';
@@ -93,7 +93,7 @@ export function matchScreen(opts: MatchOptions) {
     const hasSkills = !opts.challenge && !match.setup.classic;
 
     // ---------- Aim / input state ----------
-    const aim = { angle: 0, side: 0, vert: 0 };
+    const aim = { angle: 0, side: 0, vert: 0, elevation: 0 };
     /** Power the player set on the power bar; a tap on ĐÁNH shoots with it. */
     let preset = 0.55;
     let barActive = false;
@@ -150,6 +150,9 @@ export function matchScreen(opts: MatchOptions) {
     let aiToken = 0;
     let aiActing = false;
     let disposed = false;
+    let presenting = false;
+    let pendingUltimate: { champion: string; skill: SkillDef; side: Side } | null = null;
+    let cutIn: HTMLElement | null = null;
     let begun = false;
     let paused = false;
     let pauseWrap: HTMLElement | null = null;
@@ -164,7 +167,8 @@ export function matchScreen(opts: MatchOptions) {
     let powerKey = '';
 
     const isHumanTurn = () => match.current.kind === 'human' && !aiActing;
-    const canAct = () => isHumanTurn() && match.phase === 'aim' && strikeT === 0 && !paused;
+    const canAct = () => isHumanTurn() && match.phase === 'aim' && strikeT === 0 && !paused && !presenting;
+    const canInspectSkills = () => !presenting && !paused && strikeT === 0;
     const placingNow = () => canAct() && (!!skillPlacement || match.canMoveCue && !placeConfirmed);
     const canAdjustAim = () => canAct() && !skillPlacement && (!placingNow() || placementAim);
     const nameOf = (s: Side) => match.setup.players[s].name;
@@ -236,6 +240,7 @@ export function matchScreen(opts: MatchOptions) {
     const strikeLabel = h('span.mx-st-label', null, 'ĐÁNH');
     const strikeBtn = h('button.mx-strike', { 'aria-label': 'Đánh' }, strikeIcon, strikeLabel);
     const passiveChip = btn('Nội tại', () => {
+      if (!canAct()) return;
       const cls = match.passive(match.turn);
       if (cls === 'thanxa') match.aimLock ? match.aimLock = null : match.lockAim(aim.angle, wobbleAmp());
       if (cls === 'phaptu') match.choosePassive(match.spinAxis[match.turn] === 'side' ? 'vert' : 'side');
@@ -278,8 +283,10 @@ export function matchScreen(opts: MatchOptions) {
     function layout() {
       // HUD offsets are layout px inside the scaled #ui; the table canvas works in screen px.
       const k = uiScale();
-      const W = window.innerWidth / k;
-      const H = window.innerHeight / k;
+      const ui = document.getElementById('ui')!;
+      const rect = ui.getBoundingClientRect();
+      const W = ui.clientWidth;
+      const H = ui.clientHeight;
       // Before the screen is attached nothing has a size yet: use the usual column widths.
       const live = probe.offsetWidth > 0;
       const insetL = live ? probe.offsetLeft : 0;
@@ -298,8 +305,8 @@ export function matchScreen(opts: MatchOptions) {
         top: top + 2,
         bottom: insetB + 2,
       };
-      const fitted = view.fit(window.innerWidth, window.innerHeight, { left: bounds.left * k, right: bounds.right * k, top: bounds.top * k, bottom: bounds.bottom * k });
-      const cx = fitted.cx / k, cy = fitted.cy / k, scale = fitted.scale / k;
+      const fitted = view.fit(window.innerWidth, window.innerHeight, { left: rect.left + bounds.left * k, right: window.innerWidth - rect.right + bounds.right * k, top: rect.top + bounds.top * k, bottom: window.innerHeight - rect.bottom + bounds.bottom * k });
+      const cx = (fitted.cx - rect.left) / k, cy = (fitted.cy - rect.top) / k, scale = fitted.scale / k;
       const t = match.table;
       // Chips sit on the bottom rail, between the side pocket and a corner, never on the cloth.
       const railMid = (t.W / 2 + t.railWidth / 2) * scale;
@@ -313,6 +320,7 @@ export function matchScreen(opts: MatchOptions) {
     }
     const onResize = () => layout();
     window.addEventListener('resize', onResize);
+    window.addEventListener('cotien:ui-resize', onResize);
     requestAnimationFrame(layout);
     layout();
 
@@ -386,6 +394,8 @@ export function matchScreen(opts: MatchOptions) {
 
     function renderControls() {
       const act = canAct();
+      for (const slot of slots) slot.b.disabled = !canInspectSkills();
+      passiveChip.disabled = !act;
       const placing = placingNow();
       ctrl.classList.toggle('placing', placing);
       ctrl.classList.toggle('preview-aim', placing && !skillPlacement && placementAim);
@@ -532,7 +542,7 @@ export function matchScreen(opts: MatchOptions) {
           s.name.textContent = sk.name;
         }
         const wait = match.skillWait(side, sk.slot);
-        const can = match.canUseSkill(side, sk.slot);
+        const can = canInspectSkills() && match.canUseSkill(side, sk.slot);
         anyReady ||= can;
         const ult = sk.slot === 2;
         s.b.classList.toggle('ready', can);
@@ -577,6 +587,7 @@ export function matchScreen(opts: MatchOptions) {
     }
 
     function openSkill(slot: number) {
+      if (!canInspectSkills()) return;
       const side = humanSide();
       if (side === null) return;
       closeSheets();
@@ -587,7 +598,7 @@ export function matchScreen(opts: MatchOptions) {
       const req = h('div.mx-sc-req');
       const reason = h('div.mx-sc-reason');
       const useBtn = btn(frag(icon(ult ? 'ultimate' : 'energy'), 'Dùng'), () => {
-        if (!match.canUseSkill(side, slot)) return;
+        if (!canInspectSkills() || !match.canUseSkill(side, slot)) return;
         closeSheets();
         if (sk.kinds.some(k => PLACED_KINDS.includes(k))) {
           skillPlacement = { side, slot, cast: { direction: { x: Math.cos(aim.angle), y: Math.sin(aim.angle) } } };
@@ -619,7 +630,7 @@ export function matchScreen(opts: MatchOptions) {
         const why = skillBlock(side, slot);
         reason.textContent = why ?? 'Sẵn sàng';
         reason.classList.toggle('ok', !why);
-        useBtn.disabled = !!why;
+        useBtn.disabled = !!why || !canInspectSkills();
       };
       refresh();
       skillSheet = { el: box, catcher, refresh };
@@ -687,13 +698,22 @@ export function matchScreen(opts: MatchOptions) {
         aim.vert = p.vert;
         paint();
       }));
+      const elevationText = h('span', null, `Nâng cơ: ${Math.round(aim.elevation * 180 / Math.PI)}°`);
+      const elevation = h('input', { type: 'range', min: 0, max: 75, step: 1, value: Math.round(aim.elevation * 180 / Math.PI), 'aria-label': 'Góc nâng cơ (độ)' });
+      elevation.addEventListener('input', () => {
+        aim.elevation = Number(elevation.value) * Math.PI / 180;
+        elevationText.textContent = `Nâng cơ: ${elevation.value}°`;
+      });
       const box = h('div.mx-sheet.mx-spinsheet', { role: 'dialog', 'aria-label': 'Áp phê' },
         tap(h('button.icon-btn.small.mx-sc-x', { 'aria-label': 'Đóng' }, icon('close')), () => closeSheets()),
         h('div.mx-sp-ballwrap', null, ball),
         h('div.mx-sp-side', null,
           h('div.mx-sp-title', null, icon('spin'), 'Áp phê'),
-          cap,
-          h('div.mx-sp-presets', null, ...presetBtns),
+          h('div.mx-sp-body.scroll', { tabindex: 0, 'aria-label': 'Điểm đánh và góc nâng cơ' },
+            cap,
+            h('div.mx-sp-presets', null, ...presetBtns),
+            h('label.mx-elevation', null, elevationText, elevation),
+            h('p.mx-jump-help', null, 'Nâng cơ 45–65°, đánh sát tâm, dùng lực theo khoảng cách. Góc cao giảm tầm ngang và khó dùng áp phê; lệch tâm giảm độ bật, lệch nhiều dễ trượt cơ. Quá nhẹ đụng bi chắn; quá mạnh có thể văng bàn.')),
           btn('Xong', () => closeSheets(), 'small block')));
       const catcher = h('div.mx-catch');
       catcher.addEventListener('pointerdown', () => closeSheets());
@@ -861,20 +881,37 @@ export function matchScreen(opts: MatchOptions) {
       fire(angle, finalPower, aim.side, aim.vert);
     }
 
-    function fire(angle: number, pw: number, side: number, vert: number, aiShotCall?: ShotCall | null) {
+    async function fire(angle: number, pw: number, side: number, vert: number, aiShotCall?: ShotCall | null) {
+      if (presenting || disposed || paused || match.phase !== 'aim') return;
+      presenting = true;
       closeSheets();
+      renderControls();
+      const ultimate = pendingUltimate;
+      pendingUltimate = null;
+      if (ultimate) {
+        cutIn = playCutIn(champion(ultimate.champion), ultimate.skill, ultimate.side === 1);
+        await sleep(1500);
+        cutIn.remove();
+        cutIn = null;
+        if (disposed) return;
+        view.skillFx(ultimate.champion, ultimate.skill, ultimate.side);
+        haptic([30, 40, 60]);
+        await sleep(900);
+        if (disposed) return;
+      }
       strikePull = pw;
       strikeT = 0.0001;
       const ct = match.callType();
       const call = aiShotCall !== undefined ? aiShotCall : ct === 'none' ? null : { ball: callBallId() ?? 8, pocket: callPocket ?? 0 };
       firedCall = call;
       aiCall = null;
-      const input = { angle, power: pw, side, vert, call, pushOut };
+      const input = { angle, power: pw, side, vert, elevation: aiShotCall !== undefined ? 0 : aim.elevation, call, pushOut };
       renderControls();
       // Let the cue travel through before the ball moves.
       void sleep(70).then(() => {
         if (disposed) return;
         match.shoot(input);
+        presenting = false;
         pushOut = false;
         callPocket = null;
       });
@@ -1150,11 +1187,14 @@ export function matchScreen(opts: MatchOptions) {
             if (p.speed > 2.4) view.burst(p.x, p.y, 0xffffff, 3, 0.4, 0.008);
           } else if (p.t === 'cushion') {
             sound.cushion(p.speed);
-          } else {
+          } else if (p.t === 'pocket') {
             sound.pocket(p.speed);
             haptic(18);
             const pk = match.table.pockets[p.pocket];
             view.ring(pk.hx, pk.hy, p.id === 0 ? 0xff5a4e : 0xffe08a, 0.03);
+          } else if (p.t === 'off-table') {
+            haptic([25, 35, 25]);
+            herald({ side: match.turn, tone: 'red', title: p.id === 0 ? 'Bi cái văng khỏi bàn' : `Bi ${p.id} văng khỏi bàn`, line: 'Cú đánh được xử lý theo luật lỗi văng bi.' });
           }
           break;
         }
@@ -1188,12 +1228,12 @@ export function matchScreen(opts: MatchOptions) {
           break;
         case 'skill': {
           if (e.slot !== 2) sound.skill(); // the ultimate cut-in plays its own gong
-          if (e.slot === 2) playCutIn(champion(e.champion), e.skill, e.side === 1);
+          if (e.slot === 2) pendingUltimate = { champion: e.champion, skill: e.skill, side: e.side };
           setExpr(e.side, 'cast', 2400);
-          herald({ side: e.side, expr: 'cast', title: e.skill.name, line: `${nameOf(e.side)} ${e.slot === 2 ? 'tung tuyệt chiêu' : 'dùng chiêu'}` });
+          herald({ side: e.side, expr: 'cast', title: e.skill.name, line: e.slot === 2 ? (match.setup.players[e.side].kind === 'human' ? 'Đã chuẩn bị · bấm ĐÁNH để thi triển' : 'Đã chuẩn bị · chờ cú đánh') : `${nameOf(e.side)} dùng chiêu` });
           if (e.skill.kinds.includes('rewind')) view.resync();
-          view.skillFx(e.champion, e.skill, e.side);
-          haptic(e.slot === 2 ? [30, 40, 60] : 25);
+          if (e.slot !== 2) view.skillFx(e.champion, e.skill, e.side);
+          if (e.slot !== 2) haptic(25);
           break;
         }
         case 'omen':
@@ -1292,6 +1332,8 @@ export function matchScreen(opts: MatchOptions) {
     }
 
     function onTurn() {
+      aim.elevation = 0;
+      pendingUltimate = null;
       placeConfirmed = false;
       placementAim = false;
       cancelCharge();
@@ -1392,6 +1434,7 @@ export function matchScreen(opts: MatchOptions) {
       }
       if (disposed || token !== aiToken) return;
       // Swing the cue around like a player lining up.
+      aim.elevation = 0;
       const a0 = aim.angle;
       let da = shot.angle - a0;
       da = Math.atan2(Math.sin(da), Math.cos(da));
@@ -1575,6 +1618,7 @@ export function matchScreen(opts: MatchOptions) {
       if (paused) return;
       closeSheets();
       paused = true;
+      cutIn?.classList.add('paused');
       cancelCharge();
       const s = app.profile.settings;
       const resume = () => {
@@ -1687,7 +1731,8 @@ export function matchScreen(opts: MatchOptions) {
       const p = match.table.pockets[cs.pocket];
       const k = uiScale();
       const sp0 = view.toScreen(p.hx, p.hy);
-      const sp = { x: sp0.x / k, y: sp0.y / k };
+      const rect = document.getElementById('ui')!.getBoundingClientRect();
+      const sp = { x: (sp0.x - rect.left) / k, y: (sp0.y - rect.top) / k };
       // Push the tag toward the table centre so it never sits off-screen.
       const dirX = -Math.sign(p.hx) || 0;
       const dirY = -Math.sign(p.hy);
@@ -1726,6 +1771,7 @@ export function matchScreen(opts: MatchOptions) {
         startCharge();
         if (!charging) strikePress = null;
       }
+      cutIn?.classList.toggle('paused', paused);
       if (paused) return;
       // Charging meter: triangle wave that speeds up each half cycle.
       if (charging && match.current.kind === 'human') {
@@ -1747,7 +1793,8 @@ export function matchScreen(opts: MatchOptions) {
         const c = match.cueBall();
         const k = uiScale();
         const sp0 = view.toScreen(c.x, c.y);
-        const sp = { x: sp0.x / k, y: sp0.y / k };
+        const rect = document.getElementById('ui')!.getBoundingClientRect();
+        const sp = { x: (sp0.x - rect.left) / k, y: (sp0.y - rect.top) / k };
         const hw = hand.offsetWidth;
         const key = `${Math.round(sp.x * 2)},${Math.round(sp.y * 2)},${hw}`;
         if (key !== handKey) {
@@ -1778,7 +1825,8 @@ export function matchScreen(opts: MatchOptions) {
         pull,
         side: aim.side,
         vert: aim.vert,
-        power: Math.max(charging ? power : preset, 0.5),
+        elevation: aim.elevation,
+        power: aim.elevation > 0 ? (charging ? power : preset) : Math.max(charging ? power : preset, 0.5),
         showCue,
         showGuide: humanAim && isHumanTurn() && match.tremorNow === 1 && strikeT === 0,
         guideScale: guideScale(),
@@ -1854,6 +1902,8 @@ export function matchScreen(opts: MatchOptions) {
         app.ai.cancelAll();
         app.pixi.ticker.remove(tick);
         window.removeEventListener('resize', onResize);
+        window.removeEventListener('cotien:ui-resize', onResize);
+        cutIn?.remove();
         window.removeEventListener('keydown', onKey);
         window.removeEventListener('keyup', onKey);
         canvas.removeEventListener('pointerdown', onDown);

@@ -1,7 +1,7 @@
 import { applySkillBlast, buildCast, mergeTerrain, PLACED_KINDS, type SkillCast, type CastEffect } from './skill-cast';
 import type { AiProfile } from '../ai/types';
 import { maxSpeed, powerToSpeed } from '../core/cue-power';
-import { cloneBalls, DEFAULT_PHYS, step, strike, type Ball, type PhysEvent, type PhysParams, type SimWorld } from '../core/physics';
+import { cloneBalls, DEFAULT_PHYS, elevatedTipOffset, step, strike, type Ball, type PhysEvent, type PhysParams, type SimWorld } from '../core/physics';
 import { canPlaceCue, nearestCueSpot, respot } from '../core/rack';
 import { Rng } from '../core/rng';
 import { RULES } from '../core/rules';
@@ -41,6 +41,8 @@ export interface MatchSetup {
 }
 
 export interface ShotInput {
+  /** Cue elevation in radians, clamped to 0–75 degrees by physics. */
+  elevation?: number;
   angle: number;
   power: number;
   side: number;
@@ -202,7 +204,7 @@ export class Match {
 
   strikePreview(cue: Ball, input: ShotInput) {
     const reach = this.spinReach();
-    strike(cue, this.table.R, { angle: input.angle, speed: powerToSpeed(input.power, this.vmax()), side: input.side * reach.side, vert: input.vert * reach.vert });
+    strike(cue, this.table.R, { angle: input.angle, speed: powerToSpeed(input.power, this.vmax()), side: input.side * reach.side, vert: input.vert * reach.vert, elevation: input.elevation });
   }
   terrain() { return mergeTerrain(this.omen?.terrain, ...this.activeEffects.filter(e => e.target === this.turn).map(e => e.terrain)); }
   simulationWorld(): SimWorld {
@@ -440,9 +442,9 @@ export class Match {
   }
 
   /** Miscue chance for a tip offset (normalised) and power. */
-  miscueChance(side: number, vert: number, power: number): number {
-    if (this.spinBoost > 1) return 0;
-    const off = Math.hypot(side, vert);
+  miscueChance(side: number, vert: number, power: number, elevation = 0): number {
+    if (this.spinBoost > 1 && elevation === 0) return 0;
+    const off = elevatedTipOffset(side, vert, elevation);
     if (off <= 0.82) return 0;
     return Math.min(0.9, (off - 0.82) * 3.2 * (0.35 + power));
   }
@@ -476,14 +478,14 @@ export class Match {
     sp *= reach.side;
     vert *= reach.vert;
     let speed = powerToSpeed(power, this.vmax(side));
-    const miscue = this.rng.next() < this.miscueChance(input.side, input.vert, power);
+    const miscue = this.rng.next() < this.miscueChance((input.elevation ?? 0) > 0 ? sp : input.side, (input.elevation ?? 0) > 0 ? vert : input.vert, power, input.elevation);
     if (miscue) {
       speed *= this.rng.range(0.25, 0.5);
       angle += this.rng.range(-0.06, 0.06);
       sp = Math.sign(sp) * 0.3;
       vert = 0;
     }
-    strike(cue, this.table.R, { angle, speed, side: sp, vert });
+    strike(cue, this.table.R, { angle, speed, side: sp, vert, elevation: miscue ? 0 : input.elevation });
     // Shot buffs that act while the balls roll stay on until the shot resolves.
     this.world.captureScale = this.mawScale * this.baseCapture * (this.omen?.capture ?? 1);
     this.world.terrain = this.terrain();
@@ -567,7 +569,9 @@ export class Match {
     const crossed = this.balls.filter((b) => b.onTable && b.id !== 0 && b.x < this.table.headStringX).length;
     const shot = summarize(this.shotEvents, this.cueId(side), this.state.isBreak, input.call, input.pushOut, this.shotTargets, crossed);
     if (this.setup.judge) {
-      const verdict = this.setup.judge(shot, this.balls);
+      const verdict = shot.offTable?.length
+        ? { ok: false, why: 'Bi văng khỏi bàn' }
+        : this.setup.judge(shot, this.balls);
       const res: Resolution = {
         foul: verdict.ok ? null : verdict.why, keepTurn: false, ballInHand: 'none', respot: [],
         winner: verdict.ok ? 0 : 1, messages: [verdict.why], points: 0, highlight: verdict.ok ? 'win' : undefined,
@@ -597,11 +601,22 @@ export class Match {
       res.foul = null;
     }
 
-    for (const id of res.respot) respot(this.table, this.balls, id);
+    for (const id of res.respot) {
+      const ball = this.balls.find(b => b.id === id);
+      if (this.rules.table === 'carom' && ball) {
+        const spot = id === 2 ? this.table.footSpot : this.table.headSpot;
+        const y = spot.y + (id === this.cueId(side) ? 0.1825 : 0);
+        Object.assign(ball, nearestCueSpot(this.table, this.balls, id, spot.x, y, false));
+        ball.onTable = true;
+        ball.vx = ball.vy = ball.wx = ball.wy = ball.wz = 0;
+      } else respot(this.table, this.balls, id);
+      if (ball) ball.z = ball.vz = 0;
+    }
     // A scratched cue ball comes back for ball in hand.
     const cue = this.cueBall(side);
     if (!cue.onTable) {
       cue.onTable = true;
+      cue.z = cue.vz = 0;
       Object.assign(cue, nearestCueSpot(this.table, this.balls, cue.id, this.table.headSpot.x, 0, false));
     }
 

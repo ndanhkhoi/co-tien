@@ -250,7 +250,8 @@ input[type='text']:focus, input:not([type]):focus { border-color: var(--accent);
   border-radius: var(--r-2);
   background: var(--sheet);
   color: var(--ink);
-  border-left: 5px solid var(--info);
+  border: 1px solid var(--ink);
+  border-left: 4px solid var(--accent);
   box-shadow: var(--sh-2);
   font-weight: 600;
   overflow: hidden;
@@ -258,8 +259,8 @@ input[type='text']:focus, input:not([type]):focus { border-color: var(--accent);
 }
 .toast .ico { width: 26px; height: 26px; }
 .toast.bad { border-left-color: var(--bad); }
-.toast.good { border-left-color: var(--ok); }
-.toast.gold { border-left-color: var(--gold); }
+.toast.good { border-left-color: var(--accent); }
+.toast.gold { border-left-color: var(--accent); }
 .toast .tt { flex: 1; }
 .toast .tbar { position: absolute; left: 0; bottom: 0; height: 3px; width: 100%; background: currentColor; opacity: 0.18; transform-origin: left; animation: tbar linear both; }
 .toast.leaving { animation: toast-out 0.2s ease-in both; }

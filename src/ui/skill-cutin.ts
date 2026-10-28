@@ -7,7 +7,7 @@ const hex6 = (n: number) => '#' + n.toString(16).padStart(6, '0');
 /**
  * Ultimate cut-in: a great ink brush stroke sweeps across the screen, the champion's cut-out
  * steps in, and the skill name is written on a paper plate sealed with the skill's painted icon.
- * Purely decorative (pointer-events: none), so play never waits on it.
+ * The caller owns its active-time duration and removes it on completion or disposal.
  */
 export function playCutIn(c: Champion, skill: SkillDef, fromRight: boolean) {
   sound.ultimate();
@@ -27,5 +27,5 @@ export function playCutIn(c: Champion, skill: SkillDef, fromRight: boolean) {
     ),
   ));
   document.getElementById('ui')!.append(el);
-  setTimeout(() => el.remove(), 1500);
+  return el;
 }

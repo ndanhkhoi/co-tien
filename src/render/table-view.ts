@@ -12,6 +12,8 @@ import { SkillFx } from './skill-fx';
 import { OmenArt } from './omen-art';
 
 export interface AimView {
+  /** Cue elevation in radians. */
+  elevation?: number;
   angle: number;
   /** Shown cue pull-back 0..1 while charging. */
   pull: number;
@@ -286,7 +288,10 @@ export class TableView {
         }
         continue;
       }
-      mesh.mesh.position.set(b.x, b.y);
+      const height = b.z ?? 0;
+      mesh.mesh.position.set(b.x, b.y - height * 0.7);
+      mesh.mesh.scale.set(R * (1 + Math.min(height, 0.25) * 0.5));
+      sh.alpha = 1 / (1 + height * 12);
       sh.position.set(b.x + R * 0.28, b.y + R * 0.38);
       const w = Math.hypot(b.wx, b.wy, b.wz);
       if (w > 0) mesh.rotate(b.wx, b.wy, b.wz, w * dt);
@@ -454,7 +459,7 @@ export class TableView {
       const band = m.aimLock.band;
       for (const sign of [-1, 1]) {
         const probe = { ...cue };
-        m.strikePreview(probe, { angle: m.aimLock.angle + sign * band, power: aim!.power, side: aim!.side, vert: aim!.vert, call: null, pushOut: false });
+        m.strikePreview(probe, { angle: m.aimLock.angle + sign * band, power: aim!.power, side: aim!.side, vert: aim!.vert, elevation: aim!.elevation, call: null, pushOut: false });
         const length = Math.hypot(probe.vx, probe.vy) || 1;
         g.moveTo(cue.x, cue.y).lineTo(cue.x + probe.vx / length * 0.65, cue.y + probe.vy / length * 0.65);
         g.stroke({ width: 1, color: 0xffffff, alpha: 0.4 });
@@ -462,6 +467,23 @@ export class TableView {
     }
     if (m.eagle || m.passiveInfo || m.activeEffects.some(e => e.target === m.turn)) {
       this.drawEagle(aim!);
+      return;
+    }
+    if ((aim!.elevation ?? 0) > 10 * Math.PI / 180) {
+      // A jump cannot use the planar ghost-ball ray: trace a short physical trajectory.
+      const balls = cloneBalls(m.balls);
+      const probe = balls.find(b => b.id === cue.id)!;
+      m.strikePreview(probe, { angle: aim!.angle, power: aim!.power, side: aim!.side, vert: aim!.vert, elevation: aim!.elevation, call: null, pushOut: false });
+      const world = { ...m.simulationWorld(), balls };
+      g.moveTo(cue.x, cue.y);
+      for (let i = 0; i < 24; i++) {
+        const events: import('../core/physics').PhysEvent[] = [];
+        step(world, 1 / 120, events);
+        if (!probe.onTable) break;
+        g.lineTo(probe.x, probe.y - (probe.z ?? 0) * 0.7);
+        if (events.some(e => e.t === 'ball' || e.t === 'cushion')) break;
+      }
+      g.stroke({ width: 1.6, color: 0xffffff, alpha: 0.65 });
       return;
     }
     // Line to the first thing the cue ball meets and the ghost ball there, plus a short
@@ -515,14 +537,14 @@ export class TableView {
   /** Thần Nhãn: simulate the exact shot and draw every moving ball's path. */
   private drawEagle(aim: AimView) {
     const m = this.match;
-    const key = `${m.triplePreview}|${m.previewSpread}|${m.passiveInfo}|${aim.angle.toFixed(4)}|${aim.power.toFixed(2)}|${aim.side.toFixed(2)}|${aim.vert.toFixed(2)}|${m.cueBall().x.toFixed(3)}|${JSON.stringify(m.simulationWorld())}`;
+    const key = `${m.triplePreview}|${m.previewSpread}|${m.passiveInfo}|${aim.angle.toFixed(4)}|${aim.power.toFixed(2)}|${aim.side.toFixed(2)}|${aim.vert.toFixed(2)}|${(aim.elevation ?? 0).toFixed(3)}|${m.cueBall().x.toFixed(3)}|${JSON.stringify(m.simulationWorld())}`;
     if (!this.eagleCache || this.eagleCache.key !== key) {
       const allPaths: { id: number; pts: number[] }[] = [];
       for (const offset of m.triplePreview ? [-m.previewSpread, 0, m.previewSpread] : [0]) {
       const balls = cloneBalls(m.balls);
       const cue = balls.find((b) => b.id === m.cueId())!;
       const power = Math.max(0.05, Math.min(1, aim.power + offset));
-      m.strikePreview(cue, { angle: aim.angle, power, side: Math.max(-1, Math.min(1, aim.side + offset)), vert: Math.max(-1, Math.min(1, aim.vert - offset)), call: null, pushOut: false });
+      m.strikePreview(cue, { angle: aim.angle, power, side: Math.max(-1, Math.min(1, aim.side + offset)), vert: Math.max(-1, Math.min(1, aim.vert - offset)), elevation: aim.elevation, call: null, pushOut: false });
       const world = { ...m.simulationWorld(), balls };
       const paths = new Map<number, number[]>();
       for (const b of balls) paths.set(b.id, [b.x, b.y]);

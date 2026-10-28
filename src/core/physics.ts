@@ -8,6 +8,8 @@ export interface Ball {
   id: number;
   x: number; y: number;
   vx: number; vy: number;
+  /** Height above resting centre and vertical velocity (metres, m/s). */
+  z?: number; vz?: number;
   /** Angular velocity (rad/s). */
   wx: number; wy: number; wz: number;
   onTable: boolean;
@@ -39,6 +41,7 @@ export const DEFAULT_PHYS: PhysParams = {
 export type PhysEvent =
   | { t: 'ball'; a: number; b: number; speed: number; x: number; y: number }
   | { t: 'cushion'; id: number; speed: number; x: number; y: number }
+  | { t: 'off-table'; id: number; speed: number }
   | { t: 'pocket'; id: number; pocket: number; speed: number };
 
 /**
@@ -82,7 +85,7 @@ const STOP_V = 0.004;
 const STOP_W = 0.6;
 
 export function makeBall(id: number, x: number, y: number): Ball {
-  return { id, x, y, vx: 0, vy: 0, wx: 0, wy: 0, wz: 0, onTable: true };
+  return { id, x, y, z: 0, vz: 0, vx: 0, vy: 0, wx: 0, wy: 0, wz: 0, onTable: true };
 }
 
 export function cloneBalls(balls: Ball[]): Ball[] {
@@ -90,7 +93,7 @@ export function cloneBalls(balls: Ball[]): Ball[] {
 }
 
 export function isMoving(b: Ball): boolean {
-  return b.onTable && (Math.abs(b.vx) > 0 || Math.abs(b.vy) > 0 || Math.abs(b.wz) > 0 || Math.abs(b.wx) > 0 || Math.abs(b.wy) > 0);
+  return b.onTable && ((b.z ?? 0) > 0 || (b.vz ?? 0) !== 0 || Math.abs(b.vx) > 0 || Math.abs(b.vy) > 0 || Math.abs(b.wz) > 0 || Math.abs(b.wx) > 0 || Math.abs(b.wy) > 0);
 }
 
 export function anyMoving(balls: Ball[]): boolean {
@@ -152,6 +155,21 @@ function applyCloth(b: Ball, R: number, p: PhysParams, dt: number, slideK = 1, r
 function collideBalls(a: Ball, b: Ball, R: number, p: PhysParams, events: PhysEvent[] | null): boolean {
   const dx = b.x - a.x;
   const dy = b.y - a.y;
+  const dz = (b.z ?? 0) - (a.z ?? 0);
+  if (dz !== 0 || (a.vz ?? 0) !== 0 || (b.vz ?? 0) !== 0) {
+    const d = Math.hypot(dx, dy, dz) || 1e-9;
+    const nx = dx / d, ny = dy / d, nz = dz / d;
+    const vn = (a.vx - b.vx) * nx + (a.vy - b.vy) * ny + ((a.vz ?? 0) - (b.vz ?? 0)) * nz;
+    if (vn <= 0) return false;
+    const j = (1 + p.eBall) * vn / 2;
+    a.vx -= j * nx; a.vy -= j * ny; a.vz = (a.vz ?? 0) - j * nz;
+    b.vx += j * nx; b.vy += j * ny; b.vz = (b.vz ?? 0) + j * nz;
+    // The slate supports a resting ball: a downward impulse cannot send it below the cloth.
+    if (!(a.z ?? 0) && a.vz < 0) a.vz = 0;
+    if (!(b.z ?? 0) && b.vz < 0) b.vz = 0;
+    if (events && vn > 0.01) events.push({ t: 'ball', a: a.id, b: b.id, speed: vn, x: a.x + nx * R, y: a.y + ny * R });
+    return true;
+  }
   const d = Math.hypot(dx, dy) || 1e-9;
   const nx = dx / d;
   const ny = dy / d;
@@ -187,12 +205,14 @@ function timeOfImpact(a: Ball, b: Ball, D: number, h: number): number {
   const py = b.y - a.y;
   const vx = b.vx - a.vx;
   const vy = b.vy - a.vy;
-  const pv = px * vx + py * vy;
+  const pz = (b.z ?? 0) - (a.z ?? 0);
+  const vz = (b.vz ?? 0) - (a.vz ?? 0);
+  const pv = px * vx + py * vy + pz * vz;
   if (pv >= 0) return Infinity;
-  const vv = vx * vx + vy * vy;
+  const vv = vx * vx + vy * vy + vz * vz;
   const reach = Math.sqrt(vv) * h + D;
   if (Math.abs(px) > reach || Math.abs(py) > reach) return Infinity;
-  const pp = px * px + py * py - D * D;
+  const pp = px * px + py * py + pz * pz - D * D;
   if (pp <= 0) return 0;
   const disc = pv * pv - vv * pp;
   if (disc < 0) return Infinity;
@@ -210,7 +230,7 @@ function clusterSize(balls: Ball[], seed: Ball, D: number): number {
   while (queue.length) {
     const a = queue.pop()!;
     for (const b of balls) {
-      if (!b.onTable || seen.has(b)) continue;
+      if (!b.onTable || b.z || b.vz || seen.has(b)) continue;
       const dx = b.x - a.x;
       const dy = b.y - a.y;
       if (dx * dx + dy * dy < lim) {
@@ -236,7 +256,7 @@ function softImpact(balls: Ball[], R: number, p: PhysParams, events: PhysEvent[]
   const omega = Math.PI / CONTACT_T;
   const lnE = Math.log(p.eBall);
   const zeta = -lnE / Math.sqrt(Math.PI * Math.PI + lnE * lnE);
-  const live = balls.filter((b) => b.onTable);
+  const live = balls.filter((b) => b.onTable && !b.z && !b.vz);
   const n = live.length;
   const touching = new Set<number>();
   for (let it = 0; it < 8000; it++) {
@@ -286,6 +306,8 @@ function softImpact(balls: Ball[], R: number, p: PhysParams, events: PhysEvent[]
 function collideSegment(
   b: Ball, s: { ax: number; ay: number; bx: number; by: number }, R: number, p: PhysParams, events: PhysEvent[] | null,
 ): boolean {
+  // A ball whose bottom clears the cushion top can leave the table.
+  if ((b.z ?? 0) > 0.04) return false;
   const ex = s.bx - s.ax;
   const ey = s.by - s.ay;
   const l2 = ex * ex + ey * ey;
@@ -328,6 +350,7 @@ function collideSegment(
 }
 
 function checkPockets(w: SimWorld, b: Ball, events: PhysEvent[] | null): boolean {
+  if ((b.z ?? 0) > 0.003) return false;
   const t = w.table;
   if (t.pockets.length === 0) return false;
   const closed = w.closedPockets;
@@ -363,6 +386,7 @@ function pocketBall(b: Ball, pocket: number, events: PhysEvent[] | null) {
   const speed = Math.hypot(b.vx, b.vy);
   b.onTable = false;
   b.vx = b.vy = b.wx = b.wy = b.wz = 0;
+  b.z = b.vz = 0;
   if (events) events.push({ t: 'pocket', id: b.id, pocket, speed });
 }
 
@@ -380,7 +404,7 @@ export function step(w: SimWorld, dt: number, events: PhysEvent[] | null): boole
     let vmax = 0;
     for (const b of balls) {
       if (!b.onTable) continue;
-      const v = Math.abs(b.vx) + Math.abs(b.vy);
+      const v = Math.abs(b.vx) + Math.abs(b.vy) + Math.abs(b.vz ?? 0) + ((b.z ?? 0) > 0 ? 0.01 : 0);
       if (v > vmax) vmax = v;
     }
     if (vmax === 0) {
@@ -389,6 +413,15 @@ export function step(w: SimWorld, dt: number, events: PhysEvent[] | null): boole
       if (!spinning) return false;
     }
     let h = Math.min(remaining, Math.max(1 / 4000, (0.35 * R) / Math.max(vmax, 1e-6)), 1 / 240);
+    // Resolve a landing at its ballistic time rather than integrating through the bed.
+    for (const b of balls) {
+      if (!b.onTable) continue;
+      const z = b.z ?? 0, vz = b.vz ?? 0;
+      if (z > 0 || vz > 0) {
+        const landing = (vz + Math.sqrt(vz * vz + 2 * p.g * z)) / p.g;
+        if (landing > 1e-9) h = Math.min(h, landing);
+      }
+    }
     // Step exactly to the next ball-ball contact so balls never interpenetrate.
     let hitA: Ball | null = null;
     let hitB: Ball | null = null;
@@ -399,7 +432,7 @@ export function step(w: SimWorld, dt: number, events: PhysEvent[] | null): boole
       for (let j = i + 1; j < balls.length; j++) {
         const b = balls[j];
         if (!b.onTable) continue;
-        if (a.vx === 0 && a.vy === 0 && b.vx === 0 && b.vy === 0) continue;
+        if (!isMoving(a) && !isMoving(b)) continue;
         const t = timeOfImpact(a, b, D, h);
         if (t < h) {
           h = t;
@@ -414,12 +447,22 @@ export function step(w: SimWorld, dt: number, events: PhysEvent[] | null): boole
       if (!b.onTable) continue;
       b.x += b.vx * h;
       b.y += b.vy * h;
+      if ((b.z ?? 0) > 0 || (b.vz ?? 0) !== 0) {
+        b.z = (b.z ?? 0) + (b.vz ?? 0) * h - 0.5 * p.g * h * h;
+        b.vz = (b.vz ?? 0) - p.g * h;
+        if (b.z <= 1e-10) {
+          b.z = 0;
+          // Cloth/slate returns a fraction of normal impact energy, then settles.
+          b.vz = Math.abs(b.vz) > 0.35 ? -b.vz * 0.35 : 0;
+        }
+      }
     }
     if (h > 0) {
       const tr = w.terrain;
       if (tr) applyTerrain(w, tr, h);
       for (const b of balls) {
         if (!b.onTable) continue;
+        if ((b.z ?? 0) > 0 || (b.vz ?? 0) > 0) continue;
         let slideK = 1;
         let rollK = 1;
         let spinK = 1;
@@ -437,7 +480,7 @@ export function step(w: SimWorld, dt: number, events: PhysEvent[] | null): boole
       w.time = (w.time ?? 0) + h;
     }
     if (hitA && hitB) {
-      const frozen = clusterSize(balls, hitA, D) > 2 || clusterSize(balls, hitB, D) > 2;
+      const frozen = !(hitA.z || hitB.z || hitA.vz || hitB.vz) && (clusterSize(balls, hitA, D) > 2 || clusterSize(balls, hitB, D) > 2);
       if (frozen && Math.abs((hitA.vx - hitB.vx)) + Math.abs(hitA.vy - hitB.vy) > 0.3) softImpact(balls, R, p, events);
       else collideBalls(hitA, hitB, R, p, events);
     }
@@ -453,7 +496,12 @@ export function step(w: SimWorld, dt: number, events: PhysEvent[] | null): boole
         collideSegment(b, s, R, multiplier === 1 ? p : { ...p, eCushion: Math.min(1, p.eCushion * multiplier) }, events);
       }
       if (w.extraSegments) for (const s of w.extraSegments) collideSegment(b, s, R, p, events);
-      checkPockets(w, b, events);
+      if ((b.z ?? 0) > 0 && (Math.abs(b.x) > w.table.L / 2 + R || Math.abs(b.y) > w.table.W / 2 + R)) {
+        const speed = Math.hypot(b.vx, b.vy, b.vz ?? 0);
+        b.onTable = false;
+        b.vx = b.vy = b.wx = b.wy = b.wz = b.vz = b.z = 0;
+        if (events) events.push({ t: 'off-table', id: b.id, speed });
+      } else checkPockets(w, b, events);
     }
   }
   return anyMoving(balls);
@@ -468,7 +516,7 @@ function applyTerrain(w: SimWorld, tr: Terrain, h: number) {
     fy = tr.force.y * k;
   }
   for (const b of w.balls) {
-    if (!b.onTable || (b.vx === 0 && b.vy === 0)) continue;
+    if (!b.onTable || (b.z ?? 0) > 0 || (b.vz ?? 0) > 0 || (b.vx === 0 && b.vy === 0)) continue;
     let ax = fx;
     let ay = fy;
     if (tr.wells) {
@@ -509,7 +557,7 @@ function applyTerrain(w: SimWorld, tr: Terrain, h: number) {
 function applyPocketPull(w: SimWorld, h: number) {
   const reach = 0.16;
   for (const b of w.balls) {
-    if (!b.onTable || b.id === w.pullExempt || (b.vx === 0 && b.vy === 0)) continue;
+    if (!b.onTable || (b.z ?? 0) > 0 || b.id === w.pullExempt || (b.vx === 0 && b.vy === 0)) continue;
     w.table.pockets.forEach((pk, i) => {
       if (w.closedPockets?.includes(i)) return;
       const dx = pk.x - b.x;
@@ -526,6 +574,8 @@ function applyPocketPull(w: SimWorld, h: number) {
 export interface StrikeParams {
   /** Aim direction (radians). */
   angle: number;
+  /** Cue elevation in radians (0–75°). A downward legal strike rebounds from the slate. */
+  elevation?: number;
   /** Cue-ball launch speed (m/s). */
   speed: number;
   /** Tip offset normalised to the miscue limit: side (−1 left … 1 right), vert (−1 draw … 1 follow). */
@@ -536,14 +586,33 @@ export interface StrikeParams {
 /** Miscue limit as a fraction of R. */
 export const TIP_LIMIT = 0.5;
 
+/** The visible tip-contact circle foreshortens as the cue becomes steep.
+ * Offset is measured in the existing face-on spin control; steep strokes therefore
+ * need a much smaller offset to retain a predominantly normal, chalked contact.
+ */
+export function elevatedTipOffset(side: number, vert: number, elevation = 0): number {
+  const angle = Math.max(0, Math.min(75 * Math.PI / 180, Number.isFinite(elevation) ? elevation : 0));
+  return Math.hypot(side, vert) / Math.cos(angle);
+}
+
 /** Apply a cue strike to the cue ball. Includes squirt (deflection away from side english). */
 export function strike(b: Ball, R: number, s: StrikeParams) {
   const squirt = -s.side * 0.022 * Math.min(1, s.speed / 3);
   const ang = s.angle + squirt;
   const dx = Math.cos(ang);
   const dy = Math.sin(ang);
-  b.vx = dx * s.speed;
-  b.vy = dy * s.speed;
+  const elevation = Math.max(0, Math.min(75 * Math.PI / 180, Number.isFinite(s.elevation) ? s.elevation! : 0));
+  const horizontal = s.speed * Math.cos(elevation);
+  b.vx = dx * horizontal;
+  b.vy = dy * horizontal;
+  b.z = 0;
+  // An elevated cue drives down into the slate; restitution produces the jump.
+  // Low cues retain ordinary play rather than bouncing on every stroke.
+  const tipOffset = elevatedTipOffset(s.side, s.vert, elevation);
+  // Tangential/off-centre impulse goes into spin instead of the slate rebound.
+  // Outside the chalk contact envelope no controlled jump impulse is transferred.
+  const normalTransfer = Math.max(0, 1 - tipOffset * tipOffset);
+  b.vz = elevation > 10 * Math.PI / 180 ? s.speed * Math.sin(elevation) * 0.45 * normalTransfer : 0;
   // Off-centre hit: ω = 5·v·offset / (2R²). Natural roll at vert offset 0.4R.
   const k = (5 * s.speed) / (2 * R * R);
   const vertOff = s.vert * TIP_LIMIT * R;

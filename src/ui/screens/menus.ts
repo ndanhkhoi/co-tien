@@ -236,7 +236,10 @@ export function skillButtons(c: Champion): HTMLElement {
         'aria-label': `${label} · ${sk.name} · Xem chi tiết`, 'aria-haspopup': 'dialog',
       },
       h('img', { src: skillIconUrl(c.id, sk.slot), alt: '', loading: 'lazy' }),
-      h('span', null, label)), () => open());
+      h('span.champion-skill-label', null, label),
+      h('strong.champion-skill-name', null, sk.name),
+      h('span.champion-skill-cost', null, sk.slot === 2 ? '100 năng lượng' : `Hồi ${sk.cooldown} lượt`),
+      h('span.champion-skill-hint', null, 'Xem chi tiết')), () => open());
       const open = () => {
         modal((dismiss) => {
           const close = () => { dismiss(); button.focus(); };

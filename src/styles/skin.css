@@ -109,16 +109,16 @@
   justify-content: center;
   gap: 2px;
   padding: 0;
-  border: 14px solid transparent;
-  border-image: url('/art/ui/frame/panel.webp') 74 fill / 14px / 0 stretch;
+  border: 8px solid transparent;
+  border-image: url('/art/ui/frame/panel.webp') 74 fill / 8px / 0 stretch;
   filter: drop-shadow(0 4px 10px rgba(40, 30, 18, 0.16));
   transition: transform 0.12s var(--ease);
 }
 .home-tablet.pressed { transform: scale(0.96); }
-.ht-icon { display: grid; place-items: center; height: 46px; }
-.ht-icon .ico { width: 44px; height: 44px; }
-.ht-name { max-width: 100%; font: 700 16px/1.15 var(--display); color: var(--ink); white-space: normal; text-align: center; }
-.ht-sub { font-size: 12.5px; line-height: 1.2; color: var(--muted); white-space: normal; text-align: center; max-width: 100%; }
+.ht-icon { display: grid; place-items: center; height: 30px; flex-shrink: 0; }
+.ht-icon .ico { width: 30px; height: 30px; }
+.ht-name { max-width: 100%; font: 700 14px/1.15 var(--display); color: var(--ink); white-space: normal; text-align: center; }
+.ht-sub { font-size: 11px; line-height: 1.2; color: var(--muted); white-space: normal; text-align: center; max-width: 100%; }
 .player-card { border: 2px solid var(--ink); }
 
 /* Champion kind badges: ink seals, one tint per kind. */

@@ -85,24 +85,32 @@ boot().catch((err) => {
   console.error(err);
 });
 
-/**
- * The DOM UI is designed at 844×390 (a landscape phone). Bigger or smaller windows scale the
- * whole layer uniformly so desktop gets the same composition, larger, with no empty gutters.
- * A transform (not zoom) keeps fixed overlays (dialogs, toasts) inside the scaled layer.
- */
+/** Keep one 844×390 composition, contained inside the usable screen on every device. */
 function installUiScale() {
   const ui = document.getElementById('ui')!;
   const viewport = document.getElementById('stage')!;
+  const safeFrame = document.createElement('div');
+  safeFrame.style.cssText = 'position:fixed;inset:env(safe-area-inset-top,0px) env(safe-area-inset-right,0px) env(safe-area-inset-bottom,0px) env(safe-area-inset-left,0px);visibility:hidden;pointer-events:none';
+  document.body.append(safeFrame);
   const apply = () => {
-    // Measure the CSS viewport so browser toolbar changes and safe-area coverage stay in sync.
-    const { width, height } = viewport.getBoundingClientRect();
-    const s = mustInstall() ? 1 : Math.min(2.2, Math.max(0.75, Math.min(width / 844, height / 390)));
-    ui.style.width = `${width / s}px`;
-    ui.style.height = `${height / s}px`;
-    ui.style.transform = s === 1 ? '' : `scale(${s})`;
+    const gate = mustInstall();
+    const rect = (gate ? viewport : safeFrame).getBoundingClientRect();
+    const s = gate ? 1 : Math.min(2.2, rect.width / 844, rect.height / 390);
+    const width = gate ? rect.width : 844;
+    const height = gate ? rect.height : 390;
+    ui.style.width = `${width}px`;
+    ui.style.height = `${height}px`;
+    ui.style.left = `${rect.left + (rect.width - width * s) / 2}px`;
+    ui.style.top = `${rect.top + (rect.height - height * s) / 2}px`;
+    // Keep a transform at scale 1 too: fixed sheets must stay within the game frame.
+    ui.style.transform = `scale(${s})`;
     ui.style.setProperty('--ui-scale', String(s));
+    window.dispatchEvent(new Event('cotien:ui-resize'));
   };
-  new ResizeObserver(apply).observe(viewport);
+  const observer = new ResizeObserver(apply);
+  observer.observe(viewport);
+  observer.observe(safeFrame);
   addEventListener('resize', apply);
+  window.visualViewport?.addEventListener('resize', apply);
   apply();
 }

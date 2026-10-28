@@ -19,6 +19,8 @@ export interface ShotSummary {
   cueId: number;
   firstHit: number | null;
   pocketed: { id: number; pocket: number }[];
+  /** Balls driven off the table, distinct from pocketed balls. */
+  offTable?: number[];
   /** A ball (any, incl. cue) reached a cushion after the first contact. */
   railAfterContact: boolean;
   /** Distinct object balls that touched a cushion during the shot. */
@@ -105,6 +107,7 @@ export function summarize(
   let cueRails = 0;
   let cueRailsBeforeSecond = -1;
   const pocketed: { id: number; pocket: number }[] = [];
+  const offTable: number[] = [];
   for (const e of events) {
     if (e.t === 'ball') {
       if (e.a === cueId || e.b === cueId) {
@@ -120,12 +123,14 @@ export function summarize(
       if (contacted) railAfterContact = true;
       if (e.id !== cueId) railBalls.add(e.id);
       if (e.id === cueId) cueRails++;
+    } else if (e.t === 'off-table') {
+      if (!offTable.includes(e.id)) offTable.push(e.id);
     } else if (e.t === 'pocket') {
       pocketed.push({ id: e.id, pocket: e.pocket });
     }
   }
   return {
-    isBreak, cueId, firstHit, pocketed, railAfterContact,
+    isBreak, cueId, firstHit, pocketed, offTable, railAfterContact,
     objectBallsToRail: railBalls.size, cueContacts,
     cueRailsBeforeSecond: cueRailsBeforeSecond < 0 ? cueRails : cueRailsBeforeSecond,
     call, pushOut, targets, crossedHeadString,

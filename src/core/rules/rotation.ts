@@ -14,6 +14,7 @@ function blank(): Resolution {
 
 /** Fouls shared by 9- and 10-ball (lowest ball first, rail after contact, scratch). */
 function basicFoul(shot: ShotSummary, isPush: boolean): string | null {
+  if (shot.offTable?.length) return 'Bi văng khỏi bàn';
   const cueDown = shot.pocketed.some((p) => p.id === 0);
   if (cueDown) return 'Bi cái rơi lỗ';
   if (isPush) return null;
@@ -26,6 +27,7 @@ function basicFoul(shot: ShotSummary, isPush: boolean): string | null {
 }
 
 function breakFoul(shot: ShotSummary): string | null {
+  if (shot.offTable?.length) return 'Bi văng khỏi bàn khi phá';
   if (shot.pocketed.some((p) => p.id === 0)) return 'Bi cái rơi lỗ khi phá';
   if (shot.firstHit !== 1) return 'Phá bi phải chạm bi 1 trước';
   const objectsDown = shot.pocketed.filter((p) => p.id !== 0).length;
@@ -60,7 +62,7 @@ export const nineBall: RuleSet = {
   resolve(state, _balls, shot) {
     const res = blank();
     const side = state.turn;
-    const nine = shot.pocketed.some((p) => p.id === 9);
+    const nine = shot.pocketed.some((p) => p.id === 9) || !!shot.offTable?.includes(9);
     const objectsDown = shot.pocketed.filter((p) => p.id !== 0);
 
     if (shot.isBreak) {
@@ -132,7 +134,7 @@ export const tenBall: RuleSet = {
   resolve(state, _balls, shot) {
     const res = blank();
     const side = state.turn;
-    const ten = shot.pocketed.some((p) => p.id === 10);
+    const ten = shot.pocketed.some((p) => p.id === 10) || !!shot.offTable?.includes(10);
     const objectsDown = shot.pocketed.filter((p) => p.id !== 0);
 
     if (shot.isBreak) {

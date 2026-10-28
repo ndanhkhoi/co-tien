@@ -90,16 +90,21 @@ h1, h2, h3, p { margin: 0; }
 #stage { position: fixed; inset: 0; height: 100dvh; z-index: 0; background: var(--frame); }
 #stage canvas { display: block; width: 100%; height: 100%; touch-action: none; }
 #ui {
-  /* Insets and touch targets are screen pixels; undo this layer's transform first.
-   * Body-level install/rotation gates keep the unscaled root insets. */
-  --sl: calc(var(--safe-left) / var(--ui-scale, 1));
-  --sr: calc(var(--safe-right) / var(--ui-scale, 1));
-  --st: calc(var(--safe-top) / var(--ui-scale, 1));
-  --sb: calc(var(--safe-bottom) / var(--ui-scale, 1));
+  /* The outer frame already excludes safe areas. Touch targets stay in screen pixels. */
+  --sl: 0px;
+  --sr: 0px;
+  --st: 0px;
+  --sb: 0px;
   --touch-target: max(44px, calc(44px / var(--ui-scale, 1)));
   position: fixed; top: 0; left: 0; width: 100%; height: 100vh; height: 100dvh; transform-origin: 0 0; z-index: 1; pointer-events: none;
 }
 #ui > * { pointer-events: auto; }
+body.gate #ui {
+  --sl: var(--safe-left);
+  --sr: var(--safe-right);
+  --st: var(--safe-top);
+  --sb: var(--safe-bottom);
+}
 
 /* Only shared controls: illustrated cards and match controls size their own layouts. */
 #ui button.btn { min-width: var(--touch-target); min-height: max(48px, var(--touch-target)); }
