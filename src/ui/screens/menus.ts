@@ -329,12 +329,14 @@ function setupScreen(app: App, local: boolean): Screen {
   const foeHint = h('span.vs-sub');
   const foePortrait = h('span.vs-av');
   const foeName = h('b.vs-name');
+  const foeCut = h('img.vs-cut.foe', { alt: '', draggable: false, decoding: 'async' });
   let foe: Champion;
   const chooseFoe = () => {
     const pool = CHAMPIONS.filter((c) => c.id !== app.profile.champion && (local ? app.profile.champions.includes(c.id) : Math.abs(c.tier - (st.level + 1)) <= 1));
     foe = pool[Math.floor(Math.random() * pool.length)] ?? CHAMPIONS.find((c) => c.id !== app.profile.champion)!;
     foePortrait.replaceChildren(avatar(foe.id));
     foeName.textContent = foe.name;
+    foeCut.src = cutoutUrl(foe.id);
   };
   chooseFoe();
   const row = (label: string, ctl: Node) => h('div.opt-row', null, h('span.opt-label', null, label), ctl);
@@ -389,19 +391,21 @@ function setupScreen(app: App, local: boolean): Screen {
     type: 'text', value: st.name2, maxLength: 14, 'aria-label': 'Tên người chơi 2',
     oninput: (e: Event) => (st.name2 = (e.target as HTMLInputElement).value || 'Người chơi 2'),
   });
+  // A duel stage: both champions full-body facing each other, the seal between, the start stamp below.
   const versus = h('div.versus',
     null,
-    tap(h('button.vs-side.me', { 'aria-label': 'Đổi tướng' },
-      h('span.vs-av', null, avatar(me.id)),
-      h('span.vs-text', null, h('b.vs-name', null, app.profile.name), h('span.vs-sub', null, `${me.name} · ${classInfo(me.cls).name}`)),
-      h('span.vs-edit', null, icon('edit')),
-    ), () => profileModal(app, () => app.go(local ? localScreen : quickScreen, { replace: true }))),
-    h('div.vs-seal', { 'aria-hidden': 'true' }, 'đấu'),
-    h('div.vs-side.foe', null,
-      foePortrait,
-      h('span.vs-text', null, local ? name2 : foeName, foeHint),
+    h('div.vs-stage', null,
+      h('img.vs-cut.me', { src: cutoutUrl(me.id), alt: '', draggable: false, decoding: 'async' }),
+      foeCut,
+      h('div.vs-seal', { 'aria-hidden': 'true' }, 'đấu'),
     ),
-    h('div.vs-gear', null, cueArtEl(app.cue), h('span', null, `${app.cue.name} · ${app.tableSkin.name}`)),
+    h('div.vs-plates', null,
+      tap(h('button.vs-side.me', { 'aria-label': 'Đổi tướng' },
+        h('span.vs-text', null, h('b.vs-name', null, app.profile.name), h('span.vs-sub', null, `${me.name} · ${classInfo(me.cls).name}`)),
+        h('span.vs-edit', null, icon('edit')),
+      ), () => profileModal(app, () => app.go(local ? localScreen : quickScreen, { replace: true }))),
+      h('div.vs-side.foe', null, h('span.vs-text', null, local ? name2 : foeName, foeHint)),
+    ),
     btn(h('span.btn-in', null, icon('play'), 'Vào trận'), () => start(), 'big block'),
   );
   el.append(topbar(app, local ? 'Hai người · cùng máy' : 'Đấu nhanh'), h('div.setup-body', null, left, versus));

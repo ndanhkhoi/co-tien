@@ -127,3 +127,51 @@
 .badge.kind[data-kind='linh'] { background: #2f5677; }
 .badge.kind[data-kind='co'] { background: #4f4a44; }
 .badge.kind[data-kind='ma'] { background: #4a2a5c; }
+
+/* ---------- Quick match / two players: options on the left, duel stage on the right ---------- */
+.setup-body { gap: 12px; }
+.setup-opts { flex: 0 0 auto; width: min(470px, 56%); justify-content: space-evenly; gap: 2px; padding: 4px 8px !important; }
+.setup-opts .chip { min-height: 38px; padding: 0 11px; font-size: 13.5px; }
+.setup-opts .chip[aria-pressed='true'] { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
+.opt-label { font: 700 14px/1.2 var(--display); color: var(--ink); }
+.versus {
+  flex: 1;
+  min-width: 0;
+  width: auto !important;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 0;
+  background: none;
+  border: 0;
+  box-shadow: none;
+}
+.vs-stage {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  border: 16px solid transparent;
+  border-image: url('/art/ui/frame/panel.webp') 74 fill / 16px / 0 stretch;
+  overflow: hidden;
+}
+.vs-stage::before { content: ''; position: absolute; inset: 0; background: var(--home-bg-abs, none) center / cover; opacity: 0.35; }
+.vs-cut { position: absolute; bottom: -4%; height: 112%; width: 56%; object-fit: contain; filter: drop-shadow(0 6px 10px rgba(40, 30, 18, 0.3)); }
+.vs-cut.me { left: -4%; object-position: left bottom; }
+.vs-cut.foe { right: -4%; object-position: right bottom; transform: scaleX(-1); }
+.vs-stage .vs-seal { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%) rotate(-6deg); z-index: 2; }
+.vs-plates { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+.vs-plates .vs-side { min-height: 52px; padding: 6px 10px; background: var(--ink); color: var(--sheet); border-radius: var(--r-1); }
+.vs-plates .vs-side.foe { text-align: right; justify-content: flex-end; }
+.vs-plates .vs-name { color: #fbf6ec; font-size: 15px; display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.vs-plates .vs-sub { color: #d8cfbf; font-size: 12.5px; display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.vs-plates .vs-text { min-width: 0; flex: 1; }
+.vs-plates .vs-edit .ico { filter: brightness(0) invert(1); width: 20px; height: 20px; }
+.vs-plates input { min-height: 34px; padding: 0 8px; font-size: 14px; background: var(--sheet); color: var(--ink); }
+.versus > .btn { flex-shrink: 0; }
+.setup-opts .chip { min-height: 36px; padding: 0 9px; font-size: 13px; }
+.setup-opts .chips { gap: 4px; flex-wrap: nowrap; }
+.vs-cut { height: 135%; width: 66%; bottom: -26%; }
+.vs-cut.me { left: -10%; }
+.vs-cut.foe { right: -10%; }
+.tb-title { font-size: 24px; padding: 10px 56px 12px 58px; min-width: 210px; }
+.topbar > :first-child.tb-title { padding-left: 58px; }
