@@ -20,10 +20,27 @@ Toàn bộ tên, truyện, môn phái, nhân vật, chiêu thức và tranh là 
 | Ảnh Sát | Sau chuỗi ghi điểm, chọn soi đường hoặc tăng lực cho cú tiếp theo. |
 | Luân Hồi | Hai chiêu cơ bản chung nhịp: dùng luân phiên hồi nhanh hơn một lượt; lặp lại hồi bình thường. |
 
+`kind` là loại tạo hình, độc lập với hệ chiến đấu (`cls`): Hiệp Khách, Nữ Hiệp, Yêu Tộc, Tinh Linh, Linh Tượng, Ma Vật. Đây không phải cột giới tính; nội tại thuộc hệ, không thuộc loại.
+
 ## Kỹ năng
 
 Mỗi tướng có **2 chiêu cơ bản** và **1 tuyệt chiêu**. 65 bộ chiêu có 65 tập cơ chế khác nhau. Các vùng, vật chắn, gió, giếng hút, băng và dòng xoáy được mô phỏng chung cho trận thật, đường dự đoán và AI. Tuyệt chiêu bậc 5 dùng hình học riêng qua trường `ult`; cổng, rễ và hút miệng lỗ qua `shape`. Trên bàn phăng, hút miệng lỗ trở thành giếng trên nỉ, cổng đặt thành hành lang. Trên bàn phăng, hộ thể chuyển thành chỉnh băng; các chiêu chỉ có ý nghĩa với lỗ được đổi sang hiệu ứng phù hợp. Cổ Điển và thử thách không dùng kỹ năng hoặc nội tại.
 
+
+Có **24 nhóm cơ chế**, trong đó tám cơ chế đặt trên bàn gồm:
+
+| Mã | Cơ chế | Thao tác và tác động |
+|---|---|---|
+| `slick` | Dải Trượt | Đặt vùng giảm ma sát, kéo dài đường lăn. |
+| `sand` | Sa Trận | Đặt vùng tăng ma sát, hãm bi đi qua. |
+| `bumper` | Trấn Vật | Đặt vật phản xạ theo hướng chọn; hình `gate` chừa cổng, `roots` tạo chữ V. |
+| `railcraft` | Chỉnh Băng | Chọn đoạn băng và độ mềm/cứng để đổi độ nảy. |
+| `wind` | Dẫn Phong | Chọn hướng gió đẩy bi đang lăn. |
+| `well` | Tinh Điểm | Đặt tâm hút bẻ cong đường lăn; hình `rim` hút sát miệng lỗ. |
+| `spinwash` | Tán Toàn | Đặt vùng làm tiêu áp phê. |
+| `vortex` | Toàn Lưu | Đặt tâm và chọn chiều xoáy thuận/nghịch. |
+
+Chiêu đặt cần xác nhận “THI TRIỂN”; huỷ bước đặt không tiêu chiêu. Chiêu cơ bản hồi 2–3 lượt đánh của chính mình theo cơ chế đầu tiên trong `kinds`; tuyệt chiêu cần 100 năng lượng, có sức mạnh bằng bậc tướng cộng 2. `target: opponent` lưu hiệu ứng cho cú của đối thủ, mặc định áp dụng cho bên dùng.
 
 ## Môn phái
 
@@ -38,7 +55,7 @@ Chính đạo kiếm tông trên dãy núi đá trắng, nơi mặt trời mọc
 - **Thiên Tượng — Gió Núi:** Gió giật từng cơn đẩy bi đang lăn theo hướng gió.
 - **Biểu tượng:** a golden flying sword crossing a radiant sun halo. **Màu:** #e9d27a / #9cd3ff.
 
-| Bậc | Tướng | Giới | Hệ | Chiêu 1 | Chiêu 2 | Tuyệt chiêu |
+| Bậc | Tướng | Loại | Hệ | Chiêu 1 | Chiêu 2 | Tuyệt chiêu |
 |---|---|---|---|---|---|---|
 | 1 | **Tô Kiếm Nhi** | Nữ Hiệp | Thần Xạ | Kiếm Chỉ Đường (vision) | Phi Kiếm Dò Lối (reveal) | Vạn Kiếm Quy Tông (vision, reveal) |
 | 2 | **Mạc Thiết Sơn** | Hiệp Khách | Hộ Pháp | Kim Chung Chiếu Lộ (vision) | Trấn Sơn Thủ (railcraft) | Thiết Bích Sơn Môn (vision, sand) |
@@ -63,7 +80,7 @@ Ma môn chinh phạt dựng thành trên quặng sắt đỏ. Với Huyết Sát
 - **Thiên Tượng — Địa Chấn:** Mặt đất rung: các bi đang nằm yên bị xê dịch nhẹ khi bạn đánh.
 - **Biểu tượng:** a blood moon pierced by a black iron halberd. **Màu:** #c1272d / #ff7a45.
 
-| Bậc | Tướng | Giới | Hệ | Chiêu 1 | Chiêu 2 | Tuyệt chiêu |
+| Bậc | Tướng | Loại | Hệ | Chiêu 1 | Chiêu 2 | Tuyệt chiêu |
 |---|---|---|---|---|---|---|
 | 1 | **Hắc Lang** | Hiệp Khách | Ảnh Sát | Lang Nha Bộc (blast) | Huyết Trảo (second) | Lang Vương Tập Kích (blast, railcraft) |
 | 2 | **Đồ Cuồng** | Hiệp Khách | Cuồng Chiến | Cuồng Huyết (blast) | Chấn Địa (power) | Xích Ngục Cuồng Phong (blast, wind) |
@@ -88,7 +105,7 @@ Ma môn chinh phạt dựng thành trên quặng sắt đỏ. Với Huyết Sát
 - **Thiên Tượng — Xuân Phong:** Gió xuân giật từng cơn đẩy bi đang lăn.
 - **Biểu tượng:** a five-petal peach blossom with a curled fox tail. **Màu:** #e07aa5 / #b8f0e0.
 
-| Bậc | Tướng | Giới | Hệ | Chiêu 1 | Chiêu 2 | Tuyệt chiêu |
+| Bậc | Tướng | Loại | Hệ | Chiêu 1 | Chiêu 2 | Tuyệt chiêu |
 |---|---|---|---|---|---|---|
 | 1 | **Đào Tiểu Muội** | Nữ Hiệp | Pháp Tu | Xuân Hồ Dẫn Phong (wind) | Hoa Lộ (spin) | Đào Hoa Nguyên (wind, sand) |
 | 2 | **Phong Linh Tử** | Hiệp Khách | Ảnh Sát | Phong Ảnh (wind) | Trúc Ảnh Tái Hành (second) | Tật Phong Liên Trảm (wind, slick) |
@@ -113,7 +130,7 @@ Cung điện băng phương Bắc dưới cực quang. Nỉ ở đây lạnh và
 - **Thiên Tượng — Bão Tuyết:** Đụn tuyết phủ lên nỉ: bi lăn vào đụn tuyết chậm hẳn lại.
 - **Biểu tượng:** a six-petal ice lotus inside a crescent moon. **Màu:** #6cc4ef / #e6fbff.
 
-| Bậc | Tướng | Giới | Hệ | Chiêu 1 | Chiêu 2 | Tuyệt chiêu |
+| Bậc | Tướng | Loại | Hệ | Chiêu 1 | Chiêu 2 | Tuyệt chiêu |
 |---|---|---|---|---|---|---|
 | 1 | **Tuyết Nhi** | Nữ Hiệp | Thần Xạ | Băng Tiễn Chỉ Lộ (slick) | Hàn Mục (reveal) | Vạn Tiễn Băng Vũ (slick, wind) |
 | 2 | **Hàn Thạch** | Hiệp Khách | Hộ Pháp | Thuẫn Hàn Kính (slick) | Trấn Thủ (railcraft) | Băng Thành Bất Phá (slick, well) |
@@ -138,7 +155,7 @@ Các lâu đồng thau của những nhà cơ quan thuật. Họ tính đường
 - **Thiên Tượng — Cơ Quan Nghiêng:** Cơ quan nâng một đầu bàn: bi lăn chậm trôi về một phía.
 - **Biểu tượng:** a brass gear with a cyan lightning core. **Màu:** #d9a441 / #7fe3ff.
 
-| Bậc | Tướng | Giới | Hệ | Chiêu 1 | Chiêu 2 | Tuyệt chiêu |
+| Bậc | Tướng | Loại | Hệ | Chiêu 1 | Chiêu 2 | Tuyệt chiêu |
 |---|---|---|---|---|---|---|
 | 1 | **Tiểu Ban** | Hiệp Khách | Thần Xạ | Đồng Tước Trấn Lộ (bumper) | Tính Quỹ Đạo (reveal) | Liên Nỏ Thần Cơ (bumper, slick) |
 | 2 | **Mộc Ngưu** | Linh Tượng | Hộ Pháp | Cơ Giáp (bumper) | Đẩy Bánh Răng (railcraft) | Thành Lũy Cơ Quan (bumper, vortex) |
@@ -163,7 +180,7 @@ Thung lũng chướng khí, nơi các y sư và cổ sư nuôi độc như nuôi
 - **Thiên Tượng — Vũng Độc:** Vũng độc nhớt: bi đi qua mất áp phê và trượt ngắn lại.
 - **Biểu tượng:** a coiled green snake around a potion gourd. **Màu:** #7ccd3c / #d8ff6a.
 
-| Bậc | Tướng | Giới | Hệ | Chiêu 1 | Chiêu 2 | Tuyệt chiêu |
+| Bậc | Tướng | Loại | Hệ | Chiêu 1 | Chiêu 2 | Tuyệt chiêu |
 |---|---|---|---|---|---|---|
 | 1 | **Lục Xà** | Yêu Tộc | Ảnh Sát | Xà Độc Tán Toàn (spinwash) | Xà Ảnh (second) | Vạn Xà Quy Huyệt (spinwash, well) |
 | 2 | **Độc Thủ Lão Quái** | Hiệp Khách | Chú Sư | Độc Vụ (spinwash) | Hồ Lô Sa Chướng (sand) | Vạn Độc Di Sơn (spinwash, nudge) |
@@ -188,7 +205,7 @@ Bến cảng hải tặc nằm trên lưng một con rồng biển đã ngủ. �
 - **Thiên Tượng — Sóng Lừng:** Bàn chòng chành qua lại như trên thuyền.
 - **Biểu tượng:** a sea dragon coiled around an anchor. **Màu:** #e0782f / #5fd7c8.
 
-| Bậc | Tướng | Giới | Hệ | Chiêu 1 | Chiêu 2 | Tuyệt chiêu |
+| Bậc | Tướng | Loại | Hệ | Chiêu 1 | Chiêu 2 | Tuyệt chiêu |
 |---|---|---|---|---|---|---|
 | 1 | **Tiểu Ngư** | Nữ Hiệp | Ảnh Sát | Lướt Sóng (railcraft, wind) | Vẹt Gọi Tái Chiến (second) | Cá Chuồn Liên Hoàn (railcraft, vortex) |
 | 2 | **Sa Đại Đao** | Yêu Tộc | Cuồng Chiến | Sa Đao Dẫn Triều (railcraft, wind) | Sóng Dữ (power) | Vây Mập Hộ Hải (railcraft, shield) |
@@ -213,7 +230,7 @@ Hòn đảo của vong hồn trên dòng sông lãng quên. Người chết vẫ
 - **Thiên Tượng — Quỷ Môn:** Một lỗ bị quỷ khí phong kín trong cú này.
 - **Biểu tượng:** a jade ghost lantern with a soul flame. **Màu:** #2fd6a7 / #9dffe3.
 
-| Bậc | Tướng | Giới | Hệ | Chiêu 1 | Chiêu 2 | Tuyệt chiêu |
+| Bậc | Tướng | Loại | Hệ | Chiêu 1 | Chiêu 2 | Tuyệt chiêu |
 |---|---|---|---|---|---|---|
 | 1 | **Đăng Hồn Đồng Tử** | Tinh Linh | Chú Sư | Hồn Đăng Khai Môn (bumper) | Dẫn Hồn (sand) | Bách Quỷ Dạ Hành (bumper, spinwash) |
 | 2 | **Cốt Kiếm** | Tinh Linh | Ảnh Sát | Cốt Ảnh (bumper) | Xương Vụn (second) | Vạn Cốt Kiếm (bumper, nudge) |
@@ -238,7 +255,7 @@ Hòn đảo của vong hồn trên dòng sông lãng quên. Người chết vẫ
 - **Thiên Tượng — Tinh Lực:** Sao băng rơi xuống bàn: bi lăn gần tâm sao bị hút cong đường.
 - **Biểu tượng:** a seven-star constellation around a moon disc. **Màu:** #8a7cf0 / #ffe9a3.
 
-| Bậc | Tướng | Giới | Hệ | Chiêu 1 | Chiêu 2 | Tuyệt chiêu |
+| Bậc | Tướng | Loại | Hệ | Chiêu 1 | Chiêu 2 | Tuyệt chiêu |
 |---|---|---|---|---|---|---|
 | 1 | **Lạc Lạc Tinh Linh** | Tinh Linh | Pháp Tu | Tinh Điểm (well) | Sao Băng Dẫn (spin) | Tinh Vân Hấp Dẫn (well, shield) |
 | 2 | **Tinh Quan Thủ Vệ** | Hiệp Khách | Hộ Pháp | Đẩu Thuẫn Hấp Châu (well) | Chòm Sao Trấn (railcraft) | Bắc Đẩu Thất Tinh Trận (well, second) |
@@ -263,7 +280,7 @@ Hoàng triều sa mạc dưới mặt trời không bao giờ tắt. Nỉ phủ 
 - **Thiên Tượng — Bão Cát:** Gió cát thổi ngang và cát phủ dày làm bi chậm.
 - **Biểu tượng:** a golden sun disc with turquoise wings. **Màu:** #e8b84a / #4fe0d0.
 
-| Bậc | Tướng | Giới | Hệ | Chiêu 1 | Chiêu 2 | Tuyệt chiêu |
+| Bậc | Tướng | Loại | Hệ | Chiêu 1 | Chiêu 2 | Tuyệt chiêu |
 |---|---|---|---|---|---|---|
 | 1 | **Sa Hồ** | Yêu Tộc | Ảnh Sát | Sa Ảnh (sand) | Hồ Bộ Tái Hành (second) | Bão Cát Liên Hoàn (sand, nudge) |
 | 2 | **Thạch Tượng Hộ Lăng** | Linh Tượng | Hộ Pháp | Sư Tượng Sa Vực (sand) | Trấn Lăng (railcraft) | Lăng Mộ Phong Ấn (sand, spin) |
@@ -288,7 +305,7 @@ Rừng cổ thụ của linh thú và thần điểu. Rễ cây có thể trồi
 - **Thiên Tượng — Rễ Cổ Thụ:** Rễ cây trồi lên nỉ: bi chạm rễ bật lại như chạm băng.
 - **Biểu tượng:** a leaf crown with a beast claw mark. **Màu:** #3fae6a / #ffb04d.
 
-| Bậc | Tướng | Giới | Hệ | Chiêu 1 | Chiêu 2 | Tuyệt chiêu |
+| Bậc | Tướng | Loại | Hệ | Chiêu 1 | Chiêu 2 | Tuyệt chiêu |
 |---|---|---|---|---|---|---|
 | 1 | **Mộc Linh** | Tinh Linh | Pháp Tu | Sồi Non Phân Rễ (bumper) | Diệp Toàn Quyết (spin) | Tiểu Linh Khai Lâm (bumper, second) |
 | 2 | **Báo Nữ A Man** | Yêu Tộc | Ảnh Sát | Liệp Trảo Mộc Chướng (bumper) | Báo Bộ Tái Kích (second) | Báo Vương Trấn Lâm (bumper, power, railcraft) |
@@ -313,7 +330,7 @@ Vực sâu nơi hiện thực bị xé rách. Mọi thứ đến gần đều b�
 - **Thiên Tượng — Hư Không Thở:** Miệng lỗ phình to hoặc co hẹp trong cú này.
 - **Biểu tượng:** a single void eye inside a cracked ring. **Màu:** #b44fe0 / #ff5fe0.
 
-| Bậc | Tướng | Giới | Hệ | Chiêu 1 | Chiêu 2 | Tuyệt chiêu |
+| Bậc | Tướng | Loại | Hệ | Chiêu 1 | Chiêu 2 | Tuyệt chiêu |
 |---|---|---|---|---|---|---|
 | 1 | **Hư Trùng** | Ma Vật | Ảnh Sát | Đào Hư Không (well) | Thoát Xác Tái Hành (second) | Bầy Hư Trùng (well, spin) |
 | 2 | **Phệ Hồn Thú** | Ma Vật | Cuồng Chiến | Phệ Khẩu Hấp Châu (well) | Hư Lực (power) | Nuốt Trời Bộc (well, reveal, sand) |
@@ -338,7 +355,7 @@ Lầu các lụa hồng giữa hồ trăng, nơi các mỹ nhân luyện mị th
 - **Thiên Tượng — Lụa Trải:** Lụa trải trên nỉ: bi lướt qua lụa trượt êm và lăn xa hơn.
 - **Biểu tượng:** a folding fan open over a peony. **Màu:** #d6407a / #ffd1a8.
 
-| Bậc | Tướng | Giới | Hệ | Chiêu 1 | Chiêu 2 | Tuyệt chiêu |
+| Bậc | Tướng | Loại | Hệ | Chiêu 1 | Chiêu 2 | Tuyệt chiêu |
 |---|---|---|---|---|---|---|
 | 1 | **Hồng Liên** | Nữ Hiệp | Ảnh Sát | Vũ Ảnh (vortex) | Vũ Bộ Lưu Ảnh (second) | Hồng Liên Loạn Vũ (vortex, power) |
 | 2 | **Tử Trinh** | Nữ Hiệp | Chú Sư | Mê Hương (vortex) | Phấn Sa Trầm Lộ (sand) | Tử Vụ Mê Thành (vortex, railcraft) |

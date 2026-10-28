@@ -12,14 +12,14 @@ src/
   ui/         màn hình DOM phủ trên canvas, điều khiển, hướng dẫn
   audio/      âm thanh tổng hợp bằng WebAudio (không có file âm thanh)
   platform/   cảm ứng, rung, toàn màn hình, cài PWA
-  styles/     base.css, kit.css, screens.css, match.css
+  styles/     base.css, kit.css, screens.css, match.css, skin.css
 public/art/   tranh đã xử lý (webp) — xem docs/art-pipeline.md
 ```
 
 ## Luồng một cú đánh
 
 ```
-UI (joystick, kéo bàn, nút ĐÁNH) ──► Match.shoot(input)
+UI (kéo/chạm bàn, nút xoay, lực, ĐÁNH) ──► Match.shoot(input)
                                        │ strike(): bi cái nhận vận tốc + spin, có squirt / trượt cơ
                                        ▼
           mỗi khung hình: Match.update(dt) ──► physics.step(world, dt)   (ma sát, va chạm, băng, lỗ, địa thế)
@@ -80,17 +80,23 @@ Metadata hình học và xung lực hình quạt đi cùng yêu cầu worker. Ch
 bi (`ball-mesh.ts`: shader cầu, lăn theo vận tốc góc), cơ, đường ngắm + bi ảo + mũi tên hướng, Thiên Tượng,
 hiệu ứng chiêu (`skill-fx.ts`: ghép các nét mực VFX của môn phái theo từng nhóm cơ chế, flipbook tuyệt chiêu).
 
+Code/shader cho bi và bàn phục vụ hình học và trạng thái mô phỏng (số/sọc, màu, ánh sáng, xoay vật lý). Tranh, icon và trang trí UI vẫn là tài sản nguyên bản sinh riêng qua pipeline; ngoại lệ vật thể mô phỏng không áp dụng cho chúng.
+
 ## `src/ui`
 
-Màn hình là DOM phủ trên canvas (`app.ts` quản lý ngăn xếp màn hình). `menus.ts` (trang chủ, đấu nhanh,
-bộ sưu tập, cài đặt), `journey.ts` (bản đồ Hành trình), `codex.ts` (Cơ Tiên Lục), `story.ts` (đọc truyện có tranh, mở chương theo Hành trình), `match-screen.ts`
-(HUD, joystick, chiêu, cut-in, AI diễn hoạt), `install-gate.ts` (bắt cài PWA trên điện thoại),
+Màn hình là DOM phủ trên canvas (`app.ts` quản lý ngăn xếp màn hình). `menus.ts` (trang chủ, Luận Cơ, Song Đấu,
+Tàng Các, cài đặt), `journey.ts` (bản đồ Hành trình), `codex.ts` (Cơ Tiên Lục), `story.ts` (đọc truyện có tranh, mở chương theo Hành trình), `match-screen.ts`
+(HUD, kéo/chạm bàn, nút xoay, thanh lực, chiêu, cut-in, AI diễn hoạt), `install-gate.ts` (bắt cài PWA trên điện thoại),
 `viewport-guard.ts` (bắt xoay ngang, kiểm tra cửa sổ trên máy tính), `hints.ts` / `intro.ts` (hướng dẫn).
 `icons.ts` cung cấp `icon(name)` để tạo icon tranh từ `public/art/ui/icons/`.
 
-`src/main.ts` nạp bốn tệp CSS: `base.css` đặt nền tảng Thuỷ Mặc (màu, chữ, nền đọc và safe area);
+Tàng Các và Cơ Tiên Lục gộp các tab vào thanh tiêu đề gọn để dành chiều cao cho nội dung. Tổng số tướng đã khám phá của Cơ Tiên Lục nằm trong nội dung tab **Tướng**, không nằm trên thanh tiêu đề chung; từng thẻ vùng đất vẫn có số tướng đã gặp riêng. Tướng được xem là đã khám phá khi đã gặp hoặc đã sở hữu (`known`).
+
+`src/main.ts` nạp năm tệp CSS: `base.css` đặt nền tảng Thuỷ Mặc (màu, chữ, nền đọc và safe area);
 `kit.css` chứa thành phần dùng chung như nút, thẻ chọn và hộp thoại. `screens.css` dành cho các màn hình,
-`match.css` dành cho giao diện trận đấu; hai phần này đang được xây dựng lại.
+`match.css` dành cho giao diện trận đấu; `skin.css` nạp cuối để phủ khung tranh, nút dấu son, chuyển trang và màn xuất hiện tướng. Chuyển màn trong `app.ts` có hướng tiến/lùi/đặt lại; màn cũ trở thành `inert`, được gỡ sau 280 ms; `turnPage` chỉ giữ ảnh chụp DOM của phần cũ trong lúc nội dung thật đổi ngay. Các chuyển động tôn trọng `prefers-reduced-motion`.
+
+Lớp DOM được thiết kế ở **844×390**, scale đều trong khoảng **0,75–2,2** theo vùng `#stage` (`installUiScale()` trong `main.ts`). Canvas Pixi đo cửa sổ riêng. Safe area và token vùng chạm trong `base.css` bù ngược `--ui-scale`; cần kiểm tra kích thước hiển thị sau scale.
 
 Trên điện thoại còn phải cài PWA (`mustInstall()`), màn hình cài đặt hiện trước ngay cả khi máy đang
 dọc; `viewport-guard.ts` bỏ qua chặn xoay ngang trong thời gian này. Màn cài đặt dùng kích thước CSS
@@ -102,9 +108,19 @@ thật, không thu phóng theo khung game ngang. Lớp UI bám vùng nền
 cử chỉ trình duyệt ngoài vùng cuộn, nhưng cho cuộn trong `.scroll` hoặc phần tử hoặc phần tử cha có `overflow`
 `auto`/`scroll` và nội dung thực sự tràn; chặn cả pinch zoom nhiều ngón.
 
+## Điều khiển hiện tại
+
+`src/ui/screens/match-screen.ts` nhận kéo/chạm trực tiếp trên bàn. Kéo xoay cơ tương đối quanh bi cái; kéo xa bi cái giảm tốc xoay để ngắm tinh. Chạm bi để ngắm thẳng vào bi, chạm vị trí trống để ngắm tới đó; nút đổi mục tiêu chuyển bi. Hai nút xoay chỉnh 0,1° mỗi chạm, giữ để xoay nhanh dần.
+
+Chạm bi cái nhỏ mở bảng áp phê: chạm hoặc kéo điểm đánh trên bi lớn, hoặc chọn Giữa, Trô, Cule, Giật, Trái, Phải. Kéo/chạm thanh lực đặt lực; chạm ĐÁNH dùng lực đã chọn. Giữ ĐÁNH cho lực dao động rồi thả để đánh; trượt ngón ra xa để huỷ.
+
+Khi có bi trong tay, kéo bi cái hoặc chạm bàn để dời; bốn nút hướng chỉnh 3 mm mỗi chạm và nhanh dần khi giữ. “Ngắm thử” chuyển thao tác bàn sang ngắm, cho xem đường bi trước khi chốt; “Dời bi” quay lại đặt vị trí. “ĐẶT BI” xác nhận vị trí, không đánh ngay. Bước đặt chiêu là trạng thái riêng và dùng “THI TRIỂN” để xác nhận.
+
+HUD Tiên Đạo có ba ô icon tranh riêng của tướng đang điều khiển, lấy bằng `skillIconUrl(champion.id, slot)`; mỗi ô hiện tên, trạng thái sẵn sàng/hồi chiêu hoặc phần trăm năng lượng tuyệt chiêu. Chạm ô mở thẻ mô tả và nút dùng, không thi triển ngay. Trang tướng, Cơ Tiên Lục và thông tin đối thủ dùng ba nút chiêu với thẻ chi tiết có icon, tên, hồi chiêu hoặc yêu cầu 100 năng lượng, mô tả và nút trở về trang tướng.
+
 ## PWA và cập nhật
 
-`vite-plugin-pwa` tải sẵn code, tranh trực tiếp trong `art/ui/`, chân dung, icon chiêu và biểu tượng
+`vite-plugin-pwa` tải sẵn code, tranh đệ quy trong `art/ui/` và `art/table/`, chân dung, icon chiêu và biểu tượng
 môn phái theo `globPatterns` trong `vite.config.ts`; các ảnh khác trong `art/` được cache khi tải lần đầu.
 
 Trong bản production, `src/main.ts` kiểm tra bản mới mỗi **15 phút** và khi ứng dụng trở lại phía trước
@@ -125,7 +141,7 @@ Console test ẩn (bản dev hoặc `?dev`): `cotien.cheat(name, ...args)` với
 `src/platform/preload.ts` tải ảnh theo 3 tầng, dựa trên danh sách `virtual:art-manifest` sinh lúc build:
 màn tải (`ui/screens/loading.ts`) chặn ở lần đầu và sau mỗi bản cập nhật để tải phần cốt lõi (giao diện, chân dung,
 icon chiêu, bàn, tướng và môn phái của người chơi); phần còn lại tải nền khi ở menu (bỏ qua khi bật tiết kiệm dữ
-liệu); mỗi trận tải và giải mã sẵn ảnh của hai tướng và môn phái của bàn. Ảnh lớn được service worker lưu vào kho
+liệu); mỗi trận tải toàn bộ ảnh của hai tướng và môn phái của bàn, rồi giải mã trước cutout, flipbook và cut-in. Tầng cốt lõi chạy 6 luồng; tầng nền chạy 2 luồng, bắt đầu sau 2,5 giây và nhường lúc trình duyệt rảnh. Dấu `cotien.assets` chỉ ghi nhận lượt tải đã hoàn thành theo mã build; lỗi mạng không chặn khởi động và ảnh sẽ được tải theo nhu cầu, nên không bảo đảm toàn bộ tranh đã sẵn offline sau một lượt tải lỗi. Ảnh lớn được service worker lưu vào kho
 `art-<mã build>`, kho của bản cũ bị xoá khi bản mới chạy. `?loading` giữ màn tải để xem thiết kế.
 Tiến trình hiện bằng nét cọ mực và phần trăm tải.
 
@@ -150,3 +166,16 @@ Các vùng và đoạn dùng tranh riêng trong `public/art/table/skills/`; prev
 Trên bàn phăng, `effectiveKind` đổi hộ thể thành chỉnh băng, phong ấn lỗ thành làm run,
 nuốt lỗ thành tăng áp phê, hút lỗ thành tiên tri và dịch chuyển thành dời bi.
 Cổ Điển và thử thách không kích hoạt kỹ năng, nội tại hoặc Thiên Tượng.
+
+
+## Hợp đồng nội dung và chế độ
+
+`Champion.kind` có sáu loại tạo hình: Hiệp Khách, Nữ Hiệp, Yêu Tộc, Tinh Linh, Linh Tượng, Ma Vật; `cls` là một trong bảy hệ nội tại, độc lập với loại. `roster.json` giữ 65 tướng × 3 tên chiêu; `sects.ts` dựng slot 0/1/2, mô tả, hồi chiêu và sức mạnh. Tám cơ chế đặt bàn là `slick`, `sand`, `bumper`, `railcraft`, `wind`, `well`, `spinwash`, `vortex`; danh sách và hành vi nằm trong World Bible.
+
+Tên màn hình: **Luận Cơ** (đấu AI), **Song Đấu** (hai người chung máy), **Luyện Cơ** (thử thách), **Tàng Các** (tướng/cơ/bàn), **Hành trình**, **Cơ Tiên Truyện**, **Cơ Tiên Lục**. **Tiên Đạo / Cổ Điển** là lựa chọn luật hiệu ứng trong thiết lập trận, độc lập với thể loại 8/9/10 bi hoặc phăng.
+
+Nội tại đi qua cùng `Match` cho người và AI: Thần Xạ khoá hướng và mở khoá khi đổi góc; Cuồng Chiến tăng lực 10%, giảm tầm áp phê 25%; Pháp Tu chọn trục áp phê (trục chọn ×1,2, trục kia ×0,8); Hộ Pháp chọn băng mềm một lần mỗi lượt cơ; Chú Sư để vùng cát sau cú hợp lệ kết thúc lượt; Ảnh Sát sau chuỗi ghi điểm chọn thông tin hoặc lực ×1,12; Luân Hồi giảm một lượt hồi chiêu khi luân phiên hai slot cơ bản.
+
+Hồ sơ giữ `thancong.profile.v1`; `sanitize` bổ sung trường mới, lọc ID trang bị/tướng không còn hợp lệ, giữ các tướng bậc 1 miễn phí và xoá trường cũ `avatar`/`skills`. Mã chia sẻ giữ tiền tố `TC1.` và cũng đi qua `sanitize` khi nhập.
+
+Trang tướng ở Tàng Các và Cơ Tiên Lục dùng ba nút icon chiêu; chạm từng nút mở hộp mô tả riêng (hồi chiêu hoặc 100 năng lượng cho tuyệt chiêu), đóng để trở lại trang tướng.

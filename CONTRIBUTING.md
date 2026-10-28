@@ -21,20 +21,21 @@ npm run build      # typecheck + bản production vào dist/
 - **Vật lý và luật là thật.** Mọi chiêu và Thiên Tượng phải biểu diễn bằng lực, ma sát, chướng ngại hoặc
   kích thước lỗ trong mô phỏng — không dịch chuyển bi tuỳ tiện. Lực nghiêng/gió phải nhỏ hơn lực cản lăn.
 - **Không dùng tài sản của game khác.** Không dùng tên, hình, chiêu thức hay biểu tượng của bất kỳ game hay tác phẩm nào khác.
+- **Tranh và mô phỏng.** Tranh, icon, minh hoạ và trang trí UI phải được sinh riêng, nguyên bản qua pipeline với `cx/gpt-6-sol-image`; không tải tài sản internet, không tự vẽ SVG, emoji hay thư viện icon. Code/shader chỉ được dựng vật thể mô phỏng như bi/bàn (hình học, số/sọc, màu, ánh sáng, xoay theo vật lý), không thay tranh hoặc icon.
 - **Giữ bi dễ nhìn.** Màu nỉ mới phải qua `tests/sect-contrast.test.ts` (ΔE ≥ 25 với mọi bi).
-- **Giao diện theo Thuỷ Mặc** (`src/styles/main.css`): giấy, mực, một màu son, không phát sáng.
+- **Giao diện theo Thuỷ Mặc** (`src/styles/{base,kit,screens,match,skin}.css`, `skin.css` nạp cuối): giấy, mực, một màu son, không phát sáng.
 - **Mobile trước.** Kiểm tra màn hình ngang ~844×390, vùng chạm ≥ 44 px.
 - Commit theo Conventional Commits (`feat:`, `fix:`, `docs:`…), mỗi commit một việc.
 
 ## Thêm một tướng
 
-1. Thêm vào `src/game/content/roster.json`: `id`, `name`, `sect`, `tier`, `cls`, `look` (ghi rõ giới tính và
+1. Thêm vào `src/game/content/roster.json`: `id`, `name`, `sect`, `tier`, `kind`, `cls`, `look` (ghi rõ giới tính và
    một tổ hợp nét nhận diện không trùng tướng khác), `pose`, `expr`, 3 `skills` (`kinds` từ 24 nhóm cơ chế,
    `icon` mô tả icon).
 2. Thêm tiểu sử và câu nói vào `src/game/content/lore.json`.
 3. Vẽ tranh theo `.claude/skills/game-art/SKILL.md` (`gen-sect.sh <môn-phái> <thư-mục>` chỉ vẽ phần còn thiếu),
    duyệt bảng tổng hợp, chạy `process-sect.py` để xuất vào `public/art/`.
-4. Cập nhật `docs/world-bible.md`, chạy `npm test`.
+4. Cập nhật `docs/world-bible.md` (cả tên và nhóm cơ chế của ba chiêu, giữ tiểu sử), chạy `npm test` và `npm run build`.
 
 ## Thêm một môn phái
 
@@ -42,3 +43,18 @@ Thêm môn phái vào `roster.json` (màu, bối cảnh, biểu tượng, 2 cây
 `SectId` và các bảng `TABLE_LOOK` / `CUE_STATS` / `CUE_NAMES` trong `src/game/content/sects.ts`, Thiên Tượng
 trong `src/game/terrain.ts` (`rollOmen` + `OMEN_INFO`), chương trong `src/game/content/career.ts`, mốc trên
 bản đồ trong `src/ui/screens/journey.ts`, truyện trong `lore.json`.
+
+
+## Hợp đồng cần giữ
+
+- `kind` là loại tạo hình (Hiệp Khách, Nữ Hiệp, Yêu Tộc, Tinh Linh, Linh Tượng, Ma Vật), `cls` chọn hệ nội tại. Hai chiêu thường ở slot 0/1, tuyệt chiêu ở slot 2; không suy ra slot từ bậc sức mạnh.
+- Chiêu đặt bàn dùng tám nhóm `slick`, `sand`, `bumper`, `railcraft`, `wind`, `well`, `spinwash`, `vortex`. Dùng cùng `SkillCast`/world cho trận thật, dự đoán và AI; kiểm tra cả bàn lỗ, bàn phăng và bước huỷ/xác nhận đặt chiêu.
+- Tiên Đạo có chiêu, nội tại, địa thế; Cổ Điển và Luyện Cơ không bật các hiệu ứng này. Giữ tên menu hiện tại: Luận Cơ, Song Đấu, Luyện Cơ, Tàng Các, Hành trình, Cơ Tiên Truyện, Cơ Tiên Lục.
+- DOM thiết kế 844×390, được scale đều 0,75–2,2 trong `main.ts`; màn cài PWA dùng kích thước thật. Kiểm tra cuộn, modal, chuyển tiến/lùi và giảm chuyển động.
+- Giữ khoá save `thancong.profile.v1`; thêm trường qua mặc định và `sanitize`, giữ tương thích mã `TC1.`.
+- Tranh đi qua loader ba tầng (cốt lõi chặn mỗi build, nền lúc rảnh, tải/giải mã theo trận). Bổ sung tranh mới vào đường dẫn mà manifest nhận; không bỏ cơ chế cập nhật PWA chờ người chơi rời bàn.
+
+
+## Kiểm tra điều khiển
+
+Ngắm bằng kéo/chạm bàn và hai nút xoay; áp phê bằng điểm đánh kéo/chạm trên bi lớn hoặc các lựa chọn nhanh. Thanh lực đặt sẵn cho thao tác chạm ĐÁNH; giữ ĐÁNH dùng lực dao động và trượt ra xa để huỷ. Khi bi trong tay, kiểm tra dời bằng kéo/chạm hoặc bốn nút hướng, chuyển “Ngắm thử” / “Dời bi”, rồi “ĐẶT BI”. Kiểm tra ba icon chiêu đúng tướng, mở chi tiết trước khi dùng, hồi chiêu và năng lượng. Safe area và vùng chạm dùng tỉ lệ nghịch với `--ui-scale`; kiểm tra kích thước hiển thị sau scale.
