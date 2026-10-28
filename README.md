@@ -34,7 +34,7 @@ dụng (PWA), chơi offline.
 
 ### Hình ảnh trong game
 
-Ảnh chụp bằng trình duyệt giả lập iPhone 14 Pro Max ngang: 932×430 CSS pixel, DPR 3; giao diện ưu tiên chơi ngang trên điện thoại.
+Ảnh chụp bằng Chromium giả lập cảm ứng ở 844×390 và 932×430 CSS pixel; giao diện ưu tiên chơi ngang trên điện thoại.
 
 | Trang chủ | Luận Cơ |
 | --- | --- |
@@ -80,3 +80,5 @@ thanh. Tài liệu: [kiến trúc](docs/architecture.md) · [thế giới](docs/
 Mã nguồn: MIT. Các agent skill bên thứ ba trong `.claude/skills` (trừ `game-art`) thuộc
 [gamedev-skills/awesome-gamedev-agent-skills](https://github.com/gamedev-skills/awesome-gamedev-agent-skills),
 giấy phép Apache-2.0 — xem `.claude/skills/README.md`.
+
+> Ảnh trong bảng trên được chụp lại từ bản UI hiện tại sau vòng review asset ngày 28/10/2026.
