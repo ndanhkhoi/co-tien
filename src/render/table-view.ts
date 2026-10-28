@@ -174,8 +174,9 @@ export class TableView {
     const side = artImage(`${base}art/table/pocket-side.webp`, ready);
     const sight = artImage(`${base}art/table/${this.match.table.kind === 'pool' ? 'diamond' : 'dot'}.webp`, ready);
     const art = paintTable(this.match.table, skin, want, rail, { corner, side, sight });
-    this.tableSprite.texture?.destroy(true);
+    const previous = this.tableSprite.texture;
     this.tableSprite.texture = art.texture;
+    if (previous !== Texture.EMPTY && previous !== Texture.WHITE) previous.destroy(true);
     this.tableSprite.scale.set(1 / want);
     this.cue.scale.set(1 / want);
     this.cueShadow.scale.set(1 / want);

@@ -86,7 +86,10 @@ function next(app: App) {
     const H = window.innerHeight;
     if (it.rail) {
       const available = it.place === 'left' ? r.left - W / 2 - 10 : W / 2 - r.right - 10;
-      card.style.width = `${Math.max(1, Math.min(260, available))}px`;
+      card.style.width = `${Math.max(1, Math.min(240, available))}px`;
+    }
+    if (it.rail && it.alignTop) {
+      card.style.maxHeight = `${Math.max(44, H - r.top - 8)}px`;
     }
     const cw = card.offsetWidth;
     const ch = card.offsetHeight;

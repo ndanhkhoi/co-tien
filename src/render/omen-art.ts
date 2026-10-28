@@ -32,6 +32,8 @@ export class OmenArt {
       sprite.visible = false;
       this.pool.push(sprite);
       this.layer.addChild(sprite);
+      // Register the mask before assets load so its white geometry never paints the bed.
+      sprite.mask = this.mask;
     }
     for (const name of names) {
       void Assets.load<Texture>(`${base}art/table/omens/${name}.webp`).then(texture => {
@@ -97,7 +99,7 @@ export class OmenArt {
         if (moving && age < 0.8) this.put('star-fall', w.x, w.y - (1 - age / 0.8) * w.r, w.r, w.r, 0.5 * (1 - age / 0.8));
       }
       for (const s of o.segments ?? []) {
-        this.put('roots', (s.ax + s.bx) / 2, (s.ay + s.by) / 2, Math.hypot(s.bx - s.ax, s.by - s.ay), t.R * 0.6, 0.8 * fade, Math.atan2(s.by - s.ay, s.bx - s.ax));
+        this.put('roots', (s.ax + s.bx) / 2, (s.ay + s.by) / 2, Math.hypot(s.bx - s.ax, s.by - s.ay), t.R * 3.2, 0.95 * fade, Math.atan2(s.by - s.ay, s.bx - s.ax));
       }
       const force = o.terrain?.force;
       if (force) {

@@ -241,22 +241,23 @@
   pointer-events: none;
 }
 .mx-sk-state {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  z-index: 1;
+  position: static;
+  flex-shrink: 0;
+  max-width: 100%;
+  padding: 0 4px;
+  border-radius: 999px;
+  white-space: nowrap;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 1px;
   background: rgba(26, 23, 19, 0.84);
   color: var(--sheet);
-  font: 700 13px/19px var(--body);
+  font: 700 11px/16px var(--body);
 }
 .mx-sk-state:empty { display: none; }
 .mx-sk-state .ico { width: 16px; height: 16px; filter: brightness(0) invert(1); }
-.mx-sk-name { max-width: 100%; font: 600 13px/1.15 var(--body); text-align: center; color: var(--ink); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.mx-sk-name { flex-shrink: 0; max-width: 100%; font: 600 13px/1.15 var(--body); text-align: center; color: var(--ink); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
 .mx-skill.ready { border-color: var(--accent); box-shadow: 0 0 0 2px var(--accent), var(--sh-1); }
 .mx-skill.ult.ready .mx-sk-art { animation: mx-ult 1.5s ease-in-out infinite; }
 @keyframes mx-ult { 50% { transform: scale(1.07); } }
@@ -631,8 +632,9 @@
   .mx-power { min-height: 64px; padding: 4px 0; gap: 2px; }
   .mx-strike { height: 60px; }
   .mx-strike .ico { width: 30px; height: 30px; }
-  .mx-sk-art { width: 40px; height: 40px; }
-  .mx-skill { gap: 2px; padding: 3px; }
+  .mx-sk-art { width: 36px; height: 36px; }
+  .mx-skill { gap: 1px; padding: 2px; }
+  .mx-sk-name { line-height: 1.1; }
   .mx-sp-ballwrap { height: min(100%, 190px); }
 }
 @media (max-width: 700px) {
@@ -657,6 +659,7 @@
 .mx-dock .mx-skill { min-height: 64px; }
 .mx-sp-ballwrap { max-width: 48%; }
 @media (max-height: 430px) {
-  .mx:has(.mx-next:not(:empty):not([hidden])) .mx-sk-art { width: 32px; height: 32px; }
+  .mx:has(.mx-next:not(:empty):not([hidden])) .mx-sk-art { width: 22px; height: 22px; }
+  .mx:has(.mx-next:not(:empty):not([hidden])) .mx-skill { gap: 0; padding: 1px 3px; }
   .mx:has(.mx-next:not(:empty):not([hidden])) .mx-sk-name { line-height: 1.1; }
 }

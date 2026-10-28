@@ -159,7 +159,7 @@ export function matchScreen(opts: MatchOptions) {
       const img = h('img.mx-sk-img', { alt: '', draggable: false });
       const state = h('span.mx-sk-state');
       const name = h('span.mx-sk-name');
-      const b = tap(h('button.mx-skill', { class: slot === 2 ? 'ult' : '' }, h('span.mx-sk-art', null, img, state), name), () => openSkill(slot));
+      const b = tap(h('button.mx-skill', { class: slot === 2 ? 'ult' : '' }, h('span.mx-sk-art', null, img), name, state), () => openSkill(slot));
       return { b, img, state, name, key: '' };
     });
     const dock = h('div.mx-col.mx-dock', { 'aria-label': 'Chiêu thức' }, ...slots.map((s) => s.b));
@@ -1176,7 +1176,7 @@ export function matchScreen(opts: MatchOptions) {
       const beside = lefty ? 'right' : 'left';
       hintOnce(app, `rules-${mode}`, `Luật ${MODE_NAMES[mode]}`, `${RULES_TEXT[mode].goal} Xem đầy đủ trong menu tạm dừng → Luật chơi.`, { anchor: () => (lefty ? ctrl : dock), place: 'right', highlight: false, rail: true });
       hintOnce(app, 'ctl-aim', 'Ngắm', 'Kéo trên bàn để xoay cơ — kéo xa bi cái thì xoay chậm, tinh hơn. Chạm một bi để ngắm thẳng vào nó. Hai nút xoay chỉnh từng chút (giữ để xoay nhanh), nút đổi mục tiêu nhảy qua các bi hợp lệ, bi cái nhỏ là áp phê.',
-        { anchor: () => aimPad, place: beside });
+        { anchor: () => ctrl, place: beside, rail: true, alignTop: true });
       hintOnce(app, 'ctl-power', 'Lực và đánh', 'Kéo thanh lực để chọn lực, rồi chạm ĐÁNH. Hoặc giữ ĐÁNH cho lực tự dao động và thả đúng lúc; trượt ngón ra xa để huỷ.',
         { anchor: () => powerBar, place: beside });
       if (match.canMoveCue) {

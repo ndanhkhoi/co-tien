@@ -268,7 +268,7 @@ export function paintTable(t: TableGeom, skin: TableSkin, pxPerM: number, railIm
   // --- Diamonds: vermilion seal dots, like the red marks on an ink painting ---
   for (const dm of t.diamonds) {
     if (details.sight) {
-      const size = S(t.kind === 'pool' ? 0.017 : 0.011);
+      const size = S(t.kind === 'pool' ? 0.028 : 0.018);
       g.save();
       g.translate(X(dm.x), Y(dm.y));
       if (Math.abs(dm.x) > t.L / 2) g.rotate(Math.PI / 2);
