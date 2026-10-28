@@ -175,3 +175,30 @@
 .vs-cut.foe { right: -10%; }
 .tb-title { font-size: 24px; padding: 10px 56px 12px 58px; min-width: 210px; }
 .topbar > :first-child.tb-title { padding-left: 58px; }
+
+/* ---------- Match HUD: ink plates and framed tablets ---------- */
+.mx-card {
+  background: var(--ink);
+  color: #fbf6ec;
+  border: 2px solid #3a332b;
+  box-shadow: 0 4px 12px rgba(20, 14, 8, 0.35);
+}
+.mx-card .mx-name { color: #fbf6ec; }
+.mx-card .mx-sub { color: #d8cfbf; }
+.mx-card.active { border-color: var(--accent); box-shadow: 0 0 0 2px var(--accent), 0 4px 12px rgba(20, 14, 8, 0.35); }
+.mx-card .mx-score { background: var(--accent); color: var(--on-accent); }
+.mx-skill, .mx-btn {
+  background: none;
+  border: 12px solid transparent;
+  border-image: url('/art/ui/frame/panel.webp') 74 fill / 12px / 0 stretch;
+  border-radius: 0;
+  box-shadow: none;
+  filter: drop-shadow(0 3px 8px rgba(40, 30, 18, 0.18));
+}
+.mx-skill.pressed, .mx-btn.pressed { background: none; filter: brightness(0.92); }
+.mx-skill.ready { filter: drop-shadow(0 0 0 var(--accent)) drop-shadow(0 3px 8px rgba(176, 53, 34, 0.35)); }
+.mx-btn { padding: 0; }
+.mx-btn .ico { width: 76%; height: 76%; }
+.mx-card.active .mx-name, .mx-card .mx-name { color: #fbf6ec !important; }
+.mx-skill, .mx-btn { border-width: 8px; border-image-width: 8px; }
+.mx-sk-name { font-size: 12.5px; line-height: 1.15; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
