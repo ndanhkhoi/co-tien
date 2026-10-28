@@ -14,7 +14,7 @@ export const RULES_TEXT: Record<GameMode, RulesText> = {
       'Mỗi cú phải chạm bi thuộc nhóm mình trước; bàn mở thì không được chạm bi 8 trước.',
       'Sau khi chạm bi, phải có bi vào lỗ hoặc có bi chạm băng, nếu không là lỗi.',
       'Bi 8 vào sớm, vào sai lỗ đã gọi, hoặc vào kèm lỗi: thua ván.',
-      'Phạm lỗi: đối thủ được bi trong tay, đặt bi cái ở bất kỳ đâu.',
+      'Phạm lỗi: đối thủ được đặt bi cái ở bất kỳ đâu.',
     ],
   },
   nine: {

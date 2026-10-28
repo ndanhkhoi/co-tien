@@ -94,10 +94,11 @@ function installUiScale() {
   document.body.append(safeFrame);
   const apply = () => {
     const gate = mustInstall();
-    const rect = (gate ? viewport : safeFrame).getBoundingClientRect();
-    const s = gate ? 1 : Math.min(2.2, rect.width / 844, rect.height / 390);
-    const width = gate ? rect.width : 844;
-    const height = gate ? rect.height : 390;
+    const entry = !gate && !!ui.querySelector('.screen.splash, .screen.loading');
+    const rect = (gate || entry ? viewport : safeFrame).getBoundingClientRect();
+    const s = gate || entry ? 1 : Math.min(2.2, rect.width / 844, rect.height / 390);
+    const width = gate || entry ? rect.width : 844;
+    const height = gate || entry ? rect.height : 390;
     ui.style.width = `${width}px`;
     ui.style.height = `${height}px`;
     const left = rect.left + (rect.width - width * s) / 2;
@@ -116,6 +117,8 @@ function installUiScale() {
   };
   const observer = new ResizeObserver(apply);
   observer.observe(viewport);
+  const screenObserver = new MutationObserver(apply);
+  screenObserver.observe(ui, { childList: true });
   observer.observe(safeFrame);
   addEventListener('resize', apply);
   window.visualViewport?.addEventListener('resize', apply);

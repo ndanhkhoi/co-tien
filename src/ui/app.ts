@@ -143,6 +143,9 @@ export class App {
     else this.pixi.ticker.stop();
     next.el.dataset.direction = direction;
     this.ui.append(next.el);
+    // The root scaler distinguishes contained gameplay from fullscreen entry art.
+    // Let it recompute immediately after a screen transition instead of waiting for resize.
+    window.dispatchEvent(new Event('cotien:ui-resize'));
     if (!next.usesStage && this.pendingUpdate) this.applyUpdate();
   }
 

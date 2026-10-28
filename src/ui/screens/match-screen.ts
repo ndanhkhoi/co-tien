@@ -1287,8 +1287,8 @@ export function matchScreen(opts: MatchOptions) {
       if (r.foul && !opts.challenge) {
         sound.foul();
         setExpr(side, 'sad', 3000);
-        herald({ side, expr: 'sad', tone: 'red', title: r.ballInHand !== 'none' ? 'Lỗi — bi trong tay' : 'Phạm lỗi', line: r.foul, ms: 3400 });
-        hintOnce(app, 'foul', 'Phạm lỗi', 'Đối thủ được bi trong tay sau lỗi: đặt bi cái vào vùng cho phép rồi đánh. Xem lý do lỗi trong thông báo giữa bàn.',
+        herald({ side, expr: 'sad', tone: 'red', title: r.ballInHand !== 'none' ? 'Phạm lỗi — đối thủ được đặt bi' : 'Phạm lỗi', line: r.foul, ms: 3400 });
+        hintOnce(app, 'foul', 'Phạm lỗi', 'Đối thủ được đặt bi cái sau lỗi; họ có thể đặt trong vùng cho phép rồi đánh. Xem lý do trong thông báo giữa bàn.',
           { anchor: () => (lefty ? ctrl : dock), place: 'right', highlight: false, rail: true });
       } else if (r.winner === null && (potN > 0 || r.points > 0) && r.keepTurn) {
         sound.good();
@@ -1731,7 +1731,9 @@ export function matchScreen(opts: MatchOptions) {
       // Push the tag toward the table centre so it never sits off-screen.
       const dirX = -Math.sign(p.hx) || 0;
       const dirY = -Math.sign(p.hy);
-      const offPx = ((p.hr + 0.07) * view.pxPerM) / k;
+      // Keep the call marker clear of the pocket hit target. It is visual-only,
+      // but placing it on the mouth made the final-ball pocket look unavailable.
+      const offPx = ((p.hr + 0.16) * view.pxPerM) / k;
       const pos = `${Math.round(sp.x + dirX * offPx)},${Math.round(sp.y + dirY * offPx)}`;
       if (pos !== callTagPos) {
         callTagPos = pos;
