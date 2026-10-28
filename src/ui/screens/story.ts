@@ -95,7 +95,7 @@ function openReader(app: App, c: Chapter) {
     if (n !== i) sound.page();
     i = n;
     const page = c.pages[i];
-    // Pages without their own picture keep the previous one, dimmed, so the scene carries over.
+    // Pages without their own picture keep the previous one so the scene carries over.
     const key = page.art || c.pages.slice(0, i).reverse().find((p) => p.art)?.art || '';
     art.src = key ? artUrl(key) : '';
     art.classList.toggle('carry', !page.art);
