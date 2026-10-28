@@ -12,6 +12,7 @@ import './styles/base.css';
 import './styles/kit.css';
 import './styles/screens.css';
 import './styles/match.css';
+import './styles/skin.css';
 import { registerSW } from 'virtual:pwa-register';
 import { installNativeFeel } from './platform/device';
 import { captureInstallPrompt, mustInstall } from './platform/install';
@@ -33,6 +34,7 @@ async function boot() {
   const app = new App();
   installScrollHints(document.getElementById('ui')!);
   installViewportGuard();
+  installUiScale();
   await app.init();
   (window as unknown as { __app: App }).__app = app;
   if (import.meta.env.DEV || new URLSearchParams(location.search).has('dev')) void import('./dev/cheats').then(({ installCheats }) => installCheats(app));
@@ -75,3 +77,21 @@ boot().catch((err) => {
   if (el) el.textContent = `Không khởi động được: ${err instanceof Error ? err.message : String(err)}`;
   console.error(err);
 });
+
+/**
+ * The DOM UI is designed at 844×390 (a landscape phone). Bigger or smaller windows scale the
+ * whole layer uniformly so desktop gets the same composition, larger, with no empty gutters.
+ * A transform (not zoom) keeps fixed overlays (dialogs, toasts) inside the scaled layer.
+ */
+function installUiScale() {
+  const ui = document.getElementById('ui')!;
+  const apply = () => {
+    const s = Math.min(2.2, Math.max(0.75, Math.min(innerWidth / 844, innerHeight / 390)));
+    ui.style.width = `${innerWidth / s}px`;
+    ui.style.height = `${innerHeight / s}px`;
+    ui.style.transform = s === 1 ? '' : `scale(${s})`;
+    document.documentElement.style.setProperty('--ui-scale', String(s));
+  };
+  addEventListener('resize', apply);
+  apply();
+}

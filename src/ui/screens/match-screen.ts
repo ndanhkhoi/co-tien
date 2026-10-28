@@ -12,7 +12,7 @@ import { haptic, isTouchDevice, keepAwake, toggleFullscreen } from '../../platfo
 import { TableView, type AimView } from '../../render/table-view';
 import type { App, Screen } from '../app';
 import { avatar } from '../avatar';
-import { btn, h, item, modal, stars, tap, toggle } from '../dom';
+import { btn, h, item, modal, stars, tap, toggle, uiScale } from '../dom';
 import { clearHints, hintOnce } from '../hints';
 import { icon, type IconName } from '../icons';
 import { playCutIn } from '../skill-cutin';
@@ -218,8 +218,10 @@ export function matchScreen(opts: MatchOptions) {
 
     // ---------- Layout ----------
     function layout() {
-      const W = window.innerWidth;
-      const H = window.innerHeight;
+      // HUD offsets are layout px inside the scaled #ui; the table canvas works in screen px.
+      const k = uiScale();
+      const W = window.innerWidth / k;
+      const H = window.innerHeight / k;
       // Before the screen is attached nothing has a size yet: use the usual column widths.
       const live = probe.offsetWidth > 0;
       const insetL = live ? probe.offsetLeft : 0;
@@ -238,7 +240,8 @@ export function matchScreen(opts: MatchOptions) {
         top: top + 2,
         bottom: insetB + 2,
       };
-      const { cx, cy, scale } = view.fit(W, H, bounds);
+      const fitted = view.fit(window.innerWidth, window.innerHeight, { left: bounds.left * k, right: bounds.right * k, top: bounds.top * k, bottom: bounds.bottom * k });
+      const cx = fitted.cx / k, cy = fitted.cy / k, scale = fitted.scale / k;
       const t = match.table;
       // Chips sit on the bottom rail, between the side pocket and a corner, never on the cloth.
       const railMid = (t.W / 2 + t.railWidth / 2) * scale;
@@ -1579,11 +1582,13 @@ export function matchScreen(opts: MatchOptions) {
         return;
       }
       const p = match.table.pockets[cs.pocket];
-      const sp = view.toScreen(p.hx, p.hy);
+      const k = uiScale();
+      const sp0 = view.toScreen(p.hx, p.hy);
+      const sp = { x: sp0.x / k, y: sp0.y / k };
       // Push the tag toward the table centre so it never sits off-screen.
       const dirX = -Math.sign(p.hx) || 0;
       const dirY = -Math.sign(p.hy);
-      const offPx = (p.hr + 0.07) * view.pxPerM;
+      const offPx = ((p.hr + 0.07) * view.pxPerM) / k;
       const pos = `${Math.round(sp.x + dirX * offPx)},${Math.round(sp.y + dirY * offPx)}`;
       if (pos !== callTagPos) {
         callTagPos = pos;
@@ -1637,7 +1642,9 @@ export function matchScreen(opts: MatchOptions) {
       }
       if (placingNow()) {
         const c = match.cueBall();
-        const sp = view.toScreen(c.x, c.y);
+        const k = uiScale();
+        const sp0 = view.toScreen(c.x, c.y);
+        const sp = { x: sp0.x / k, y: sp0.y / k };
         const hw = hand.offsetWidth;
         const key = `${Math.round(sp.x * 2)},${Math.round(sp.y * 2)},${hw}`;
         if (key !== handKey) {

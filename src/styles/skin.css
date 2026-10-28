@@ -1,0 +1,121 @@
+/*
+ * Game skin: painted ink frames, seal-stamp buttons and a brush title band (public/art/ui/frame).
+ * Loaded last so every screen picks it up; layout stays in base/kit/screens/match.
+ */
+
+/* Framed sheets: an ink-brush border with cloud-scroll corners around smooth paper. */
+.panel, .modal, .home-menu, .sheet {
+  border: 22px solid transparent;
+  border-image: url('/art/ui/frame/panel.webp') 74 fill / 22px / 0 stretch;
+  background: none;
+  border-radius: 0;
+  box-shadow: none;
+  filter: drop-shadow(0 6px 14px rgba(40, 30, 18, 0.16));
+}
+.modal { border-width: 26px; border-image-width: 26px; padding: 6px 10px; }
+.panel { padding: 4px 6px; }
+.home-menu { padding: 0; }
+
+/* Seal-stamp primary buttons and ink-outline secondary buttons. */
+.btn {
+  border: 14px solid transparent;
+  border-image: url('/art/ui/frame/btn-primary.webp') 56 fill / 14px / 0 stretch;
+  background: none;
+  box-shadow: none;
+  border-radius: 0;
+  padding: 0 10px;
+  min-height: 52px;
+  text-shadow: 0 1px 0 rgba(60, 10, 4, 0.35);
+}
+.btn.pressed, .btn:active { background: none; box-shadow: none; filter: brightness(0.9); transform: translateY(2px); }
+.btn.ghost, .btn.secondary, .btn.quiet {
+  border-image-source: url('/art/ui/frame/btn-secondary.webp');
+  background: none;
+  text-shadow: none;
+}
+.btn.ghost.pressed, .btn.secondary.pressed { background: none; filter: brightness(0.94); }
+.btn.small { min-height: 46px; border-width: 12px; border-image-width: 12px; padding: 0 6px; }
+.btn.big { min-height: 60px; }
+
+/* Screen titles sit on a brush band instead of a pill. */
+.topbar {
+  background: none;
+  border: 0;
+  box-shadow: none;
+  padding: 0;
+}
+.tb-title {
+  flex: 0 1 auto;
+  margin-right: auto;
+  padding: 8px 46px 10px 52px;
+  color: #fbf6ec;
+  background: url('/art/ui/frame/ribbon.webp') left center / 100% 100% no-repeat;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.45);
+}
+.topbar > :first-child.tb-title { padding-left: 52px; }
+
+/* ---------- Home: hero art on the right, journey card and tablets on the left ---------- */
+.screen.home { display: block; background: var(--home-bg) right center / cover no-repeat, var(--frame); }
+.home-left {
+  position: absolute;
+  z-index: 2;
+  top: calc(8px + var(--st));
+  bottom: calc(10px + var(--sb));
+  left: calc(14px + var(--sl));
+  width: 384px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.home-left .home-logo { height: 52px; width: auto; align-self: flex-start; object-fit: contain; flex-shrink: 0; }
+.home-top { position: absolute; z-index: 3; top: calc(8px + var(--st)); right: calc(14px + var(--sr)); }
+.home-hero { height: calc(100% - 8px); max-width: calc(100% - 400px - var(--sl)); }
+
+.home-journey {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 92px;
+  padding: 2px 4px;
+  text-align: left;
+  border: 18px solid transparent;
+  border-image: url('/art/ui/frame/panel.webp') 74 fill / 18px / 0 stretch;
+  filter: drop-shadow(0 6px 14px rgba(40, 30, 18, 0.2));
+  transition: transform 0.12s var(--ease);
+}
+.home-journey.pressed { transform: scale(0.98); }
+.hj-map { width: 104px; height: 60px; flex-shrink: 0; border-radius: 6px; background: var(--map) center / cover; box-shadow: 0 0 0 2px var(--ink); }
+.hj-text { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+.hj-name { font: 800 23px/1.1 var(--display); color: var(--accent-2); }
+.hj-sub { font-size: var(--fs-xs); color: var(--muted); }
+.hj-go { width: 46px; height: 46px; flex-shrink: 0; display: grid; place-items: center; border-radius: 50%; background: var(--accent); box-shadow: 0 2px 0 var(--accent-2); }
+.hj-go .ico { width: 24px; height: 24px; filter: brightness(0) invert(1); }
+
+.home-grid {
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-auto-rows: 1fr;
+  gap: 6px;
+}
+.home-tablet {
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  padding: 0;
+  border: 14px solid transparent;
+  border-image: url('/art/ui/frame/panel.webp') 74 fill / 14px / 0 stretch;
+  filter: drop-shadow(0 4px 10px rgba(40, 30, 18, 0.16));
+  transition: transform 0.12s var(--ease);
+}
+.home-tablet.pressed { transform: scale(0.96); }
+.ht-icon { display: grid; place-items: center; height: 46px; }
+.ht-icon .ico { width: 44px; height: 44px; }
+.ht-name { font: 700 16px/1.15 var(--display); color: var(--ink); white-space: nowrap; }
+.ht-sub { font-size: 12.5px; line-height: 1.2; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
+.player-card { border: 2px solid var(--ink); }

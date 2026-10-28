@@ -1,5 +1,5 @@
 import type { App } from './app';
-import { btn, h } from './dom';
+import { btn, h, uiScale } from './dom';
 import { icon } from './icons';
 
 export interface HintOptions {
@@ -87,13 +87,16 @@ function next(app: App) {
       card.classList.add('floating');
       return;
     }
-    const r = target.getBoundingClientRect();
-    if (!r.width) {
+    const k = uiScale();
+    const sr = target.getBoundingClientRect();
+    if (!sr.width) {
       card.classList.add('floating');
       return;
     }
-    const W = window.innerWidth;
-    const H = window.innerHeight;
+    // Tips live inside the scaled #ui: convert the screen rect to layout px.
+    const r = { left: sr.left / k, right: sr.right / k, top: sr.top / k, bottom: sr.bottom / k, width: sr.width / k, height: sr.height / k };
+    const W = window.innerWidth / k;
+    const H = window.innerHeight / k;
     if (it.rail) {
       const available = it.place === 'left' ? r.left - W / 2 - 10 : W / 2 - r.right - 10;
       card.style.width = `${Math.max(1, Math.min(240, available))}px`;

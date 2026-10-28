@@ -281,24 +281,30 @@ export function homeScreen(app: App): Screen {
   const beaten = Object.keys(p.career).length;
   const chDone = Object.keys(p.challenges).length;
   const read = Object.keys(p.storyRead).length;
-  const entry = (ic: IconName, name: string, desc: string, fn: () => void, main = false) =>
-    tap(h('button.menu-item', { class: main ? 'main' : '' }, h('span.mi-icon', null, icon(ic)),
-      h('span.mi-text', null, h('span.mi-name', null, name), h('span.mi-desc', null, desc))), fn);
+  // Game-style home: the journey is a big framed card with the map; the rest are square tablets.
+  const tablet = (ic: IconName, name: string, sub: string, fn: () => void) =>
+    tap(h('button.home-tablet', null, h('span.ht-icon', null, icon(ic)), h('span.ht-name', null, name), h('span.ht-sub', null, sub)), fn);
   el.style.setProperty('--home-bg', `url("${artUrl('ui/home-bg.webp')}")`);
+  el.style.setProperty('--map', `url("${artUrl('ui/map.webp')}")`);
   el.append(
     h('img.home-hero', { src: cutoutUrl(p.champion), alt: '', draggable: false, decoding: 'async' }),
-    h('img.home-logo', { src: artUrl('ui/logo.webp'), alt: 'Cơ Tiên', draggable: false }),
     h('div.home-top', null, player,
       isTouchDevice() ? null : iconBtn(icon('fullscreen'), () => void toggleFullscreen(), 'Toàn màn hình'),
       iconBtn(icon('settings'), () => app.go(settingsScreen), 'Cài đặt')),
-    h('nav.home-menu.scroll', { 'aria-label': 'Trình đơn chính' },
-      entry('journey', 'Hành trình', `${beaten}/${CHAMPIONS.length} cao thủ · ${chDone}/${CHALLENGES.length} thử thách`, () => app.go(journeyScreen), true),
-      entry('target', 'Thử thách', `${chDone}/${CHALLENGES.length} bài · luyện 5 kỹ thuật`, () => app.go(challengesScreen)),
-      entry('quick-match', 'Đấu nhanh', 'Chọn thể loại, đấu với máy', () => app.go(quickScreen)),
-      entry('users', 'Hai người', 'Chơi chung một máy', () => app.go(localScreen)),
-      entry('collection', 'Bộ sưu tập', `${p.champions.length}/${CHAMPIONS.length} tướng · cơ · bàn`, () => app.go(collectionScreen)),
-      entry('story', 'Truyện', read ? `Cơ Tiên Truyện · đã đọc ${read} chương` : 'Cơ Tiên Truyện · 15 chương có tranh', () => app.go(storyScreen)),
-      entry('codex', 'Cơ Tiên Lục', 'Vùng đất · tướng · luật chơi', () => app.go(codexScreen)),
+    h('div.home-left', null,
+      h('img.home-logo', { src: artUrl('ui/logo.webp'), alt: 'Cơ Tiên', draggable: false }),
+      tap(h('button.home-journey', { 'aria-label': 'Hành trình' },
+        h('span.hj-map'),
+        h('span.hj-text', null, h('span.hj-name', null, 'Hành trình'), h('span.hj-sub', null, `${beaten}/${CHAMPIONS.length} cao thủ · ${chDone}/${CHALLENGES.length} thử thách`)),
+        h('span.hj-go', null, icon('play'))), () => app.go(journeyScreen)),
+      h('nav.home-grid', { 'aria-label': 'Trình đơn chính' },
+        tablet('quick-match', 'Đấu nhanh', 'Đấu với máy', () => app.go(quickScreen)),
+        tablet('users', 'Hai người', 'Chung một máy', () => app.go(localScreen)),
+        tablet('target', 'Thử thách', `${chDone}/${CHALLENGES.length} bài`, () => app.go(challengesScreen)),
+        tablet('collection', 'Bộ sưu tập', `${p.champions.length}/${CHAMPIONS.length} tướng`, () => app.go(collectionScreen)),
+        tablet('story', 'Truyện', read ? `Đã đọc ${read} chương` : '15 chương', () => app.go(storyScreen)),
+        tablet('codex', 'Cơ Tiên Lục', 'Bách khoa', () => app.go(codexScreen)),
+      ),
     ),
   );
   return { el };

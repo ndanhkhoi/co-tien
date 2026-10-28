@@ -171,3 +171,8 @@ export function tabs<T extends string>(items: { id: T; label: string; icon?: Ico
 export function chip(label: Child, selected: boolean, fn: () => void, ic?: IconName): HTMLButtonElement {
   return tap(h('button.chip', { 'aria-pressed': String(selected) }, ic ? icon(ic) : null, label), fn);
 }
+
+/** Scale of the #ui layer (see installUiScale in main.ts): screen px = layout px × uiScale(). */
+export function uiScale(): number {
+  return Number(document.documentElement.style.getPropertyValue('--ui-scale')) || 1;
+}
