@@ -1,6 +1,23 @@
 import { defineConfig } from 'vitest/config';
 import pkg from './package.json' with { type: 'json' };
 import { VitePWA } from 'vite-plugin-pwa';
+import { readdirSync, statSync } from 'node:fs';
+import { join, relative } from 'node:path';
+
+/** `virtual:art-manifest`: every file under public/art with its size, for the asset loader. */
+function artManifest() {
+  const id = 'virtual:art-manifest';
+  const walk = (dir: string): [string, number][] => readdirSync(dir).flatMap((f) => {
+    const p = join(dir, f);
+    const st = statSync(p);
+    return st.isDirectory() ? walk(p) : f.endsWith('.webp') ? [[relative('public', p).split('\\').join('/'), st.size] as [string, number]] : [];
+  });
+  return {
+    name: 'art-manifest',
+    resolveId: (s: string) => (s === id ? '\0' + id : null),
+    load: (s: string) => (s === '\0' + id ? `export default ${JSON.stringify(walk('public/art'))};` : null),
+  };
+}
 
 // One id per build: art is cached under it, so redrawn images at the same path are refetched after an update.
 const BUILD_ID = Date.now().toString(36);
@@ -14,6 +31,7 @@ export default defineConfig({
   build: { target: 'es2022', chunkSizeWarningLimit: 1500 },
   worker: { format: 'es' },
   plugins: [
+    artManifest(),
     VitePWA({
       registerType: 'prompt',
       injectRegister: null,

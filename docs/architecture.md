@@ -112,3 +112,11 @@ môn phái. `tests/skill-usage.test.ts` kiểm tra AI dùng chiêu thường/tuy
 giới hạn năng lượng, sự kiện `energy`, hồi chiêu và tuyệt chiêu đặt bi của AI cấp 1. `npm run build` chạy typecheck trước khi build.
 
 Console test ẩn (bản dev hoặc `?dev`): `cotien.cheat(name, ...args)` với `unlockAll`, `coins(n)`, `xp(n)`, `story`, `journey`, `challenges`, `energy`, `reset`; ví dụ `cotien.cheat('coins', 5000)`. `coins`/`xp` cộng số lượng; `story` mở chương qua mốc Hành trình; không có giao diện cheat.
+
+## Tải tài nguyên
+
+`src/platform/preload.ts` tải ảnh theo 3 tầng, dựa trên danh sách `virtual:art-manifest` sinh lúc build:
+màn tải (`ui/screens/loading.ts`) chặn ở lần đầu và sau mỗi bản cập nhật để tải phần cốt lõi (giao diện, chân dung,
+icon chiêu, bàn, tướng và môn phái của người chơi); phần còn lại tải nền khi ở menu (bỏ qua khi bật tiết kiệm dữ
+liệu); mỗi trận tải và giải mã sẵn ảnh của hai tướng và môn phái của bàn. Ảnh lớn được service worker lưu vào kho
+`art-<mã build>`, kho của bản cũ bị xoá khi bản mới chạy. `?loading` giữ màn tải để xem thiết kế.

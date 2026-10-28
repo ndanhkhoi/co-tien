@@ -1,5 +1,6 @@
 import type { Personality } from '../../ai/types';
 import { sound } from '../../audio/sound';
+import { preloadBackground } from '../../platform/preload';
 import { MODE_NAMES } from '../../core/rules';
 import type { GameMode } from '../../core/rules/types';
 import { LEVEL_NAMES, PERSONALITY_NAMES, type Npc } from '../../game/content/career';
@@ -269,6 +270,7 @@ export function splashScreen(app: App): Screen {
 
 export function homeScreen(app: App): Screen {
   const el = screenEl('home');
+  preloadBackground();
   const p = app.profile;
   const prog = levelProgress(p.xp);
   const again = () => app.go(homeScreen, { replace: true });

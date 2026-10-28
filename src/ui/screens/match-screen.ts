@@ -1,6 +1,7 @@
 import type { Ticker } from 'pixi.js';
 import type { AiRequest } from '../../ai/types';
 import { sound } from '../../audio/sound';
+import { preloadMatch } from '../../platform/preload';
 import { ballCss } from '../../core/ball-styles';
 import { MODE_NAMES } from '../../core/rules';
 import { other, type Resolution, type ShotCall, type Side } from '../../core/rules/types';
@@ -74,6 +75,8 @@ function frag(...kids: (Node | string)[]): DocumentFragment {
 
 export function matchScreen(opts: MatchOptions) {
   return (app: App): Screen => {
+    // Both champions and the table's sect load (and decode) while the duel intro plays.
+    void preloadMatch(opts.setup.players.map((p) => p.champion), opts.setup.tableSkin.sect);
     const match = new Match(opts.setup);
     // Exposed for automated browser checks.
     (window as unknown as { __match?: Match }).__match = match;

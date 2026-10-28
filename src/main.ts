@@ -19,6 +19,8 @@ import { captureInstallPrompt, mustInstall } from './platform/install';
 import { App } from './ui/app';
 import { installGate } from './ui/screens/install-gate';
 import { splashScreen } from './ui/screens/menus';
+import { loadingScreen } from './ui/screens/loading';
+import { coreReady } from './platform/preload';
 import { installScrollHints } from './ui/scroll-hint';
 import { installViewportGuard } from './ui/viewport-guard';
 
@@ -42,7 +44,8 @@ async function boot() {
     document.body.classList.add('gate');
     app.go(installGate, { reset: true });
   } else {
-    app.go(splashScreen, { reset: true });
+    // `?loading` keeps the loading screen up for design checks.
+    app.go(coreReady() && !location.search.includes('loading') ? splashScreen : loadingScreen(splashScreen), { reset: true });
   }
   document.getElementById('boot')?.remove();
   if (import.meta.env.PROD) setupUpdates(app);
