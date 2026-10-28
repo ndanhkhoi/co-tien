@@ -51,7 +51,7 @@ export const RULES_TEXT: Record<GameMode, RulesText> = {
 };
 
 export const SKILL_RULES = [
-  'Tiên Đạo: mỗi tướng có nội tại theo hệ, 2 chiêu cơ bản (hồi sau vài cú đánh) và 1 tuyệt chiêu (cần đầy năng lượng).',
+  'Tiên Đạo: mỗi tướng có nội tại theo hệ, 2 chiêu cơ bản (hồi chiêu theo lượt đánh của chính mình) và 1 tuyệt chiêu (cần đầy thanh năng lượng).',
   'Năng lượng tăng khi bạn vào bi và khi đối thủ phạm lỗi.',
   'Bàn của mỗi môn phái có đặc tính riêng; thỉnh thoảng nổi Thiên Tượng (gió, tuyết, nghiêng bàn…) được báo trước và vẽ lên bàn.',
   'Địa Lợi: đánh trên bàn môn phái mình thì +20% năng lượng và không gặp Thiên Tượng.',

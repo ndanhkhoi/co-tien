@@ -209,7 +209,7 @@ export function championModal(app: App, c: Champion, onChange?: () => void) {
     const skillCard = (sk: Champion['skills'][number]) => h('div.cp-skill', { class: sk.slot === 2 ? 'ult' : '' },
       h('img.cp-sk-icon', { src: skillIconUrl(c.id, sk.slot), alt: '', loading: 'lazy' }),
       h('b.cp-sk-name', null, sk.name),
-      h('span.cp-sk-cd', null, sk.slot === 2 ? 'Tuyệt chiêu' : `Hồi ${sk.cooldown} cú`),
+      h('span.cp-sk-cd', null, sk.slot === 2 ? 'Cần đầy thanh năng lượng' : `Hồi chiêu: ${sk.cooldown} lượt`),
       h('p.cp-sk-desc', null, sk.desc));
     return h('div.modal.champ-page', { style: `--sect:${hex6(s.main)}` },
       h('div.cp-art', null, h('img', { src: cutoutUrl(c.id), alt: '', draggable: false, decoding: 'async',
@@ -236,7 +236,7 @@ export function skillRow(c: Champion, sk: Champion['skills'][number]): HTMLEleme
   return h('div.skill-row', { class: sk.slot === 2 ? 'ult' : '' },
     h('img.sk-icon', { src: skillIconUrl(c.id, sk.slot), alt: '', loading: 'lazy' }),
     h('div.grow', null,
-      h('div.sk-head', null, h('b', null, sk.name), h('span.badge', { class: sk.slot === 2 ? 'accent' : '' }, sk.slot === 2 ? 'Tuyệt chiêu · đầy năng lượng' : `Hồi ${sk.cooldown} cú`)),
+      h('div.sk-head', null, h('b', null, sk.name), h('span.badge', { class: sk.slot === 2 ? 'accent' : '' }, sk.slot === 2 ? 'Cần đầy thanh năng lượng' : `Hồi chiêu: ${sk.cooldown} lượt`)),
       h('p', null, sk.desc),
     ),
   );

@@ -466,12 +466,12 @@ export function matchScreen(opts: MatchOptions) {
         const pct = Math.round((match.energy[side] / ENERGY_MAX) * 100);
         s.b.style.setProperty('--e', String(Math.min(100, pct)));
         if (ult && wait < 0) s.state.replaceChildren(icon('energy'), `${pct}%`);
-        else if (!ult && wait > 0) s.state.replaceChildren(icon('cooldown'), String(wait));
+        else if (!ult && wait > 0) s.state.replaceChildren(icon('cooldown'), `Còn ${wait} lượt`);
         else s.state.replaceChildren(icon(can ? 'check' : 'info'), can ? 'Sẵn sàng' : 'Chờ');
         s.b.setAttribute('aria-label', `${sk.name}${ult ? ' (tuyệt chiêu)' : ''}: ${can ? 'sẵn sàng' : skillBlock(side, sk.slot) ?? ''}. Chạm để xem.`);
       }
       if (begun && anyReady && isHumanTurn()) {
-        hintOnce(app, 'skill-dock', 'Chiêu thức', 'Chạm ô sáng để đọc và dùng chiêu. Hai chiêu đầu có hồi lượt; tuyệt chiêu cần đầy năng lượng.',
+        hintOnce(app, 'skill-dock', 'Chiêu thức', 'Chạm ô sáng để đọc và dùng chiêu. Hai chiêu đầu hồi chiêu theo lượt đánh của bạn; tuyệt chiêu cần đầy thanh năng lượng.',
           { anchor: () => dock, place: lefty ? 'left' : 'right', rail: true });
       }
     }
@@ -479,8 +479,8 @@ export function matchScreen(opts: MatchOptions) {
     function skillBlock(side: Side, slot: number): string | null {
       if (match.canUseSkill(side, slot)) return null;
       const wait = match.skillWait(side, slot);
-      if (slot === 2 && wait < 0) return `Cần đầy năng lượng: ${Math.round(match.energy[side])}/${ENERGY_MAX}`;
-      if (wait > 0) return `Đang hồi: còn ${wait} lượt của bạn`;
+      if (slot === 2 && wait < 0) return `Cần đầy thanh năng lượng: ${Math.round(match.energy[side])}/${ENERGY_MAX}`;
+      if (wait > 0) return `Hồi chiêu: còn ${wait} lượt đánh của bạn`;
       if (match.phase === 'rolling') return 'Chờ bi dừng lăn';
       if (match.phase === 'rack-over' || match.phase === 'match-over') return 'Ván đã kết thúc';
       if (match.turn !== side || aiActing) return 'Chưa dùng được lúc này — đợi tới lượt bạn';
@@ -534,8 +534,8 @@ export function matchScreen(opts: MatchOptions) {
       const refresh = () => {
         const e = Math.round(match.energy[side]);
         req.replaceChildren(ult
-          ? frag(icon('energy'), h('span', null, `Cần ${ENERGY_MAX} năng lượng · đang có `, h('b.num', null, String(e))))
-          : frag(icon('cooldown'), h('span', null, `Dùng xong hồi lại sau ${sk.cooldown} lượt của bạn`)));
+          ? frag(icon('energy'), h('span', null, `Cần đầy thanh năng lượng (${ENERGY_MAX}) · đang có `, h('b.num', null, String(e))))
+          : frag(icon('cooldown'), h('span', null, `Hồi chiêu: ${sk.cooldown} lượt đánh của bạn`)));
         const why = skillBlock(side, slot);
         reason.textContent = why ?? 'Sẵn sàng';
         reason.classList.toggle('ok', !why);
@@ -1083,7 +1083,7 @@ export function matchScreen(opts: MatchOptions) {
         case 'energy':
           floatGain(e.side, e.gain);
           if (hasSkills && match.setup.players[e.side].kind === 'human') {
-            hintOnce(app, 'energy', 'Năng lượng', 'Vòng chân dung là năng lượng: +8 mỗi cú đánh, +14 khi ăn bi, +12 khi đối thủ lỗi. Đầy 100 để dùng tuyệt chiêu.',
+            hintOnce(app, 'energy', 'Năng lượng', 'Vòng chân dung là năng lượng: +8 mỗi cú đánh, +14 khi ăn bi, +12 khi đối thủ lỗi. Cần đầy thanh năng lượng (100) để dùng tuyệt chiêu.',
               { anchor: () => cards[e.side].ringWrap, place: e.side === 0 ? 'right' : 'left', alignTop: true });
           }
           break;
@@ -1173,7 +1173,7 @@ export function matchScreen(opts: MatchOptions) {
       const mode = match.setup.mode;
       if (hasSkills) {
         const side = humanSide() ?? match.turn;
-        hintOnce(app, 'energy', 'Năng lượng', 'Vòng chân dung là năng lượng: +8 mỗi cú đánh, +14 khi ăn bi, +12 khi đối thủ lỗi. Đầy 100 để dùng tuyệt chiêu.',
+        hintOnce(app, 'energy', 'Năng lượng', 'Vòng chân dung là năng lượng: +8 mỗi cú đánh, +14 khi ăn bi, +12 khi đối thủ lỗi. Cần đầy thanh năng lượng (100) để dùng tuyệt chiêu.',
           { anchor: () => cards[side].ringWrap, place: side === 0 ? 'right' : 'left', alignTop: true });
       }
       const beside = lefty ? 'right' : 'left';
@@ -1547,7 +1547,7 @@ export function matchScreen(opts: MatchOptions) {
           tip('spin', 'Áp phê', 'Chạm bi cái nhỏ để mở bi lớn, chạm điểm đánh hoặc chọn nhanh Giữa, Trô, Cule, Giật, Trái, Phải.'),
           tip('power', 'Lực', 'Kéo thanh lực để chọn lực rồi chạm ĐÁNH. Hoặc giữ ĐÁNH cho lực dao động, thả đúng lúc; trượt ra xa để huỷ.'),
           tip('place', 'Bi trong tay', 'Kéo bi cái, chạm chỗ muốn đặt, hoặc dùng 4 nút mũi tên; bấm ĐẶT BI để chốt.'),
-          tip('energy', 'Chiêu và năng lượng', 'Chạm ô chiêu để đọc rồi bấm Dùng. Năng lượng tăng mỗi cú đánh, mỗi bi vào và khi đối thủ lỗi; đầy thì dùng được tuyệt chiêu.'),
+          tip('energy', 'Chiêu và năng lượng', 'Chạm ô chiêu để đọc rồi bấm Dùng. Năng lượng tăng mỗi cú đánh, mỗi bi vào và khi đối thủ lỗi; cần đầy thanh năng lượng để dùng tuyệt chiêu.'),
           tip('target', 'Gọi lỗ', 'Khi phải gọi: chạm bi (nếu cần) rồi chạm lỗ trên bàn trước khi đánh.'),
           tip('settings', 'Bàn phím', 'Mũi tên xoay (Shift = tinh), lên/xuống chỉnh lực, Tab đổi mục tiêu, Enter đánh, giữ Space nạp lực, lăn chuột xoay tinh.'),
         ),

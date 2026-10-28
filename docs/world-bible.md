@@ -18,11 +18,11 @@ Toàn bộ tên, truyện, môn phái, nhân vật, chiêu thức và tranh là 
 | Hộ Pháp | Lỗi đầu tiên mỗi ván không trao bi trong tay. |
 | Chú Sư | Đối thủ hồi năng lượng chậm 15%. |
 | Ảnh Sát | Mỗi bi vào liên tiếp thêm 5 năng lượng. |
-| Luân Hồi | Chiêu cơ bản hồi nhanh hơn 1 lượt. |
+| Luân Hồi | Chiêu cơ bản giảm hồi chiêu 1 lượt đánh của chính mình. |
 
 ## Kỹ năng
 
-Mỗi tướng có **2 chiêu cơ bản** (hồi sau một số cú đánh của chính mình) và **1 tuyệt chiêu** (cần đầy thanh năng lượng, nạp khi vào bi hoặc khi đối thủ phạm lỗi). Mọi chiêu dựng từ 16 nhóm cơ chế trong `src/game/content/sects.ts` (tiên tri, soi hướng, áp phê thần, dời bi, cuồng lực, bộc phá, hộ thể, tái chiến, tua lại, dịch chuyển, làm run, đóng băng, phong ấn lỗ, hút năng lượng, nuốt chửng, hấp dẫn). Tuyệt chiêu thường là tổ hợp hai cơ chế ở cấp mạnh hơn. Trên bàn phăng (không lỗ), chiêu liên quan đến lỗ tự đổi sang hiệu ứng tương đương.
+Mỗi tướng có **2 chiêu cơ bản** (hồi chiêu theo lượt đánh của chính mình) và **1 tuyệt chiêu** (cần đầy thanh năng lượng, nạp khi vào bi hoặc khi đối thủ phạm lỗi). Mọi chiêu dựng từ 16 nhóm cơ chế trong `src/game/content/sects.ts` (tiên tri, soi hướng, áp phê thần, dời bi, cuồng lực, bộc phá, hộ thể, tái chiến, tua lại, dịch chuyển, làm run, đóng băng, phong ấn lỗ, hút năng lượng, nuốt chửng, hấp dẫn). Tuyệt chiêu thường là tổ hợp hai cơ chế ở cấp mạnh hơn. Trên bàn phăng (không lỗ), chiêu liên quan đến lỗ tự đổi sang hiệu ứng tương đương.
 
 ## Môn phái
 
