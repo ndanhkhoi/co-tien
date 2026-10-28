@@ -211,6 +211,7 @@ export function championModal(app: App, c: Champion, onChange?: () => void) {
         // Wide action poses would shrink to fit the tall column: fill it instead and crop the sides.
         onload: (e: Event) => { const im = e.target as HTMLImageElement; im.classList.toggle('wide', im.naturalWidth > im.naturalHeight * 0.85); } })),
       h('div.cp-main', null,
+        h('div.cp-content.scroll', { tabindex: '0', 'aria-label': 'Thông tin và chiêu thức' },
         h('div.cp-head', null,
           h('div.cp-sect', null, h('img', { src: sectArtUrl(c.sect, 'emblem'), alt: '' }), s.name),
           h('h2.cp-name', null, c.name),
@@ -218,7 +219,7 @@ export function championModal(app: App, c: Champion, onChange?: () => void) {
             owned ? h('span.badge.ok', null, 'Đã chiêu mộ') : h('span.badge.accent', null, 'Chưa chiêu mộ')),
           h('p.cp-passive', null, h('b', null, `Nội tại · ${cls.name}: `), cls.passive),
         ),
-        skillButtons(c),
+        skillButtons(c)),
         h('div.cp-foot', null, btn('Đóng', close, 'ghost'), action),
       ),
       closeX(close),
