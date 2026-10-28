@@ -98,7 +98,7 @@ Tàng Các và Cơ Tiên Lục gộp các tab vào thanh tiêu đề gọn để
 `kit.css` chứa thành phần dùng chung như nút, thẻ chọn và hộp thoại. `screens.css` dành cho các màn hình,
 `match.css` dành cho giao diện trận đấu; `skin.css` nạp cuối để phủ khung tranh, nút dấu son, chuyển trang và màn xuất hiện tướng. Chuyển màn trong `app.ts` có hướng tiến/lùi/đặt lại; màn cũ trở thành `inert`, được gỡ sau 280 ms; `turnPage` chỉ giữ ảnh chụp DOM của phần cũ trong lúc nội dung thật đổi ngay. Các chuyển động tôn trọng `prefers-reduced-motion`.
 
-Lớp DOM giữ khung thiết kế **844×390**, scale đều để nằm trọn trong vùng màn hình đã trừ safe area, tối đa **2,2** (`installUiScale()` trong `main.ts`). Khung được căn giữa, chừa khoảng trống khi tỉ lệ màn hình khác tỉ lệ thiết kế; không ép scale tối thiểu gây cắt nội dung. Canvas Pixi vẫn phủ cửa sổ; bố cục bàn quy đổi biên HUD và độ lệch khung DOM sang pixel màn hình. Sự kiện `cotien:ui-resize` cập nhật lại bàn sau khi khung đổi kích thước. Safe area được tính một lần ở khung ngoài; token vùng chạm trong `base.css` bù ngược `--ui-scale` để giữ tối thiểu 44 pixel hiển thị.
+Lớp DOM giữ khung thiết kế **844×390**, scale đều để nằm trọn trong vùng màn hình đã trừ safe area, tối đa **2,2** (`installUiScale()` trong `main.ts`). Khung được căn giữa, chừa khoảng trống khi tỉ lệ màn hình khác tỉ lệ thiết kế; không ép scale tối thiểu gây cắt nội dung. Canvas Pixi vẫn phủ cửa sổ; bố cục bàn quy đổi biên HUD và độ lệch khung DOM sang pixel màn hình. Sự kiện `cotien:ui-resize` cập nhật lại bàn sau khi khung đổi kích thước. Safe area được tính một lần ở khung ngoài; token vùng chạm trong `base.css` bù ngược `--ui-scale` để giữ tối thiểu 44 pixel hiển thị. Khoảng `--bleed-*` quy đổi phần bù viewport về layout pixel: nền tối modal/bảng áp phê/chiêu, nền đối đầu và tranh trang chủ phủ cả phần bù, trong khi nội dung và nút vẫn nằm trong khung an toàn. Kích thước HUD theo khung thiết kế, không tăng theo chiều cao màn hình ngoài.
 
 Trên điện thoại còn phải cài PWA (`mustInstall()`), màn hình cài đặt hiện trước ngay cả khi máy đang
 dọc; `viewport-guard.ts` bỏ qua chặn xoay ngang trong thời gian này. Màn cài đặt dùng kích thước CSS
@@ -116,7 +116,7 @@ cử chỉ trình duyệt ngoài vùng cuộn, nhưng cho cuộn trong `.scroll`
 
 Chạm bi cái nhỏ mở bảng áp phê: chạm hoặc kéo điểm đánh trên bi lớn, hoặc chọn Giữa, Trô, Cule, Giật, Trái, Phải. Bảng này cũng có thanh “Nâng cơ” 0–75° cho cú nhảy: lực và góc quyết định tầm bay, góc cao giảm tầm ngang; quá nhẹ có thể chạm bi chắn, quá mạnh có thể văng bàn. Kéo/chạm thanh lực đặt lực; chạm ĐÁNH dùng lực đã chọn. Giữ ĐÁNH cho lực dao động rồi thả để đánh; trượt ngón ra xa để huỷ.
 
-Khi có bi trong tay, kéo bi cái hoặc chạm bàn để dời; bốn nút hướng chỉnh 3 mm mỗi chạm và nhanh dần khi giữ. “Ngắm thử” chuyển thao tác bàn sang ngắm, cho xem đường bi trước khi chốt; “Dời bi” quay lại đặt vị trí. “ĐẶT BI” xác nhận vị trí, không đánh ngay. Bước đặt chiêu là trạng thái riêng và dùng “THI TRIỂN” để xác nhận.
+Khi có bi trong tay, kéo bi cái hoặc chạm bàn để dời; bốn nút hướng chỉnh 3 mm mỗi chạm và nhanh dần khi giữ. “Ngắm thử” chuyển thao tác bàn sang ngắm, cho xem đường bi trước khi chốt; “Dời bi” quay lại đặt vị trí. Khi dời bi, cả cơ và tia ngắm đều ẩn; chỉ hiện lại ở Ngắm thử. “ĐẶT BI” xác nhận vị trí, không đánh ngay. Bước đặt chiêu là trạng thái riêng và dùng “THI TRIỂN” để xác nhận.
 
 HUD Tiên Đạo có ba ô icon tranh riêng của tướng đang điều khiển, lấy bằng `skillIconUrl(champion.id, slot)`; mỗi ô hiện tên, trạng thái sẵn sàng/hồi chiêu hoặc phần trăm năng lượng tuyệt chiêu. Chạm ô mở thẻ mô tả và nút dùng, không thi triển ngay. Trang tướng, Cơ Tiên Lục và thông tin đối thủ dùng ba nút chiêu với thẻ chi tiết có icon, tên, hồi chiêu hoặc yêu cầu 100 năng lượng, mô tả và nút trở về trang tướng.
 
@@ -185,3 +185,14 @@ Trang tướng ở Tàng Các và Cơ Tiên Lục dùng ba nút icon chiêu; ch�
 Ba nút chiêu hiện tên và hồi chiêu/năng lượng ngay trên trang tướng. Xem trước bàn trong Tàng Các giữ tỉ lệ kích thước bàn WPA gồm cả viền, không kéo giãn theo chiều rộng thẻ.
 
 Tuyệt chiêu được ghi nhận khi xác nhận dùng nhưng phần diễn hoạt chờ thao tác ĐÁNH: khoá điều khiển, hiện cut-in tướng, rồi hiệu ứng trên bàn, sau đó cơ vung và mô phỏng cú đánh mới bắt đầu. Cả người và AI đi qua cùng luồng; chờ diễn hoạt tôn trọng tạm dừng và được huỷ khi rời trận.
+
+## Quyết định UI ngày 2026-10-28
+
+Giữ PixiJS WebGL cho bàn, bi, hiệu ứng; DOM cho điều khiển/menu/truyện. Đổi engine không tự giải quyết letterbox, layout hoặc trạng thái điều khiển.
+
+Thông báo lượt/lỗi/ghi điểm hiện lớn giữa bàn rồi tự tắt, không chặn thao tác hoặc dừng mô phỏng; trạng thái AI đang tính thu gọn về dải trên. Ô mục tiêu bỏ nền trắng. Thanh lực dùng thước dọc với phần trăm và giữ vùng kéo đầy đủ. Nội tại tách tên hệ và trạng thái; chưa đạt điều kiện chỉ hiện thông tin, hành động sẵn sàng dùng khung mực. Nút tạm dừng dùng một lưới đồng kích thước; nút hành động cài đặt cùng độ rộng. Hành trình bỏ khung thẻ, hòa mép tranh vào nền và ngăn cuộn quá biên lan ra ngoài.
+
+Nút hành động trong ván là tranh tròn có icon và chữ thư pháp, tên thao tác vẫn có trong `aria-label`.
+Trang chủ chừa vùng header ngoài chân dung. Trang tướng dùng hàng grid thống nhất cho ba chiêu,
+bao gồm tên xuống dòng. Scroll hint neo vào cha trực tiếp để giữ đúng lớp và vùng đọc truyện.
+Tên tuyệt chiêu dùng nền nét mực riêng; bản đồ dùng tuyến `CHAPTERS` và tọa độ khớp tranh 3:2.

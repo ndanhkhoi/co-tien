@@ -433,3 +433,153 @@
 /* The column is too narrow for words here: icon-only (aria-labels carry the meaning). */
 .mx-castrow .btn { font-size: 0; gap: 0; }
 .mx-castrow .btn .ico { width: 22px; height: 22px; }
+
+/* Full viewport paint, with controls retained in the safe 844×390 composition. */
+#stage {
+  background: linear-gradient(#e9e1d0d1, #e9e1d0d1), var(--paper, none) center / 640px, var(--frame);
+}
+.modal-wrap { background: none; isolation: isolate; }
+.modal-wrap::before {
+  content: '';
+  position: absolute;
+  inset: calc(-1 * var(--bleed-top, 0px)) calc(-1 * var(--bleed-right, 0px)) calc(-1 * var(--bleed-bottom, 0px)) calc(-1 * var(--bleed-left, 0px));
+  background: var(--scrim);
+  z-index: -1;
+}
+#ui > .screen.game > .mx-vs {
+  background: transparent;
+  isolation: isolate;
+}
+.mx-vs::before {
+  content: '';
+  position: absolute;
+  inset: calc(-1 * var(--bleed-top, 0px)) calc(-1 * var(--bleed-right, 0px)) calc(-1 * var(--bleed-bottom, 0px)) calc(-1 * var(--bleed-left, 0px));
+  background: linear-gradient(105deg, #1a171312 0 50%, #b035221f 50%), var(--paper, none) center / 640px, var(--frame);
+  z-index: -1;
+}
+
+/* Shared action grids use equal tracks and one button size. */
+.modal .actions { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); }
+.modal .actions > .btn { min-width: 0; white-space: normal; text-align: center; }
+.settings-col .item > .btn { width: 150px; flex-shrink: 0; }
+.settings-col .item > .switch { margin-right: 47px; }
+.settings-col .item > .set-val { min-width: 150px; }
+.settings-col .item > .champ-pill { width: 220px; justify-content: space-between; }
+
+/* The objective belongs to the ink HUD; announcements briefly occupy the table. */
+.mx-obj { background: transparent; border: 0; box-shadow: none; }
+.mx-herald {
+  inset: auto;
+  left: 50%;
+  top: 48%;
+  translate: -50% -50%;
+  width: min(500px, 66%);
+  min-height: 100px;
+  padding: 16px 22px;
+  gap: 16px;
+  z-index: 20;
+  pointer-events: none;
+  background: var(--ink);
+  color: var(--sheet);
+  border: 0;
+  border-left: 5px solid var(--accent);
+  box-shadow: var(--sh-2);
+}
+.mx-herald.red { color: var(--sheet); border-color: var(--accent); }
+.mx-herald .mx-h-face, .mx-herald .mx-h-icon { height: 64px; width: 64px; }
+.mx-herald .mx-h-title { font-size: 24px; white-space: normal; overflow: visible; }
+.mx-herald .mx-h-line { font-size: 15px; margin-top: 6px; -webkit-line-clamp: 3; }
+.mx-center.heralding .mx-obj { opacity: 1; }
+.mx-herald.thinking { top: 30px; width: 280px; min-height: 48px; padding: 5px 10px; gap: 8px; box-shadow: none; }
+.mx-herald.thinking .mx-h-face { width: 34px; height: 34px; }
+.mx-herald.thinking .mx-h-title { font-size: 14px; }
+.mx-herald.thinking .mx-h-think { width: 28px; height: 28px; }
+#ui:has(.mx-pausebox) .mx-herald, .game:has(.mx-vs) .mx-herald { visibility: hidden; }
+
+/* One continuous landscape; the map is no longer a framed card. */
+.screen.journey { padding-bottom: 0; gap: 0; }
+.journey-scroll { flex: 1; min-height: 0; border-radius: 0; box-shadow: none; background: var(--frame); overscroll-behavior: none; }
+.journey-map { isolation: isolate; }
+.journey-art { object-fit: cover; }
+.journey-map::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(var(--frame), transparent 12%, transparent 88%, var(--frame)), linear-gradient(90deg, var(--frame), transparent 8%, transparent 92%, var(--frame));
+}
+
+/* Compact power ruler: reserve real travel instead of squeezing a wide tank. */
+.mx-power { flex-direction: row; justify-content: center; gap: 12px; padding: 4px 8px; background: transparent; border: 0; border-radius: 0; box-shadow: none; min-height: 64px; }
+.mx-phead { flex-direction: column; gap: 4px; font-size: 19px; }
+.mx-ppct::after { content: '%'; font: 500 11px var(--body); margin-left: 1px; }
+.mx-ptrack { flex: 0 0 24px; align-self: stretch; width: 24px; min-height: 52px; border-radius: 3px; border-color: var(--ink-2); background: var(--sheet-3); }
+.mx-pfill { background: var(--accent); }
+.mx-ptick { width: 35%; height: 1px; background: #1a171366; }
+#ui .mx-passive.btn { display: flex; flex-direction: column; gap: 3px; min-width: 0; width: 100%; padding: 3px 4px; border-width: 7px; border-image-width: 7px; border-image-source: url('/art/ui/frame/btn-secondary.webp'); color: var(--ink); text-shadow: none; font-family: var(--body); }
+.mx-passive-name { font: 700 12px/1.2 var(--display); }
+.mx-passive-detail { font: 500 11px/1.3 var(--body); }
+#ui .mx-passive:disabled { opacity: 1; border-image: none; border: 0; border-top: 1px solid var(--line-2); background: transparent; color: var(--muted); cursor: default; }
+.mx-pausebox { width: min(680px, 100%); }
+.mx-pause-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+#ui .mx-pause-grid > .btn { height: max(52px, var(--touch-target)); min-height: var(--touch-target); min-width: 0; font-size: 15px; padding: 0 3px; }
+.mx-pause-settings { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
+.mx-pause-settings .item { border: 0; min-height: 48px; }
+.mx-pause-settings .switch { margin-right: 4px; }
+/* HUD geometry follows the design frame, independent of the outer viewport height. */
+.screen.game.mx { --top-h: 72px; --face: 56px; --colL: 88px; --colR: max(112px, calc(2 * var(--touch-target) + var(--gap))); --btn: max(48px, var(--touch-target)); --gap: 5px; }
+.mx-ctrl > .mx-strike { height: 56px; flex-shrink: 0; }
+.mx-strike .ico { width: 28px; height: 28px; }
+#ui .mx-passive.btn { flex-shrink: 0; min-height: var(--touch-target); line-height: 1.2; }
+#ui .mx-ctrl.placing .mx-passive.btn { display: none; }
+
+#ui > .screen.game > .mx-herald { pointer-events: none; }
+
+/* Artwork screens paint once across the viewport, avoiding a visible frame seam. */
+.screen.home { background: none; isolation: isolate; }
+.screen.home::before {
+  content: '';
+  position: absolute;
+  inset: calc(-1 * var(--bleed-top, 0px)) calc(-1 * var(--bleed-right, 0px)) calc(-1 * var(--bleed-bottom, 0px)) calc(-1 * var(--bleed-left, 0px));
+  background: var(--home-bg) right center / cover no-repeat, var(--frame);
+  z-index: -1;
+  pointer-events: none;
+}
+#ui > .screen.game > .mx-catch {
+  inset: calc(-1 * var(--bleed-top, 0px)) calc(-1 * var(--bleed-right, 0px)) calc(-1 * var(--bleed-bottom, 0px)) calc(-1 * var(--bleed-left, 0px));
+}
+#ui:has(.modal-wrap) .mx-herald { visibility: hidden; }
+body { background: linear-gradient(#e9e1d0d1, #e9e1d0d1), var(--paper, none) center / 640px, var(--frame); }
+.screen:not(.splash):not(.home):not(.loading):not(.game) { background: transparent; }
+/* The painted action owns both icon and Vietnamese brush lettering. */
+.mx-ctrl > .mx-strike,
+.mx-strike.place,
+.mx-strike.charging,
+.mx-strike.cancel,
+.mx-strike.pressed { background: transparent; border: 0; border-radius: 0; box-shadow: none; padding: 0; }
+.mx-action-art { display: block; width: 100%; height: 100%; object-fit: contain; }
+.mx-strike.pressed .mx-action-art { filter: brightness(.9); }
+/* Reserve a portrait-free header and align content by rows, including wrapped names. */
+.home-hero { height: calc(100% - 82px); max-width: calc(100% - 400px - var(--sl)); }
+.home-top { height: 62px; }
+.home-grid { grid-template-rows: repeat(2, minmax(0, 1fr)); }
+.home-tablet { display: grid; grid-template-rows: 28px 34px 27px; align-content: center; justify-items: center; gap: 1px; }
+.ht-icon { height: 28px; }
+.ht-icon .ico { width: 28px; height: 28px; }
+.ht-name, .ht-sub { align-self: center; }
+.champion-skills { align-items: stretch; }
+.champion-skill { display: grid; grid-template-rows: 48px 15px minmax(34px, 1fr) 15px 15px; justify-items: center; align-content: start; align-items: center; }
+.champion-skill-name { align-self: start; text-align: center; }
+.mx-ctrl > .mx-strike { width: 82px; height: 82px; align-self: center; border-radius: 50%; overflow: hidden; }
+.mx-power { min-height: 56px; }
+.mx-ptrack { min-height: 44px; }
+#ui .mx-passive.btn { min-height: var(--touch-target); padding: 1px 3px; gap: 1px; }
+.mx-passive-detail { font-size: 10px; }
+/* Ultimate names ride an original ink sweep instead of a notification card. */
+.cutin .ci-plate { width: 64%; max-width: 64%; min-height: 132px; top: 52%; right: 1%; padding: 22px 34px; background: url('/art/ui/ultimate-banner.webp') center / 100% 100% no-repeat; color: var(--sheet); border: 0; border-radius: 0; box-shadow: none; gap: 12px; }
+.cutin .ci-seal { width: 58px; height: 58px; border-radius: 50%; border-color: var(--accent); }
+.cutin .ci-kicker { font-size: 11px; letter-spacing: .08em; color: #e7c2b0; }
+.cutin .ci-name { font-size: 30px; line-height: 1.25; text-shadow: 0 2px 2px #000; }
+.cutin.rtl .ci-plate { left: 1%; }
+/* Route names remain readable instead of losing the sect at an ellipsis. */
+.lp-name { white-space: normal; overflow: visible; font-size: 12px; }

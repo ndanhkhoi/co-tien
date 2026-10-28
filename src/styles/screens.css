@@ -548,7 +548,7 @@ textarea.code-box:focus { border-color: var(--accent); }
   background: var(--sheet-2);
   box-shadow: var(--sh-1), inset 0 0 0 1px var(--line);
 }
-.journey-map { position: relative; width: 100%; min-width: 760px; aspect-ratio: 1672 / 941; }
+.journey-map { position: relative; width: 100%; min-width: 760px; aspect-ratio: 3 / 2; }
 .journey-art { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
 .land-pin {
   position: absolute;

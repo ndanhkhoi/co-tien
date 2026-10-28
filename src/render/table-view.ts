@@ -172,10 +172,8 @@ export class TableView {
     const rail = artImage(sectArtUrl(skin.sect, 'rail'), () => this.paintArt(this.artScale));
     const base = new URL(import.meta.env.BASE_URL, document.baseURI).href;
     const ready = () => this.paintArt(this.artScale);
-    const corner = artImage(`${base}art/table/pocket-corner.webp`, ready);
-    const side = artImage(`${base}art/table/pocket-side.webp`, ready);
     const sight = artImage(`${base}art/table/${this.match.table.kind === 'pool' ? 'diamond' : 'dot'}.webp`, ready);
-    const art = paintTable(this.match.table, skin, want, rail, { corner, side, sight });
+    const art = paintTable(this.match.table, skin, want, rail, { sight });
     const previous = this.tableSprite.texture;
     this.tableSprite.texture = art.texture;
     if (previous !== Texture.EMPTY && previous !== Texture.WHITE) previous.destroy(true);
@@ -373,7 +371,7 @@ export class TableView {
       const pulse = 0.5 + 0.5 * Math.sin(this.time * 4);
       if (this.goal.pocket !== undefined) {
         const p = t.pockets[this.goal.pocket];
-        g.circle(p.hx, p.hy, p.hr * (1.05 + pulse * 0.12)).stroke({ width: 3, color: 0xffd34d, alpha: 0.6 + pulse * 0.4 });
+        g.circle(p.hx, p.hy, p.hr * (1.05 + pulse * 0.12)).stroke({ width: 3, color: 0xb03522, alpha: 0.6 + pulse * 0.4 });
       }
       if (this.goal.zone) {
         const [zx, zy, zr] = this.goal.zone;
@@ -396,12 +394,12 @@ export class TableView {
       const cs = this.calledShot;
       if (cs.pocket >= 0) {
         const p = t.pockets[cs.pocket];
-        g.circle(p.hx, p.hy, p.hr * (1.02 + pulse * 0.1)).stroke({ width: 3.5, color: 0xffc531, alpha: 0.95 });
-        g.circle(p.hx, p.hy, p.hr * (1.3 + pulse * 0.25)).stroke({ width: 2, color: 0xffc531, alpha: 0.5 * (1 - pulse) + 0.15 });
+        g.circle(p.hx, p.hy, p.hr * (1.02 + pulse * 0.1)).stroke({ width: 3.5, color: 0xb03522, alpha: 0.95 });
+        g.circle(p.hx, p.hy, p.hr * (1.3 + pulse * 0.25)).stroke({ width: 2, color: 0xb03522, alpha: 0.5 * (1 - pulse) + 0.15 });
       }
       if (cs.ball !== null) {
         const b = m.balls.find((x) => x.id === cs.ball);
-        if (b && b.onTable) g.circle(b.x, b.y, t.R * (1.3 + pulse * 0.12)).stroke({ width: 2.5, color: 0xffc531, alpha: 0.9 });
+        if (b && b.onTable) g.circle(b.x, b.y, t.R * (1.3 + pulse * 0.12)).stroke({ width: 2.5, color: 0xb03522, alpha: 0.9 });
       }
     }
     if (!aim) return;

@@ -7,7 +7,7 @@ import { ballCss } from '../../core/ball-styles';
 import { MODE_NAMES } from '../../core/rules';
 import { other, type Resolution, type ShotCall, type Side } from '../../core/rules/types';
 import { Rng } from '../../core/rng';
-import { type SkillDef, champion, exprUrl, portraitUrl, sect, skillIconUrl, winUrl } from '../../game/content/sects';
+import { type SkillDef, champion, classInfo, exprUrl, portraitUrl, sect, skillIconUrl, winUrl } from '../../game/content/sects';
 import { RULES_TEXT, SKILL_RULES } from '../../game/content/rules-text';
 import { ENERGY_MAX, Match, type MatchSetup } from '../../game/match';
 import { haptic, isTouchDevice, keepAwake, toggleFullscreen } from '../../platform/device';
@@ -192,7 +192,7 @@ export function matchScreen(opts: MatchOptions) {
     const objPlate = h('div.mx-obj', null, objKicker, objText);
     const nextBall = h('div.mx-next', { 'aria-live': 'polite' });
     const heraldEl = h('div.mx-herald', { role: 'status', 'aria-live': 'polite' });
-    const center = h('div.mx-center', null, objPlate, heraldEl);
+    const center = h('div.mx-center', null, objPlate);
     const topBar = h('div.mx-top', null, pauseBtn, cards[0].el, center, cards[1].el);
     if (opts.challenge) cards[1].el.style.visibility = 'hidden';
 
@@ -236,9 +236,14 @@ export function matchScreen(opts: MatchOptions) {
     for (let i = 1; i < 10; i++) powerTrack.append(h('i.mx-ptick', { style: `bottom:${i * 10}%` }));
     const powerBar = h('div.mx-power', { role: 'slider', 'aria-label': 'Lực đánh', 'aria-valuemin': '0', 'aria-valuemax': '100' },
       h('div.mx-phead', null, icon('power'), powerPct), powerTrack);
-    const strikeIcon = icon('strike');
-    const strikeLabel = h('span.mx-st-label', null, 'ĐÁNH');
-    const strikeBtn = h('button.mx-strike', { 'aria-label': 'Đánh' }, strikeIcon, strikeLabel);
+    const strikeArt = h('img.mx-action-art', { src: `${import.meta.env.BASE_URL}art/ui/actions/strike.webp`, alt: '', draggable: false });
+    const strikeBtn = h('button.mx-strike', { 'aria-label': 'Đánh' }, strikeArt);
+    function setStrikeAction(action: 'strike' | 'place' | 'cast' | 'cancel') {
+      if (strikeArt.dataset.action === action) return;
+      strikeArt.dataset.action = action;
+      strikeArt.src = `${import.meta.env.BASE_URL}art/ui/actions/${action}.webp`;
+      strikeBtn.setAttribute('aria-label', { strike: 'Đánh', place: 'Đặt bi cái tại đây', cast: 'Thi triển chiêu tại đây', cancel: 'Huỷ cú đánh' }[action]);
+    }
     const passiveChip = btn('Nội tại', () => {
       if (!canAct()) return;
       const cls = match.passive(match.turn);
@@ -260,7 +265,7 @@ export function matchScreen(opts: MatchOptions) {
     callTag.style.display = 'none';
     const hand = h('img.mx-hand', { src: HAND_URL, alt: '', draggable: false, 'aria-hidden': 'true' });
     hand.style.display = 'none';
-    el.append(probe, hand, topBar, dock, ctrl, chips, callTag, nextBall);
+    el.append(probe, hand, topBar, dock, ctrl, chips, callTag, nextBall, heraldEl);
 
     function playerCard(side: Side) {
       const p = opts.setup.players[side];
@@ -330,15 +335,16 @@ export function matchScreen(opts: MatchOptions) {
       passiveChip.hidden = !cls || match.current.kind !== 'human' || match.phase !== 'aim';
       const passiveLabels: Record<string, string> = {
         thanxa: match.aimLock ? 'Đã khoá ngắm · chạm để mở' : 'Khoá ngắm',
-        cuongchien: 'Đầu cơ cứng · lực ↑ xoáy ↓',
+        cuongchien: 'Tăng lực · giảm xoáy',
         phaptu: match.spinAxis[match.turn] === 'side' ? 'Ưu tiên áp phê ngang' : 'Ưu tiên kéo / đẩy',
         hophap: match.guardUsed[match.turn] ? 'Đã dùng băng mềm' : 'Đặt băng mềm',
         chusu: 'Cú thủ hợp lệ để lại cát',
         anhsat: match.assassinReady[match.turn] ? (match.assassinChoice[match.turn] === 'info' ? 'Liên hoàn · xem đường' : 'Liên hoàn · thêm lực') : 'Ăn liên tiếp để chọn lợi thế',
         luanhoi: 'Luân phiên chiêu · hồi nhanh',
       };
-      passiveChip.textContent = cls ? passiveLabels[cls] : '';
-      passiveChip.disabled = cls === 'cuongchien' || cls === 'chusu' || cls === 'luanhoi' || (cls === 'hophap' && match.guardUsed[match.turn]) || (cls === 'anhsat' && !match.assassinReady[match.turn]);
+      const passiveName = cls ? classInfo(cls).name : '';
+      passiveChip.replaceChildren(h('span.mx-passive-name', null, passiveName), h('span.mx-passive-detail', null, cls ? passiveLabels[cls] : ''));
+      passiveChip.setAttribute('aria-label', cls ? `${passiveName}: ${passiveLabels[cls]}` : 'Nội tại');
       const st = match.state;
       const carom = match.isCarom;
       for (const s of [0, 1] as Side[]) {
@@ -395,7 +401,8 @@ export function matchScreen(opts: MatchOptions) {
     function renderControls() {
       const act = canAct();
       for (const slot of slots) slot.b.disabled = !canInspectSkills();
-      passiveChip.disabled = !act;
+      const passive = match.passive(match.turn);
+      passiveChip.disabled = !act || passive === 'cuongchien' || passive === 'chusu' || passive === 'luanhoi' || (passive === 'hophap' && match.guardUsed[match.turn]) || (passive === 'anhsat' && !match.assassinReady[match.turn]);
       const placing = placingNow();
       ctrl.classList.toggle('placing', placing);
       ctrl.classList.toggle('preview-aim', placing && !skillPlacement && placementAim);
@@ -406,9 +413,7 @@ export function matchScreen(opts: MatchOptions) {
       for (const b of [rotL, rotR, switchBtn, spinBtn, upB, downB, leftB, rightB, strikeBtn]) b.disabled = !act;
       powerBar.classList.toggle('off', !act || placing);
       if (!charging) {
-        strikeLabel.textContent = skillPlacement ? 'THI TRIỂN' : placing ? 'ĐẶT BI' : 'ĐÁNH';
-        strikeIcon.src = icon(placing ? 'place' : 'strike').src;
-        strikeBtn.setAttribute('aria-label', skillPlacement ? 'Thi triển chiêu tại đây' : placing ? 'Đặt bi cái tại đây' : 'Đánh');
+        setStrikeAction(skillPlacement ? 'cast' : placing ? 'place' : 'strike');
       }
       strikeBtn.classList.toggle('place', placing);
     }
@@ -475,7 +480,7 @@ export function matchScreen(opts: MatchOptions) {
       setTimeout(() => f.remove(), 1200);
     }
 
-    // ---------- Herald: turn banner in the top strip, never on the cloth ----------
+    // ---------- Herald: transient announcements over the table ----------
     const heraldQ: HeraldMsg[] = [];
     let heraldTimer = 0;
     let heraldOn = false;
@@ -1100,7 +1105,7 @@ export function matchScreen(opts: MatchOptions) {
       if (armed !== cancelArmed) {
         cancelArmed = armed;
         strikeBtn.classList.toggle('cancel', armed);
-        strikeLabel.textContent = armed ? 'HỦY' : 'ĐÁNH';
+        setStrikeAction(armed ? 'cancel' : 'strike');
         haptic(12);
       }
     });
@@ -1283,7 +1288,7 @@ export function matchScreen(opts: MatchOptions) {
         sound.foul();
         setExpr(side, 'sad', 3000);
         herald({ side, expr: 'sad', tone: 'red', title: r.ballInHand !== 'none' ? 'Lỗi — bi trong tay' : 'Phạm lỗi', line: r.foul, ms: 3400 });
-        hintOnce(app, 'foul', 'Phạm lỗi', 'Đối thủ được bi trong tay sau lỗi: đặt bi cái vào vùng cho phép rồi đánh. Xem lý do lỗi ở dải trên.',
+        hintOnce(app, 'foul', 'Phạm lỗi', 'Đối thủ được bi trong tay sau lỗi: đặt bi cái vào vùng cho phép rồi đánh. Xem lý do lỗi trong thông báo giữa bàn.',
           { anchor: () => (lefty ? ctrl : dock), place: 'right', highlight: false, rail: true });
       } else if (r.winner === null && (potN > 0 || r.points > 0) && r.keepTurn) {
         sound.good();
@@ -1633,38 +1638,28 @@ export function matchScreen(opts: MatchOptions) {
             h('h2', null, 'Tạm dừng'),
             h('div.muted.small', null, `${opts.label} · ${MODE_NAMES[match.setup.mode]}${match.setup.mutator ? ' · có biến thể bàn' : ''}`)),
           h('div.mx-pause-grid', null,
-            h('div.mx-pause-col', null,
-              btn(frag(icon('play'), 'Tiếp tục'), done, 'block big'),
-              btn(frag(icon('scroll'), 'Luật chơi'), () => {
-                openRules();
-              }, 'ghost block'),
-              btn(frag(icon('hint'), 'Cách điều khiển'), () => {
-                openHelp();
-              }, 'ghost block'),
-            ),
-            h('div.mx-pause-col', null,
-              h('div.list', null,
-                item('Âm thanh', toggle(s.sfx > 0, (on) => {
-                  s.sfx = on ? 0.9 : 0;
-                  app.applySettings();
-                  app.save();
-                }, 'Âm thanh'), { icon: 'sound' }),
-                item('Nhạc nền', toggle(s.music > 0, (on) => {
-                  s.music = on ? 0.3 : 0;
-                  app.applySettings();
-                  if (on) sound.startMusic();
-                  else sound.stopMusic();
-                  app.save();
-                }, 'Nhạc nền'), { icon: 'music' }),
-              ),
-              isTouchDevice() ? null : btn(frag(icon('fullscreen'), 'Toàn màn hình'), () => void toggleFullscreen(), 'ghost block small'),
-              btn(frag(icon('back'), 'Thoát trận'), () => {
-                close();
-                paused = false;
-                pauseWrap = null;
-                opts.onExit();
-              }, 'ghost block small mx-leave'),
-            ),
+            btn(frag(icon('play'), 'Tiếp tục'), done, 'block'),
+            btn(frag(icon('scroll'), 'Luật chơi'), openRules, 'ghost block'),
+            btn(frag(icon('hint'), 'Cách điều khiển'), openHelp, 'ghost block'),
+            isTouchDevice() ? null : btn(frag(icon('fullscreen'), 'Toàn màn hình'), () => void toggleFullscreen(), 'ghost block'),
+            btn(frag(icon('back'), 'Thoát trận'), () => {
+              close();
+              opts.onExit();
+            }, 'ghost block mx-leave'),
+          ),
+          h('div.list.mx-pause-settings', null,
+            item('Âm thanh', toggle(s.sfx > 0, (on) => {
+              s.sfx = on ? 0.9 : 0;
+              app.applySettings();
+              app.save();
+            }, 'Âm thanh'), { icon: 'sound' }),
+            item('Nhạc nền', toggle(s.music > 0, (on) => {
+              s.music = on ? 0.3 : 0;
+              app.applySettings();
+              if (on) sound.startMusic();
+              else sound.stopMusic();
+              app.save();
+            }, 'Nhạc nền'), { icon: 'music' }),
           ),
         );
         queueMicrotask(() => (pauseWrap = box.parentElement));
@@ -1828,10 +1823,10 @@ export function matchScreen(opts: MatchOptions) {
         elevation: aim.elevation,
         power: aim.elevation > 0 ? (charging ? power : preset) : Math.max(charging ? power : preset, 0.5),
         showCue,
-        showGuide: humanAim && isHumanTurn() && match.tremorNow === 1 && strikeT === 0,
+        showGuide: humanAim && isHumanTurn() && (!placingNow() || !skillPlacement && placementAim) && match.tremorNow === 1 && strikeT === 0,
         guideScale: guideScale(),
         fog: match.setup.mutator === 'fog',
-        pocketChoices: ct !== 'none' && isHumanTurn(),
+        pocketChoices: ct !== 'none' && isHumanTurn() && !placingNow(),
         strike: strikeT > 0 ? Math.min(1, strikeT) : 0,
       } : null;
       view.calledShot = currentCall();

@@ -64,3 +64,17 @@ son và đen. Quy tắc đầy đủ: `.claude/skills/game-art/references/style-
 chứa bản đã xử lý cho game. Muốn vẽ lại hay vẽ thêm: đọc `.claude/skills/game-art/SKILL.md`, cấu hình
 `.env.image-api` rồi chạy script với API và model được quy định ở trên. Không đưa khoá hay vị trí thư
 mục riêng vào tài liệu hoặc commit.
+
+## Bộ UI và bản đồ hành trình
+
+Các nút hành động dùng bộ tranh tròn `ui/actions/{strike,place,cast,cancel}.webp`, gồm cả icon và chữ
+thư pháp tiếng Việt; DOM chỉ giữ tên trợ năng. Icon cài đặt dùng bánh răng có lỗ trục rõ nghĩa.
+Tên tuyệt chiêu đặt trên tranh nét mực `ui/ultimate-banner.webp`.
+
+Bản đồ `ui/map.webp` có tỷ lệ 3:2, được chọn từ ba phương án vẽ theo tuyến trong `career.ts`:
+Thiên Quang → Hoa Linh → Hải Long → Thiên Cơ → Băng Phách → Độc Vụ → Kim Sa → Vạn Thú →
+Huyết Sát → U Minh → Tinh Tú → Thiên Hương → Hư Không. Phương án hai được chọn vì đường đi
+liên tục và giữ địa hình tuyết phía bắc, biển phía đông, hoang mạc và vết nứt Hư Không.
+Loại phương án một có đường tắt sai tuyến và phương án ba đặt đường lệch đài Tinh Tú.
+Các mốc tương tác trong `journey.ts` phải khớp quảng trường trên tranh; số thứ tự lấy từ `CHAPTERS`,
+không tạo một tuyến độc lập trong UI. Khi thay tranh phải duyệt lại cả đường nối và tọa độ mốc.

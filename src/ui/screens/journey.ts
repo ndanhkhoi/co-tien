@@ -17,10 +17,11 @@ import { artUrl, champCard, closeX, hex6, npcModal, startChallenge, statChip, to
 
 /** Plaza of each land on art/ui/map.webp, as fractions of the image. */
 const PINS: Record<SectId, [number, number]> = {
-  bangphach: [0.143, 0.152], tinhtu: [0.386, 0.127], thienquang: [0.607, 0.146], hukhong: [0.893, 0.184],
-  uminh: [0.121, 0.387], hoalinh: [0.371, 0.368], thienco: [0.629, 0.381], huyetsat: [0.886, 0.393],
-  hailong: [0.1, 0.66], thienhuong: [0.386, 0.654], vanthu: [0.664, 0.692], docvu: [0.907, 0.685],
-  kimsa: [0.5, 0.92],
+  thienquang: [0.84, 0.145], hoalinh: [0.55, 0.165], hailong: [0.82, 0.35],
+  thienco: [0.53, 0.355], bangphach: [0.18, 0.14], docvu: [0.18, 0.34],
+  kimsa: [0.18, 0.53], vanthu: [0.51, 0.575], huyetsat: [0.81, 0.575],
+  uminh: [0.85, 0.815], tinhtu: [0.64, 0.8], thienhuong: [0.39, 0.85],
+  hukhong: [0.16, 0.84],
 };
 
 const FAMILIES = Object.keys(FAMILY_INFO) as ChallengeFamily[];
@@ -84,7 +85,7 @@ export function journeyScreen(app: App): Screen {
     i === current ? h('span.lp-flag', null, 'Đi tiếp') : null,
     h('span.lp-emblem', null, h('img', { src: sectArtUrl(ch.id, 'emblem'), alt: '' })),
     h('span.lp-text', null,
-      h('span.lp-name', null, ch.name),
+      h('span.lp-name', null, `${i + 1}. ${ch.name}`),
       open
         ? h('span.lp-prog', null, icon('users'), h('b.num', null, `${beaten}/${ch.npcs.length}`), icon('target'), h('b.num', null, `${solved}/${tasks.length}`))
         : h('span.lp-prog.lp-closed', null, icon('lock'), 'Chưa mở'),

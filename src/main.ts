@@ -100,8 +100,15 @@ function installUiScale() {
     const height = gate ? rect.height : 390;
     ui.style.width = `${width}px`;
     ui.style.height = `${height}px`;
-    ui.style.left = `${rect.left + (rect.width - width * s) / 2}px`;
-    ui.style.top = `${rect.top + (rect.height - height * s) / 2}px`;
+    const left = rect.left + (rect.width - width * s) / 2;
+    const top = rect.top + (rect.height - height * s) / 2;
+    ui.style.left = `${left}px`;
+    ui.style.top = `${top}px`;
+    // Fullscreen surfaces share layout coordinates with the contained controls.
+    ui.style.setProperty('--bleed-left', `${left / s}px`);
+    ui.style.setProperty('--bleed-top', `${top / s}px`);
+    ui.style.setProperty('--bleed-right', `${(viewport.clientWidth - left - width * s) / s}px`);
+    ui.style.setProperty('--bleed-bottom', `${(viewport.clientHeight - top - height * s) / s}px`);
     // Keep a transform at scale 1 too: fixed sheets must stay within the game frame.
     ui.style.transform = `scale(${s})`;
     ui.style.setProperty('--ui-scale', String(s));

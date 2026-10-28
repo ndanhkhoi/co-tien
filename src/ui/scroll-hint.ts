@@ -18,7 +18,10 @@ function update(el: HTMLElement) {
   else delete el.dataset.more;
   // The chevron lives beside the list (the fade mask would hide it inside), placed over its bottom edge.
   let chev = chevrons.get(el);
-  const host = el.offsetParent as HTMLElement | null;
+  // Keep each affordance in its own panel's stacking context. Appending to #ui
+  // puts a story reader's chevron behind the reader itself (z-index 70).
+  const host = el.parentElement;
+  if (host && getComputedStyle(host).position === 'static') host.classList.add('scroll-hint-host');
   if (below && host) {
     if (!chev) {
       chev = document.createElement('div');
@@ -29,8 +32,8 @@ function update(el: HTMLElement) {
     }
     if (chev.parentElement !== host) host.append(chev);
     chev.style.left = `${el.offsetLeft + el.offsetWidth / 2}px`;
-    // Straddles the bottom edge inside the faded strip, so it never sits on readable text.
-    chev.style.top = `${el.offsetTop + el.offsetHeight - 14}px`;
+    // Sits wholly inside the bottom edge of the faded strip, so it never sits on readable text.
+    chev.style.top = `${el.offsetTop + el.offsetHeight - 28}px`;
   } else {
     chev?.remove();
   }

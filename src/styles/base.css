@@ -173,7 +173,8 @@ body.gate #ui {
 .scroll.x { overflow-x: auto; overflow-y: hidden; touch-action: pan-x; }
 .scroll[data-more*='b'] { -webkit-mask-image: linear-gradient(180deg, #000 calc(100% - 26px), transparent); mask-image: linear-gradient(180deg, #000 calc(100% - 26px), transparent); }
 .scroll[data-more='r'] { -webkit-mask-image: linear-gradient(90deg, #000 calc(100% - 26px), transparent); mask-image: linear-gradient(90deg, #000 calc(100% - 26px), transparent); }
-/* Painted brush arrowhead pointing down, straddling the bottom edge of a scroller with more content. */
+/* Each hint stays inside its panel so dialogs cannot cover their own affordance. */
+.scroll-hint-host { position: relative; }
 .more-chevron { position: absolute; z-index: 5; width: 26px; height: 26px; margin-left: -13px; pointer-events: none; animation: more-bounce 1.4s ease-in-out infinite; }
 .more-chevron .ico { width: 26px; height: 26px; transform: rotate(90deg); filter: drop-shadow(0 1px 1px rgba(255, 250, 243, 0.9)); }
 @keyframes more-bounce { 50% { translate: 0 3px; } }
