@@ -38,7 +38,7 @@ npm run gen:challenges
 3. **Thuỷ Mặc look.** Paper, black ink, one vermilion accent, serif display type (Noto Serif), body in Be
    Vietnam Pro; no glow, no gold 3D text. Champions keep their colourful anime design on paper backgrounds.
 4. **Readable balls.** Any felt colour must pass `tests/sect-contrast.test.ts`.
-5. **Mobile landscape first.** DOM design is 844×390; `main.ts` scales it uniformly (0.75–2.2), except the install gate. Test at ~844×390; touch targets ≥ 44 px; respect reduced motion.
+5. **Mobile landscape first.** DOM design is 844×390; `main.ts` uniformly contains and centers it inside the safe viewport (maximum scale 2.2), except the native-size install gate. Canvas table fitting includes the DOM frame offset. Test at ~844×390; touch targets ≥ 44 px; respect reduced motion.
 6. **Data first.** Champions/sects are data; keep all 195 skill names in sync. `kind` is one of six appearance types, `cls` selects one of seven passives; slots 0/1 are basics, slot 2 is ultimate. Eight placed families are `slick`, `sand`, `bumper`, `railcraft`, `wind`, `well`, `spinwash`, `vortex`; keep `docs/world-bible.md` in sync with `roster.json`/`lore.json`.
 7. **Saves are sacred.** Profile changes go through `sanitize` in `src/game/profile.ts`; never rename the
    storage key `thancong.profile.v1`.
@@ -55,4 +55,4 @@ Use the existing three-tier loader in `src/platform/preload.ts`: blocking core p
 
 ## Current controls
 
-Aim by dragging/tapping the table or the two rotation buttons. Spin uses a draggable/tappable point on the large cue ball and presets. Tap/drag the power bar, then tap ĐÁNH; holding ĐÁNH charges an oscillating meter, sliding away cancels. Ball-in-hand uses drag/tap or four direction buttons, Ngắm thử / Dời bi, then ĐẶT BI. Preserve the three champion-specific painted skill icons and detail-before-use flow. Safe-area and touch-target tokens compensate for DOM scale; verify rendered sizes.
+Aim by dragging/tapping the table or the two rotation buttons. Spin uses a draggable/tappable point on the large cue ball and presets. Tap/drag the power bar, then tap ĐÁNH; holding ĐÁNH charges an oscillating meter, sliding away cancels. Ball-in-hand uses drag/tap or four direction buttons, Ngắm thử / Dời bi, then ĐẶT BI. Preserve the three champion-specific painted skill icons and detail-before-use flow. The outer frame excludes safe areas once; touch-target tokens compensate for DOM scale. Verify rendered sizes. Cue elevation in the spin sheet drives physical 2.5D jumps; preserve off-table rule handling. Ultimate presentation waits for ĐÁNH, then cut-in → table FX → cue strike → simulation.

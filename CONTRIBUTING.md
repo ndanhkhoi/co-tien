@@ -50,11 +50,11 @@ bản đồ trong `src/ui/screens/journey.ts`, truyện trong `lore.json`.
 - `kind` là loại tạo hình (Hiệp Khách, Nữ Hiệp, Yêu Tộc, Tinh Linh, Linh Tượng, Ma Vật), `cls` chọn hệ nội tại. Hai chiêu thường ở slot 0/1, tuyệt chiêu ở slot 2; không suy ra slot từ bậc sức mạnh.
 - Chiêu đặt bàn dùng tám nhóm `slick`, `sand`, `bumper`, `railcraft`, `wind`, `well`, `spinwash`, `vortex`. Dùng cùng `SkillCast`/world cho trận thật, dự đoán và AI; kiểm tra cả bàn lỗ, bàn phăng và bước huỷ/xác nhận đặt chiêu.
 - Tiên Đạo có chiêu, nội tại, địa thế; Cổ Điển và Luyện Cơ không bật các hiệu ứng này. Giữ tên menu hiện tại: Luận Cơ, Song Đấu, Luyện Cơ, Tàng Các, Hành trình, Cơ Tiên Truyện, Cơ Tiên Lục.
-- DOM thiết kế 844×390, được scale đều 0,75–2,2 trong `main.ts`; màn cài PWA dùng kích thước thật. Kiểm tra cuộn, modal, chuyển tiến/lùi và giảm chuyển động.
+- DOM giữ khung 844×390, scale đều vừa vùng safe area và căn giữa (tối đa 2,2) trong `main.ts`; canvas quy đổi cả độ lệch khung. Màn cài PWA dùng kích thước thật. Kiểm tra cuộn, modal, chuyển tiến/lùi và giảm chuyển động.
 - Giữ khoá save `thancong.profile.v1`; thêm trường qua mặc định và `sanitize`, giữ tương thích mã `TC1.`.
 - Tranh đi qua loader ba tầng (cốt lõi chặn mỗi build, nền lúc rảnh, tải/giải mã theo trận). Bổ sung tranh mới vào đường dẫn mà manifest nhận; không bỏ cơ chế cập nhật PWA chờ người chơi rời bàn.
 
 
 ## Kiểm tra điều khiển
 
-Ngắm bằng kéo/chạm bàn và hai nút xoay; áp phê bằng điểm đánh kéo/chạm trên bi lớn hoặc các lựa chọn nhanh. Thanh lực đặt sẵn cho thao tác chạm ĐÁNH; giữ ĐÁNH dùng lực dao động và trượt ra xa để huỷ. Khi bi trong tay, kiểm tra dời bằng kéo/chạm hoặc bốn nút hướng, chuyển “Ngắm thử” / “Dời bi”, rồi “ĐẶT BI”. Kiểm tra ba icon chiêu đúng tướng, mở chi tiết trước khi dùng, hồi chiêu và năng lượng. Safe area và vùng chạm dùng tỉ lệ nghịch với `--ui-scale`; kiểm tra kích thước hiển thị sau scale.
+Ngắm bằng kéo/chạm bàn và hai nút xoay; áp phê bằng điểm đánh kéo/chạm trên bi lớn hoặc các lựa chọn nhanh. Thanh lực đặt sẵn cho thao tác chạm ĐÁNH; giữ ĐÁNH dùng lực dao động và trượt ra xa để huỷ. Khi bi trong tay, kiểm tra dời bằng kéo/chạm hoặc bốn nút hướng, chuyển “Ngắm thử” / “Dời bi”, rồi “ĐẶT BI”. Kiểm tra ba icon chiêu đúng tướng, mở chi tiết trước khi dùng, hồi chiêu và năng lượng. Safe area được trừ một lần ở khung ngoài; vùng chạm bù ngược `--ui-scale`. Kiểm tra kích thước hiển thị sau scale, cả màn 844×390 và giả lập iPhone 14 Pro Max ngang 932×430 CSS pixel, DPR 3. Kiểm tra góc nâng cơ, nhảy qua bi chắn, tiếp đất và bi văng bàn; tuyệt chiêu phải chờ ĐÁNH rồi mới hiện cut-in, hiệu ứng bàn và cú đánh.

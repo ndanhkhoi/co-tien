@@ -33,10 +33,11 @@ UI (kéo/chạm bàn, nút xoay, lực, ĐÁNH) ──► Match.shoot(input)
 
 ## `src/core` — vật lý và luật
 
-- `physics.ts`: mô phỏng 2D theo mét. Ma sát trượt và lăn, spin ba trục, throw khi cắt bi, ném băng có
+- `physics.ts`: mô phỏng mặt bàn theo mét, thêm độ cao `z` và vận tốc đứng `vz` cho cú nhảy (2.5D). Ma sát trượt và lăn, spin ba trục, throw khi cắt bi, ném băng có
   áp phê, bước thời gian theo thời điểm va chạm (không xuyên bi), khối bi khít khi phá được giải bằng tiếp
   xúc mềm bước nhỏ. `Terrain` thêm lực đều (nghiêng / gió, có giật), vùng ma sát và giếng hấp dẫn — chỉ tác
   động lên bi đang lăn.
+  Góc nâng cơ 0–75° tách vận tốc ngang và đứng; trên 10° có thể tạo cú nảy khỏi mặt bàn, chịu trọng lực và mất năng lượng khi tiếp đất. Vùng tiếp xúc đầu cơ thu hẹp theo cos góc nâng: đánh lệch tâm làm giảm xung lực đứng, dễ trượt cơ hơn khi nâng cao; trượt cơ không tạo cú nhảy có kiểm soát. Đây là mô hình 2.5D cho cú nhảy, không phải bộ mô phỏng cơ và mặt bàn 3D đầy đủ. Va chạm bi xét khoảng cách theo ba trục; bi đủ cao vượt được bi chắn hoặc băng. Bi bay khỏi bàn phát `off-table` để luật xử lý, không tính là vào lỗ.
 - `table.ts`: kích thước WPA (bàn 7 ft 1,981 × 0,991 m, bi 57,15 mm, miệng lỗ góc 117,5 mm / giữa 130 mm,
   hàm lỗ 142° / 104°, viền 12,7 cm, nút ngắm cách mép băng 3 11/16 in) và bàn carom UMB.
 - `rack.ts`: xếp bi đúng luật cho 8/9/10 bi và carom; đặt lại bi.
@@ -79,6 +80,7 @@ Metadata hình học và xung lực hình quạt đi cùng yêu cầu worker. Ch
 `table-view.ts` dựng bàn (vẽ bằng canvas theo kích thước thật, dùng ảnh viền bàn của môn phái khi có),
 bi (`ball-mesh.ts`: shader cầu, lăn theo vận tốc góc), cơ, đường ngắm + bi ảo + mũi tên hướng, Thiên Tượng,
 hiệu ứng chiêu (`skill-fx.ts`: ghép các nét mực VFX của môn phái theo từng nhóm cơ chế, flipbook tuyệt chiêu).
+Độ cao mô phỏng nâng hình bi khỏi bóng trên mặt bàn; đường ngắm cú nhảy chạy một đoạn mô phỏng ngắn thay cho tia bi ảo phẳng.
 
 Code/shader cho bi và bàn phục vụ hình học và trạng thái mô phỏng (số/sọc, màu, ánh sáng, xoay vật lý). Tranh, icon và trang trí UI vẫn là tài sản nguyên bản sinh riêng qua pipeline; ngoại lệ vật thể mô phỏng không áp dụng cho chúng.
 
@@ -96,7 +98,7 @@ Tàng Các và Cơ Tiên Lục gộp các tab vào thanh tiêu đề gọn để
 `kit.css` chứa thành phần dùng chung như nút, thẻ chọn và hộp thoại. `screens.css` dành cho các màn hình,
 `match.css` dành cho giao diện trận đấu; `skin.css` nạp cuối để phủ khung tranh, nút dấu son, chuyển trang và màn xuất hiện tướng. Chuyển màn trong `app.ts` có hướng tiến/lùi/đặt lại; màn cũ trở thành `inert`, được gỡ sau 280 ms; `turnPage` chỉ giữ ảnh chụp DOM của phần cũ trong lúc nội dung thật đổi ngay. Các chuyển động tôn trọng `prefers-reduced-motion`.
 
-Lớp DOM được thiết kế ở **844×390**, scale đều trong khoảng **0,75–2,2** theo vùng `#stage` (`installUiScale()` trong `main.ts`). Canvas Pixi đo cửa sổ riêng. Safe area và token vùng chạm trong `base.css` bù ngược `--ui-scale`; cần kiểm tra kích thước hiển thị sau scale.
+Lớp DOM giữ khung thiết kế **844×390**, scale đều để nằm trọn trong vùng màn hình đã trừ safe area, tối đa **2,2** (`installUiScale()` trong `main.ts`). Khung được căn giữa, chừa khoảng trống khi tỉ lệ màn hình khác tỉ lệ thiết kế; không ép scale tối thiểu gây cắt nội dung. Canvas Pixi vẫn phủ cửa sổ; bố cục bàn quy đổi biên HUD và độ lệch khung DOM sang pixel màn hình. Sự kiện `cotien:ui-resize` cập nhật lại bàn sau khi khung đổi kích thước. Safe area được tính một lần ở khung ngoài; token vùng chạm trong `base.css` bù ngược `--ui-scale` để giữ tối thiểu 44 pixel hiển thị.
 
 Trên điện thoại còn phải cài PWA (`mustInstall()`), màn hình cài đặt hiện trước ngay cả khi máy đang
 dọc; `viewport-guard.ts` bỏ qua chặn xoay ngang trong thời gian này. Màn cài đặt dùng kích thước CSS
@@ -112,7 +114,7 @@ cử chỉ trình duyệt ngoài vùng cuộn, nhưng cho cuộn trong `.scroll`
 
 `src/ui/screens/match-screen.ts` nhận kéo/chạm trực tiếp trên bàn. Kéo xoay cơ tương đối quanh bi cái; kéo xa bi cái giảm tốc xoay để ngắm tinh. Chạm bi để ngắm thẳng vào bi, chạm vị trí trống để ngắm tới đó; nút đổi mục tiêu chuyển bi. Hai nút xoay chỉnh 0,1° mỗi chạm, giữ để xoay nhanh dần.
 
-Chạm bi cái nhỏ mở bảng áp phê: chạm hoặc kéo điểm đánh trên bi lớn, hoặc chọn Giữa, Trô, Cule, Giật, Trái, Phải. Kéo/chạm thanh lực đặt lực; chạm ĐÁNH dùng lực đã chọn. Giữ ĐÁNH cho lực dao động rồi thả để đánh; trượt ngón ra xa để huỷ.
+Chạm bi cái nhỏ mở bảng áp phê: chạm hoặc kéo điểm đánh trên bi lớn, hoặc chọn Giữa, Trô, Cule, Giật, Trái, Phải. Bảng này cũng có thanh “Nâng cơ” 0–75° cho cú nhảy: lực và góc quyết định tầm bay, góc cao giảm tầm ngang; quá nhẹ có thể chạm bi chắn, quá mạnh có thể văng bàn. Kéo/chạm thanh lực đặt lực; chạm ĐÁNH dùng lực đã chọn. Giữ ĐÁNH cho lực dao động rồi thả để đánh; trượt ngón ra xa để huỷ.
 
 Khi có bi trong tay, kéo bi cái hoặc chạm bàn để dời; bốn nút hướng chỉnh 3 mm mỗi chạm và nhanh dần khi giữ. “Ngắm thử” chuyển thao tác bàn sang ngắm, cho xem đường bi trước khi chốt; “Dời bi” quay lại đặt vị trí. “ĐẶT BI” xác nhận vị trí, không đánh ngay. Bước đặt chiêu là trạng thái riêng và dùng “THI TRIỂN” để xác nhận.
 
@@ -179,3 +181,7 @@ Nội tại đi qua cùng `Match` cho người và AI: Thần Xạ khoá hướn
 Hồ sơ giữ `thancong.profile.v1`; `sanitize` bổ sung trường mới, lọc ID trang bị/tướng không còn hợp lệ, giữ các tướng bậc 1 miễn phí và xoá trường cũ `avatar`/`skills`. Mã chia sẻ giữ tiền tố `TC1.` và cũng đi qua `sanitize` khi nhập.
 
 Trang tướng ở Tàng Các và Cơ Tiên Lục dùng ba nút icon chiêu; chạm từng nút mở hộp mô tả riêng (hồi chiêu hoặc 100 năng lượng cho tuyệt chiêu), đóng để trở lại trang tướng.
+
+Ba nút chiêu hiện tên và hồi chiêu/năng lượng ngay trên trang tướng. Xem trước bàn trong Tàng Các giữ tỉ lệ kích thước bàn WPA gồm cả viền, không kéo giãn theo chiều rộng thẻ.
+
+Tuyệt chiêu được ghi nhận khi xác nhận dùng nhưng phần diễn hoạt chờ thao tác ĐÁNH: khoá điều khiển, hiện cut-in tướng, rồi hiệu ứng trên bàn, sau đó cơ vung và mô phỏng cú đánh mới bắt đầu. Cả người và AI đi qua cùng luồng; chờ diễn hoạt tôn trọng tạm dừng và được huỷ khi rời trận.

@@ -13,7 +13,7 @@ dụng (PWA), chơi offline.
     không hợp lệ, gọi bi gọi lỗ) và bi-a phăng tự do, 3 băng theo UMB.
   - Kích thước chuẩn WPA: bàn 7 ft, bi 57,15 mm, miệng lỗ góc 117,5 mm và lỗ giữa 130 mm, hàm lỗ 142°/104°.
   - Vật lý: ma sát trượt và lăn, spin ba trục, throw, squirt, áp phê đổi góc bật băng, phá bi bảo toàn năng
-    lượng. Màu bi theo bộ Aramith truyền thống, vẽ bằng shader và lăn theo vận tốc góc thật.
+    lượng. Cú nhảy dùng góc nâng cơ, lực và điểm chạm trong mô hình 2.5D; nâng cao cần đánh gần tâm hơn, bi có thể văng bàn. Màu bi theo bộ Aramith truyền thống, vẽ bằng shader và lăn theo vận tốc góc thật.
 - **Hai chế độ cho mọi thể loại:** **Tiên Đạo** (chiêu, nội tại, địa thế) và **Cổ Điển** (bida thuần).
 - **Địa thế:** mỗi môn phái có Linh Đài riêng (màu nỉ, ma sát, độ nảy băng, miệng lỗ) và Thiên Tượng ngẫu
   nhiên — bão tuyết, sóng lừng, gió giật, giếng sao, rễ cây… — đều là lực và ma sát thật trong mô phỏng,
@@ -34,7 +34,7 @@ dụng (PWA), chơi offline.
 
 ### Hình ảnh trong game
 
-Ảnh chụp ở 1280×720; giao diện ưu tiên chơi ngang trên điện thoại.
+Ảnh chụp bằng trình duyệt giả lập iPhone 14 Pro Max ngang: 932×430 CSS pixel, DPR 3; giao diện ưu tiên chơi ngang trên điện thoại.
 
 | Trang chủ | Luận Cơ |
 | --- | --- |
