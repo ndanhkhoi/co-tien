@@ -17,13 +17,17 @@ const TIPS = [
 export function loadingScreen(next: (app: App) => Screen) {
   return (app: App): Screen => {
     const el = screenEl('loading');
-    const fill = h('i.ld-fill');
+    // A felt strip ending in a pocket; the cue ball rolls along it with an ink trail and drops in at 100%.
+    const art = (f: string) => new URL(`${import.meta.env.BASE_URL}art/ui/${f}`, document.baseURI).href;
+    const trail = h('i.ld-trail');
+    const ball = h('img.ld-ball', { src: art('load-ball.webp'), alt: '', draggable: false });
+    const track = h('div.ld-track', { style: `background-image:url("${art('load-track.webp')}")` }, trail, ball);
     const pct = h('span.ld-pct.num', null, '0%');
     const tip = h('p.ld-tip', null, TIPS[Math.floor(Math.random() * TIPS.length)]);
     el.append(h('div.ld-box', null,
       h('img.ld-logo', { src: new URL(`${import.meta.env.BASE_URL}art/ui/logo.webp`, document.baseURI).href, alt: 'Cơ Tiên', draggable: false }),
       h('div.ld-title', null, 'Đang chuẩn bị tài nguyên', pct),
-      h('div.ld-bar', null, fill),
+      track,
       tip,
     ));
     let shown = 0;
@@ -31,9 +35,12 @@ export function loadingScreen(next: (app: App) => Screen) {
       const p = Math.round(f * 100);
       if (p === shown) return;
       shown = p;
-      fill.style.transform = `scaleX(${f})`;
+      track.style.setProperty('--p', String(f));
       pct.textContent = `${p}%`;
-    }).then(() => { if (!location.search.includes('loading')) setTimeout(() => app.go(next, { reset: true }), 250); });
+    }).then(() => {
+      track.classList.add('sunk');
+      if (!location.search.includes('loading')) setTimeout(() => app.go(next, { reset: true }), 650);
+    });
     return { el };
   };
 }
