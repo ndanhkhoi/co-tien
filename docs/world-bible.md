@@ -40,11 +40,11 @@ Chính đạo kiếm tông trên dãy núi đá trắng, nơi mặt trời mọc
 
 | Bậc | Tướng | Giới | Hệ | Chiêu 1 | Chiêu 2 | Tuyệt chiêu |
 |---|---|---|---|---|---|---|
-| 1 | **Tô Kiếm Nhi** | Nữ Hiệp | Thần Xạ | Quang Kiếm Dẫn Lộ (vision) | Quang Kiếm Minh Nhãn (reveal) | Quang Kiếm Đại Trận (vision, reveal) |
-| 2 | **Mạc Thiết Sơn** | Hiệp Khách | Hộ Pháp | Quang Kiếm Dẫn Lộ (vision) | Quang Kiếm Nhu Bích (railcraft) | Quang Kiếm Đại Trận (vision, sand) |
-| 3 | **Bạch Vân Khanh** | Hiệp Khách | Pháp Tu | Quang Kiếm Dẫn Lộ (vision) | Quang Kiếm Toàn Quyết (spin) | Quang Kiếm Đại Trận (vision, slick) |
-| 4 | **Lăng Thiên Kỳ** | Nữ Hiệp | Cuồng Chiến | Quang Kiếm Dẫn Lộ (vision) | Quang Kiếm Cương Kình (power) | Quang Kiếm Đại Trận (vision, vortex) |
-| 5 | **Kiếm Thánh Diệp Huyền Quang** | Hiệp Khách | Thần Xạ | Quang Kiếm Dẫn Lộ (vision) | Quang Kiếm Minh Nhãn (reveal) | Tam Quang Chiếu Lộ (vision, shield) |
+| 1 | **Tô Kiếm Nhi** | Nữ Hiệp | Thần Xạ | Kiếm Chỉ Đường (vision) | Phi Kiếm Dò Lối (reveal) | Vạn Kiếm Quy Tông (vision, reveal) |
+| 2 | **Mạc Thiết Sơn** | Hiệp Khách | Hộ Pháp | Kim Chung Chiếu Lộ (vision) | Trấn Sơn Thủ (railcraft) | Thiết Bích Sơn Môn (vision, sand) |
+| 3 | **Bạch Vân Khanh** | Hiệp Khách | Pháp Tu | Vân Kiếm Tam Lộ (vision) | Lưu Vân Bộ (spin) | Thiên Kiếm Vân Hải (vision, slick) |
+| 4 | **Lăng Thiên Kỳ** | Nữ Hiệp | Cuồng Chiến | Thương Kiếm Chiếu Tâm (vision) | Chấn Kiếm Âm (power) | Liệt Nhật Kiếm Uy (vision, vortex) |
+| 5 | **Kiếm Thánh Diệp Huyền Quang** | Hiệp Khách | Thần Xạ | Huệ Nhãn (vision) | Kiếm Tâm Thông Minh (reveal) | Cửu Kiếm Quy Nhất (vision, shield) |
 
 - **Tô Kiếm Nhi** — Đệ tử nhỏ tuổi nhất Thiên Quang, nổi tiếng vì dám thách đấu cả trưởng lão. Mỗi lần thua lại dán thêm một miếng băng lên má làm kỷ niệm. *“Một cú thẳng, một tiếng rơi. Lần này ta không trượt đâu!”*
 - **Mạc Thiết Sơn** — Người giữ cổng sơn môn suốt hai mươi năm. Chưa ai đánh bi qua được tấm khiên kiếm của ông mà không trả giá. *“Muốn vào núi, hãy thắng ta trước.”*
@@ -65,11 +65,11 @@ Ma môn chinh phạt dựng thành trên quặng sắt đỏ. Với Huyết Sát
 
 | Bậc | Tướng | Giới | Hệ | Chiêu 1 | Chiêu 2 | Tuyệt chiêu |
 |---|---|---|---|---|---|---|
-| 1 | **Hắc Lang** | Hiệp Khách | Ảnh Sát | Huyết Kình Dẫn Lộ (blast) | Huyết Kình Truy Ảnh (second) | Huyết Kình Đại Trận (blast, railcraft) |
-| 2 | **Đồ Cuồng** | Hiệp Khách | Cuồng Chiến | Huyết Kình Dẫn Lộ (blast) | Huyết Kình Cương Kình (power) | Huyết Kình Đại Trận (blast, wind) |
-| 3 | **Huyết Cơ Mị Nương** | Nữ Hiệp | Chú Sư | Huyết Kình Dẫn Lộ (blast) | Huyết Kình Sa Chú (sand) | Huyết Kình Đại Trận (blast, well) |
-| 4 | **Tư Đồ Liệt** | Hiệp Khách | Cuồng Chiến | Huyết Kình Dẫn Lộ (blast) | Huyết Kình Cương Kình (power) | Huyết Kình Đại Trận (blast, spinwash) |
-| 5 | **Ma Tôn Cửu U** | Yêu Tộc | Luân Hồi | Huyết Kình Dẫn Lộ (blast) | Huyết Kình Luân Chuyển (spinwash) | Huyết Kình Phá Trận (blast, nudge) |
+| 1 | **Hắc Lang** | Hiệp Khách | Ảnh Sát | Lang Nha Bộc (blast) | Huyết Trảo (second) | Lang Vương Tập Kích (blast, railcraft) |
+| 2 | **Đồ Cuồng** | Hiệp Khách | Cuồng Chiến | Cuồng Huyết (blast) | Chấn Địa (power) | Xích Ngục Cuồng Phong (blast, wind) |
+| 3 | **Huyết Cơ Mị Nương** | Nữ Hiệp | Chú Sư | Huyết Chú (blast) | Mạng La Trầm Sa (sand) | Xích Nguyệt Nhiếp Tâm (blast, well) |
+| 4 | **Tư Đồ Liệt** | Hiệp Khách | Cuồng Chiến | Hành Quân Lệnh (blast) | Phá Trận (power) | Thiết Kỵ Phá Thành (blast, spinwash) |
+| 5 | **Ma Tôn Cửu U** | Yêu Tộc | Luân Hồi | Ma Giác Chấn (blast) | Hồn Toàn Tịch Diệt (spinwash) | Cửu U Nghịch Thiên (blast, nudge) |
 
 - **Hắc Lang** — Sát thủ trẻ của Huyết Sát, mũ trùm tai sói không bao giờ rời. Chỉ cần đối thủ sơ hở một cú, hắn dọn sạch bàn. *“Một sơ hở thôi. Ta chỉ cần một.”*
 - **Đồ Cuồng** — Gã khổng lồ đeo mặt nạ sắt, xích quấn quanh tay như vòng tay. Hắn không biết áp phê, chỉ biết đánh mạnh hơn nữa. *“Bida là phải nổ!”*
@@ -90,11 +90,11 @@ Ma môn chinh phạt dựng thành trên quặng sắt đỏ. Với Huyết Sát
 
 | Bậc | Tướng | Giới | Hệ | Chiêu 1 | Chiêu 2 | Tuyệt chiêu |
 |---|---|---|---|---|---|---|
-| 1 | **Đào Tiểu Muội** | Nữ Hiệp | Pháp Tu | Hoa Phong Dẫn Lộ (wind) | Hoa Phong Toàn Quyết (spin) | Hoa Phong Đại Trận (wind, sand) |
-| 2 | **Phong Linh Tử** | Hiệp Khách | Ảnh Sát | Hoa Phong Dẫn Lộ (wind) | Hoa Phong Truy Ảnh (second) | Hoa Phong Đại Trận (wind, slick) |
-| 3 | **Hồ Tiên Nguyệt Ly** | Yêu Tộc | Chú Sư | Hoa Phong Dẫn Lộ (wind) | Hoa Phong Sa Chú (sand) | Hoa Phong Đại Trận (wind, vortex) |
-| 4 | **Thanh Liên Đại Sư** | Hiệp Khách | Hộ Pháp | Hoa Phong Dẫn Lộ (wind) | Hoa Phong Nhu Bích (railcraft) | Hoa Phong Đại Trận (wind, shield) |
-| 5 | **Đảo Chủ Mộng Hoa** | Nữ Hiệp | Luân Hồi | Hoa Phong Dẫn Lộ (wind) | Hoa Phong Luân Chuyển (spinwash) | Lưỡng Nghi Hoa Phong (wind, second) |
+| 1 | **Đào Tiểu Muội** | Nữ Hiệp | Pháp Tu | Xuân Hồ Dẫn Phong (wind) | Hoa Lộ (spin) | Đào Hoa Nguyên (wind, sand) |
+| 2 | **Phong Linh Tử** | Hiệp Khách | Ảnh Sát | Phong Ảnh (wind) | Trúc Ảnh Tái Hành (second) | Tật Phong Liên Trảm (wind, slick) |
+| 3 | **Hồ Tiên Nguyệt Ly** | Yêu Tộc | Chú Sư | Hồ Tức Dẫn Lưu (wind) | Vĩ Sa Mê Lộ (sand) | Cửu Vĩ Mê Trận (wind, vortex) |
+| 4 | **Thanh Liên Đại Sư** | Hiệp Khách | Hộ Pháp | Liên Phong Tịnh Tâm (wind) | Tâm Tĩnh Như Thủy (railcraft) | Thiên Liên Kết Giới (wind, shield) |
+| 5 | **Đảo Chủ Mộng Hoa** | Nữ Hiệp | Luân Hồi | Mộng Điệp (wind) | Hồi Mộng (spinwash) | Song Điệp Nghịch Mộng (wind, second) |
 
 - **Đào Tiểu Muội** — Cô bé má phúng phính, đi đâu cũng có hồ ly con ngồi trên đầu. Đánh bi bằng hoa đào và nụ cười, nhưng đừng coi thường. *“Hoa rơi đúng chỗ, bi cũng vậy!”*
 - **Phong Linh Tử** — Kiếm khách lang thang ngậm cọng cỏ, buộc chuông trên tóc. Hắn ngủ gật cả trong trận, rồi tỉnh dậy ăn liền ba bi. *“Gió thổi đâu, bi theo đó.”*
@@ -115,11 +115,11 @@ Cung điện băng phương Bắc dưới cực quang. Nỉ ở đây lạnh và
 
 | Bậc | Tướng | Giới | Hệ | Chiêu 1 | Chiêu 2 | Tuyệt chiêu |
 |---|---|---|---|---|---|---|
-| 1 | **Tuyết Nhi** | Nữ Hiệp | Thần Xạ | Băng Lộ Dẫn Lộ (slick) | Băng Lộ Minh Nhãn (reveal) | Băng Lộ Đại Trận (slick, wind) |
-| 2 | **Hàn Thạch** | Hiệp Khách | Hộ Pháp | Băng Lộ Dẫn Lộ (slick) | Băng Lộ Nhu Bích (railcraft) | Băng Lộ Đại Trận (slick, well) |
-| 3 | **Lạc Sương** | Tinh Linh | Pháp Tu | Băng Lộ Dẫn Lộ (slick) | Băng Lộ Toàn Quyết (spin) | Băng Lộ Đại Trận (slick, spinwash) |
-| 4 | **Bắc Minh Cuồng Hùng** | Yêu Tộc | Cuồng Chiến | Băng Lộ Dẫn Lộ (slick) | Băng Lộ Cương Kình (power) | Băng Lộ Đại Trận (slick, nudge) |
-| 5 | **Cung Chủ Hàn Nguyệt** | Nữ Hiệp | Chú Sư | Băng Lộ Dẫn Lộ (slick) | Băng Lộ Sa Chú (sand) | Băng Hà Song Hãm (slick, spin) |
+| 1 | **Tuyết Nhi** | Nữ Hiệp | Thần Xạ | Băng Tiễn Chỉ Lộ (slick) | Hàn Mục (reveal) | Vạn Tiễn Băng Vũ (slick, wind) |
+| 2 | **Hàn Thạch** | Hiệp Khách | Hộ Pháp | Thuẫn Hàn Kính (slick) | Trấn Thủ (railcraft) | Băng Thành Bất Phá (slick, well) |
+| 3 | **Lạc Sương** | Tinh Linh | Pháp Tu | Sương Liên Khai Kính (slick) | Ngọc Liên Toàn Vũ (spin) | Tịnh Liên Tán Toàn (slick, spinwash) |
+| 4 | **Bắc Minh Cuồng Hùng** | Yêu Tộc | Cuồng Chiến | Hùng Chưởng Băng Ngân (slick) | Chấn Băng (power) | Bạch Hùng Khai Sơn (slick, nudge) |
+| 5 | **Cung Chủ Hàn Nguyệt** | Nữ Hiệp | Chú Sư | Hàn Khí Xâm Cốt (slick) | Nguyệt Sa Ngưng Lộ (sand) | Vạn Lý Băng Phong (slick, spin) |
 
 - **Tuyết Nhi** — Tiểu đệ tử Băng Phách, cung pha lê luôn đeo sau lưng. Nàng ngắm bi như ngắm tên, một mắt nhắm, một mắt cười. *“Trúng rồi nhé!”*
 - **Hàn Thạch** — Hộ vệ to lớn của Tuyết Cung, giáp băng không bao giờ tan. Ít nói, nhưng mỗi lời đều chắc như khiên. *“Giữ vững.”*
@@ -140,11 +140,11 @@ Các lâu đồng thau của những nhà cơ quan thuật. Họ tính đường
 
 | Bậc | Tướng | Giới | Hệ | Chiêu 1 | Chiêu 2 | Tuyệt chiêu |
 |---|---|---|---|---|---|---|
-| 1 | **Tiểu Ban** | Hiệp Khách | Thần Xạ | Cơ Trận Dẫn Lộ (bumper) | Cơ Trận Minh Nhãn (reveal) | Cơ Trận Đại Trận (bumper, slick) |
-| 2 | **Mộc Ngưu** | Linh Tượng | Hộ Pháp | Cơ Trận Dẫn Lộ (bumper) | Cơ Trận Nhu Bích (railcraft) | Cơ Trận Đại Trận (bumper, vortex) |
-| 3 | **Lỗ Diệu Diệu** | Nữ Hiệp | Pháp Tu | Cơ Trận Dẫn Lộ (bumper) | Cơ Trận Toàn Quyết (spin) | Cơ Trận Đại Trận (bumper, shield) |
-| 4 | **Hoả Lôi Tiên Sinh** | Hiệp Khách | Cuồng Chiến | Cơ Trận Dẫn Lộ (bumper) | Cơ Trận Cương Kình (power) | Cơ Trận Đại Trận (bumper, second) |
-| 5 | **Thần Toán Gia Cát Vân** | Hiệp Khách | Luân Hồi | Cơ Trận Dẫn Lộ (bumper) | Cơ Trận Luân Chuyển (spinwash) | Chiết Quang Song Kính (bumper, power) |
+| 1 | **Tiểu Ban** | Hiệp Khách | Thần Xạ | Đồng Tước Trấn Lộ (bumper) | Tính Quỹ Đạo (reveal) | Liên Nỏ Thần Cơ (bumper, slick) |
+| 2 | **Mộc Ngưu** | Linh Tượng | Hộ Pháp | Cơ Giáp (bumper) | Đẩy Bánh Răng (railcraft) | Thành Lũy Cơ Quan (bumper, vortex) |
+| 3 | **Lỗ Diệu Diệu** | Nữ Hiệp | Pháp Tu | Con Quay Thần (bumper) | Tơ Linh Toàn Quyết (spin) | Thiên Cơ Từ Trường (bumper, shield) |
+| 4 | **Hoả Lôi Tiên Sinh** | Hiệp Khách | Cuồng Chiến | Lôi Pháo Trấn Vật (bumper) | Pháo Chấn (power) | Thần Hoả Lôi Pháo (bumper, second) |
+| 5 | **Thần Toán Gia Cát Vân** | Hiệp Khách | Luân Hồi | La Bàn Trấn Cơ (bumper) | Bát Môn Trận (spinwash) | Thiên Cơ Đoán Mệnh (bumper, power) |
 
 - **Tiểu Ban** — Thợ học việc của Thiên Cơ Các, luôn có một chú chim cơ quan trên vai. Cậu tin mọi cú đánh đều giải được bằng toán. *“Góc 37 độ, lực 6 phần. Xong!”*
 - **Mộc Ngưu** — Trâu gỗ cơ quan do Các Chủ chế tạo để canh giữ kho bản vẽ. Nó không biết nói, nhưng biết chặn mọi đường bi. *“…kẽo kẹt… (tiếng bánh răng)”*
@@ -165,11 +165,11 @@ Thung lũng chướng khí, nơi các y sư và cổ sư nuôi độc như nuôi
 
 | Bậc | Tướng | Giới | Hệ | Chiêu 1 | Chiêu 2 | Tuyệt chiêu |
 |---|---|---|---|---|---|---|
-| 1 | **Lục Xà** | Yêu Tộc | Ảnh Sát | Độc Toàn Dẫn Lộ (spinwash) | Xà Ảnh (second) | Độc Toàn Đại Trận (spinwash, well) |
-| 2 | **Độc Thủ Lão Quái** | Hiệp Khách | Chú Sư | Độc Toàn Dẫn Lộ (spinwash) | Độc Toàn Sa Chú (sand) | Độc Toàn Đại Trận (spinwash, nudge) |
-| 3 | **Ngũ Độc Đồng Tử** | Hiệp Khách | Pháp Tu | Độc Toàn Dẫn Lộ (spinwash) | Kim Tằm Xoáy (spin) | Độc Toàn Đại Trận (spinwash, nudge) |
-| 4 | **Huyết Lang Nhân** | Ma Vật | Ảnh Sát | Độc Toàn Dẫn Lộ (spinwash) | Độc Toàn Truy Ảnh (second) | Độc Toàn Đại Trận (spinwash, spin) |
-| 5 | **Quỷ Y Dược Vương** | Nữ Hiệp | Luân Hồi | Độc Toàn Dẫn Lộ (spinwash) | Kim Châm Hộ Mạch (shield) | Độc Hoàn Tán Toàn (spinwash, reveal) |
+| 1 | **Lục Xà** | Yêu Tộc | Ảnh Sát | Xà Độc Tán Toàn (spinwash) | Xà Ảnh (second) | Vạn Xà Quy Huyệt (spinwash, well) |
+| 2 | **Độc Thủ Lão Quái** | Hiệp Khách | Chú Sư | Độc Vụ (spinwash) | Hồ Lô Sa Chướng (sand) | Vạn Độc Di Sơn (spinwash, nudge) |
+| 3 | **Ngũ Độc Đồng Tử** | Hiệp Khách | Pháp Tu | Cổ Trùng Tán Kình (spinwash) | Kim Tằm Xoáy (spin) | Ngũ Độc Chuyển Châu (spinwash, nudge) |
+| 4 | **Huyết Lang Nhân** | Ma Vật | Ảnh Sát | Lang Trảo Tiêu Toàn (spinwash) | Cuồng Lang (second) | Săn Mồi (spinwash, spin) |
+| 5 | **Quỷ Y Dược Vương** | Nữ Hiệp | Luân Hồi | Ngân Châm Giải Toàn (spinwash) | Kim Châm Hộ Mạch (shield) | Quỷ Y Hoàn Nguyên (spinwash, reveal) |
 
 - **Lục Xà** — Thiếu nữ rắn của Độc Vụ, mắt hổ phách khe dọc. Nàng chờ đợi lâu như rắn rình mồi, rồi ra đòn chỉ một lần. *“Ssss… đến lượt ta.”*
 - **Độc Thủ Lão Quái** — Lão độc sư râu dài, bầu độc đeo hông. Hơi thở của lão cũng đủ làm đối thủ hoa mắt. *“Hít sâu vào, cháu ngoan…”*
@@ -190,11 +190,11 @@ Bến cảng hải tặc nằm trên lưng một con rồng biển đã ngủ. �
 
 | Bậc | Tướng | Giới | Hệ | Chiêu 1 | Chiêu 2 | Tuyệt chiêu |
 |---|---|---|---|---|---|---|
-| 1 | **Tiểu Ngư** | Nữ Hiệp | Ảnh Sát | Hải Triều Dẫn Lộ (railcraft, wind) | Hải Triều Truy Ảnh (second) | Hải Triều Đại Trận (railcraft, vortex) |
-| 2 | **Sa Đại Đao** | Yêu Tộc | Cuồng Chiến | Hải Triều Dẫn Lộ (railcraft, wind) | Hải Triều Cương Kình (power) | Hải Triều Đại Trận (railcraft, shield) |
-| 3 | **Thuyền Nương Lưu Hương** | Nữ Hiệp | Thần Xạ | Hải Triều Dẫn Lộ (railcraft, wind) | Hải Triều Minh Nhãn (reveal) | Hải Triều Đại Trận (railcraft, second) |
-| 4 | **Thiết Neo Lão Kình** | Hiệp Khách | Hộ Pháp | Hải Triều Dẫn Lộ (railcraft, wind) | Hải Triều Hộ Quyết (shield) | Hải Triều Đại Trận (railcraft, reveal) |
-| 5 | **Đông Hải Long Vương** | Yêu Tộc | Chú Sư | Hải Triều Dẫn Lộ (railcraft, wind) | Hải Triều Sa Chú (sand) | Triều Hoàn Quy Uyên (railcraft, wind, vortex) |
+| 1 | **Tiểu Ngư** | Nữ Hiệp | Ảnh Sát | Lướt Sóng (railcraft, wind) | Vẹt Gọi Tái Chiến (second) | Cá Chuồn Liên Hoàn (railcraft, vortex) |
+| 2 | **Sa Đại Đao** | Yêu Tộc | Cuồng Chiến | Sa Đao Dẫn Triều (railcraft, wind) | Sóng Dữ (power) | Vây Mập Hộ Hải (railcraft, shield) |
+| 3 | **Thuyền Nương Lưu Hương** | Nữ Hiệp | Thần Xạ | Thuận Phong Chỉnh Mạn (railcraft, wind) | Viễn Kính Soi Lộ (reveal) | Hạm Trưởng Tái Chinh (railcraft, second) |
+| 4 | **Thiết Neo Lão Kình** | Hiệp Khách | Hộ Pháp | Thiết Neo Dẫn Lưu (railcraft, wind) | Cự Neo Hộ Thân (shield) | Neo Trấn Biển (railcraft, reveal) |
+| 5 | **Đông Hải Long Vương** | Yêu Tộc | Chú Sư | Thủy Triều (railcraft, wind) | San Hô Trầm Sa (sand) | Long Vương Hải Khiếu (railcraft, wind, vortex) |
 
 - **Tiểu Ngư** — Nữ hải tặc tí hon bịt một mắt, da rám nắng, tóc xanh như rong biển. Cô đánh bi nhanh như cá chuồn. *“Bi của ngươi giờ là chiến lợi phẩm của ta!”*
 - **Sa Đại Đao** — Gã hải tặc răng cá mập, đao to như mái chèo. Hắn ăn bi như cá mập đớp mồi. *“Ngoạm!”*
@@ -215,11 +215,11 @@ Hòn đảo của vong hồn trên dòng sông lãng quên. Người chết vẫ
 
 | Bậc | Tướng | Giới | Hệ | Chiêu 1 | Chiêu 2 | Tuyệt chiêu |
 |---|---|---|---|---|---|---|
-| 1 | **Đăng Hồn Đồng Tử** | Tinh Linh | Chú Sư | Minh Môn Dẫn Lộ (bumper) | Minh Môn Sa Chú (sand) | Minh Môn Đại Trận (bumper, spinwash) |
-| 2 | **Cốt Kiếm** | Tinh Linh | Ảnh Sát | Minh Môn Dẫn Lộ (bumper) | Minh Môn Truy Ảnh (second) | Minh Môn Đại Trận (bumper, nudge) |
-| 3 | **Vong Xuyên Bà Bà** | Tinh Linh | Luân Hồi | Minh Môn Dẫn Lộ (bumper) | Minh Môn Luân Chuyển (spinwash) | Minh Môn Đại Trận (bumper, spin) |
-| 4 | **Câu Hồn Sứ** | Tinh Linh | Chú Sư | Minh Môn Dẫn Lộ (bumper) | Minh Môn Sa Chú (sand) | Minh Môn Đại Trận (bumper, reveal) |
-| 5 | **U Minh Quỷ Đế** | Tinh Linh | Cuồng Chiến | Minh Môn Dẫn Lộ (bumper) | Minh Môn Cương Kình (power) | U Môn Song Khoá (bumper, sand) |
+| 1 | **Đăng Hồn Đồng Tử** | Tinh Linh | Chú Sư | Hồn Đăng Khai Môn (bumper) | Dẫn Hồn (sand) | Bách Quỷ Dạ Hành (bumper, spinwash) |
+| 2 | **Cốt Kiếm** | Tinh Linh | Ảnh Sát | Cốt Ảnh (bumper) | Xương Vụn (second) | Vạn Cốt Kiếm (bumper, nudge) |
+| 3 | **Vong Xuyên Bà Bà** | Tinh Linh | Luân Hồi | Vong Xuyên Độ Khẩu (bumper) | Canh Tán Toàn (spinwash) | Cầu Luân Hồi (bumper, spin) |
+| 4 | **Câu Hồn Sứ** | Tinh Linh | Chú Sư | Xích Câu Hồn (bumper) | Hồn Hàn (sand) | Âm Ty Khai Lộ (bumper, reveal) |
+| 5 | **U Minh Quỷ Đế** | Tinh Linh | Cuồng Chiến | Quỷ Trượng Khai Quan (bumper) | Đế Uy Chấn Kình (power) | U Minh Song Quan (bumper, sand) |
 
 - **Đăng Hồn Đồng Tử** — Bé trai ma trong suốt với lá bùa vàng trên trán. Cậu cầm đèn lồng dẫn hồn, và đôi khi dẫn cả bi đi lạc. *“Đi theo ánh đèn nhé…”*
 - **Cốt Kiếm** — Kiếm sĩ xương đội nón lá, vẫn luyện cơ dù đã chết trăm năm. Hắn quên tên mình nhưng chưa quên một chiêu nào. *“Xương cốt cũ, chiêu thức mới.”*
@@ -240,11 +240,11 @@ Hòn đảo của vong hồn trên dòng sông lãng quên. Người chết vẫ
 
 | Bậc | Tướng | Giới | Hệ | Chiêu 1 | Chiêu 2 | Tuyệt chiêu |
 |---|---|---|---|---|---|---|
-| 1 | **Lạc Lạc Tinh Linh** | Tinh Linh | Pháp Tu | Tinh Tuyền Dẫn Lộ (well) | Tinh Tuyền Toàn Quyết (spin) | Tinh Tuyền Đại Trận (well, shield) |
-| 2 | **Tinh Quan Thủ Vệ** | Hiệp Khách | Hộ Pháp | Tinh Tuyền Dẫn Lộ (well) | Tinh Tuyền Nhu Bích (railcraft) | Tinh Tuyền Đại Trận (well, second) |
-| 3 | **Nguyệt Hoa Tiên Tử** | Tinh Linh | Thần Xạ | Tinh Tuyền Dẫn Lộ (well) | Tinh Tuyền Minh Nhãn (reveal) | Tinh Tuyền Đại Trận (well, power) |
-| 4 | **Nhật Diệu Chiến Thần** | Tinh Linh | Cuồng Chiến | Tinh Tuyền Dẫn Lộ (well) | Tinh Tuyền Cương Kình (power) | Tinh Tuyền Đại Trận (well, railcraft) |
-| 5 | **Tinh Đế Thiên Xu** | Tinh Linh | Pháp Tu | Tinh Tuyền Dẫn Lộ (well) | Tinh Tuyền Toàn Quyết (spin) | Song Tinh Dẫn Độ (well, wind) |
+| 1 | **Lạc Lạc Tinh Linh** | Tinh Linh | Pháp Tu | Tinh Điểm (well) | Sao Băng Dẫn (spin) | Tinh Vân Hấp Dẫn (well, shield) |
+| 2 | **Tinh Quan Thủ Vệ** | Hiệp Khách | Hộ Pháp | Đẩu Thuẫn Hấp Châu (well) | Chòm Sao Trấn (railcraft) | Bắc Đẩu Thất Tinh Trận (well, second) |
+| 3 | **Nguyệt Hoa Tiên Tử** | Tinh Linh | Thần Xạ | Nguyệt Cung Quy Tâm (well) | Nguyệt Quang Lộ (reveal) | Mãn Nguyệt Tiễn (well, power) |
+| 4 | **Nhật Diệu Chiến Thần** | Tinh Linh | Cuồng Chiến | Nhật Luân Quy Châu (well) | Liệt Dương Chấn (power) | Thái Dương Bộc Phát (well, railcraft) |
+| 5 | **Tinh Đế Thiên Xu** | Tinh Linh | Pháp Tu | Ngân Hà Quy Tụ (well) | Thiên Tinh Toàn (spin) | Thiên Xu Hấp Tinh (well, wind) |
 
 - **Lạc Lạc Tinh Linh** — Tinh linh tí hon da xanh nhạt phát sáng, đôi cánh chuồn chuồn trong suốt. Cô rải sao lên bàn để dẫn bi đi. *“Hihi, sao rơi kìa!”*
 - **Tinh Quan Thủ Vệ** — Kỵ sĩ canh giữ đài quan tinh, giáp khắc chòm sao. Anh ta đứng gác ba trăm năm chưa từng chợp mắt. *“Không bi nào qua được chòm Bắc Đẩu.”*
@@ -265,11 +265,11 @@ Hoàng triều sa mạc dưới mặt trời không bao giờ tắt. Nỉ phủ 
 
 | Bậc | Tướng | Giới | Hệ | Chiêu 1 | Chiêu 2 | Tuyệt chiêu |
 |---|---|---|---|---|---|---|
-| 1 | **Sa Hồ** | Yêu Tộc | Ảnh Sát | Kim Sa Dẫn Lộ (sand) | Kim Sa Truy Ảnh (second) | Kim Sa Đại Trận (sand, nudge) |
-| 2 | **Thạch Tượng Hộ Lăng** | Linh Tượng | Hộ Pháp | Kim Sa Dẫn Lộ (sand) | Kim Sa Nhu Bích (railcraft) | Kim Sa Đại Trận (sand, spin) |
-| 3 | **Kim Nhãn Tế Ti** | Hiệp Khách | Chú Sư | Kim Sa Dẫn Lộ (sand) | Kim Sa Truy Ảnh (second) | Kim Sa Đại Trận (sand, reveal) |
-| 4 | **Sa Vương Kim Giáp** | Hiệp Khách | Cuồng Chiến | Kim Sa Dẫn Lộ (sand) | Kim Sa Cương Kình (power) | Kim Sa Đại Trận (sand) |
-| 5 | **Thái Dương Nữ Hoàng** | Nữ Hiệp | Thần Xạ | Kim Sa Dẫn Lộ (sand) | Kim Sa Minh Nhãn (reveal) | Sa Mạc Khuyết Môn (sand, slick) |
+| 1 | **Sa Hồ** | Yêu Tộc | Ảnh Sát | Sa Ảnh (sand) | Hồ Bộ Tái Hành (second) | Bão Cát Liên Hoàn (sand, nudge) |
+| 2 | **Thạch Tượng Hộ Lăng** | Linh Tượng | Hộ Pháp | Sư Tượng Sa Vực (sand) | Trấn Lăng (railcraft) | Lăng Mộ Phong Ấn (sand, spin) |
+| 3 | **Kim Nhãn Tế Ti** | Hiệp Khách | Chú Sư | Tế Nhật Sa Đàn (sand) | Nhãn Ấn Tái Chiếu (second) | Nhật Thực (sand, reveal) |
+| 4 | **Sa Vương Kim Giáp** | Hiệp Khách | Cuồng Chiến | Vương Thổ Sa Trì (sand) | Hoàng Giáp Cương Kình (power) | Hoàng Sa Bão Tố (sand) |
+| 5 | **Thái Dương Nữ Hoàng** | Nữ Hiệp | Thần Xạ | Đế Miện Sa Chướng (sand) | Thiên Nhãn (reveal) | Thái Dương Khuyết Môn (sand, slick) |
 
 - **Sa Hồ** — Tiểu đạo chích tai cáo sa mạc, khăn vàng che mặt. Cô lướt qua cát nhanh như cơn gió và luôn lấy được thứ mình muốn. *“Của ngươi? Giờ là của ta rồi.”*
 - **Thạch Tượng Hộ Lăng** — Tượng sư tử đá canh lăng mộ cổ, sống dậy khi có kẻ xâm phạm. Nó im lặng ngàn năm và có thể chờ thêm ngàn năm nữa. *“…(tiếng đá nghiến)…”*
@@ -290,11 +290,11 @@ Rừng cổ thụ của linh thú và thần điểu. Rễ cây có thể trồi
 
 | Bậc | Tướng | Giới | Hệ | Chiêu 1 | Chiêu 2 | Tuyệt chiêu |
 |---|---|---|---|---|---|---|
-| 1 | **Mộc Linh** | Tinh Linh | Pháp Tu | Mộc Căn Dẫn Lộ (bumper) | Mộc Căn Toàn Quyết (spin) | Mộc Căn Đại Trận (bumper, second) |
-| 2 | **Báo Nữ A Man** | Yêu Tộc | Ảnh Sát | Mộc Căn Dẫn Lộ (bumper) | Mộc Căn Truy Ảnh (second) | Mộc Căn Đại Trận (bumper, power, railcraft) |
-| 3 | **Thạch Quy Lão** | Yêu Tộc | Hộ Pháp | Mộc Căn Dẫn Lộ (bumper) | Mộc Căn Nhu Bích (railcraft) | Mộc Căn Đại Trận (bumper, railcraft) |
-| 4 | **Lôi Ưng Vũ Vương** | Yêu Tộc | Thần Xạ | Mộc Căn Dẫn Lộ (bumper) | Mộc Căn Minh Nhãn (reveal) | Mộc Căn Đại Trận (bumper, wind) |
-| 5 | **Thụ Mẫu Thanh Long** | Tinh Linh | Chú Sư | Mộc Căn Dẫn Lộ (bumper) | Mộc Căn Sa Chú (sand) | Cổ Mộc Phân Căn (bumper, well) |
+| 1 | **Mộc Linh** | Tinh Linh | Pháp Tu | Sồi Non Phân Rễ (bumper) | Diệp Toàn Quyết (spin) | Tiểu Linh Khai Lâm (bumper, second) |
+| 2 | **Báo Nữ A Man** | Yêu Tộc | Ảnh Sát | Liệp Trảo Mộc Chướng (bumper) | Báo Bộ Tái Kích (second) | Báo Vương Trấn Lâm (bumper, power, railcraft) |
+| 3 | **Thạch Quy Lão** | Yêu Tộc | Hộ Pháp | Mai Rùa (bumper) | Quy Trượng Nhu Bích (railcraft) | Huyền Vũ Trấn (bumper, railcraft) |
+| 4 | **Lôi Ưng Vũ Vương** | Yêu Tộc | Thần Xạ | Dực Căn Trấn Lộ (bumper) | Ưng Mục Chiếu Lộ (reveal) | Lôi Ưng Giáng (bumper, wind) |
+| 5 | **Thụ Mẫu Thanh Long** | Tinh Linh | Chú Sư | Dây Leo Trói (bumper) | Lạc Diệp Trầm Sa (sand) | Thanh Long Thụ Giới (bumper, well) |
 
 - **Mộc Linh** — Tiểu mộc linh da lá xanh, đội mũ quả sồi. Nó sinh ra từ một hạt giống rơi trên Linh Đài và lớn lên cùng tiếng bi lăn. *“Lá rơi… bi cũng rơi!”*
 - **Báo Nữ A Man** — Nữ thợ săn tai báo của Vạn Thú Lâm. Nàng rình bi như rình mồi rồi vồ liền ba cú. *“Đứng im. Ta đang săn.”*
@@ -315,11 +315,11 @@ Vực sâu nơi hiện thực bị xé rách. Mọi thứ đến gần đều b�
 
 | Bậc | Tướng | Giới | Hệ | Chiêu 1 | Chiêu 2 | Tuyệt chiêu |
 |---|---|---|---|---|---|---|
-| 1 | **Hư Trùng** | Ma Vật | Ảnh Sát | Hư Uyên Dẫn Lộ (well) | Hư Uyên Truy Ảnh (second) | Hư Uyên Đại Trận (well, spin) |
-| 2 | **Phệ Hồn Thú** | Ma Vật | Cuồng Chiến | Hư Uyên Dẫn Lộ (well) | Hư Lực (power) | Hư Uyên Đại Trận (well, reveal, sand) |
-| 3 | **Vô Diện Khách** | Tinh Linh | Luân Hồi | Hư Uyên Dẫn Lộ (well) | Hư Uyên Luân Chuyển (spinwash) | Hư Uyên Đại Trận (teleport, well) |
-| 4 | **Hư Không Mẫu Hoàng** | Yêu Tộc | Chú Sư | Hư Uyên Dẫn Lộ (well) | Hư Uyên Sa Chú (sand) | Hư Uyên Đại Trận (well, slick) |
-| 5 | **Thôn Thiên Ma Vương** | Ma Vật | Cuồng Chiến | Hư Uyên Dẫn Lộ (well) | Hư Uyên Cương Kình (power) | Hư Uyên Nhiếp Khẩu (well, vortex) |
+| 1 | **Hư Trùng** | Ma Vật | Ảnh Sát | Đào Hư Không (well) | Thoát Xác Tái Hành (second) | Bầy Hư Trùng (well, spin) |
+| 2 | **Phệ Hồn Thú** | Ma Vật | Cuồng Chiến | Phệ Khẩu Hấp Châu (well) | Hư Lực (power) | Nuốt Trời Bộc (well, reveal, sand) |
+| 3 | **Vô Diện Khách** | Tinh Linh | Luân Hồi | Vô Tướng Dẫn Uyên (well) | Tịch Diện Tán Toàn (spinwash) | Vô Diện Luân Chuyển (teleport, well) |
+| 4 | **Hư Không Mẫu Hoàng** | Yêu Tộc | Chú Sư | Tam Nhãn Nhiếp Châu (well) | Kén Cát Trầm Hành (sand) | Mẫu Hoàng Giáng Uyên (well, slick) |
+| 5 | **Thôn Thiên Ma Vương** | Ma Vật | Cuồng Chiến | Cự Uyên Hấp Tinh (well) | Ma Trụ Cương Kình (power) | Thôn Thiên (well, vortex) |
 
 - **Hư Trùng** — Con bọ hư không nhỏ xíu, mắt hồng phát sáng. Nó đào hang xuyên qua hiện thực và gặm năng lượng của đối thủ. *“Kẹt kẹt kẹt!”*
 - **Phệ Hồn Thú** — Quái thú hư không có cái miệng răng nanh ngay giữa bụng. Nó gầm lên làm cả Linh Đài rung chuyển. *“GRRRAAAH!”*
@@ -340,11 +340,11 @@ Lầu các lụa hồng giữa hồ trăng, nơi các mỹ nhân luyện mị th
 
 | Bậc | Tướng | Giới | Hệ | Chiêu 1 | Chiêu 2 | Tuyệt chiêu |
 |---|---|---|---|---|---|---|
-| 1 | **Hồng Liên** | Nữ Hiệp | Ảnh Sát | Hương Lưu Dẫn Lộ (vortex) | Hương Lưu Truy Ảnh (second) | Hương Lưu Đại Trận (vortex, power) |
-| 2 | **Tử Trinh** | Nữ Hiệp | Chú Sư | Hương Lưu Dẫn Lộ (vortex) | Hương Lưu Sa Chú (sand) | Hương Lưu Đại Trận (vortex, railcraft) |
-| 3 | **Ngân Cầm** | Nữ Hiệp | Pháp Tu | Hương Lưu Dẫn Lộ (vortex) | Hương Lưu Toàn Quyết (spin) | Hương Lưu Đại Trận (vortex, wind) |
-| 4 | **Kim Phượng** | Nữ Hiệp | Cuồng Chiến | Hương Lưu Dẫn Lộ (vortex) | Hương Lưu Cương Kình (power) | Hương Lưu Đại Trận (vortex) |
-| 5 | **Mị Cơ Các Chủ** | Nữ Hiệp | Luân Hồi | Hương Lưu Dẫn Lộ (vortex) | Hương Lưu Luân Chuyển (spinwash) | Song Vũ Nghịch Toàn (vortex, spinwash) |
+| 1 | **Hồng Liên** | Nữ Hiệp | Ảnh Sát | Vũ Ảnh (vortex) | Vũ Bộ Lưu Ảnh (second) | Hồng Liên Loạn Vũ (vortex, power) |
+| 2 | **Tử Trinh** | Nữ Hiệp | Chú Sư | Mê Hương (vortex) | Phấn Sa Trầm Lộ (sand) | Tử Vụ Mê Thành (vortex, railcraft) |
+| 3 | **Ngân Cầm** | Nữ Hiệp | Pháp Tu | Ngân Huyền Toàn Khúc (vortex) | Khúc Nhạc Dẫn Bi (spin) | Thiên Hương Cầm Khúc (vortex, wind) |
+| 4 | **Kim Phượng** | Nữ Hiệp | Cuồng Chiến | Song Phiến Toàn Phong (vortex) | Thiết Phiến Chấn (power) | Kim Phượng Nghịch Vũ (vortex) |
+| 5 | **Mị Cơ Các Chủ** | Nữ Hiệp | Luân Hồi | Kính Hoa Thuỷ Nguyệt (vortex) | Mộng Hồi Cung (spinwash) | Khuynh Quốc Khuynh Thành (vortex, spinwash) |
 
 - **Hồng Liên** — Vũ cơ tay áo dài của Thiên Hương Các. Mỗi bước nhảy của nàng để lại tàn ảnh, và đối thủ không biết đâu mới là thật. *“Nhìn theo tay áo ta này…”*
 - **Tử Trinh** — Nữ điều hương tóc tím, nốt ruồi dưới mắt. Mùi hương của nàng khiến người ta quên cả cách cầm cơ. *“Thơm không? Hít thêm chút nữa đi…”*
