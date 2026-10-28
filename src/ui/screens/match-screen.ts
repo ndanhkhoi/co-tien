@@ -391,7 +391,7 @@ export function matchScreen(opts: MatchOptions) {
         nextBall.replaceChildren('Bi tiếp theo', Number.isFinite(id) ? miniBall(id) : '', Number.isFinite(id) ? String(id) : 'Hết bi');
       } else nextBall.hidden = true;
       objKicker.textContent = opts.challenge ? opts.label : `${MODE_NAMES[match.setup.mode]} · chạm ${match.setup.raceTo} · ván ${match.rackNo}`;
-      objText.textContent = opts.challenge ? opts.challenge.goal : match.objective();
+      objText.textContent = opts.challenge ? opts.challenge.goal : match.setup.mode === 'carom-3c' ? 'Chạm bi thứ nhất, đủ 3 băng trước bi thứ hai.' : match.objective();
       renderSkills();
       renderChips();
       renderControls();

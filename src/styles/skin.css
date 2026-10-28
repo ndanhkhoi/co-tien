@@ -630,3 +630,7 @@ body { background: linear-gradient(#e9e1d0d1, #e9e1d0d1), var(--paper, none) cen
 .mx-vs-av img, .mx-vs-av > div { width: 100%; height: 100%; object-fit: cover; }
 .mx-vs-av::after { inset: 0; }
 .mx-vs-title { width: 210px; max-width: 100%; overflow-wrap: anywhere; }
+/* Keep long rules inside the painted objective plate at every mode. */
+.mx-obj { min-width: 0; max-width: min(360px, 100%); padding: 8px 28px; }
+.mx-obj-k { font-size: 11px; }
+.mx-obj-t { max-height: 2.45em; font-size: 13px; line-height: 1.22; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
