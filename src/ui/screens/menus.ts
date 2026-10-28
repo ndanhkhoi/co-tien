@@ -212,7 +212,9 @@ export function championModal(app: App, c: Champion, onChange?: () => void) {
       h('span.cp-sk-cd', null, sk.slot === 2 ? 'Tuyệt chiêu' : `Hồi ${sk.cooldown} cú`),
       h('p.cp-sk-desc', null, sk.desc));
     return h('div.modal.champ-page', { style: `--sect:${hex6(s.main)}` },
-      h('div.cp-art', null, h('img', { src: cutoutUrl(c.id), alt: '', draggable: false, decoding: 'async' })),
+      h('div.cp-art', null, h('img', { src: cutoutUrl(c.id), alt: '', draggable: false, decoding: 'async',
+        // Wide action poses would shrink to fit the tall column: fill it instead and crop the sides.
+        onload: (e: Event) => { const im = e.target as HTMLImageElement; im.classList.toggle('wide', im.naturalWidth > im.naturalHeight * 0.85); } })),
       h('div.cp-main', null,
         h('div.cp-head', null,
           h('div.cp-sect', null, h('img', { src: sectArtUrl(c.sect, 'emblem'), alt: '' }), s.name),

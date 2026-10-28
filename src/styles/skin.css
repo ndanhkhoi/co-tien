@@ -312,3 +312,6 @@
 /* Settings groups and guard sheets wear the ink frame too. */
 .set-group, .rh-card, .vp-card { border: 14px solid transparent; border-image: url('/art/ui/frame/panel.webp') 74 fill / 14px / 0 stretch; border-radius: 0; box-shadow: none; background: none; }
 .rh-card::before, .vp-card::before { display: none !important; }
+.cp-art img.wide { object-fit: cover; object-position: 50% 35%; }
+.cp-skills { align-content: stretch; grid-auto-rows: 1fr; }
+.cp-skill { justify-content: center; }
