@@ -49,6 +49,6 @@ export function showIntro(app: App, onDone?: () => void) {
     return h('div.modal.intro', null,
       h('div.intro-art', null, img),
       h('div.intro-body', null, h('div.intro-scroll.scroll', null, count, title, text),
-        h('div.intro-foot', null, dots, h('div.grow'), btn('Bỏ qua', finish, 'ghost small'), next)));
+        h('div.intro-foot', null, dots, h('div.intro-actions', null, btn('Bỏ qua', finish, 'ghost'), next))));
   });
 }

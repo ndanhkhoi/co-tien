@@ -215,11 +215,28 @@ const CUE_NAMES: Record<SectId, [string, string]> = {
   thienhuong: ['Hồng Phiến Cơ', 'Hạc Vũ Cơ'],
 };
 
+/** Player-facing cue descriptions (roster.json keeps the English art prompts). */
+const CUE_DESC: Record<SectId, [string, string]> = {
+  thienquang: ['Cơ bạch ngọc, cổ cơ bọc chắn kiếm bằng vàng.', 'Cơ vàng ngà, đuôi khảm đĩa mặt trời.'],
+  huyetsat: ['Cơ sắt đen quấn xích đỏ.', 'Cơ hắc diện thạch, đầu cơ cháy lửa đỏ thẫm.'],
+  hoalinh: ['Cơ gỗ đào chạm hoa.', 'Cơ ngọc nhạt buộc tua lụa.'],
+  bangphach: ['Cơ băng pha lê, đầu hình sen.', 'Cơ bạc và băng, vòng hoa tuyết.'],
+  thienco: ['Cơ đồng và gỗ tếch, đuôi khảm bánh răng.', 'Cơ gỗ tếch, khớp nối có vòng con quay.'],
+  docvu: ['Cơ gỗ độc cong queo, rỉ nọc.', 'Cơ trúc treo hồ lô ngọc.'],
+  hailong: ['Cơ gỗ tếch và đồng như ống nhòm.', 'Cơ san hô, đuôi hình mỏ neo.'],
+  uminh: ['Cơ xương với những vòng lửa ma.', 'Cơ gỗ đen có móc treo đèn lồng.'],
+  tinhtu: ['Cơ bạc ngưng tụ từ ánh sao.', 'Cơ tím, đầu hình trăng khuyết.'],
+  kimsa: ['Cơ vàng, đầu cơ mặt trời.', 'Cơ sa thạch, đai lam ngọc.'],
+  vanthu: ['Cơ gỗ sống còn đâm lá.', 'Cơ hổ phách và xương, kết lông vũ.'],
+  hukhong: ['Cơ gai đen rỉ ánh tím.', 'Cơ vỏ giáp, khảm một con mắt hư không.'],
+  thienhuong: ['Cơ sơn mài đỏ, cổ cơ mẫu đơn vàng, tua lụa.', 'Cơ ngà vẽ hạc múa và lá vàng.'],
+};
+
 export const SECT_CUES: CueDef[] = SECTS.flatMap((s, i) => (['a', 'b'] as const).map((v, j) => {
   const [power, aim, spin, control, energy] = CUE_STATS[s.id][j];
   return {
     id: `${s.id}-${v}`, sect: s.id, name: CUE_NAMES[s.id][j],
-    desc: roster.sects[i].cues[j],
+    desc: CUE_DESC[s.id][j],
     price: j === 0 ? 400 + 120 * i : 1200 + 250 * i, level: j === 0 ? 2 + i : 4 + i,
     power, aim, spin, control, energy,
     colors: { shaft: 0xeedcae, wrap: darken(s.main, 0.45), butt: darken(s.main, 0.7), accent: s.glow, ferrule: 0xf3f0e6 },

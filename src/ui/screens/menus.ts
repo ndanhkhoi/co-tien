@@ -205,18 +205,24 @@ export function championModal(app: App, c: Champion, onChange?: () => void) {
         close();
         onChange?.();
       });
-    return h('div.modal.champ-modal', { style: `--sect:${hex6(s.main)}` },
-      h('div.cm-art', null, h('img', { src: cutoutUrl(c.id), alt: '', draggable: false, decoding: 'async' })),
-      h('div.cm-body', null, h('div.cm-scroll.scroll', null,
-        h('div.cm-sect', null, h('img', { src: sectArtUrl(c.sect, 'emblem'), alt: '' }), s.name),
-        h('h2', null, c.name),
-        h('div.row.wrap', { style: 'gap:6px' }, h('span.badge', null, `Bậc ${c.tier}`), h('span.badge.kind', { 'data-kind': c.kind }, KIND_LABEL[c.kind]), h('span.badge', null, cls.name),
-          owned ? h('span.badge.ok', null, 'Đã chiêu mộ') : h('span.badge.accent', null, 'Chưa chiêu mộ')),
-        h('div.cm-passive', null, h('b', null, `Nội tại · ${cls.name}`), h('p', null, cls.passive)),
-        ...c.skills.map((sk) => skillRow(c, sk)),
-        h('p.cm-note', null, 'Chiêu và nội tại dùng ở chế độ Tiên Đạo. Trên bàn phăng (không lỗ), chiêu liên quan đến lỗ tự đổi: phong ấn lỗ → làm run, nuốt chửng → áp phê thần, hấp dẫn → tiên tri, bộc phá → cuồng lực, dịch chuyển → dời bi.'),
+    // A full champion page: art on the left; identity, passive and the three skills as cards on the right.
+    const skillCard = (sk: Champion['skills'][number]) => h('div.cp-skill', { class: sk.slot === 2 ? 'ult' : '' },
+      h('img.cp-sk-icon', { src: skillIconUrl(c.id, sk.slot), alt: '', loading: 'lazy' }),
+      h('b.cp-sk-name', null, sk.name),
+      h('span.cp-sk-cd', null, sk.slot === 2 ? 'Tuyệt chiêu' : `Hồi ${sk.cooldown} cú`),
+      h('p.cp-sk-desc', null, sk.desc));
+    return h('div.modal.champ-page', { style: `--sect:${hex6(s.main)}` },
+      h('div.cp-art', null, h('img', { src: cutoutUrl(c.id), alt: '', draggable: false, decoding: 'async' })),
+      h('div.cp-main', null,
+        h('div.cp-head', null,
+          h('div.cp-sect', null, h('img', { src: sectArtUrl(c.sect, 'emblem'), alt: '' }), s.name),
+          h('h2.cp-name', null, c.name),
+          h('div.cp-tags', null, h('span.badge.kind', { 'data-kind': c.kind }, KIND_LABEL[c.kind]), h('span.badge', null, `Bậc ${c.tier}`), h('span.badge', null, cls.name),
+            owned ? h('span.badge.ok', null, 'Đã chiêu mộ') : h('span.badge.accent', null, 'Chưa chiêu mộ')),
+          h('p.cp-passive', null, h('b', null, `Nội tại · ${cls.name}: `), cls.passive),
         ),
-        h('div.actions', null, btn('Đóng', close, 'ghost'), action),
+        h('div.cp-skills.scroll', null, ...c.skills.map(skillCard)),
+        h('div.cp-foot', null, btn('Đóng', close, 'ghost'), action),
       ),
       closeX(close),
     );
@@ -743,7 +749,7 @@ export function settingsScreen(app: App): Screen {
       item('Rung khi chạm', toggle(s.haptics, (v) => {
         s.haptics = v;
         save();
-      }, 'Rung khi chạm'), { icon: 'tremor', hint: 'Android có rung; iPhone không cho trang web rung' }),
+      }, 'Rung khi chạm'), { icon: 'tremor', hint: 'Rung nhẹ khi thiết bị hỗ trợ' }),
       item('Thuận tay trái', toggle(s.leftHanded, (v) => {
         s.leftHanded = v;
         save();

@@ -1,3 +1,4 @@
+import { icon } from './icons';
 /**
  * Scroll affordance: every `.scroll` area gets `data-more` = "b" / "r" / "br" while content
  * remains below / to the right, so CSS can fade that edge and show a chevron. Players on
@@ -22,12 +23,14 @@ function update(el: HTMLElement) {
     if (!chev) {
       chev = document.createElement('div');
       chev.className = 'more-chevron';
+      chev.append(icon('turn'));
       chev.setAttribute('aria-hidden', 'true');
       chevrons.set(el, chev);
     }
     if (chev.parentElement !== host) host.append(chev);
     chev.style.left = `${el.offsetLeft + el.offsetWidth / 2}px`;
-    chev.style.top = `${el.offsetTop + el.offsetHeight - 38}px`;
+    // Straddles the bottom edge inside the faded strip, so it never sits on readable text.
+    chev.style.top = `${el.offsetTop + el.offsetHeight - 14}px`;
   } else {
     chev?.remove();
   }
