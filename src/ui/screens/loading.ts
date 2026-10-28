@@ -25,7 +25,6 @@ export function loadingScreen(next: (app: App) => Screen) {
       h('div.ld-title', null, 'Đang chuẩn bị tài nguyên', pct),
       h('div.ld-bar', null, fill),
       tip,
-      h('p.ld-note', null, 'Chỉ lần đầu và sau mỗi bản cập nhật — những lần sau vào ngay.'),
     ));
     let shown = 0;
     void preloadCore(app.profile.champion, (f) => {
