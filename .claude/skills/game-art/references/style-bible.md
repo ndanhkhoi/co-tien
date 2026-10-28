@@ -5,10 +5,10 @@ the visual contract every generated image must follow.
 
 ## Brand look: Thuỷ Mặc (chosen)
 
-Everything that is not a champion is painted as Chinese/Vietnamese ink wash on warm rice paper: black ink
+Illustrations, icons and UI decoration are painted as Chinese/Vietnamese ink wash on warm rice paper: black ink
 brushwork, grey washes, mist, generous empty paper, exactly one vermilion accent (seals, sight dots), matte, no
 glow, no gold, no 3D text. Skill icons and emblems follow it (one sect accent colour allowed). Champions keep
-their colourful anime look; on-table VFX stay luminous because they are magic. Reference: `brand/thuymac` in
+their colourful anime look; on-table VFX use matte sect-coloured ink brushwork, without glow or additive light. Reference: `brand/thuymac` in
 the master art folder.
 
 ## Look
@@ -18,20 +18,23 @@ the master art folder.
 - **Two render styles, one world**:
   - *Chibi* — 3D-render chibi (big head ~1:2 body, large expressive eyes, soft subsurface
     skin, toy-like clean materials, soft studio light). Used for portraits/avatars.
-  - *Splash* — painterly 2.5D anime illustration, dynamic pose, rim light in the sect glow
-    colour, cinematic. Used for splash, cut-in, menus, loading.
-- **Icons & VFX** — painterly glowing magic, high contrast, chunky readable silhouettes,
+  - *Splash* — painterly 2.5D anime illustration, dynamic pose, restrained sect-colour accents,
+    matte painted finish without glow. Used for splash, cut-in, menus, loading.
+- **Icons & VFX** — matte painted ink magic, no glow, no metallic shine or additive light; high contrast, chunky readable silhouettes,
   readable at 48–64 px, no text.
 - **Outfits**: stylish fantasy costumes may show skin (slits, bare shoulders, midriff) like typical
   xianxia/gacha art, but never sexualised or lewd: no nudity, no fetish framing, no suggestive poses.
 - **State gender explicitly** in every champion look ("a man", "a woman"): without it the model drifts
   towards young women, even for kings and emperors.
-- **Original designs only**: no resemblance to famous characters (e.g. a bald man with red body stripes,
-  spiky golden hair heroes, plumbers, pocket monsters). If a result evokes a known character, reject it.
+- **Original designs only**: no resemblance to characters from existing works. If a result evokes a known character, reject it.
 - **Never**: Latin/Chinese letters used as glyphs, text, logos, watermarks, signatures, UI frames, existing game/IP
   characters or emblems, modern clothing, guns (Thiên Cơ Các may use fantasy crossbows/cannons).
 
+Code/shaders may render simulated objects such as balls and the table (geometry, numbers/stripes, colours, lighting and physics-driven rotation). This exception does not permit code-drawn illustrations, icons or UI decoration; those must be original assets generated through the prescribed art pipeline.
+
 ## Sect palettes (main / glow)
+
+`glow` is the existing secondary palette field name, not permission to add luminous effects.
 
 | sect | main | glow | motifs |
 |---|---|---|---|
@@ -52,10 +55,10 @@ the master art folder.
 
 | asset | background to request | slice key |
 |---|---|---|
-| portrait (chibi avatar) | soft radial gradient of the sect main → dark navy, nothing else | none (kept) |
+| portrait (chibi avatar) | warm rice paper, matching the approved character reference | none (kept) |
 | character cut-out (splash/cut-in) | **transparent** or flat pure green `#00ff00` | alpha / green |
-| skill icons, emblems | pure black `#000000` | black (or kept for framed icons) |
-| VFX elements, flipbooks | pure black `#000000` (additive) | black |
+| skill icons, emblems | warm rice paper; black ink + one sect accent, emblems vermilion + black | inspect actual background before slicing |
+| VFX elements, flipbooks | transparent; matte sect ink with paper-white brush edges, no glow | alpha; normal blending |
 | scenes (splash bg, menu, cut-in strip) | full scene, no transparency | none |
 | table felt / rail textures | full-bleed top-down texture, seamless | none |
 

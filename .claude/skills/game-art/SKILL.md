@@ -5,10 +5,7 @@ description: Vẽ mới hoặc vẽ lại tài sản nguyên bản cho Cơ Tiên
 
 # Game art pipeline
 
-Mọi tranh phải được sinh riêng cho Cơ Tiên, không tải từ internet, không dùng nhân vật, tên hay biểu
-tượng của tác phẩm khác. Mọi hình đồ hoạ phải là painted asset: không tự vẽ SVG, không emoji, không
-thư viện icon. Đây là quy tắc làm nội dung; mã hiện tại vẫn còn `ballArt`/`cueArt` vẽ SVG trong
-`src/ui/icons.ts`, bi trên bàn dùng shader.
+Mọi tranh, icon, minh hoạ và trang trí UI phải được sinh riêng, nguyên bản cho Cơ Tiên qua 9router với model `cx/gpt-6-sol-image`; không tải từ internet, không dùng nhân vật, tên hay biểu tượng của tác phẩm khác, không tự vẽ SVG, không emoji hoặc thư viện icon. Code/shader chỉ được vẽ vật thể mô phỏng như bi và bàn (hình học, số/sọc, màu, ánh sáng và xoay theo vật lý); không dùng ngoại lệ này để thay tranh, icon hay trang trí UI.
 Đọc trước khi vẽ:
 
 - `docs/world-bible.md` — môn phái, hệ, tướng, chiêu
@@ -93,8 +90,7 @@ public/art/
 ```
 
 Id khớp dữ liệu `src/game/content/`. Icon UI được `src/ui/icons.ts` cung cấp qua `icon(name)`.
-Kiểm tra `vite.config.ts` khi thêm tài sản cần tải sẵn: mẫu `art/ui/*.webp` hiện không bao gồm
-thư mục con `ui/icons/`; ảnh trong `art/` có cache lúc tải lần đầu.
+Kiểm tra `vite.config.ts` khi thêm tài sản cần tải sẵn: mẫu `art/ui/**/*.webp` bao gồm cả thư mục con `ui/icons/`; các ảnh khác trong `art/` có cache lúc tải lần đầu.
 
 ## How VFX turns into skill animation
 

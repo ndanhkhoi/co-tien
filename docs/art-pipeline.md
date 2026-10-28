@@ -56,9 +56,7 @@ response để kiểm tra trước khi chạy lại.
 vàng 3D. Tướng giữ tạo hình anime màu sắc trên giấy; hiệu ứng dùng nét mực màu môn phái. Dấu ấn chỉ dùng
 son và đen. Quy tắc đầy đủ: `.claude/skills/game-art/references/style-bible.md`.
 
-**Quy tắc tài sản:** mọi hình đồ hoạ trong game phải là tranh được vẽ qua pipeline; không tự vẽ SVG,
-không dùng emoji hay thư viện icon. Đây là quy tắc cho nội dung mới và thay thế; mã hiện tại vẫn còn
-`ballArt`/`cueArt` vẽ SVG trong `src/ui/icons.ts`, còn bi trên bàn dùng shader.
+**Quy tắc tài sản:** mọi tranh, icon, minh hoạ và trang trí giao diện phải là tài sản nguyên bản được sinh riêng qua pipeline, bằng model quy định; không lấy ảnh internet, tài sản có sẵn của tác phẩm khác, emoji, thư viện icon hoặc tự vẽ SVG thay tranh. Code/shader được dùng cho vật thể mô phỏng như bi và bàn: hình học, số/sọc, màu, ánh sáng và xoay theo vật lý. Ngoại lệ này không mở rộng sang tranh, icon hay trang trí UI. Vật thể mang tính minh hoạ trong giao diện, kể cả ảnh xem cơ mặc định, vẫn dùng tranh qua pipeline.
 
 ## Ảnh gốc
 

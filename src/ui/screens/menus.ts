@@ -79,10 +79,10 @@ export function statRows(lines: StatLine[]): HTMLElement {
   )));
 }
 
-/** Painted cue for menus: the sect cue art, or a plain wooden bar for the house cue. */
+/** Painted cue for menus, including the plain wooden house cue. */
 export function cueArtEl(c: CueDef): HTMLElement {
-  if (!c.sect) return h('div.cue-strip', null, h('i.cue-wood', { 'aria-hidden': 'true' }));
-  return h('div.cue-strip', null, h('img', { src: sectArtUrl(c.sect, c.id.endsWith('-b') ? 'cue-b' : 'cue-a'), alt: '', draggable: false, decoding: 'async', loading: 'lazy' }));
+  const src = c.sect ? sectArtUrl(c.sect, c.id.endsWith('-b') ? 'cue-b' : 'cue-a') : artUrl('ui/cue-default.webp');
+  return h('div.cue-strip', null, h('img', { src, alt: '', draggable: false, decoding: 'async', loading: 'lazy' }));
 }
 
 /** CSS felt preview of a table skin (cloth inside its rail). */

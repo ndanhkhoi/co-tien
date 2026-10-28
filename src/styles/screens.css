@@ -130,16 +130,6 @@ textarea.code-box:focus { border-color: var(--accent); }
   box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.25);
 }
 .cue-strip img { width: 100%; height: 30px; object-fit: contain; filter: drop-shadow(0 3px 2px rgba(0, 0, 0, 0.45)); }
-/* The house cue: a plain wooden bar, tip on the left. */
-.cue-wood {
-  display: block;
-  width: 100%;
-  height: 12px;
-  background: linear-gradient(90deg, #2f5677 0 1.2%, #f4ecd8 1.2% 3.5%, #e2c79a 3.5% 52%, #1a1713 52% 53.5%, #9b6a3a 53.5% 72%, #6e4523 72% 97%, #1a1713 97%);
-  clip-path: polygon(0 32%, 100% 0, 100% 100%, 0 68%);
-  filter: drop-shadow(0 3px 2px rgba(0, 0, 0, 0.45));
-}
-
 /* Table preview: cloth inside its rail. */
 .table-preview {
   height: 86px;

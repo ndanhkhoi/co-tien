@@ -32,14 +32,6 @@ export function append(el: Element, kids: Child[]) {
   }
 }
 
-export function svg(markup: string, cls = ''): SVGElement {
-  const t = document.createElement('template');
-  t.innerHTML = markup.trim();
-  const s = t.content.firstElementChild as SVGElement;
-  if (cls) s.setAttribute('class', cls);
-  return s;
-}
-
 /**
  * Button that reacts on pointer-down (no 300 ms click delay), with sound + haptic,
  * and fires on pointer-up inside. Scrolling containers still work because a move
