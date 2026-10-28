@@ -732,3 +732,11 @@
 /* Cut-ins never capture controls, including the pause sheet above the table. */
 .cutin, .cutin * { pointer-events: none !important; }
 .cutin.paused { visibility: hidden; }
+
+/* Desktop precision-pointer layout: placement is done by dragging the cue ball on the
+   table, so the four touch nudge buttons must not steal room from the playing surface. */
+@media (hover: hover) and (pointer: fine) and (min-width: 900px) {
+  .screen.game.mx .mx-dpad { display: none !important; }
+  .screen.game.mx .mx-ctrl.placing:not(.preview-aim) .mx-place-mode { min-width: 128px; }
+  .screen.game.mx .mx-ctrl { --colR: 112px; }
+}
