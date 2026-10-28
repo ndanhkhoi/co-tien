@@ -1327,7 +1327,7 @@ export function matchScreen(opts: MatchOptions) {
       hintOnce(app, 'ctl-power', 'Lực và đánh', 'Kéo thanh lực rồi chạm ĐÁNH. Hoặc giữ ĐÁNH và thả đúng lực; trượt ngón ra xa để huỷ.',
         { anchor: () => powerBar, place: beside });
       if (match.canMoveCue) {
-        hintOnce(app, 'ctl-ballinhand', 'Bi trong tay', 'Kéo bi cái hoặc chạm bàn để dời bi. Dùng nút hướng để chỉnh nhỏ. Chọn Ngắm thử để chỉnh hướng và xem đường bi trước khi bấm ĐẶT BI.',
+        hintOnce(app, 'ctl-ballinhand', match.state.isBreak ? 'Đặt bi phá' : 'Đặt bi cái', 'Kéo bi cái hoặc chạm bàn để dời bi. Dùng nút hướng để chỉnh nhỏ. Chọn Ngắm thử để chỉnh hướng và xem đường bi trước khi bấm ĐẶT BI.',
           { anchor: () => dpad, place: beside });
       }
       if (match.callType() !== 'none') {
@@ -1366,7 +1366,10 @@ export function matchScreen(opts: MatchOptions) {
         aim.vert = 0;
         updateSpinDot();
         aimFirstTarget();
-        if (match.canMoveCue) herald({ side, title: changed ? `Lượt của ${nameOf(side)}` : 'Bi trong tay', line: 'Bi trong tay — dời bi, Ngắm thử, rồi ĐẶT BI' });
+        if (match.canMoveCue) {
+          const placingTitle = match.state.isBreak ? 'Đặt bi phá' : 'Đặt bi cái';
+          herald({ side, title: changed ? `Lượt của ${nameOf(side)}` : placingTitle, line: `${placingTitle} — dời bi, Ngắm thử, rồi ĐẶT BI` });
+        }
         else if (changed) herald({ side, title: `Lượt của ${nameOf(side)}`, line: match.objective() });
         coachTurn();
       }
@@ -1688,7 +1691,7 @@ export function matchScreen(opts: MatchOptions) {
           tip('switch-target', 'Đổi mục tiêu', 'Nhảy lần lượt qua các bi hợp lệ: bi nhỏ nhất ở 9/10 bi, bi nhóm mình ở 8 bi.'),
           tip('spin', 'Áp phê', 'Chạm bi cái nhỏ để mở bi lớn, chạm điểm đánh hoặc chọn nhanh Giữa, Trô, Cule, Giật, Trái, Phải.'),
           tip('power', 'Lực', 'Kéo thanh lực để chọn lực rồi chạm ĐÁNH. Hoặc giữ ĐÁNH cho lực dao động, thả đúng lúc; trượt ra xa để huỷ.'),
-          tip('place', 'Bi trong tay', 'Kéo bi cái, chạm chỗ muốn đặt, hoặc dùng 4 nút mũi tên. Chọn Ngắm thử để chỉnh hướng; Dời bi để quay lại. Bấm ĐẶT BI để chốt.'),
+          tip('place', match.state.isBreak ? 'Đặt bi phá' : 'Đặt bi cái', 'Kéo bi cái, chạm chỗ muốn đặt, hoặc dùng 4 nút mũi tên. Chọn Ngắm thử để chỉnh hướng; Dời bi để quay lại. Bấm ĐẶT BI để chốt.'),
           tip('energy', 'Chiêu và năng lượng', 'Chạm ô chiêu để đọc rồi bấm Dùng. Năng lượng tăng mỗi cú đánh, mỗi bi vào và khi đối thủ lỗi; cần đầy thanh năng lượng để dùng tuyệt chiêu.'),
           tip('target', 'Gọi lỗ', 'Khi phải gọi: chạm bi (nếu cần) rồi chạm lỗ trên bàn trước khi đánh.'),
           tip('settings', 'Bàn phím', 'Mũi tên xoay (Shift = tinh), lên/xuống chỉnh lực, Tab đổi mục tiêu, Enter đánh, giữ Space nạp lực, lăn chuột xoay tinh.'),
