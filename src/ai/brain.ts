@@ -1,3 +1,4 @@
+import { buildCast, mergeTerrain, PLACED_KINDS } from '../game/skill-cast';
 import { powerToSpeed, speedToPower } from '../core/cue-power';
 import { cloneBalls, step, strike, type Ball, type PhysEvent, type PhysParams, type SimWorld } from '../core/physics';
 import { canPlaceCue } from '../core/rack';
@@ -465,7 +466,7 @@ function addNoise(ctx: Ctx, shot: AiShot): AiShot {
 }
 
 /** Families that help when the coming shot looks hard, and ones that hurt the opponent. */
-const RESCUE: SkillKind[] = ['maw', 'gravity', 'second', 'shield', 'blast'];
+const RESCUE: SkillKind[] = ['maw', 'gravity', 'second', 'shield', 'blast', 'sand', 'bumper', 'spinwash'];
 const HEX: SkillKind[] = ['chill', 'freeze', 'seal', 'drain'];
 
 function chooseSkill(ctx: Ctx, confidence: number): AiDecision['skill'] {
@@ -484,6 +485,8 @@ function chooseSkill(ctx: Ctx, confidence: number): AiDecision['skill'] {
   if (rescue && confidence < 0.5) return rescue.slot;
   const hex = usable.find((s) => !s.ultimate && HEX.includes(s.kind));
   if (hex && tableEase(ctx, ctx.req.balls, ctx.req.state, other(ctx.side), false) > 0.6) return hex.slot;
+  const terrain = usable.find(s => !s.ultimate && PLACED_KINDS.includes(s.kind));
+  if (terrain) return terrain.slot;
   const boost = usable.find((s) => !s.ultimate && !HEX.includes(s.kind));
   if (boost && confidence >= 0.5 && ctx.rules.legalTargets(ctx.req.state, ctx.req.balls, ctx.side).length <= 3 &&
     tableEase(ctx, ctx.req.balls, ctx.req.state, ctx.side, ctx.req.ballInHand !== 'none') >= 0.65) return boost.slot;
@@ -560,7 +563,17 @@ function planShot(req: AiRequest): AiDecision {
 /** Placement skills must return a shot planned from the position the match will accept. */
 export function think(req: AiRequest): AiDecision {
   const decision = planShot(req);
-  if (req.option || req.state.isBreak || RULES[req.state.mode].table === 'carom') return decision;
+  if (req.option || req.state.isBreak) return decision;
+  const selected = req.skills.find(s => s.slot === decision.skill);
+  if (selected && (selected.kinds ?? [selected.kind]).some(k => PLACED_KINDS.includes(k)) && decision.shot) {
+    const table = RULES[req.state.mode].table === 'pool' ? makePoolTable() : makeCaromTable();
+    const cueId = RULES[req.state.mode].cueId(req.state, req.side);
+    const cast = { direction: { x: Math.cos(decision.shot.angle), y: Math.sin(decision.shot.angle) } };
+    const effects = (selected.kinds ?? [selected.kind]).filter(k => PLACED_KINDS.includes(k)).map(k => buildCast(k, selected.tier ?? 1, selected.slot, table, req.balls, cueId, cast));
+    const planned = planShot({ ...req, skills: [], terrain: mergeTerrain(req.terrain, ...(selected.target === 'opponent' ? [] : effects.map(e => e.terrain))), extraSegments: [...req.extraSegments, ...(selected.target === 'opponent' ? [] : effects.flatMap(e => e.segments))] });
+    return { ...planned, skill: selected.slot, cast: effects[0].cast };
+  }
+  if (RULES[req.state.mode].table === 'carom') return decision;
   const placementUltimate = req.skills.some((s) => s.ultimate && (s.kind === 'nudge' || s.kind === 'teleport'));
   if (decision.skill !== undefined && !placementUltimate) return decision;
   const placements = req.skills.filter((s) => s.kind === 'teleport' || (s.kind === 'nudge' && s.tier !== undefined));

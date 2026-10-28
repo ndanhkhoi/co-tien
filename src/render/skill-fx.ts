@@ -30,6 +30,7 @@ const BASE = import.meta.env.BASE_URL;
 
 /** How each effect family reads on the table, built from the sect's painted VFX pieces. */
 const RECIPES: Record<SkillKind, Recipe[]> = {
+  slick: [], sand: [], bumper: [], railcraft: [], wind: [], well: [], spinwash: [], vortex: [],
   vision: [{ el: 'circle', size: [0.08, 0.3], dur: 1.1, spin: 1.2, where: 'cue', follow: true }, { el: 'pillar', size: [0.12, 0.22], dur: 0.8, where: 'cue' }],
   reveal: [{ el: 'runes', size: [0.1, 0.26], dur: 1, spin: -1.5, where: 'cue', follow: true }, { el: 'spark', size: [0.05, 0.12], dur: 0.6, where: 'cue' }],
   spin: [{ el: 'vortex', size: [0.06, 0.16], dur: 1.2, spin: 7, where: 'cue', follow: true }],

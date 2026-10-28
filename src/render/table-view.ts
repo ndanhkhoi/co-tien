@@ -1,8 +1,7 @@
 import { Container, Graphics, Sprite, Texture, type Application } from 'pixi.js';
 import { predictAim } from '../core/aim';
 import { ballStyle } from '../core/ball-styles';
-import { cloneBalls, step, strike, type Ball } from '../core/physics';
-import { powerToSpeed } from '../core/cue-power';
+import { cloneBalls, step, type Ball } from '../core/physics';
 import { champion, sectArtUrl, type SkillDef } from '../game/content/sects';
 import type { CueDef } from '../game/content/gear';
 import type { Match } from '../game/match';
@@ -449,7 +448,7 @@ export class TableView {
     }
     if (!aim!.showGuide || m.phase !== 'aim') return;
 
-    if (m.eagle) {
+    if (m.eagle || m.activeEffects.some(e => e.target === m.turn)) {
       this.drawEagle(aim!);
       return;
     }
@@ -504,13 +503,13 @@ export class TableView {
   /** Thần Nhãn: simulate the exact shot and draw every moving ball's path. */
   private drawEagle(aim: AimView) {
     const m = this.match;
-    const key = `${aim.angle.toFixed(4)}|${aim.power.toFixed(2)}|${aim.side.toFixed(2)}|${aim.vert.toFixed(2)}|${m.cueBall().x.toFixed(3)}`;
+    const key = `${aim.angle.toFixed(4)}|${aim.power.toFixed(2)}|${aim.side.toFixed(2)}|${aim.vert.toFixed(2)}|${m.cueBall().x.toFixed(3)}|${JSON.stringify(m.simulationWorld())}`;
     if (!this.eagleCache || this.eagleCache.key !== key) {
       const balls = cloneBalls(m.balls);
       const cue = balls.find((b) => b.id === m.cueId())!;
-      const power = Math.max(aim.power, 0.35);
-      strike(cue, m.table.R, { angle: aim.angle, speed: powerToSpeed(power, m.vmax()), side: aim.side, vert: aim.vert });
-      const world = { table: m.table, balls, params: m.params, closedPockets: m.closedPockets, extraSegments: m.obstacles(), terrain: m.omen?.terrain ?? null, time: 0 };
+      const power = aim.power;
+      m.strikePreview(cue, { angle: aim.angle, power, side: aim.side, vert: aim.vert, call: null, pushOut: false });
+      const world = { ...m.simulationWorld(), balls };
       const paths = new Map<number, number[]>();
       for (const b of balls) paths.set(b.id, [b.x, b.y]);
       for (let i = 0; i < 600; i++) {

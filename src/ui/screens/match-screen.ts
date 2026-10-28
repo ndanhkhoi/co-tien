@@ -1,3 +1,4 @@
+import { buildCast, PLACED_KINDS, type SkillCast } from '../../game/skill-cast';
 import type { Ticker } from 'pixi.js';
 import type { AiRequest } from '../../ai/types';
 import { sound } from '../../audio/sound';
@@ -107,6 +108,28 @@ export function matchScreen(opts: MatchOptions) {
     let strikePull = 0;
     /** Ball in hand: the player moves the cue ball, then confirms with ĐẶT BI before aiming. */
     let placeConfirmed = false;
+    let skillPlacement: { side: Side; slot: number; cast: SkillCast } | null = null;
+    const cancelCast = btn('Huỷ đặt chiêu', () => {
+      skillPlacement = null; match.castPreview = []; cancelCast.hidden = true; castSense.hidden = true; renderHud();
+    });
+    cancelCast.hidden = true;
+    const castSense = btn('Đổi chiều / băng mềm–cứng', () => {
+      if (!skillPlacement) return;
+      previewCast({ ...skillPlacement.cast, sense: skillPlacement.cast.sense === 'cw' ? 'ccw' : 'cw', hardness: skillPlacement.cast.hardness === 'soft' ? 'hard' : 'soft' });
+    });
+    castSense.hidden = true;
+    function previewCast(cast: SkillCast) {
+      if (!skillPlacement) return;
+      const { side, slot } = skillPlacement;
+      const sk = match.skills(side)[slot];
+      match.castPreview = sk.kinds.filter(k => PLACED_KINDS.includes(k)).map(k => buildCast(k, sk.tier, slot, match.table, match.balls, match.cueId(side), cast));
+      skillPlacement.cast = match.castPreview[0]?.cast ?? cast;
+    }
+    function moveCast(x: number, y: number) {
+      if (!skillPlacement) return;
+      const c = match.cueBall();
+      previewCast({ ...skillPlacement.cast, point: { x, y }, rail: undefined, direction: { x: x - c.x, y: y - c.y } });
+    }
     let callPocket: number | null = null;
     let callBall: number | null = null;
     /** Call announced by the AI before it lines up, and the call of the shot in flight. */
@@ -131,7 +154,7 @@ export function matchScreen(opts: MatchOptions) {
 
     const isHumanTurn = () => match.current.kind === 'human' && !aiActing;
     const canAct = () => isHumanTurn() && match.phase === 'aim' && strikeT === 0 && !paused;
-    const placingNow = () => canAct() && match.canMoveCue && !placeConfirmed;
+    const placingNow = () => canAct() && (!!skillPlacement || match.canMoveCue && !placeConfirmed);
     const nameOf = (s: Side) => match.setup.players[s].name;
     const champOf = (s: Side) => match.setup.players[s].champion;
 
@@ -193,7 +216,7 @@ export function matchScreen(opts: MatchOptions) {
     const strikeIcon = icon('strike');
     const strikeLabel = h('span.mx-st-label', null, 'ĐÁNH');
     const strikeBtn = h('button.mx-strike', { 'aria-label': 'Đánh' }, strikeIcon, strikeLabel);
-    const ctrl = h('div.mx-col.mx-ctrl', null, aimPad, dpad, powerBar, strikeBtn);
+    const ctrl = h('div.mx-col.mx-ctrl', null, aimPad, dpad, powerBar, strikeBtn, cancelCast, castSense);
 
     const chips = h('div.mx-chips');
     const callTag = h('div.mx-calltag');
@@ -324,7 +347,7 @@ export function matchScreen(opts: MatchOptions) {
       for (const b of [rotL, rotR, switchBtn, spinBtn, upB, downB, leftB, rightB, strikeBtn]) b.disabled = !act;
       powerBar.classList.toggle('off', !act || placing);
       if (!charging) {
-        strikeLabel.textContent = placing ? 'ĐẶT BI' : 'ĐÁNH';
+        strikeLabel.textContent = skillPlacement ? 'THI TRIỂN' : placing ? 'ĐẶT BI' : 'ĐÁNH';
         strikeIcon.src = icon(placing ? 'place' : 'strike').src;
         strikeBtn.setAttribute('aria-label', placing ? 'Đặt bi cái tại đây' : 'Đánh');
       }
@@ -517,7 +540,12 @@ export function matchScreen(opts: MatchOptions) {
       const useBtn = btn(frag(icon(ult ? 'ultimate' : 'energy'), 'Dùng'), () => {
         if (!match.canUseSkill(side, slot)) return;
         closeSheets();
-        match.useSkill(side, slot);
+        if (sk.kinds.some(k => PLACED_KINDS.includes(k))) {
+          skillPlacement = { side, slot, cast: { direction: { x: Math.cos(aim.angle), y: Math.sin(aim.angle) } } };
+          previewCast(skillPlacement.cast);
+          cancelCast.hidden = false; castSense.hidden = false;
+          renderHud();
+        } else match.useSkill(side, slot);
       }, 'big');
       const closeBtn = tap(h('button.icon-btn.small.mx-sc-x', { 'aria-label': 'Đóng' }, icon('close')), () => closeSheets());
       const box = h('div.mx-sheet.mx-skillcard', { role: 'dialog', 'aria-label': sk.name },
@@ -676,6 +704,11 @@ export function matchScreen(opts: MatchOptions) {
 
     function nudgeCue(dx: number, dy: number, metres: number) {
       if (!placingNow()) return;
+      if (skillPlacement) {
+        const p = skillPlacement.cast.point!;
+        moveCast(p.x + dx * metres, p.y + dy * metres);
+        return;
+      }
       const c = match.cueBall();
       match.placeCue(c.x + dx * metres, c.y + dy * metres);
     }
@@ -716,6 +749,13 @@ export function matchScreen(opts: MatchOptions) {
 
     function confirmPlace() {
       if (!placingNow()) return;
+      if (skillPlacement) {
+        const { side, slot, cast } = skillPlacement;
+        match.useSkill(side, slot, cast);
+        skillPlacement = null; match.castPreview = []; cancelCast.hidden = true; castSense.hidden = true;
+        renderHud();
+        return;
+      }
       placeConfirmed = true;
       haptic(15);
       sound.tap();
@@ -801,6 +841,7 @@ export function matchScreen(opts: MatchOptions) {
       if (!canAct() || charging || drag) return;
       const p = view.toTable(e.clientX, e.clientY);
       const t = match.table;
+      if (skillPlacement) moveCast(p.x, p.y);
       // Pocket call taps first.
       if (match.callType() !== 'none' && !placingNow()) {
         const hit = t.pockets.findIndex((pk, i) => !match.closedPockets.includes(i) && Math.hypot(p.x - pk.hx, p.y - pk.hy) < pk.hr * 1.6);
@@ -831,6 +872,7 @@ export function matchScreen(opts: MatchOptions) {
       if (!drag.moved && Math.hypot(e.clientX - drag.sx, e.clientY - drag.sy) < 6) return;
       drag.moved = true;
       const p = view.toTable(e.clientX, e.clientY);
+      if (skillPlacement) { moveCast(p.x, p.y); return; }
       if (drag.mode === 'cue') {
         // The ball keeps its offset from the finger, so the finger never hides it.
         match.placeCue(drag.cue0.x + p.x - drag.p0.x, drag.cue0.y + p.y - drag.p0.y);
@@ -856,7 +898,8 @@ export function matchScreen(opts: MatchOptions) {
       // A tap: place the ball there, aim straight at a tapped ball, or aim at the tapped spot.
       const p = view.toTable(e.clientX, e.clientY);
       if (d.mode === 'cue') {
-        match.placeCue(p.x, p.y);
+        if (skillPlacement) moveCast(p.x, p.y);
+        else match.placeCue(p.x, p.y);
         return;
       }
       const cue = match.cueBall();
@@ -997,6 +1040,11 @@ export function matchScreen(opts: MatchOptions) {
         return;
       }
       if (e.type === 'keydown') {
+        if (skillPlacement && e.code === 'Escape') { cancelCast.click(); return; }
+        if (skillPlacement && e.code === 'KeyR') {
+          previewCast({ ...skillPlacement.cast, sense: skillPlacement.cast.sense === 'cw' ? 'ccw' : 'cw', hardness: skillPlacement.cast.hardness === 'soft' ? 'hard' : 'soft' });
+          return;
+        }
         if (e.code.startsWith('Arrow') && canAct()) e.preventDefault();
         if (e.code === 'Space') {
           e.preventDefault();
@@ -1242,10 +1290,10 @@ export function matchScreen(opts: MatchOptions) {
       const req: AiRequest = {
         balls: view0.balls, state: view0.state, side, profile: player.ai!, maxSpeed: match.vmax(side),
         ballInHand: match.placing === 'nudge' ? 'none' : match.placing, closedPockets: view0.closedPockets,
-        params: match.params, terrain: match.omen?.terrain ?? null,
-        extraSegments: match.omen?.segments ?? [], captureScale: match.omen?.capture ?? 1, seed: (Math.random() * 1e9) | 0, option: match.phase === 'option',
+        params: match.params, terrain: match.terrain(),
+        extraSegments: match.obstacles().slice(match.closedPockets.length), captureScale: match.simulationWorld().captureScale ?? 1, seed: (Math.random() * 1e9) | 0, option: match.phase === 'option',
         pushOutAvailable: match.state.pushOutAvailable, energy: match.energy[side],
-        skills: match.skills(side).filter((sk) => match.canUseSkill(side, sk.slot)).map((sk) => ({ slot: sk.slot, kind: match.effectiveKind(sk.kinds[0]), ultimate: sk.slot === 2, tier: sk.tier })),
+        skills: match.skills(side).filter((sk) => match.canUseSkill(side, sk.slot)).map((sk) => ({ slot: sk.slot, kind: match.effectiveKind(sk.kinds[0]), ultimate: sk.slot === 2, tier: sk.tier, kinds: sk.kinds.map(k => match.effectiveKind(k)), target: sk.target })),
       };
       const started = performance.now();
       const decision = await app.ai.think(req);
@@ -1274,7 +1322,7 @@ export function matchScreen(opts: MatchOptions) {
         herald({ side, expr: 'focus', icon: 'target', title: `${player.name} gọi ${ballTxt}`, line: POCKET_NAMES[shot.call.pocket] });
       }
       if (decision.skill !== undefined && match.canUseSkill(side, decision.skill)) {
-        match.useSkill(side, decision.skill);
+        match.useSkill(side, decision.skill, decision.cast);
         await sleep(decision.skill === 2 ? 1400 : 450);
       }
       showAiCue = true;
@@ -1643,7 +1691,7 @@ export function matchScreen(opts: MatchOptions) {
       } else if (charging) {
         holdT += dt;
       }
-      if (placingNow()) {
+      if (placingNow() && !skillPlacement) {
         const c = match.cueBall();
         const k = uiScale();
         const sp0 = view.toScreen(c.x, c.y);

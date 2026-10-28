@@ -51,7 +51,10 @@ export interface Terrain {
   /** Gusts: the force is scaled by (1 − amp + amp·sin(ω·t)). */
   gust?: { amp: number; omega: number };
   /** Friction patches (snow, sand, poison puddles): multipliers inside the circle. */
-  patches?: { x: number; y: number; r: number; roll: number; slide: number }[];
+  patches?: { x: number; y: number; r: number; roll: number; slide: number; spin?: number }[];
+  forces?: { x: number; y: number; gust?: { amp: number; omega: number } }[];
+  vortices?: { x: number; y: number; r: number; a: number; sense: number }[];
+  rails?: { ax: number; ay: number; bx: number; by: number; multiplier: number }[];
   /** Point attractors (m/s² at the centre, fading to 0 at radius r). */
   wells?: { x: number; y: number; r: number; a: number }[];
 }
@@ -419,15 +422,17 @@ export function step(w: SimWorld, dt: number, events: PhysEvent[] | null): boole
         if (!b.onTable) continue;
         let slideK = 1;
         let rollK = 1;
+        let spinK = 1;
         if (tr?.patches) {
           for (const pa of tr.patches) {
             if ((b.x - pa.x) ** 2 + (b.y - pa.y) ** 2 < pa.r * pa.r) {
-              slideK = pa.slide;
-              rollK = pa.roll;
+              slideK *= pa.slide;
+              spinK *= pa.spin ?? 1;
+              rollK *= pa.roll;
             }
           }
         }
-        applyCloth(b, R, p, h, slideK, rollK);
+        applyCloth(b, R, spinK === 1 ? p : { ...p, spinDecel: p.spinDecel * spinK }, h, slideK, rollK);
       }
       w.time = (w.time ?? 0) + h;
     }
@@ -440,7 +445,13 @@ export function step(w: SimWorld, dt: number, events: PhysEvent[] | null): boole
     for (const b of balls) {
       if (!b.onTable) continue;
       if (b.vx === 0 && b.vy === 0) continue;
-      for (const s of w.table.segments) collideSegment(b, s, R, p, events);
+      for (const s of w.table.segments) {
+        let multiplier = 1;
+        for (const rail of w.terrain?.rails ?? []) {
+          if (segmentDistance(b.x, b.y, rail) <= R * 1.1) multiplier *= rail.multiplier;
+        }
+        collideSegment(b, s, R, multiplier === 1 ? p : { ...p, eCushion: Math.min(1, p.eCushion * multiplier) }, events);
+      }
       if (w.extraSegments) for (const s of w.extraSegments) collideSegment(b, s, R, p, events);
       checkPockets(w, b, events);
     }
@@ -471,6 +482,22 @@ function applyTerrain(w: SimWorld, tr: Terrain, h: number) {
         ay += (dy / d) * a;
       }
     }
+    for (const f of tr.forces ?? []) {
+      const k = f.gust ? 1 - f.gust.amp + f.gust.amp * Math.sin(f.gust.omega * (w.time ?? 0)) : 1;
+      ax += f.x * k; ay += f.y * k;
+    }
+    for (const v of tr.vortices ?? []) {
+      const dx = b.x - v.x, dy = b.y - v.y, d = Math.hypot(dx, dy);
+      if (d > 0 && d < v.r) {
+        const a = v.a * Math.sin(Math.PI * d / v.r) * v.sense;
+        ax -= dy / d * a; ay += dx / d * a;
+      }
+    }
+    // Bound against the smallest rolling coefficient anywhere, including overlapping patches.
+    const minRoll = (tr.patches ?? []).reduce((k, p) => k * Math.min(1, p.roll), 1);
+    const limit = 0.799 * w.params.muRoll * minRoll * w.params.g;
+    const scale = Math.min(1, limit / (Math.hypot(ax, ay) || 1));
+    ax *= scale; ay *= scale;
     // A force through the centre of a rolling ball; cloth friction then re-establishes rolling.
     b.vx += ax * h;
     b.vy += ay * h;
@@ -534,4 +561,11 @@ export function simulate(w: SimWorld, maxTime = 30, events: PhysEvent[] = []): P
     t += dt;
   }
   return events;
+}
+
+/** Distance to a finite cushion or obstacle. */
+export function segmentDistance(x: number, y: number, s: { ax: number; ay: number; bx: number; by: number }): number {
+  const dx = s.bx - s.ax, dy = s.by - s.ay;
+  const u = Math.max(0, Math.min(1, ((x - s.ax) * dx + (y - s.ay) * dy) / (dx * dx + dy * dy || 1)));
+  return Math.hypot(x - s.ax - u * dx, y - s.ay - u * dy);
 }

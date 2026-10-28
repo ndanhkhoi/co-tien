@@ -1,3 +1,4 @@
+import { buildCast, mergeTerrain, PLACED_KINDS, type SkillCast, type CastEffect } from './skill-cast';
 import type { AiProfile } from '../ai/types';
 import { maxSpeed, powerToSpeed } from '../core/cue-power';
 import { cloneBalls, DEFAULT_PHYS, step, strike, type Ball, type PhysEvent, type PhysParams, type SimWorld } from '../core/physics';
@@ -142,6 +143,17 @@ export class Match {
   private shotEvents: PhysEvent[] = [];
   private shotInput: ShotInput | null = null;
   private shotTargets: number[] = [];
+  activeEffects: (CastEffect & { target: Side })[] = [];
+  castPreview: CastEffect[] = [];
+  strikePreview(cue: Ball, input: ShotInput) {
+    const side = this.turn;
+    const reach = Math.min(1, 0.72 + 0.07 * this.setup.players[side].cue.spin) * this.spinBoost * (this.passive(side) === 'phaptu' ? 1.1 : 1);
+    strike(cue, this.table.R, { angle: input.angle, speed: powerToSpeed(input.power, this.vmax()), side: input.side * reach, vert: input.vert * reach });
+  }
+  terrain() { return mergeTerrain(this.omen?.terrain, ...this.activeEffects.filter(e => e.target === this.turn).map(e => e.terrain)); }
+  simulationWorld(): SimWorld {
+    return { table: this.table, balls: this.balls, params: this.params, terrain: this.terrain(), extraSegments: this.obstacles(), closedPockets: this.closedPockets, captureScale: this.mawScale * this.baseCapture * (this.omen?.capture ?? 1), pocketPull: this.pull, pullExempt: this.cueId(), time: 0 };
+  }
   private world: SimWorld;
   private listeners: ((e: MatchEvent) => void)[] = [];
 
@@ -219,7 +231,7 @@ export class Match {
 
   /** Every fixed obstacle on the cloth right now: closed pocket mouths and Thiên Tượng pieces. */
   obstacles() {
-    return [...this.closedPockets.map((i) => this.table.pockets[i].mouth), ...(this.omen?.segments ?? [])];
+    return [...this.closedPockets.map((i) => this.table.pockets[i].mouth), ...(this.omen?.segments ?? []), ...this.activeEffects.filter(e => e.target === this.turn).flatMap(e => e.segments)];
   }
 
   private syncObstacles() {
@@ -272,6 +284,8 @@ export class Match {
   }
 
   startRack() {
+    this.activeEffects = [];
+    this.castPreview = [];
     this.rackNo++;
     const breaker = this.breaker;
     const target = this.state.caromTarget;
@@ -415,7 +429,8 @@ export class Match {
     strike(cue, this.table.R, { angle, speed, side: sp, vert });
     // Shot buffs that act while the balls roll stay on until the shot resolves.
     this.world.captureScale = this.mawScale * this.baseCapture * (this.omen?.capture ?? 1);
-    this.world.terrain = this.omen?.terrain ?? null;
+    this.world.terrain = this.terrain();
+    this.syncObstacles();
     this.world.time = 0;
     if (this.omen?.jitter) {
       for (const b of this.balls) {
@@ -516,6 +531,7 @@ export class Match {
     }
     const res = this.rules.resolve(this.state, this.balls, shot);
     const st = this.state;
+    this.activeEffects = this.activeEffects.filter(e => e.target !== side);
     this.endOmen();
 
     if (!res.foul && !res.keepTurn && !res.option && res.winner === null && this.secondChance) {
@@ -631,6 +647,7 @@ export class Match {
     this.phase = 'aim';
     // Roll first: the AI plans its shot as soon as it hears about the turn.
     this.rollOmenFor(side);
+    this.syncObstacles();
     this.emit({ type: 'turn', side });
   }
 
@@ -703,6 +720,7 @@ export class Match {
     const myAim = this.phase === 'aim' && this.state.turn === side;
     const opp = other(side);
     const live = this.phase === 'aim' || this.phase === 'option';
+    if (PLACED_KINDS.includes(kind)) return myAim && !this.activeEffects.some(e => e.kind === kind && e.target === side);
     switch (kind) {
       case 'rewind':
         return !!this.snapshot && this.snapshot.side === side && this.lastShooter === side &&
@@ -723,6 +741,7 @@ export class Match {
       case 'freeze': return live && this.freeze[opp] === 1 && !(this.state.turn === opp && this.freezeNow < 1);
       case 'seal': return live && this.seal[opp] === 0 && !this.isCarom;
     }
+    return false;
   }
 
   /**
@@ -744,23 +763,28 @@ export class Match {
   canUseSkill(side: Side, slot: number): boolean {
     if (this.setup.judge || this.setup.classic) return false;
     if (this.skillWait(side, slot) !== 0) return false;
-    return this.kindReady(this.effectiveKind(this.skills(side)[slot].kinds[0]), side);
+    return this.skills(side)[slot].kinds.some(k => this.kindReady(this.effectiveKind(k), side));
   }
 
-  useSkill(side: Side, slot: number): boolean {
+  useSkill(side: Side, slot: number, cast?: SkillCast): boolean {
     if (!this.canUseSkill(side, slot)) return false;
     const sk = this.skills(side)[slot];
     if (slot === 2) this.energy[side] = 0;
     else this.cooldown[side][slot] = sk.cooldown;
-    // The first family is guaranteed ready; the others apply when they can.
-    sk.kinds.map((k) => this.effectiveKind(k)).forEach((k, i) => {
-      if (i === 0 || this.kindReady(k, side)) this.applyKind(k, sk.tier, side);
+    // Cast the entire package, including families already active.
+    sk.kinds.map((k) => this.effectiveKind(k)).forEach((k) => {
+      this.applyKind(k, sk.tier, side, slot, cast, sk.target);
     });
     this.emit({ type: 'skill', side, champion: this.setup.players[side].champion, slot, skill: sk });
     return true;
   }
 
-  private applyKind(kind: SkillKind, tier: number, side: Side) {
+  private applyKind(kind: SkillKind, tier: number, side: Side, slot: number, cast?: SkillCast, target?: 'self' | 'opponent') {
+    if (PLACED_KINDS.includes(kind)) {
+      this.activeEffects.push({ ...buildCast(kind, tier, slot, this.table, this.balls, this.cueId(side), cast), target: target === 'opponent' ? other(side) : side });
+      this.syncObstacles();
+      return;
+    }
     const pw = skillPower(kind, tier) as Record<string, number>;
     const opp = other(side);
     const oppNow = this.state.turn === opp && this.phase === 'aim';
@@ -800,7 +824,7 @@ export class Match {
         if (oppNow) this.sealPockets(opp, pw.pockets);
         else this.seal[opp] = pw.pockets;
         break;
-      case 'rewind': this.rewind(); break;
+      case 'rewind': if (this.snapshot) this.rewind(); break;
     }
   }
 

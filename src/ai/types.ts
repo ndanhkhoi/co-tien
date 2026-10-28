@@ -1,3 +1,4 @@
+import type { SkillCast } from '../game/skill-cast';
 import type { Ball } from '../core/physics';
 import type { GameState, ShotCall, Side } from '../core/rules/types';
 import type { PhysParams, Terrain } from '../core/physics';
@@ -35,7 +36,7 @@ export interface AiRequest {
   pushOutAvailable: boolean;
   energy: number;
   /** Skills castable right now (checked by the match), with their leading effect family. */
-  skills: { slot: number; kind: SkillKind; ultimate: boolean; tier?: number }[];
+  skills: { slot: number; kind: SkillKind; ultimate: boolean; tier?: number; kinds?: SkillKind[]; target?: 'self' | 'opponent' }[];
 }
 
 export interface AiShot {
@@ -55,6 +56,7 @@ export interface AiDecision {
   option?: 'play' | 'pass';
   /** Skill slot to cast before shooting. */
   skill?: number;
+  cast?: SkillCast;
   /** Debug: estimated success chance. */
   confidence: number;
 }

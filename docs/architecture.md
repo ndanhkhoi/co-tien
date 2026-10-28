@@ -120,3 +120,22 @@ màn tải (`ui/screens/loading.ts`) chặn ở lần đầu và sau mỗi bản
 icon chiêu, bàn, tướng và môn phái của người chơi); phần còn lại tải nền khi ở menu (bỏ qua khi bật tiết kiệm dữ
 liệu); mỗi trận tải và giải mã sẵn ảnh của hai tướng và môn phái của bàn. Ảnh lớn được service worker lưu vào kho
 `art-<mã build>`, kho của bản cũ bị xoá khi bản mới chạy. `?loading` giữ màn tải để xem thiết kế.
+
+## Thi triển kỹ năng theo vị trí
+
+`useSkill(side, slot, cast?)` nhận `SkillCast` trong `src/game/skill-cast.ts`: tâm theo mét,
+hướng được chuẩn hoá, chỉ số đoạn băng và vị trí 0–1 trên đoạn đó, chiều xoáy `cw/ccw`,
+băng `soft/hard`. Bỏ tham số thì chọn tâm giữa bi cái và bi gần nhất, hướng về bi ấy,
+băng gần tâm nhất. Bộ dựng thuần `buildCast` giới hạn tâm trong nỉ và tránh tâm đè bi;
+vật chắn tránh cả bi và lỗ. Slot được lưu độc lập với tier.
+
+`Match.activeEffects` giữ hiệu ứng theo bên nhận; `SkillDef.target` mặc định `self`, có thể
+đặt `opponent` (ví dụ bẫy cát). Hiệu ứng hết sau cú đánh của bên nhận. `terrain()`,
+`obstacles()`, `simulationWorld()` ghép kỹ năng với Thiên Tượng; lực tổng được chặn trong
+physics dưới 0,8 lần lực cản lăn nhỏ nhất, kể cả vùng ma sát chồng nhau. AI dựng cùng hiệu ứng
+rồi tìm lại cú đánh; đường dự đoán dùng cùng world và tham số đầu cơ.
+
+Sau “Dùng”, chiêu có vị trí vào bước đặt: kéo/chạm bàn hoặc dùng mũi tên, “THI TRIỂN” xác nhận,
+“Huỷ đặt chiêu” huỷ mà không tiêu chiêu. Nút đổi chiều/băng (phím R) chọn chiều xoáy hoặc băng mềm/cứng.
+Các vùng và đoạn dùng tranh riêng trong `public/art/table/skills/`; preview có vòng đặt, điểm đặt, mũi tên và dấu chiều xoáy. Tám cơ chế đã có API; phân bổ vào 65 bộ chiêu
+và tuyệt chiêu riêng môn phái thuộc các phần tiếp theo.

@@ -17,7 +17,8 @@ export const KIND_LABEL: Record<ChampionKind, string> = {
 /** Billiards effect families every skill is built from. */
 export type SkillKind =
   | 'vision' | 'rewind' | 'shield' | 'chill' | 'spin' | 'nudge' | 'reveal' | 'power'
-  | 'blast' | 'seal' | 'maw' | 'drain' | 'gravity' | 'freeze' | 'teleport' | 'second';
+  | 'blast' | 'seal' | 'maw' | 'drain' | 'gravity' | 'freeze' | 'teleport' | 'second'
+  | 'slick' | 'sand' | 'bumper' | 'railcraft' | 'wind' | 'well' | 'spinwash' | 'vortex';
 
 export interface Sect {
   id: SectId;
@@ -37,10 +38,11 @@ export interface SkillDef {
   /** 0, 1 = basic skills (cooldown in own turns), 2 = ultimate (needs a full energy bar). */
   slot: 0 | 1 | 2;
   name: string;
-  /** First kind decides when the skill can be cast; the rest ride along. */
+  /** Any ready family allows casting; the entire package fires together. */
   kinds: SkillKind[];
   /** Strength tier fed to skillPower (champion tier, +2 for the ultimate). */
   tier: number;
+  target?: 'self' | 'opponent';
   cooldown: number;
   desc: string;
 }
@@ -67,7 +69,8 @@ export const CLASSES: ClassInfo[] = roster.classes.map((c) => ({ id: c.id as Cla
 export const classInfo = (id: ClassId): ClassInfo => CLASSES.find((c) => c.id === id)!;
 
 /** Turns a basic skill of each family waits before it can be cast again. */
-const KIND_COOLDOWN: Record<SkillKind, number> = {
+export const KIND_COOLDOWN: Record<SkillKind, number> = {
+  slick: 2, sand: 3, bumper: 3, railcraft: 2, wind: 2, well: 3, spinwash: 2, vortex: 3,
   vision: 3, rewind: 3, shield: 3, chill: 3, spin: 2, nudge: 3, reveal: 2, power: 2,
   blast: 3, seal: 3, maw: 3, drain: 2, gravity: 3, freeze: 3, teleport: 3, second: 3,
 };
@@ -75,6 +78,13 @@ const KIND_COOLDOWN: Record<SkillKind, number> = {
 /** Strength numbers per family and tier, shared by the match engine and the UI text. */
 export function skillPower(kind: SkillKind, tier: number) {
   switch (kind) {
+    case 'slick': return { radius: 0.12 + 0.02 * tier, friction: 0.80 - 0.04 * tier };
+    case 'sand': return { radius: 0.10 + 0.02 * tier, friction: 1.3 + 0.12 * tier };
+    case 'bumper': return { length: 0.08 + 0.02 * tier };
+    case 'railcraft': return { length: 0.25 + 0.05 * tier, restitution: 0.08 + 0.02 * tier };
+    case 'wind': return { acceleration: 0.01 + 0.004 * tier };
+    case 'well': case 'vortex': return { radius: 0.14 + 0.02 * tier, acceleration: 0.015 + 0.003 * tier };
+    case 'spinwash': return { radius: 0.12 + 0.015 * tier, friction: 1.2 + 0.15 * tier };
     case 'chill': return { tremor: 1.8 + 0.35 * tier };
     case 'spin': return { spin: 1.3 + 0.12 * tier };
     case 'nudge': return { radius: 0.06 + 0.025 * tier };
@@ -89,10 +99,16 @@ export function skillPower(kind: SkillKind, tier: number) {
   }
 }
 
-function describeKind(kind: SkillKind, tier: number): string {
+export function describeKind(kind: SkillKind, tier: number): string {
   const p = skillPower(kind, tier) as Record<string, number>;
   const pct = (x: number) => `${Math.round(x * 100)}%`;
   switch (kind) {
+    case 'slick': case 'sand': case 'spinwash':
+      return `${KIND_NAMES[kind]}: bán kính ${Math.round(p.radius * 100)} cm, ma sát ×${p.friction.toFixed(2)} trong cú kế tiếp.`;
+    case 'bumper': return `Vật chắn dài ${Math.round(p.length * 100)} cm, bật bi như băng trong cú kế tiếp.`;
+    case 'railcraft': return `Đoạn băng dài ${Math.round(p.length * 100)} cm, mềm hoặc cứng thêm ${pct(p.restitution)} trong cú kế tiếp.`;
+    case 'wind': return `Gió hướng chọn, gia tốc ${p.acceleration.toFixed(3)} m/s² trong cú kế tiếp.`;
+    case 'well': case 'vortex': return `${KIND_NAMES[kind]}: bán kính ${Math.round(p.radius * 100)} cm, gia tốc đỉnh ${p.acceleration.toFixed(3)} m/s² trong cú kế tiếp.`;
     case 'vision': return 'Thấy trước toàn bộ đường đi của các bi trong cú này.';
     case 'rewind': return 'Đánh hỏng? Quay ngược thời gian và đánh lại cú vừa rồi.';
     case 'shield': return 'Lỗi kế tiếp của bạn không bị phạt bi trong tay.';
@@ -111,6 +127,14 @@ function describeKind(kind: SkillKind, tier: number): string {
     case 'second': return 'Nếu cú này không vào bi và không phạm lỗi, bạn được đánh tiếp.';
   }
 }
+
+export const KIND_NAMES: Record<SkillKind, string> = {
+  slick: 'Dải Trượt', sand: 'Sa Trận', bumper: 'Trấn Vật', railcraft: 'Chỉnh Băng', wind: 'Dẫn Phong', well: 'Tinh Điểm', spinwash: 'Tán Toàn', vortex: 'Toàn Lưu',
+  vision: 'Tiên tri', rewind: 'Tua thời gian', shield: 'Hộ thể', chill: 'Làm run', spin: 'Áp phê thần',
+  nudge: 'Dời bi', reveal: 'Soi đường', power: 'Cuồng lực', blast: 'Bộc phá', seal: 'Phong ấn lỗ',
+  maw: 'Nuốt chửng', drain: 'Hút năng lượng', gravity: 'Hấp dẫn', freeze: 'Đóng băng',
+  teleport: 'Dịch chuyển', second: 'Tái chiến',
+};
 
 function makeSkill(raw: RawSkill, slot: 0 | 1 | 2, tier: number, cls: ClassId): SkillDef {
   const kinds = raw.kinds as SkillKind[];
@@ -134,12 +158,7 @@ export const CHAMPIONS: Champion[] = (roster.champions as RawChampion[]).map((c)
 
 export const champion = (id: string): Champion => CHAMPIONS.find((c) => c.id === id) ?? CHAMPIONS[0];
 
-export const KIND_NAMES: Record<SkillKind, string> = {
-  vision: 'Tiên tri', rewind: 'Tua thời gian', shield: 'Hộ thể', chill: 'Làm run', spin: 'Áp phê thần',
-  nudge: 'Dời bi', reveal: 'Soi đường', power: 'Cuồng lực', blast: 'Bộc phá', seal: 'Phong ấn lỗ',
-  maw: 'Nuốt chửng', drain: 'Hút năng lượng', gravity: 'Hấp dẫn', freeze: 'Đóng băng',
-  teleport: 'Dịch chuyển', second: 'Tái chiến',
-};
+
 
 /** Unlock price by tier (tier-1 champions are free). */
 export const CHAMPION_PRICE = [0, 0, 400, 800, 1400, 2400];

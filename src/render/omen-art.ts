@@ -2,7 +2,8 @@ import { Assets, Container, Graphics, Sprite, Texture } from 'pixi.js';
 import type { Match } from '../game/match';
 
 const names = ['snow-drift', 'snowflakes', 'wind', 'petal', 'swell', 'sand', 'puddle', 'star-fall', 'star-well', 'roots', 'quake', 'gate-seal', 'silk', 'tilt', 'breath', 'mist'] as const;
-type Art = typeof names[number];
+const skillNames = ['bumper-stone', 'bumper-wood', 'bumper-bronze', 'rail-soft', 'rail-hard', 'spinwash', 'slick', 'sand', 'well', 'vortex', 'wind', 'arrow', 'spin-cw', 'spin-ccw', 'target', 'mark'] as const;
+type Art = typeof names[number] | `skill/${typeof skillNames[number]}`;
 const base = new URL(import.meta.env.BASE_URL, document.baseURI).href;
 
 /** Bounded sprite pool: shared Assets textures survive the view; sprites belong to it. */
@@ -35,8 +36,9 @@ export class OmenArt {
       // Register the mask before assets load so its white geometry never paints the bed.
       sprite.mask = this.mask;
     }
-    for (const name of names) {
-      void Assets.load<Texture>(`${base}art/table/omens/${name}.webp`).then(texture => {
+    for (const name of [...names, ...skillNames.map(name => `skill/${name}` as const)]) {
+      const path = name.startsWith('skill/') ? `skills/${name.slice(6)}` : `omens/${name}`;
+      void Assets.load<Texture>(`${base}art/table/${path}.webp`).then(texture => {
         if (!this.layer.destroyed) this.textures.set(name, texture);
       }).catch(() => { /* Missing painted art stays absent; never substitute invented geometry. */ });
     }
@@ -119,6 +121,29 @@ export class OmenArt {
       if (moving && age < 0.8) this.put('mist', 0, 0, t.L, t.W, 0.12 * Math.sin(age / 0.8 * Math.PI));
       const quakeAge = this.clock - this.shotTime;
       if (o.jitter && quakeAge < 1.2) for (const p of this.cracks) this.put('quake', p.x, p.y, t.R * 4, t.R * 4, 0.5 * (1 - quakeAge / 1.2));
+    }
+    for (const e of [...(m.activeEffects ?? []), ...(m.castPreview ?? [])]) {
+      const preview = m.castPreview?.includes(e);
+      const alpha = preview ? 0.65 : 0.4;
+      for (const p of e.terrain.patches ?? []) this.put(e.kind === 'slick' ? 'skill/slick' : e.kind === 'sand' ? 'skill/sand' : 'skill/spinwash', p.x, p.y, p.r * 2, p.r * 2, alpha);
+      for (const p of e.terrain.wells ?? []) this.put('skill/well', p.x, p.y, p.r * 2, p.r * 2, alpha);
+      for (const p of e.terrain.vortices ?? []) {
+        this.put('skill/vortex', p.x, p.y, p.r * 2, p.r * 2, alpha);
+        this.put(p.sense < 0 ? 'skill/spin-ccw' : 'skill/spin-cw', p.x, p.y, p.r * 1.4, p.r * 1.4, alpha + 0.2);
+      }
+      // Slot selects a painted material without changing the physical obstacle.
+      const bumper = (['skill/bumper-stone', 'skill/bumper-wood', 'skill/bumper-bronze'] as const)[e.slot] ?? 'skill/bumper-stone';
+      for (const s of e.segments) this.put(bumper, (s.ax + s.bx) / 2, (s.ay + s.by) / 2, Math.hypot(s.bx - s.ax, s.by - s.ay), 0.06, alpha + 0.2, Math.atan2(s.by - s.ay, s.bx - s.ax));
+      for (const s of e.terrain.rails ?? []) this.put(s.multiplier > 1 ? 'skill/rail-hard' : 'skill/rail-soft', (s.ax + s.bx) / 2, (s.ay + s.by) / 2, Math.hypot(s.bx - s.ax, s.by - s.ay), 0.06, alpha + 0.2, Math.atan2(s.by - s.ay, s.bx - s.ax));
+      const point = e.cast.point;
+      const direction = e.cast.direction;
+      if (e.terrain.force && point) this.put('skill/wind', point.x, point.y, 0.32, 0.12, alpha, Math.atan2(e.terrain.force.y, e.terrain.force.x));
+      if (preview && point) {
+        const radius = e.terrain.patches?.[0]?.r ?? e.terrain.wells?.[0]?.r ?? e.terrain.vortices?.[0]?.r ?? 0.07;
+        this.put('skill/target', point.x, point.y, radius * 2, radius * 2, 0.8);
+        this.put('skill/mark', point.x, point.y, 0.035, 0.035, 0.95);
+      }
+      if (direction && point && (preview || e.kind === 'wind')) this.put('skill/arrow', point.x, point.y, 0.16, 0.05, 0.85, Math.atan2(direction.y, direction.x));
     }
     for (let i = this.used; i < this.pool.length; i++) this.pool[i].visible = false;
   }
