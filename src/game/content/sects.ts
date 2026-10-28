@@ -11,7 +11,7 @@ export type ClassId = 'thanxa' | 'cuongchien' | 'phaptu' | 'hophap' | 'chusu' | 
 export type ChampionKind = 'hiepkhach' | 'nuhiep' | 'yeu' | 'linh' | 'co' | 'ma';
 export const KIND_LABEL: Record<ChampionKind, string> = {
   hiepkhach: 'Hiệp Khách', nuhiep: 'Nữ Hiệp', yeu: 'Yêu Tộc',
-  linh: 'Tinh Linh', co: 'Cơ Quan', ma: 'Ma Vật',
+  linh: 'Tinh Linh', co: 'Khôi Lỗi', ma: 'Ma Vật',
 };
 
 /** Billiards effect families every skill is built from. */

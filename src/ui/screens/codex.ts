@@ -4,7 +4,7 @@ import { CUES, TABLES } from '../../game/content/gear';
 import lore from '../../game/content/lore.json';
 import { RULES_TEXT, SKILL_RULES } from '../../game/content/rules-text';
 import {
-  CHAMPIONS, CLASSES, classInfo, cutoutUrl, exprUrl, sect, sectArtUrl, SECTS, winUrl,
+  CHAMPIONS, CLASSES, classInfo, cutoutUrl, KIND_LABEL, exprUrl, sect, sectArtUrl, SECTS, winUrl,
   type Champion, type SectId,
 } from '../../game/content/sects';
 import { cueStats, tableStats } from '../../game/content/stat-text';
@@ -118,7 +118,7 @@ function champPage(app: App, c: Champion) {
     h('div.codex-champ', null,
       h('div.cc-cut', null, h('img', { src: cutoutUrl(c.id), alt: '' })),
       h('div.grow', null,
-        h('div.cp-meta', null, `${sect(c.sect).name} · bậc ${c.tier} · ${cls.name}`),
+        h('div.cp-meta', null, h('span.badge.kind', { 'data-kind': c.kind }, KIND_LABEL[c.kind]), ` ${sect(c.sect).name} · bậc ${c.tier} · ${cls.name}`),
         h('h2', null, c.name),
         info ? h('blockquote.nm-quote', null, info.quote) : null,
         info ? h('p.prose-p', null, info.bio) : null,

@@ -6,8 +6,7 @@ import { LEVEL_NAMES, PERSONALITY_NAMES, type Npc } from '../../game/content/car
 import { CHALLENGES, challengeBalls, FAMILY_INFO, goalText, judgeChallenge, type ChallengeDef } from '../../game/content/challenges';
 import { CUES, MUTATORS, TABLES, type CueDef, type MutatorId, type TableSkin } from '../../game/content/gear';
 import {
-  CHAMPION_PRICE, CHAMPIONS, champion, classInfo, cutoutUrl, sect, sectArtUrl, SECTS, skillIconUrl, type Champion,
-} from '../../game/content/sects';
+  CHAMPION_PRICE, CHAMPIONS, champion, classInfo, cutoutUrl, sect, sectArtUrl, SECTS, skillIconUrl, type Champion, KIND_LABEL } from '../../game/content/sects';
 import { cueStats, tableStats, TABLE_NOTE, type StatLine } from '../../game/content/stat-text';
 import { defaultProfile, exportCode, importCode, levelProgress } from '../../game/profile';
 import { enterFullscreen, isTouchDevice, toggleFullscreen } from '../../platform/device';
@@ -211,7 +210,7 @@ export function championModal(app: App, c: Champion, onChange?: () => void) {
       h('div.cm-body', null, h('div.cm-scroll.scroll', null,
         h('div.cm-sect', null, h('img', { src: sectArtUrl(c.sect, 'emblem'), alt: '' }), s.name),
         h('h2', null, c.name),
-        h('div.row.wrap', { style: 'gap:6px' }, h('span.badge', null, `Bậc ${c.tier}`), h('span.badge', null, cls.name),
+        h('div.row.wrap', { style: 'gap:6px' }, h('span.badge', null, `Bậc ${c.tier}`), h('span.badge.kind', { 'data-kind': c.kind }, KIND_LABEL[c.kind]), h('span.badge', null, cls.name),
           owned ? h('span.badge.ok', null, 'Đã chiêu mộ') : h('span.badge.accent', null, 'Chưa chiêu mộ')),
         h('div.cm-passive', null, h('b', null, `Nội tại · ${cls.name}`), h('p', null, cls.passive)),
         ...c.skills.map((sk) => skillRow(c, sk)),

@@ -119,3 +119,11 @@
 .ht-name { font: 700 16px/1.15 var(--display); color: var(--ink); white-space: nowrap; }
 .ht-sub { font-size: 12.5px; line-height: 1.2; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
 .player-card { border: 2px solid var(--ink); }
+
+/* Champion kind badges: ink seals, one tint per kind. */
+.badge.kind { color: #fbf6ec; background: var(--ink); font-family: var(--display); letter-spacing: 0.02em; }
+.badge.kind[data-kind='nuhiep'] { background: #8f2f4a; }
+.badge.kind[data-kind='yeu'] { background: #6b5320; }
+.badge.kind[data-kind='linh'] { background: #2f5677; }
+.badge.kind[data-kind='co'] { background: #4f4a44; }
+.badge.kind[data-kind='ma'] { background: #4a2a5c; }

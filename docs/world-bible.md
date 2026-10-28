@@ -125,7 +125,7 @@ Các lâu đồng thau của những nhà cơ quan thuật. Họ tính đường
 | Bậc | Tướng | Giới | Hệ | Chiêu 1 | Chiêu 2 | Tuyệt chiêu |
 |---|---|---|---|---|---|---|
 | 1 | **Tiểu Ban** | Hiệp Khách | Thần Xạ | Kính Ngắm Đồng | Tính Quỹ Đạo | Liên Nỏ Thần Cơ |
-| 2 | **Mộc Ngưu** | Cơ Quan | Hộ Pháp | Cơ Giáp | Đẩy Bánh Răng | Thành Lũy Cơ Quan |
+| 2 | **Mộc Ngưu** | Khôi Lỗi | Hộ Pháp | Cơ Giáp | Đẩy Bánh Răng | Thành Lũy Cơ Quan |
 | 3 | **Lỗ Diệu Diệu** | Nữ Hiệp | Pháp Tu | Con Quay Thần | Rối Gỗ Dời Bi | Thiên Cơ Từ Trường |
 | 4 | **Hoả Lôi Tiên Sinh** | Hiệp Khách | Cuồng Chiến | Thuốc Nổ | Pháo Chấn | Thần Hoả Lôi Pháo |
 | 5 | **Thần Toán Gia Cát Vân** | Hiệp Khách | Luân Hồi | Thần Toán | Bát Môn Trận | Thiên Cơ Đoán Mệnh |
@@ -235,7 +235,7 @@ Hoàng triều sa mạc dưới mặt trời không bao giờ tắt. Nỉ phủ 
 | Bậc | Tướng | Giới | Hệ | Chiêu 1 | Chiêu 2 | Tuyệt chiêu |
 |---|---|---|---|---|---|---|
 | 1 | **Sa Hồ** | Yêu Tộc | Ảnh Sát | Sa Ảnh | Mắt Cáo Sa Mạc | Bão Cát Liên Hoàn |
-| 2 | **Thạch Tượng Hộ Lăng** | Cơ Quan | Hộ Pháp | Thạch Hoá | Trấn Lăng | Lăng Mộ Phong Ấn |
+| 2 | **Thạch Tượng Hộ Lăng** | Khôi Lỗi | Hộ Pháp | Thạch Hoá | Trấn Lăng | Lăng Mộ Phong Ấn |
 | 3 | **Kim Nhãn Tế Ti** | Hiệp Khách | Chú Sư | Nắng Thiêu | Kim Nhãn Hút | Nhật Thực |
 | 4 | **Sa Vương Kim Giáp** | Hiệp Khách | Cuồng Chiến | Kim Giáp Lực | Sa Mạc Chấn | Hoàng Sa Bão Tố |
 | 5 | **Thái Dương Nữ Hoàng** | Nữ Hiệp | Thần Xạ | Nhật Quang Chỉ Lộ | Thiên Nhãn | Thái Dương Thần Xạ |
