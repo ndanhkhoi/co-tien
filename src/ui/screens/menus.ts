@@ -11,9 +11,9 @@ import {
 import { cueStats, tableStats, TABLE_NOTE, type StatLine } from '../../game/content/stat-text';
 import { defaultProfile, exportCode, importCode, levelProgress } from '../../game/profile';
 import { enterFullscreen, isTouchDevice, toggleFullscreen } from '../../platform/device';
-import { screenEl, type App, type Screen } from '../app';
+import { motionModal as modal, screenEl, type App, type Screen } from '../app';
 import { avatar } from '../avatar';
-import { bar5, btn, chip, h, iconBtn, item, modal, slider, stars, tabs, tap, toast, toggle } from '../dom';
+import { bar5, btn, chip, h, iconBtn, item, slider, stars, tabs, tap, toast, toggle } from '../dom';
 import { icon, type IconName } from '../icons';
 import { showIntro } from '../intro';
 import { resetHints } from '../hints';
@@ -171,7 +171,7 @@ function profileModal(app: App, onDone: () => void, first = false) {
         }, 'block'),
       ),
       h('div.pm-right.scroll', null,
-        h('p.pm-note', null, 'Chọn tướng đại diện. Thắng cao thủ ở Hành trình hoặc chiêu mộ trong Bộ sưu tập để có thêm tướng.'),
+        h('p.pm-note', null, 'Chọn tướng đại diện. Thắng cao thủ ở Hành trình hoặc chiêu mộ trong Tàng Các để có thêm tướng.'),
         championPicker(app, () => pick, (c) => {
           pick = c.id;
           show();
@@ -207,7 +207,7 @@ export function championModal(app: App, c: Champion, onChange?: () => void) {
         onChange?.();
       });
     // A full champion page: art on the left; identity, passive and the three skills as cards on the right.
-    const skillCard = (sk: Champion['skills'][number]) => h('div.cp-skill', { class: sk.slot === 2 ? 'ult' : '' },
+    const skillCard = (sk: Champion['skills'][number]) => h('div.cp-skill', { class: sk.slot === 2 ? 'ult' : '', style: `--entry-delay:${sk.slot * 60}ms` },
       h('img.cp-sk-icon', { src: skillIconUrl(c.id, sk.slot), alt: '', loading: 'lazy' }),
       h('b.cp-sk-name', null, sk.name),
       h('span.cp-sk-cd', null, sk.slot === 2 ? 'Cần đầy thanh năng lượng' : `Hồi chiêu: ${sk.cooldown} lượt`),
@@ -234,7 +234,7 @@ export function championModal(app: App, c: Champion, onChange?: () => void) {
 
 /** Skill line with its painted icon, name, cooldown and description. */
 export function skillRow(c: Champion, sk: Champion['skills'][number]): HTMLElement {
-  return h('div.skill-row', { class: sk.slot === 2 ? 'ult' : '' },
+  return h('div.skill-row', { class: sk.slot === 2 ? 'ult' : '', style: `--entry-delay:${sk.slot * 60}ms` },
     h('img.sk-icon', { src: skillIconUrl(c.id, sk.slot), alt: '', loading: 'lazy' }),
     h('div.grow', null,
       h('div.sk-head', null, h('b', null, sk.name), h('span.badge', { class: sk.slot === 2 ? 'accent' : '' }, sk.slot === 2 ? 'Cần đầy thanh năng lượng' : `Hồi chiêu: ${sk.cooldown} lượt`)),
@@ -307,11 +307,11 @@ export function homeScreen(app: App): Screen {
         h('span.hj-text', null, h('span.hj-name', null, 'Hành trình'), h('span.hj-sub', null, `${beaten}/${CHAMPIONS.length} cao thủ · ${chDone}/${CHALLENGES.length} thử thách`)),
         h('span.hj-go', null, icon('play'))), () => app.go(journeyScreen)),
       h('nav.home-grid', { 'aria-label': 'Trình đơn chính' },
-        tablet('quick-match', 'Đấu nhanh', 'Đấu với máy', () => app.go(quickScreen)),
-        tablet('users', 'Hai người', 'Chung một máy', () => app.go(localScreen)),
-        tablet('target', 'Thử thách', `${chDone}/${CHALLENGES.length} bài`, () => app.go(challengesScreen)),
-        tablet('collection', 'Bộ sưu tập', `${p.champions.length}/${CHAMPIONS.length} tướng`, () => app.go(collectionScreen)),
-        tablet('story', 'Truyện', read ? `Đã đọc ${read} chương` : '15 chương', () => app.go(storyScreen)),
+        tablet('quick-match', 'Luận Cơ', 'So tài cùng máy', () => app.go(quickScreen)),
+        tablet('users', 'Song Đấu', 'Hai người · chung máy', () => app.go(localScreen)),
+        tablet('target', 'Luyện Cơ', `Luyện cú · ${chDone}/${CHALLENGES.length}`, () => app.go(challengesScreen)),
+        tablet('collection', 'Tàng Các', `Chiêu mộ · ${p.champions.length}/${CHAMPIONS.length}`, () => app.go(collectionScreen)),
+        tablet('story', 'Cơ Tiên Truyện', read ? `Đã đọc ${read} chương` : '15 chương', () => app.go(storyScreen)),
         tablet('codex', 'Cơ Tiên Lục', 'Bách khoa', () => app.go(codexScreen)),
       ),
     ),
@@ -418,7 +418,7 @@ function setupScreen(app: App, local: boolean): Screen {
     ),
     btn(h('span.btn-in', null, icon('play'), 'Vào trận'), () => start(), 'big block'),
   );
-  el.append(topbar(app, local ? 'Hai người · cùng máy' : 'Đấu nhanh'), h('div.setup-body', null, left, versus));
+  el.append(topbar(app, local ? 'Song Đấu' : 'Luận Cơ'), h('div.setup-body', null, left, versus));
 
   function start() {
     // AI opponents: a champion whose tier fits the level, with a cue from their own sect.
@@ -435,7 +435,7 @@ function setupScreen(app: App, local: boolean): Screen {
         tableSkin: app.tableSkin, caromTarget: st.points, firstBreaker: Math.random() < 0.5 ? 0 : 1, classic: st.classic,
       },
       titles: [`Cấp ${app.level}`, local ? 'Khách' : `${LEVEL_NAMES[st.level]} · ${PERSONALITY_NAMES[st.pers]}`],
-      label: local ? '2 người' : 'Đấu nhanh',
+      label: local ? 'Song Đấu' : 'Luận Cơ',
       onExit: () => app.pop(),
       onEnd: ({ won, match }) => {
         app.profile.stats.played++;
@@ -559,12 +559,12 @@ export function startChallenge(app: App, c: ChallengeDef, table: TableSkin = app
       mode, raceTo: 1, mutator: null, tableSkin: table, classic: true,
       players: [
         { name: app.profile.name, kind: 'human', cue: app.cue, champion: app.profile.champion },
-        { name: 'Thử thách', kind: 'human', cue: app.cue, champion: app.profile.champion },
+        { name: 'Luyện Cơ', kind: 'human', cue: app.cue, champion: app.profile.champion },
       ],
       layout: challengeBalls(c),
       judge: (shot, balls) => judgeChallenge(c, shot, balls),
     },
-    label: `${FAMILY_INFO[c.family].name} ${idx + 1}`,
+    label: `Luyện Cơ · ${FAMILY_INFO[c.family].name} ${idx + 1}`,
     challenge: {
       tries: 3,
       goal: goalText(c, (i) => POCKET_LABEL[i]),
@@ -664,7 +664,7 @@ export function collectionScreen(app: App): Screen {
     render();
   });
   render();
-  el.append(topbar(app, 'Bộ sưu tập'), h('div.sub-bar', null, bar, note), content);
+  el.append(topbar(app, 'Tàng Các'), h('div.sub-bar', null, bar, note), content);
   return { el };
 }
 

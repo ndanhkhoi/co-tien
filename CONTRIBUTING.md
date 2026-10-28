@@ -29,7 +29,7 @@ npm run build      # typecheck + bản production vào dist/
 ## Thêm một tướng
 
 1. Thêm vào `src/game/content/roster.json`: `id`, `name`, `sect`, `tier`, `cls`, `look` (ghi rõ giới tính và
-   một tổ hợp nét nhận diện không trùng tướng khác), `pose`, `expr`, 3 `skills` (`kinds` từ 16 nhóm cơ chế,
+   một tổ hợp nét nhận diện không trùng tướng khác), `pose`, `expr`, 3 `skills` (`kinds` từ 24 nhóm cơ chế,
    `icon` mô tả icon).
 2. Thêm tiểu sử và câu nói vào `src/game/content/lore.json`.
 3. Vẽ tranh theo `.claude/skills/game-art/SKILL.md` (`gen-sect.sh <môn-phái> <thư-mục>` chỉ vẽ phần còn thiếu),

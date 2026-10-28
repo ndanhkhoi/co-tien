@@ -372,3 +372,114 @@
 .ld-track.sunk .ld-ball { animation: ld-sink 0.45s 0.2s ease-in forwards; }
 @keyframes ld-sink { to { left: calc(100% - 4.5% - var(--ball) / 2); transform: scale(0.35); opacity: 0; } }
 @media (prefers-reduced-motion: reduce) { .ld-ball { transform: none; } }
+
+/* ---------- Cơ Tiên: directional pages and painted champion entrances ---------- */
+.screen { animation: ct-screen-forward 280ms var(--ease) both; }
+.screen[data-direction='back'] { animation-name: ct-screen-back; }
+.screen[data-direction='reset'] { animation-name: ct-fade-in; }
+.screen.out { animation: ct-parallax-out 280ms var(--ease) both; pointer-events: none; }
+.screen.out[data-direction='back'] { animation-name: ct-screen-back-out; }
+.screen.out[data-direction='reset'] { animation-name: ct-fade-out; }
+@keyframes ct-screen-forward { from { opacity: 0; transform: translateX(10%); } to { opacity: 1; transform: none; } }
+@keyframes ct-screen-back { from { opacity: .3; transform: translateX(-4%); } to { opacity: 1; transform: none; } }
+@keyframes ct-parallax-out { to { opacity: 0; transform: translateX(-4%); } }
+@keyframes ct-screen-back-out { to { opacity: 0; transform: translateX(10%); } }
+@keyframes ct-fade-in { from { opacity: 0; } to { opacity: 1; } }
+@keyframes ct-fade-out { to { opacity: 0; } }
+.page-motion-host { position: relative; }
+.page-motion-host > .page-echo { position: absolute !important; right: auto; bottom: auto; pointer-events: none !important; z-index: 2; }
+.motion-sheet { animation: ct-sheet-in 280ms var(--ease) both; }
+@keyframes ct-sheet-in { from { opacity: 0; transform: translateX(36px); } to { opacity: 1; transform: none; } }
+.home-hero, .cp-art img, .codex-champ .cc-cut img { animation: ct-art-rise 480ms var(--ease) both; }
+@keyframes ct-art-rise { from { opacity: 0; translate: 0 22px; } to { opacity: 1; translate: 0 0; } }
+.cp-skill, .skill-row { animation: ct-art-rise 360ms var(--ease) both; animation-delay: var(--entry-delay, 0ms); }
+.champ-card { animation: ct-art-rise 340ms var(--ease) both; }
+.champ-card:nth-child(5n + 2) { animation-delay: 40ms; }
+.champ-card:nth-child(5n + 3) { animation-delay: 80ms; }
+.champ-card:nth-child(5n + 4) { animation-delay: 120ms; }
+.champ-card:nth-child(5n) { animation-delay: 160ms; }
+.vs-cut.me { animation: ct-duel-me 580ms var(--ease) both; }
+.vs-cut.foe { animation: ct-duel-foe 580ms 80ms var(--ease) both; }
+/* A painted ink veil sweeps off the stage; its motion reveals both side entrances. */
+.vs-stage::after {
+  content: ''; position: absolute; inset: -15%; z-index: 1; pointer-events: none;
+  background: var(--ink);
+  mask: url('../../public/art/sects/thienquang/cutin.webp') center / 100% 100% no-repeat;
+  animation: ct-ink-wipe 660ms var(--ease) both;
+}
+@keyframes ct-ink-wipe { from { opacity: .85; transform: translateX(0); } to { opacity: 0; transform: translateX(105%); } }
+@keyframes ct-duel-me { from { opacity: 0; translate: -60px 0; } to { opacity: 1; translate: 0 0; } }
+@keyframes ct-duel-foe { from { opacity: 0; translate: 60px 0; } to { opacity: 1; translate: 0 0; } }
+.vs-stage .vs-seal { animation: ct-seal-stamp 240ms 660ms var(--ease) both; }
+@keyframes ct-seal-stamp { from { opacity: 0; scale: 1.6; } to { opacity: 1; scale: 1; } }
+.intro-actions .btn { min-height: 44px; }
+@media (prefers-reduced-motion: reduce) {
+  .screen, .screen.out, .motion-sheet, .home-hero, .cp-art img,
+  .codex-champ .cc-cut img, .cp-skill, .skill-row, .champ-card,
+  .vs-cut.me, .vs-cut.foe, .vs-stage .vs-seal { animation: none !important; }
+  .vs-stage::after { display: none; }
+}
+
+.intro-copy { display: flex; flex-direction: column; gap: 10px; }
+.pm-av img { animation: ct-art-rise 360ms var(--ease) both; }
+@media (prefers-reduced-motion: reduce) { .pm-av img { animation: none; } }
+
+/* ===== Duel and hero entrances, hand-tuned =====
+ * Duel: the stage washes in like ink on wet paper, each champion is brushed in from their side
+ * (clip reveal + travel + motion blur settling), the seal slams down with a small stage shake,
+ * then the name plates rise. Total ≈ 1 s. */
+.vs-stage { animation: ct-stage-wash 420ms ease-out both; }
+@keyframes ct-stage-wash { from { clip-path: circle(0% at 50% 55%); } to { clip-path: circle(80% at 50% 55%); } }
+.vs-cut.me { animation: ct-brush-me 640ms 120ms cubic-bezier(0.16, 1, 0.3, 1) both; }
+.vs-cut.foe { animation: ct-brush-foe 640ms 260ms cubic-bezier(0.16, 1, 0.3, 1) both; }
+@keyframes ct-brush-me {
+  0% { clip-path: inset(0 100% 0 0); translate: -90px 0; filter: blur(6px) drop-shadow(0 6px 10px rgba(40, 30, 18, 0.3)); }
+  55% { clip-path: inset(0 0 0 0); filter: blur(0) drop-shadow(0 6px 10px rgba(40, 30, 18, 0.3)); }
+  100% { clip-path: inset(0 0 0 0); translate: 0 0; filter: blur(0) drop-shadow(0 6px 10px rgba(40, 30, 18, 0.3)); }
+}
+@keyframes ct-brush-foe {
+  0% { clip-path: inset(0 100% 0 0); translate: 90px 0; filter: blur(6px) drop-shadow(0 6px 10px rgba(40, 30, 18, 0.3)); }
+  55% { clip-path: inset(0 0 0 0); filter: blur(0) drop-shadow(0 6px 10px rgba(40, 30, 18, 0.3)); }
+  100% { clip-path: inset(0 0 0 0); translate: 0 0; filter: blur(0) drop-shadow(0 6px 10px rgba(40, 30, 18, 0.3)); }
+}
+.vs-stage .vs-seal { animation: ct-seal-slam 300ms 820ms cubic-bezier(0.3, 1.4, 0.5, 1) both; }
+@keyframes ct-seal-slam {
+  0% { opacity: 0; scale: 2.6; rotate: -22deg; }
+  70% { opacity: 1; scale: 0.92; rotate: -4deg; }
+  100% { opacity: 1; scale: 1; rotate: 0deg; }
+}
+.versus { animation: ct-shake 220ms 1020ms linear both; }
+@keyframes ct-shake { 0%, 100% { translate: 0 0; } 25% { translate: -3px 1px; } 50% { translate: 3px -1px; } 75% { translate: -2px 0; } }
+.vs-plates .vs-side { animation: ct-plate-up 360ms 900ms var(--ease) both; }
+.vs-plates .vs-side.foe { animation-delay: 980ms; }
+@keyframes ct-plate-up { from { opacity: 0; translate: 0 14px; } to { opacity: 1; translate: 0 0; } }
+
+/* Home hero: brushed in from the right edge. */
+.home-hero { animation: ct-hero-brush 700ms 80ms cubic-bezier(0.16, 1, 0.3, 1) both; }
+@keyframes ct-hero-brush {
+  0% { clip-path: inset(0 0 0 100%); translate: 70px 0; filter: blur(5px) drop-shadow(0 10px 22px rgba(40, 30, 18, 0.25)); }
+  60% { clip-path: inset(0 0 0 0); filter: blur(0) drop-shadow(0 10px 22px rgba(40, 30, 18, 0.25)); }
+  100% { clip-path: inset(0 0 0 0); translate: 0 0; filter: blur(0) drop-shadow(0 10px 22px rgba(40, 30, 18, 0.25)); }
+}
+/* Home tablets drop in one after another. */
+.home-journey, .home-tablet { animation: ct-tile-in 380ms var(--ease) both; }
+.home-journey { animation-delay: 60ms; }
+.home-tablet:nth-child(1) { animation-delay: 140ms; } .home-tablet:nth-child(2) { animation-delay: 190ms; } .home-tablet:nth-child(3) { animation-delay: 240ms; }
+.home-tablet:nth-child(4) { animation-delay: 290ms; } .home-tablet:nth-child(5) { animation-delay: 340ms; } .home-tablet:nth-child(6) { animation-delay: 390ms; }
+@keyframes ct-tile-in { from { opacity: 0; translate: -18px 0; scale: 0.96; } to { opacity: 1; translate: 0 0; scale: 1; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .vs-stage, .vs-cut.me, .vs-cut.foe, .vs-stage .vs-seal, .versus, .vs-plates .vs-side, .home-hero, .home-journey, .home-tablet { animation: ct-fade-in 200ms ease both !important; }
+}
+.mx-castrow { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; }
+.mx-castrow:has(> .btn:not([hidden])) { margin-top: 2px; }
+.mx-castrow .btn { min-height: 40px; height: 40px; padding: 0 2px; font-size: 13px; gap: 3px; border-width: 9px; border-image-width: 9px; }
+.mx-castrow .btn .ico { width: 18px; height: 18px; }
+.mx-strike { white-space: nowrap; }
+.mx-ctrl.placing .mx-strike { font-size: 15px; }
+.mx-castrow .btn { width: 100%; min-width: 0; overflow: hidden; }
+.mx-ctrl.placing .mx-passive { display: none; }
+.mx-ctrl.placing .mx-dpad { gap: 3px; }
+/* The column is too narrow for words here: icon-only (aria-labels carry the meaning). */
+.mx-castrow .btn { font-size: 0; gap: 0; }
+.mx-castrow .btn .ico { width: 22px; height: 22px; }

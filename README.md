@@ -18,6 +18,8 @@ dụng (PWA), chơi offline.
 - **Địa thế:** mỗi môn phái có Linh Đài riêng (màu nỉ, ma sát, độ nảy băng, miệng lỗ) và Thiên Tượng ngẫu
   nhiên — bão tuyết, sóng lừng, gió giật, giếng sao, rễ cây… — đều là lực và ma sát thật trong mô phỏng,
   báo trước và vẽ lên bàn. Địa Lợi cho tướng đánh trên bàn quê nhà.
+- **Luận Cơ:** so tài nhanh với máy. **Song Đấu:** hai người luân phiên trên cùng một thiết bị.
+- **Luyện Cơ:** luyện từng cú đánh qua các bài thế có lời giải. **Tàng Các:** chiêu mộ tướng, chọn cơ và bàn.
 - **Hành trình:** bản đồ Cơ Tiên Giới; mỗi vùng có 5 cao thủ để thách đấu (thắng thì chiêu mộ được) và các
   thử thách. 60 thử thách được sinh tự động, mỗi bài có lời giải đã kiểm chứng bằng vật lý.
 - **Cơ Tiên Truyện:** truyện chữ có tranh minh hoạ thuỷ mặc, 15 chương mở dần theo Hành trình — một câu

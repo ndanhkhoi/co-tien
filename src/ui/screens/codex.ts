@@ -4,13 +4,13 @@ import { CUES, TABLES } from '../../game/content/gear';
 import lore from '../../game/content/lore.json';
 import { RULES_TEXT, SKILL_RULES } from '../../game/content/rules-text';
 import {
-  CHAMPIONS, CLASSES, classInfo, cutoutUrl, KIND_LABEL, exprUrl, sect, sectArtUrl, SECTS, winUrl,
+  CHAMPIONS, CLASSES, classInfo, cutoutUrl, KIND_LABEL, exprUrl, sect, sectArtUrl, SECTS, SECT_SIGNATURES, winUrl,
   type Champion, type SectId,
 } from '../../game/content/sects';
 import { cueStats, tableStats } from '../../game/content/stat-text';
 import { OMEN_INFO } from '../../game/terrain';
-import { screenEl, type App, type Screen } from '../app';
-import { btn, h, modal, tabs, tap, toast } from '../dom';
+import { motionModal as modal, screenEl, turnPage, type App, type Screen } from '../app';
+import { btn, h, tabs, tap, toast } from '../dom';
 import { champCard, closeX, cueArtEl, hex6, skillRow, statChip, statRows, tablePreview, topbar } from './menus';
 
 /**
@@ -41,8 +41,10 @@ export function codexScreen(app: App): Screen {
       { id: 'land', label: 'Vùng đất', icon: 'journey' }, { id: 'champ', label: 'Tướng', icon: 'users' },
       { id: 'class', label: 'Hệ', icon: 'shield' }, { id: 'rules', label: 'Luật chơi', icon: 'scroll' },
     ], tab, (v) => {
+      const order: Tab[] = ['land', 'champ', 'class', 'rules'];
+      const direction = order.indexOf(v) > order.indexOf(tab) ? 1 : -1;
       tab = v;
-      render();
+      turnPage(content, render, direction);
     })),
     content,
   );
@@ -64,15 +66,20 @@ function landList(app: App): HTMLElement {
   );
 }
 
-function landPage(app: App, id: SectId) {
+function landPage(app: App, id: SectId, page?: DetailPage, direction = 1) {
+  const entries = SECTS;
+  const index = entries.findIndex((entry) => entry.id === id);
+  const navigate = (step: number) => { const next = entries[index + step]; if (next) landPage(app, next.id, page, step); };
+
   const s = sect(id);
   const table = TABLES.find((t) => t.sect === id)!;
   const cues = CUES.filter((c) => c.sect === id);
   const omen = OMEN_INFO[id];
-  modal((close) => h('div.modal.codex-page.scroll', { style: `--sect:${hex6(s.main)}` },
+  const build = (close: () => void) => h('div.modal.codex-page.scroll', { style: `--sect:${hex6(s.main)}` },
     h('img.codex-banner', { src: sectArtUrl(id, 'splash'), alt: '', onerror: (e: Event) => (e.target as HTMLElement).remove() }),
     h('div.cp-head', null, h('img', { src: sectArtUrl(id, 'emblem'), alt: '' }), h('h2', null, s.name)),
     h('p.prose-p', null, LORE.sects[id]),
+    h('p.prose-p', null, `Dấu ấn môn phái: ${SECT_SIGNATURES[id]}`),
     h('h3.section-title', null, 'Tướng'),
     h('div.cc-grid', null, ...CHAMPIONS.filter((c) => c.sect === id).map((c) => thumb(app, c, () => {
       close();
@@ -83,15 +90,16 @@ function landPage(app: App, id: SectId) {
     statRows(tableStats(table)),
     h('h3.section-title', null, 'Cơ của môn phái'),
     ...cues.map((c) => h('div.cp-cue', null, h('b', null, c.name), cueArtEl(c), statRows(cueStats(c)))),
-    h('div.actions', null, btn('Đóng', close, 'ghost')),
+    h('div.actions', null, ...detailButtons(index, entries.length, navigate), btn('Đóng', close, 'ghost')),
     closeX(close),
-  ), { dismissable: true });
+  );
+  page = showDetail(build, page, direction, navigate);
 }
 
 function thumb(app: App, c: Champion, open: () => void): HTMLElement {
   const k = known(app, c.id);
   return champCard(c, { locked: !k, name: c.name, sub: k ? classInfo(c.cls).name : 'Gặp ở Hành trình để mở' },
-    () => (k ? open() : toast('Gặp tướng này ở Hành trình hoặc Đấu nhanh để mở trang', 'bad')));
+    () => (k ? open() : toast('Gặp tướng này ở Hành trình hoặc Luận Cơ để mở trang', 'bad')));
 }
 
 function champGrid(app: App): HTMLElement {
@@ -105,7 +113,11 @@ function champGrid(app: App): HTMLElement {
   }));
 }
 
-function champPage(app: App, c: Champion) {
+function champPage(app: App, c: Champion, page?: DetailPage, direction = 1) {
+  const entries = CHAMPIONS.filter((entry) => known(app, entry.id));
+  const index = entries.findIndex((entry) => entry.id === c.id);
+  const navigate = (step: number) => { const next = entries[index + step]; if (next) champPage(app, next, page, step); };
+
   const owned = app.profile.champions.includes(c.id);
   const cls = classInfo(c.cls);
   const info = LORE.champions[c.id];
@@ -113,8 +125,8 @@ function champPage(app: App, c: Champion) {
     ? h('div.codex-gallery', null,
       ...(['focus', 'joy', 'sad', 'cast'] as const).map((e) => h('img', { src: exprUrl(c.id, e), alt: '', loading: 'lazy' })),
       h('img.win', { src: winUrl(c.id), alt: '', loading: 'lazy' }))
-    : h('p.locked-note', null, 'Chiêu mộ tướng này (thắng ở Hành trình hoặc mua trong Bộ sưu tập) để mở bộ tranh đầy đủ.');
-  modal((close) => h('div.modal.codex-page.scroll', { style: `--sect:${hex6(sect(c.sect).main)}` },
+    : h('p.locked-note', null, 'Chiêu mộ tướng này (thắng ở Hành trình hoặc mua trong Tàng Các) để mở bộ tranh đầy đủ.');
+  const build = (close: () => void) => h('div.modal.codex-page.scroll', { style: `--sect:${hex6(sect(c.sect).main)}` },
     h('div.codex-champ', null,
       h('div.cc-cut', null, h('img', { src: cutoutUrl(c.id), alt: '' })),
       h('div.grow', null,
@@ -130,9 +142,10 @@ function champPage(app: App, c: Champion) {
     ...c.skills.map((sk) => skillRow(c, sk)),
     h('h3.section-title', null, 'Tranh'),
     gallery,
-    h('div.actions', null, btn('Đóng', close, 'ghost')),
+    h('div.actions', null, ...detailButtons(index, entries.length, navigate), btn('Đóng', close, 'ghost')),
     closeX(close),
-  ), { dismissable: true });
+  );
+  page = showDetail(build, page, direction, navigate);
 }
 
 function classList(): HTMLElement {
@@ -151,4 +164,45 @@ function rulesPage(): HTMLElement {
       h('ul.rules-list', null, ...RULES_TEXT[m].points.map((t) => h('li', null, t))))),
     h('div.sheet.prose', null, h('h2.h3', null, 'Tiên Đạo'), h('ul.rules-list', null, ...SKILL_RULES.map((t) => h('li', null, t)))),
   );
+}
+
+interface DetailPage { el: HTMLElement; close: () => void }
+
+function detailButtons(index: number, count: number, navigate: (step: number) => void) {
+  const prev = btn('Trước', () => navigate(-1), 'ghost');
+  const next = btn('Tiếp', () => navigate(1), 'ghost');
+  prev.disabled = index <= 0;
+  next.disabled = index >= count - 1;
+  return [prev, next];
+}
+
+function showDetail(build: (close: () => void) => HTMLElement, page: DetailPage | undefined,
+  direction: number, navigate: (step: number) => void): DetailPage {
+  if (page) {
+    const current = page;
+    turnPage(current.el, () => {
+      const next = build(current.close);
+      current.el.replaceChildren(...next.childNodes);
+      current.el.style.cssText = next.style.cssText;
+      current.el.scrollTop = 0;
+    }, direction);
+  } else {
+    modal((close) => {
+      page = { el: build(close), close };
+      return page.el;
+    }, { dismissable: true });
+  }
+  const el = page!.el;
+  let start: { x: number; y: number } | null = null;
+  // Replacing handlers keeps rapid navigation from accumulating stale page callbacks.
+  el.onpointerdown = (e) => { start = { x: e.clientX, y: e.clientY }; };
+  el.onpointercancel = () => { start = null; };
+  el.onpointerup = (e) => {
+    if (!start) return;
+    const dx = e.clientX - start.x;
+    const dy = e.clientY - start.y;
+    start = null;
+    if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy) * 1.5) navigate(dx < 0 ? 1 : -1);
+  };
+  return page!;
 }

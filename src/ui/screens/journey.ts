@@ -4,8 +4,8 @@ import { TABLES } from '../../game/content/gear';
 import lore from '../../game/content/lore.json';
 import { champion, sect, sectArtUrl, type SectId } from '../../game/content/sects';
 import { MODE_NAMES } from '../../core/rules';
-import { screenEl, type App, type Screen } from '../app';
-import { btn, h, modal, stars, tap, toast } from '../dom';
+import { motionModal as modal, screenEl, type App, type Screen } from '../app';
+import { btn, h, stars, tap, toast } from '../dom';
 import { icon } from '../icons';
 import { artUrl, champCard, closeX, hex6, npcModal, startChallenge, statChip, topbar } from './menus';
 
@@ -142,7 +142,7 @@ function landSheet(app: App, id: SectId) {
           npcModal(app, n);
         });
       })),
-      tasks.length ? h('h3.section-title', null, 'Thử thách') : null,
+      tasks.length ? h('h3.section-title', null, 'Luyện Cơ') : null,
       h('div.ls-tasks', null, ...tasks.map((c, i) => {
         const best = p.challenges[c.id] ?? 0;
         const open = taskOpen(app, c);
@@ -151,7 +151,7 @@ function landSheet(app: App, id: SectId) {
           h('span.tk-text', null, h('b', null, FAMILY_INFO[c.family].name), h('span', null, FAMILY_INFO[c.family].desc)),
           open ? stars(best) : icon('lock'),
         ), () => {
-          if (!open) return toast(`Giải bài trước trong nhóm ${FAMILY_INFO[c.family].name} ở Thử thách để mở`, 'bad');
+          if (!open) return toast(`Giải bài trước trong nhóm ${FAMILY_INFO[c.family].name} ở Luyện Cơ để mở`, 'bad');
           close();
           startChallenge(app, c, table);
         });

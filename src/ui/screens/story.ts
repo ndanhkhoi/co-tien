@@ -1,7 +1,7 @@
 import { sound } from '../../audio/sound';
 import { CHAPTERS as LANDS } from '../../game/content/career';
 import story from '../../game/content/story.json';
-import { screenEl, type App, type Screen } from '../app';
+import { screenEl, turnPage, type App, type Screen } from '../app';
 import { btn, h, iconBtn, tap, toast } from '../dom';
 import { icon } from '../icons';
 import { statChip, topbar } from './menus';
@@ -93,14 +93,18 @@ function openReader(app: App, c: Chapter) {
     if (n < 0) return;
     if (n >= c.pages.length) return close();
     if (n !== i) sound.page();
+    const direction = n >= i ? 1 : -1;
     i = n;
     const page = c.pages[i];
     // Pages without their own picture keep the previous one so the scene carries over.
     const key = page.art || c.pages.slice(0, i).reverse().find((p) => p.art)?.art || '';
-    art.src = key ? artUrl(key) : '';
+    const source = key ? artUrl(key) : '';
+    if (art.getAttribute('src') !== source) turnPage(art, () => { art.src = source; }, direction, true);
     art.classList.toggle('carry', !page.art);
-    text.replaceChildren(...page.text.split('\n\n').map((para) => h('p', null, para)));
-    text.scrollTop = 0;
+    turnPage(text, () => {
+      text.replaceChildren(...page.text.split('\n\n').map((para) => h('p', null, para)));
+      text.scrollTop = 0;
+    }, direction);
     count.textContent = `${i + 1}/${c.pages.length}`;
     [...dots.children].forEach((d, k) => d.classList.toggle('on', k === i));
     prev.toggleAttribute('disabled', i === 0);
@@ -115,6 +119,7 @@ function openReader(app: App, c: Chapter) {
     sx = e.clientX;
     sy = e.clientY;
   });
+  reader.addEventListener('pointercancel', () => { sx = null; });
   reader.addEventListener('pointerup', (e) => {
     if (sx === null) return;
     const dx = e.clientX - sx;

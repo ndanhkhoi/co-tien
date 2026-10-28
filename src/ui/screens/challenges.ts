@@ -25,6 +25,6 @@ export function challengesScreen(app: App): Screen {
       }))),
     );
   }
-  el.append(topbar(app, 'Thử thách', true, statChip('target', `${solved}/${CHALLENGES.length}`)), list);
+  el.append(topbar(app, 'Luyện Cơ', true, statChip('target', `${solved}/${CHALLENGES.length}`)), list);
   return { el };
 }
