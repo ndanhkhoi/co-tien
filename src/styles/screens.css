@@ -806,6 +806,10 @@ textarea.code-box:focus { border-color: var(--accent); }
   color: var(--ink);
   font-family: var(--body);
 }
+/* iOS standalone can expose the root canvas below a fixed overlay near the home indicator.
+ * Paint that canvas too; safe-area padding belongs to the content, not the backdrop. */
+html:has(body.vp-rotate), body.vp-rotate { background: var(--ink); }
+body.vp-rotate .rotate-hint { min-height: 100vh; min-height: 100lvh; }
 body.vp-rotate .rotate-hint, body.vp-resize .size-hint { display: flex; }
 .rh-card, .vp-card {
   width: min(440px, 100%);

@@ -92,13 +92,17 @@ boot().catch((err) => {
  */
 function installUiScale() {
   const ui = document.getElementById('ui')!;
+  const viewport = document.getElementById('stage')!;
   const apply = () => {
-    const s = Math.min(2.2, Math.max(0.75, Math.min(innerWidth / 844, innerHeight / 390)));
-    ui.style.width = `${innerWidth / s}px`;
-    ui.style.height = `${innerHeight / s}px`;
+    // Measure the CSS viewport so browser toolbar changes and safe-area coverage stay in sync.
+    const { width, height } = viewport.getBoundingClientRect();
+    const s = mustInstall() ? 1 : Math.min(2.2, Math.max(0.75, Math.min(width / 844, height / 390)));
+    ui.style.width = `${width / s}px`;
+    ui.style.height = `${height / s}px`;
     ui.style.transform = s === 1 ? '' : `scale(${s})`;
     document.documentElement.style.setProperty('--ui-scale', String(s));
   };
+  new ResizeObserver(apply).observe(viewport);
   addEventListener('resize', apply);
   apply();
 }

@@ -317,61 +317,24 @@
 .cp-skill { justify-content: center; }
 
 /* ---------- Loading screen ---------- */
-.screen.loading { display: grid; place-items: center; background: var(--paper, none) center / 640px, var(--frame); }
+.screen.loading { display: grid; place-items: center; background: linear-gradient(rgba(233, 225, 208, 0.78), rgba(233, 225, 208, 0.78)), var(--paper, none) center / 640px, var(--frame); }
 .ld-box {
-  width: min(520px, 92%);
+  width: min(500px, 94%);
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 10px;
-  padding: 10px 18px;
-  border: 22px solid transparent;
-  border-image: url('/art/ui/frame/panel.webp') 74 fill / 22px / 0 stretch;
+  gap: 12px;
+  padding: 12px 24px 18px;
   text-align: center;
 }
-.ld-logo { height: 84px; width: auto; }
-.ld-title { display: flex; gap: 10px; align-items: baseline; font: 700 18px/1.2 var(--display); }
-.ld-pct { color: var(--accent-2); }
-.ld-bar { position: relative; width: 100%; height: 14px; border-radius: 7px; overflow: hidden; background: var(--sheet-3); box-shadow: inset 0 0 0 1.5px var(--ink); }
-.ld-fill { position: absolute; inset: 0; background: url('/art/ui/frame/ribbon.webp') center / 100% 260% no-repeat, var(--ink); transform: scaleX(0); transform-origin: left; transition: transform 0.25s var(--ease); }
-.ld-tip { font-size: 14.5px; line-height: 1.45; color: var(--ink-2); min-height: 42px; }
-.ld-note { font-size: 12.5px; color: var(--muted); }
-.ld-fill { background: linear-gradient(90deg, var(--ink) 0%, var(--ink) 55%, var(--accent) 100%); }
-
-/* Loading bar: the ball rolls along a felt strip (--p = 0…1) and sinks into the pocket at the end. */
-.ld-track {
-  --p: 0;
-  --ball: 30px;
-  position: relative;
-  width: 100%;
-  height: 28px;
-  background: center / 100% 100% no-repeat;
-}
-.ld-trail {
-  position: absolute;
-  left: 3%;
-  top: 50%;
-  height: 6px;
-  margin-top: -3px;
-  width: calc((100% - 9% - var(--ball)) * var(--p));
-  border-radius: 3px;
-  background: linear-gradient(90deg, rgba(26, 23, 19, 0.15), rgba(26, 23, 19, 0.55));
-  transition: width 0.3s var(--ease);
-}
-.ld-ball {
-  position: absolute;
-  top: 50%;
-  left: calc(3% + (100% - 9% - var(--ball)) * var(--p));
-  width: var(--ball);
-  height: var(--ball);
-  margin-top: calc(var(--ball) / -2);
-  transform: rotate(calc(var(--p) * 1440deg));
-  transition: left 0.3s var(--ease), transform 0.3s var(--ease);
-  filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.3));
-}
-.ld-track.sunk .ld-ball { animation: ld-sink 0.45s 0.2s ease-in forwards; }
-@keyframes ld-sink { to { left: calc(100% - 4.5% - var(--ball) / 2); transform: scale(0.35); opacity: 0; } }
-@media (prefers-reduced-motion: reduce) { .ld-ball { transform: none; } }
+.ld-logo { width: min(300px, 90%); height: auto; margin-bottom: 8px; }
+.ld-title { display: flex; justify-content: space-between; gap: 16px; align-items: baseline; width: 100%; font: 600 17px/1.4 var(--display); }
+.ld-pct { color: var(--accent-2); font: 700 23px/1 var(--display); min-width: 3.5ch; text-align: right; }
+.ld-track { position: relative; width: 100%; height: 12px; background: url('/art/ui/frame/ribbon.webp') center / 100% 100% no-repeat; }
+.ld-track::before { content: ''; position: absolute; inset: 0; background: var(--frame); opacity: 0.8; }
+.ld-fill { position: absolute; inset: 0; background: url('/art/ui/frame/ribbon.webp') center / 100% 100% no-repeat; clip-path: inset(0 100% 0 0); transition: clip-path 0.25s ease-out; }
+.ld-note { font-size: 13px; color: var(--muted); }
+.ld-tip { margin-top: 14px; max-width: 400px; font-size: 14px; line-height: 1.6; color: var(--ink-2); min-height: 45px; }
 
 /* ---------- Cơ Tiên: directional pages and painted champion entrances ---------- */
 .screen { animation: ct-screen-forward 280ms var(--ease) both; }

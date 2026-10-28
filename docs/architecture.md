@@ -93,7 +93,12 @@ bộ sưu tập, cài đặt), `journey.ts` (bản đồ Hành trình), `codex.t
 `match.css` dành cho giao diện trận đấu; hai phần này đang được xây dựng lại.
 
 Trên điện thoại còn phải cài PWA (`mustInstall()`), màn hình cài đặt hiện trước ngay cả khi máy đang
-dọc; `viewport-guard.ts` bỏ qua chặn xoay ngang trong thời gian này. `src/platform/device.ts` chặn
+dọc; `viewport-guard.ts` bỏ qua chặn xoay ngang trong thời gian này. Màn cài đặt dùng kích thước CSS
+thật, không thu phóng theo khung game ngang. Lớp UI bám vùng nền
+`100dvh` qua `ResizeObserver` để cập nhật theo thanh trình duyệt mobile. Màn chặn xoay phủ tối thiểu
+`100lvh` và tô nền gốc cùng màu mực để vùng home indicator của iOS standalone không lộ nền giấy.
+
+`src/platform/device.ts` chặn
 cử chỉ trình duyệt ngoài vùng cuộn, nhưng cho cuộn trong `.scroll` hoặc phần tử hoặc phần tử cha có `overflow`
 `auto`/`scroll` và nội dung thực sự tràn; chặn cả pinch zoom nhiều ngón.
 
@@ -122,6 +127,7 @@ màn tải (`ui/screens/loading.ts`) chặn ở lần đầu và sau mỗi bản
 icon chiêu, bàn, tướng và môn phái của người chơi); phần còn lại tải nền khi ở menu (bỏ qua khi bật tiết kiệm dữ
 liệu); mỗi trận tải và giải mã sẵn ảnh của hai tướng và môn phái của bàn. Ảnh lớn được service worker lưu vào kho
 `art-<mã build>`, kho của bản cũ bị xoá khi bản mới chạy. `?loading` giữ màn tải để xem thiết kế.
+Tiến trình hiện bằng nét cọ mực và phần trăm tải.
 
 ## Thi triển kỹ năng theo vị trí
 

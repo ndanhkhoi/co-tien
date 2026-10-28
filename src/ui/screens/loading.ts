@@ -17,30 +17,36 @@ const TIPS = [
 export function loadingScreen(next: (app: App) => Screen) {
   return (app: App): Screen => {
     const el = screenEl('loading');
-    // A felt strip ending in a pocket; the cue ball rolls along it with an ink trail and drops in at 100%.
-    const art = (f: string) => new URL(`${import.meta.env.BASE_URL}art/ui/${f}`, document.baseURI).href;
-    const trail = h('i.ld-trail');
-    const ball = h('img.ld-ball', { src: art('load-ball.webp'), alt: '', draggable: false });
-    const track = h('div.ld-track', { style: `background-image:url("${art('load-track.webp')}")` }, trail, ball);
+    // Reveal the painted brush band as resources arrive.
+    const fill = h('div.ld-fill', { 'aria-hidden': 'true' });
+    const track = h('div.ld-track', {
+      role: 'progressbar', 'aria-label': 'Tải tài nguyên',
+      'aria-valuemin': '0', 'aria-valuemax': '100', 'aria-valuenow': '0',
+    }, fill);
     const pct = h('span.ld-pct.num', null, '0%');
     const tip = h('p.ld-tip', null, TIPS[Math.floor(Math.random() * TIPS.length)]);
     el.append(h('div.ld-box', null,
       h('img.ld-logo', { src: new URL(`${import.meta.env.BASE_URL}art/ui/logo.webp`, document.baseURI).href, alt: 'Cơ Tiên', draggable: false }),
-      h('div.ld-title', null, 'Đang chuẩn bị tài nguyên', pct),
+      h('div.ld-title', null, h('span', null, 'Đang tải tài nguyên'), pct),
       track,
+      h('p.ld-note', null, 'Chuẩn bị bàn, tướng và chiêu thức'),
       tip,
     ));
     let shown = 0;
+    let disposed = false;
+    let timer: ReturnType<typeof setTimeout> | undefined;
     void preloadCore(app.profile.champion, (f) => {
+      if (disposed) return;
       const p = Math.round(f * 100);
       if (p === shown) return;
       shown = p;
-      track.style.setProperty('--p', String(f));
+      fill.style.clipPath = `inset(0 ${100 - p}% 0 0)`;
+      track.setAttribute('aria-valuenow', String(p));
       pct.textContent = `${p}%`;
     }).then(() => {
-      track.classList.add('sunk');
-      if (!location.search.includes('loading')) setTimeout(() => app.go(next, { reset: true }), 650);
+      if (disposed) return;
+      if (!location.search.includes('loading')) timer = setTimeout(() => app.go(next, { reset: true }), 400);
     });
-    return { el };
+    return { el, dispose: () => { disposed = true; clearTimeout(timer); } };
   };
 }
