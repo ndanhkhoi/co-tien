@@ -661,11 +661,13 @@ body.cast-top .bd-cast.on { translate: 0 0; }
 /* Nine-slice of stage.webp (768×512): the carved corners keep their shape, the straight bands
    stretch. The game edge sits between the band's inner edge and the cloud brackets, so the
    brackets only touch the corners and the pine, tassel and seal spill out over the backdrop.
-   --fk is screen px per source px. */
+   --fk is screen px per source px. The border colour must not be transparent: iOS gives a fixed
+   layer whose only decoration is a transparent border no backing, so the frame never reached the
+   screen. The border image paints over it. */
 body.theatre #theatre {
   display: block; position: fixed; z-index: 0; pointer-events: none;
   left: var(--game-l); top: var(--game-t); width: var(--game-w); height: var(--game-h);
-  border: 1px solid transparent;
+  border: 1px solid var(--ink);
   border-image-source: url('/art/ui/frame/stage.webp');
   border-image-slice: 140 138 142 145;
   border-image-width: calc(140 * var(--fk)) calc(138 * var(--fk)) calc(142 * var(--fk)) calc(145 * var(--fk));
