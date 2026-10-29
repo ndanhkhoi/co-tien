@@ -42,6 +42,13 @@ Có **24 nhóm cơ chế**, trong đó tám cơ chế đặt trên bàn gồm:
 
 Chiêu đặt cần xác nhận “THI TRIỂN”; huỷ bước đặt không tiêu chiêu. Chiêu cơ bản hồi 2–3 lượt đánh của chính mình theo cơ chế đầu tiên trong `kinds`; tuyệt chiêu cần 100 năng lượng, có sức mạnh bằng bậc tướng cộng 2. `target: opponent` lưu hiệu ứng cho cú của đối thủ, mặc định áp dụng cho bên dùng.
 
+Năng lượng nạp theo **điểm cú đánh**: mỗi cú +6, mỗi điểm +11; bi thường là 1 điểm, cú khó hoặc đẹp (cắt mỏng,
+bi băng, hai băng, bi kết, gỡ băng, nhảy qua bi chắn, cú xa, ăn nhiều bi, ba băng) được thêm điểm. Cú đánh thắng
+ván mở **Kết liễu** riêng của tướng: tướng lao tới thúc cơ, bi quyết định bay theo vệt mực vào lỗ.
+
+Thiên Tượng gió (Gió Núi, Xuân Phong, Bão Cát) giữ một hướng suốt lượt; cơn giật chỉ làm gió yếu đi, không đổi
+chiều. Mỗi lần nổi gió có sức riêng (nhẹ, vừa, mạnh), được báo cùng hướng và vẽ bằng mũi tên mực trên nỉ.
+
 ## Môn phái
 
 ### Thiên Quang Kiếm Tông (`thienquang`)

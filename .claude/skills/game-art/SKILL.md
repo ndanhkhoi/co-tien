@@ -79,18 +79,25 @@ sau khi đã có ảnh. Mặc định bỏ qua PNG gốc đã có, xuất webp v
 
 ```
 public/art/
-  champions/{id}/portrait.webp  cutout.webp  win.webp  expr-{focus|joy|sad|cast}.webp
+  champions/{id}/portrait.webp  cutout.webp  win.webp  finisher.webp  expr-{focus|joy|sad|cast}.webp
   sects/{sect}/emblem.webp  splash.webp  cutin.webp  felt.webp  rail.webp  cue-a.webp  cue-b.webp
   sects/{sect}/vfx/{element}.webp
   sects/{sect}/flip/{00..15}.webp
   skills/{champion}-{1|2|u}.webp
   story/{scene}.webp
   ui/{name}.webp
+  ui/frame/{name}.webp   (khung 9 lát: band, plate, scroll, panel, stage; close-seal)
   ui/icons/{name}.webp
 ```
 
 Id khớp dữ liệu `src/game/content/`. Icon UI được `src/ui/icons.ts` cung cấp qua `icon(name)`.
-Kiểm tra `vite.config.ts` khi thêm tài sản cần tải sẵn: mẫu `art/ui/**/*.webp` bao gồm cả thư mục con `ui/icons/`; các ảnh khác trong `art/` có cache lúc tải lần đầu.
+Mọi file `.webp` dưới `public/art/` tự vào manifest của bộ tải ảnh (`src/platform/preload.ts`) kèm mã nội dung:
+lần đầu người chơi tải trọn bộ, bản sau chỉ tải lại file có nội dung đổi. Không cần sửa `vite.config.ts` khi thêm tranh.
+
+`finisher.webp` (Kết liễu): cùng nhân vật với cut-out (gửi cut-out làm `--ref`, chèn `look`), lao người theo đường
+chéo trên trái xuống dưới phải, đầu cơ thúc về góc dưới phải, vệt mực màu môn phái sau đầu cơ, nền trong suốt,
+`--size 1536x1024`; xuất cắt sát, tối đa 820 px, webp q74. Khung 9 lát cho chữ: prompt nêu rõ phần giữa phẳng và
+trống, trang trí chỉ ở hai đầu ngắn; cắt sát thân khung theo chiều dọc trước khi dùng.
 
 ## How VFX turns into skill animation
 

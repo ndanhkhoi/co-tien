@@ -50,6 +50,12 @@ response để kiểm tra trước khi chạy lại.
    Bỏ qua PNG gốc đã có; đặt `REDO=1` để vẽ lại các cảnh được chỉ định, xuất vào
    `public/art/story/`.
 
+8. **Tư thế kết liễu** — mỗi tướng có `champions/{id}/finisher.webp` cho hiệu ứng Kết liễu: cùng nhân vật với
+   cut-out (gửi cut-out làm `--ref`, chèn toàn bộ `look`), lao người theo đường chéo từ trên trái xuống dưới
+   phải, đầu cơ thúc về góc dưới phải, một vệt mực màu môn phái theo sau đầu cơ, nền trong suốt, khổ
+   1536×1024. Xuất bản cắt sát, tối đa 820 px, webp chất lượng 74 (khoảng 230 KB mỗi tướng). Nếu thiếu tranh,
+   game dùng cut-out.
+
 ## Phong cách
 
 **Thuỷ Mặc**: tranh mực trên giấy dó, mực đen, một màu son, nhiều khoảng trống, không phát sáng, không chữ
@@ -70,6 +76,15 @@ mục riêng vào tài liệu hoặc commit.
 Các nút hành động dùng bộ tranh tròn `ui/actions/{strike,place,cast,cancel}.webp`, gồm cả icon và chữ
 thư pháp tiếng Việt; DOM chỉ giữ tên trợ năng. Icon cài đặt dùng bánh răng có lỗ trục rõ nghĩa.
 Tên tuyệt chiêu đặt trên tranh nét mực `ui/ultimate-banner.webp`.
+
+Khung chữ trong trận là ba tranh có phần giữa trơn để co giãn kiểu 9 lát: dải mực `ui/frame/band.webp`
+(thông báo), bảng tên `ui/frame/plate.webp` (khung người chơi, tên ở màn VS và thiết lập trận) và cuộn giấy
+`ui/frame/scroll.webp` (ô mục tiêu, nhãn bi, lời nhắc chiêu). Hoa văn chỉ nằm ở hai đầu để chữ không bao
+giờ đè lên. Nút đóng thông báo là đĩa giấy có dấu X nét cọ `ui/frame/close-seal.webp`. Khi vẽ khung mới
+cho 9 lát, yêu cầu rõ trong prompt: phần giữa phẳng, đều, trống; trang trí chỉ ở hai đầu ngắn.
+
+Cây cơ môn phái (`sects/{id}/cue-a|b.webp`) có thể kèm tua rua hay chạm khắc chìa ra; game đo bề dày thân
+cơ phía trước để phóng, nên thân cơ trong tranh phải thẳng và đều phía đầu cơ.
 
 Bản đồ `ui/map.webp` có tỷ lệ 3:2, được chọn từ ba phương án vẽ theo tuyến trong `career.ts`:
 Thiên Quang → Hoa Linh → Hải Long → Thiên Cơ → Băng Phách → Độc Vụ → Kim Sa → Vạn Thú →

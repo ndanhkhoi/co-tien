@@ -43,12 +43,18 @@ UI (kéo/chạm bàn, nút xoay, lực, ĐÁNH) ──► Match.shoot(input)
 - `rack.ts`: xếp bi đúng luật cho 8/9/10 bi và carom; đặt lại bi.
 - `rules/`: 8 bi, 9/10 bi (rotation), carom phăng tự do và 3 băng theo WPA 2026 / UMB.
 - `aim.ts`: dự đoán điểm chạm, bi ảo, hướng bi mục tiêu.
+- `shot-score.ts`: chấm điểm một cú ghi điểm từ chuỗi sự kiện vật lý và vị trí bi trước cú: mỗi bi/điểm 1,
+  cộng thêm cho cắt mỏng, bi băng, bi kết, gỡ băng, nhảy qua bi chắn thật, cú xa, ăn nhiều bi, carom ba băng;
+  trả tên các kỹ thuật để HUD gọi tên.
 
 ## `src/game` — trận đấu và nội dung
 
 - `match.ts`: máy trạng thái của một trận (`aim → rolling → option / rack-over / match-over`), năng lượng,
   hồi chiêu, nội tại hệ, 24 nhóm cơ chế chiêu, Thiên Tượng, Địa Lợi, tua lại.
-- `terrain.ts`: Thiên Tượng của từng môn phái, biểu diễn bằng vật lý (`Terrain`, chướng ngại, rung).
+- `terrain.ts`: Thiên Tượng của từng môn phái, biểu diễn bằng vật lý (`Terrain`, chướng ngại, rung). Gió có
+  sức ngẫu nhiên (`forceStrength`: nhẹ, vừa, mạnh) và giữ một chiều suốt lượt; cơn giật chỉ làm gió yếu đi.
+  Sóng lừng của Hải Long cố ý nghiêng bàn qua lại.
+- `practice.ts`: thế mẫu và Thế của tôi của Luyện thế, kiểm tra vị trí đặt bi (`canRest`).
 - `content/roster.json`: **nguồn sự thật** cho môn phái, hệ và tướng (tạo hình dùng để vẽ, chiêu).
 - `content/lore.json`: truyện thế giới, môn phái, tiểu sử và câu nói của tướng.
 - `content/story.json`: Cơ Tiên Truyện — 15 chương, mỗi trang có thể kèm tranh (`art`), `scenes` giữ đề bài
@@ -86,6 +92,11 @@ Metadata hình học và xung lực hình quạt đi cùng yêu cầu worker. Ch
 bi (`ball-mesh.ts`: shader cầu, lăn theo vận tốc góc), cơ, đường ngắm + bi ảo + mũi tên hướng, Thiên Tượng,
 hiệu ứng chiêu (`skill-fx.ts`: ghép các nét mực VFX của môn phái theo từng nhóm cơ chế, flipbook tuyệt chiêu).
 Độ cao mô phỏng nâng hình bi khỏi bóng trên mặt bàn; đường ngắm cú nhảy chạy một đoạn mô phỏng ngắn thay cho tia bi ảo phẳng.
+Chấm kim cương trên băng vẽ to (4,6 cm trên bàn lỗ) trên đĩa nền sáng để đếm điểm băng. Cây cơ tranh được phóng
+theo bề dày thân cơ phía trước (đo một lần từ kênh alpha), nên tua rua hay đuôi chạm khắc không làm thân teo lại.
+`omen-art.ts` vẽ lưới mũi tên mực trôi theo hướng gió, to và nhanh hơn khi gió mạnh. Canvas phủ cả cửa sổ nên
+`app.ts` giới hạn mật độ 2× và khoảng 3,6 triệu điểm ảnh, chỉ bật MSAA khi màn hình kém nét; mã chạy mỗi khung
+hình đọc vị trí lớp UI qua `uiOrigin()` thay vì đọc layout.
 
 Code/shader cho bi và bàn phục vụ hình học và trạng thái mô phỏng (số/sọc, màu, ánh sáng, xoay vật lý). Tranh, icon và trang trí UI vẫn là tài sản nguyên bản sinh riêng qua pipeline; ngoại lệ vật thể mô phỏng không áp dụng cho chúng.
 
@@ -93,7 +104,7 @@ Code/shader cho bi và bàn phục vụ hình học và trạng thái mô phỏn
 
 Màn hình là DOM phủ trên canvas (`app.ts` quản lý ngăn xếp màn hình). `menus.ts` (trang chủ, Luận Cơ, Song Đấu,
 Tàng Các, cài đặt), `journey.ts` (bản đồ Hành trình), `codex.ts` (nội dung Cơ Tiên Lục, hiện trong Tàng Các), `practice.ts` và `practice-desk.ts` (Luyện thế: màn chọn thế và bảng bên bàn), `story.ts` (đọc truyện có tranh, mở chương theo Hành trình), `match-screen.ts`
-(HUD, kéo/chạm bàn, nút xoay, thanh lực, chiêu, cut-in, AI diễn hoạt), `install-gate.ts` (bắt cài PWA trên điện thoại),
+(HUD, kéo/chạm bàn, nút xoay, thanh lực, chiêu, cut-in, AI diễn hoạt), `finisher.ts` (Kết liễu), `install-gate.ts` (bắt cài PWA trên điện thoại, hướng dẫn theo tab iPhone/iPad và Android, mở sẵn đúng hệ máy, kèm nút cài một chạm khi trình duyệt hỗ trợ),
 `viewport-guard.ts` (bắt xoay ngang, kiểm tra cửa sổ trên máy tính), `hints.ts` / `intro.ts` (hướng dẫn).
 `icons.ts` cung cấp `icon(name)` để tạo icon tranh từ `public/art/ui/icons/`.
 
@@ -105,7 +116,7 @@ Tàng Các gộp các tab vào thanh tiêu đề gọn để dành chiều cao c
 `kit.css` chứa thành phần dùng chung như nút, thẻ chọn và hộp thoại. `screens.css` dành cho các màn hình,
 `match.css` dành cho giao diện trận đấu; `skin.css` nạp cuối để phủ khung tranh, nút dấu son, chuyển trang và màn xuất hiện tướng. Chuyển màn trong `app.ts` có hướng tiến/lùi/đặt lại; màn cũ trở thành `inert`, được gỡ sau 280 ms; `turnPage` chỉ giữ ảnh chụp DOM của phần cũ trong lúc nội dung thật đổi ngay. Các chuyển động tôn trọng `prefers-reduced-motion`.
 
-Lớp DOM giữ một khung thiết kế **16:9 (844×475)**, scale đều để nằm trọn trong vùng màn hình đã trừ safe area, tối đa **2,2** (`installUiScale()` trong `main.ts`). Bên trong khung không có media query hay đơn vị `vw`/`vh`: mọi phần tử co dãn theo khung, không theo cửa sổ. Dải thừa quanh khung (`body.stage`) luôn là phông sống, không phải nền một màu. Màn hình rộng rãi (cạnh ngắn ≥ 480 px và scale khi có khung ≥ 1: desktop, tablet, cửa sổ lạ) bật `body.theatre`: game nằm trong khung bình phong vẽ (`art/ui/frame/stage.webp`, nine-slice, góc tràn ra ngoài) trên phông sống (`#backdrop`: tranh theo màn trôi chậm, sương `stage-mist.webp`, lớp giấy lót dưới bàn). Phông lấy từ `Screen.backdrop` (mặc định keyart; trận dùng splash môn phái đối thủ; Cơ Tiên Truyện dùng tranh trang đang đọc) qua `App.setBackdrop`. Ở chế độ này splash/màn tải cũng nằm trong khung, `--bleed-*` bằng 0 và canvas bị cắt theo khung. Khi lề hai bên đủ rộng (`body.cast-room`), tướng của hai bên (`Screen.cast`) đứng hai cạnh khung; màn cao (4:3, 5:4, tablet) có lề trên đủ rộng (`body.cast-top`) thì tướng ló đầu qua mép trên khung. Điện thoại không có khung gỗ: splash/màn tải phủ toàn màn hình ở kích thước gốc. Cửa sổ dưới 640×360 hiện thông báo vì chữ và nút không còn đủ rõ; mọi tỉ lệ khác đều chơi được. Canvas Pixi vẫn phủ cửa sổ; bố cục bàn quy đổi biên HUD và độ lệch khung DOM sang pixel màn hình. Sự kiện `cotien:ui-resize` cập nhật lại bàn sau khi khung đổi kích thước. Safe area được tính một lần ở khung ngoài; token vùng chạm trong `base.css` bù ngược `--ui-scale` để giữ tối thiểu 44 pixel hiển thị. Khoảng `--bleed-*` quy đổi phần bù viewport về layout pixel: nền tối modal/bảng áp phê/chiêu, nền đối đầu và tranh trang chủ phủ cả phần bù, trong khi nội dung và nút vẫn nằm trong khung an toàn. Kích thước HUD theo khung thiết kế, không tăng theo chiều cao màn hình ngoài.
+Lớp DOM giữ một khung thiết kế **16:9 (844×475)**, scale đều to nhất có thể trong vùng màn hình đã trừ safe area, chỉ chừa dải khung tranh, tối đa **2,2** (`installUiScale()` trong `main.ts`); ví dụ 1280×800 cho khung rộng 1196 px. Bên trong khung không có media query hay đơn vị `vw`/`vh`: mọi phần tử co dãn theo khung, không theo cửa sổ. Mọi màn hình, kể cả splash và màn tải (trừ màn cài app), nằm trong khung bình phong vẽ (`art/ui/frame/stage.webp`, nine-slice, góc tràn ra ngoài) trên phông sống (`#backdrop`: tranh theo màn trôi chậm, sương `stage-mist.webp`, lớp giấy lót dưới bàn). Điện thoại (cạnh ngắn < 480 px) dùng dải khung mảnh hơn. Khung được căn giữa theo cả màn hình rồi đẩy vào trong safe area nếu chạm tai thỏ hay thanh home. Phông lấy từ `Screen.backdrop` (mặc định keyart; trận dùng splash môn phái đối thủ; Cơ Tiên Truyện dùng tranh trang đang đọc) qua `App.setBackdrop`. Khi lề hai bên đủ rộng (`body.cast-room`), tướng của hai bên (`Screen.cast`) đứng hai cạnh khung; màn cao (4:3, 5:4, tablet) có lề trên đủ rộng (`body.cast-top`) thì tướng ló đầu qua mép trên khung. Mọi khung nine-slice giữ viền 1px trong suốt, vì WebKit (Safari/iOS) không vẽ `border-image` trên viền dày 0. Cửa sổ dưới 640×360 hiện thông báo vì chữ và nút không còn đủ rõ; mọi tỉ lệ khác đều chơi được. Canvas Pixi phủ cửa sổ và bị cắt theo khung; bố cục bàn quy đổi biên HUD và độ lệch khung DOM sang pixel màn hình. Sự kiện `cotien:ui-resize` cập nhật lại bàn sau khi khung đổi kích thước. Token vùng chạm trong `base.css` bù ngược `--ui-scale` để giữ tối thiểu 44 pixel hiển thị. Kích thước HUD theo khung thiết kế, không tăng theo chiều cao màn hình ngoài.
 
 Trên điện thoại còn phải cài PWA (`mustInstall()`), màn hình cài đặt hiện trước ngay cả khi máy đang
 dọc; `viewport-guard.ts` bỏ qua chặn xoay ngang trong thời gian này. Màn cài đặt dùng kích thước CSS
@@ -123,25 +134,28 @@ cử chỉ trình duyệt ngoài vùng cuộn, nhưng cho cuộn trong `.scroll`
 
 Giữ hoặc kéo bi cái nhỏ mở một bi lớn cạnh cột điều khiển; ngón tay dời điểm đánh trên bi lớn, thả tay là đóng. Chạm nhanh bi cái nhỏ mở bảng áp phê: chạm hoặc kéo điểm đánh trên bi lớn, hoặc chọn Giữa, Trô, Cule, Giật, Trái, Phải. Bảng này cũng có thanh “Nâng cơ” 0–75° cho cú nhảy: lực và góc quyết định tầm bay, góc cao giảm tầm ngang; quá nhẹ có thể chạm bi chắn, quá mạnh có thể văng bàn. Chạm thanh lực đặt mức tại điểm chạm, kéo để tinh chỉnh từ mức hiện tại; chạm ĐÁNH dùng lực đã chọn. Gọi lỗ bằng cách chạm lỗ trên bàn; lỗ đã gọi hiện trong ô mục tiêu phía trên, nút đẩy bi (push-out) nằm trong cột điều khiển, không có gì đặt trên băng bàn. Giữ ĐÁNH cho lực dao động rồi thả để đánh; trượt ngón ra xa để huỷ.
 
+Chạm một bi hiện nhãn có ảnh bi thật và số bi; trong Luyện thế chỉ chạm-thả tại chỗ mới hiện nhãn, kéo bi chỉ dời bi. Ván 9 bi và 10 bi hiện hai bi tiếp theo theo thứ tự dưới cột chiêu. Thông báo giữa bàn đóng khi chạm bất kỳ đâu hoặc nút ✕ vẽ; công tắc “Thông báo giữa bàn” (Cài đặt, menu Tạm dừng) tắt chúng, trừ lỗi và thắng ván.
+
 Khi có bi trong tay, kéo bi cái hoặc chạm bàn để dời; bốn nút hướng chỉnh 3 mm mỗi chạm và nhanh dần khi giữ. “Ngắm thử” chuyển thao tác bàn sang ngắm, cho xem đường bi trước khi chốt; “Dời bi” quay lại đặt vị trí. Khi dời bi, cả cơ và tia ngắm đều ẩn; chỉ hiện lại ở Ngắm thử. “ĐẶT BI” xác nhận vị trí, không đánh ngay. Bước đặt chiêu là trạng thái riêng và dùng “THI TRIỂN” để xác nhận.
 
-HUD Tiên Đạo có ba ô icon tranh riêng của tướng đang điều khiển, lấy bằng `skillIconUrl(champion.id, slot)`; mỗi ô hiện tên, trạng thái sẵn sàng/hồi chiêu hoặc phần trăm năng lượng tuyệt chiêu. Chạm ô mở thẻ mô tả và nút dùng, không thi triển ngay. Trang tướng, Cơ Tiên Lục và thông tin đối thủ dùng ba nút chiêu với thẻ chi tiết có icon, tên, hồi chiêu hoặc yêu cầu 100 năng lượng, mô tả và nút trở về trang tướng.
+HUD Tiên Đạo có ba ô icon tranh riêng của tướng đang điều khiển, lấy bằng `skillIconUrl(champion.id, slot)`; mỗi ô hiện tên và một viên trạng thái ngắn (“Sẵn sàng”, “2 lượt”, phần trăm năng lượng tuyệt chiêu) luôn nằm gọn trong ô; chiêu sẵn sàng có vòng son vẽ thở nhẹ, tuyệt chiêu có vòng lửa riêng. Chạm ô mở thẻ mô tả và nút dùng, không thi triển ngay. Trang tướng, Cơ Tiên Lục và thông tin đối thủ dùng ba nút chiêu với thẻ chi tiết có icon, tên, hồi chiêu hoặc yêu cầu 100 năng lượng, mô tả và nút trở về trang tướng.
 
 ## PWA và cập nhật
 
-`vite-plugin-pwa` tải sẵn code, tranh đệ quy trong `art/ui/` và `art/table/`, chân dung, icon chiêu và biểu tượng
-môn phái theo `globPatterns` trong `vite.config.ts`; các ảnh khác trong `art/` được cache khi tải lần đầu.
+`vite-plugin-pwa` tải sẵn code (JS, CSS, HTML, font, icon app); tranh nằm ở kho `art` do bộ tải ảnh quản lý (xem “Tải tài nguyên”), service worker chỉ phục vụ kho đó theo CacheFirst và `clientsClaim` để lần đầu vào đã dùng được kho ngay. Màn Cơ Tiên Truyện và nội dung truyện là một chunk riêng, chỉ tải khi mở. Bản build lược các trường chỉ dùng cho vẽ tranh (`look`, `pose`, `expr`, `icon`, `motifs`, `emblem`, `element`) khỏi `roster.json`.
 
 Trong bản production, `src/main.ts` kiểm tra bản mới mỗi **15 phút**, khi ứng dụng trở lại phía trước, khi có
 mạng trở lại, và khi bấm “Kiểm tra” ở mục Phiên bản trong Cài đặt. Ngay khi bản mới bắt đầu tải (`updatefound`),
-menu bị chặn bằng tấm “Đang tải bản mới…” để không ai tiếp tục chơi bản cũ; tải lỗi thì tấm này tự gỡ. `src/ui/app.ts` buộc áp dụng ngay từ menu; nếu đang ở màn hình trận đấu thì chờ hết trận,
+menu bị chặn bằng tấm “Đang tải bản mới…” (logo và nét cọ mực chạy qua lại) để không ai tiếp tục chơi bản cũ; tải lỗi thì tấm này tự gỡ. `src/ui/app.ts` buộc áp dụng ngay từ menu; nếu đang ở màn hình trận đấu thì chờ hết trận,
 khi chuyển sang màn hình không dùng stage. Lúc áp dụng, một lớp **chặn thao tác** hiện “Đang cập nhật
 bản mới…” trước khi kích hoạt service worker mới và tải lại ứng dụng.
 
 ## Kiểm thử
 
 `npm test` (Vitest): vật lý, luật, AI, 60 thử thách có lời giải, độ tương phản bi–nỉ (ΔE ≥ 25) cho mọi
-môn phái. `tests/skill-usage.test.ts` kiểm tra AI dùng chiêu thường/tuyệt chiêu qua các ván, cộng và
+môn phái. `tests/practice.test.ts` kiểm tra thế mẫu, đặt/cất bi, đánh lại và lưu thế; `tests/shot-score.test.ts`
+kiểm tra cách chấm cú (cắt mỏng, băng, kết, gỡ băng, nhảy chỉ khi có bi chắn, ba băng); `tests/terrain-wind.test.ts`
+bảo đảm gió không đảo chiều và có đủ ba sức gió. `tests/skill-usage.test.ts` kiểm tra AI dùng chiêu thường/tuyệt chiêu qua các ván, cộng và
 giới hạn năng lượng, sự kiện `energy`, hồi chiêu và tuyệt chiêu đặt bi của AI cấp 1. `npm run build` chạy typecheck trước khi build.
 
 Console test ẩn (bản dev hoặc `?dev`): `cotien.cheat(name, ...args)` với `unlockAll`, `coins(n)`, `xp(n)`, `story`, `journey`, `challenges`, `energy`, `reset`; ví dụ `cotien.cheat('coins', 5000)`. `coins`/`xp` cộng số lượng; `story` mở chương qua mốc Hành trình; không có giao diện cheat.
@@ -153,7 +167,7 @@ Console test ẩn (bản dev hoặc `?dev`): `cotien.cheat(name, ...args)` với
 trong kho mang header `x-art-rev`. Service worker chỉ phục vụ kho này (CacheFirst), còn loader tự điền và giữ
 kho khớp với bản build theo từng file, với các yêu cầu `?rev=` đi thẳng ra mạng.
 
-- **Màn tải** (`ui/screens/loading.ts`): lần đầu mở game tải **toàn bộ** tranh (~92 MB, hiện số MB), để sau đó
+- **Màn tải** (`ui/screens/loading.ts`): lần đầu mở game tải **toàn bộ** tranh (khoảng 105 MB kể cả 65 tranh kết liễu, hiện số MB đã tải), để sau đó
   chơi không bao giờ phải chờ ảnh. Một bản build có tranh mới quay lại màn này nhưng chỉ tải những file có mã
   nội dung đổi. Bật tiết kiệm dữ liệu thì chỉ tải phần cốt lõi (giao diện, chân dung, icon chiêu, bàn, tướng và
   môn phái của người chơi). Dấu `cotien.assets` = `<mã bộ tranh>:all|core`; mã bộ tranh (`__ART_VERSION__`) chỉ
@@ -163,7 +177,9 @@ kho khớp với bản build theo từng file, với các yêu cầu `?rev=` đi
 - **Trận:** kiểm tra và tải ảnh của hai tướng và môn phái của bàn, rồi giải mã trước cutout, flipbook và cut-in.
 
 Sau khi tải đủ, file không còn trong manifest bị xoá khỏi kho. Các kho `art-<mã build>` của bản cũ bị xoá.
-Lỗi mạng không chặn khởi động: ảnh tải theo nhu cầu và lần mở sau thử lại. `?loading` giữ màn tải để xem thiết kế.
+Tải đủ xong, game xin trình duyệt giữ kho lâu dài (`navigator.storage.persist`) để không bị xoá khi máy thiếu
+dung lượng. Lỗi mạng không chặn khởi động: ảnh tải theo nhu cầu và lần mở sau thử lại. Câu dưới thanh tiến trình
+nói rõ lần đầu cần chờ, hoặc đang tải tranh mới của bản cập nhật. `?loading` giữ màn tải để xem thiết kế.
 Tiến trình hiện bằng nét cọ mực và phần trăm tải.
 
 ## Thi triển kỹ năng theo vị trí
@@ -195,7 +211,7 @@ Cổ Điển và thử thách không kích hoạt kỹ năng, nội tại hoặc
 
 Tên màn hình: **Luận Cơ** (đấu AI), **Song Đấu** (hai người chung máy), **Luyện Cơ** (thử thách), **Tàng Các** (tướng/cơ/bàn và Cơ Tiên Lục), **Hành trình**, **Cơ Tiên Truyện**, **Luyện thế** (bàn tập tự do). **Tiên Đạo / Cổ Điển** là lựa chọn luật hiệu ứng trong thiết lập trận, độc lập với thể loại 8/9/10 bi hoặc phăng.
 
-Nội tại đi qua cùng `Match` cho người và AI: Thần Xạ khoá hướng và mở khoá khi đổi góc; Cuồng Chiến tăng lực 10%, giảm tầm áp phê 25%; Pháp Tu chọn trục áp phê (trục chọn ×1,2, trục kia ×0,8); Hộ Pháp chọn băng mềm một lần mỗi lượt cơ; Chú Sư để vùng cát sau cú hợp lệ kết thúc lượt; Ảnh Sát cần ăn liền 4 bi (`ASSASSIN_RUN`) rồi mới chọn thông tin hoặc lực ×1,12, dùng xong phải gom lại chuỗi; Luân Hồi giảm một lượt hồi chiêu khi luân phiên hai slot cơ bản.
+Nội tại đi qua cùng `Match` cho người và AI: Thần Xạ khoá hướng và mở khoá khi đổi góc; Cuồng Chiến tăng lực 10%, giảm tầm áp phê 25%; Pháp Tu chọn trục áp phê (trục chọn ×1,2, trục kia ×0,8); Hộ Pháp chọn băng mềm một lần mỗi lượt cơ; Chú Sư để vùng cát sau cú hợp lệ kết thúc lượt; Ảnh Sát cần chuỗi ăn liền ít nhất 4 bi (`ASSASSIN_RUN`) đạt 5 điểm cú đánh (`ASSASSIN_VALUE`) rồi mới chọn thông tin hoặc lực ×1,12, dùng xong phải gom lại chuỗi; Luân Hồi giảm một lượt hồi chiêu khi luân phiên hai slot cơ bản.
 
 Hồ sơ giữ `thancong.profile.v1`; `sanitize` bổ sung trường mới, lọc ID trang bị/tướng không còn hợp lệ, giữ các tướng bậc 1 miễn phí và xoá trường cũ `avatar`/`skills`. Mã chia sẻ giữ tiền tố `TC1.` và cũng đi qua `sanitize` khi nhập.
 
@@ -205,7 +221,7 @@ Ba nút chiêu hiện tên và hồi chiêu/năng lượng ngay trên trang tư�
 
 Tuyệt chiêu được ghi nhận khi xác nhận dùng nhưng phần diễn hoạt chờ thao tác ĐÁNH: khoá điều khiển, hiện cut-in tướng, rồi hiệu ứng trên bàn, sau đó cơ vung và mô phỏng cú đánh mới bắt đầu. Cả người và AI đi qua cùng luồng; chờ diễn hoạt tôn trọng tạm dừng và được huỷ khi rời trận.
 
-## Quyết định UI ngày 2026-10-28
+## Quyết định UI (cập nhật 2026-10-29)
 
 Giữ PixiJS WebGL cho bàn, bi, hiệu ứng; DOM cho điều khiển/menu/truyện. Đổi engine không tự giải quyết letterbox, layout hoặc trạng thái điều khiển.
 
@@ -214,6 +230,7 @@ Mỗi lượt hiện tối đa một mẹo (`hintTurn`), mẹo còn lại quay l
 **Kết liễu** (`src/ui/finisher.ts`): ván thắng bằng chính cú sạch của người thắng (mọi thể loại, không tính Luyện Cơ/Luyện thế) mở màn tối, dải mực môn phái, tướng lao vào với bóng mờ (`champions/{id}/finisher.webp`, thiếu thì dùng cut-out), bi quyết định bay khỏi đầu cơ theo vệt mực vào lỗ mực nổ tung, màn rung, rồi dấu son "Kết liễu" kèm tên cú và bi; khoảng 2,7 giây, chạm để bỏ qua, giảm chuyển động thì hiện tĩnh. Hành trình bỏ khung thẻ, hòa mép tranh vào nền và ngăn cuộn quá biên lan ra ngoài.
 
 Nút hành động trong ván là tranh tròn có icon và chữ thư pháp, tên thao tác vẫn có trong `aria-label`.
+Bảng kết quả Luyện Cơ giữ mục tiêu bài và số lượt đã dùng. Máy diễn mỗi lượt (nghĩ, xoay cơ, nạp lực) khoảng 1–2 giây.
 Trang chủ chừa vùng header ngoài chân dung. Trang tướng dùng hàng grid thống nhất cho ba chiêu,
 bao gồm tên xuống dòng. Scroll hint neo vào cha trực tiếp để giữ đúng lớp và vùng đọc truyện.
 Tên tuyệt chiêu dùng nền nét mực riêng; bản đồ dùng tuyến `CHAPTERS` và tọa độ khớp tranh 3:2.
