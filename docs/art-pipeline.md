@@ -80,7 +80,7 @@ Tên tuyệt chiêu đặt trên tranh nét mực `ui/ultimate-banner.webp`.
 Khung chữ trong trận là ba tranh có phần giữa trơn để co giãn kiểu 9 lát: dải mực `ui/frame/band.webp`
 (thông báo), bảng tên `ui/frame/plate.webp` (khung người chơi, tên ở màn VS và thiết lập trận) và cuộn giấy
 `ui/frame/scroll.webp` (ô mục tiêu, nhãn bi, lời nhắc chiêu). Hoa văn chỉ nằm ở hai đầu để chữ không bao
-giờ đè lên. Nút đóng thông báo là đĩa giấy có dấu X nét cọ `ui/frame/close-seal.webp`. Khi vẽ khung mới
+giờ đè lên. Nút đóng thông báo là icon vẽ `close` thu nhỏ, mực nhạt ở góc trên dải giấy. Logo `ui/logo.webp` ghi dòng phụ “BIDA × TU TIÊN” (dấu × màu son); mũi tên `ui/rotate-arrow.webp` ở màn xoay ngang dùng màu son của game. Khi vẽ khung mới
 cho 9 lát, yêu cầu rõ trong prompt: phần giữa phẳng, đều, trống; trang trí chỉ ở hai đầu ngắn.
 
 Cây cơ môn phái (`sects/{id}/cue-a|b.webp`) có thể kèm tua rua hay chạm khắc chìa ra; game đo bề dày thân

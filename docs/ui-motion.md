@@ -9,7 +9,7 @@ nguyên bản của repo, không lấy tên từ một trò chơi khác. Phụ �
 | Đấu nhanh | Luận Cơ: so tài bằng cơ; Thách Đấu: rõ hành động; Giao Đấu: giao tranh ngắn | Luận Cơ — đặc trưng bida tu tiên; phụ đề “So tài cùng máy” |
 | Hai người | Song Đấu: hai bên đối đầu; Đối Cơ: đối thủ chung bàn; Bằng Hữu: thân tình nhưng ít rõ tính cạnh tranh | Song Đấu — ngắn, phụ đề “Hai người · chung máy” |
 | Thử thách | Luyện Cơ: luyện cú đánh; Khảo Nghiệm: sắc thái tu luyện; Phá Thế: giải thế bi | Luyện Cơ — dễ hiểu, hợp các bài có lời giải |
-| Bộ sưu tập | Tàng Các: nơi lưu giữ; Bảo Các: kho vật quý; Tàng Bảo: nhấn sưu tầm vật phẩm | Tàng Các — chứa cả tướng, cơ và bàn; phụ đề “Chiêu mộ” kèm tiến độ |
+| Bộ sưu tập | Tàng Các: nơi lưu giữ; Bảo Các: kho vật quý; Tàng Bảo: nhấn sưu tầm vật phẩm | Tàng Các — chứa cả tướng, Pháp Cơ và Linh Đài; phụ đề “Chiêu mộ” kèm tiến độ |
 | Truyện | Cơ Tiên Truyện: tên tác phẩm; Truyền Kỳ: chất truyện cổ; Cố Sự: ngắn nhưng khó hiểu hơn | Cơ Tiên Truyện — thống nhất tên tác phẩm và tiêu đề màn hình |
 | Cơ Tiên Lục | Cơ Tiên Lục: sổ ghi thế giới; Giới Lục: ngắn nhưng mơ hồ; Tàng Thư: thư viện | Giữ Cơ Tiên Lục — đã rõ bản sắc; nay là các tab Vùng đất, Hệ, Luật trong Tàng Các |
 | Luyện tự do | Luyện thế: bày thế rồi đánh; Bàn tập: rõ nhưng nhạt; Tự Do Cơ: dài | Luyện thế — ô thứ sáu ở trang chủ, phụ đề “Tự bày thế tập” |
@@ -29,7 +29,7 @@ nguyên bản của repo, không lấy tên từ một trò chơi khác. Phụ �
 - Tướng: tranh trang chủ và trang tướng đi lên/fade; thẻ chiêu lệch 60 ms, thẻ chọn tướng lệch tối đa
   160 ms theo hàng. Hai tướng ở màn chuẩn bị quét từ hai phía, lớp mực dùng tranh cutin đã có;
   dấu Đấu đóng cuối, toàn chuỗi 900 ms.
-- Thông báo giữa bàn: dải mực quét vào từ trái (380 ms) rồi mờ dần; chạm bất kỳ hoặc ✕ để đóng ngay.
+- Thông báo giữa bàn: dải mực quét vào từ trái (380 ms) rồi mờ dần; đường chỉ son ở chân giấy rút từ phải sang trái đúng bằng thời gian hiển thị (ẩn khi giảm chuyển động); chạm bất kỳ hoặc ✕ để đóng ngay.
 - Kết liễu (`src/ui/finisher.ts`, khoảng 2,7 s): màn tối 0–0,22 s, dải mực môn phái 0–0,3 s, tướng lao vào kèm
   hai bóng mờ 0,08–0,42 s, bi quyết định bay theo vệt mực 0,42–0,74 s, lỗ mực nổ và màn rung từ 0,74 s, dấu son
   “Kết liễu” đóng ở 0,8 s, dòng tên cú ở 1 s, tan dần lúc 2,7 s; chạm để bỏ qua.

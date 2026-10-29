@@ -1,4 +1,4 @@
-# Cơ Tiên — bida tu tiên
+# Cơ Tiên — bida × tu tiên
 
 Game bida cho điện thoại (màn hình ngang) và máy tính, với vật lý và luật bida thật, đặt trong một thế giới
 tiên hiệp riêng: **Cơ Tiên Giới** — 13 môn phái, 65 tướng, mỗi tướng có nội tại và 3 chiêu. Cài được như ứng
@@ -28,7 +28,7 @@ dụng (PWA), chơi offline.
   tên, chọn tướng đã mở khoá (không trùng nhau) và cây cơ, cùng chọn bàn — không phụ thuộc tướng đại diện.
 - **Luyện Cơ:** luyện từng cú đánh qua các bài thế có lời giải, chấm sao.
 - **Luyện thế:** chọn một thế mẫu (phá bi, cắt mỏng, bi sát băng, bi kết, gỡ thế chặn, nhảy bi, ba băng…) hoặc thế mình đã lưu, xếp thêm bi từ khay bằng cách chạm hay kéo, rồi đánh tự do không luật. **Đánh lại** trả mọi bi về chỗ trước cú vừa đánh, **Đường đi** vẽ trước đường của mọi bi, **Lưu thế** giữ vị trí bàn vào Thế của tôi.
-- **Tàng Các:** chiêu mộ tướng, chọn cơ và bàn; các tab Vùng đất, Hệ, Luật là **Cơ Tiên Lục**, wiki trong game
+- **Tàng Các:** chiêu mộ tướng, chọn Pháp Cơ và Linh Đài; các tab Vùng đất, Hệ, Luật là **Cơ Tiên Lục**, wiki trong game
   về vùng đất, hệ và luật chơi. Trang tướng mở tiểu sử bằng nút Tiểu sử; tướng chưa gặp còn khoá.
 - **Hành trình:** bản đồ Cơ Tiên Giới; mỗi vùng có 5 cao thủ để thách đấu (thắng thì chiêu mộ được) và các
   thử thách. 60 thử thách được sinh tự động, mỗi bài có lời giải đã kiểm chứng bằng vật lý.
@@ -61,7 +61,7 @@ dụng (PWA), chơi offline.
 | --- | --- |
 | ![Trang chủ](docs/screenshots/trang-chu.webp) | ![Chọn trận Luận Cơ](docs/screenshots/luan-co.webp) |
 | Song Đấu | |
-| ![Song Đấu: mỗi bên chọn tướng, tên và cơ](docs/screenshots/song-dau.webp) | |
+| ![Song Đấu: mỗi bên chọn tướng, tên và Pháp Cơ](docs/screenshots/song-dau.webp) | |
 | Trận đấu · mũi tên chỉ lượt | Chiêu thức |
 | ![Trận đấu: mũi tên son trên chân dung người tới lượt](docs/screenshots/tran-dau.webp) | ![Thẻ chiêu thức](docs/screenshots/dat-chieu.webp) |
 | Tuyệt chiêu | Kết liễu |
