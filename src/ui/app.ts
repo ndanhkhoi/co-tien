@@ -14,7 +14,13 @@ export interface Screen {
   dispose?: () => void;
   /** Uses the WebGL stage (game screens). */
   usesStage?: boolean;
+  /** Painting behind the framed stage on roomy screens; the key art when omitted. */
+  backdrop?: string;
+  /** Champion cut-outs flanking the framed stage (left, right) when the screen has room. */
+  cast?: [string | null, string | null];
 }
+
+const KEY_ART = `${import.meta.env.BASE_URL}art/ui/keyart.webp`;
 
 export type ScreenFactory = (app: App) => Screen;
 
@@ -118,6 +124,40 @@ export class App {
     setTimeout(apply, 700);
   }
 
+  /** Cross-fade the stage backdrop once the new painting has decoded. */
+  setBackdrop(url = KEY_ART) {
+    const layers = document.querySelectorAll<HTMLElement>('#backdrop .bd-scene');
+    const shown = [...layers].find((l) => l.classList.contains('on'));
+    if (!layers.length || shown?.dataset.src === url) return;
+    const next = shown === layers[0] ? layers[1] : layers[0];
+    next.dataset.src = url;
+    const img = new Image();
+    img.src = url;
+    const swap = () => {
+      if (next.dataset.src !== url) return;
+      next.style.backgroundImage = `url("${url}")`;
+      next.classList.add('on');
+      shown?.classList.remove('on');
+    };
+    img.decode().then(swap, swap);
+  }
+
+  /** Champions standing either side of the stage; each fades in once its art has decoded. */
+  setCast(cast: [string | null, string | null] = [null, null]) {
+    document.querySelectorAll<HTMLImageElement>('#backdrop .bd-cast').forEach((img, i) => {
+      const url = cast[i];
+      if (!url) {
+        img.classList.remove('on');
+        return;
+      }
+      if (img.dataset.src === url) return;
+      img.dataset.src = url;
+      img.classList.remove('on');
+      img.src = url;
+      img.decode().then(() => img.dataset.src === url && img.classList.add('on'), () => undefined);
+    });
+  }
+
   /** Leave the current screen unconditionally (closes any open dialogs). */
   pop() {
     document.querySelectorAll('.modal-wrap').forEach((m) => m.remove());
@@ -142,6 +182,8 @@ export class App {
     if (next.usesStage) this.pixi.ticker.start();
     else this.pixi.ticker.stop();
     next.el.dataset.direction = direction;
+    this.setBackdrop(next.backdrop);
+    this.setCast(next.cast);
     this.ui.append(next.el);
     // The root scaler distinguishes contained gameplay from fullscreen entry art.
     // Let it recompute immediately after a screen transition instead of waiting for resize.

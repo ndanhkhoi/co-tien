@@ -7,18 +7,19 @@ import { btn, h, modal } from './dom';
 export function showIntro(app: App, onDone?: () => void) {
   const base = new URL(import.meta.env.BASE_URL, document.baseURI).href;
   const pages = [
-    { img: 'art/ui/keyart.webp', title: 'Cơ Tiên Giới', text: (lore as { world: string }).world },
+    // `focus` keeps the painted subject in the tall art panel instead of the empty sky between.
+    { img: 'art/ui/keyart.webp', focus: '12% 72%', title: 'Cơ Tiên Giới', text: (lore as { world: string }).world },
     {
       img: 'art/ui/map.webp', title: `${SECTS.length} môn phái · ${CHAMPIONS.length} tướng`,
       text: 'Mỗi môn phái có Linh Đài riêng: màu nỉ, đặc tính bàn và Thiên Tượng (gió, tuyết, bàn nghiêng…). Đi Hành trình qua từng vùng đất, thắng cao thủ để chiêu mộ họ, giải bài ở Luyện Cơ. Luận Cơ: đấu máy. Song Đấu: hai người chung máy. Tàng Các: chiêu mộ tướng. Đọc Cơ Tiên Truyện, tra cứu Cơ Tiên Lục.',
     },
     {
-      img: 'art/ui/home-bg.webp', title: 'Tiên Đạo hay Cổ Điển',
+      img: 'art/ui/home-bg.webp', focus: '82% 60%', title: 'Tiên Đạo hay Cổ Điển',
       text: 'Tiên Đạo: mỗi tướng có nội tại, 2 chiêu và 1 tuyệt chiêu; cú đánh nào cũng nạp năng lượng, vào bi nạp nhiều hơn. Cổ Điển: bida thuần theo luật WPA, không chiêu. Cả hai chơi được 8 bi, 9 bi, 10 bi và phăng.',
     },
     {
       img: 'art/ui/keyart-portrait.webp', title: 'Điều khiển',
-      text: 'Kéo trên bàn để xoay cơ, chạm một bi để ngắm thẳng vào bi đó, dùng nút tinh chỉnh để chỉnh từng chút. Chạm bi cái nhỏ để chọn điểm áp phê. Chọn lực rồi bấm ĐÁNH. Gợi ý sẽ hiện đúng lúc khi bạn chơi.',
+      text: 'Kéo trên bàn để xoay cơ, chạm một bi để ngắm thẳng vào bi đó, dùng nút tinh chỉnh để chỉnh từng chút. Kéo trên bi cái nhỏ để áp phê nhanh, chạm vào để chỉnh chính xác. Chọn lực rồi bấm ĐÁNH. Gợi ý sẽ hiện đúng lúc khi bạn chơi.',
     },
   ];
   let i = 0;
@@ -43,7 +44,10 @@ export function showIntro(app: App, onDone?: () => void) {
       if (n >= pages.length) return finish();
       const direction = n >= i ? 1 : -1;
       i = n;
-      turnPage(img, () => { img.src = base + pages[i].img; }, direction, true);
+      turnPage(img, () => {
+        img.src = base + pages[i].img;
+        img.style.objectPosition = pages[i].focus ?? '';
+      }, direction, true);
       turnPage(copy, () => { title.textContent = pages[i].title; text.textContent = pages[i].text; scroll.scrollTop = 0; }, direction);
       prev.disabled = i === 0;
       count.textContent = `${i + 1}/${pages.length}`;

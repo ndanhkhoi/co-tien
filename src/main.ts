@@ -85,7 +85,18 @@ boot().catch((err) => {
   console.error(err);
 });
 
-/** Keep one 844×390 composition, contained inside the usable screen on every device. */
+/** The game is composed once at 16:9 and scaled uniformly; nothing inside depends on the window. */
+const DESIGN_W = 844;
+const DESIGN_H = 475;
+/** Largest scale: past this the frame stops growing and the backdrop takes the extra room. */
+const MAX_SCALE = 2.2;
+/** Design px per source pixel of the painted stage frame (art/ui/frame/stage.webp). */
+const FRAME_PX = 0.45;
+/** How far that frame reaches outside the composition, in design px (sides, top/bottom). */
+const FRAME_X = 92 * FRAME_PX;
+const FRAME_Y = 117 * FRAME_PX;
+
+/** Keep one 16:9 composition, contained and centred inside the usable screen on every device. */
 function installUiScale() {
   const ui = document.getElementById('ui')!;
   const viewport = document.getElementById('stage')!;
@@ -94,24 +105,45 @@ function installUiScale() {
   document.body.append(safeFrame);
   const apply = () => {
     const gate = mustInstall();
-    const entry = !gate && !!ui.querySelector('.screen.splash, .screen.loading');
-    const rect = (gate || entry ? viewport : safeFrame).getBoundingClientRect();
-    const desktop = !gate && !entry && matchMedia('(min-width: 900px) and (pointer: fine)').matches;
-    // Desktop gets a contained theatre frame; reserve viewport space for the painted surround.
-    const s = gate || entry ? 1 : Math.min(desktop ? 1.65 : 2.2, rect.width / 844, rect.height / 390);
-    const width = gate || entry ? rect.width : 844;
-    const height = gate || entry ? rect.height : 390;
+    const safe = safeFrame.getBoundingClientRect();
+    // Roomy screens (desktop, tablet, odd window shapes) also get the painted frame and the
+    // flanking champions. Phones have no pixels to spare for a frame.
+    const framed = Math.min(
+      MAX_SCALE,
+      (safe.width * 0.92) / (DESIGN_W + 2 * FRAME_X),
+      (safe.height * 0.92) / (DESIGN_H + 2 * FRAME_Y),
+    );
+    const theatre = !gate && Math.min(safe.width, safe.height) >= 480 && framed >= 1;
+    // Without a frame, entry art (splash, loading) paints the whole viewport at native size.
+    const entry = !gate && !theatre && !!ui.querySelector('.screen.splash, .screen.loading');
+    const native = gate || entry;
+    // Everywhere else the letterbox around the 16:9 game shows the living backdrop.
+    document.body.classList.toggle('stage', !native);
+    document.body.classList.toggle('theatre', theatre);
+    const rect = native ? viewport.getBoundingClientRect() : safe;
+    const s = native ? 1 : theatre ? framed : Math.min(MAX_SCALE, rect.width / DESIGN_W, rect.height / DESIGN_H);
+    const width = native ? rect.width : DESIGN_W;
+    const height = native ? rect.height : DESIGN_H;
+    // Champions only flank the stage when the side margins can hold a figure.
+    document.body.classList.toggle('cast-room', theatre && (safe.width - DESIGN_W * s) / 2 >= 150);
     ui.style.width = `${width}px`;
     ui.style.height = `${height}px`;
     const left = rect.left + (rect.width - width * s) / 2;
     const top = rect.top + (rect.height - height * s) / 2;
     ui.style.left = `${left}px`;
     ui.style.top = `${top}px`;
-    // Fullscreen surfaces share layout coordinates with the contained controls.
-    ui.style.setProperty('--bleed-left', `${left / s}px`);
-    ui.style.setProperty('--bleed-top', `${top / s}px`);
-    ui.style.setProperty('--bleed-right', `${(viewport.clientWidth - left - width * s) / s}px`);
-    ui.style.setProperty('--bleed-bottom', `${(viewport.clientHeight - top - height * s) / s}px`);
+    // Native screens paint across the viewport; on the stage, surfaces stop at the game edge.
+    ui.style.setProperty('--bleed-left', `${native ? left / s : 0}px`);
+    ui.style.setProperty('--bleed-top', `${native ? top / s : 0}px`);
+    ui.style.setProperty('--bleed-right', `${native ? (viewport.clientWidth - left - width * s) / s : 0}px`);
+    ui.style.setProperty('--bleed-bottom', `${native ? (viewport.clientHeight - top - height * s) / s : 0}px`);
+    // The painted frame and the paper mat under the table both follow the game rectangle.
+    const root = document.documentElement.style;
+    root.setProperty('--game-l', `${left}px`);
+    root.setProperty('--game-t', `${top}px`);
+    root.setProperty('--game-w', `${width * s}px`);
+    root.setProperty('--game-h', `${height * s}px`);
+    root.setProperty('--fk', `${theatre ? FRAME_PX * s : 0}px`);
     // Keep a transform at scale 1 too: fixed sheets must stay within the game frame.
     ui.style.transform = `scale(${s})`;
     ui.style.setProperty('--ui-scale', String(s));

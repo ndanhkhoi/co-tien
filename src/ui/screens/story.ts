@@ -100,6 +100,7 @@ function openReader(app: App, c: Chapter) {
     const key = page.art || c.pages.slice(0, i).reverse().find((p) => p.art)?.art || '';
     const source = key ? artUrl(key) : '';
     if (art.getAttribute('src') !== source) turnPage(art, () => { art.src = source; }, direction, true);
+    if (source) app.setBackdrop(source);
     art.classList.toggle('carry', !page.art);
     turnPage(text, () => {
       text.replaceChildren(...page.text.split('\n\n').map((para) => h('p', null, para)));

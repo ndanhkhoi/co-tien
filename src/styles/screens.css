@@ -254,10 +254,10 @@ textarea.code-box:focus { border-color: var(--accent); }
 }
 @media (orientation: portrait) { .screen.splash { background-image: var(--keyart-tall); } }
 .splash-logo {
-  width: min(66vw, 560px);
-  max-height: 52vh;
+  width: min(66%, 560px);
+  max-height: 247px;
   object-fit: contain;
-  padding: 3vh 6vw;
+  padding: 14px 50px;
   background: radial-gradient(closest-side, rgba(251, 248, 242, 0.95) 55%, rgba(251, 248, 242, 0));
 }
 .tap-hint {
@@ -860,20 +860,8 @@ body.vp-rotate .rotate-hint, body.vp-resize .size-hint { display: flex; }
 
 /* ---------- Smaller landscape phones ---------- */
 
-@media (max-height: 400px) {
-  .screen { gap: 8px; padding-top: calc(8px + var(--st)); padding-bottom: calc(8px + var(--sb)); }
-  .topbar { min-height: 52px; }
-}
-@media (max-width: 720px) {
-  .screen.home { grid-template-columns: minmax(290px, 330px) 1fr; }
-  .home-hero { max-width: calc(100% - 360px - var(--sl)); }
-  .pc-name { max-width: 100px; }
-  .opt-label { width: 64px; }
-  .versus { width: min(250px, 38%); }
-  .modal.land-sheet { grid-template-columns: minmax(0, 24%) minmax(0, 1fr); }
-  .modal.champ-modal { grid-template-columns: minmax(0, 34%) minmax(0, 1fr); }
-  .pm-body { grid-template-columns: 190px minmax(0, 1fr); }
-}
+.screen { gap: 8px; padding-top: calc(8px + var(--st)); padding-bottom: calc(8px + var(--sb)); }
+.topbar { min-height: 52px; }
 
 /* Technique practice: one scroll surface, with progress visible for every lesson. */
 .challenge-list { display: flex; flex-direction: column; gap: 12px; padding-bottom: 16px; }
@@ -893,26 +881,15 @@ body.vp-rotate .rotate-hint, body.vp-resize .size-hint { display: flex; }
 .setup-opts { justify-content: space-between; gap: 2px; padding: 8px; }
 .setup-opts .chips { gap: 4px; }
 .setup-opts .chip { padding: 0 8px; font-size: 13px; }
-@media (max-width: 720px) {
-  .setup-opts { gap: 0; }
-  .opt-row { gap: 4px; }
-  .setup-opts .chip { padding: 0 5px; }
-  .opt-label { width: 60px; font-size: 13px; }
-  .versus { width: 220px; }
-  .vs-name { font-size: 15px; }
-  .vs-gear { display: none; }
-}
 
 .lp-lock { inset: auto 0 0 auto; width: 26px; height: 26px; border-radius: 50%; background: var(--sheet); }
 .lp-lock .ico { width: 22px; height: 22px; filter: none; }
-@media (max-height: 450px) {
-  .pm-av { width: 60px; height: 60px; }
-  .pm-left { gap: 4px; }
-  .pm-char b { font-size: 15px; }
-  .pm-char span { font-size: 13px; }
-  .profile-modal { padding: 12px; }
-  .pm-body { gap: 12px; }
-}
+.pm-av { width: 60px; height: 60px; }
+.pm-left { gap: 4px; }
+.pm-char b { font-size: 15px; }
+.pm-char span { font-size: 13px; }
+.profile-modal { padding: 12px; }
+.pm-body { gap: 12px; }
 
 .screen:not(.game) .tab { min-height: 44px; }
 .vs-side input { min-height: 44px; }
@@ -964,12 +941,3 @@ body.vp-rotate .rotate-hint, body.vp-resize .size-hint { display: flex; }
 .champion-skill-copy p { margin: 0 0 10px; }
 .champion-skill-copy .champion-skill-cost { font-weight: 700; color: var(--accent-2); }
 .champion-skill-detail .actions { flex-shrink: 0; }
-
-.practice-wrap { width: min(760px, 94%); margin: auto; display: grid; gap: 12px; justify-items: center; }
-.practice-tools, .practice-modes { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; justify-content: center; }
-.practice-tools label { display: inline-flex; align-items: center; gap: 6px; }
-.practice-tools input { width: 150px; }
-.practice-table { position: relative; width: min(720px, 92vw); aspect-ratio: 2 / 1; border: 18px solid #30241b; border-radius: 24px; background: #315b4a; box-shadow: inset 0 0 0 5px #142e27, 0 8px 20px #20180f55; touch-action: none; }
-.practice-ball { position: absolute; width: 28px; height: 28px; transform: translate(-50%, -50%); border: 2px solid #fff8; border-radius: 50%; background: #f6f0df; color: #17130f; font: 700 12px/24px var(--body); padding: 0; }
-.practice-ball:nth-child(odd) { background: #b83b28; color: #fff8ee; }.practice-ball.sel { outline: 3px solid #f4bd3d; }
-.practice-status { min-height: 24px; margin: 0; text-align: center; }

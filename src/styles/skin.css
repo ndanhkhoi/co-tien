@@ -161,13 +161,14 @@
 .vs-cut.foe { right: -4%; object-position: right bottom; transform: scaleX(-1); }
 .vs-stage .vs-seal { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%) rotate(-6deg); z-index: 2; }
 .vs-plates { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; min-width: 0; }
-.vs-plates .vs-side { min-width: 0; min-height: max(52px, calc(44px / var(--ui-scale, 1))); padding: 6px 10px; background: var(--ink); color: var(--sheet); border-radius: var(--r-1); }
-.vs-plates .vs-side.foe { text-align: right; justify-content: flex-end; }
-.vs-plates .vs-name { color: #fbf6ec; font-size: 15px; display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.vs-plates .vs-sub { color: #d8cfbf; font-size: 12.5px; display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+/* Player plates match the match HUD: painted paper, ink type, room for two sub lines. */
+.vs-plates .vs-side { min-width: 0; min-height: max(58px, calc(44px / var(--ui-scale, 1))); padding: 9px 18px 9px 22px; background: url('/art/ui/frame/name-wide.webp') center / 100% 100% no-repeat; color: var(--ink); border-radius: 0; }
+.vs-plates .vs-side.foe { text-align: right; justify-content: flex-end; padding: 9px 22px 9px 18px; }
+.vs-plates .vs-name { color: var(--ink); font-size: 15px; display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.vs-plates .vs-sub { color: var(--ink-2); font-size: 12px; line-height: 1.25; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; }
 .vs-plates .vs-text { min-width: 0; flex: 1; }
-.vs-plates .vs-edit .ico { filter: brightness(0) invert(1); width: 20px; height: 20px; }
-.vs-plates input { min-width: 0; max-width: 100%; min-height: max(34px, calc(44px / var(--ui-scale, 1))); padding: 0 8px; font-size: 14px; background: var(--sheet); color: var(--ink); }
+.vs-plates .vs-edit .ico { width: 20px; height: 20px; }
+.vs-plates input { width: 100%; min-width: 0; max-width: 100%; min-height: max(32px, calc(44px / var(--ui-scale, 1))); padding: 0 2px; font: 700 15px/1.2 var(--display); text-align: inherit; background: transparent; color: var(--ink); border: 0; border-bottom: 1.5px solid var(--ink); border-radius: 0; box-shadow: none; }
 .versus > .btn { flex-shrink: 0; }
 .setup-opts .chip { min-height: 36px; padding: 0 9px; font-size: 13px; }
 .setup-opts .chips { gap: 4px; flex-wrap: nowrap; }
@@ -177,17 +178,6 @@
 .tb-title { font-size: 24px; padding: 10px 56px 12px 58px; min-width: 210px; }
 .topbar > :first-child.tb-title { padding-left: 58px; }
 
-/* ---------- Match HUD: ink plates and framed tablets ---------- */
-.mx-card {
-  background: var(--ink);
-  color: #fbf6ec;
-  border: 2px solid #3a332b;
-  box-shadow: 0 4px 12px rgba(20, 14, 8, 0.35);
-}
-.mx-card .mx-name { color: #fbf6ec; }
-.mx-card .mx-sub { color: #d8cfbf; }
-.mx-card.active { border-color: var(--accent); box-shadow: 0 0 0 2px var(--accent), 0 4px 12px rgba(20, 14, 8, 0.35); }
-.mx-card .mx-score { background: var(--accent); color: var(--on-accent); }
 .mx-skill, .mx-btn {
   background: none;
   border: 12px solid transparent;
@@ -200,7 +190,6 @@
 .mx-skill.ready { filter: drop-shadow(0 0 0 var(--accent)) drop-shadow(0 3px 8px rgba(176, 53, 34, 0.35)); }
 .mx-btn { padding: 0; }
 .mx-btn .ico { width: 76%; height: 76%; }
-.mx-card.active .mx-name, .mx-card .mx-name { color: #fbf6ec !important; }
 .mx-skill, .mx-btn { border-width: 8px; border-image-width: 8px; }
 .mx-sk-name { font-size: 12.5px; line-height: 1.15; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
 
@@ -466,34 +455,6 @@
 .settings-col .item > .set-val { min-width: 150px; }
 .settings-col .item > .champ-pill { width: 220px; justify-content: space-between; }
 
-/* The objective belongs to the ink HUD; announcements briefly occupy the table. */
-.mx-obj { background: transparent; border: 0; box-shadow: none; }
-.mx-herald {
-  inset: auto;
-  left: 50%;
-  top: 48%;
-  translate: -50% -50%;
-  width: min(500px, 66%);
-  min-height: 100px;
-  padding: 16px 22px;
-  gap: 16px;
-  z-index: 20;
-  pointer-events: none;
-  background: var(--ink);
-  color: var(--sheet);
-  border: 0;
-  border-left: 5px solid var(--accent);
-  box-shadow: var(--sh-2);
-}
-.mx-herald.red { color: var(--sheet); border-color: var(--accent); }
-.mx-herald .mx-h-face, .mx-herald .mx-h-icon { height: 64px; width: 64px; }
-.mx-herald .mx-h-title { font-size: 24px; white-space: normal; overflow: visible; }
-.mx-herald .mx-h-line { font-size: 15px; margin-top: 6px; -webkit-line-clamp: 3; }
-.mx-center.heralding .mx-obj { opacity: 1; }
-.mx-herald.thinking { top: 30px; width: 280px; min-height: 48px; padding: 5px 10px; gap: 8px; box-shadow: none; }
-.mx-herald.thinking .mx-h-face { width: 34px; height: 34px; }
-.mx-herald.thinking .mx-h-title { font-size: 14px; }
-.mx-herald.thinking .mx-h-think { width: 28px; height: 28px; }
 #ui:has(.mx-pausebox) .mx-herald, .game:has(.mx-vs) .mx-herald { visibility: hidden; }
 
 /* One continuous landscape; the map is no longer a framed card. */
@@ -513,7 +474,7 @@
 .mx-power { flex-direction: row; justify-content: center; gap: 12px; padding: 4px 8px; background: transparent; border: 0; border-radius: 0; box-shadow: none; min-height: 64px; }
 .mx-phead { flex-direction: column; gap: 4px; font-size: 19px; }
 .mx-ppct::after { content: '%'; font: 500 11px var(--body); margin-left: 1px; }
-.mx-ptrack { flex: 0 0 24px; align-self: stretch; width: 24px; min-height: 52px; border-radius: 3px; border-color: var(--ink-2); background: var(--sheet-3); }
+.mx-ptrack { flex: 0 0 40px; align-self: stretch; width: 40px; min-height: 72px; border-radius: 3px; border-color: var(--ink-2); background: var(--sheet-3); }
 .mx-pfill { background: var(--accent); }
 .mx-ptick { width: 35%; height: 1px; background: #1a171366; }
 #ui .mx-passive.btn { display: flex; flex-direction: column; gap: 3px; min-width: 0; width: 100%; padding: 3px 4px; border-width: 7px; border-image-width: 7px; border-image-source: url('/art/ui/frame/btn-secondary.webp'); color: var(--ink); text-shadow: none; font-family: var(--body); }
@@ -533,7 +494,6 @@
 #ui .mx-passive.btn { flex-shrink: 0; min-height: var(--touch-target); line-height: 1.2; }
 #ui .mx-ctrl.placing .mx-passive.btn { display: none; }
 
-#ui > .screen.game > .mx-herald { pointer-events: none; }
 
 /* Artwork screens paint once across the viewport, avoiding a visible frame seam. */
 .screen.home { background: none; isolation: isolate; }
@@ -571,8 +531,7 @@ body { background: linear-gradient(#e9e1d0d1, #e9e1d0d1), var(--paper, none) cen
 .champion-skill { display: grid; grid-template-rows: 48px 15px minmax(34px, 1fr) 15px 15px; justify-items: center; align-content: start; align-items: center; }
 .champion-skill-name { align-self: start; text-align: center; }
 .mx-ctrl > .mx-strike { width: 82px; height: 82px; align-self: center; border-radius: 50%; overflow: hidden; }
-.mx-power { min-height: 56px; }
-.mx-ptrack { min-height: 44px; }
+.mx-power { min-height: 88px; }
 #ui .mx-passive.btn { min-height: var(--touch-target); padding: 1px 3px; gap: 1px; }
 .mx-passive-detail { font-size: 10px; }
 /* Ultimate names ride an original ink sweep instead of a notification card. */
@@ -594,23 +553,13 @@ body { background: linear-gradient(#e9e1d0d1, #e9e1d0d1), var(--paper, none) cen
 
 
 /* Painted plates are the visual surface; layout remains semantic and responsive. */
-#ui .mx-herald {
-  background: transparent url('/art/ui/frame/herald.webp') center / 100% 100% no-repeat;
-  border: 0;
-  padding: 20px 28px;
-  box-shadow: none;
-}
-#ui .mx-herald.red { background-image: url('/art/ui/frame/herald.webp'); }
-#ui .mx-herald.thinking { background-image: url('/art/ui/frame/herald.webp'); padding: 8px 14px; }
 
-.mx-obj { background: url('/art/ui/frame/quote-wide.webp') center / 100% 100% no-repeat; padding: 10px 22px; }
 .mx-vs-av { position: relative; width: 156px; padding: 18px; border: 0; border-radius: 0; background: transparent; box-shadow: none; overflow: visible; }
 .mx-vs-av::after { content: ''; position: absolute; inset: 0; background: url('/art/ui/frame/portrait-v2.webp') center / 100% 100% no-repeat; pointer-events: none; }
 .mx-vs-side { gap: 4px; min-width: 0; }
 .mx-vs-name { width: 270px; max-width: 100%; min-height: 52px; display: grid; place-items: center; padding: 10px 28px; border-radius: 0; background: url('/art/ui/frame/name-wide.webp') center / 100% 100% no-repeat; font-size: 24px; overflow-wrap: anywhere; }
 .mx-vs-title { max-width: 280px; padding: 10px 24px; min-height: 40px; border-radius: 0; background: url('/art/ui/frame/ink-wide.webp') center / 100% 100% no-repeat; text-align: center; font-size: 13px; }
 .mx-vs-quote { background: url('/art/ui/frame/quote-wide.webp') center / 100% 100% no-repeat; border-radius: 0; box-shadow: none; padding: 12px 30px; }
-.vs-plates .vs-side { background: url('/art/ui/frame/ink-wide.webp') center / 100% 100% no-repeat; border-radius: 0; padding: 10px 16px; }
 .mx-res-art { border-radius: 0; border: 10px solid transparent; border-image: url('/art/ui/frame/portrait-v2.webp') 70 / 10px / 0 stretch; background: transparent; }
 /* Leave a dedicated gutter for the scroll affordance, clear of story copy. */
 .sr-sheet { padding-bottom: 30px; }
@@ -630,22 +579,191 @@ body { background: linear-gradient(#e9e1d0d1, #e9e1d0d1), var(--paper, none) cen
 .mx-vs-av img, .mx-vs-av > div { width: 100%; height: 100%; object-fit: cover; }
 .mx-vs-av::after { inset: 0; }
 .mx-vs-title { width: 210px; max-width: 100%; overflow-wrap: anywhere; }
-/* Keep long rules inside the painted objective plate at every mode. */
-.mx-obj { min-width: 0; max-width: min(360px, 100%); padding: 8px 28px; }
-.mx-obj-k { font-size: 11px; }
-.mx-obj-t { max-height: 2.45em; font-size: 13px; line-height: 1.22; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
 
 /* Entry artwork is a viewport paint on desktop. The source key art carries a paper border;
    a slight overscan removes that seam so browser letterboxing never reads as a second frame. */
 @media (orientation: landscape) and (min-width: 900px) {
-  .screen.splash { background-size: auto 118%; }
+  body:not(.theatre) .screen.splash { background-size: auto 118%; }
 }
 
-/* Home menu tiles must own their copy. The previous fixed three-row template made the
-   subtitle escape below the painted plate when the desktop frame was contained. */
-.home-grid { grid-template-rows: repeat(3, minmax(0, 1fr)); }
-.home-tablet { overflow: hidden; padding: 4px 8px; gap: 1px; }
-.home-tablet .ht-icon { height: 24px; }
-.home-tablet .ht-icon .ico { width: 24px; height: 24px; }
-.home-tablet .ht-name { min-width: 0; max-width: 100%; font-size: 15px; line-height: 1.08; }
-.home-tablet .ht-sub { min-width: 0; max-width: 100%; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 1; overflow: hidden; font-size: 10px; line-height: 1.15; }
+/* Stage: on roomy screens the 844×390 game sits in a painted frame over a living backdrop.
+   main.ts toggles body.theatre and publishes the game rectangle as --game-* variables. */
+#backdrop, #theatre { display: none; }
+body.stage #backdrop { display: block; position: fixed; inset: 0; z-index: 0; overflow: hidden; background: var(--frame); pointer-events: none; }
+/* The table canvas covers the window; on the stage it is cut to the framed game so the cue
+   and effects never draw over the backdrop. */
+body.stage #stage {
+  background: transparent;
+  clip-path: inset(var(--game-t) calc(100% - var(--game-l) - var(--game-w)) calc(100% - var(--game-t) - var(--game-h)) var(--game-l));
+}
+.bd-scene {
+  position: absolute; inset: -4%;
+  background: var(--frame) center / cover no-repeat;
+  filter: saturate(0.82) blur(1.5px);
+  opacity: 0;
+  transition: opacity 0.9s ease;
+  animation: bd-drift 70s ease-in-out infinite alternate;
+}
+.bd-scene.on { opacity: 1; }
+/* A paper wash and ink vignette keep the painting behind the frame, never competing with it. */
+#backdrop::after {
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(ellipse at 50% 50%, #e9e1d000 40%, #1a171359 100%), linear-gradient(#e9e1d04d, #e9e1d04d);
+}
+.bd-mist {
+  position: absolute; left: 0; bottom: -6%; width: 200%; height: 62%;
+  background: url('/art/ui/stage-mist.webp') 0 100% / 50% 100% repeat-x;
+  opacity: 0.8;
+  animation: bd-mist 120s linear infinite;
+}
+/* Champions flank the stage on wide screens, tucked behind the carved frame like duellists
+   either side of the Linh Đài. The opponent is mirrored so the two face each other. */
+.bd-cast {
+  display: none; position: absolute; bottom: -2%; z-index: 1;
+  height: min(96%, calc(var(--game-h) * 1.5)); width: auto; max-width: none;
+  opacity: 0; transition: opacity 0.6s ease, translate 0.6s var(--ease);
+  filter: drop-shadow(0 10px 18px rgba(26, 23, 19, 0.35));
+}
+body.cast-room .bd-cast { display: block; }
+.bd-cast.left { right: calc(100% - var(--game-l) - 70 * var(--fk)); translate: -24px 0; }
+.bd-cast.right { left: calc(var(--game-l) + var(--game-w) - 70 * var(--fk)); transform: scaleX(-1); translate: 24px 0; }
+.bd-cast.on { opacity: 1; translate: 0 0; }
+/* Paper under the table, reaching under the carved band so no backdrop shows between them. */
+.bd-mat {
+  position: absolute; z-index: 1;
+  left: calc(var(--game-l) - 40 * var(--fk)); top: calc(var(--game-t) - 40 * var(--fk));
+  width: calc(var(--game-w) + 80 * var(--fk)); height: calc(var(--game-h) + 80 * var(--fk));
+  background: linear-gradient(#e9e1d0d1, #e9e1d0d1), var(--paper, none) center / 640px, var(--frame);
+  box-shadow: 0 1.5vmin 6vmin #1a171366;
+}
+/* Nine-slice of stage.webp (768×512): the carved corners keep their shape, the straight bands
+   stretch. The game edge sits between the band's inner edge and the cloud brackets, so the
+   brackets only touch the corners and the pine, tassel and seal spill out over the backdrop.
+   --fk is screen px per source px. */
+body.theatre #theatre {
+  display: block; position: fixed; z-index: 0; pointer-events: none;
+  left: var(--game-l); top: var(--game-t); width: var(--game-w); height: var(--game-h);
+  border: 0 solid transparent;
+  border-image-source: url('/art/ui/frame/stage.webp');
+  border-image-slice: 140 138 142 145;
+  border-image-width: calc(140 * var(--fk)) calc(138 * var(--fk)) calc(142 * var(--fk)) calc(145 * var(--fk));
+  border-image-outset: calc(107 * var(--fk)) calc(91 * var(--fk)) calc(117 * var(--fk)) calc(92 * var(--fk));
+  border-image-repeat: stretch;
+}
+@keyframes bd-drift { from { transform: scale(1) translate(0, 0); } to { transform: scale(1.07) translate(-1.6%, -1.2%); } }
+@keyframes bd-mist { to { transform: translateX(-50%); } }
+@media (prefers-reduced-motion: reduce) {
+  .bd-scene, .bd-mist { animation: none; }
+  .bd-scene, .bd-cast { transition: none; }
+}
+
+/* Luyện thế: the arrangement panel takes the skill column; Luyện Cơ lists it first. */
+.screen.game.mx:has(.mx-practice) { --colL: 104px; }
+.mx-practice { justify-content: flex-start; gap: var(--gap); }
+.mx-practice .btn { width: 100%; min-width: 0; padding-inline: 4px; font-size: 13px; }
+.mx-pr-picked, .mx-pr-count { display: flex; align-items: center; justify-content: center; gap: 5px; min-height: 28px; padding: 3px 4px; background: var(--sheet); border: 1px solid var(--line-2); border-radius: var(--r-1); color: var(--ink); font-size: 12px; font-weight: 700; text-align: center; }
+.practice-tables { display: flex; gap: 10px; margin-top: 10px; }
+.practice-tables .btn { flex: 1; }
+
+/* ---------- Match HUD ----------
+   Paper plates with painted ink edges. The table stays the brightest, most open surface:
+   plates are compact, and announcements are a translucent brush stroke that passes over it. */
+.mx-card {
+  position: relative; isolation: isolate;
+  gap: 8px; padding: 4px 24px 4px 2px;
+  background: none; border: 0; border-radius: 0; box-shadow: none;
+  color: var(--ink);
+  transition: opacity 0.2s, transform 0.2s var(--ease);
+}
+.mx-card::before {
+  content: ''; position: absolute; z-index: -1;
+  inset: -4px 0 -4px calc(var(--face) / 2);
+  background: url('/art/ui/frame/name-wide.webp') center / 100% 100% no-repeat;
+  filter: drop-shadow(0 3px 6px rgba(40, 30, 18, 0.2));
+}
+.mx-card.p2 { padding: 4px 2px 4px 24px; }
+.mx-card.p2::before { inset: -4px calc(var(--face) / 2) -4px 0; transform: scaleX(-1); }
+.mx-card:not(.active) { opacity: 0.74; }
+.mx-card.active { transform: translateY(1px); border: 0; box-shadow: none; }
+.mx-card .mx-info { gap: 2px; padding-top: 7px; }
+.mx-card { flex-basis: 29%; }
+.mx-card .mx-name { font-size: 15px; color: var(--ink); }
+.mx-card.active .mx-name { color: var(--accent-2); }
+.mx-card .mx-sub { color: var(--ink-2); }
+.mx-card .mx-score { background: var(--accent); color: var(--on-accent); border-radius: 3px; }
+
+.mx-obj {
+  inset: 2px 0; padding: 6px 30px;
+  background: url('/art/ui/frame/quote-wide.webp') center / 100% 100% no-repeat;
+  border: 0; border-radius: 0; box-shadow: none;
+}
+.mx-obj-k { font-size: 11px; letter-spacing: 0.02em; }
+.mx-obj-t { font-size: 14px; line-height: 1.22; }
+/* Announcements sit over the table now, so the objective stays readable meanwhile. */
+.mx-center.heralding .mx-obj { opacity: 1; }
+
+#ui .mx-herald {
+  inset: auto; left: 50%; top: 42%; translate: -50% -50%;
+  width: min(460px, 60%); min-height: 76px;
+  padding: 12px 52px 12px 26px; gap: 12px;
+  z-index: 20; pointer-events: none; isolation: isolate;
+  background: none; border: 0; border-radius: 0; box-shadow: none;
+  color: var(--sheet);
+}
+#ui .mx-herald::before {
+  content: ''; position: absolute; inset: 0; z-index: -1;
+  background: url('/art/ui/frame/ink-wide.webp') center / 100% 100% no-repeat;
+  opacity: 0.82;
+}
+#ui .mx-herald.show { animation: mx-herald-brush 0.38s var(--ease) both; }
+#ui .mx-herald.leaving { display: flex; animation: mx-herald-out 0.26s ease both; }
+@keyframes mx-herald-brush { from { opacity: 0; clip-path: inset(0 100% 0 0); } to { opacity: 1; clip-path: inset(0); } }
+@keyframes mx-herald-out { to { opacity: 0; transform: translateY(-6px); } }
+.mx-herald .mx-h-face, .mx-herald .mx-h-icon { width: 52px; height: 52px; }
+.mx-herald .mx-h-title { font-size: 20px; white-space: normal; text-shadow: 0 1px 2px rgba(0, 0, 0, 0.55); }
+.mx-herald .mx-h-line { margin-top: 3px; font-size: 13px; line-height: 1.3; color: #efe7d8; -webkit-line-clamp: 3; }
+.mx-herald.red .mx-h-title { color: #f4a896; }
+/* The AI's "thinking" note is a small paper slip under the top strip. */
+#ui .mx-herald.thinking { top: calc(var(--top-h) + 30px); width: min(340px, 44%); min-height: 48px; padding: 6px 28px 6px 16px; gap: 8px; color: var(--ink); }
+#ui .mx-herald.thinking::before { background-image: url('/art/ui/frame/quote-wide.webp'); opacity: 0.95; }
+.mx-herald.thinking .mx-h-face { width: 34px; height: 34px; }
+.mx-herald.thinking .mx-h-title { font-size: 14px; text-shadow: none; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.mx-herald.thinking .mx-h-think { width: 28px; height: 28px; }
+@media (prefers-reduced-motion: reduce) {
+  #ui .mx-herald.show, #ui .mx-herald.leaving { animation: none; }
+}
+
+/* The close button sits over the top-right corner; keep the picker's note clear of it. */
+.profile-modal .pm-note { padding-right: 52px; }
+/* The "next land" flag sits fully above its pin so the land name stays readable. */
+.lp-flag { top: auto; bottom: calc(100% + 2px); line-height: 16px; }
+
+/* Tapped ball label: a small paper slip above the ball, gone after a moment. */
+.mx-balltag {
+  position: absolute; z-index: 18; translate: -50% -100%; pointer-events: none;
+  display: none; align-items: center; gap: 5px; padding: 3px 9px;
+  background: var(--sheet); color: var(--ink); border: 1.5px solid var(--ink); border-radius: 3px;
+  font: 700 14px/1.2 var(--display); white-space: nowrap; box-shadow: 0 3px 8px rgba(26, 23, 19, 0.25);
+}
+.mx-balltag.show { display: inline-flex; animation: mx-balltag 1.4s ease both; }
+@keyframes mx-balltag { 0% { opacity: 0; margin-top: 4px; } 12%, 80% { opacity: 1; margin-top: 0; } 100% { opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { .mx-balltag.show { animation: none; } }
+
+/* Skill nudge: a paper slip beside the ready skill, and a soft pulse on the slot itself. */
+.mx-skillnudge {
+  position: absolute; z-index: 17; display: none; translate: 0 -50%;
+  left: calc(8px + var(--sl) + var(--colL) + var(--gap));
+  max-width: 230px; min-height: var(--touch-target); padding: 6px 12px;
+  flex-direction: column; align-items: flex-start; justify-content: center; gap: 1px;
+  background: var(--sheet); color: var(--ink-2); border: 1.5px solid var(--accent); border-radius: 3px;
+  font-size: 12px; line-height: 1.25; text-align: left; box-shadow: 0 4px 12px rgba(26, 23, 19, 0.25);
+}
+.mx-skillnudge b { color: var(--accent-2); font: 700 15px/1.2 var(--display); }
+.mx-skillnudge::before { content: ''; position: absolute; left: -7px; top: 50%; width: 12px; height: 12px; translate: 0 -50%; rotate: 45deg; background: var(--sheet); border-left: 1.5px solid var(--accent); border-bottom: 1.5px solid var(--accent); }
+.mx-skillnudge.show { display: flex; animation: mx-nudge-in 0.3s var(--ease) both; }
+.lefty .mx-skillnudge { left: auto; right: calc(8px + var(--sr) + var(--colL) + var(--gap)); align-items: flex-end; text-align: right; }
+.lefty .mx-skillnudge::before { left: auto; right: -7px; border: 0; border-right: 1.5px solid var(--accent); border-top: 1.5px solid var(--accent); }
+.mx-skill.nudge { animation: mx-skill-nudge 1.1s ease-in-out 3; }
+@keyframes mx-nudge-in { from { opacity: 0; translate: -8px -50%; } }
+@keyframes mx-skill-nudge { 50% { transform: scale(1.06); } }
+@media (prefers-reduced-motion: reduce) { .mx-skillnudge.show, .mx-skill.nudge { animation: none; } }
