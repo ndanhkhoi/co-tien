@@ -1,7 +1,7 @@
 import type { Personality } from '../../ai/types';
 import { sound } from '../../audio/sound';
 import { preloadBackground } from '../../platform/preload';
-import { MODE_NAMES } from '../../core/rules';
+import { MODE_NAMES, raceName } from '../../core/rules';
 import type { GameMode } from '../../core/rules/types';
 import { LEVEL_NAMES, PERSONALITY_NAMES, type Npc } from '../../game/content/career';
 import { CHALLENGES, challengeBalls, FAMILY_INFO, goalText, judgeChallenge, type ChallengeDef } from '../../game/content/challenges';
@@ -301,7 +301,7 @@ export function splashScreen(app: App): Screen {
   el.style.setProperty('--keyart', `url("${artUrl('ui/keyart.webp')}")`);
   el.style.setProperty('--keyart-tall', `url("${artUrl('ui/keyart-portrait.webp')}")`);
   el.append(
-    h('img.splash-logo', { src: artUrl('ui/logo.webp'), alt: 'Cơ Tiên — bida tu tiên', draggable: false }),
+    h('img.splash-logo', { src: artUrl('ui/logo.webp'), alt: 'Cơ Tiên — bida × tu tiên', draggable: false }),
     h('div.tap-hint', null, h('span', null, 'Chạm để bắt đầu')),
   );
   let started = false;
@@ -402,7 +402,7 @@ function seatModal(app: App, seat: Seat, other: string, onDone: () => void) {
     h('div.pm-body', null,
       h('div.pm-left', null, preview, label,
         h('span.section-title', null, 'Tên'), input,
-        h('span.section-title', null, 'Cơ'), cues,
+        h('span.section-title', null, 'Pháp Cơ'), cues,
         btn('Xong', () => {
           seat.name = name.trim().slice(0, 14) || seat.name;
           seat.champion = pick;
@@ -478,8 +478,8 @@ function setupScreen(app: App, local: boolean): Screen {
         foeHint.textContent = tierRange();
       })),
       local ? null : row('Lối đánh', seg(Object.entries(PERSONALITY_NAMES) as [Personality, string][], st.pers, (v) => (st.pers = v))),
-      row('Số ván', seg([[1, 'Chạm 1'], [2, 'Chạm 2'], [3, 'Chạm 3'], [5, 'Chạm 5']], st.race, (v) => (st.race = v))),
-      local ? row('Bàn', h('div.chips', null, chip(TABLES.find((t) => t.id === tableId)?.name ?? TABLES[0].name, true, pickTable, 'edit'))) : null,
+      row('Số ván', seg([1, 2, 3, 5].map((n): [number, string] => [n, raceName(n, true)]), st.race, (v) => (st.race = v))),
+      local ? row('Linh Đài', h('div.chips', null, chip(TABLES.find((t) => t.id === tableId)?.name ?? TABLES[0].name, true, pickTable, 'edit'))) : null,
       isCarom()
         ? row('Điểm/ván', seg(st.mode === 'carom-3c' ? [[3, '3 điểm'], [5, '5 điểm'], [10, '10 điểm']] : [[5, '5 điểm'], [10, '10 điểm'], [15, '15 điểm']], st.points, (v) => (st.points = v)))
         : row('Biến thể', h('div.chips', null, chip(mut ? mut.name : 'Không có', !!mut, pickMutator, 'edit'))),
@@ -487,7 +487,7 @@ function setupScreen(app: App, local: boolean): Screen {
   };
   function pickTable() {
     modal((close) => h('div.modal.scroll', null,
-      h('h2', null, 'Chọn bàn'),
+      h('h2', null, 'Chọn Linh Đài'),
       h('div.list', null, ...TABLES.filter((t) => app.profile.tables.includes(t.id)).map((t) =>
         item(t.name, chip(tableId === t.id ? 'Đang chọn' : 'Chọn', tableId === t.id, () => {
           tableId = t.id;
@@ -519,7 +519,7 @@ function setupScreen(app: App, local: boolean): Screen {
   const me = champion(app.profile.champion);
   const meCut = h('img.vs-cut.me', { src: cutoutUrl(local ? seats[0].champion : me.id), alt: '', draggable: false, decoding: 'async' });
   const seatPlate = (i: 0 | 1) => {
-    const plate = tap(h('button.vs-side', { class: i ? 'foe' : 'me', 'aria-label': `Chọn tướng, tên và cơ cho người chơi ${i + 1}` }), () =>
+    const plate = tap(h('button.vs-side', { class: i ? 'foe' : 'me', 'aria-label': `Chọn tướng, tên và Pháp Cơ cho người chơi ${i + 1}` }), () =>
       seatModal(app, seats[i], seats[i ? 0 : 1].champion, () => paintSeats()));
     return plate;
   };
@@ -605,7 +605,7 @@ export function npcModal(app: App, n: Npc) {
   const mut = n.mutator ? MUTATORS.find((m) => m.id === n.mutator)! : null;
   const best = app.profile.career[n.id];
   const recruited = app.profile.champions.includes(n.id);
-  const facts = [MODE_NAMES[n.mode], `chạm ${n.raceTo}`, n.caromTarget ? `${n.caromTarget} điểm/ván` : '', LEVEL_NAMES[n.level], PERSONALITY_NAMES[n.personality]].filter(Boolean).join(' · ');
+  const facts = [MODE_NAMES[n.mode], raceName(n.raceTo), n.caromTarget ? `${n.caromTarget} điểm/ván` : '', LEVEL_NAMES[n.level], PERSONALITY_NAMES[n.personality]].filter(Boolean).join(' · ');
   modal((close) => h('div.modal.npc-modal', { style: `--sect:${hex6(sect(n.sect).main)}` },
     h('div.nm-scroll.scroll', null,
       h('div.nm-head', null,
@@ -617,7 +617,7 @@ export function npcModal(app: App, n: Npc) {
         ),
       ),
       h('blockquote.nm-quote', null, n.intro),
-      h('p.nm-facts', null, h('b', null, facts), h('br'), `Bàn: ${tableOf(n).name}`),
+      h('p.nm-facts', null, h('b', null, facts), h('br'), `Linh Đài: ${tableOf(n).name}`),
       mut ? h('p.nm-facts', null, h('b', null, `Biến thể ${mut.name}: `), mut.desc) : null,
     ),
     h('div.nm-foot', null,
@@ -746,7 +746,7 @@ export function collectionScreen(app: App): Screen {
     content.replaceChildren();
     content.scrollTop = 0;
     if (tab === 'land' || tab === 'class' || tab === 'rules') {
-      note.textContent = tab === 'land' ? 'Cơ Tiên Lục · mười ba môn phái, bàn và cơ của từng vùng.' : tab === 'class' ? 'Cơ Tiên Lục · bảy hệ, mỗi hệ một nội tại.' : 'Cơ Tiên Lục · luật của từng lối chơi.';
+      note.textContent = tab === 'land' ? 'Cơ Tiên Lục · mười ba môn phái, Linh Đài và Pháp Cơ của từng vùng.' : tab === 'class' ? 'Cơ Tiên Lục · bảy hệ, mỗi hệ một nội tại.' : 'Cơ Tiên Lục · luật của từng lối chơi.';
       content.append(tab === 'land' ? landList(app) : tab === 'class' ? classList() : rulesPage());
       return;
     }
@@ -760,7 +760,7 @@ export function collectionScreen(app: App): Screen {
     }
     const grid = h('div.gear-grid');
     if (tab === 'cue') {
-      note.textContent = 'Cây cơ nào cũng có đường ngắm và bi ảo. Chỉ số chỉ đổi những gì ghi bên dưới.';
+      note.textContent = 'Pháp Cơ nào cũng có đường ngắm và bi ảo. Chỉ số chỉ đổi những gì ghi bên dưới.';
       for (const c of CUES) grid.append(gearCard(c, cueArtEl(c), cueStats(c), p.cues.includes(c.id), p.cue === c.id, () => {
         if (!p.cues.includes(c.id)) p.cues.push(c.id);
         p.cue = c.id;
@@ -803,7 +803,7 @@ export function collectionScreen(app: App): Screen {
     return btn(h('span.btn-in', null, icon('coin', 'keep'), `Mua · ${fmt(price)} xu`), () => (p.coins >= price ? act() : toast('Chưa đủ xu', 'bad')), 'small block');
   }
   const bar = tabs<CollTab>([
-    { id: 'champ', label: 'Tướng', icon: 'users' }, { id: 'cue', label: 'Cơ', icon: 'strike' }, { id: 'table', label: 'Bàn', icon: 'target' },
+    { id: 'champ', label: 'Tướng', icon: 'users' }, { id: 'cue', label: 'Pháp Cơ', icon: 'strike' }, { id: 'table', label: 'Linh Đài', icon: 'target' },
     { id: 'land', label: 'Vùng đất', icon: 'journey' }, { id: 'class', label: 'Hệ', icon: 'shield' }, { id: 'rules', label: 'Luật', icon: 'scroll' },
   ], tab, (v) => {
     const order: CollTab[] = ['champ', 'cue', 'table', 'land', 'class', 'rules'];
@@ -874,7 +874,7 @@ export function settingsScreen(app: App): Screen {
   const wipe = () => {
     modal((close) => h('div.modal', null,
       h('h2', null, 'Chơi lại từ đầu?'),
-      h('p', null, 'Toàn bộ cấp, xu, tướng, cơ, bàn và tiến trình Hành trình trên máy này sẽ bị xoá. ', h('b', null, 'Không thể hoàn tác.')),
+      h('p', null, 'Toàn bộ cấp, xu, tướng, Pháp Cơ, Linh Đài và tiến trình Hành trình trên máy này sẽ bị xoá. ', h('b', null, 'Không thể hoàn tác.')),
       h('p.muted', null, 'Muốn giữ lại? Hãy Sao lưu trước.'),
       h('div.actions', null, btn('Huỷ', close, 'ghost'), btn('Xoá và chơi lại', () => {
         Object.assign(p, defaultProfile());

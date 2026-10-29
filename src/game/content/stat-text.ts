@@ -37,4 +37,4 @@ export function tableStats(t: TableSkin): StatLine[] {
   ];
 }
 
-export const TABLE_NOTE = 'Đặc tính bàn chỉ có ở chế độ Tiên Đạo. Chế độ Cổ Điển luôn dùng bàn chuẩn WPA.';
+export const TABLE_NOTE = 'Đặc tính Linh Đài chỉ có ở chế độ Tiên Đạo. Chế độ Cổ Điển luôn dùng bàn chuẩn WPA.';

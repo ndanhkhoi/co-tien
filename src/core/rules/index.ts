@@ -11,6 +11,12 @@ export const RULES: Record<GameMode, RuleSet> = {
   'carom-3c': caromThree,
 };
 
+/** How Vietnamese players name a match length: race to 2 is "3 ván thắng 2". */
+export function raceName(raceTo: number, short = false): string {
+  if (raceTo <= 1) return '1 ván';
+  return short ? `${2 * raceTo - 1} thắng ${raceTo}` : `${2 * raceTo - 1} ván thắng ${raceTo}`;
+}
+
 export const MODE_NAMES: Record<GameMode, string> = {
   eight: '8 Bi',
   nine: '9 Bi',

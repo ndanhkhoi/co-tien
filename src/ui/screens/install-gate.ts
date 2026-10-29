@@ -80,7 +80,7 @@ export function installGate(): Screen {
           h('img.ig-splash', { src: `${base}art/ui/splash-ring.webp`, alt: '', draggable: false }),
           h('img.ig-icon', { src: `${base}icons/icon-192.png`, alt: '', draggable: false }),
         ),
-        h('img.ig-logo', { src: `${base}art/ui/logo.webp`, alt: 'Cơ Tiên — bida tu tiên', draggable: false }),
+        h('img.ig-logo', { src: `${base}art/ui/logo.webp`, alt: 'Cơ Tiên — bida × tu tiên', draggable: false }),
       ),
       h('div.install-card', null, h('h2.ig-title', null, icon('install'), 'Cài đặt để chơi'), body),
     ),

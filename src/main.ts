@@ -90,7 +90,7 @@ function setupUpdates(app: App) {
       addEventListener('cotien:check-update', () => {
         if (!navigator.onLine) return toast('Đang ngoại tuyến — kết nối mạng để kiểm tra', 'bad');
         reg.update().then(() => {
-          if (!reg.installing && !reg.waiting) toast('Bạn đang dùng bản mới nhất', 'good');
+          if (!reg.installing && !reg.waiting) toast('Game đã ở bản mới nhất, không cần cập nhật', 'good');
         }, () => toast('Chưa kiểm tra được, thử lại sau', 'bad'));
       });
     },
