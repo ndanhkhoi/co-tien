@@ -162,7 +162,7 @@
 .vs-stage .vs-seal { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%) rotate(-6deg); z-index: 2; }
 .vs-plates { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; min-width: 0; }
 /* Player plates match the match HUD: painted paper, ink type, room for two sub lines. */
-.vs-plates .vs-side { min-width: 0; align-items: center; height: 64px; min-height: max(58px, calc(44px / var(--ui-scale, 1))); padding: 9px 22px; background: none; border: 0 solid transparent; border-image: url('/art/ui/frame/plate.webp') 0 80 fill / 0 18px / 0 stretch; color: var(--ink); border-radius: 0; }
+.vs-plates .vs-side { min-width: 0; align-items: center; height: 64px; min-height: max(58px, calc(44px / var(--ui-scale, 1))); padding: 9px 22px; background: none; border: 1px solid transparent; border-image: url('/art/ui/frame/plate.webp') 0 80 fill / 0 18px / 0 stretch; color: var(--ink); border-radius: 0; }
 .vs-plates .vs-side.foe { text-align: right; justify-content: flex-end; padding: 9px 22px; }
 .vs-plates .vs-name { color: var(--ink); font-size: 15px; display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .vs-plates .vs-sub { color: var(--ink-2); font-size: 12px; line-height: 1.25; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; }
@@ -579,9 +579,9 @@ body { background: linear-gradient(#e9e1d0d1, #e9e1d0d1), var(--paper, none) cen
 .mx-vs-av { position: relative; width: 156px; padding: 18px; border: 0; border-radius: 0; background: transparent; box-shadow: none; overflow: visible; }
 .mx-vs-av::after { content: ''; position: absolute; inset: 0; background: url('/art/ui/frame/portrait-v2.webp') center / 100% 100% no-repeat; pointer-events: none; }
 .mx-vs-side { gap: 4px; min-width: 0; }
-.mx-vs-name { width: 270px; max-width: 100%; min-height: 52px; display: grid; place-items: center; padding: 10px 36px; border-radius: 0; background: none; border: 0 solid transparent; border-image: url('/art/ui/frame/plate.webp') 0 80 fill / 0 26px / 0 stretch; font-size: 24px; overflow-wrap: anywhere; }
-.mx-vs-title { max-width: 280px; padding: 10px 40px; min-height: 40px; border-radius: 0; background: none; border: 0 solid transparent; border-image: url('/art/ui/frame/band.webp') 0 150 0 130 fill / 0 44px 0 38px / 0 stretch; text-align: center; font-size: 13px; }
-.mx-vs-quote { background: none; border: 0 solid transparent; border-image: url('/art/ui/frame/scroll.webp') 0 45 fill / 0 12px / 0 stretch; border-radius: 0; box-shadow: none; padding: 12px 30px; }
+.mx-vs-name { width: 270px; max-width: 100%; min-height: 52px; display: grid; place-items: center; padding: 10px 36px; border-radius: 0; background: none; border: 1px solid transparent; border-image: url('/art/ui/frame/plate.webp') 0 80 fill / 0 26px / 0 stretch; font-size: 24px; overflow-wrap: anywhere; }
+.mx-vs-title { max-width: 280px; padding: 10px 40px; min-height: 40px; border-radius: 0; background: none; border: 1px solid transparent; border-image: url('/art/ui/frame/band.webp') 0 150 0 130 fill / 0 44px 0 38px / 0 stretch; text-align: center; font-size: 13px; }
+.mx-vs-quote { background: none; border: 1px solid transparent; border-image: url('/art/ui/frame/scroll.webp') 0 45 fill / 0 12px / 0 stretch; border-radius: 0; box-shadow: none; padding: 12px 30px; }
 .mx-res-art { border-radius: 0; border: 10px solid transparent; border-image: url('/art/ui/frame/portrait-v2.webp') 70 / 10px / 0 stretch; background: transparent; }
 /* Leave a dedicated gutter for the scroll affordance, clear of story copy. */
 .sr-sheet { padding-bottom: 30px; }
@@ -665,7 +665,7 @@ body.cast-top .bd-cast.on { translate: 0 0; }
 body.theatre #theatre {
   display: block; position: fixed; z-index: 0; pointer-events: none;
   left: var(--game-l); top: var(--game-t); width: var(--game-w); height: var(--game-h);
-  border: 0 solid transparent;
+  border: 1px solid transparent;
   border-image-source: url('/art/ui/frame/stage.webp');
   border-image-slice: 140 138 142 145;
   border-image-width: calc(140 * var(--fk)) calc(138 * var(--fk)) calc(142 * var(--fk)) calc(145 * var(--fk));
@@ -746,7 +746,7 @@ body.theatre #theatre {
 .mx-card::before {
   content: ''; position: absolute; z-index: -1;
   inset: -4px 0 -4px calc(var(--face) / 2);
-  border: 0 solid transparent; border-image: url('/art/ui/frame/plate.webp') 0 80 fill / 0 30px / 0 stretch;
+  border: 1px solid transparent; border-image: url('/art/ui/frame/plate.webp') 0 80 fill / 0 30px / 0 stretch;
   filter: drop-shadow(0 3px 6px rgba(40, 30, 18, 0.2));
 }
 .mx-card.p2 { padding: 4px 2px 4px 24px; }
@@ -763,7 +763,7 @@ body.theatre #theatre {
 
 .mx-obj {
   inset: 2px 0; padding: 6px 26px;
-  background: none; border: 0 solid transparent; border-image: url('/art/ui/frame/scroll.webp') 0 45 fill / 0 12px / 0 stretch; border-radius: 0; box-shadow: none;
+  background: none; border: 1px solid transparent; border-image: url('/art/ui/frame/scroll.webp') 0 45 fill / 0 12px / 0 stretch; border-radius: 0; box-shadow: none;
 }
 .mx-obj-k { font-size: 11px; letter-spacing: 0.02em; }
 .mx-obj-t { font-size: 14px; line-height: 1.22; }
@@ -780,7 +780,7 @@ body.theatre #theatre {
 }
 #ui .mx-herald::before {
   content: ''; position: absolute; inset: 0; z-index: -1;
-  border: 0 solid transparent; border-image: url('/art/ui/frame/band.webp') 0 150 0 130 fill / 0 84px 0 72px / 0 stretch;
+  border: 1px solid transparent; border-image: url('/art/ui/frame/band.webp') 0 150 0 130 fill / 0 84px 0 72px / 0 stretch;
   opacity: 0.86;
 }
 #ui .mx-herald.show { animation: mx-herald-brush 0.38s var(--ease) both; }
@@ -812,7 +812,7 @@ body.theatre #theatre {
 .mx-balltag {
   position: absolute; z-index: 18; translate: -50% -100%; pointer-events: none;
   display: none; align-items: center; gap: 8px; padding: 8px 22px 8px 18px;
-  border: 0 solid transparent; border-image: url('/art/ui/frame/scroll.webp') 0 45 fill / 0 10px / 0 stretch; color: var(--ink);
+  border: 1px solid transparent; border-image: url('/art/ui/frame/scroll.webp') 0 45 fill / 0 10px / 0 stretch; color: var(--ink);
   font: 700 16px/1.2 var(--display); white-space: nowrap; filter: drop-shadow(0 4px 8px rgba(26, 23, 19, 0.3));
 }
 .mx-balltag.show { display: inline-flex; animation: mx-balltag 1.6s ease both; }
@@ -872,7 +872,7 @@ body.theatre #theatre {
   left: calc(8px + var(--sl) + var(--colL) + var(--gap) + 6px);
   max-width: 240px; min-height: var(--touch-target); padding: 10px 24px 10px 22px;
   flex-direction: column; align-items: flex-start; justify-content: center; gap: 1px;
-  background: none; border: 0 solid transparent; border-image: url('/art/ui/frame/scroll.webp') 0 45 fill / 0 11px / 0 stretch;
+  background: none; border: 1px solid transparent; border-image: url('/art/ui/frame/scroll.webp') 0 45 fill / 0 11px / 0 stretch;
   color: var(--ink-2); font: 500 12px/1.25 var(--body); text-align: left;
   filter: drop-shadow(0 4px 10px rgba(26, 23, 19, 0.28));
 }
