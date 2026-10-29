@@ -55,15 +55,15 @@ dụng (PWA), chơi offline.
 
 ### Hình ảnh trong game
 
-Ảnh chụp bằng Chromium giả lập cảm ứng ở 932×430 CSS pixel (màn hình lớn: 1280×800); game giữ khung 16:9 và scale đều theo màn hình.
+Ảnh chụp bằng Chromium ở 932×430 CSS pixel (màn hình lớn: 1280×800), tướng đại diện là Ngân Cầm; game giữ khung 16:9 và scale đều theo màn hình.
 
 | Trang chủ | Luận Cơ |
 | --- | --- |
 | ![Trang chủ](docs/screenshots/trang-chu.webp) | ![Chọn trận Luận Cơ](docs/screenshots/luan-co.webp) |
 | Song Đấu | |
 | ![Song Đấu: mỗi bên chọn tướng, tên và cơ](docs/screenshots/song-dau.webp) | |
-| Trận đấu · lượt, khay bi, thông báo | Chiêu thức |
-| ![Trận đấu: mũi tên chỉ lượt, khay bi đã ăn và dải thông báo](docs/screenshots/tran-dau.webp) | ![Thẻ chiêu thức](docs/screenshots/dat-chieu.webp) |
+| Trận đấu · mũi tên chỉ lượt | Chiêu thức |
+| ![Trận đấu: mũi tên son trên chân dung người tới lượt](docs/screenshots/tran-dau.webp) | ![Thẻ chiêu thức](docs/screenshots/dat-chieu.webp) |
 | Tuyệt chiêu | Kết liễu |
 | ![Thẻ tuyệt chiêu](docs/screenshots/tuyet-chieu.webp) | ![Hiệu ứng kết liễu khi thắng ván](docs/screenshots/ket-lieu.webp) |
 | Tạm dừng | Luyện thế · chọn thế |
