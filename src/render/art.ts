@@ -58,6 +58,25 @@ export function artImage(url: string, onReady: () => void): HTMLImageElement | n
   return null;
 }
 
+let feltTile: HTMLCanvasElement | null = null;
+
+/** A 256 px tile of light and dark specks (±7 levels per channel, like the old per-pixel pass). */
+function feltNoise(): HTMLCanvasElement {
+  if (feltTile) return feltTile;
+  const [c, g] = canvas(256, 256);
+  const img = g.createImageData(256, 256);
+  const rnd = noiseRng(11);
+  for (let i = 0; i < img.data.length; i += 4) {
+    const n = rnd() - 0.5;
+    const v = n > 0 ? 255 : 0;
+    img.data[i] = img.data[i + 1] = img.data[i + 2] = v;
+    img.data[i + 3] = Math.round(Math.abs(n) * 14 * 2);
+  }
+  g.putImageData(img, 0, 0);
+  feltTile = c;
+  return c;
+}
+
 /**
  * Paints the whole table: wooden frame, cloth bed with lamp falloff, pocket holes,
  * cloth-covered cushions with a lit nose, diamonds and the foot spot.
@@ -142,16 +161,10 @@ export function paintTable(t: TableGeom, skin: TableSkin, pxPerM: number, railIm
   const bh = S(t.W + 2 * cushionDepth);
   g.fillStyle = hex(skin.cloth);
   g.fillRect(bx0, by0, bw, bh);
-  // Felt fibres.
-  const img = g.getImageData(bx0, by0, bw, bh);
-  const d = img.data;
-  for (let i = 0; i < d.length; i += 4) {
-    const n = (rnd() - 0.5) * 14;
-    d[i] += n;
-    d[i + 1] += n;
-    d[i + 2] += n;
-  }
-  g.putImageData(img, bx0, by0);
+  // Felt fibres: a fixed noise tile laid over the cloth. Reading the canvas back pixel by pixel
+  // cost over a second on mid-range phones every time the table was repainted.
+  g.fillStyle = g.createPattern(feltNoise(), 'repeat')!;
+  g.fillRect(bx0, by0, bw, bh);
   // Lamp falloff: bright centre, darker edges.
   const lamp = g.createRadialGradient(X(0), Y(0), S(0.1), X(0), Y(0), S(t.L * 0.62));
   lamp.addColorStop(0, 'rgba(0,0,0,0)');

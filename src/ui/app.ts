@@ -52,6 +52,11 @@ export class App {
     });
     this.stageEl.append(this.pixi.canvas);
     this.pixi.ticker.stop();
+    // Compile the ball shader while the player is still on the title screen; otherwise the first
+    // table pays for it and the transition into a match stalls.
+    const warm = () => void import('../render/ball-warmup').then((m) => m.warmBallShader(this.pixi)).catch(() => undefined);
+    if ('requestIdleCallback' in window) requestIdleCallback(warm, { timeout: 2500 });
+    else setTimeout(warm, 1200);
     // Back button / swipe-back: route through screens instead of leaving the page.
     history.replaceState({ tc: 0 }, '');
     history.pushState({ tc: 1 }, '');

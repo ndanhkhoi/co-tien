@@ -164,14 +164,24 @@ export class TableView {
     for (const m of this.meshes.values()) m.setPixelRadius(this.match.table.R * scale * res);
   }
 
+  private repaintQueued = false;
+
   /** Table and cue textures at the current pixel density; painted art is used once it has loaded. */
   private paintArt(want: number) {
     if (this.disposed) return;
     this.artScale = want;
     const skin = this.match.setup.tableSkin;
-    const rail = artImage(sectArtUrl(skin.sect, 'rail'), () => this.paintArt(this.artScale));
+    // Several images may finish loading in the same moment: repaint once for all of them.
+    const ready = () => {
+      if (this.repaintQueued) return;
+      this.repaintQueued = true;
+      requestAnimationFrame(() => {
+        this.repaintQueued = false;
+        this.paintArt(this.artScale);
+      });
+    };
+    const rail = artImage(sectArtUrl(skin.sect, 'rail'), ready);
     const base = new URL(import.meta.env.BASE_URL, document.baseURI).href;
-    const ready = () => this.paintArt(this.artScale);
     const sight = artImage(`${base}art/table/${this.match.table.kind === 'pool' ? 'diamond' : 'dot'}.webp`, ready);
     const art = paintTable(this.match.table, skin, want, rail, { sight });
     const previous = this.tableSprite.texture;

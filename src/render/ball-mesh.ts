@@ -1,4 +1,4 @@
-import { Geometry, Mesh, Shader, type Texture, type UniformGroup } from 'pixi.js';
+import { Geometry, GlProgram, Mesh, Shader, type Texture, type UniformGroup } from 'pixi.js';
 import type { BallStyle } from '../core/ball-styles';
 
 const vertex = `#version 300 es
@@ -100,6 +100,12 @@ function quad(): Geometry {
   return geometry;
 }
 
+let program: GlProgram | null = null;
+/** One GL program for every ball: each mesh only carries its own uniforms, so it is linked once. */
+function ballProgram(): GlProgram {
+  return (program ??= GlProgram.from({ vertex, fragment, name: 'ball' }));
+}
+
 const rgb = (c: number): [number, number, number] => [((c >> 16) & 255) / 255, ((c >> 8) & 255) / 255, (c & 255) / 255];
 
 export class BallMesh {
@@ -110,8 +116,8 @@ export class BallMesh {
   private uniforms: { uRot: Float32Array; uPx: number; uAlpha: number; [k: string]: unknown };
 
   constructor(style: BallStyle, numbers: Texture, cloth: number, rng: () => number) {
-    const shader = Shader.from({
-      gl: { vertex, fragment },
+    const shader = new Shader({
+      glProgram: ballProgram(),
       resources: {
         uNumbers: numbers.source,
         ballUniforms: {
