@@ -1244,3 +1244,16 @@ body.vp-resize .size-hint { display: flex; }
     background: #d8cdbb var(--paper) center / 520px repeat;
   }
 }
+
+/* Update gate uses the painted action language instead of a flat red square. */
+.update-sheet { background: var(--paper, #efe8da) center / 520px repeat; }
+.update-sheet .us-seal {
+  width: 78px; height: 78px; border-radius: 0;
+  border: 12px solid transparent;
+  border-image: url('/art/ui/frame/panel.webp') 74 fill / 12px / 0 stretch;
+  background: url('/art/ui/icons/replay.webp') center / 52% no-repeat, var(--accent);
+  filter: drop-shadow(0 5px 10px rgba(40, 30, 18, .2));
+  animation: us-pulse 1.2s ease-in-out infinite;
+}
+.update-sheet b { padding: 10px 26px; border: 10px solid transparent; border-image: url('/art/ui/frame/ink-wide.webp') 70 fill / 10px / 0 stretch; color: #fbf6ec; text-shadow: 0 1px 2px rgba(0,0,0,.35); }
+@media (prefers-reduced-motion: reduce) { .update-sheet .us-seal { animation: none; } }
