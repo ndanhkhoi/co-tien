@@ -281,9 +281,14 @@ export function paintTable(t: TableGeom, skin: TableSkin, pxPerM: number, railIm
   // --- Diamonds: vermilion seal dots, like the red marks on an ink painting ---
   for (const dm of t.diamonds) {
     if (details.sight) {
-      const size = S(t.kind === 'pool' ? 0.028 : 0.018);
+      // Big and backed by a pale disc: players count diamonds to plan banks, so they must read at a glance.
+      const size = S(t.kind === 'pool' ? 0.046 : 0.034);
       g.save();
       g.translate(X(dm.x), Y(dm.y));
+      g.fillStyle = 'rgba(250, 244, 232, 0.88)';
+      g.beginPath();
+      g.arc(0, 0, size * 0.36, 0, Math.PI * 2);
+      g.fill();
       if (Math.abs(dm.x) > t.L / 2) g.rotate(Math.PI / 2);
       g.drawImage(details.sight, -size / 2, -size / 2, size, size);
       g.restore();
@@ -291,7 +296,7 @@ export function paintTable(t: TableGeom, skin: TableSkin, pxPerM: number, railIm
     }
     g.fillStyle = '#b23a26';
     g.beginPath();
-    g.arc(X(dm.x), Y(dm.y), Math.max(1.6, S(0.0055)), 0, Math.PI * 2);
+    g.arc(X(dm.x), Y(dm.y), Math.max(2.4, S(0.009)), 0, Math.PI * 2);
     g.fill();
   }
 
@@ -345,6 +350,39 @@ export function paintGlow(): Texture {
  * Cue stick drawn horizontally with the tip at x = 0 (pointing left), 1.47 m (58 in) long.
  * Returns texture plus the pixel scale so the view can size it in metres.
  */
+const bodies = new WeakMap<HTMLImageElement, { thick: number; mid: number }>();
+/** Thickness and centre line of a painted cue's plain front shaft, in image pixels. */
+function cueBody(img: HTMLImageElement): { thick: number; mid: number } {
+  const hit = bodies.get(img);
+  if (hit) return hit;
+  const W = img.naturalWidth;
+  const H = img.naturalHeight;
+  const [c, g] = canvas(W, H);
+  g.drawImage(img, 0, 0);
+  const data = g.getImageData(0, 0, W, H).data;
+  const runs: { thick: number; mid: number }[] = [];
+  for (let u = 0.16; u <= 0.4; u += 0.02) {
+    const x = Math.round(u * (W - 1));
+    // The longest opaque run in this column is the shaft; ornaments are shorter, detached runs.
+    let best = { len: 0, start: 0 };
+    let start = -1;
+    for (let y = 0; y <= H; y++) {
+      const solid = y < H && data[(y * W + x) * 4 + 3] > 140;
+      if (solid && start < 0) start = y;
+      if (!solid && start >= 0) {
+        if (y - start > best.len) best = { len: y - start, start };
+        start = -1;
+      }
+    }
+    if (best.len > 2) runs.push({ thick: best.len, mid: best.start + best.len / 2 });
+  }
+  void c;
+  runs.sort((a, b) => a.thick - b.thick);
+  const body = runs.length ? runs[Math.floor(runs.length / 2)] : { thick: H, mid: H / 2 };
+  bodies.set(img, body);
+  return body;
+}
+
 export function paintCue(cue: CueDef, pxPerM: number, img: HTMLImageElement | null = null): { texture: Texture; length: number; thick: number } {
   const L = 1.47;
   const tipR = 0.0065;
@@ -356,6 +394,10 @@ export function paintCue(cue: CueDef, pxPerM: number, img: HTMLImageElement | nu
   const rAt = (u: number) => (tipR + (buttR - tipR) * Math.pow(u, 0.8)) * pxPerM;
   if (img) {
     // Painted sect cue: tip on the left like the procedural one, squeezed to the real taper.
+    // Scale by the plain front shaft, not the whole picture: ornate butts, tassels and drips on
+    // some cues would otherwise shrink the shaft to a thread. A wider butt is trimmed by the taper.
+    const body = cueBody(img);
+    const k = (rAt(0.28) * 2) / body.thick;
     g.save();
     g.beginPath();
     g.moveTo(0, cy - rAt(0));
@@ -364,7 +406,7 @@ export function paintCue(cue: CueDef, pxPerM: number, img: HTMLImageElement | nu
     g.lineTo(0, cy + rAt(0));
     g.closePath();
     g.clip();
-    g.drawImage(img, 0, cy - rAt(1), w, rAt(1) * 2);
+    g.drawImage(img, 0, cy - body.mid * k, w, img.naturalHeight * k);
     g.restore();
     return { texture: Texture.from(c), length: L, thick: buttR * 2 + 4 / pxPerM };
   }
