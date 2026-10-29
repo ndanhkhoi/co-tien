@@ -640,3 +640,12 @@ body { background: linear-gradient(#e9e1d0d1, #e9e1d0d1), var(--paper, none) cen
 @media (orientation: landscape) and (min-width: 900px) {
   .screen.splash { background-size: auto 118%; }
 }
+
+/* Home menu tiles must own their copy. The previous fixed three-row template made the
+   subtitle escape below the painted plate when the desktop frame was contained. */
+.home-grid { grid-template-rows: repeat(3, minmax(0, 1fr)); }
+.home-tablet { overflow: hidden; padding: 4px 8px; gap: 1px; }
+.home-tablet .ht-icon { height: 24px; }
+.home-tablet .ht-icon .ico { width: 24px; height: 24px; }
+.home-tablet .ht-name { min-width: 0; max-width: 100%; font-size: 15px; line-height: 1.08; }
+.home-tablet .ht-sub { min-width: 0; max-width: 100%; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 1; overflow: hidden; font-size: 10px; line-height: 1.15; }
