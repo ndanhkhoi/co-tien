@@ -24,7 +24,8 @@ dụng (PWA), chơi offline.
   nhiên — bão tuyết, sóng lừng, gió giật, giếng sao, rễ cây… — đều là lực và ma sát thật trong mô phỏng,
   báo trước và vẽ lên bàn. Gió giữ một chiều suốt lượt, thông báo nêu hướng và sức gió (nhẹ, vừa, mạnh), mũi
   tên mực trên nỉ to và trôi nhanh theo sức gió. Địa Lợi cho tướng đánh trên bàn quê nhà.
-- **Luận Cơ:** so tài nhanh với máy. **Song Đấu:** hai người luân phiên trên cùng một thiết bị.
+- **Luận Cơ:** so tài nhanh với máy. **Song Đấu:** hai người luân phiên trên cùng một thiết bị; mỗi bên tự đặt
+  tên, chọn tướng đã mở khoá (không trùng nhau) và cây cơ, cùng chọn bàn — không phụ thuộc tướng đại diện.
 - **Luyện Cơ:** luyện từng cú đánh qua các bài thế có lời giải, chấm sao.
 - **Luyện thế:** chọn một thế mẫu (phá bi, cắt mỏng, bi sát băng, bi kết, gỡ thế chặn, nhảy bi, ba băng…) hoặc thế mình đã lưu, xếp thêm bi từ khay bằng cách chạm hay kéo, rồi đánh tự do không luật. **Đánh lại** trả mọi bi về chỗ trước cú vừa đánh, **Đường đi** vẽ trước đường của mọi bi, **Lưu thế** giữ vị trí bàn vào Thế của tôi.
 - **Tàng Các:** chiêu mộ tướng, chọn cơ và bàn; các tab Vùng đất, Hệ, Luật là **Cơ Tiên Lục**, wiki trong game
@@ -33,15 +34,19 @@ dụng (PWA), chơi offline.
   thử thách. 60 thử thách được sinh tự động, mỗi bài có lời giải đã kiểm chứng bằng vật lý.
 - **Cơ Tiên Truyện:** truyện chữ có tranh minh hoạ thuỷ mặc, 15 chương mở dần theo Hành trình — một câu
   chuyện riêng của Cơ Tiên Giới, lấy cảm hứng từ cách kể của truyện cổ Việt Nam và Trung Hoa.
-- **Điều khiển cảm ứng:** kéo/chạm trên bàn và nút xoay để ngắm, kéo bi cái hoặc dùng nút hướng để
-  đặt bi; chuyển “Ngắm thử” để canh đường trước khi chốt. Giữ bi cái nhỏ để mở bi lớn và kéo chọn điểm áp phê
+- **Điều khiển cảm ứng:** kéo/chạm trên bàn và nút xoay để ngắm, kéo bi cái hoặc dùng cụm nút hướng
+  tròn để đặt bi; chuyển “Ngắm thử” để canh đường trước khi chốt. Giữ bi cái nhỏ để mở bi lớn và kéo chọn điểm áp phê
   (chạm để mở bảng chỉnh chính xác); chạm thanh lực đặt mức, kéo để tinh chỉnh, rồi chạm ĐÁNH hoặc giữ–thả để
   nạp lực; chạm bi trên bàn để xem số bi; gọi lỗ bằng cách chạm lỗ, lỗ đã gọi hiện ở ô thông tin phía trên;
-  9 bi và 10 bi hiện hai bi tiếp theo; chấm kim cương trên băng to rõ để tính đường băng. Thông báo giữa bàn
-  đóng khi chạm bất kỳ hoặc nút ✕, tắt được trong Cài đặt và menu Tạm dừng (lỗi và thắng ván vẫn báo). Rung,
-  giữ màn hình sáng; trên điện thoại phải cài app (hướng dẫn cho cả iPhone/iPad và Android) và xoay ngang.
+  9 bi và 10 bi hiện hai bi tiếp theo; chấm kim cương trên băng là chấm trắng như bàn thật, to hơn một chút.
+  Mũi tên son nhấp nhô trên chân dung người đang tới lượt; khay bi dưới tên mỗi bên hiện bi đã ăn (8 bi: đủ
+  bảy bi của nhóm, bi còn trên bàn mờ đi). Thông báo giữa bàn là dải giấy thuỷ mặc, đóng khi chạm bất kỳ hoặc
+  nút ✕, tắt được trong Cài đặt và menu Tạm dừng (lỗi và thắng ván vẫn báo). Rung,
+  giữ màn hình sáng; trên điện thoại phải cài app (hướng dẫn cho cả iPhone/iPad và Android) và xoay ngang. Thoát trận
+  luôn hỏi xác nhận.
 - **Một khung 16:9:** mọi màn hình nằm trong một khung tranh thuỷ mặc, phóng to hết cỡ cửa sổ mà vẫn giữ tỷ lệ;
-  phần thừa hai bên là tranh nền và tướng đứng hai bên khi đủ chỗ.
+  phần thừa là tranh nền với cành thông phía trên, núi mực phía dưới và tướng đứng hai bên khi đủ chỗ
+  (trong trận tranh nền đứng yên để bàn bi mượt).
 - **Tải một lần:** lần đầu mở game tải trọn bộ tranh (khoảng 100 MB) rồi chơi không phải chờ ảnh; bản cập nhật chỉ
   tải lại tranh đã đổi.
 - **AI 4 cấp, 4 lối đánh:** tìm cú đánh bằng chính bộ mô phỏng (kể cả địa thế), chạy trong Web Worker; mỗi lượt
@@ -55,8 +60,10 @@ dụng (PWA), chơi offline.
 | Trang chủ | Luận Cơ |
 | --- | --- |
 | ![Trang chủ](docs/screenshots/trang-chu.webp) | ![Chọn trận Luận Cơ](docs/screenshots/luan-co.webp) |
-| Trận đấu · chạm bi để xem số | Chiêu thức |
-| ![Trận đấu, chạm bi hiện số bi](docs/screenshots/tran-dau.webp) | ![Thẻ chiêu thức](docs/screenshots/dat-chieu.webp) |
+| Song Đấu | |
+| ![Song Đấu: mỗi bên chọn tướng, tên và cơ](docs/screenshots/song-dau.webp) | |
+| Trận đấu · lượt, khay bi, thông báo | Chiêu thức |
+| ![Trận đấu: mũi tên chỉ lượt, khay bi đã ăn và dải thông báo](docs/screenshots/tran-dau.webp) | ![Thẻ chiêu thức](docs/screenshots/dat-chieu.webp) |
 | Tuyệt chiêu | Kết liễu |
 | ![Thẻ tuyệt chiêu](docs/screenshots/tuyet-chieu.webp) | ![Hiệu ứng kết liễu khi thắng ván](docs/screenshots/ket-lieu.webp) |
 | Tạm dừng | Luyện thế · chọn thế |
