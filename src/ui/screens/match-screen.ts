@@ -1641,7 +1641,7 @@ export function matchScreen(opts: MatchOptions) {
       };
       const started = performance.now();
       const decision = await app.ai.think(req);
-      const minThink = 550 + rng.next() * 600;
+      const minThink = 350 + rng.next() * 400;
       const wait = minThink - (performance.now() - started);
       if (wait > 0) await sleep(wait);
       if (disposed || token !== aiToken) return;
@@ -1686,17 +1686,17 @@ export function matchScreen(opts: MatchOptions) {
       const a0 = aim.angle;
       let da = shot.angle - a0;
       da = Math.atan2(Math.sin(da), Math.cos(da));
-      await animate(420 + Math.abs(da) * 160, (k) => {
+      await animate(300 + Math.abs(da) * 120, (k) => {
         aim.angle = a0 + da * k;
         aim.side = shot.side * k;
         aim.vert = shot.vert * k;
       });
-      await sleep(180 + rng.next() * 250);
+      await sleep(120 + rng.next() * 160);
       if (disposed || token !== aiToken) return;
       // Charge, then strike.
       charging = true;
       holdT = 0;
-      await animate(260 + shot.power * 650, (k) => {
+      await animate(200 + shot.power * 450, (k) => {
         power = shot.power * k;
       }, (k) => k);
       charging = false;
