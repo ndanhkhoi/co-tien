@@ -122,18 +122,33 @@ function championPicker(app: App, selected: () => string, onPick: (c: Champion) 
       render();
     });
   };
-  // Picking among owned champions: one flat grid, no empty sect headers.
-  const render = () => onlyOwned
-    ? wrap.replaceChildren(h('div.cc-grid', null, ...CHAMPIONS.filter((c) => app.profile.champions.includes(c.id)).map(card)))
-    : wrap.replaceChildren(...SECTS.flatMap((s) => {
+  const group = (s: (typeof SECTS)[number]) => {
     const all = CHAMPIONS.filter((c) => c.sect === s.id);
     const owned = all.filter((c) => app.profile.champions.includes(c.id)).length;
-    return [h('section.sect-group', null,
+    return h('section.sect-group', null,
       h('div.sg-head', null, h('img', { src: sectArtUrl(s.id, 'emblem'), alt: '', loading: 'lazy' }), h('b', null, s.name),
         h('span.badge', null, `${owned}/${all.length}`)),
       h('div.cc-grid', null, ...all.map(card)),
-    )];
-  }));
+    );
+  };
+  let pass = 0;
+  const render = () => {
+    // Picking among owned champions: one flat grid, no empty sect headers.
+    if (onlyOwned) {
+      wrap.replaceChildren(h('div.cc-grid', null, ...CHAMPIONS.filter((c) => app.profile.champions.includes(c.id)).map(card)));
+      return;
+    }
+    // The first sects paint with the screen; the rest follow a frame at a time so opening never stalls.
+    const run = ++pass;
+    wrap.replaceChildren(...SECTS.slice(0, 2).map(group));
+    let i = 2;
+    const more = () => {
+      if (run !== pass || i >= SECTS.length) return;
+      wrap.append(group(SECTS[i++]));
+      requestAnimationFrame(more);
+    };
+    requestAnimationFrame(more);
+  };
   render();
   return wrap;
 }
