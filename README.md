@@ -19,7 +19,7 @@ dụng (PWA), chơi offline.
   nhiên — bão tuyết, sóng lừng, gió giật, giếng sao, rễ cây… — đều là lực và ma sát thật trong mô phỏng,
   báo trước và vẽ lên bàn. Địa Lợi cho tướng đánh trên bàn quê nhà.
 - **Luận Cơ:** so tài nhanh với máy. **Song Đấu:** hai người luân phiên trên cùng một thiết bị.
-- **Luyện Cơ:** luyện từng cú đánh qua các bài thế có lời giải; **Luyện thế** cho phép tự chọn bàn lỗ/phăng, đặt số bi và dựng thế riêng trước khi luyện. **Tàng Các:** chiêu mộ tướng, chọn cơ và bàn.
+- **Luyện Cơ:** luyện từng cú đánh qua các bài thế có lời giải; **Luyện thế** (mở từ Luyện Cơ) cho kéo xếp bi ngay trên bàn lỗ hoặc bàn phăng thật, rồi đánh tự do không luật, không đổi lượt và đặt lại thế bất cứ lúc nào. **Tàng Các:** chiêu mộ tướng, chọn cơ và bàn.
 - **Hành trình:** bản đồ Cơ Tiên Giới; mỗi vùng có 5 cao thủ để thách đấu (thắng thì chiêu mộ được) và các
   thử thách. 60 thử thách được sinh tự động, mỗi bài có lời giải đã kiểm chứng bằng vật lý.
 - **Cơ Tiên Truyện:** truyện chữ có tranh minh hoạ thuỷ mặc, 15 chương mở dần theo Hành trình — một câu
@@ -34,19 +34,19 @@ dụng (PWA), chơi offline.
 
 ### Hình ảnh trong game
 
-Ảnh chụp bằng Chromium giả lập cảm ứng ở 844×390 và 932×430 CSS pixel; giao diện ưu tiên chơi ngang trên điện thoại.
+Ảnh chụp bằng Chromium giả lập cảm ứng ở 932×430 CSS pixel; game giữ khung 16:9 và scale đều theo màn hình.
 
 | Trang chủ | Luận Cơ |
 | --- | --- |
 | ![Trang chủ](docs/screenshots/trang-chu.webp) | ![Chọn trận Luận Cơ](docs/screenshots/luan-co.webp) |
-| Thiên Tượng trên bàn | Đặt vùng thi triển |
-| ![Trận đấu có Thiên Tượng](docs/screenshots/thien-tuong.webp) | ![Đặt chiêu](docs/screenshots/dat-chieu.webp) |
+| Trận đấu · chạm bi để xem số | Chiêu thức |
+| ![Trận đấu, chạm bi hiện số bi](docs/screenshots/tran-dau.webp) | ![Thẻ chiêu thức](docs/screenshots/dat-chieu.webp) |
 | Tuyệt chiêu | Trang tướng |
-| ![Tướng thi triển tuyệt chiêu](docs/screenshots/tuyet-chieu.webp) | ![Thông tin tướng và ba icon kỹ năng](docs/screenshots/trang-tuong.webp) |
+| ![Thẻ tuyệt chiêu](docs/screenshots/tuyet-chieu.webp) | ![Thông tin tướng và ba icon kỹ năng](docs/screenshots/trang-tuong.webp) |
 | Hành trình | Cơ Tiên Truyện |
 | ![Bản đồ Hành trình](docs/screenshots/hanh-trinh.webp) | ![Đọc Cơ Tiên Truyện](docs/screenshots/co-tien-truyen.webp) |
-
-![Màn tải tài nguyên](docs/screenshots/man-tai.webp)
+| Luyện thế | Màn hình lớn |
+| ![Xếp bi trong Luyện thế](docs/screenshots/luyen-the.webp) | ![Khung sân khấu trên desktop](docs/screenshots/desktop-san-khau.webp) |
 
 ## Phát triển
 
