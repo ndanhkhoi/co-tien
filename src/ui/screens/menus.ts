@@ -21,7 +21,6 @@ import { challengesScreen } from './challenges';
 import { champPage, classList, known, landList, rulesPage } from './codex';
 import { practiceScreen } from './practice';
 import { journeyScreen } from './journey';
-import { storyScreen } from './story';
 import { matchScreen } from './match-screen';
 
 // ---------- Shared bits ----------
@@ -363,7 +362,8 @@ export function homeScreen(app: App): Screen {
         tablet('users', 'Song Đấu', 'Hai người · chung máy', () => app.go(localScreen)),
         tablet('target', 'Luyện Cơ', `Luyện cú · ${chDone}/${CHALLENGES.length}`, () => app.go(challengesScreen)),
         tablet('collection', 'Tàng Các', `Chiêu mộ · ${p.champions.length}/${CHAMPIONS.length}`, () => app.go(collectionScreen)),
-        tablet('story', 'Cơ Tiên Truyện', read ? `Đã đọc ${read} chương` : '15 chương', () => app.go(storyScreen)),
+        // The story and its text load only when opened.
+        tablet('story', 'Cơ Tiên Truyện', read ? `Đã đọc ${read} chương` : '15 chương', () => void import('./story').then((m) => app.go(m.storyScreen))),
         tablet('place', 'Luyện thế', 'Tự bày thế tập', () => app.go(practiceScreen)),
       ),
     ),

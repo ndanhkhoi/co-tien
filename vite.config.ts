@@ -20,6 +20,29 @@ const ART = walkArt();
 /** Changes only when some painting changes; the loading screen checks the art again only then. */
 const ART_VERSION = createHash('sha1').update(JSON.stringify(ART)).digest('hex').slice(0, 12);
 
+/**
+ * The roster also carries the art briefs (looks, poses, icon prompts) that only the art pipeline
+ * reads. The shipped game drops them; tests and scripts still read the full file.
+ */
+function slimRoster() {
+  return {
+    name: 'slim-roster',
+    apply: 'build' as const,
+    // Before Vite's JSON plugin, so the file is still plain JSON here.
+    enforce: 'pre' as const,
+    transform(code: string, id: string) {
+      if (!id.endsWith('/content/roster.json')) return null;
+      const r = JSON.parse(code);
+      for (const c of r.champions) {
+        delete c.look; delete c.pose; delete c.expr;
+        for (const s of c.skills) delete s.icon;
+      }
+      for (const s of r.sects) { delete s.motifs; delete s.emblem; delete s.element; }
+      return { code: JSON.stringify(r), map: null };
+    },
+  };
+}
+
 /** `virtual:art-manifest`: the art list above. */
 function artManifest() {
   const id = 'virtual:art-manifest';
@@ -40,6 +63,7 @@ export default defineConfig({
   worker: { format: 'es' },
   plugins: [
     artManifest(),
+    slimRoster(),
     VitePWA({
       registerType: 'prompt',
       injectRegister: null,
