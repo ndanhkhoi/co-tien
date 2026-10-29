@@ -1,3 +1,4 @@
+import { MAX_FORCE } from '../game/terrain';
 import { Assets, Container, Graphics, Sprite, Texture } from 'pixi.js';
 import type { Match } from '../game/match';
 
@@ -115,9 +116,11 @@ export class OmenArt {
         if (name === 'wind') {
           // A lattice of ink arrows drifting downwind across the cloth: the direction reads at a
           // glance, and the drift speed follows the gust.
+          // Stronger wind: bigger arrows that drift faster.
+          const strength = Math.min(1, Math.hypot(force.x, force.y) / MAX_FORCE);
           const ux = Math.cos(a), uy = Math.sin(a);
           const step = 0.42;
-          const drift = ((this.clock * 0.12) % step + step) % step;
+          const drift = ((this.clock * (0.06 + strength * 0.14)) % step + step) % step;
           for (let i = -3; i <= 3; i++) {
             for (let j = -1; j <= 1; j++) {
               const along = i * step + drift;
@@ -125,7 +128,7 @@ export class OmenArt {
               const y = uy * along + ux * j * 0.36;
               if (Math.abs(x) > t.L / 2 - 0.06 || Math.abs(y) > t.W / 2 - 0.06) continue;
               const edge = Math.min(1, (t.L / 2 - Math.abs(x)) / 0.25);
-              this.put('skill/arrow', x, y, 0.13, 0.045, (0.22 + Math.abs(k) * 0.18) * fade * edge, a);
+              this.put('skill/arrow', x, y, 0.09 + strength * 0.08, 0.032 + strength * 0.026, (0.26 + Math.abs(k) * 0.2) * fade * edge, a);
             }
           }
         }

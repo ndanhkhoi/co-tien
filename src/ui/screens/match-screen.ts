@@ -19,6 +19,7 @@ import { clearHints, hintOnce, hintTurn } from '../hints';
 import { icon, type IconName } from '../icons';
 import { playCutIn } from '../skill-cutin';
 import { playFinisher } from '../finisher';
+import { forceStrength } from '../../game/terrain';
 import { practiceDesk, type PracticeSetup } from './practice-desk';
 
 export interface MatchResult {
@@ -487,8 +488,12 @@ export function matchScreen(opts: MatchOptions) {
         c.ringWrap.classList.toggle('full', hasSkills && e >= ENERGY_MAX);
       }
       if (match.setup.mode === 'nine' || match.setup.mode === 'ten') {
-        const id = match.balls.filter((b) => b.onTable && b.id > 0).reduce((lo, b) => Math.min(lo, b.id), Infinity);
-        nextBall.replaceChildren('Bi tiếp theo', Number.isFinite(id) ? miniBall(id) : '', Number.isFinite(id) ? String(id) : 'Hết bi');
+        // The next two balls in order, so the player can plan position for the one after.
+        const [first, second] = match.balls.filter((b) => b.onTable && b.id > 0).map((b) => b.id).sort((x, y) => x - y);
+        nextBall.replaceChildren(...(first === undefined ? ['Hết bi'] : [
+          h('span.mx-next-k', null, 'Bi tiếp theo'), miniBall(first), String(first),
+          ...(second === undefined ? [] : [h('span.mx-next-then', null, '›'), miniBall(second), String(second)]),
+        ]));
       } else nextBall.hidden = true;
       objKicker.textContent = desk ? desk.plate().kicker : solo ? opts.label : `${MODE_NAMES[match.setup.mode]} · chạm ${match.setup.raceTo} · ván ${match.rackNo}`;
       objText.textContent = desk ? desk.plate().text : opts.challenge ? opts.challenge.goal : match.setup.mode === 'carom-3c' ? 'Chạm bi thứ nhất, đủ 3 băng trước bi thứ hai.' : match.objective();
@@ -524,7 +529,7 @@ export function matchScreen(opts: MatchOptions) {
       if (!f || !Math.hypot(f.x, f.y)) return '';
       const deg = (Math.atan2(f.y, f.x) * 180) / Math.PI;
       const names = ['sang phải', 'chếch phải xuống', 'xuống dưới', 'chếch trái xuống', 'sang trái', 'chếch trái lên', 'lên trên', 'chếch phải lên'];
-      return `Hướng: ${names[((Math.round(deg / 45) % 8) + 8) % 8]} (theo mũi tên trên nỉ).`;
+      return `Hướng: ${names[((Math.round(deg / 45) % 8) + 8) % 8]}, sức ${forceStrength(f)} (theo mũi tên trên nỉ).`;
     }
 
     /** The ball that decided the rack: the last one pocketed, or a carom's second ball. */
@@ -698,9 +703,11 @@ export function matchScreen(opts: MatchOptions) {
         s.b.classList.toggle('charging', ult && wait < 0);
         const pct = Math.round((match.energy[side] / ENERGY_MAX) * 100);
         s.b.style.setProperty('--e', String(Math.min(100, pct)));
-        if (ult && wait < 0) s.state.replaceChildren(icon('energy'), `${pct}%`);
-        else if (!ult && wait > 0) s.state.replaceChildren(icon('cooldown'), `Còn ${wait} lượt`);
-        else s.state.replaceChildren(icon(can ? 'check' : 'info'), can ? 'Sẵn sàng' : 'Chờ');
+        // Short words inside the pill so it never spills past the slot on narrow phones.
+        if (ult && wait < 0) s.state.replaceChildren(icon('energy'), h('span', null, `${pct}%`));
+        else if (!ult && wait > 0) s.state.replaceChildren(icon('cooldown'), h('span', null, `${wait} lượt`));
+        // Ready needs no tick: the painted ring around the slot already says so.
+        else s.state.replaceChildren(h('span', null, can ? 'Sẵn sàng' : 'Chờ'));
         s.b.setAttribute('aria-label', `${sk.name}${ult ? ' (tuyệt chiêu)' : ''}: ${can ? 'sẵn sàng' : skillBlock(side, sk.slot) ?? ''}. Chạm để xem.`);
       }
       if (begun && anyReady && isHumanTurn()) {

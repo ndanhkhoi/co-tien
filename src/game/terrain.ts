@@ -27,7 +27,13 @@ export interface Omen {
 export const OMEN_CHANCE = 0.25;
 
 /** Rolling resistance on standard cloth is μr·g ≈ 0.108 m/s²; land forces stay well under it. */
-const MAX_FORCE = 0.06;
+export const MAX_FORCE = 0.06;
+
+/** How hard a land force pushes, in words the HUD shows (wind, tilt). */
+export function forceStrength(f: { x: number; y: number }): 'nhẹ' | 'vừa' | 'mạnh' {
+  const k = Math.hypot(f.x, f.y) / MAX_FORCE;
+  return k < 0.6 ? 'nhẹ' : k < 0.78 ? 'vừa' : 'mạnh';
+}
 
 function dir(rng: Rng, mag: number) {
   const a = rng.range(0, Math.PI * 2);
@@ -87,7 +93,8 @@ export function rollOmen(sect: SectId, rng: Rng, t: TableGeom, balls: Ball[]): O
     case 'thienquang':
       return {
         id: 'wind', name: sect === 'hoalinh' ? 'Xuân Phong' : 'Gió Núi', desc: 'Gió giật từng cơn đẩy bi đang lăn theo hướng gió.',
-        terrain: { force: dir(rng, MAX_FORCE * 0.9), gust: { amp: 0.6, omega: rng.range(2.5, 4) } },
+        // One direction for the whole turn: gusts only ease off (to 10%), never blow back.
+        terrain: { force: dir(rng, MAX_FORCE * rng.range(0.45, 0.95)), gust: { amp: 0.45, omega: rng.range(2.5, 4) } },
       };
     case 'kimsa':
       return {

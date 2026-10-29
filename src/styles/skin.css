@@ -996,3 +996,12 @@ body.theatre #theatre {
 .mx-mgoal { margin: 0; padding: 8px 12px; border-radius: var(--r-2); background: var(--sheet-2); border: 1px solid var(--line); font-size: 13px; line-height: 1.4; color: var(--ink-2); }
 .mx-mgoal b { color: var(--accent-2); }
 .mx-mgoal span { color: var(--muted); white-space: nowrap; }
+
+/* Skill state pill: fits the slot on every phone; a long word ends in an ellipsis inside the pill. */
+#ui .mx-sk-state { max-width: calc(100% - 4px); padding: 0 7px; gap: 2px; overflow: hidden; font-size: 10.5px; }
+.mx-sk-state .ico { width: 13px; height: 13px; flex-shrink: 0; }
+.mx-sk-state span { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+.mx-next-k { flex-basis: 100%; text-align: center; font-size: 11px; font-weight: 600; color: var(--muted); }
+.mx-next-then { margin: 0 2px; color: var(--muted); font-weight: 700; }
+#ui .mx-next { gap: 1px 3px; padding: 4px; }
+.mx:has(.mx-next:not(:empty):not([hidden])) .mx-dock { bottom: calc(62px + var(--sb)); }
