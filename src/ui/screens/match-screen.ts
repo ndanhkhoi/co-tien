@@ -396,14 +396,16 @@ export function matchScreen(opts: MatchOptions) {
       renderHud();
     });
     passiveChip.classList.add('mx-passive');
-    const ctrl = h('div.mx-col.mx-ctrl', null, placeMode, aimPad, dpad, powerBar, strikeBtn, h('div.mx-castrow', null, cancelCast, castSense), passiveChip);
-
+    // Off-table controls only: the push-out toggle lives in the controls column, and the pocket
+    // call is read in the objective plate. Nothing sits on the rails, where it could hide a pocket.
     const chips = h('div.mx-chips');
+    const ctrl = h('div.mx-col.mx-ctrl', null, placeMode, aimPad, dpad, powerBar, strikeBtn, h('div.mx-castrow', null, cancelCast, castSense), chips, passiveChip);
+
     const callTag = h('div.mx-calltag');
     callTag.style.display = 'none';
     const hand = h('img.mx-hand', { src: HAND_URL, alt: '', draggable: false, 'aria-hidden': 'true' });
     hand.style.display = 'none';
-    el.append(probe, hand, topBar, dock, ctrl, chips, callTag, nextBall, heraldEl);
+    el.append(probe, hand, topBar, dock, ctrl, callTag, nextBall, heraldEl);
 
     function playerCard(side: Side) {
       const p = opts.setup.players[side];
@@ -451,12 +453,8 @@ export function matchScreen(opts: MatchOptions) {
         bottom: insetB + 2,
       };
       const fitted = view.fit(window.innerWidth, window.innerHeight, { left: rect.left + bounds.left * k, right: window.innerWidth - rect.right + bounds.right * k, top: rect.top + bounds.top * k, bottom: window.innerHeight - rect.bottom + bounds.bottom * k });
-      const cx = (fitted.cx - rect.left) / k, cy = (fitted.cy - rect.top) / k, scale = fitted.scale / k;
+      const scale = fitted.scale / k;
       const t = match.table;
-      // Chips sit on the bottom rail, between the side pocket and a corner, never on the cloth.
-      const railMid = (t.W / 2 + t.railWidth / 2) * scale;
-      chips.style.left = `${cx}px`;
-      chips.style.top = `${cy + railMid}px`;
       // The painted ball in the hand is drawn a little larger than the real one: it is lifted off the cloth.
       const handW = (t.R * scale * 1.3) / HAND.r;
       hand.style.width = `${handW}px`;
@@ -582,10 +580,12 @@ export function matchScreen(opts: MatchOptions) {
         }));
       }
       const ct = match.callType();
+      objPlate.classList.toggle('calling', ct !== 'none');
+      objPlate.classList.toggle('need', ct !== 'none' && callPocket === null);
       if (ct !== 'none') {
         const ballPart = ct === 'ball-pocket' ? `bi ${callBallId() ?? '?'} → ` : '';
-        chips.append(h('div.chip.mx-chip', { class: callPocket === null ? 'need' : 'set' }, icon('target'),
-          callPocket === null ? `Gọi ${ballPart}chạm 1 lỗ` : `Gọi ${ballPart}${POCKET_NAMES[callPocket]}`));
+        objKicker.textContent = 'Gọi lỗ';
+        objText.textContent = callPocket === null ? `Gọi ${ballPart}chạm 1 lỗ trên bàn` : `Gọi ${ballPart}${POCKET_NAMES[callPocket]}`;
       }
     }
 
@@ -1551,7 +1551,7 @@ export function matchScreen(opts: MatchOptions) {
       }
       if (match.callType() !== 'none') {
         hintOnce(app, 'call', 'Gọi lỗ', 'Chạm bi và lỗ định đánh trước khi ra cơ. Bi vào lỗ khác không được tính.',
-          { anchor: () => chips, place: 'above' });
+          { anchor: () => objPlate, place: 'below' });
       }
     }
 

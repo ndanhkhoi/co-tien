@@ -791,3 +791,12 @@ body.theatre #theatre {
 @keyframes mx-passive-ready { 50% { filter: brightness(1.08); transform: scale(1.03); } }
 @media (prefers-reduced-motion: reduce) { #ui .mx-passive.btn:not(:disabled) { animation: none; } }
 .mx-skill .mx-sk-art { margin: 3px 0 4px; }
+
+/* Pocket calls read in the objective plate; the push-out toggle sits in the controls column. */
+.mx-ctrl .mx-chips { position: static; transform: none; flex-direction: column; gap: 4px; white-space: normal; }
+.mx-ctrl .mx-chips .mx-chip { width: 100%; min-height: var(--touch-target); justify-content: center; font-size: 12px; line-height: 1.2; text-align: center; }
+.mx-ctrl .mx-chips .mx-chip[aria-pressed='true'] { background: var(--ink); color: var(--sheet); border-color: var(--ink); }
+.mx-obj.calling .mx-obj-k { color: var(--accent-2); font-weight: 700; }
+.mx-obj.calling.need .mx-obj-t { color: var(--accent); animation: mx-call-need 1.4s ease-in-out infinite; }
+@keyframes mx-call-need { 50% { opacity: 0.55; } }
+@media (prefers-reduced-motion: reduce) { .mx-obj.calling.need .mx-obj-t { animation: none; } }

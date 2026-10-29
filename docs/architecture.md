@@ -114,7 +114,7 @@ cử chỉ trình duyệt ngoài vùng cuộn, nhưng cho cuộn trong `.scroll`
 
 `src/ui/screens/match-screen.ts` nhận kéo/chạm trực tiếp trên bàn. Kéo xoay cơ tương đối quanh bi cái; kéo xa bi cái giảm tốc xoay để ngắm tinh. Chạm bi để ngắm thẳng vào bi, chạm vị trí trống để ngắm tới đó; nút đổi mục tiêu chuyển bi. Hai nút xoay chỉnh 0,1° mỗi chạm, giữ để xoay nhanh dần.
 
-Chạm bi cái nhỏ mở bảng áp phê: chạm hoặc kéo điểm đánh trên bi lớn, hoặc chọn Giữa, Trô, Cule, Giật, Trái, Phải. Bảng này cũng có thanh “Nâng cơ” 0–75° cho cú nhảy: lực và góc quyết định tầm bay, góc cao giảm tầm ngang; quá nhẹ có thể chạm bi chắn, quá mạnh có thể văng bàn. Kéo/chạm thanh lực đặt lực; chạm ĐÁNH dùng lực đã chọn. Giữ ĐÁNH cho lực dao động rồi thả để đánh; trượt ngón ra xa để huỷ.
+Giữ hoặc kéo bi cái nhỏ mở một bi lớn cạnh cột điều khiển; ngón tay dời điểm đánh trên bi lớn, thả tay là đóng. Chạm nhanh bi cái nhỏ mở bảng áp phê: chạm hoặc kéo điểm đánh trên bi lớn, hoặc chọn Giữa, Trô, Cule, Giật, Trái, Phải. Bảng này cũng có thanh “Nâng cơ” 0–75° cho cú nhảy: lực và góc quyết định tầm bay, góc cao giảm tầm ngang; quá nhẹ có thể chạm bi chắn, quá mạnh có thể văng bàn. Chạm thanh lực đặt mức tại điểm chạm, kéo để tinh chỉnh từ mức hiện tại; chạm ĐÁNH dùng lực đã chọn. Gọi lỗ bằng cách chạm lỗ trên bàn; lỗ đã gọi hiện trong ô mục tiêu phía trên, nút đẩy bi (push-out) nằm trong cột điều khiển, không có gì đặt trên băng bàn. Giữ ĐÁNH cho lực dao động rồi thả để đánh; trượt ngón ra xa để huỷ.
 
 Khi có bi trong tay, kéo bi cái hoặc chạm bàn để dời; bốn nút hướng chỉnh 3 mm mỗi chạm và nhanh dần khi giữ. “Ngắm thử” chuyển thao tác bàn sang ngắm, cho xem đường bi trước khi chốt; “Dời bi” quay lại đặt vị trí. Khi dời bi, cả cơ và tia ngắm đều ẩn; chỉ hiện lại ở Ngắm thử. “ĐẶT BI” xác nhận vị trí, không đánh ngay. Bước đặt chiêu là trạng thái riêng và dùng “THI TRIỂN” để xác nhận.
 
@@ -125,8 +125,9 @@ HUD Tiên Đạo có ba ô icon tranh riêng của tướng đang điều khiể
 `vite-plugin-pwa` tải sẵn code, tranh đệ quy trong `art/ui/` và `art/table/`, chân dung, icon chiêu và biểu tượng
 môn phái theo `globPatterns` trong `vite.config.ts`; các ảnh khác trong `art/` được cache khi tải lần đầu.
 
-Trong bản production, `src/main.ts` kiểm tra bản mới mỗi **15 phút** và khi ứng dụng trở lại phía trước
-(nếu có mạng). `src/ui/app.ts` buộc áp dụng ngay từ menu; nếu đang ở màn hình trận đấu thì chờ hết trận,
+Trong bản production, `src/main.ts` kiểm tra bản mới mỗi **15 phút**, khi ứng dụng trở lại phía trước, khi có
+mạng trở lại, và khi bấm “Kiểm tra” ở mục Phiên bản trong Cài đặt. Ngay khi bản mới bắt đầu tải (`updatefound`),
+menu bị chặn bằng tấm “Đang tải bản mới…” để không ai tiếp tục chơi bản cũ; tải lỗi thì tấm này tự gỡ. `src/ui/app.ts` buộc áp dụng ngay từ menu; nếu đang ở màn hình trận đấu thì chờ hết trận,
 khi chuyển sang màn hình không dùng stage. Lúc áp dụng, một lớp **chặn thao tác** hiện “Đang cập nhật
 bản mới…” trước khi kích hoạt service worker mới và tải lại ứng dụng.
 

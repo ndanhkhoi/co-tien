@@ -26,8 +26,9 @@ dụng (PWA), chơi offline.
   chuyện riêng của Cơ Tiên Giới, lấy cảm hứng từ cách kể của truyện cổ Việt Nam và Trung Hoa.
 - **Cơ Tiên Lục:** wiki trong game về vùng đất, tướng, hệ và luật chơi; tướng chưa gặp hiện "???".
 - **Điều khiển cảm ứng:** kéo/chạm trên bàn và nút xoay để ngắm, kéo bi cái hoặc dùng nút hướng để
-  đặt bi; chuyển “Ngắm thử” để canh đường trước khi chốt. Chọn điểm áp phê trên bi, chỉnh thanh lực rồi
-  chạm ĐÁNH hoặc giữ–thả để nạp lực; rung, giữ màn hình sáng; bắt cài app và xoay ngang trên điện thoại, kiểm tra kích thước cửa
+  đặt bi; chuyển “Ngắm thử” để canh đường trước khi chốt. Giữ bi cái nhỏ để mở bi lớn và kéo chọn điểm áp phê
+  (chạm để mở bảng chỉnh chính xác); chạm thanh lực đặt mức, kéo để tinh chỉnh, rồi chạm ĐÁNH hoặc giữ–thả để
+  nạp lực; chạm bi trên bàn để xem số bi; gọi lỗ bằng cách chạm lỗ, lỗ đã gọi hiện ở ô thông tin phía trên; rung, giữ màn hình sáng; bắt cài app và xoay ngang trên điện thoại, kiểm tra kích thước cửa
   sổ trên máy tính.
 - **AI 4 cấp, 4 lối đánh:** tìm cú đánh bằng chính bộ mô phỏng (kể cả địa thế), chạy trong Web Worker.
 - **Người mới:** giới thiệu thế giới, gợi ý đúng lúc, luật chơi đầy đủ trong menu tạm dừng.
