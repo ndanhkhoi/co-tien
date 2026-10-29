@@ -108,7 +108,7 @@ export function champCard(c: Champion, opts: { locked?: boolean; sel?: boolean; 
 }
 
 /** Champions grouped by sect, each group on its own sheet. */
-function championPicker(app: App, selected: () => string, onPick: (c: Champion) => void, onlyOwned = false): HTMLElement {
+function championPicker(app: App, selected: () => string, onPick: (c: Champion) => void, onlyOwned = false, exclude: () => string | null = () => null): HTMLElement {
   const wrap = h('div.sect-groups');
   const card = (c: Champion) => {
     const has = app.profile.champions.includes(c.id);
@@ -134,7 +134,7 @@ function championPicker(app: App, selected: () => string, onPick: (c: Champion) 
   const render = () => {
     // Picking among owned champions: one flat grid, no empty sect headers.
     if (onlyOwned) {
-      wrap.replaceChildren(h('div.cc-grid', null, ...CHAMPIONS.filter((c) => app.profile.champions.includes(c.id)).map(card)));
+      wrap.replaceChildren(h('div.cc-grid', null, ...CHAMPIONS.filter((c) => app.profile.champions.includes(c.id) && c.id !== exclude()).map(card)));
       return;
     }
     // The first sects paint with the screen; the rest follow a frame at a time so opening never stalls.
@@ -302,7 +302,7 @@ export function splashScreen(app: App): Screen {
   el.style.setProperty('--keyart-tall', `url("${artUrl('ui/keyart-portrait.webp')}")`);
   el.append(
     h('img.splash-logo', { src: artUrl('ui/logo.webp'), alt: 'Cơ Tiên — bida tu tiên', draggable: false }),
-    h('div.tap-hint', null, icon('play'), 'Chạm để bắt đầu'),
+    h('div.tap-hint', null, h('span', null, 'Chạm để bắt đầu')),
   );
   let started = false;
   el.addEventListener('pointerup', () => {
@@ -373,6 +373,55 @@ export function homeScreen(app: App): Screen {
 
 // ---------- Quick play / Local ----------
 
+interface Seat { name: string; champion: string; cue: string }
+
+/** One Song Đấu player: name, champion (any owned one but the other player's) and cue. */
+function seatModal(app: App, seat: Seat, other: string, onDone: () => void) {
+  let name = seat.name;
+  let pick = seat.champion;
+  let cue = seat.cue;
+  const preview = h('div.pm-av');
+  const label = h('div.pm-char');
+  const cues = h('div.chips.seat-cues');
+  const show = () => {
+    const c = champion(pick);
+    preview.replaceChildren(avatar(c.id));
+    label.replaceChildren(h('b', null, c.name), h('span', null, `${classInfo(c.cls).name} · ${sect(c.sect).name}`));
+    cues.replaceChildren(...CUES.filter((q) => app.profile.cues.includes(q.id)).map((q) => chip(q.name, q.id === cue, () => {
+      cue = q.id;
+      show();
+    })));
+  };
+  show();
+  const input = h('input', {
+    type: 'text', value: name, maxLength: 14, placeholder: 'Tên người chơi', autocomplete: 'off', 'aria-label': 'Tên người chơi',
+    oninput: (e: Event) => (name = (e.target as HTMLInputElement).value),
+  }) as HTMLInputElement;
+  modal((close) => h('div.modal.profile-modal', null,
+    h('h2', null, 'Người chơi'),
+    h('div.pm-body', null,
+      h('div.pm-left', null, preview, label,
+        h('span.section-title', null, 'Tên'), input,
+        h('span.section-title', null, 'Cơ'), cues,
+        btn('Xong', () => {
+          seat.name = name.trim().slice(0, 14) || seat.name;
+          seat.champion = pick;
+          seat.cue = cue;
+          close();
+          onDone();
+        }, 'block'),
+      ),
+      h('div.pm-right.scroll', null,
+        h('p.pm-note', null, 'Chọn một tướng đã mở khoá. Hai người chơi không dùng chung một tướng.'),
+        championPicker(app, () => pick, (c) => {
+          pick = c.id;
+          show();
+        }, true, () => other)),
+    ),
+    closeX(close),
+  ), { dismissable: true });
+}
+
 function setupScreen(app: App, local: boolean): Screen {
   const el = screenEl('setup');
   const st = {
@@ -382,9 +431,14 @@ function setupScreen(app: App, local: boolean): Screen {
     race: 3,
     points: 10,
     mutator: null as MutatorId | null,
-    name2: 'Người chơi 2',
     classic: false,
   };
+  // Song Đấu seats: each player picks name, champion and cue; nothing comes from the profile's own pick.
+  const seats: Seat[] = [
+    { name: 'Cơ thủ 1', champion: app.profile.champion, cue: app.profile.cue },
+    { name: 'Cơ thủ 2', champion: '', cue: app.profile.cue },
+  ];
+  let tableId = app.profile.table;
   const SHORT: Record<GameMode, string> = { eight: '8 bi', nine: '9 bi', ten: '10 bi', 'carom-libre': 'Phăng', 'carom-3c': '3 Băng' };
   const isCarom = () => st.mode.startsWith('carom');
   const left = h('div.setup-opts');
@@ -396,6 +450,7 @@ function setupScreen(app: App, local: boolean): Screen {
   const chooseFoe = () => {
     const pool = CHAMPIONS.filter((c) => c.id !== app.profile.champion && (local ? app.profile.champions.includes(c.id) : Math.abs(c.tier - (st.level + 1)) <= 1));
     foe = pool[Math.floor(Math.random() * pool.length)] ?? CHAMPIONS.find((c) => c.id !== app.profile.champion)!;
+    seats[1].champion = foe.id;
     foePortrait.replaceChildren(avatar(foe.id));
     foeName.textContent = foe.name;
     foeCut.src = cutoutUrl(foe.id);
@@ -408,7 +463,7 @@ function setupScreen(app: App, local: boolean): Screen {
     return `Tướng bậc ${lo}–${hi} · ${LEVEL_NAMES[st.level]}`;
   };
   const render = () => {
-    foeHint.textContent = local ? 'Chạm để đổi tên' : tierRange();
+    foeHint.textContent = tierRange();
     const mut = MUTATORS.find((m) => m.id === st.mutator);
     left.replaceChildren(...[
       row('Chế độ', seg([['tc', 'Tiên Đạo · có chiêu'], ['cd', 'Cổ Điển']], st.classic ? 'cd' : 'tc', (v) => (st.classic = v === 'cd'))),
@@ -424,11 +479,24 @@ function setupScreen(app: App, local: boolean): Screen {
       })),
       local ? null : row('Lối đánh', seg(Object.entries(PERSONALITY_NAMES) as [Personality, string][], st.pers, (v) => (st.pers = v))),
       row('Số ván', seg([[1, 'Chạm 1'], [2, 'Chạm 2'], [3, 'Chạm 3'], [5, 'Chạm 5']], st.race, (v) => (st.race = v))),
+      local ? row('Bàn', h('div.chips', null, chip(TABLES.find((t) => t.id === tableId)?.name ?? TABLES[0].name, true, pickTable, 'edit'))) : null,
       isCarom()
         ? row('Điểm/ván', seg(st.mode === 'carom-3c' ? [[3, '3 điểm'], [5, '5 điểm'], [10, '10 điểm']] : [[5, '5 điểm'], [10, '10 điểm'], [15, '15 điểm']], st.points, (v) => (st.points = v)))
         : row('Biến thể', h('div.chips', null, chip(mut ? mut.name : 'Không có', !!mut, pickMutator, 'edit'))),
     ].filter((r): r is HTMLDivElement => r !== null));
   };
+  function pickTable() {
+    modal((close) => h('div.modal.scroll', null,
+      h('h2', null, 'Chọn bàn'),
+      h('div.list', null, ...TABLES.filter((t) => app.profile.tables.includes(t.id)).map((t) =>
+        item(t.name, chip(tableId === t.id ? 'Đang chọn' : 'Chọn', tableId === t.id, () => {
+          tableId = t.id;
+          close();
+          render();
+        }), { hint: t.desc }))),
+      h('div.actions', null, btn('Đóng', close, 'ghost')),
+    ), { dismissable: true });
+  }
   function pickMutator() {
     modal((close) => {
       const choose = (id: MutatorId | null) => () => {
@@ -449,25 +517,39 @@ function setupScreen(app: App, local: boolean): Screen {
   render();
 
   const me = champion(app.profile.champion);
-  const name2 = h('input', {
-    type: 'text', value: st.name2, maxLength: 14, 'aria-label': 'Tên người chơi 2',
-    oninput: (e: Event) => (st.name2 = (e.target as HTMLInputElement).value || 'Người chơi 2'),
-  });
+  const meCut = h('img.vs-cut.me', { src: cutoutUrl(local ? seats[0].champion : me.id), alt: '', draggable: false, decoding: 'async' });
+  const seatPlate = (i: 0 | 1) => {
+    const plate = tap(h('button.vs-side', { class: i ? 'foe' : 'me', 'aria-label': `Chọn tướng, tên và cơ cho người chơi ${i + 1}` }), () =>
+      seatModal(app, seats[i], seats[i ? 0 : 1].champion, () => paintSeats()));
+    return plate;
+  };
+  const plates = local ? [seatPlate(0), seatPlate(1)] : [];
+  function paintSeats() {
+    seats.forEach((seat, i) => {
+      const c = champion(seat.champion);
+      const cue = CUES.find((q) => q.id === seat.cue) ?? CUES[0];
+      const text = h('span.vs-text', null, h('b.vs-name', null, seat.name), h('span.vs-sub', null, `${c.name} · ${cue.name}`));
+      plates[i].replaceChildren(...(i ? [h('span.vs-edit', null, icon('edit')), text] : [text, h('span.vs-edit', null, icon('edit'))]));
+    });
+    meCut.src = cutoutUrl(seats[0].champion);
+    foeCut.src = cutoutUrl(seats[1].champion);
+  }
+  if (local) paintSeats();
   // A duel stage: both champions full-body facing each other, the seal between, the start stamp below.
   const versus = h('div.versus',
     null,
     h('div.vs-stage', null,
-      h('img.vs-cut.me', { src: cutoutUrl(me.id), alt: '', draggable: false, decoding: 'async' }),
+      meCut,
       foeCut,
       h('div.vs-seal', { 'aria-hidden': 'true' }, 'đấu'),
     ),
-    h('div.vs-plates', null,
+    h('div.vs-plates', null, ...(local ? plates : [
       tap(h('button.vs-side.me', { 'aria-label': 'Đổi tướng' },
         h('span.vs-text', null, h('b.vs-name', null, app.profile.name), h('span.vs-sub', null, `${me.name} · ${classInfo(me.cls).name}`)),
         h('span.vs-edit', null, icon('edit')),
-      ), () => profileModal(app, () => app.go(local ? localScreen : quickScreen, { replace: true }))),
-      h('div.vs-side.foe', null, local ? h('span.vs-edit', null, icon('edit')) : null, h('span.vs-text', null, local ? name2 : foeName, foeHint)),
-    ),
+      ), () => profileModal(app, () => app.go(quickScreen, { replace: true }))),
+      h('div.vs-side.foe', null, h('span.vs-text', null, foeName, foeHint)),
+    ])),
     btn(h('span.btn-in', null, icon('play'), 'Vào trận'), () => start(), 'big block'),
   );
   el.append(topbar(app, local ? 'Song Đấu' : 'Luận Cơ'), h('div.setup-body', null, left, versus));
@@ -475,18 +557,21 @@ function setupScreen(app: App, local: boolean): Screen {
   function start() {
     // AI opponents: a champion whose tier fits the level, with a cue from their own sect.
     // Never the player's own champion: no mirror matches.
-    const foeCue = local ? app.cue : CUES.find((c) => c.id === `${foe.sect}-${st.level >= 3 ? 'b' : 'a'}`) ?? CUES[0];
-    const p1 = { name: app.profile.name, kind: 'human' as const, cue: app.cue, champion: me.id };
+    const cueOf = (id: string) => CUES.find((c) => c.id === id) ?? CUES[0];
+    const foeCue = cueOf(`${foe.sect}-${st.level >= 3 ? 'b' : 'a'}`);
+    const p1 = local
+      ? { name: seats[0].name, kind: 'human' as const, cue: cueOf(seats[0].cue), champion: seats[0].champion }
+      : { name: app.profile.name, kind: 'human' as const, cue: app.cue, champion: me.id };
     const opp = local
-      ? { name: st.name2.slice(0, 14), kind: 'human' as const, cue: foeCue, champion: foe.id }
+      ? { name: seats[1].name, kind: 'human' as const, cue: cueOf(seats[1].cue), champion: seats[1].champion }
       : { name: foe.name, kind: 'ai' as const, ai: { level: st.level, personality: st.pers }, cue: foeCue, champion: foe.id };
     const again = () => app.go(launch, { replace: true });
     const launch = matchScreen({
       setup: {
         mode: st.mode, raceTo: st.race, players: [p1, opp], mutator: isCarom() ? null : st.mutator,
-        tableSkin: app.tableSkin, caromTarget: st.points, firstBreaker: Math.random() < 0.5 ? 0 : 1, classic: st.classic,
+        tableSkin: local ? TABLES.find((t) => t.id === tableId) ?? app.tableSkin : app.tableSkin, caromTarget: st.points, firstBreaker: Math.random() < 0.5 ? 0 : 1, classic: st.classic,
       },
-      titles: [`Cấp ${app.level}`, local ? 'Khách' : `${LEVEL_NAMES[st.level]} · ${PERSONALITY_NAMES[st.pers]}`],
+      titles: local ? ['Người chơi 1', 'Người chơi 2'] : [`Cấp ${app.level}`, `${LEVEL_NAMES[st.level]} · ${PERSONALITY_NAMES[st.pers]}`],
       label: local ? 'Song Đấu' : 'Luận Cơ',
       onExit: () => app.pop(),
       onEnd: ({ won, match }) => {

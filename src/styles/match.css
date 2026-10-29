@@ -69,6 +69,13 @@
 .mx-face { display: block; width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: 2px solid var(--sheet); }
 .mx-ring.swap .mx-face { animation: mx-swap 0.34s var(--ease); }
 @keyframes mx-swap { from { transform: scale(0.86); opacity: 0.4; } }
+.mx-turnmark { position: absolute; left: 50%; top: -19px; z-index: 2; width: 30px; height: 30px; translate: -50% 0; display: none; pointer-events: none; filter: drop-shadow(0 1px 1px rgba(251, 248, 242, 0.9)); }
+.mx-turnmark .ico { width: 100%; height: 100%; transform: rotate(90deg); }
+.mx-card.active .mx-turnmark { display: block; animation: mx-turn-bob 1.1s ease-in-out infinite; }
+.mx-card.active .mx-ring { animation: mx-turn-ring 1.1s ease-in-out infinite; }
+@keyframes mx-turn-bob { 50% { translate: -50% 4px; opacity: 0.55; } }
+@keyframes mx-turn-ring { 50% { box-shadow: 0 0 0 3px var(--accent); } }
+@media (prefers-reduced-motion: reduce) { .mx-card.active .mx-turnmark, .mx-card.active .mx-ring { animation: none; } }
 .no-energy .mx-ring { background: var(--sheet-3); }
 .no-energy .mx-epill { display: none; }
 .mx-epill {
@@ -126,7 +133,9 @@
 .mx-grp { padding: 0 7px; border-radius: 999px; border: 1.5px solid var(--ink); font-size: 13px; line-height: 18px; }
 .mx-grp.solid { background: var(--ink); color: var(--sheet); }
 .mx-foul { color: var(--bad); }
-.mx-potted { display: flex; gap: 2px; height: 12px; overflow: hidden; }
+.mx-potted { display: flex; gap: 2px; height: 18px; overflow: hidden; }
+.mx-pot { width: 18px; height: 18px; flex-shrink: 0; filter: drop-shadow(0 1px 1px rgba(26, 23, 19, 0.35)); }
+.mx-pot.left { opacity: 0.3; filter: grayscale(0.6); }
 .mx-card.p2 .mx-potted { justify-content: flex-end; }
 .mx-ball {
   width: 12px;
@@ -285,16 +294,17 @@
 }
 .mx-cb-dot { position: absolute; width: 10px; height: 10px; margin: -5px 0 0 -5px; border-radius: 50%; background: var(--accent); border: 1.5px solid var(--sheet); }
 
-.mx-dpad { display: none; grid-template-columns: 1fr 1fr; grid-template-areas: 'up up' 'left right' 'down down'; gap: 6px; }
-.mx-dpad > span { display: none; }
-.mx-dpad .mx-btn { width: 100%; }
-.mx-dpad .mx-btn:nth-child(2) { grid-area: up; }
-.mx-dpad .mx-btn:nth-child(4) { grid-area: left; }
-.mx-dpad .mx-btn:nth-child(6) { grid-area: right; }
-.mx-dpad .mx-btn:nth-child(8) { grid-area: down; }
-.mx-dpad .mx-btn .ico { width: 30px; height: 30px; }
+.mx-dpad { display: none; position: relative; width: 100%; aspect-ratio: 384 / 371; background: url('/art/ui/dpad.webp') center / contain no-repeat; }
+/* Each direction owns the triangle from its edge to the centre: big, equal touch areas. */
+.mx-dpad-b { position: absolute; inset: 0; padding: 0; border: 0; background: none; touch-action: none; cursor: pointer; }
+.mx-dpad-b.up { clip-path: polygon(0 0, 100% 0, 50% 50%); }
+.mx-dpad-b.down { clip-path: polygon(0 100%, 100% 100%, 50% 50%); }
+.mx-dpad-b.left { clip-path: polygon(0 0, 0 100%, 50% 50%); }
+.mx-dpad-b.right { clip-path: polygon(100% 0, 100% 100%, 50% 50%); }
+.mx-dpad-b.pressed { background: radial-gradient(circle closest-side, transparent 36%, rgba(26, 23, 19, 0.16) 37% 88%, transparent 89%); }
+.mx-dpad-b:disabled { opacity: 0.45; }
 .mx-ctrl.placing .mx-pad, .mx-ctrl.placing .mx-power { display: none; }
-.mx-ctrl.placing .mx-dpad { display: grid; }
+.mx-ctrl.placing .mx-dpad { display: block; }
 
 .mx-power {
   flex: 1 1 auto;
@@ -319,7 +329,9 @@
 .mx-ptick:nth-child(6) { width: 50%; }
 .mx-power.off { opacity: 0.5; }
 .mx-power.hot .mx-ppct { color: var(--accent); }
-.mx-power.live .mx-ptrack { box-shadow: 0 0 0 2px var(--accent); }
+/* No ring or focus outline: the fill itself shows the power, and a red ring flickering on and off
+   around the track while charging only distracted. */
+.mx-power:focus-visible { outline: none; }
 
 .mx-strike {
   flex: 0 0 auto;

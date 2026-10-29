@@ -181,9 +181,7 @@ export class TableView {
       });
     };
     const rail = artImage(sectArtUrl(skin.sect, 'rail'), ready);
-    const base = new URL(import.meta.env.BASE_URL, document.baseURI).href;
-    const sight = artImage(`${base}art/table/${this.match.table.kind === 'pool' ? 'diamond' : 'dot'}.webp`, ready);
-    const art = paintTable(this.match.table, skin, want, rail, { sight });
+    const art = paintTable(this.match.table, skin, want, rail);
     const previous = this.tableSprite.texture;
     this.tableSprite.texture = art.texture;
     if (previous !== Texture.EMPTY && previous !== Texture.WHITE) previous.destroy(true);

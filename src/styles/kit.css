@@ -289,12 +289,27 @@ input[type='text']:focus, input:not([type]):focus { border-color: var(--accent);
 
 /* ---------- Mandatory update sheet ---------- */
 
-.update-sheet { position: fixed; inset: 0; z-index: 9999; display: grid; place-items: center; background: linear-gradient(#e9e1d0e6, #e9e1d0e6), var(--paper, none) center / 640px, var(--frame); color: var(--ink); }
-.us-card { display: grid; justify-items: center; gap: 8px; min-width: min(320px, 86vw); padding: 26px 34px; border: 14px solid transparent; border-image: url('/art/ui/frame/panel.webp') 74 fill / 14px / 0 stretch; filter: drop-shadow(0 8px 20px rgba(26, 23, 19, 0.25)); }
-.us-logo { width: 200px; max-width: 70vw; height: auto; margin-bottom: 4px; }
-.us-bar { position: relative; width: 240px; max-width: 70vw; height: 10px; overflow: hidden; }
-.us-bar i { position: absolute; inset: 0; background: url('/art/ui/frame/ribbon.webp') center / 100% 100% no-repeat; animation: us-sweep 1.8s var(--ease) infinite; }
-.us-text { font: 700 var(--fs-l)/1.4 var(--display); }
-.us-note { font-size: var(--fs-s); color: var(--muted); }
-@keyframes us-sweep { 0% { clip-path: inset(0 100% 0 0); } 55% { clip-path: inset(0 0 0 0); } 100% { clip-path: inset(0 0 0 100%); } }
-@media (prefers-reduced-motion: reduce) { .us-bar i { animation: none; } }
+/* Updating: the key art under a paper wash, the logo on a mist, and a brush stroke that keeps
+   painting itself until the new build takes over. No card, no frame. */
+.update-sheet {
+  position: fixed; inset: 0; z-index: 9999; display: grid; place-items: center;
+  background: linear-gradient(#e9e1d0b3, #e9e1d0b3), url('/art/ui/keyart.webp') center / cover no-repeat, var(--frame);
+  color: var(--ink);
+  animation: us-in 0.35s ease both;
+}
+.us-card {
+  position: relative; isolation: isolate; display: grid; justify-items: center; gap: 10px;
+  padding: 24px 56px 28px;
+}
+.us-card::before {
+  content: ''; position: absolute; inset: -20% -12%; z-index: -1;
+  background: radial-gradient(closest-side, rgba(251, 248, 242, 0.95) 55%, rgba(251, 248, 242, 0));
+}
+.us-logo { width: 240px; max-width: 70vw; height: auto; margin-bottom: 2px; }
+.us-text { font: 700 20px/1.35 var(--display); letter-spacing: 0.02em; }
+.us-bar { position: relative; width: 260px; max-width: 70vw; height: 22px; }
+.us-bar i { position: absolute; inset: 0; background: url('/art/ui/tap-stroke.webp') center / 100% 100% no-repeat; animation: us-sweep 2.2s var(--ease) infinite; }
+.us-note { font-size: var(--fs-s); color: var(--ink-2); }
+@keyframes us-in { from { opacity: 0; } }
+@keyframes us-sweep { 0% { clip-path: inset(0 100% 0 0); opacity: 1; } 60% { clip-path: inset(0 0 0 0); opacity: 1; } 85%, 100% { clip-path: inset(0 0 0 0); opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { .update-sheet { animation: none; } .us-bar i { animation: none; } }

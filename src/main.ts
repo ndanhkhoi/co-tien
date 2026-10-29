@@ -147,12 +147,14 @@ function installUiScale() {
     const width = native ? rect.width : DESIGN_W;
     const height = native ? rect.height : DESIGN_H;
     // Champions only flank the stage when the side margins can hold a figure.
-    const sideRoom = (safe.width - DESIGN_W * s) / 2;
+    // Measured on the whole screen: the backdrop paints under notches and the home bar too.
+    const sideRoom = (view.width - DESIGN_W * s) / 2;
     const topRoom = (safe.height - DESIGN_H * s) / 2;
-    document.body.classList.toggle('cast-room', theatre && roomy && sideRoom >= 150);
+    document.body.classList.toggle('cast-room', theatre && sideRoom >= 60);
+    document.documentElement.style.setProperty('--side-room', `${Math.max(0, sideRoom)}px`);
     // Tall windows (4:3, 5:4, tablets) have their room above and below instead: the champions
     // lean over the top of the frame there.
-    document.body.classList.toggle('cast-top', theatre && roomy && sideRoom < 150 && topRoom >= 90);
+    document.body.classList.toggle('cast-top', theatre && roomy && sideRoom < 60 && topRoom >= 90);
     ui.style.width = `${width}px`;
     ui.style.height = `${height}px`;
     // Centre on the whole screen (an iPhone's home-bar inset would otherwise push the game up),

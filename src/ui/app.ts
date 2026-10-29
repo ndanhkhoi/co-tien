@@ -2,6 +2,7 @@ import { Application } from 'pixi.js';
 import { AiClient } from '../ai/ai-client';
 import { sound } from '../audio/sound';
 import { CUES, TABLES } from '../game/content/gear';
+import { CHAMPIONS, cutoutUrl } from '../game/content/sects';
 import { levelOf, loadProfile, saveProfile, type Profile } from '../game/profile';
 import { setHaptics } from '../platform/device';
 import { h, modal as baseModal, toast } from './dom';
@@ -180,6 +181,17 @@ export class App {
     img.decode().then(swap, swap);
   }
 
+  /** Menus flank the stage with the player's champion and one other, picked once per launch. */
+  private guest: string | null = null;
+  private menuCast(): [string, string] {
+    const own = this.profile.champion;
+    if (!this.guest || this.guest === own) {
+      const pool = CHAMPIONS.filter((c) => c.id !== own);
+      this.guest = pool[Math.floor(Math.random() * pool.length)].id;
+    }
+    return [cutoutUrl(own), cutoutUrl(this.guest)];
+  }
+
   /** Champions standing either side of the stage; each fades in once its art has decoded. */
   setCast(cast: [string | null, string | null] = [null, null]) {
     document.querySelectorAll<HTMLImageElement>('#backdrop .bd-cast').forEach((img, i) => {
@@ -217,11 +229,14 @@ export class App {
     const next = factory(this);
     this.current = next;
     this.stageEl.style.visibility = next.usesStage ? 'visible' : 'hidden';
+    // The backdrop's drifting painting and mist hold still while a table is up: on phones the
+    // transparent table canvas is composited over them every frame, and their motion made play stutter.
+    document.body.classList.toggle('playing', !!next.usesStage);
     if (next.usesStage) this.pixi.ticker.start();
     else this.pixi.ticker.stop();
     next.el.dataset.direction = direction;
     this.setBackdrop(next.backdrop);
-    this.setCast(next.cast);
+    this.setCast(next.cast ?? this.menuCast());
     this.ui.append(next.el);
     // The root scaler distinguishes contained gameplay from fullscreen entry art.
     // Let it recompute immediately after a screen transition instead of waiting for resize.

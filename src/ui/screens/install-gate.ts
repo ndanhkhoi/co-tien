@@ -49,6 +49,10 @@ export function installGate(): Screen {
         tabs<Os>([{ id: 'ios', label: 'iPhone · iPad' }, { id: 'android', label: 'Android' }], os, (v) => {
           os = v;
           render();
+          // Switching systems slides the new steps in as one block; the staggered entrance is for first open only.
+          body.classList.remove('ig-switch');
+          void body.offsetWidth;
+          body.classList.add('ig-switch');
         }),
         os === 'ios'
           ? h('ol.install-steps', null,

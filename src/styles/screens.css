@@ -261,20 +261,21 @@ textarea.code-box:focus { border-color: var(--accent); }
   background: radial-gradient(closest-side, rgba(251, 248, 242, 0.95) 55%, rgba(251, 248, 242, 0));
 }
 .tap-hint {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  min-height: 52px;
-  padding: 0 24px 0 16px;
-  border-radius: 999px;
-  background: var(--sheet);
+  /* Calligraphy on the key art: ink serif over a brush stroke on a paper mist, no button pill. */
+  position: relative;
+  display: grid;
+  place-items: center;
+  padding: 10px 46px 22px;
   color: var(--ink);
-  font: 700 var(--fs-l)/1 var(--display);
-  box-shadow: var(--sh-2);
-  animation: tap-pulse 2.2s ease-in-out infinite;
+  font: 700 22px/1.2 var(--display);
+  letter-spacing: 0.06em;
+  background:
+    url('/art/ui/tap-stroke.webp') center bottom 4px / 78% 16px no-repeat,
+    radial-gradient(closest-side, rgba(251, 248, 242, 0.92) 50%, rgba(251, 248, 242, 0));
+  animation: tap-breathe 2.6s ease-in-out infinite;
 }
-.tap-hint .ico { width: 28px; height: 28px; }
-@keyframes tap-pulse { 50% { transform: scale(1.04); } }
+@keyframes tap-breathe { 50% { opacity: 0.62; } }
+@media (prefers-reduced-motion: reduce) { .tap-hint { animation: none; } }
 
 /* ---------- Home ---------- */
 
@@ -811,6 +812,10 @@ textarea.code-box:focus { border-color: var(--accent); }
 .ig-num { width: 38px; height: 38px; flex-shrink: 0; display: grid; place-items: center; border-radius: 7px; background: var(--accent); color: var(--on-accent); font: 700 20px/1 var(--display); transform: rotate(-6deg); }
 .ig-note { font-size: var(--fs-m); color: var(--muted); }
 @keyframes ig-fade { from { opacity: 0; transform: translateY(8px); } }
+.install-body.ig-switch .ig-lead, .install-body.ig-switch .install-step { animation: none; }
+.install-body.ig-switch .install-steps, .install-body.ig-switch .ig-note { animation: ig-swap 0.28s var(--ease) both; }
+@keyframes ig-swap { from { opacity: 0; transform: translateX(14px); } }
+@media (prefers-reduced-motion: reduce) { .install-body.ig-switch .install-steps, .install-body.ig-switch .ig-note { animation: none; } }
 @media (orientation: portrait) {
   .install-wrap { flex-direction: column; gap: 14px; margin: 4vh auto auto; }
   .install-card { width: 100%; max-width: 520px; }
@@ -827,13 +832,13 @@ textarea.code-box:focus { border-color: var(--accent); }
   align-items: center;
   justify-content: center;
   padding: calc(20px + var(--st)) 20px calc(20px + var(--sb));
-  background: var(--ink);
+  background: linear-gradient(#e9e1d0d1, #e9e1d0d1), url('/art/ui/paper.webp') center / 640px, #e9e1d0;
   color: var(--ink);
   font-family: var(--body);
 }
 /* iOS standalone can expose the root canvas below a fixed overlay near the home indicator.
  * Paint that canvas too; safe-area padding belongs to the content, not the backdrop. */
-html:has(body.vp-rotate), body.vp-rotate { background: var(--ink); }
+html:has(body.vp-rotate), body.vp-rotate { background: #e9e1d0; }
 body.vp-rotate .rotate-hint { min-height: 100vh; min-height: 100lvh; }
 body.vp-rotate .rotate-hint, body.vp-resize .size-hint { display: flex; }
 .rh-card, .vp-card {

@@ -81,7 +81,7 @@ function feltNoise(): HTMLCanvasElement {
  * Paints the whole table: wooden frame, cloth bed with lamp falloff, pocket holes,
  * cloth-covered cushions with a lit nose, diamonds and the foot spot.
  */
-export function paintTable(t: TableGeom, skin: TableSkin, pxPerM: number, railImg: HTMLImageElement | null = null, details: Partial<Record<'corner' | 'side' | 'sight', HTMLImageElement | null>> = {}): TableArt {
+export function paintTable(t: TableGeom, skin: TableSkin, pxPerM: number, railImg: HTMLImageElement | null = null, details: Partial<Record<'corner' | 'side', HTMLImageElement | null>> = {}): TableArt {
   const rail = t.railWidth;
   const hx = t.L / 2 + rail;
   const hy = t.W / 2 + rail;
@@ -278,26 +278,15 @@ export function paintTable(t: TableGeom, skin: TableSkin, pxPerM: number, railIm
     g.stroke();
   }
 
-  // --- Diamonds: vermilion seal dots, like the red marks on an ink painting ---
+  // --- Diamonds: plain white inlays like a real table, a touch larger so they read on a phone ---
   for (const dm of t.diamonds) {
-    if (details.sight) {
-      // Big and backed by a pale disc: players count diamonds to plan banks, so they must read at a glance.
-      const size = S(t.kind === 'pool' ? 0.046 : 0.034);
-      g.save();
-      g.translate(X(dm.x), Y(dm.y));
-      g.fillStyle = 'rgba(250, 244, 232, 0.88)';
-      g.beginPath();
-      g.arc(0, 0, size * 0.36, 0, Math.PI * 2);
-      g.fill();
-      if (Math.abs(dm.x) > t.L / 2) g.rotate(Math.PI / 2);
-      g.drawImage(details.sight, -size / 2, -size / 2, size, size);
-      g.restore();
-      continue;
-    }
-    g.fillStyle = '#b23a26';
+    g.fillStyle = '#f6f1e6';
+    g.strokeStyle = 'rgba(26, 23, 19, 0.35)';
+    g.lineWidth = 1;
     g.beginPath();
-    g.arc(X(dm.x), Y(dm.y), Math.max(2.4, S(0.009)), 0, Math.PI * 2);
+    g.arc(X(dm.x), Y(dm.y), Math.max(2.2, S(0.0075)), 0, Math.PI * 2);
     g.fill();
+    g.stroke();
   }
 
   return { texture: Texture.from(c), pxPerM, hx, hy };

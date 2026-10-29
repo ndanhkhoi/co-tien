@@ -316,12 +316,13 @@ export function matchScreen(opts: MatchOptions) {
       h('div.mx-pair', null, rotL, rotR),
       h('div.mx-pair', null, switchBtn, spinBtn),
     );
-    const arrow = (deg: number, label: string) => h('button.mx-btn.mx-arrow', { 'aria-label': label }, icon('turn', `rot${deg}`));
-    const upB = arrow(270, 'Dời bi lên');
-    const downB = arrow(90, 'Dời bi xuống');
-    const leftB = arrow(180, 'Dời bi sang trái');
-    const rightB = arrow(0, 'Dời bi sang phải');
-    const dpad = h('div.mx-dpad', null, h('span'), upB, h('span'), leftB, h('span.mx-dpad-c', null, icon('place')), rightB, h('span'), downB, h('span'));
+    // One painted pad (art/ui/dpad.webp); each button is a transparent quarter of it.
+    const arrow = (dir: string, label: string) => h('button.mx-dpad-b', { type: 'button', class: dir, 'aria-label': label });
+    const upB = arrow('up', 'Dời bi lên');
+    const downB = arrow('down', 'Dời bi xuống');
+    const leftB = arrow('left', 'Dời bi sang trái');
+    const rightB = arrow('right', 'Dời bi sang phải');
+    const dpad = h('div.mx-dpad', null, upB, leftB, rightB, downB);
     const placeMode = btn('Ngắm thử', () => {
       if (!placingNow() || skillPlacement) return;
       placementAim = !placementAim;
@@ -375,7 +376,8 @@ export function matchScreen(opts: MatchOptions) {
       face.style.background = hex6(sect(c.sect).main);
       const ring = h('div.mx-ring', null, face);
       const epill = h('span.mx-epill.num');
-      const ringWrap = h('div.mx-ringwrap', { 'aria-label': 'Năng lượng' }, ring, epill);
+      // Whose turn: a painted arrow bobs over the active player's portrait.
+      const ringWrap = h('div.mx-ringwrap', { 'aria-label': 'Năng lượng' }, ring, epill, h('span.mx-turnmark', { 'aria-hidden': 'true' }, icon('turn')));
       if (!hasSkills) ringWrap.classList.add('no-energy');
       const score = h('span.mx-score.num');
       const sub = h('span.mx-sub');
@@ -434,7 +436,10 @@ export function matchScreen(opts: MatchOptions) {
     // ---------- HUD (event driven) ----------
     function renderHud() {
       const cls = match.passive(match.turn);
-      passiveChip.hidden = !cls || match.current.kind !== 'human' || match.phase !== 'aim';
+      // Hide the passive only when there is none: between shots it keeps its room (just invisible)
+      // so the power bar and ĐÁNH above it never jump.
+      passiveChip.hidden = !cls;
+      passiveChip.classList.toggle('idle', match.current.kind !== 'human' || match.phase !== 'aim');
       const passiveLabels: Record<string, string> = {
         thanxa: match.aimLock ? 'Đã khoá ngắm · chạm để mở' : 'Khoá ngắm',
         cuongchien: 'Tăng lực · giảm xoáy',
@@ -478,10 +483,16 @@ export function matchScreen(opts: MatchOptions) {
           }
         }
         if (!carom && !solo) {
-          const key = match.potted[s].join(',');
+          // Eight-ball with groups set shows the player's seven balls: pocketed ones bright, the
+          // ones still on the table faded. Otherwise the balls this player has pocketed, in order.
+          const g = match.setup.mode === 'eight' ? st.groups[s] : null;
+          const tray = g
+            ? (g === 'solid' ? [1, 2, 3, 4, 5, 6, 7] : [9, 10, 11, 12, 13, 14, 15]).map((id) => ({ id, left: !!match.balls.find((b) => b.id === id)?.onTable }))
+            : match.potted[s].map((id) => ({ id, left: false }));
+          const key = tray.map((b) => `${b.id}${b.left ? '-' : ''}`).join(',');
           if (key !== c.key) {
             c.key = key;
-            c.potted.replaceChildren(...match.potted[s].map((id) => miniBall(id)));
+            c.potted.replaceChildren(...tray.map((b) => h('img.mx-pot', { src: view.ballPortrait(b.id, 36), alt: `Bi ${b.id}`, class: b.left ? 'left' : '', draggable: false })));
           }
         }
         const e = Math.round(match.energy[s]);
@@ -1934,8 +1945,18 @@ export function matchScreen(opts: MatchOptions) {
             btn(frag(icon('hint'), 'Cách điều khiển'), openHelp, 'secondary block'),
             isTouchDevice() ? null : btn(frag(icon('fullscreen'), 'Toàn màn hình'), () => void toggleFullscreen(), 'secondary block'),
             btn(frag(icon('back'), 'Thoát trận'), () => {
-              close();
-              opts.onExit();
+              // Leaving throws the match away, so ask once more.
+              modal((closeAsk) => h('div.modal.mx-modal.mx-leave-ask', null,
+                h('h2', null, 'Thoát trận?'),
+                h('p.mx-mtext', null, 'Trận đang đấu sẽ kết thúc ngay và không được tính.'),
+                h('div.actions', null,
+                  btn('Ở lại', closeAsk, 'secondary'),
+                  btn(frag(icon('back'), 'Thoát'), () => {
+                    closeAsk();
+                    close();
+                    opts.onExit();
+                  })),
+              ), { dismissable: true });
             }, 'ghost block mx-leave'),
           ),
         );
