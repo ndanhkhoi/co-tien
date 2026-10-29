@@ -187,7 +187,6 @@
   filter: drop-shadow(0 3px 8px rgba(40, 30, 18, 0.18));
 }
 .mx-skill.pressed, .mx-btn.pressed { background: none; filter: brightness(0.92); }
-.mx-skill.ready { filter: drop-shadow(0 0 0 var(--accent)) drop-shadow(0 3px 8px rgba(176, 53, 34, 0.35)); }
 .mx-btn { padding: 0; }
 .mx-btn .ico { width: 76%; height: 76%; }
 .mx-skill, .mx-btn { border-width: 8px; border-image-width: 8px; }
@@ -744,45 +743,51 @@ body.theatre #theatre {
 /* The "next land" flag sits fully above its pin so the land name stays readable. */
 .lp-flag { top: auto; bottom: calc(100% + 2px); line-height: 16px; }
 
-/* Tapped ball label: a small paper slip above the ball, gone after a moment. */
+/* Tapped ball label: a painted paper slip holding the real ball and its name. */
 .mx-balltag {
   position: absolute; z-index: 18; translate: -50% -100%; pointer-events: none;
-  display: none; align-items: center; gap: 7px; padding: 3px 12px 3px 4px;
-  background: var(--sheet); color: var(--ink); border: 1.5px solid var(--ink); border-radius: 3px;
-  font: 700 14px/1.2 var(--display); white-space: nowrap; box-shadow: 0 3px 8px rgba(26, 23, 19, 0.25);
+  display: none; align-items: center; gap: 8px; padding: 8px 22px 8px 12px;
+  background: url('/art/ui/frame/quote-wide.webp') center / 100% 100% no-repeat; color: var(--ink);
+  font: 700 16px/1.2 var(--display); white-space: nowrap; filter: drop-shadow(0 4px 8px rgba(26, 23, 19, 0.3));
 }
-.mx-balltag.show { display: inline-flex; animation: mx-balltag 1.4s ease both; }
-@keyframes mx-balltag { 0% { opacity: 0; margin-top: 4px; } 12%, 80% { opacity: 1; margin-top: 0; } 100% { opacity: 0; } }
+.mx-balltag.show { display: inline-flex; animation: mx-balltag 1.6s ease both; }
+@keyframes mx-balltag { 0% { opacity: 0; margin-top: 6px; } 12%, 82% { opacity: 1; margin-top: 0; } 100% { opacity: 0; } }
 @media (prefers-reduced-motion: reduce) { .mx-balltag.show { animation: none; } }
+.mx-bt-ball { width: 36px; height: 36px; flex-shrink: 0; filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.3)); }
 
-/* Skill nudge: a paper slip beside the ready skill, and a soft pulse on the slot itself. */
-.mx-skillnudge {
-  position: absolute; z-index: 17; display: none; translate: 0 -50%;
-  left: calc(8px + var(--sl) + var(--colL) + var(--gap));
-  max-width: 230px; min-height: var(--touch-target); padding: 6px 12px;
-  flex-direction: column; align-items: flex-start; justify-content: center; gap: 1px;
-  background: var(--sheet); color: var(--ink-2); border: 1.5px solid var(--accent); border-radius: 3px;
-  font-size: 12px; line-height: 1.25; text-align: left; box-shadow: 0 4px 12px rgba(26, 23, 19, 0.25);
+/* Ready skills wear a painted vermilion brush ring that breathes; the ultimate gets the flame ring. */
+.mx-skill .mx-sk-art { overflow: visible; border-radius: 0; background: none; }
+.mx-skill .mx-sk-img { border-radius: 10px; }
+.mx-skill.ready .mx-sk-art::before {
+  content: ''; position: absolute; inset: -6px; z-index: 1; pointer-events: none;
+  background: url('/art/ui/frame/skill-ready.webp') center / contain no-repeat;
+  animation: mx-ready-breathe 1.8s ease-in-out infinite;
 }
-.mx-skillnudge b { color: var(--accent-2); font: 700 15px/1.2 var(--display); }
-.mx-skillnudge::before { content: ''; position: absolute; left: -7px; top: 50%; width: 12px; height: 12px; translate: 0 -50%; rotate: 45deg; background: var(--sheet); border-left: 1.5px solid var(--accent); border-bottom: 1.5px solid var(--accent); }
-.mx-skillnudge.show { display: flex; animation: mx-nudge-in 0.3s var(--ease) both; }
-.lefty .mx-skillnudge { left: auto; right: calc(8px + var(--sr) + var(--colL) + var(--gap)); align-items: flex-end; text-align: right; }
-.lefty .mx-skillnudge::before { left: auto; right: -7px; border: 0; border-right: 1.5px solid var(--accent); border-top: 1.5px solid var(--accent); }
-.mx-skill.nudge { animation: mx-skill-nudge 1.1s ease-in-out 3; }
-@keyframes mx-nudge-in { from { opacity: 0; translate: -8px -50%; } }
-@keyframes mx-skill-nudge { 50% { transform: scale(1.06); } }
-@media (prefers-reduced-motion: reduce) { .mx-skillnudge.show, .mx-skill.nudge { animation: none; } }
+.mx-skill.ult.ready .mx-sk-art::before { inset: -9px; background-image: url('/art/ui/frame/ult-ready.webp'); animation: mx-ult-ready 2.4s linear infinite; }
+.mx-skill.ult.ready .mx-sk-art { animation: none; }
+.mx-skill.charging .mx-sk-art::after { border-radius: 0 0 10px 10px; }
+@keyframes mx-ready-breathe { 50% { opacity: 0.55; transform: scale(0.94); } }
+@keyframes mx-ult-ready { 0% { transform: rotate(0) scale(1); } 50% { transform: rotate(180deg) scale(1.06); } 100% { transform: rotate(360deg) scale(1); } }
+@media (prefers-reduced-motion: reduce) { .mx-skill.ready .mx-sk-art::before { animation: none; } }
 
-/* Cards in a row share their line positions: names reserve two lines, so a wrapped name never
-   pushes its subtitle, price or description below its neighbours'. */
-.champ-card .cc-name { min-height: calc(2 * 1.15em); display: flex; align-items: flex-start; justify-content: center; }
-.gc-head { align-items: flex-start; min-height: calc(2 * 1.2 * var(--fs-l) + 4px); }
-.gc-head b { padding-top: 2px; }
+/* Hold-to-spin: the large cue ball opens beside the controls while the finger is down. */
+.mx-spinpeek {
+  position: absolute; z-index: 30; display: none; width: 170px; pointer-events: none;
+  flex-direction: column; align-items: center; gap: 6px; padding: 12px 12px 10px;
+  border: 12px solid transparent; border-image: url('/art/ui/frame/panel.webp') 74 fill / 12px / 0 stretch;
+  filter: drop-shadow(0 8px 18px rgba(26, 23, 19, 0.3));
+}
+.mx-spinpeek.show { display: flex; animation: mx-peek-in 0.16s var(--ease) both; }
+.mx-spinpeek .mx-bigball { width: 122px; height: 122px; flex: none; }
+.mx-peek-cap { font: 700 12px/1.25 var(--body); color: var(--accent-2); text-align: center; }
+@keyframes mx-peek-in { from { opacity: 0; transform: scale(0.85); } }
 
-/* Wide phones scale the 16:9 frame down to about 0.76; secondary HUD lines stay at 12–13 px
-   in design units so they never drop below ~9 px on screen. */
-.mx-obj-k { font-size: 12px; }
-.mx-card .mx-line, .mx-card .mx-sub { font-size: 13px; }
-.mx-sk-name { font-size: 13px; }
-.mx-bt-ball { width: 32px; height: 32px; flex-shrink: 0; filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.3)); }
+/* The class passive reads as a control: a painted button when it can be used, a framed plate
+   showing progress when it cannot yet, never loose text. */
+#ui .mx-passive.btn { border-width: 8px; border-image-width: 8px; border-image-source: url('/art/ui/frame/btn-secondary.webp'); border-style: solid; color: var(--ink); }
+#ui .mx-passive.btn:not(:disabled) { border-image-source: url('/art/ui/frame/btn-primary.webp'); color: var(--on-accent); animation: mx-passive-ready 1.8s ease-in-out infinite; }
+#ui .mx-passive.btn:not(:disabled) .mx-passive-detail { color: var(--on-accent); }
+#ui .mx-passive:disabled { opacity: 0.82; border-image-source: url('/art/ui/frame/btn-secondary.webp'); border-width: 8px; border-style: solid; border-top: 8px solid transparent; background: none; color: var(--ink-2); }
+@keyframes mx-passive-ready { 50% { filter: brightness(1.08); transform: scale(1.03); } }
+@media (prefers-reduced-motion: reduce) { #ui .mx-passive.btn:not(:disabled) { animation: none; } }
+.mx-skill .mx-sk-art { margin: 3px 0 4px; }

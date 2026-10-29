@@ -281,22 +281,55 @@ export function matchScreen(opts: MatchOptions) {
     const rotR = h('button.mx-btn', { 'aria-label': 'Xoay cơ sang phải (giữ để xoay nhanh)' }, icon('rotate-right'));
     const switchBtn = tap(h('button.mx-btn', { 'aria-label': 'Đổi bi mục tiêu' }, icon('switch-target')), () => switchTarget());
     const spinDot = h('i.mx-cb-dot');
-    const spinBtn = tap(h('button.mx-btn.mx-spinbtn', { 'aria-label': 'Áp phê: kéo để chỉnh nhanh, chạm để chỉnh chính xác' }, h('span.mx-cueball', null, spinDot)), () => openSpin());
-    // Quick spin: drag on the small cue ball to move the tip point; a plain tap still opens the
-    // precise sheet. The point follows the finger's travel, so the ball never hides under it.
-    let spinDrag: { id: number; x: number; y: number; side: number; vert: number; live: boolean } | null = null;
+    const spinBtn = tap(h('button.mx-btn.mx-spinbtn', { 'aria-label': 'Áp phê: giữ để chỉnh nhanh trên bi lớn, chạm để mở bảng chỉnh chính xác' }, h('span.mx-cueball', null, spinDot)), () => { if (!spinBtn.dataset.held) openSpin(); });
+    // Quick spin: hold (or start dragging) the small cue ball and a large one opens beside it.
+    // The finger then steers the tip point across the large ball; letting go closes it.
+    // A plain tap still opens the precise sheet.
+    const peekTip = h('i.mx-bb-tip');
+    const peekBall = h('div.mx-bigball', { 'aria-hidden': 'true' }, h('i.mx-bb-limit'), h('i.mx-bb-h'), h('i.mx-bb-v'), peekTip);
+    const peekCap = h('div.mx-peek-cap');
+    const spinPeek = h('div.mx-spinpeek', { 'aria-hidden': 'true' }, peekBall, peekCap);
+    el.append(spinPeek);
+    let spinDrag: { id: number; x: number; y: number; side: number; vert: number; live: boolean; timer: number } | null = null;
+    const paintPeek = () => {
+      peekTip.style.left = `${50 + aim.side * 46}%`;
+      peekTip.style.top = `${50 - aim.vert * 46}%`;
+      peekCap.textContent = spinCaption();
+    };
+    const openPeek = () => {
+      if (!spinDrag || spinDrag.live) return;
+      spinDrag.live = true;
+      // Marked now: the tap handler runs before ours on release and must not open the sheet.
+      spinBtn.dataset.held = '1';
+      const k = uiScale();
+      const r = spinBtn.getBoundingClientRect();
+      const ui = document.getElementById('ui')!.getBoundingClientRect();
+      // Beside the controls column, centred on the button, kept inside the frame.
+      const size = 170;
+      const left = lefty ? (r.right - ui.left) / k + 12 : (r.left - ui.left) / k - size - 12;
+      const top = Math.max(8, Math.min(475 - size - 40, (r.top - ui.top) / k + r.height / k / 2 - size / 2));
+      spinPeek.style.left = `${left}px`;
+      spinPeek.style.top = `${top}px`;
+      paintPeek();
+      spinPeek.classList.add('show');
+      haptic(10);
+    };
     spinBtn.addEventListener('pointerdown', (e) => {
       if (e.button > 0 || !canAct()) return;
-      spinDrag = { id: e.pointerId, x: e.clientX, y: e.clientY, side: aim.side, vert: aim.vert, live: false };
+      spinDrag = { id: e.pointerId, x: e.clientX, y: e.clientY, side: aim.side, vert: aim.vert, live: false, timer: window.setTimeout(openPeek, 220) };
       spinBtn.setPointerCapture(e.pointerId);
     });
     spinBtn.addEventListener('pointermove', (e) => {
       if (!spinDrag || e.pointerId !== spinDrag.id) return;
       const dx = e.clientX - spinDrag.x;
       const dy = e.clientY - spinDrag.y;
-      if (!spinDrag.live && Math.hypot(dx, dy) <= 10) return;
-      spinDrag.live = true;
-      const span = spinBtn.getBoundingClientRect().width * 0.9;
+      if (!spinDrag.live) {
+        if (Math.hypot(dx, dy) <= 8) return;
+        clearTimeout(spinDrag.timer);
+        openPeek();
+      }
+      // Finger travel is measured against the large ball, so the whole face is in easy reach.
+      const span = 170 * uiScale() * 0.46;
       let sx = spinDrag.side + dx / span;
       let sy = spinDrag.vert - dy / span;
       const m = Math.hypot(sx, sy);
@@ -304,10 +337,16 @@ export function matchScreen(opts: MatchOptions) {
       aim.side = sx;
       aim.vert = sy;
       updateSpinDot();
+      paintPeek();
     });
     const endSpinDrag = (e: PointerEvent) => {
       if (spinDrag?.id !== e.pointerId) return;
-      if (spinDrag.live) haptic(8);
+      clearTimeout(spinDrag.timer);
+      if (spinDrag.live) {
+        haptic(8);
+        spinPeek.classList.remove('show');
+        setTimeout(() => delete spinBtn.dataset.held, 0);
+      }
       spinDrag = null;
     };
     spinBtn.addEventListener('pointerup', endSpinDrag);
