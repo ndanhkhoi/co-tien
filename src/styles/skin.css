@@ -155,7 +155,8 @@
   border-image: url('/art/ui/frame/panel.webp') 74 fill / 16px / 0 stretch;
   overflow: hidden;
 }
-.vs-stage::before { content: ''; position: absolute; inset: 0; background: var(--home-bg-abs, none) center / cover; opacity: 0.35; }
+/* Each side stands on its own tinted paper (ink grey | vermilion), split on the same slant as the match VS. */
+.vs-stage::before { content: ''; position: absolute; inset: 0; background: linear-gradient(105deg, rgba(26, 23, 19, 0.2) 0 50%, rgba(176, 53, 34, 0.26) 50%), var(--paper, none) center / 640px, #ebe2cf; }
 .vs-cut { position: absolute; bottom: -4%; height: 112%; width: 56%; object-fit: contain; filter: drop-shadow(0 6px 10px rgba(40, 30, 18, 0.3)); }
 .vs-cut.me { left: -4%; object-position: left bottom; }
 .vs-cut.foe { right: -4%; object-position: right bottom; transform: scaleX(-1); }
@@ -448,7 +449,7 @@
   content: '';
   position: absolute;
   inset: calc(-1 * var(--bleed-top, 0px)) calc(-1 * var(--bleed-right, 0px)) calc(-1 * var(--bleed-bottom, 0px)) calc(-1 * var(--bleed-left, 0px));
-  background: linear-gradient(105deg, #1a171312 0 50%, #b035221f 50%), var(--paper, none) center / 640px, var(--frame);
+  background: linear-gradient(105deg, rgba(26, 23, 19, 0.2) 0 50%, rgba(176, 53, 34, 0.26) 50%), var(--paper, none) center / 640px, var(--frame);
   z-index: -1;
 }
 
