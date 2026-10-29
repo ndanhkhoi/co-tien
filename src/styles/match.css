@@ -510,12 +510,6 @@
 .mx-res-body .actions { margin-top: auto; padding-top: 6px; }
 .mx-res-lines .kv > :first-child { color: var(--ink); }
 
-.mx-pausebox { width: min(600px, 100%); }
-.mx-pause-head { display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; }
-.mx-pause-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
-.mx-pause-col { display: flex; flex-direction: column; gap: 8px; }
-.mx-pause-col .item { min-height: 50px; padding: 2px; }
-.mx-pause-col .item > .ico { width: 28px; height: 28px; }
 .btn.mx-leave { color: var(--bad); }
 
 .mx-rules, .mx-help { max-height: 100%; }

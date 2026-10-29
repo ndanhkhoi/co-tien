@@ -485,12 +485,29 @@
 .mx-passive-name { font: 700 12px/1.2 var(--display); }
 .mx-passive-detail { font: 500 11px/1.3 var(--body); }
 #ui .mx-passive:disabled { opacity: 1; border-image: none; border: 0; border-top: 1px solid var(--line-2); background: transparent; color: var(--muted); cursor: default; }
-.mx-pausebox { width: min(680px, 100%); }
-.mx-pause-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
-#ui .mx-pause-grid > .btn { height: max(52px, var(--touch-target)); min-height: var(--touch-target); min-width: 0; font-size: 15px; padding: 0 3px; }
-.mx-pause-settings { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
-.mx-pause-settings .item { border: 0; min-height: 48px; }
-.mx-pause-settings .switch { margin-right: 4px; }
+/* Pause: the match at a glance on the left, one column of actions on the right. */
+#ui .mx-pausebox { width: min(640px, 100%); display: grid; grid-template-columns: minmax(0, 1fr) 210px; gap: 18px; align-items: stretch; }
+.mx-pause-main { min-width: 0; display: flex; flex-direction: column; gap: 12px; }
+.mx-pause-head h2 { margin: 0; font: 700 26px/1.15 var(--display); }
+.mx-pause-sub { margin-top: 3px; font-size: 13px; font-weight: 600; color: var(--muted); }
+.mx-pause-board { flex: 1; display: flex; flex-direction: column; justify-content: center; gap: 6px; padding: 10px 12px; border-radius: var(--r-2); background: var(--sheet-2); border: 1px solid var(--line); }
+.mx-ps-side { display: grid; grid-template-columns: 44px minmax(0, 1fr) auto; align-items: center; gap: 10px; }
+.mx-ps-av { width: 44px; height: 44px; border-radius: 50%; overflow: hidden; box-shadow: 0 0 0 1.5px var(--line-2); }
+.mx-ps-who { min-width: 0; display: flex; flex-direction: column; }
+.mx-ps-who b { font: 700 16px/1.2 var(--display); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.mx-ps-who span { font-size: 12px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.mx-ps-score { min-width: 40px; text-align: center; font: 700 26px/1 var(--display); color: var(--accent-2); }
+.mx-ps-vs { align-self: center; font: 700 12px/1 var(--display); letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.mx-pause-quick { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+#ui .mx-pq { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; min-width: 0; min-height: max(64px, var(--touch-target)); padding: 6px 4px; border-radius: var(--r-2); border: 1.5px solid var(--line-2); background: var(--sheet); color: var(--muted); font-size: 12px; font-weight: 700; transition: border-color 0.15s, color 0.15s, background 0.15s; }
+.mx-pq .ico { width: 26px; height: 26px; opacity: 0.45; }
+.mx-pq-state { font-size: 11px; font-weight: 700; color: var(--muted); }
+#ui .mx-pq[aria-pressed='true'] { border-color: var(--accent); color: var(--ink); background: var(--sheet-2); }
+.mx-pq[aria-pressed='true'] .ico { opacity: 1; }
+.mx-pq[aria-pressed='true'] .mx-pq-state { color: var(--accent-2); }
+.mx-pause-actions { display: flex; flex-direction: column; gap: 8px; }
+#ui .mx-pause-actions > .btn { min-width: 0; padding: 0 8px; font-size: 15px; }
+#ui .mx-pause-actions > .mx-leave { margin-top: auto; }
 /* HUD geometry follows the design frame, independent of the outer viewport height. */
 .screen.game.mx { --top-h: 72px; --face: 56px; --colL: 88px; --colR: max(112px, calc(2 * var(--touch-target) + var(--gap))); --btn: max(48px, var(--touch-target)); --gap: 5px; }
 .mx-ctrl > .mx-strike { height: 56px; flex-shrink: 0; }
@@ -767,7 +784,7 @@ body.theatre #theatre {
   opacity: 0.82;
 }
 #ui .mx-herald.show { animation: mx-herald-brush 0.38s var(--ease) both; }
-#ui .mx-h-close { position: absolute; top: 2px; right: 6px; width: 32px; height: 32px; min-width: 0; min-height: 0; padding: 5px; border-radius: 50%; background: var(--sheet); box-shadow: var(--sh-1); pointer-events: auto; }
+#ui .mx-h-close { position: absolute; top: -12px; right: -4px; width: 30px; height: 30px; min-width: 0; min-height: 0; padding: 5px; border-radius: 50%; background: var(--sheet); box-shadow: var(--sh-1); pointer-events: auto; }
 #ui .mx-h-close .ico { width: 100%; height: 100%; }
 #ui .mx-herald.leaving { display: flex; animation: mx-herald-out 0.26s ease both; }
 @keyframes mx-herald-brush { from { opacity: 0; clip-path: inset(0 100% 0 0); } to { opacity: 1; clip-path: inset(0); } }

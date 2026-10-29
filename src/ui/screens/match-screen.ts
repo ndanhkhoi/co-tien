@@ -14,7 +14,7 @@ import { haptic, isTouchDevice, keepAwake, toggleFullscreen } from '../../platfo
 import { TableView, type AimView } from '../../render/table-view';
 import type { App, Screen } from '../app';
 import { avatar } from '../avatar';
-import { btn, h, item, modal, stars, tap, toggle, uiScale } from '../dom';
+import { btn, h, modal, stars, tap, uiScale } from '../dom';
 import { clearHints, hintOnce, hintTurn } from '../hints';
 import { icon, type IconName } from '../icons';
 import { playCutIn } from '../skill-cutin';
@@ -1399,7 +1399,7 @@ export function matchScreen(opts: MatchOptions) {
             ultAnnounced[e.side] = full;
           }
           if (hasSkills && match.setup.players[e.side].kind === 'human') {
-            hintOnce(app, 'energy', 'Năng lượng', 'Vòng chân dung là năng lượng: +6 mỗi cú đánh, +11 mỗi bi vào và nhiều hơn khi cú khó (cắt mỏng, băng, bi kết, gỡ băng, nhảy bi, cú xa), +12 khi đối thủ lỗi. Cần đầy thanh (100) để dùng tuyệt chiêu.',
+            hintOnce(app, 'energy', 'Năng lượng', 'Mỗi cú +6, mỗi bi vào +11, cú khó còn thêm. Đầy vòng (100) thì dùng tuyệt chiêu.',
               { anchor: () => cards[e.side].ringWrap, place: e.side === 0 ? 'right' : 'left', alignTop: true });
           }
           break;
@@ -1501,7 +1501,7 @@ export function matchScreen(opts: MatchOptions) {
       const mode = match.setup.mode;
       if (hasSkills) {
         const side = humanSide() ?? match.turn;
-        hintOnce(app, 'energy', 'Năng lượng', 'Vòng chân dung là năng lượng: +6 mỗi cú đánh, +11 mỗi bi vào và nhiều hơn khi cú khó (cắt mỏng, băng, bi kết, gỡ băng, nhảy bi, cú xa), +12 khi đối thủ lỗi. Cần đầy thanh (100) để dùng tuyệt chiêu.',
+        hintOnce(app, 'energy', 'Năng lượng', 'Mỗi cú +6, mỗi bi vào +11, cú khó còn thêm. Đầy vòng (100) thì dùng tuyệt chiêu.',
           { anchor: () => cards[side].ringWrap, place: side === 0 ? 'right' : 'left', alignTop: true });
       }
       const beside = lefty ? 'right' : 'left';
@@ -1850,37 +1850,54 @@ export function matchScreen(opts: MatchOptions) {
       };
       const done = () => closePause();
       const closePause = modal((close) => {
+        // Quick switches: painted icon, label, on/off state; one tap flips them.
+        const quick = (ic: IconName, label: string, on: () => boolean, flip: () => void) => {
+          const b = tap(h('button.mx-pq', { type: 'button' }, icon(ic), h('span', null, label), h('b.mx-pq-state')), () => {
+            flip();
+            app.save();
+            paint();
+          });
+          const paint = () => {
+            b.setAttribute('aria-pressed', String(on()));
+            b.querySelector('.mx-pq-state')!.textContent = on() ? 'Bật' : 'Tắt';
+          };
+          paint();
+          return b;
+        };
+        // Who is at the table and how it stands, from the HUD's own cards.
+        const side = (sd: Side) => h('div.mx-ps-side', { class: sd ? 'r' : '' },
+          h('span.mx-ps-av', null, avatar(champOf(sd))),
+          h('span.mx-ps-who', null, h('b', null, nameOf(sd)), h('span', null, cards[sd].sub.textContent || '')),
+          h('span.mx-ps-score.num', null, cards[sd].score.textContent || '0'));
         const box = h('div.modal.mx-modal.mx-pausebox', null,
-          h('div.mx-pause-head', null,
-            h('h2', null, 'Tạm dừng'),
-            h('div.muted.small', null, `${opts.label} · ${MODE_NAMES[match.setup.mode]}${match.setup.mutator ? ' · có biến thể bàn' : ''}`)),
-          h('div.mx-pause-grid', null,
-            btn(frag(icon('play'), 'Tiếp tục'), done, 'block'),
-            btn(frag(icon('scroll'), 'Luật chơi'), openRules, 'ghost block'),
-            btn(frag(icon('hint'), 'Cách điều khiển'), openHelp, 'ghost block'),
-            isTouchDevice() ? null : btn(frag(icon('fullscreen'), 'Toàn màn hình'), () => void toggleFullscreen(), 'ghost block'),
+          h('div.mx-pause-main', null,
+            h('div.mx-pause-head', null,
+              h('h2', null, 'Tạm dừng'),
+              h('div.mx-pause-sub', null, `${opts.label} · ${MODE_NAMES[match.setup.mode]}${match.setup.mutator ? ' · có biến thể bàn' : ''}`)),
+            h('div.mx-pause-board', null, side(0), solo ? null : h('span.mx-ps-vs', null, 'đấu'), solo ? null : side(1)),
+            h('div.mx-pause-quick', null,
+              quick('sound', 'Âm thanh', () => s.sfx > 0, () => {
+                s.sfx = s.sfx > 0 ? 0 : 0.9;
+                app.applySettings();
+              }),
+              quick('music', 'Nhạc nền', () => s.music > 0, () => {
+                s.music = s.music > 0 ? 0 : 0.3;
+                app.applySettings();
+                if (s.music > 0) sound.startMusic();
+                else sound.stopMusic();
+              }),
+              quick('info', 'Thông báo', () => s.herald, () => {
+                s.herald = !s.herald;
+              }))),
+          h('div.mx-pause-actions', null,
+            btn(frag(icon('play'), 'Tiếp tục'), done, 'block big'),
+            btn(frag(icon('scroll'), 'Luật chơi'), openRules, 'secondary block'),
+            btn(frag(icon('hint'), 'Cách điều khiển'), openHelp, 'secondary block'),
+            isTouchDevice() ? null : btn(frag(icon('fullscreen'), 'Toàn màn hình'), () => void toggleFullscreen(), 'secondary block'),
             btn(frag(icon('back'), 'Thoát trận'), () => {
               close();
               opts.onExit();
             }, 'ghost block mx-leave'),
-          ),
-          h('div.list.mx-pause-settings', null,
-            item('Âm thanh', toggle(s.sfx > 0, (on) => {
-              s.sfx = on ? 0.9 : 0;
-              app.applySettings();
-              app.save();
-            }, 'Âm thanh'), { icon: 'sound' }),
-            item('Thông báo giữa bàn', toggle(s.herald, (on) => {
-              s.herald = on;
-              app.save();
-            }, 'Thông báo giữa bàn'), { icon: 'info', hint: 'Tắt thì chỉ còn báo lỗi và thắng ván' }),
-            item('Nhạc nền', toggle(s.music > 0, (on) => {
-              s.music = on ? 0.3 : 0;
-              app.applySettings();
-              if (on) sound.startMusic();
-              else sound.stopMusic();
-              app.save();
-            }, 'Nhạc nền'), { icon: 'music' }),
           ),
         );
         queueMicrotask(() => (pauseWrap = box.parentElement));
