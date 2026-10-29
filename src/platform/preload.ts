@@ -140,7 +140,15 @@ export async function preloadCore(champion: string, onProgress: (f: number, got:
   const whole = !saveData();
   const ok = await sync(whole ? ART : coreList(champion), 6, onProgress);
   mark(ok && whole ? 'all' : 'core');
-  if (ok && whole) void prune();
+  if (ok && whole) {
+    void prune();
+    keepStored();
+  }
+}
+
+/** Ask the browser not to evict the art under storage pressure (granted silently or not at all). */
+function keepStored() {
+  void navigator.storage?.persist?.().catch(() => undefined);
 }
 
 /** Keep the paintings every menu shows decoded in memory, so screens never paint blank. */
@@ -172,6 +180,7 @@ export function preloadBackground(champion?: string) {
       if (!ok) return;
       mark('all');
       void prune();
+      keepStored();
     });
   }, 1500);
 }
