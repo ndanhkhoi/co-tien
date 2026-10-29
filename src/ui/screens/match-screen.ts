@@ -783,7 +783,9 @@ export function matchScreen(opts: MatchOptions) {
       const refresh = () => {
         const e = Math.round(match.energy[side]);
         req.replaceChildren(ult
-          ? frag(icon('energy'), h('span', null, `Cần đầy thanh năng lượng (${ENERGY_MAX}) · đang có `, h('b.num', null, String(e))))
+          ? frag(icon('energy'), e >= ENERGY_MAX
+            ? h('span', null, 'Năng lượng đã đầy, dùng được ngay')
+            : h('span', null, `Cần đầy thanh năng lượng (${ENERGY_MAX}) · đang có `, h('b.num', null, String(e))))
           : frag(icon('cooldown'), h('span', null, `Hồi chiêu: ${sk.cooldown} lượt đánh của bạn`)));
         const why = skillBlock(side, slot);
         reason.textContent = why ?? 'Sẵn sàng';
