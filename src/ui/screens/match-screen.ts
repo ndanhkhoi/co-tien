@@ -643,7 +643,7 @@ export function matchScreen(opts: MatchOptions) {
       );
       // Any tap closes an announcement; the cross says so.
       if (thinking) heraldEl.append(icon('thinking', 'mx-h-think'));
-      else heraldEl.append(h('button.mx-h-close', { type: 'button', 'aria-label': 'Đóng thông báo' }, icon('close')));
+      else heraldEl.append(h('button.mx-h-close', { type: 'button', 'aria-label': 'Đóng thông báo' }));
       center.classList.add('heralding');
     }
     // Any touch, click or key dismisses the current announcement: the player is acting, and the

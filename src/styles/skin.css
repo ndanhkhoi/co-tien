@@ -784,8 +784,8 @@ body.theatre #theatre {
   opacity: 0.86;
 }
 #ui .mx-herald.show { animation: mx-herald-brush 0.38s var(--ease) both; }
-#ui .mx-h-close { position: absolute; top: -12px; right: -4px; width: 30px; height: 30px; min-width: 0; min-height: 0; padding: 5px; border-radius: 50%; background: var(--sheet); box-shadow: var(--sh-1); pointer-events: auto; }
-#ui .mx-h-close .ico { width: 100%; height: 100%; }
+/* The painted paper seal with a brushed cross, made for the ink band. */
+#ui .mx-h-close { position: absolute; top: -10px; right: 2px; width: 32px; height: 32px; min-width: 0; min-height: 0; padding: 0; border-radius: 50%; background: url('/art/ui/frame/close-seal.webp') center / contain no-repeat; box-shadow: none; filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.4)); pointer-events: auto; }
 #ui .mx-herald.leaving { display: flex; animation: mx-herald-out 0.26s ease both; }
 @keyframes mx-herald-brush { from { opacity: 0; clip-path: inset(0 100% 0 0); } to { opacity: 1; clip-path: inset(0); } }
 @keyframes mx-herald-out { to { opacity: 0; transform: translateY(-6px); } }
