@@ -6,6 +6,8 @@ export interface Settings {
   music: number;
   haptics: boolean;
   leftHanded: boolean;
+  /** Announcements over the table after shots and turns; fouls and rack wins always show. */
+  herald: boolean;
 }
 
 export interface Profile {
@@ -58,7 +60,7 @@ export function defaultProfile(): Profile {
     tables: ['thienquang'],
     cue: 'house',
     table: 'thienquang',
-    settings: { sfx: 0.9, music: 0.3, haptics: true, leftHanded: false },
+    settings: { sfx: 0.9, music: 0.3, haptics: true, leftHanded: false, herald: true },
     career: {},
     challenges: {},
     stats: { played: 0, won: 0, pots: 0, bestRun: 0 },
@@ -81,6 +83,7 @@ function sanitize(p: Partial<Profile>): Profile {
   if (!out.tables.includes(out.table)) out.table = 'thienquang';
   out.champions = [...new Set([...FREE_CHAMPIONS, ...(out.champions ?? []).filter((id) => CHAMPIONS.some((c) => c.id === id))])];
   if (!out.champions.includes(out.champion)) out.champion = 'tokiemnhi';
+  out.settings.herald = out.settings.herald !== false;
   out.hints = Array.isArray(out.hints) ? out.hints : [];
   out.met = Array.isArray(out.met) ? out.met : [];
   out.storyRead = out.storyRead && typeof out.storyRead === 'object' ? out.storyRead : {};

@@ -53,6 +53,8 @@ interface HeraldMsg {
   line?: string;
   tone?: 'ink' | 'red';
   ms?: number;
+  /** Shown even when the player turned announcements off (a rack won). Fouls always show. */
+  important?: boolean;
 }
 
 const DEG = Math.PI / 180;
@@ -592,6 +594,7 @@ export function matchScreen(opts: MatchOptions) {
 
     function herald(m: HeraldMsg) {
       if (disposed) return;
+      if (!app.profile.settings.herald && !m.important && m.tone !== 'red') return;
       heraldQ.push(m);
       // Old news is dropped rather than shown late.
       if (heraldQ.length > 3) heraldQ.splice(0, heraldQ.length - 3);
@@ -620,7 +623,9 @@ export function matchScreen(opts: MatchOptions) {
       heraldEl.replaceChildren(face,
         h('div.mx-h-text', null, h('div.mx-h-title', null, m.title), m.line ? h('div.mx-h-line', null, m.line) : null),
       );
+      // Any tap closes an announcement; the cross says so.
       if (thinking) heraldEl.append(icon('thinking', 'mx-h-think'));
+      else heraldEl.append(h('button.mx-h-close', { type: 'button', 'aria-label': 'Đóng thông báo' }, icon('close')));
       center.classList.add('heralding');
     }
     // Any touch, click or key dismisses the current announcement: the player is acting, and the
@@ -1438,7 +1443,7 @@ export function matchScreen(opts: MatchOptions) {
           if (!opts.challenge) {
             setExpr(w, 'joy', 5000);
             setExpr(other(w), 'sad', 5000);
-            herald({ side: w, expr: 'joy', title: `${nameOf(w)} thắng ván`, line: match.lastRes?.messages.join(' ') || undefined, ms: 3000 });
+            herald({ side: w, expr: 'joy', title: `${nameOf(w)} thắng ván`, line: match.lastRes?.messages.join(' ') || undefined, ms: 3000, important: true });
           }
           setTimeout(() => onRackOver(w), opts.challenge ? 700 : 1100);
           break;
@@ -1865,6 +1870,10 @@ export function matchScreen(opts: MatchOptions) {
               app.applySettings();
               app.save();
             }, 'Âm thanh'), { icon: 'sound' }),
+            item('Thông báo giữa bàn', toggle(s.herald, (on) => {
+              s.herald = on;
+              app.save();
+            }, 'Thông báo giữa bàn'), { icon: 'info', hint: 'Tắt thì chỉ còn báo lỗi và thắng ván' }),
             item('Nhạc nền', toggle(s.music > 0, (on) => {
               s.music = on ? 0.3 : 0;
               app.applySettings();

@@ -808,6 +808,10 @@ export function settingsScreen(app: App): Screen {
         s.leftHanded = v;
         save();
       }, 'Thuận tay trái'), { icon: 'place', hint: 'Đưa nút ĐÁNH và thanh lực sang bên trái' }),
+      item('Thông báo giữa bàn', toggle(s.herald, (v) => {
+        s.herald = v;
+        save();
+      }, 'Thông báo giữa bàn'), { icon: 'info', hint: 'Tắt thì chỉ còn báo lỗi và thắng ván. Chạm bất kỳ đâu cũng đóng thông báo.' }),
     ),
     group('Hồ sơ',
       item('Tên cơ thủ', nameInput, { icon: 'user' }),
