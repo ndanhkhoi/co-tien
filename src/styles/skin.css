@@ -748,7 +748,7 @@ body.playing .bd-scene, body.playing .bd-mist { animation-play-state: paused; }
    plates are compact, and announcements are a translucent brush stroke that passes over it. */
 .mx-card {
   position: relative; isolation: isolate;
-  gap: 8px; padding: 4px 24px 4px 2px;
+  gap: 26px; padding: 4px 24px 4px 2px;
   background: none; border: 0; border-radius: 0; box-shadow: none;
   color: var(--ink);
   transition: opacity 0.2s, transform 0.2s var(--ease);

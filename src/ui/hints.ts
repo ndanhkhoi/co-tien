@@ -103,7 +103,8 @@ function next(app: App) {
     card.classList.add('match-coach');
     slot.append(card);
   } else document.getElementById('ui')!.append(card);
-  if (item.highlight !== false) target?.classList.add('coach-target');
+  // In a match the tip sits in the top centre slot; outlining a whole column there only hides the HUD.
+  if (item.highlight !== false && !slot) target?.classList.add('coach-target');
   function place() {
     if (slot) return;
     if (!target || !target.isConnected) {
