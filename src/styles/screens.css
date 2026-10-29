@@ -764,8 +764,11 @@ textarea.code-box:focus { border-color: var(--accent); }
 
 /* ---------- Install gate ---------- */
 
-.screen.install { justify-content: center; background: var(--keyart) center / cover no-repeat, var(--frame); }
-@media (orientation: portrait) { .screen.install { background-image: var(--keyart-tall); justify-content: flex-start; } }
+/* .install-wrap centres itself with margin: auto, which falls to zero when the content is taller
+   than the screen. justify-content: center would push the overflow above the scroll origin, out
+   of reach, and the scroll hint would never clear. */
+.screen.install { background: var(--keyart) center / cover no-repeat, var(--frame); }
+@media (orientation: portrait) { .screen.install { background-image: var(--keyart-tall); } }
 .install-wrap { display: flex; align-items: center; justify-content: center; gap: 22px; width: min(900px, 100%); margin: auto; }
 /* No card behind the hero: the ink splash spills past any box. A paper mist that fades out
    keeps the logo readable over the key art without a visible edge. */
@@ -780,7 +783,7 @@ textarea.code-box:focus { border-color: var(--accent); }
   padding: 16px 20px;
 }
 .install-hero::before {
-  content: ''; position: absolute; inset: -18% -22%; z-index: -1; pointer-events: none;
+  content: ''; position: absolute; inset: -18% -10%; z-index: -1; pointer-events: none;
   background: radial-gradient(closest-side, rgba(251, 248, 242, 0.92) 55%, rgba(251, 248, 242, 0));
 }
 .ig-stamp { position: relative; width: clamp(88px, 22vh, 124px); aspect-ratio: 1; }
