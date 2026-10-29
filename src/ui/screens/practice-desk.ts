@@ -290,9 +290,10 @@ export function practiceDesk(host: DeskHost): PracticeDesk {
     const point = carom && shot.cueContacts.length >= 2;
     scored += carom ? (point ? 1 : 0) : pots.length;
     const left = match.balls.some((b) => b.onTable && b.id !== cue);
+    const feats = match.lastScore.names.join(' · ') || undefined;
     if (scratch) host.herald({ title: 'Bi cái rơi', line: 'Đặt lại bi cái rồi đánh tiếp, hoặc Đánh lại cú vừa rồi.', tone: 'red', ms: 2200 });
-    else if (point) host.herald({ title: shot.cueRailsBeforeSecond >= 3 ? 'Ghi điểm ba băng' : 'Ghi điểm', ms: 1500 });
-    else if (pots.length) host.herald({ title: pots.length > 1 ? `Vào ${pots.length} bi` : `Vào bi ${pots[0]}`, line: left ? undefined : 'Sạch bàn. Về thế đầu để luyện lại.', ms: left ? 1300 : 2400 });
+    else if (point) host.herald({ title: 'Ghi điểm', line: feats, ms: 1600 });
+    else if (pots.length) host.herald({ title: pots.length > 1 ? `Vào ${pots.length} bi` : `Vào bi ${pots[0]}`, line: [feats, left ? '' : 'Sạch bàn. Về thế đầu để luyện lại.'].filter(Boolean).join(' — ') || undefined, ms: left ? 1600 : 2400 });
     else if (shot.firstHit === null) host.herald({ title: 'Không chạm bi', ms: 1300 });
   }
 

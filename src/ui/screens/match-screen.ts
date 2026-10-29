@@ -9,7 +9,7 @@ import { other, type Resolution, type ShotCall, type Side } from '../../core/rul
 import { Rng } from '../../core/rng';
 import { type SkillDef, champion, classInfo, cutoutUrl, exprUrl, portraitUrl, sect, sectArtUrl, skillIconUrl, winUrl } from '../../game/content/sects';
 import { RULES_TEXT, SKILL_RULES } from '../../game/content/rules-text';
-import { ASSASSIN_RUN, ENERGY_MAX, Match, type MatchSetup } from '../../game/match';
+import { ASSASSIN_RUN, ASSASSIN_VALUE, ENERGY_MAX, Match, type MatchSetup } from '../../game/match';
 import { haptic, isTouchDevice, keepAwake, toggleFullscreen } from '../../platform/device';
 import { TableView, type AimView } from '../../render/table-view';
 import type { App, Screen } from '../app';
@@ -430,7 +430,7 @@ export function matchScreen(opts: MatchOptions) {
         phaptu: match.spinAxis[match.turn] === 'side' ? 'Ưu tiên áp phê ngang' : 'Ưu tiên kéo / đẩy',
         hophap: match.guardUsed[match.turn] ? 'Đã dùng băng mềm' : 'Đặt băng mềm',
         chusu: 'Cú thủ hợp lệ để lại cát',
-        anhsat: match.assassinReady[match.turn] ? (match.assassinChoice[match.turn] === 'info' ? 'Liên hoàn · xem đường' : 'Liên hoàn · thêm lực') : `Ăn liền ${ASSASSIN_RUN} bi · đang ${match.assassinStreak[match.turn]}/${ASSASSIN_RUN}`,
+        anhsat: match.assassinReady[match.turn] ? (match.assassinChoice[match.turn] === 'info' ? 'Liên hoàn · xem đường' : 'Liên hoàn · thêm lực') : `Chuỗi ${match.assassinStreak[match.turn]}/${ASSASSIN_RUN} bi · ${match.assassinValue[match.turn].toFixed(1).replace('.', ',')}/${ASSASSIN_VALUE} điểm`,
         luanhoi: 'Luân phiên chiêu · hồi nhanh',
       };
       const passiveName = cls ? classInfo(cls).name : '';
@@ -1394,7 +1394,7 @@ export function matchScreen(opts: MatchOptions) {
             ultAnnounced[e.side] = full;
           }
           if (hasSkills && match.setup.players[e.side].kind === 'human') {
-            hintOnce(app, 'energy', 'Năng lượng', 'Vòng chân dung là năng lượng: +8 mỗi cú đánh, +14 khi ăn bi, +12 khi đối thủ lỗi. Cần đầy thanh năng lượng (100) để dùng tuyệt chiêu.',
+            hintOnce(app, 'energy', 'Năng lượng', 'Vòng chân dung là năng lượng: +6 mỗi cú đánh, +11 mỗi bi vào và nhiều hơn khi cú khó (cắt mỏng, băng, bi kết, gỡ băng, nhảy bi, cú xa), +12 khi đối thủ lỗi. Cần đầy thanh (100) để dùng tuyệt chiêu.',
               { anchor: () => cards[e.side].ringWrap, place: e.side === 0 ? 'right' : 'left', alignTop: true });
           }
           break;
@@ -1469,8 +1469,11 @@ export function matchScreen(opts: MatchOptions) {
       } else if (r.winner === null && (potN > 0 || r.points > 0) && r.keepTurn) {
         sound.good();
         setExpr(side, 'joy');
-        const title = r.highlight === 'golden' ? 'Bi vàng!' : match.isCarom ? 'Ghi điểm!' : potN > 1 ? `Ăn ${potN} bi!` : 'Ăn bi!';
-        herald({ side, expr: 'joy', title, line: r.messages.join(' ') || 'Đánh tiếp' });
+        // A hard or pretty shot is named, so players see what earned the extra energy.
+        const sc = match.lastScore;
+        const title = r.highlight === 'golden' ? 'Bi vàng!' : sc.tier === 2 ? 'Tuyệt kỹ!' : sc.tier === 1 ? 'Cú đẹp!' : match.isCarom ? 'Ghi điểm!' : potN > 1 ? `Ăn ${potN} bi!` : 'Ăn bi!';
+        const feats = sc.names.join(' · ');
+        herald({ side, expr: 'joy', title, line: [feats, r.messages.join(' ')].filter(Boolean).join(' — ') || 'Đánh tiếp' });
       } else if (r.winner === null && r.messages.length) {
         if (!r.foul && (r.keepTurn || r.points)) sound.good();
         herald({ side, title: r.messages[0], line: r.messages.slice(1).join(' ') || undefined });
@@ -1493,7 +1496,7 @@ export function matchScreen(opts: MatchOptions) {
       const mode = match.setup.mode;
       if (hasSkills) {
         const side = humanSide() ?? match.turn;
-        hintOnce(app, 'energy', 'Năng lượng', 'Vòng chân dung là năng lượng: +8 mỗi cú đánh, +14 khi ăn bi, +12 khi đối thủ lỗi. Cần đầy thanh năng lượng (100) để dùng tuyệt chiêu.',
+        hintOnce(app, 'energy', 'Năng lượng', 'Vòng chân dung là năng lượng: +6 mỗi cú đánh, +11 mỗi bi vào và nhiều hơn khi cú khó (cắt mỏng, băng, bi kết, gỡ băng, nhảy bi, cú xa), +12 khi đối thủ lỗi. Cần đầy thanh (100) để dùng tuyệt chiêu.',
           { anchor: () => cards[side].ringWrap, place: side === 0 ? 'right' : 'left', alignTop: true });
       }
       const beside = lefty ? 'right' : 'left';
@@ -1898,7 +1901,7 @@ export function matchScreen(opts: MatchOptions) {
           tip('spin', 'Áp phê', 'Kéo trên bi cái nhỏ để chỉnh nhanh điểm đánh. Cần chính xác thì chạm để mở bi lớn, chạm điểm đánh hoặc chọn nhanh Giữa, Trô, Cule, Giật, Trái, Phải.'),
           tip('power', 'Lực', 'Chạm thanh lực để đặt mức, kéo lên xuống để tinh chỉnh, rồi chạm ĐÁNH. Hoặc giữ ĐÁNH cho lực dao động, thả đúng lúc; trượt ra xa để huỷ.'),
           tip('place', match.state.isBreak ? 'Đặt bi phá' : 'Đặt bi cái', 'Kéo bi cái, chạm chỗ muốn đặt, hoặc dùng 4 nút mũi tên. Chọn Ngắm thử để chỉnh hướng; Dời bi để quay lại. Bấm ĐẶT BI để chốt.'),
-          tip('energy', 'Chiêu và năng lượng', 'Chạm ô chiêu để đọc rồi bấm Dùng. Năng lượng tăng mỗi cú đánh, mỗi bi vào và khi đối thủ lỗi; cần đầy thanh năng lượng để dùng tuyệt chiêu.'),
+          tip('energy', 'Chiêu và năng lượng', 'Chạm ô chiêu để đọc rồi bấm Dùng. Năng lượng tăng mỗi cú đánh, mỗi bi vào (cú càng khó càng nhiều) và khi đối thủ lỗi; cần đầy thanh năng lượng để dùng tuyệt chiêu.'),
           tip('target', 'Gọi lỗ', 'Khi phải gọi: chạm bi (nếu cần) rồi chạm lỗ trên bàn trước khi đánh.'),
           tip('settings', 'Bàn phím', 'Mũi tên xoay (Shift = tinh), lên/xuống chỉnh lực, Tab đổi mục tiêu, Enter đánh, giữ Space nạp lực, lăn chuột xoay tinh.'),
         ),

@@ -60,8 +60,13 @@ UI (kéo/chạm bàn, nút xoay, lực, ĐÁNH) ──► Match.shoot(input)
   dữ liệu sau khi đổi tên game).
 
 Trong Tiên Đạo, mỗi bên bắt đầu ván với **30 năng lượng**, tối đa **100** (`ENERGY_MAX`). Mỗi cú
-đánh được **+8**; mỗi bi của mình vào lỗ hoặc điểm carom có mức cơ sở **+14**, rồi điều chỉnh theo chỉ
-số năng lượng của cơ và Địa Lợi. Đối thủ phạm lỗi thì được **+12**. `match.ts` phát sự kiện
+đánh được **+6** (`ENERGY_PER_SHOT`). Phần còn lại trả theo **điểm cú đánh** của `src/core/shot-score.ts`:
+mỗi bi của mình vào lỗ hoặc điểm carom là 1 điểm, cộng thêm khi cú khó hoặc đẹp (cắt mỏng từ 50°, bi băng,
+hai băng, bi kết, gỡ băng, nhảy bi, cú xa, ăn nhiều bi, carom ba băng; cú phá không có thưởng). Mỗi điểm
+được **+11** (`ENERGY_PER_VALUE`), rồi điều chỉnh theo chỉ số năng lượng của cơ và Địa Lợi. Cú lỗi không
+có điểm. Đối thủ phạm lỗi thì được **+12**. Ảnh Sát cần chuỗi ăn liền ít nhất **4 bi** (`ASSASSIN_RUN`) và
+cả chuỗi đạt **5 điểm** (`ASSASSIN_VALUE`). Thông báo sau cú vào gọi tên cú đẹp (“Cú đẹp!”, “Tuyệt kỹ!”
+kèm tên các kỹ thuật), Luyện thế cũng hiện tên đó. `match.ts` phát sự kiện
 `energy` với `side`, `gain` (phần tăng thực tế sau giới hạn) và `total`. Cổ Điển không cộng năng lượng.
 Hai chiêu thường hồi sau **2–3 lượt đánh của chính mình**; hệ Luân Hồi chỉ giảm một lượt khi dùng luân phiên hai chiêu cơ bản.
 Tuyệt chiêu cần đầy thanh năng lượng.

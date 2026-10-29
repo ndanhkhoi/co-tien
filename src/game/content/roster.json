@@ -238,7 +238,7 @@
     {
       "id": "anhsat",
       "name": "Ảnh Sát",
-      "passive": "Ăn liền 4 bi không đứt chuỗi, chọn soi đường hoặc tăng lực cho cú tiếp theo."
+      "passive": "Ăn liền ít nhất 4 bi không đứt chuỗi, cả chuỗi đạt 5 điểm cú đánh (bi thường 1 điểm, cú khó được thêm), rồi chọn soi đường hoặc tăng lực cho cú tiếp theo."
     },
     {
       "id": "luanhoi",

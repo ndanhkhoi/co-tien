@@ -4,6 +4,7 @@ import { maxSpeed, powerToSpeed } from '../core/cue-power';
 import { cloneBalls, DEFAULT_PHYS, elevatedTipOffset, step, strike, type Ball, type PhysEvent, type PhysParams, type SimWorld } from '../core/physics';
 import { canPlaceCue, nearestCueSpot, respot } from '../core/rack';
 import { canRest } from './practice';
+import { NO_SCORE, scoreShot, type ShotScore } from '../core/shot-score';
 import { Rng } from '../core/rng';
 import { RULES } from '../core/rules';
 import { groupOf } from '../core/rules/eight-ball';
@@ -16,8 +17,13 @@ import { champion, skillPower, type ClassId, type SkillDef, type SkillKind } fro
 import type { CueDef, MutatorId, TableSkin } from './content/gear';
 import { OMEN_CHANCE, rollOmen, type Omen } from './terrain';
 
-/** Balls Ảnh Sát must score in one unbroken run to choose an advantage. */
+/** Ảnh Sát's run: at least this many balls in a row… */
 export const ASSASSIN_RUN = 4;
+/** …worth this much shot value together, so four hangers alone are not enough. */
+export const ASSASSIN_VALUE = 5;
+/** Energy for every shot, and per point of shot value (1 per plain ball, more for hard shots). */
+export const ENERGY_PER_SHOT = 6;
+export const ENERGY_PER_VALUE = 11;
 
 export interface PlayerSetup {
   name: string;
@@ -151,6 +157,7 @@ export class Match {
   lastShooter: Side = 0;
   /** What happened on the last shot, for the HUD to name it. */
   lastShot: ShotSummary | null = null;
+  lastScore: ShotScore = NO_SCORE;
   /** Luyện thế: draw every ball's full path while aiming. */
   sight = false;
   private snapshot: Snapshot | null = null;
@@ -165,6 +172,8 @@ export class Match {
   assassinReady: [boolean, boolean] = [false, false];
   /** Ảnh Sát: balls scored in the current unbroken run since the last advantage was spent. */
   assassinStreak: [number, number] = [0, 0];
+  /** Ảnh Sát: shot value (see shot-score.ts) of that run. */
+  assassinValue: [number, number] = [0, 0];
   assassinChoice: ['info' | 'power', 'info' | 'power'] = ['info', 'info'];
   lastBasic: [number | null, number | null] = [null, null];
 
@@ -377,6 +386,7 @@ export class Match {
     this.guardUsed = [false, false];
     this.assassinReady = [false, false];
     this.assassinStreak = [0, 0];
+    this.assassinValue = [0, 0];
     this.lastBasic = [null, null];
     this.aimLock = null;
     this.tremor = [1, 1];
@@ -527,7 +537,7 @@ export class Match {
     this.nudgeOrigin = null;
     this.aimLock = null;
     // A spent advantage needs a fresh run of balls before it comes back.
-    if (this.assassinReady[side]) this.assassinStreak[side] = 0;
+    if (this.assassinReady[side]) this.assassinStreak[side] = this.assassinValue[side] = 0;
     this.assassinReady[side] = false;
     this.phase = 'rolling';
     this.emit({ type: 'shot', side, speed, miscue });
@@ -648,20 +658,25 @@ export class Match {
     const s = this.stats[side];
     const potted = shot.pocketed.filter((p) => p.id !== 0 && !res.respot.includes(p.id));
     for (const p of potted) this.potted[side].push(p.id);
-    const ownPots = this.ownPots(side, potted.map((p) => p.id));
+    const own = this.ownPots(side, potted.map((p) => p.id));
+    const ownPots = own.length;
     if (res.foul) s.fouls++;
     s.pots += ownPots + res.points;
-    let gain = (ownPots + res.points) * 14 * (0.8 + 0.1 * this.setup.players[side].cue.energy);
-    // Ảnh Sát earns its advantage with ASSASSIN_RUN balls in a row, not after any second pot.
-    const scored = !res.foul && res.keepTurn ? ownPots + res.points : 0;
-    this.assassinStreak[side] = scored > 0 ? this.assassinStreak[side] + scored : 0;
-    this.assassinReady[side] = this.passive(side) === 'anhsat' && scored > 0 && this.assassinStreak[side] >= ASSASSIN_RUN;
+    // Energy pays for how hard and pretty the shot was, not only for how many balls dropped.
+    const score = res.foul ? this.judgeShot([], 0, st.isBreak) : this.judgeShot(own, res.points, st.isBreak);
+    let gain = score.value * ENERGY_PER_VALUE * (0.8 + 0.1 * this.setup.players[side].cue.energy);
+    // Ảnh Sát needs an unbroken run of at least ASSASSIN_RUN balls worth ASSASSIN_VALUE together.
+    const scored = !res.foul && res.keepTurn ? score : NO_SCORE;
+    this.assassinStreak[side] = scored.count > 0 ? this.assassinStreak[side] + scored.count : 0;
+    this.assassinValue[side] = scored.count > 0 ? this.assassinValue[side] + scored.value : 0;
+    this.assassinReady[side] = this.passive(side) === 'anhsat' && scored.count > 0
+      && this.assassinStreak[side] >= ASSASSIN_RUN && this.assassinValue[side] >= ASSASSIN_VALUE;
     if (this.passive(side) === 'chusu' && !res.foul && !res.keepTurn && !res.option && res.winner === null) {
       this.activeEffects.push({ ...buildCast('sand', 1, -1, this.table, this.balls, this.cueId(side), { point: { x: cue.x, y: cue.y } }), target: opp });
     }
     if (this.homeSide(side)) gain *= 1.2;
     if (!this.setup.classic) {
-      this.gainEnergy(side, gain + 8);
+      this.gainEnergy(side, gain + ENERGY_PER_SHOT);
       if (res.foul) this.gainEnergy(opp, 12);
     }
     if (res.keepTurn && (ownPots > 0 || res.points > 0)) {
@@ -710,7 +725,9 @@ export class Match {
   private finishPracticeShot(side: Side, shot: ShotSummary) {
     const cue = this.cueBall(side);
     const scratched = !cue.onTable;
-    for (const p of shot.pocketed) if (p.id !== cue.id) this.potted[side].push(p.id);
+    const pots = shot.pocketed.filter((p) => p.id !== cue.id).map((p) => p.id);
+    this.potted[side].push(...pots);
+    this.judgeShot(scratched ? [] : pots, this.isCarom && shot.cueContacts.length >= 2 ? 1 : 0, false);
     if (scratched) {
       cue.onTable = true;
       cue.z = cue.vz = 0;
@@ -804,10 +821,19 @@ export class Match {
     this.emit({ type: 'energy', side, gain: this.energy[side] - before, total: this.energy[side] });
   }
 
-  private ownPots(side: Side, ids: number[]): number {
-    if (this.setup.mode !== 'eight') return ids.length;
+  private ownPots(side: Side, ids: number[]): number[] {
+    if (this.setup.mode !== 'eight') return ids;
     const g = this.state.groups[side];
-    return ids.filter((id) => g === null || groupOf(id) === g || id === 8).length;
+    return ids.filter((id) => g === null || groupOf(id) === g || id === 8);
+  }
+
+  /** Difficulty and beauty of the shot that just ended (see shot-score.ts). */
+  private judgeShot(counted: number[], points: number, isBreak: boolean): ShotScore {
+    this.lastScore = scoreShot({
+      table: this.table, before: this.snapshot?.balls ?? this.balls, events: this.shotEvents, cueId: this.cueId(this.state.turn),
+      counted, points, isBreak, elevation: this.shotInput?.elevation ?? 0,
+    });
+    return this.lastScore;
   }
 
   private beginTurn() {
