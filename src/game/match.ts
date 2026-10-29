@@ -38,6 +38,8 @@ export interface MatchSetup {
   /** Challenge mode: fixed layout and a custom judge instead of the rules. */
   layout?: Ball[];
   judge?: (shot: ShotSummary, balls: Ball[]) => { ok: boolean; why: string };
+  /** Luyện thế: one player arranges `layout` freely and shoots without rules or turns. */
+  practice?: boolean;
 }
 
 export interface ShotInput {
@@ -391,12 +393,12 @@ export class Match {
   }
 
   legalTargets(side: Side = this.state.turn): number[] {
-    if (this.setup.judge) return [];
+    if (this.setup.judge || this.setup.practice) return [];
     return this.rules.legalTargets(this.state, this.balls, side);
   }
 
   callType(side: Side = this.state.turn) {
-    if (this.setup.judge) return 'none' as const;
+    if (this.setup.judge || this.setup.practice) return 'none' as const;
     return this.rules.callType(this.state, this.balls, side);
   }
 
@@ -568,6 +570,7 @@ export class Match {
     const input = this.shotInput!;
     const crossed = this.balls.filter((b) => b.onTable && b.id !== 0 && b.x < this.table.headStringX).length;
     const shot = summarize(this.shotEvents, this.cueId(side), this.state.isBreak, input.call, input.pushOut, this.shotTargets, crossed);
+    if (this.setup.practice) return this.finishPracticeShot(side, shot);
     if (this.setup.judge) {
       const verdict = shot.offTable?.length
         ? { ok: false, why: 'Bi văng khỏi bàn' }
@@ -684,6 +687,75 @@ export class Match {
       Object.assign(c, nearestCueSpot(this.table, this.balls, c.id, c.x, c.y, this.placing === 'kitchen'));
     }
     this.beginTurn();
+  }
+
+  /** Luyện thế: no rules and no turns; a scratched cue ball comes back in hand anywhere. */
+  private finishPracticeShot(side: Side, shot: ShotSummary) {
+    const cue = this.cueBall(side);
+    const scratched = !cue.onTable;
+    for (const p of shot.pocketed) if (p.id !== cue.id) this.potted[side].push(p.id);
+    if (scratched) {
+      cue.onTable = true;
+      cue.z = cue.vz = 0;
+      Object.assign(cue, nearestCueSpot(this.table, this.balls, cue.id, this.table.headSpot.x, 0, false));
+    }
+    const left = this.balls.some((b) => b.onTable && b.id !== cue.id);
+    const res: Resolution = {
+      foul: null, keepTurn: true, ballInHand: scratched ? 'anywhere' : 'none', respot: [], winner: null, points: 0,
+      messages: scratched ? ['Bi cái rơi — đặt lại bi cái'] : left ? [] : ['Sạch bàn — đặt lại thế để luyện tiếp'],
+    };
+    this.lastRes = res;
+    this.lastShooter = side;
+    this.emit({ type: 'resolved', res, side });
+    this.placing = res.ballInHand;
+    this.beginTurn();
+  }
+
+  /** Luyện thế: where `id` may rest — on the cloth, clear of other balls and pocket mouths. */
+  canArrange(id: number, x: number, y: number): boolean {
+    const t = this.table;
+    if (!canPlaceCue(t, this.balls, id, x, y, false)) return false;
+    return t.pockets.every((p) => Math.hypot(x - p.hx, y - p.hy) > p.hr + t.R);
+  }
+
+  /** Luyện thế: move (or bring back) ball `id` toward (x, y); false when nothing legal is near. */
+  arrangeBall(id: number, x: number, y: number): boolean {
+    const b = this.balls.find((v) => v.id === id);
+    if (!b || !this.setup.practice || this.phase !== 'aim') return false;
+    const spot = this.arrangeSpot(id, x, y);
+    if (!spot) return false;
+    Object.assign(b, { x: spot.x, y: spot.y, z: 0, vx: 0, vy: 0, vz: 0, wx: 0, wy: 0, wz: 0, onTable: true });
+    return true;
+  }
+
+  /** Nearest spot to (x, y) where `id` may rest, by spiral search; null on a full table. */
+  private arrangeSpot(id: number, x: number, y: number): { x: number; y: number } | null {
+    const t = this.table;
+    const cx = Math.max(-t.L / 2, Math.min(t.L / 2, x));
+    const cy = Math.max(-t.W / 2, Math.min(t.W / 2, y));
+    if (this.canArrange(id, cx, cy)) return { x: cx, y: cy };
+    for (let r = 0.004; r < t.L; r += 0.004) {
+      for (let a = 0; a < 32; a++) {
+        const px = cx + Math.cos((a / 32) * Math.PI * 2) * r;
+        const py = cy + Math.sin((a / 32) * Math.PI * 2) * r;
+        if (this.canArrange(id, px, py)) return { x: px, y: py };
+      }
+    }
+    return null;
+  }
+
+  /** Luyện thế: take an object ball off the cloth. The cue ball always stays. */
+  removeBall(id: number) {
+    const b = this.balls.find((v) => v.id === id);
+    if (!b || id === this.cueId() || !this.setup.practice || this.phase !== 'aim') return;
+    b.onTable = false;
+  }
+
+  /** Luyện thế: the current arrangement becomes the position "Đặt lại thế" returns to. */
+  saveLayout() {
+    if (!this.setup.practice) return;
+    this.setup.layout = cloneBalls(this.balls);
+    this.placing = 'none';
   }
 
   private gainEnergy(side: Side, amount: number) {

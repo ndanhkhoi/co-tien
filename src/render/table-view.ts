@@ -464,6 +464,12 @@ export class TableView {
       }
     }
     if (m.eagle || m.passiveInfo || m.activeEffects.some(e => e.target === m.turn)) {
+      // The simulated paths follow the chosen power, spin and terrain, so they move when the
+      // power changes. Keep the straight aim to the ghost ball as a fixed reference beneath
+      // them; otherwise a power change reads as the aim itself drifting.
+      const ref = predictAim(t, m.balls, m.cueId(), aim!.angle, m.obstacles());
+      g.moveTo(cue.x + dx * R, cue.y + dy * R).lineTo(ref.gx - dx * R, ref.gy - dy * R).stroke({ width: 1, color: 0xffffff, alpha: 0.45 });
+      g.circle(ref.gx, ref.gy, R).stroke({ width: 1, color: 0xffffff, alpha: 0.5 });
       this.drawEagle(aim!);
       return;
     }

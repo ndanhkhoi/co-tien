@@ -7,14 +7,14 @@ import { ballCss } from '../../core/ball-styles';
 import { MODE_NAMES } from '../../core/rules';
 import { other, type Resolution, type ShotCall, type Side } from '../../core/rules/types';
 import { Rng } from '../../core/rng';
-import { type SkillDef, champion, classInfo, exprUrl, portraitUrl, sect, skillIconUrl, winUrl } from '../../game/content/sects';
+import { type SkillDef, champion, classInfo, cutoutUrl, exprUrl, portraitUrl, sect, sectArtUrl, skillIconUrl, winUrl } from '../../game/content/sects';
 import { RULES_TEXT, SKILL_RULES } from '../../game/content/rules-text';
 import { ENERGY_MAX, Match, type MatchSetup } from '../../game/match';
 import { haptic, isTouchDevice, keepAwake, toggleFullscreen } from '../../platform/device';
 import { TableView, type AimView } from '../../render/table-view';
 import type { App, Screen } from '../app';
 import { avatar } from '../avatar';
-import { btn, h, item, modal, stars, tap, toggle, uiScale } from '../dom';
+import { btn, h, item, modal, stars, tap, toast, toggle, uiScale } from '../dom';
 import { clearHints, hintOnce } from '../hints';
 import { icon, type IconName } from '../icons';
 import { playCutIn } from '../skill-cutin';
@@ -36,6 +36,8 @@ export interface MatchOptions {
   /** Match end: return reward lines to show and optional actions. */
   onEnd?: (r: MatchResult) => { lines: string[]; again?: () => void };
   onExit: () => void;
+  /** Luyện thế: the left column becomes the arrangement panel; no rules, no opponent. */
+  practice?: boolean;
 }
 
 type Expr = 'focus' | 'joy' | 'sad' | 'cast';
@@ -91,6 +93,8 @@ export function matchScreen(opts: MatchOptions) {
     const rng = new Rng();
     const lefty = app.profile.settings.leftHanded;
     const hasSkills = !opts.challenge && !match.setup.classic;
+    /** One player against the table: challenges and Luyện thế. */
+    const solo = !!(opts.challenge || opts.practice);
 
     // ---------- Aim / input state ----------
     const aim = { angle: 0, side: 0, vert: 0, elevation: 0 };
@@ -157,6 +161,12 @@ export function matchScreen(opts: MatchOptions) {
     let paused = false;
     let pauseWrap: HTMLElement | null = null;
     let attempt = 1;
+    /** Luyện thế: laying out balls (true) or shooting (false), and the ball last touched. */
+    let arranging = !!opts.practice;
+    let picked: number | null = null;
+    /** Skill nudges: own turns since the human last cast, and whether a full bar was announced. */
+    const skillIdle: [number, number] = [0, 0];
+    const ultAnnounced: [boolean, boolean] = [false, false];
     let lastTick = 0;
     let showAiCue = false;
     let targetIdx = -1;
@@ -167,7 +177,7 @@ export function matchScreen(opts: MatchOptions) {
     let powerKey = '';
 
     const isHumanTurn = () => match.current.kind === 'human' && !aiActing;
-    const canAct = () => isHumanTurn() && match.phase === 'aim' && strikeT === 0 && !paused && !presenting;
+    const canAct = () => !arranging && isHumanTurn() && match.phase === 'aim' && strikeT === 0 && !paused && !presenting;
     const canInspectSkills = () => !presenting && !paused && strikeT === 0;
     const placingNow = () => canAct() && (!!skillPlacement || match.canMoveCue && !placeConfirmed);
     const canAdjustAim = () => canAct() && !skillPlacement && (!placingNow() || placementAim);
@@ -194,7 +204,7 @@ export function matchScreen(opts: MatchOptions) {
     const heraldEl = h('div.mx-herald', { role: 'status', 'aria-live': 'polite' });
     const center = h('div.mx-center', null, objPlate);
     const topBar = h('div.mx-top', null, pauseBtn, cards[0].el, center, cards[1].el);
-    if (opts.challenge) cards[1].el.style.visibility = 'hidden';
+    if (solo) cards[1].el.style.visibility = 'hidden';
 
     // Skill dock.
     const slots = [0, 1, 2].map((slot) => {
@@ -207,12 +217,101 @@ export function matchScreen(opts: MatchOptions) {
     const dock = h('div.mx-col.mx-dock', { 'aria-label': 'Chiêu thức' }, ...slots.map((s) => s.b));
     if (!hasSkills) dock.style.display = 'none';
 
+    // Luyện thế panel, in the skill column (practice has no skills).
+    const objectIds = match.balls.map((b) => b.id).filter((id) => id !== match.cueId());
+    const arrangeToggle = btn('Xong · Đánh', () => setArranging(!arranging));
+    const pickedInfo = h('div.mx-pr-picked', { 'aria-live': 'polite' });
+    const countInfo = h('div.mx-pr-count.num');
+    const addBall = btn('Thêm bi', () => {
+      const next = objectIds.find((id) => !match.balls.find((b) => b.id === id)!.onTable);
+      if (next === undefined) return;
+      const t = match.table;
+      if (match.arrangeBall(next, t.footSpot.x, t.footSpot.y)) {
+        picked = next;
+        view.resync();
+        sound.tap();
+      } else toast('Bàn đã kín, không còn chỗ đặt bi', 'bad');
+      renderHud();
+    }, 'secondary');
+    const removeBall = btn('Cất bi', () => {
+      if (picked === null) return;
+      match.removeBall(picked);
+      picked = null;
+      view.resync();
+      renderHud();
+    }, 'ghost');
+    const resetLayout = btn('Đặt lại thế', () => {
+      match.retryLayout();
+      aimFirstTarget();
+      renderHud();
+    }, 'secondary');
+    for (const b of [arrangeToggle, addBall, removeBall, resetLayout]) b.classList.add('small');
+    if (opts.practice) {
+      dock.style.display = '';
+      dock.classList.add('mx-practice');
+      dock.setAttribute('aria-label', 'Luyện thế');
+      dock.replaceChildren(arrangeToggle, pickedInfo, countInfo, addBall, removeBall, resetLayout);
+    }
+    function setArranging(on: boolean) {
+      if (on === arranging || match.phase !== 'aim') return;
+      arranging = on;
+      picked = null;
+      if (!on) {
+        match.saveLayout();
+        aimFirstTarget();
+      }
+      sound.tap();
+      renderHud();
+    }
+    function renderPractice() {
+      if (!opts.practice) return;
+      const live = objectIds.filter((id) => match.balls.find((b) => b.id === id)!.onTable).length;
+      arrangeToggle.textContent = arranging ? 'Xong · Đánh' : 'Xếp bi';
+      arrangeToggle.classList.toggle('ghost', !arranging);
+      pickedInfo.replaceChildren(...(picked !== null ? [miniBall(picked), `Bi ${picked}`] : ['Chạm bi để chọn']));
+      countInfo.textContent = `Trên bàn ${live}/${objectIds.length}`;
+      for (const b of [pickedInfo, countInfo, addBall, removeBall]) b.hidden = !arranging;
+      resetLayout.hidden = arranging;
+      addBall.disabled = live >= objectIds.length;
+      removeBall.disabled = picked === null;
+    }
+
     // Controls column.
     const rotL = h('button.mx-btn', { 'aria-label': 'Xoay cơ sang trái (giữ để xoay nhanh)' }, icon('rotate-left'));
     const rotR = h('button.mx-btn', { 'aria-label': 'Xoay cơ sang phải (giữ để xoay nhanh)' }, icon('rotate-right'));
     const switchBtn = tap(h('button.mx-btn', { 'aria-label': 'Đổi bi mục tiêu' }, icon('switch-target')), () => switchTarget());
     const spinDot = h('i.mx-cb-dot');
-    const spinBtn = tap(h('button.mx-btn.mx-spinbtn', { 'aria-label': 'Áp phê: chọn điểm đánh trên bi cái' }, h('span.mx-cueball', null, spinDot)), () => openSpin());
+    const spinBtn = tap(h('button.mx-btn.mx-spinbtn', { 'aria-label': 'Áp phê: kéo để chỉnh nhanh, chạm để chỉnh chính xác' }, h('span.mx-cueball', null, spinDot)), () => openSpin());
+    // Quick spin: drag on the small cue ball to move the tip point; a plain tap still opens the
+    // precise sheet. The point follows the finger's travel, so the ball never hides under it.
+    let spinDrag: { id: number; x: number; y: number; side: number; vert: number; live: boolean } | null = null;
+    spinBtn.addEventListener('pointerdown', (e) => {
+      if (e.button > 0 || !canAct()) return;
+      spinDrag = { id: e.pointerId, x: e.clientX, y: e.clientY, side: aim.side, vert: aim.vert, live: false };
+      spinBtn.setPointerCapture(e.pointerId);
+    });
+    spinBtn.addEventListener('pointermove', (e) => {
+      if (!spinDrag || e.pointerId !== spinDrag.id) return;
+      const dx = e.clientX - spinDrag.x;
+      const dy = e.clientY - spinDrag.y;
+      if (!spinDrag.live && Math.hypot(dx, dy) <= 10) return;
+      spinDrag.live = true;
+      const span = spinBtn.getBoundingClientRect().width * 0.9;
+      let sx = spinDrag.side + dx / span;
+      let sy = spinDrag.vert - dy / span;
+      const m = Math.hypot(sx, sy);
+      if (m > 1) { sx /= m; sy /= m; }
+      aim.side = sx;
+      aim.vert = sy;
+      updateSpinDot();
+    });
+    const endSpinDrag = (e: PointerEvent) => {
+      if (spinDrag?.id !== e.pointerId) return;
+      if (spinDrag.live) haptic(8);
+      spinDrag = null;
+    };
+    spinBtn.addEventListener('pointerup', endSpinDrag);
+    spinBtn.addEventListener('pointercancel', endSpinDrag);
     const aimPad = h('div.mx-pad', null,
       h('div.mx-pair', null, rotL, rotR),
       h('div.mx-pair', null, switchBtn, spinBtn),
@@ -350,9 +449,11 @@ export function matchScreen(opts: MatchOptions) {
       for (const s of [0, 1] as Side[]) {
         const c = cards[s];
         c.el.classList.toggle('active', match.turn === s && match.phase !== 'match-over');
-        c.score.textContent = opts.challenge ? `${attempt}/${opts.challenge.tries}` : carom ? `${st.scores[s]}/${st.caromTarget}` : String(match.rackWins[s]);
+        c.score.textContent = opts.practice ? String(match.potted[s].length) : opts.challenge ? `${attempt}/${opts.challenge.tries}` : carom ? `${st.scores[s]}/${st.caromTarget}` : String(match.rackWins[s]);
         c.sub.replaceChildren();
-        if (opts.challenge) {
+        if (opts.practice) {
+          c.sub.append('bi đã ăn');
+        } else if (opts.challenge) {
           c.sub.append('lượt thử');
         } else if (match.setup.mode === 'eight') {
           const g = st.groups[s];
@@ -373,7 +474,7 @@ export function matchScreen(opts: MatchOptions) {
             if (lo) c.sub.append('Bi', miniBall(lo));
           }
         }
-        if (!carom && !opts.challenge) {
+        if (!carom && !solo) {
           const key = match.potted[s].join(',');
           if (key !== c.key) {
             c.key = key;
@@ -390,9 +491,10 @@ export function matchScreen(opts: MatchOptions) {
         const id = match.balls.filter((b) => b.onTable && b.id > 0).reduce((lo, b) => Math.min(lo, b.id), Infinity);
         nextBall.replaceChildren('Bi tiếp theo', Number.isFinite(id) ? miniBall(id) : '', Number.isFinite(id) ? String(id) : 'Hết bi');
       } else nextBall.hidden = true;
-      objKicker.textContent = opts.challenge ? opts.label : `${MODE_NAMES[match.setup.mode]} · chạm ${match.setup.raceTo} · ván ${match.rackNo}`;
-      objText.textContent = opts.challenge ? opts.challenge.goal : match.setup.mode === 'carom-3c' ? 'Chạm bi thứ nhất, đủ 3 băng trước bi thứ hai.' : match.objective();
+      objKicker.textContent = solo ? opts.label : `${MODE_NAMES[match.setup.mode]} · chạm ${match.setup.raceTo} · ván ${match.rackNo}`;
+      objText.textContent = opts.practice ? (arranging ? 'Kéo bi để xếp thế, xong thì chạm Xong · Đánh' : 'Đánh tự do · bi cái rơi được đặt lại') : opts.challenge ? opts.challenge.goal : match.setup.mode === 'carom-3c' ? 'Chạm bi thứ nhất, đủ 3 băng trước bi thứ hai.' : match.objective();
       renderSkills();
+      renderPractice();
       renderChips();
       renderControls();
       skillSheet?.refresh();
@@ -523,7 +625,11 @@ export function matchScreen(opts: MatchOptions) {
       if (thinkingSide !== null) {
         showHerald({ side: thinkingSide, expr: 'focus', title: `${nameOf(thinkingSide)} đang tính…` }, true);
       } else {
-        heraldEl.className = 'mx-herald';
+        // Fade the stroke away instead of cutting it off.
+        heraldEl.className = heraldEl.classList.contains('show') ? 'mx-herald leaving' : 'mx-herald';
+        setTimeout(() => {
+          if (heraldEl.classList.contains('leaving')) heraldEl.className = 'mx-herald';
+        }, 260);
         center.classList.remove('heralding');
       }
     }
@@ -924,10 +1030,11 @@ export function matchScreen(opts: MatchOptions) {
 
     // ---------- Pointer input on the table ----------
     const canvas = app.pixi.canvas;
-    let drag: { id: number; mode: 'aim' | 'cue'; sx: number; sy: number; lastA: number; moved: boolean; cue0: { x: number; y: number }; p0: { x: number; y: number } } | null = null;
+    let drag: { id: number; mode: 'aim' | 'cue' | 'arrange'; ball?: number; sx: number; sy: number; lastA: number; moved: boolean; cue0: { x: number; y: number }; p0: { x: number; y: number } } | null = null;
 
     const onDown = (e: PointerEvent) => {
       sound.unlock();
+      if (arranging && !paused && !drag && match.phase === 'aim') return arrangeDown(e);
       if (!canAct() || charging || drag) return;
       const p = view.toTable(e.clientX, e.clientY);
       const t = match.table;
@@ -958,6 +1065,12 @@ export function matchScreen(opts: MatchOptions) {
       canvas.setPointerCapture(e.pointerId);
     };
     const onMove = (e: PointerEvent) => {
+      if (drag?.mode === 'arrange' && e.pointerId === drag.id && arranging) {
+        const p = view.toTable(e.clientX, e.clientY);
+        match.arrangeBall(drag.ball!, drag.cue0.x + p.x - drag.p0.x, drag.cue0.y + p.y - drag.p0.y);
+        drag.moved = true;
+        return;
+      }
       if (!drag || e.pointerId !== drag.id || !canAct()) return;
       if (!drag.moved && Math.hypot(e.clientX - drag.sx, e.clientY - drag.sy) < 6) return;
       drag.moved = true;
@@ -984,6 +1097,7 @@ export function matchScreen(opts: MatchOptions) {
       if (!drag || e.pointerId !== drag.id) return;
       const d = drag;
       drag = null;
+      if (d.mode === 'arrange') return;
       if (d.moved || !canAct() || e.type === 'pointercancel') return;
       // A tap: place the ball there, aim straight at a tapped ball, or aim at the tapped spot.
       const p = view.toTable(e.clientX, e.clientY);
@@ -999,6 +1113,7 @@ export function matchScreen(opts: MatchOptions) {
         .sort((a, b) => Math.hypot(p.x - a.x, p.y - a.y) - Math.hypot(p.x - b.x, p.y - b.y))[0];
       if (hit) {
         aimAt(hit);
+        showBallTag(hit.id);
         const list = targetList();
         targetIdx = Math.max(-1, list.findIndex((b) => b.id === hit.id));
         haptic(8);
@@ -1006,6 +1121,45 @@ export function matchScreen(opts: MatchOptions) {
         aimAt(p);
       }
     };
+    /** A tapped ball names itself for a moment, just above it on the cloth. */
+    const ballTag = h('div.mx-balltag', { 'aria-live': 'polite' });
+    el.append(ballTag);
+    let ballTagTimer = 0;
+    function showBallTag(id: number) {
+      const b = match.balls.find((x) => x.id === id);
+      if (!b) return;
+      const k = uiScale();
+      const at = view.toScreen(b.x, b.y);
+      const rect = document.getElementById('ui')!.getBoundingClientRect();
+      const label = id === match.cueId() ? 'Bi cái' : match.isCarom ? (id === 2 ? 'Bi đỏ' : 'Bi đối thủ') : `Bi ${id}`;
+      ballTag.replaceChildren(id === match.cueId() || match.isCarom ? '' : miniBall(id), label);
+      ballTag.style.left = `${(at.x - rect.left) / k}px`;
+      ballTag.style.top = `${(at.y - rect.top) / k - match.table.R * view.pxPerM / k - 6}px`;
+      ballTag.classList.remove('show');
+      void ballTag.offsetWidth;
+      ballTag.classList.add('show');
+      clearTimeout(ballTagTimer);
+      ballTagTimer = window.setTimeout(() => ballTag.classList.remove('show'), 1400);
+    }
+
+    /** Luyện thế: grab the nearest ball and drag it, or tap the cloth to move the picked ball there. */
+    function arrangeDown(e: PointerEvent) {
+      const p = view.toTable(e.clientX, e.clientY);
+      const grab = Math.max(match.table.R * 1.8, 22 / view.pxPerM);
+      const hit = match.balls
+        .filter((b) => b.onTable && Math.hypot(p.x - b.x, p.y - b.y) < grab)
+        .sort((a, b) => Math.hypot(p.x - a.x, p.y - a.y) - Math.hypot(p.x - b.x, p.y - b.y))[0];
+      if (hit) {
+        picked = hit.id;
+        showBallTag(hit.id);
+        drag = { id: e.pointerId, mode: 'arrange', ball: hit.id, sx: e.clientX, sy: e.clientY, moved: false, lastA: 0, cue0: { x: hit.x, y: hit.y }, p0: p };
+        canvas.setPointerCapture(e.pointerId);
+        haptic(8);
+      } else if (picked !== null) {
+        match.arrangeBall(picked, p.x, p.y);
+      }
+      renderHud();
+    }
     canvas.addEventListener('pointerdown', onDown);
     canvas.addEventListener('pointermove', onMove);
     canvas.addEventListener('pointerup', onUp);
@@ -1059,14 +1213,20 @@ export function matchScreen(opts: MatchOptions) {
 
     // ---------- Power bar: drag to set the power ----------
     let barId: number | null = null;
-    const setBar = (e: PointerEvent) => {
-      const r = powerTrack.getBoundingClientRect();
-      preset = Math.max(0.05, Math.min(1, 1 - (e.clientY - r.top) / r.height));
+    const setPreset = (v: number) => {
+      preset = Math.max(0.05, Math.min(1, v));
       const lvl = Math.floor(preset * 10);
       if (lvl !== lastTick) {
         lastTick = lvl;
         sound.tick(preset);
       }
+    };
+    // A tap sets the power where it lands; a drag fine-tunes from the current value at a
+    // reduced rate (the full track height is worth about two thirds of the range).
+    let barDrag: { y: number; from: number; moved: boolean } | null = null;
+    const trackLevel = (e: PointerEvent) => {
+      const r = powerTrack.getBoundingClientRect();
+      return 1 - (e.clientY - r.top) / r.height;
     };
     powerBar.addEventListener('pointerdown', (e) => {
       if (!canAct() || placingNow() || charging || barId !== null) return;
@@ -1074,11 +1234,19 @@ export function matchScreen(opts: MatchOptions) {
       barId = e.pointerId;
       powerBar.setPointerCapture(barId);
       barActive = true;
-      setBar(e);
+      barDrag = { y: e.clientY, from: preset, moved: false };
     });
-    powerBar.addEventListener('pointermove', (e) => e.pointerId === barId && canAct() && setBar(e));
+    powerBar.addEventListener('pointermove', (e) => {
+      if (e.pointerId !== barId || !barDrag || !canAct()) return;
+      const dy = e.clientY - barDrag.y;
+      if (!barDrag.moved && Math.abs(dy) < 4) return;
+      barDrag.moved = true;
+      setPreset(barDrag.from - dy / (powerTrack.getBoundingClientRect().height * 1.5));
+    });
     const barEnd = (e: PointerEvent) => {
       if (e.pointerId !== barId) return;
+      if (barDrag && !barDrag.moved && e.type === 'pointerup' && canAct()) setPreset(trackLevel(e));
+      barDrag = null;
       barId = null;
       barActive = false;
     };
@@ -1227,11 +1395,21 @@ export function matchScreen(opts: MatchOptions) {
         case 'energy':
           floatGain(e.side, e.gain);
           if (hasSkills && match.setup.players[e.side].kind === 'human') {
+            const full = e.total >= ENERGY_MAX;
+            if (full && !ultAnnounced[e.side]) {
+              const ult = champion(champOf(e.side)).skills[2];
+              herald({ side: e.side, expr: 'focus', title: 'Tuyệt chiêu đã đầy', line: `${ult.name} — chạm ô tuyệt chiêu để chuẩn bị`, ms: 3200 });
+            }
+            ultAnnounced[e.side] = full;
+          }
+          if (hasSkills && match.setup.players[e.side].kind === 'human') {
             hintOnce(app, 'energy', 'Năng lượng', 'Vòng chân dung là năng lượng: +8 mỗi cú đánh, +14 khi ăn bi, +12 khi đối thủ lỗi. Cần đầy thanh năng lượng (100) để dùng tuyệt chiêu.',
               { anchor: () => cards[e.side].ringWrap, place: e.side === 0 ? 'right' : 'left', alignTop: true });
           }
           break;
         case 'skill': {
+          skillIdle[e.side] = 0;
+          hideSkillNudge();
           if (e.slot !== 2) sound.skill(); // the ultimate cut-in plays its own gong
           if (e.slot === 2) pendingUltimate = { champion: e.champion, skill: e.skill, side: e.side };
           setExpr(e.side, 'cast', 2400);
@@ -1313,7 +1491,7 @@ export function matchScreen(opts: MatchOptions) {
 
     /** First-time explanations, queued in the top strip, outside the playing surface. */
     function coachTurn() {
-      if (opts.challenge) return;
+      if (solo) return;
       const mode = match.setup.mode;
       if (hasSkills) {
         const side = humanSide() ?? match.turn;
@@ -1368,11 +1546,40 @@ export function matchScreen(opts: MatchOptions) {
         aimFirstTarget();
         if (match.canMoveCue) {
           const placingTitle = match.state.isBreak ? 'Đặt bi phá' : 'Đặt bi cái';
-          herald({ side, title: changed ? `Lượt của ${nameOf(side)}` : placingTitle, line: `${placingTitle} — dời bi, Ngắm thử, rồi ĐẶT BI` });
+          herald({ side, title: changed && !solo ? `Lượt của ${nameOf(side)}` : placingTitle, line: `${placingTitle} — dời bi, Ngắm thử, rồi ĐẶT BI` });
         }
-        else if (changed) herald({ side, title: `Lượt của ${nameOf(side)}`, line: match.objective() });
+        else if (changed && !solo) herald({ side, title: `Lượt của ${nameOf(side)}`, line: match.objective() });
         coachTurn();
+        if (hasSkills) {
+          // Players used to plain billiards forget their kit: after a turn without casting,
+          // point at a ready skill once the turn announcement has had its moment.
+          const idle = skillIdle[side]++;
+          if (idle >= 1) setTimeout(() => nudgeSkill(side), 1900);
+        }
       }
+    }
+
+    const skillNudge = h('button.mx-skillnudge', { type: 'button' });
+    el.append(skillNudge);
+    let nudgeTimer = 0;
+    function hideSkillNudge() {
+      clearTimeout(nudgeTimer);
+      skillNudge.classList.remove('show');
+      slots.forEach((s) => s.b.classList.remove('nudge'));
+    }
+    function nudgeSkill(side: Side) {
+      if (disposed || match.turn !== side || !canAct() || skillSheet) return;
+      const ready = champion(champOf(side)).skills.filter((sk) => match.canUseSkill(side, sk.slot));
+      const sk = ready.find((x) => x.slot === 2) ?? ready[0];
+      if (!sk) return;
+      const slot = slots[sk.slot].b;
+      skillNudge.replaceChildren(h('b', null, sk.name), sk.slot === 2 ? 'Tuyệt chiêu sẵn sàng · chạm để dùng' : 'Chiêu sẵn sàng · chạm để dùng');
+      skillNudge.onclick = () => { hideSkillNudge(); openSkill(sk.slot); };
+      skillNudge.style.top = `${slot.offsetTop + dock.offsetTop + slot.offsetHeight / 2}px`;
+      skillNudge.classList.add('show');
+      slot.classList.add('nudge');
+      clearTimeout(nudgeTimer);
+      nudgeTimer = window.setTimeout(hideSkillNudge, 4500);
     }
 
     // ---------- AI ----------
@@ -1689,8 +1896,8 @@ export function matchScreen(opts: MatchOptions) {
         h('div.mx-help-grid', null,
           tip('rotate-right', 'Ngắm', 'Kéo trên bàn để xoay cơ; kéo xa bi cái thì xoay chậm, tinh. Chạm một bi để ngắm thẳng. Nút xoay: chạm = 0,1°, giữ = xoay nhanh dần.'),
           tip('switch-target', 'Đổi mục tiêu', 'Nhảy lần lượt qua các bi hợp lệ: bi nhỏ nhất ở 9/10 bi, bi nhóm mình ở 8 bi.'),
-          tip('spin', 'Áp phê', 'Chạm bi cái nhỏ để mở bi lớn, chạm điểm đánh hoặc chọn nhanh Giữa, Trô, Cule, Giật, Trái, Phải.'),
-          tip('power', 'Lực', 'Kéo thanh lực để chọn lực rồi chạm ĐÁNH. Hoặc giữ ĐÁNH cho lực dao động, thả đúng lúc; trượt ra xa để huỷ.'),
+          tip('spin', 'Áp phê', 'Kéo trên bi cái nhỏ để chỉnh nhanh điểm đánh. Cần chính xác thì chạm để mở bi lớn, chạm điểm đánh hoặc chọn nhanh Giữa, Trô, Cule, Giật, Trái, Phải.'),
+          tip('power', 'Lực', 'Chạm thanh lực để đặt mức, kéo lên xuống để tinh chỉnh, rồi chạm ĐÁNH. Hoặc giữ ĐÁNH cho lực dao động, thả đúng lúc; trượt ra xa để huỷ.'),
           tip('place', match.state.isBreak ? 'Đặt bi phá' : 'Đặt bi cái', 'Kéo bi cái, chạm chỗ muốn đặt, hoặc dùng 4 nút mũi tên. Chọn Ngắm thử để chỉnh hướng; Dời bi để quay lại. Bấm ĐẶT BI để chốt.'),
           tip('energy', 'Chiêu và năng lượng', 'Chạm ô chiêu để đọc rồi bấm Dùng. Năng lượng tăng mỗi cú đánh, mỗi bi vào và khi đối thủ lỗi; cần đầy thanh năng lượng để dùng tuyệt chiêu.'),
           tip('target', 'Gọi lỗ', 'Khi phải gọi: chạm bi (nếu cần) rồi chạm lỗ trên bàn trước khi đánh.'),
@@ -1814,7 +2021,7 @@ export function matchScreen(opts: MatchOptions) {
           renderControls();
         }
       }
-      const humanAim = match.phase === 'aim' && (isHumanTurn() || showAiCue);
+      const humanAim = !arranging && match.phase === 'aim' && (isHumanTurn() || showAiCue);
       // Preview the cue while aiming in hand, while confirmation still gates shooting.
       const showCue = (humanAim || strikeT > 0) && (!placingNow() || !skillPlacement && placementAim);
       const ct = match.callType();
@@ -1878,12 +2085,15 @@ export function matchScreen(opts: MatchOptions) {
       onTurn();
       renderHud();
     };
-    if (opts.challenge) begin();
+    if (solo) begin();
     else showVs(begin);
 
     return {
       el,
       usesStage: true,
+      // The opponent's homeland hangs behind the table.
+      backdrop: sectArtUrl(champion(opts.setup.players[1].champion).sect, 'splash'),
+      cast: [cutoutUrl(champOf(0)), solo ? null : cutoutUrl(champOf(1))],
       onBack: () => {
         if (skillSheet || spinSheet) {
           closeSheets();
