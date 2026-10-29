@@ -52,7 +52,7 @@ bản đồ trong `src/ui/screens/journey.ts`, truyện trong `lore.json`.
 - Tiên Đạo có chiêu, nội tại, địa thế; Cổ Điển và Luyện Cơ không bật các hiệu ứng này. Giữ tên menu hiện tại: Hành trình, Luận Cơ, Song Đấu, Luyện Cơ, Tàng Các (có Cơ Tiên Lục), Cơ Tiên Truyện, Luyện thế.
 - DOM giữ khung 16:9 (844×475), scale đều vừa vùng safe area và căn giữa (tối đa 2,2) trong `main.ts`; không dùng media query hay `vw`/`vh` bên trong khung; canvas quy đổi cả độ lệch khung. Màn cài PWA dùng kích thước thật. Kiểm tra cuộn, modal, chuyển tiến/lùi và giảm chuyển động.
 - Giữ khoá save `thancong.profile.v1`; thêm trường qua mặc định và `sanitize`, giữ tương thích mã `TC1.`.
-- Tranh đi qua loader ba tầng (cốt lõi chặn mỗi build, nền lúc rảnh, tải/giải mã theo trận). Bổ sung tranh mới vào đường dẫn mà manifest nhận; không bỏ cơ chế cập nhật PWA chờ người chơi rời bàn.
+- Tranh đi qua loader trong `src/platform/preload.ts`: lần đầu tải trọn bộ vào kho `art`, mỗi file có mã nội dung nên bản mới chỉ tải lại tranh đã đổi; nền lúc rảnh bù phần thiếu, trận kiểm tra và giải mã trước. Bổ sung tranh mới vào đường dẫn mà manifest nhận; không bỏ cơ chế cập nhật PWA chờ người chơi rời bàn.
 
 
 ## Kiểm tra điều khiển

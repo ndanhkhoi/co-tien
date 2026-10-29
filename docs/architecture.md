@@ -148,11 +148,22 @@ Console test ẩn (bản dev hoặc `?dev`): `cotien.cheat(name, ...args)` với
 
 ## Tải tài nguyên
 
-`src/platform/preload.ts` tải ảnh theo 3 tầng, dựa trên danh sách `virtual:art-manifest` sinh lúc build:
-màn tải (`ui/screens/loading.ts`) chặn ở lần đầu và sau mỗi bản cập nhật để tải phần cốt lõi (giao diện, chân dung,
-icon chiêu, bàn, tướng và môn phái của người chơi); phần còn lại tải nền khi ở menu (bỏ qua khi bật tiết kiệm dữ
-liệu); mỗi trận tải toàn bộ ảnh của hai tướng và môn phái của bàn, rồi giải mã trước cutout, flipbook và cut-in. Tầng cốt lõi chạy 6 luồng; tầng nền chạy 2 luồng, bắt đầu sau 2,5 giây và nhường lúc trình duyệt rảnh. Dấu `cotien.assets` chỉ ghi nhận lượt tải đã hoàn thành theo mã build; lỗi mạng không chặn khởi động và ảnh sẽ được tải theo nhu cầu, nên không bảo đảm toàn bộ tranh đã sẵn offline sau một lượt tải lỗi. Ảnh lớn được service worker lưu vào kho
-`art-<mã build>`, kho của bản cũ bị xoá khi bản mới chạy. `?loading` giữ màn tải để xem thiết kế.
+`src/platform/preload.ts` giữ toàn bộ tranh trong một kho Cache Storage lâu dài tên `art`. Danh sách
+`virtual:art-manifest` sinh lúc build ghi đường dẫn, dung lượng và **mã nội dung** (sha1) của từng file; mỗi file
+trong kho mang header `x-art-rev`. Service worker chỉ phục vụ kho này (CacheFirst), còn loader tự điền và giữ
+kho khớp với bản build theo từng file, với các yêu cầu `?rev=` đi thẳng ra mạng.
+
+- **Màn tải** (`ui/screens/loading.ts`): lần đầu mở game tải **toàn bộ** tranh (~92 MB, hiện số MB), để sau đó
+  chơi không bao giờ phải chờ ảnh. Một bản build có tranh mới quay lại màn này nhưng chỉ tải những file có mã
+  nội dung đổi. Bật tiết kiệm dữ liệu thì chỉ tải phần cốt lõi (giao diện, chân dung, icon chiêu, bàn, tướng và
+  môn phái của người chơi). Dấu `cotien.assets` = `<mã bộ tranh>:all|core`; mã bộ tranh (`__ART_VERSION__`) chỉ
+  đổi khi có tranh đổi, nên bản cập nhật chỉ sửa code không hiện màn tải.
+- **Nền:** ở menu, phần còn thiếu (lỗi mạng, tiết kiệm dữ liệu) tải tiếp 2 luồng lúc trình duyệt rảnh; tranh
+  giao diện và cutout tướng của người chơi được giải mã sẵn và giữ trong bộ nhớ để màn hình không chớp trắng.
+- **Trận:** kiểm tra và tải ảnh của hai tướng và môn phái của bàn, rồi giải mã trước cutout, flipbook và cut-in.
+
+Sau khi tải đủ, file không còn trong manifest bị xoá khỏi kho. Các kho `art-<mã build>` của bản cũ bị xoá.
+Lỗi mạng không chặn khởi động: ảnh tải theo nhu cầu và lần mở sau thử lại. `?loading` giữ màn tải để xem thiết kế.
 Tiến trình hiện bằng nét cọ mực và phần trăm tải.
 
 ## Thi triển kỹ năng theo vị trí

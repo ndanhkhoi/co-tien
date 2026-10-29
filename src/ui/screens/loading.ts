@@ -11,8 +11,8 @@ const TIPS = [
 ];
 
 /**
- * First launch and after each update: fetch the core art with an ink progress bar, then hand over
- * to the next screen. Later launches skip it (see coreReady).
+ * First launch: download the whole art set once, with an ink progress bar. A build with new art
+ * comes back here for just the changed paintings. Other launches skip it (see coreReady).
  */
 export function loadingScreen(next: (app: App) => Screen) {
   return (app: App): Screen => {
@@ -24,19 +24,23 @@ export function loadingScreen(next: (app: App) => Screen) {
       'aria-valuemin': '0', 'aria-valuemax': '100', 'aria-valuenow': '0',
     }, fill);
     const pct = h('span.ld-pct.num', null, '0%');
+    const note = h('p.ld-note', null, 'Chuẩn bị bàn, tướng và chiêu thức');
     const tip = h('p.ld-tip', null, TIPS[Math.floor(Math.random() * TIPS.length)]);
     el.append(h('div.ld-box', null,
       h('img.ld-logo', { src: new URL(`${import.meta.env.BASE_URL}art/ui/logo.webp`, document.baseURI).href, alt: 'Cơ Tiên', draggable: false }),
       h('div.ld-title', null, h('span', null, 'Đang tải tài nguyên'), pct),
       track,
-      h('p.ld-note', null, 'Chuẩn bị bàn, tướng và chiêu thức'),
+      note,
       tip,
     ));
     let shown = 0;
     let disposed = false;
     let timer: ReturnType<typeof setTimeout> | undefined;
-    void preloadCore(app.profile.champion, (f) => {
+    const mb = (n: number) => (n / 1048576).toFixed(n < 10485760 ? 1 : 0).replace('.', ',');
+    void preloadCore(app.profile.champion, (f, got, total) => {
       if (disposed) return;
+      // Big downloads (the first launch) say how much is left; an update with a few new paintings just fills up.
+      if (total > 5 * 1048576) note.textContent = `Tải một lần, lần sau vào ngay · ${mb(got)}/${mb(total)} MB`;
       const p = Math.round(f * 100);
       if (p === shown) return;
       shown = p;

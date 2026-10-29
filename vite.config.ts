@@ -1,31 +1,39 @@
 import { defineConfig } from 'vitest/config';
 import pkg from './package.json' with { type: 'json' };
 import { VitePWA } from 'vite-plugin-pwa';
-import { readdirSync, statSync } from 'node:fs';
+import { createHash } from 'node:crypto';
+import { readdirSync, readFileSync, statSync } from 'node:fs';
 import { join, relative } from 'node:path';
 
-/** `virtual:art-manifest`: every file under public/art with its size, for the asset loader. */
-function artManifest() {
-  const id = 'virtual:art-manifest';
-  const walk = (dir: string): [string, number][] => readdirSync(dir).flatMap((f) => {
+/** Every file under public/art with its size and a content revision, for the asset loader. */
+function walkArt(dir = 'public/art'): [string, number, string][] {
+  return readdirSync(dir).sort().flatMap((f) => {
     const p = join(dir, f);
     const st = statSync(p);
-    return st.isDirectory() ? walk(p) : f.endsWith('.webp') ? [[relative('public', p).split('\\').join('/'), st.size] as [string, number]] : [];
+    if (st.isDirectory()) return walkArt(p);
+    if (!f.endsWith('.webp')) return [];
+    const rev = createHash('sha1').update(readFileSync(p)).digest('hex').slice(0, 10);
+    return [[relative('public', p).split('\\').join('/'), st.size, rev] as [string, number, string]];
   });
+}
+const ART = walkArt();
+/** Changes only when some painting changes; the loading screen checks the art again only then. */
+const ART_VERSION = createHash('sha1').update(JSON.stringify(ART)).digest('hex').slice(0, 12);
+
+/** `virtual:art-manifest`: the art list above. */
+function artManifest() {
+  const id = 'virtual:art-manifest';
   return {
     name: 'art-manifest',
     resolveId: (s: string) => (s === id ? '\0' + id : null),
-    load: (s: string) => (s === '\0' + id ? `export default ${JSON.stringify(walk('public/art'))};` : null),
+    load: (s: string) => (s === '\0' + id ? `export default ${JSON.stringify(ART)};` : null),
   };
 }
-
-// One id per build: art is cached under it, so redrawn images at the same path are refetched after an update.
-const BUILD_ID = Date.now().toString(36);
 
 export default defineConfig({
   base: './',
   define: {
-    __ART_CACHE__: JSON.stringify(`art-${BUILD_ID}`),
+    __ART_VERSION__: JSON.stringify(ART_VERSION),
     __APP_VERSION__: JSON.stringify(`${pkg.version} · ${new Date().toISOString().slice(0, 16).replace('T', ' ')}`),
   },
   build: { target: 'es2022', chunkSizeWarningLimit: 1500 },
@@ -56,13 +64,16 @@ export default defineConfig({
       },
       workbox: {
         cleanupOutdatedCaches: true,
-        // Precache code, UI art, portraits and skill icons; big art streams in and is cached on first view.
-        globPatterns: ['**/*.{js,css,html,png,svg,woff2,woff,json}', 'art/ui/**/*.webp', 'art/table/**/*.webp', 'art/champions/*/portrait.webp', 'art/skills/*.webp', 'art/sects/*/emblem.webp'],
-        maximumFileSizeToCacheInBytes: 6_000_000,
+        // A first visit is served by the worker as soon as it activates, so the art it caches is used at once.
+        clientsClaim: true,
+        // Code is precached. Art lives in one lasting cache ("art") that the asset loader fills and
+        // keeps in step with the build, file by file (src/platform/preload.ts); the worker only
+        // serves it. Loader requests carry ?rev= and go straight to the network.
+        globPatterns: ['**/*.{js,css,html,png,svg,woff2,woff,json}'],
         runtimeCaching: [{
-          urlPattern: ({ url }) => url.pathname.includes('/art/'),
+          urlPattern: ({ url }) => url.pathname.includes('/art/') && !url.searchParams.has('rev'),
           handler: 'CacheFirst',
-          options: { cacheName: `art-${BUILD_ID}`, expiration: { maxEntries: 2500 } },
+          options: { cacheName: 'art' },
         }],
       },
     }),

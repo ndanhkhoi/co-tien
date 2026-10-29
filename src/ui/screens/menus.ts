@@ -307,7 +307,7 @@ export function splashScreen(app: App): Screen {
 
 export function homeScreen(app: App): Screen {
   const el = screenEl('home');
-  preloadBackground();
+  preloadBackground(app.profile.champion);
   const p = app.profile;
   const prog = levelProgress(p.xp);
   const again = () => app.go(homeScreen, { replace: true });

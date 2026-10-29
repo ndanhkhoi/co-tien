@@ -64,9 +64,9 @@ function setupUpdates(app: App) {
       app.setPendingUpdate(() => void updateSW(true));
     },
     onRegisteredSW(_url, reg) {
-      // Drop art caches from older builds (images are redrawn in place, so old copies would stick).
+      // Older builds kept art in one cache per build; the lasting "art" cache replaces them all.
       void caches?.keys().then((keys) => keys
-        .filter((k) => (k === 'art' || k.startsWith('art-')) && k !== __ART_CACHE__)
+        .filter((k) => k.startsWith('art-'))
         .forEach((k) => void caches.delete(k))).catch(() => undefined);
       if (!reg) return;
       // Hold the player on the update sheet from the moment a new build starts downloading,
