@@ -112,7 +112,7 @@ const MAX_SCALE = 2.2;
  * Design px per source pixel of the painted stage frame (art/ui/frame/stage.webp). Every screen
  * gets the frame; phones use a slimmer band so it does not eat into the game.
  */
-const FRAME_PX_ROOMY = 0.45;
+const FRAME_PX_ROOMY = 0.32;
 const FRAME_PX_SLIM = 0.2;
 /** How far the frame reaches outside the composition per frame px (sides, top/bottom). */
 const FRAME_X = 92;
@@ -131,7 +131,6 @@ function installUiScale() {
     const view = viewport.getBoundingClientRect();
     const roomy = Math.min(safe.width, safe.height) >= 480;
     const framePx = roomy ? FRAME_PX_ROOMY : FRAME_PX_SLIM;
-    const margin = roomy ? 0.92 : 1;
     // The install gate is the only native-size screen; everything else, splash included, is the
     // framed 16:9 game on its backdrop.
     const native = gate;
@@ -139,8 +138,9 @@ function installUiScale() {
     document.body.classList.toggle('theatre', !native);
     const s = native ? 1 : Math.min(
       MAX_SCALE,
-      (safe.width * margin) / (DESIGN_W + 2 * FRAME_X * framePx),
-      (safe.height * margin) / (DESIGN_H + 2 * FRAME_Y * framePx),
+      // As large as the screen allows: only the painted frame band stays outside the game.
+      safe.width / (DESIGN_W + 2 * FRAME_X * framePx),
+      safe.height / (DESIGN_H + 2 * FRAME_Y * framePx),
     );
     const theatre = !native;
     const rect = native ? view : safe;
