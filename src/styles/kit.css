@@ -291,7 +291,10 @@ input[type='text']:focus, input:not([type]):focus { border-color: var(--accent);
 
 .update-sheet { position: fixed; inset: 0; z-index: 9999; display: grid; place-items: center; background: linear-gradient(#e9e1d0e6, #e9e1d0e6), var(--paper, none) center / 640px, var(--frame); color: var(--ink); }
 .us-card { display: grid; justify-items: center; gap: 8px; min-width: min(320px, 86vw); padding: 26px 34px; border: 14px solid transparent; border-image: url('/art/ui/frame/panel.webp') 74 fill / 14px / 0 stretch; filter: drop-shadow(0 8px 20px rgba(26, 23, 19, 0.25)); }
-.us-icon { width: 56px; height: 56px; animation: us-turn 1.6s linear infinite; }
+.us-logo { width: 200px; max-width: 70vw; height: auto; margin-bottom: 4px; }
+.us-bar { position: relative; width: 240px; max-width: 70vw; height: 10px; overflow: hidden; }
+.us-bar i { position: absolute; inset: 0; background: url('/art/ui/frame/ribbon.webp') center / 100% 100% no-repeat; animation: us-sweep 1.8s var(--ease) infinite; }
 .us-text { font: 700 var(--fs-l)/1.4 var(--display); }
 .us-note { font-size: var(--fs-s); color: var(--muted); }
-@keyframes us-turn { to { transform: rotate(-360deg); } }
+@keyframes us-sweep { 0% { clip-path: inset(0 100% 0 0); } 55% { clip-path: inset(0 0 0 0); } 100% { clip-path: inset(0 0 0 100%); } }
+@media (prefers-reduced-motion: reduce) { .us-bar i { animation: none; } }

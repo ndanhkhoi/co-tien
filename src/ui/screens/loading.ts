@@ -1,4 +1,4 @@
-import { preloadCore } from '../../platform/preload';
+import { firstLaunch, preloadCore } from '../../platform/preload';
 import { screenEl, type App, type Screen } from '../app';
 import { h } from '../dom';
 
@@ -37,10 +37,15 @@ export function loadingScreen(next: (app: App) => Screen) {
     let disposed = false;
     let timer: ReturnType<typeof setTimeout> | undefined;
     const mb = (n: number) => (n / 1048576).toFixed(n < 10485760 ? 1 : 0).replace('.', ',');
+    const first = firstLaunch();
     void preloadCore(app.profile.champion, (f, got, total) => {
       if (disposed) return;
-      // Big downloads (the first launch) say how much is left; an update with a few new paintings just fills up.
-      if (total > 5 * 1048576) note.textContent = `Tải một lần, lần sau vào ngay · ${mb(got)}/${mb(total)} MB`;
+      // Big downloads say how much is left; an update with a few new paintings just fills up.
+      if (total > 5 * 1048576) {
+        note.textContent = first
+          ? `Đã tải ${mb(got)}/${mb(total)} MB. Chỉ lần đầu cần chờ, những lần sau vào game ngay.`
+          : `Đang tải tranh mới của bản cập nhật: ${mb(got)}/${mb(total)} MB.`;
+      }
       const p = Math.round(f * 100);
       if (p === shown) return;
       shown = p;

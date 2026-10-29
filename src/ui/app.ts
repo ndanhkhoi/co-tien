@@ -149,9 +149,11 @@ export class App {
       label.textContent = text;
       return;
     }
-    const icon = `${import.meta.env.BASE_URL}art/ui/icons/replay.webp`;
+    const logo = `${import.meta.env.BASE_URL}art/ui/logo.webp`;
+    // The logo over an ink stroke that keeps sweeping until the new build takes over.
     document.body.append(h('div.update-sheet', { role: 'alert', 'aria-live': 'assertive' },
-      h('div.us-card', null, h('img.us-icon', { src: icon, alt: '' }), h('b.us-text', null, text), h('span.us-note', null, 'Tiến trình của bạn được giữ nguyên'))));
+      h('div.us-card', null, h('img.us-logo', { src: logo, alt: 'Cơ Tiên' }), h('b.us-text', null, text),
+        h('div.us-bar', { 'aria-hidden': 'true' }, h('i')), h('span.us-note', null, 'Tiến trình của bạn được giữ nguyên'))));
   }
 
   /** Cross-fade the stage backdrop once the new painting has decoded. */

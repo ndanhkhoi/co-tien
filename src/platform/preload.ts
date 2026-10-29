@@ -125,6 +125,11 @@ function marked(): string | null {
   }
 }
 
+/** Nothing was ever downloaded on this device: the very first launch. */
+export function firstLaunch(): boolean {
+  return marked() === null;
+}
+
 /** True when this art version is already on the device (at least its core). */
 export function coreReady(): boolean {
   return marked()?.startsWith(`${__ART_VERSION__}:`) ?? false;
