@@ -4,7 +4,7 @@ import type { AiRequest } from '../../ai/types';
 import { sound } from '../../audio/sound';
 import { preloadMatch } from '../../platform/preload';
 import { ballCss } from '../../core/ball-styles';
-import { MODE_NAMES } from '../../core/rules';
+import { MODE_NAMES, raceName } from '../../core/rules';
 import { other, type Resolution, type ShotCall, type Side } from '../../core/rules/types';
 import { Rng } from '../../core/rng';
 import { type SkillDef, champion, classInfo, cutoutUrl, exprUrl, portraitUrl, sect, sectArtUrl, skillIconUrl, winUrl } from '../../game/content/sects';
@@ -105,6 +105,10 @@ export function matchScreen(opts: MatchOptions) {
     const aim = { angle: 0, side: 0, vert: 0, elevation: 0 };
     /** Power the player set on the power bar; a tap on ĐÁNH shoots with it. */
     let preset = 0.55;
+    // Each seat keeps its own bar setting (Song Đấu), and the bar keeps showing the last shot's
+    // power while the balls roll: it only returns to a player's setting when their turn starts.
+    const presets: [number, number] = [0.55, 0.55];
+    let heldPower: number | null = null;
     let barActive = false;
     /** Live charge (hold ĐÁNH) or the shot in flight. */
     let power = 0;
@@ -509,7 +513,7 @@ export function matchScreen(opts: MatchOptions) {
           ...(second === undefined ? [] : [h('span.mx-next-then', null, '›'), miniBall(second), String(second)]),
         ]));
       } else nextBall.hidden = true;
-      objKicker.textContent = desk ? desk.plate().kicker : solo ? opts.label : `${MODE_NAMES[match.setup.mode]} · chạm ${match.setup.raceTo} · ván ${match.rackNo}`;
+      objKicker.textContent = desk ? desk.plate().kicker : solo ? opts.label : `${MODE_NAMES[match.setup.mode]} · ${raceName(match.setup.raceTo)} · ván ${match.rackNo}`;
       objText.textContent = desk ? desk.plate().text : opts.challenge ? opts.challenge.goal : match.setup.mode === 'carom-3c' ? 'Chạm bi thứ nhất, đủ 3 băng trước bi thứ hai.' : match.objective();
       renderSkills();
       desk?.render();
@@ -646,13 +650,13 @@ export function matchScreen(opts: MatchOptions) {
         return;
       }
       heraldOn = true;
-      showHerald(m, false);
       const len = m.title.length + (m.line?.length ?? 0);
       // Shorter while more news waits.
       const ms = m.ms ?? Math.min(4200, 1600 + len * 30) * (heraldQ.length ? 0.7 : 1);
+      showHerald(m, false, ms);
       heraldTimer = window.setTimeout(nextHerald, ms);
     }
-    function showHerald(m: HeraldMsg, thinking: boolean) {
+    function showHerald(m: HeraldMsg, thinking: boolean, ms = 0) {
       const face = m.side !== null
         ? h('img.mx-h-face', { src: m.expr ? exprUrl(champOf(m.side), m.expr) : portraitUrl(champOf(m.side)), alt: '', draggable: false })
         : h('span.mx-h-icon', null, icon(m.icon ?? 'info'));
@@ -660,9 +664,10 @@ export function matchScreen(opts: MatchOptions) {
       heraldEl.replaceChildren(face,
         h('div.mx-h-text', null, h('div.mx-h-title', null, m.title), m.line ? h('div.mx-h-line', null, m.line) : null),
       );
-      // Any tap closes an announcement; the cross says so.
+      // Any tap closes an announcement; the cross says so and the hairline shows the time left.
       if (thinking) heraldEl.append(icon('thinking', 'mx-h-think'));
-      else heraldEl.append(h('button.mx-h-close', { type: 'button', 'aria-label': 'Đóng thông báo' }));
+      else heraldEl.append(h('button.mx-h-close', { type: 'button', 'aria-label': 'Đóng thông báo' }, icon('close')),
+        h('i.mx-h-timer', { style: `--ms:${Math.round(ms)}ms`, 'aria-hidden': 'true' }));
       center.classList.add('heralding');
     }
     // Any touch, click or key dismisses the current announcement: the player is acting, and the
@@ -1072,6 +1077,7 @@ export function matchScreen(opts: MatchOptions) {
       }
       strikePull = pw;
       strikeT = 0.0001;
+      if (match.current.kind === 'human') presets[match.turn] = preset;
       const ct = match.callType();
       const call = aiShotCall !== undefined ? aiShotCall : ct === 'none' ? null : { ball: callBallId() ?? 8, pocket: callPocket ?? 0 };
       firedCall = call;
@@ -1251,6 +1257,7 @@ export function matchScreen(opts: MatchOptions) {
     // ---------- Power bar: drag to set the power ----------
     let barId: number | null = null;
     const setPreset = (v: number) => {
+      heldPower = null;
       preset = Math.max(0.05, Math.min(1, v));
       const lvl = Math.floor(preset * 10);
       if (lvl !== lastTick) {
@@ -1362,8 +1369,8 @@ export function matchScreen(opts: MatchOptions) {
         } else {
           if (e.code === 'ArrowLeft') rotate(-fine);
           if (e.code === 'ArrowRight') rotate(fine);
-          if (e.code === 'ArrowUp' && canAct()) preset = Math.min(1, preset + 0.05);
-          if (e.code === 'ArrowDown' && canAct()) preset = Math.max(0.05, preset - 0.05);
+          if (e.code === 'ArrowUp' && canAct()) setPreset(preset + 0.05);
+          if (e.code === 'ArrowDown' && canAct()) setPreset(preset - 0.05);
         }
         if (e.code === 'Tab' && canAct()) {
           e.preventDefault();
@@ -1597,6 +1604,8 @@ export function matchScreen(opts: MatchOptions) {
       } else {
         aim.side = 0;
         aim.vert = 0;
+        heldPower = null;
+        preset = presets[side];
         updateSpinDot();
         aimFirstTarget();
         if (match.canMoveCue) {
@@ -2106,6 +2115,7 @@ export function matchScreen(opts: MatchOptions) {
         strikeT += dt / 0.09;
         if (strikeT >= 1.6) {
           strikeT = 0;
+          heldPower = strikePull;
           power = 0;
           renderControls();
         }
@@ -2134,7 +2144,7 @@ export function matchScreen(opts: MatchOptions) {
       placeCallTag();
       view.update(dt, av);
       // Power UI: the live charge while swinging, otherwise the set power.
-      const shown = strikeT > 0 ? strikePull : charging ? power : preset;
+      const shown = strikeT > 0 ? strikePull : charging ? power : heldPower ?? preset;
       const pk = `${Math.round(shown * 100)}|${charging}`;
       if (pk !== powerKey) {
         powerKey = pk;

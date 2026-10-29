@@ -49,6 +49,7 @@ function landPage(app: App, id: SectId, page?: DetailPage, direction = 1) {
   const cues = CUES.filter((c) => c.sect === id);
   const omen = OMEN_INFO[id];
   const build = (close: () => void) => h('div.modal.codex-page.scroll', { style: `--sect:${hex6(s.main)}` },
+    closeX(close),
     h('img.codex-banner', { src: sectArtUrl(id, 'splash'), alt: '', onerror: (e: Event) => (e.target as HTMLElement).remove() }),
     h('div.cp-head', null, h('img', { src: sectArtUrl(id, 'emblem'), alt: '' }), h('h2', null, s.name)),
     h('p.prose-p', null, LORE.sects[id]),
@@ -61,10 +62,9 @@ function landPage(app: App, id: SectId, page?: DetailPage, direction = 1) {
     h('h3.section-title', null, `Linh Đài · Thiên Tượng: ${omen.name}`),
     h('div.cp-table', null, tablePreview(table), h('p', null, `${table.desc} ${omen.desc}`)),
     statRows(tableStats(table)),
-    h('h3.section-title', null, 'Cơ của môn phái'),
+    h('h3.section-title', null, 'Pháp Cơ của môn phái'),
     ...cues.map((c) => h('div.cp-cue', null, h('b', null, c.name), cueArtEl(c), statRows(cueStats(c)))),
     h('div.actions', null, ...detailButtons(index, entries.length, navigate), btn('Đóng', close, 'ghost')),
-    closeX(close),
   );
   page = showDetail(build, page, direction, navigate);
 }
@@ -89,6 +89,7 @@ export function champPage(app: App, c: Champion, page?: DetailPage, direction = 
       h('img.win', { src: winUrl(c.id), alt: '', loading: 'lazy' }))
     : h('p.locked-note', null, 'Chiêu mộ tướng này (thắng ở Hành trình hoặc mua trong Tàng Các) để mở bộ tranh đầy đủ.');
   const build = (close: () => void) => h('div.modal.codex-page.scroll', { style: `--sect:${hex6(sect(c.sect).main)}` },
+    closeX(close),
     h('div.codex-champ', null,
       h('div.cc-cut', null, h('img', { src: cutoutUrl(c.id), alt: '' })),
       h('div.grow', null,
@@ -105,7 +106,6 @@ export function champPage(app: App, c: Champion, page?: DetailPage, direction = 
     h('h3.section-title', null, 'Tranh'),
     gallery,
     h('div.actions', null, ...detailButtons(index, entries.length, navigate), btn('Đóng', close, 'ghost')),
-    closeX(close),
   );
   page = showDetail(build, page, direction, navigate);
 }

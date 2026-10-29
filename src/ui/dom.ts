@@ -115,6 +115,10 @@ export function modal(build: (close: () => void) => HTMLElement, opts: { dismiss
   };
   wrap.addEventListener('modal-back', () => { if (opts.backDismissable !== false) close(); });
   const box = build(close);
+  // In a box that scrolls itself, the close disc goes first so CSS can pin it to the corner;
+  // as the last child it would scroll away with the content.
+  const x = box.classList.contains('scroll') ? box.querySelector(':scope > .close-x') : null;
+  if (x) box.prepend(x);
   wrap.append(box);
   if (opts.dismissable) {
     wrap.addEventListener('pointerdown', (e) => {

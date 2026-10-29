@@ -787,7 +787,7 @@ body.playing .bd-scene, body.playing .bd-mist { animation-play-state: paused; }
 #ui .mx-herald {
   inset: auto; left: 50%; top: 42%; translate: -50% -50%;
   width: min(480px, 62%); min-height: 80px;
-  padding: 16px 62px 16px 46px; gap: 12px;
+  padding: 16px 62px 22px 46px; gap: 12px;
   z-index: 20; pointer-events: none; isolation: isolate;
   background: none; border: 0; border-radius: 0; box-shadow: none;
   color: var(--ink);
@@ -798,9 +798,20 @@ body.playing .bd-scene, body.playing .bd-mist { animation-play-state: paused; }
   filter: drop-shadow(0 4px 10px rgba(40, 30, 18, 0.22));
 }
 #ui .mx-herald.show { animation: mx-herald-brush 0.38s var(--ease) both; }
-#ui .mx-h-close { position: absolute; top: 50%; right: 14px; translate: 0 -50%; width: 34px; height: 34px; min-width: 0; min-height: 0; padding: 0; border-radius: 50%; background: url('/art/ui/frame/close-seal.webp') center / contain no-repeat; box-shadow: none; pointer-events: auto; }
-/* A wider invisible hit area keeps the 44 px touch target without a bigger seal. */
-#ui .mx-h-close::after { content: ''; position: absolute; inset: -6px; }
+/* The close mark is a small ink cross in the strip's top corner, quiet next to the message;
+   any tap closes the announcement anyway. */
+#ui .mx-h-close { position: absolute; top: 13px; right: 40px; width: 22px; height: 22px; min-width: 0; min-height: 0; padding: 0; border: 0; border-radius: 0; background: none; box-shadow: none; opacity: 0.7; pointer-events: auto; }
+#ui .mx-h-close .ico { width: 100%; height: 100%; }
+/* A wider invisible hit area keeps the 44 px touch target. */
+#ui .mx-h-close::after { content: ''; position: absolute; inset: -11px; }
+/* Time left: a vermilion brush hairline along the foot of the paper that draws back to nothing. */
+#ui .mx-h-timer {
+  position: absolute; left: 50px; right: 50px; bottom: 17px; height: 2px; border-radius: 1px;
+  background: linear-gradient(90deg, transparent, var(--accent) 14%, var(--accent) 86%, transparent);
+  opacity: 0.7; transform-origin: left center; pointer-events: none;
+  animation: mx-h-timer var(--ms, 3000ms) linear forwards;
+}
+@keyframes mx-h-timer { from { transform: scaleX(1); } to { transform: scaleX(0); } }
 #ui .mx-herald.leaving { display: flex; animation: mx-herald-out 0.26s ease both; }
 @keyframes mx-herald-brush { from { opacity: 0; clip-path: inset(0 100% 0 0); } to { opacity: 1; clip-path: inset(0); } }
 @keyframes mx-herald-out { to { opacity: 0; transform: translateY(-6px); } }
@@ -816,6 +827,7 @@ body.playing .bd-scene, body.playing .bd-mist { animation-play-state: paused; }
 .mx-herald.thinking .mx-h-think { width: 28px; height: 28px; }
 @media (prefers-reduced-motion: reduce) {
   #ui .mx-herald.show, #ui .mx-herald.leaving { animation: none; }
+  #ui .mx-h-timer { display: none; }
 }
 
 /* The close button sits over the top-right corner; keep the picker's note clear of it. */

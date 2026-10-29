@@ -118,6 +118,9 @@ textarea.code-box:focus { border-color: var(--accent); }
 /* Modal close disc in the corner; titles leave room for it. */
 .modal .close-x { position: absolute; top: 10px; right: 10px; z-index: 3; }
 .modal > h2:first-child { padding-right: 48px; }
+/* A box that scrolls itself keeps its close disc pinned in the corner (dom.ts puts it first). */
+.modal.scroll > .close-x:first-child { position: sticky; top: 4px; right: auto; align-self: flex-end; margin-bottom: -54px; }
+.modal.scroll > .close-x:first-child + h2 { padding-right: 48px; }
 .modal p { font-size: var(--fs-m); line-height: 1.55; color: var(--ink-2); }
 
 .kv-list { display: flex; flex-direction: column; }
@@ -853,17 +856,19 @@ body.vp-rotate .rotate-hint, body.vp-resize .size-hint { display: flex; }
   box-shadow: 0 24px 60px rgba(0, 0, 0, 0.5);
   text-align: center;
 }
-.rh-stage { position: relative; width: 230px; height: 230px; display: grid; place-items: center; }
-.rh-phone { height: 200px; width: auto; filter: drop-shadow(0 10px 16px rgba(26, 23, 19, 0.3)); animation: rh-turn 3.4s var(--ease) infinite; }
-.rh-arrow { position: absolute; left: -10px; top: 10px; width: 92px; animation: rh-arrow 3.4s ease-in-out infinite; }
-@keyframes rh-turn { 0%, 18% { rotate: 0deg; } 46%, 84% { rotate: 90deg; } 100% { rotate: 0deg; } }
-@keyframes rh-arrow { 0%, 6% { opacity: 0; } 16%, 46% { opacity: 1; } 60%, 100% { opacity: 0; } }
+/* The brush arrow sweeps down the left and out to the right, so the phone turns the same way
+   (counter-clockwise) inside it; the arrow sits by its lower-left corner, behind it, as the path of the turn. */
+.rh-stage { position: relative; width: 260px; height: 230px; display: grid; place-items: center; }
+.rh-phone { position: relative; z-index: 1; height: 190px; width: auto; filter: drop-shadow(0 10px 16px rgba(26, 23, 19, 0.3)); animation: rh-turn 3.4s var(--ease) infinite; }
+.rh-arrow { position: absolute; z-index: 0; left: 0; top: 96px; width: 118px; opacity: 0.85; animation: rh-arrow 3.4s ease-in-out infinite; }
+@keyframes rh-turn { 0%, 18% { rotate: 0deg; } 46%, 84% { rotate: -90deg; } 100% { rotate: 0deg; } }
+@keyframes rh-arrow { 0%, 6% { opacity: 0; } 16%, 46% { opacity: 0.85; } 60%, 100% { opacity: 0; } }
 .rh-copy { display: flex; flex-direction: column; gap: 8px; }
 .rh-title { font: 800 30px/1.15 var(--display); color: var(--ink); }
 .rh-sub { font-size: var(--fs-l); line-height: 1.5; color: var(--ink-2); }
 @media (prefers-reduced-motion: reduce) {
-  .rh-phone { animation: none; rotate: 90deg; }
-  .rh-arrow { animation: none; opacity: 1; }
+  .rh-phone { animation: none; rotate: -90deg; }
+  .rh-arrow { animation: none; opacity: 0.85; }
 }
 .vp-icon { width: 68px; height: 68px; display: grid; place-items: center; border-radius: 50%; background: var(--sheet-2); box-shadow: inset 0 0 0 1.5px var(--line-2); }
 .vp-icon .ico { width: 42px; height: 42px; }
