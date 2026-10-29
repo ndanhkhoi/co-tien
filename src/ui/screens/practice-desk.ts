@@ -25,6 +25,7 @@ export interface DeskHost {
   /** Point the cue at the first ball again after the layout changed. */
   reaim(): void;
   showBallTag(id: number): void;
+  hideBallTag(): void;
   herald(m: { title: string; line?: string; tone?: 'ink' | 'red'; ms?: number }): void;
 }
 
@@ -181,6 +182,7 @@ export function practiceDesk(host: DeskHost): PracticeDesk {
   function trayMove(e: PointerEvent) {
     if (!drag?.fromTray || e.pointerId !== drag.pointer) return;
     if (!drag.moved && Math.hypot(e.clientX - drag.sx, e.clientY - drag.sy) < 8) return;
+    if (!drag.moved) host.hideBallTag();
     drag.moved = true;
     dragTo(e);
   }
@@ -231,10 +233,8 @@ export function practiceDesk(host: DeskHost): PracticeDesk {
 
   function settle(id: number) {
     const ball = match.balls.find((b) => b.id === id)!;
-    if (ball.onTable) {
-      picked = id;
-      host.showBallTag(id);
-    } else if (picked === id) picked = null;
+    if (ball.onTable) picked = id;
+    else if (picked === id) picked = null;
     haptic(8);
     host.refresh();
   }
@@ -252,7 +252,6 @@ export function practiceDesk(host: DeskHost): PracticeDesk {
       drag = { id: hit.id, pointer: e.pointerId, dx: p.x - hit.x, dy: p.y - hit.y, fromTray: false, moved: false, sx: e.clientX, sy: e.clientY };
       (e.target as Element).setPointerCapture?.(e.pointerId);
       picked = hit.id;
-      host.showBallTag(hit.id);
       haptic(8);
     } else if (picked !== null && match.balls.find((b) => b.id === picked)?.onTable) {
       // A tap on bare cloth moves the ball last touched there.
@@ -265,7 +264,8 @@ export function practiceDesk(host: DeskHost): PracticeDesk {
   function move(e: PointerEvent): boolean {
     if (!arranging) return false;
     if (!drag || drag.fromTray || e.pointerId !== drag.pointer) return true;
-    if (!drag.moved && Math.hypot(e.clientX - drag.sx, e.clientY - drag.sy) < 4) return true;
+    if (!drag.moved && Math.hypot(e.clientX - drag.sx, e.clientY - drag.sy) < 6) return true;
+    if (!drag.moved) host.hideBallTag();
     drag.moved = true;
     dragTo(e);
     return true;
@@ -276,7 +276,9 @@ export function practiceDesk(host: DeskHost): PracticeDesk {
     const d = drag;
     drag = null;
     showGhost(e, null);
+    // A tap names the ball; a drag only moves it.
     if (d.moved) settle(d.id);
+    else host.showBallTag(d.id);
     return true;
   }
 

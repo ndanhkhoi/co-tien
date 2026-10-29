@@ -222,6 +222,10 @@ export function matchScreen(opts: MatchOptions) {
       refresh: () => renderHud(),
       reaim: () => aimFirstTarget(),
       showBallTag: (id) => showBallTag(id),
+      hideBallTag: () => {
+        clearTimeout(ballTagTimer);
+        ballTag.classList.remove('show');
+      },
       herald: (m) => herald({ side: null, icon: 'target', ...m }),
     }) : null;
     if (desk) {
