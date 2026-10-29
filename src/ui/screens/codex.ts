@@ -9,53 +9,23 @@ import {
 } from '../../game/content/sects';
 import { cueStats, tableStats } from '../../game/content/stat-text';
 import { OMEN_INFO } from '../../game/terrain';
-import { motionModal as modal, screenEl, turnPage, type App, type Screen } from '../app';
-import { btn, h, tabs, tap, toast } from '../dom';
-import { champCard, closeX, cueArtEl, hex6, skillButtons, statRows, tablePreview, topbar } from './menus';
+import { motionModal as modal, turnPage, type App } from '../app';
+import { btn, h, tap, toast } from '../dom';
+import { champCard, closeX, cueArtEl, hex6, skillButtons, statRows, tablePreview } from './menus';
 
 /**
- * Cơ Tiên Lục — the world's library. Lands, champions, classes and rules. Champions the
- * player has never faced keep a portrait and unlock hint; meeting one opens their page, recruiting one
- * opens their full gallery, so there is always something left to discover.
+ * Cơ Tiên Lục — the world's library, shown as tabs of Tàng Các: lands, classes and rules, plus
+ * each champion's page. Meeting a champion opens their page, recruiting one opens their full
+ * gallery, so there is always something left to discover.
  */
-type Tab = 'land' | 'champ' | 'class' | 'rules';
 
 const LORE = lore as { world: string; sects: Record<string, string>; champions: Record<string, { bio: string; quote: string }> };
 
-function known(app: App, id: string) {
+export function known(app: App, id: string) {
   return app.profile.met.includes(id) || app.profile.champions.includes(id);
 }
 
-export function codexScreen(app: App): Screen {
-  const el = screenEl('codex');
-  let tab: Tab = 'land';
-  const discovered = CHAMPIONS.filter((c) => known(app, c.id)).length;
-  const content = h('div.scroll.codex-scroll');
-  const render = () => {
-    content.scrollTop = 0;
-    content.replaceChildren(
-      tab === 'land' ? landList(app) : tab === 'champ'
-        ? h('div.col', null, h('div.section-title', null, `Tướng · đã khám phá ${discovered}/${CHAMPIONS.length}`), champGrid(app))
-        : tab === 'class' ? classList() : rulesPage(),
-    );
-  };
-  const bar = tabs<Tab>([
-    { id: 'land', label: 'Vùng đất', icon: 'journey' }, { id: 'champ', label: 'Tướng', icon: 'users' },
-    { id: 'class', label: 'Hệ', icon: 'shield' }, { id: 'rules', label: 'Luật chơi', icon: 'scroll' },
-  ], tab, (v) => {
-    const order: Tab[] = ['land', 'champ', 'class', 'rules'];
-    const direction = order.indexOf(v) > order.indexOf(tab) ? 1 : -1;
-    tab = v;
-    turnPage(content, render, direction);
-  });
-  const header = topbar(app, 'Cơ Tiên Lục', true, bar);
-  header.classList.add('compact-nav');
-  el.append(header, content);
-  render();
-  return { el };
-}
-
-function landList(app: App): HTMLElement {
+export function landList(app: App): HTMLElement {
   return h('div.col', { style: 'gap:12px' },
     h('div.sheet.prose', null, h('h2.h3', null, 'Cơ Tiên Giới'), h('p', null, LORE.world)),
     h('div.land-grid', null, ...SECTS.map((s) => {
@@ -105,18 +75,7 @@ function thumb(app: App, c: Champion, open: () => void): HTMLElement {
     () => (k ? open() : toast('Gặp tướng này ở Hành trình hoặc Luận Cơ để mở trang', 'bad')));
 }
 
-function champGrid(app: App): HTMLElement {
-  return h('div.sect-groups', null, ...SECTS.map((s) => {
-    const list = CHAMPIONS.filter((c) => c.sect === s.id);
-    const met = list.filter((c) => known(app, c.id)).length;
-    return h('section.sect-group', null,
-      h('div.sg-head', null, h('img', { src: sectArtUrl(s.id, 'emblem'), alt: '', loading: 'lazy' }), h('b', null, s.name), h('span.badge', null, `${met}/${list.length}`)),
-      h('div.cc-grid', null, ...list.map((c) => thumb(app, c, () => champPage(app, c)))),
-    );
-  }));
-}
-
-function champPage(app: App, c: Champion, page?: DetailPage, direction = 1) {
+export function champPage(app: App, c: Champion, page?: DetailPage, direction = 1) {
   const entries = CHAMPIONS.filter((entry) => known(app, entry.id));
   const index = entries.findIndex((entry) => entry.id === c.id);
   const navigate = (step: number) => { const next = entries[index + step]; if (next) champPage(app, next, page, step); };
@@ -151,7 +110,7 @@ function champPage(app: App, c: Champion, page?: DetailPage, direction = 1) {
   page = showDetail(build, page, direction, navigate);
 }
 
-function classList(): HTMLElement {
+export function classList(): HTMLElement {
   return h('div.class-grid', null, ...CLASSES.map((cl) => h('div.sheet.prose', null,
     h('h2.h3', null, cl.name),
     h('p', null, cl.passive),
@@ -159,7 +118,7 @@ function classList(): HTMLElement {
   )));
 }
 
-function rulesPage(): HTMLElement {
+export function rulesPage(): HTMLElement {
   return h('div.col', { style: 'gap:12px' },
     ...(Object.keys(RULES_TEXT) as GameMode[]).map((m) => h('div.sheet.prose', null,
       h('h2.h3', null, MODE_NAMES[m]),

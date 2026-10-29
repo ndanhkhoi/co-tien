@@ -662,13 +662,59 @@ body.theatre #theatre {
   .bd-scene, .bd-cast { transition: none; }
 }
 
-/* Luyện thế: the arrangement panel takes the skill column; Luyện Cơ lists it first. */
-.screen.game.mx:has(.mx-practice) { --colL: 104px; }
-.mx-practice { justify-content: flex-start; gap: var(--gap); }
-.mx-practice .btn { width: 100%; min-width: 0; padding-inline: 4px; font-size: 13px; }
-.mx-pr-picked, .mx-pr-count { display: flex; align-items: center; justify-content: center; gap: 5px; min-height: 28px; padding: 3px 4px; background: var(--sheet); border: 1px solid var(--line-2); border-radius: var(--r-1); color: var(--ink); font-size: 12px; font-weight: 700; text-align: center; }
-.practice-tables { display: flex; gap: 10px; margin-top: 10px; }
-.practice-tables .btn { flex: 1; }
+/* ---------- Luyện thế: position picker ---------- */
+.screen.practice { gap: 10px; }
+.pr-body { flex: 1; min-height: 0; display: grid; grid-template-columns: 296px minmax(0, 1fr); gap: 12px; }
+.pr-list { display: flex; flex-direction: column; gap: 6px; padding: 2px 4px 14px 2px; }
+.pr-list .section-title { margin: 6px 2px 0; color: var(--accent-2); }
+.pr-list .section-title:first-child { margin-top: 0; }
+.pr-item { flex-shrink: 0; display: flex; align-items: center; gap: 10px; min-height: 58px; padding: 6px 10px 6px 6px; text-align: left; background: var(--sheet); border: 1px solid var(--line); border-radius: var(--r-2); box-shadow: var(--sh-1); color: var(--ink); transition: border-color 0.15s, box-shadow 0.15s; }
+.pr-item.sel { border-color: var(--accent); box-shadow: 0 0 0 1.5px var(--accent), var(--sh-1); }
+.pr-item b { display: block; font: 700 15px/1.25 var(--display); }
+.pr-sub { display: block; margin-top: 1px; font-size: 12px; line-height: 1.3; color: var(--muted); }
+.pr-thumb { flex: 0 0 auto; width: 80px; height: 46px; }
+.pr-empty { margin: 0; padding: 10px 12px; font-size: 13px; line-height: 1.4; color: var(--muted); background: var(--sheet-2); border: 1px dashed var(--line-2); border-radius: var(--r-2); }
+.pr-stage { min-height: 0; display: flex; flex-direction: column; gap: 8px; padding: 12px 14px; }
+.pr-felt { position: relative; flex: 1; min-height: 120px; }
+.pr-table { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.pr-info { display: flex; flex-direction: column; gap: 2px; }
+.pr-name { margin: 0; font: 700 22px/1.2 var(--display); }
+.pr-count { font-size: 13px; font-weight: 600; color: var(--muted); }
+.pr-tip { margin: 4px 0 0; font-size: 14px; line-height: 1.45; color: var(--ink-2); }
+.pr-tip b { color: var(--accent-2); }
+.pr-actions { display: flex; justify-content: flex-end; gap: 10px; }
+
+/* ---------- Luyện thế: the desk beside the table ---------- */
+.screen.game.mx:has(.mx-practice) { --colL: 132px; }
+.mx-practice { justify-content: flex-start; }
+.pd { flex: 1; min-height: 0; display: flex; flex-direction: column; gap: 8px; padding: 8px; background: var(--sheet); border: 1.5px solid var(--line); border-radius: var(--r-3); box-shadow: var(--sh-1); }
+.pd-seg { flex-shrink: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 3px; padding: 3px; border-radius: 999px; background: var(--sheet-3); }
+#ui .pd-seg-b { min-height: 38px; min-width: 0; padding: 0 4px; border-radius: 999px; font: 700 13px/1 var(--body); color: var(--muted); transition: background 0.15s, color 0.15s; }
+#ui .pd-seg-b[aria-selected='true'] { background: var(--sheet); color: var(--ink); box-shadow: var(--sh-1); }
+.pd-view { flex: 1; min-height: 0; display: flex; flex-direction: column; gap: 7px; }
+.pd-view[hidden] { display: none; }
+.pd-hint { font-size: 11px; line-height: 1.35; color: var(--muted); }
+.pd-hint b { font: 700 13px/1 var(--display); color: var(--ink); }
+.pd-tray { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; padding: 4px; border-radius: var(--r-2); background: var(--sheet-3); box-shadow: inset 0 1px 4px rgba(40, 30, 18, 0.28); }
+.pd-tray.few { grid-template-columns: repeat(2, 1fr); }
+#ui .pd-ball { position: relative; aspect-ratio: 1; min-width: 0; min-height: 0; display: grid; place-items: center; padding: 0; border-radius: 50%; touch-action: none; }
+.pd-ball img { width: 84%; height: 84%; pointer-events: none; filter: drop-shadow(0 2px 2px rgba(30, 20, 10, 0.35)); transition: opacity 0.15s, transform 0.15s; }
+/* A ball out on the cloth leaves its hollow in the tray. */
+.pd-ball.on img { opacity: 0.2; transform: scale(0.8); filter: grayscale(0.7); }
+.pd-ball.picked:not(.on) img { transform: scale(1.06); }
+.pd-arrange > .btn { margin-top: auto; }
+#ui .pd .btn.small { min-width: 0; padding-inline: 6px; font-size: 13px; }
+.pd-tally { flex-shrink: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+.pd-tally > div { display: flex; flex-direction: column; align-items: center; padding: 5px 4px 6px; border-radius: var(--r-2); background: var(--sheet-2); border: 1px solid var(--line); }
+.pd-tally b { font: 700 24px/1.1 var(--display); }
+.pd-tally span { font-size: 11px; font-weight: 600; color: var(--muted); }
+#ui .pd-sight { display: flex; align-items: center; justify-content: center; gap: 6px; min-height: 42px; margin-top: auto; border-radius: 999px; border: 1.5px solid var(--line-2); font-size: 13px; font-weight: 700; color: var(--muted); transition: border-color 0.15s, color 0.15s; }
+.pd-sight .ico { width: 24px; height: 24px; opacity: 0.55; }
+#ui .pd-sight[aria-pressed='true'] { border-color: var(--accent); color: var(--accent-2); background: var(--sheet-2); }
+.pd-sight[aria-pressed='true'] .ico { opacity: 1; }
+.pd-ghost { position: absolute; z-index: 40; width: 36px; height: 36px; margin: -18px 0 0 -18px; pointer-events: none; opacity: 0; transform: scale(0.6); transition: opacity 0.12s, transform 0.12s; }
+.pd-ghost.show { opacity: 0.92; transform: none; }
+@media (prefers-reduced-motion: reduce) { .pd-ghost, .pd-ball img { transition: none; } }
 
 /* ---------- Match HUD ----------
    Paper plates with painted ink edges. The table stays the brightest, most open surface:

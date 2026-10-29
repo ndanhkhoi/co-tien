@@ -14,10 +14,11 @@ import { haptic, isTouchDevice, keepAwake, toggleFullscreen } from '../../platfo
 import { TableView, type AimView } from '../../render/table-view';
 import type { App, Screen } from '../app';
 import { avatar } from '../avatar';
-import { btn, h, item, modal, stars, tap, toast, toggle, uiScale } from '../dom';
+import { btn, h, item, modal, stars, tap, toggle, uiScale } from '../dom';
 import { clearHints, hintOnce, hintTurn } from '../hints';
 import { icon, type IconName } from '../icons';
 import { playCutIn } from '../skill-cutin';
+import { practiceDesk, type PracticeSetup } from './practice-desk';
 
 export interface MatchResult {
   won: boolean;
@@ -36,8 +37,8 @@ export interface MatchOptions {
   /** Match end: return reward lines to show and optional actions. */
   onEnd?: (r: MatchResult) => { lines: string[]; again?: () => void };
   onExit: () => void;
-  /** Luyện thế: the left column becomes the arrangement panel; no rules, no opponent. */
-  practice?: boolean;
+  /** Luyện thế: the left column becomes the practice desk; no rules, no opponent. */
+  practice?: PracticeSetup;
 }
 
 type Expr = 'focus' | 'joy' | 'sad' | 'cast';
@@ -161,9 +162,6 @@ export function matchScreen(opts: MatchOptions) {
     let paused = false;
     let pauseWrap: HTMLElement | null = null;
     let attempt = 1;
-    /** Luyện thế: laying out balls (true) or shooting (false), and the ball last touched. */
-    let arranging = !!opts.practice;
-    let picked: number | null = null;
     /** Skill nudges: own turns since the human last cast, and whether a full bar was announced. */
     const skillIdle: [number, number] = [0, 0];
     const ultAnnounced: [boolean, boolean] = [false, false];
@@ -177,7 +175,7 @@ export function matchScreen(opts: MatchOptions) {
     let powerKey = '';
 
     const isHumanTurn = () => match.current.kind === 'human' && !aiActing;
-    const canAct = () => !arranging && isHumanTurn() && match.phase === 'aim' && strikeT === 0 && !paused && !presenting;
+    const canAct = () => !desk?.arranging && isHumanTurn() && match.phase === 'aim' && strikeT === 0 && !paused && !presenting;
     const canInspectSkills = () => !presenting && !paused && strikeT === 0;
     const placingNow = () => canAct() && (!!skillPlacement || match.canMoveCue && !placeConfirmed);
     const canAdjustAim = () => canAct() && !skillPlacement && (!placingNow() || placementAim);
@@ -216,64 +214,19 @@ export function matchScreen(opts: MatchOptions) {
     });
     const dock = h('div.mx-col.mx-dock', { 'aria-label': 'Chiêu thức' }, ...slots.map((s) => s.b));
     if (!hasSkills) dock.style.display = 'none';
-
-    // Luyện thế panel, in the skill column (practice has no skills).
-    const objectIds = match.balls.map((b) => b.id).filter((id) => id !== match.cueId());
-    const arrangeToggle = btn('Xong · Đánh', () => setArranging(!arranging));
-    const pickedInfo = h('div.mx-pr-picked', { 'aria-live': 'polite' });
-    const countInfo = h('div.mx-pr-count.num');
-    const addBall = btn('Thêm bi', () => {
-      const next = objectIds.find((id) => !match.balls.find((b) => b.id === id)!.onTable);
-      if (next === undefined) return;
-      const t = match.table;
-      if (match.arrangeBall(next, t.footSpot.x, t.footSpot.y)) {
-        picked = next;
-        view.resync();
-        sound.tap();
-      } else toast('Bàn đã kín, không còn chỗ đặt bi', 'bad');
-      renderHud();
-    }, 'secondary');
-    const removeBall = btn('Cất bi', () => {
-      if (picked === null) return;
-      match.removeBall(picked);
-      picked = null;
-      view.resync();
-      renderHud();
-    }, 'ghost');
-    const resetLayout = btn('Đặt lại thế', () => {
-      match.retryLayout();
-      aimFirstTarget();
-      renderHud();
-    }, 'secondary');
-    for (const b of [arrangeToggle, addBall, removeBall, resetLayout]) b.classList.add('small');
-    if (opts.practice) {
+    // Luyện thế takes the skill column (practice has no skills).
+    const desk = opts.practice ? practiceDesk({
+      match, view, screen: el, setup: opts.practice,
+      refresh: () => renderHud(),
+      reaim: () => aimFirstTarget(),
+      showBallTag: (id) => showBallTag(id),
+      herald: (m) => herald({ side: null, icon: 'target', ...m }),
+    }) : null;
+    if (desk) {
       dock.style.display = '';
       dock.classList.add('mx-practice');
       dock.setAttribute('aria-label', 'Luyện thế');
-      dock.replaceChildren(arrangeToggle, pickedInfo, countInfo, addBall, removeBall, resetLayout);
-    }
-    function setArranging(on: boolean) {
-      if (on === arranging || match.phase !== 'aim') return;
-      arranging = on;
-      picked = null;
-      if (!on) {
-        match.saveLayout();
-        aimFirstTarget();
-      }
-      sound.tap();
-      renderHud();
-    }
-    function renderPractice() {
-      if (!opts.practice) return;
-      const live = objectIds.filter((id) => match.balls.find((b) => b.id === id)!.onTable).length;
-      arrangeToggle.textContent = arranging ? 'Xong · Đánh' : 'Xếp bi';
-      arrangeToggle.classList.toggle('ghost', !arranging);
-      pickedInfo.replaceChildren(...(picked !== null ? [miniBall(picked), `Bi ${picked}`] : ['Chạm bi để chọn']));
-      countInfo.textContent = `Trên bàn ${live}/${objectIds.length}`;
-      for (const b of [pickedInfo, countInfo, addBall, removeBall]) b.hidden = !arranging;
-      resetLayout.hidden = arranging;
-      addBall.disabled = live >= objectIds.length;
-      removeBall.disabled = picked === null;
+      dock.replaceChildren(desk.el);
     }
 
     // Controls column.
@@ -488,10 +441,10 @@ export function matchScreen(opts: MatchOptions) {
       for (const s of [0, 1] as Side[]) {
         const c = cards[s];
         c.el.classList.toggle('active', match.turn === s && match.phase !== 'match-over');
-        c.score.textContent = opts.practice ? String(match.potted[s].length) : opts.challenge ? `${attempt}/${opts.challenge.tries}` : carom ? `${st.scores[s]}/${st.caromTarget}` : String(match.rackWins[s]);
+        c.score.textContent = desk ? desk.card().score : opts.challenge ? `${attempt}/${opts.challenge.tries}` : carom ? `${st.scores[s]}/${st.caromTarget}` : String(match.rackWins[s]);
         c.sub.replaceChildren();
-        if (opts.practice) {
-          c.sub.append('bi đã ăn');
+        if (desk) {
+          c.sub.append(desk.card().sub);
         } else if (opts.challenge) {
           c.sub.append('lượt thử');
         } else if (match.setup.mode === 'eight') {
@@ -530,10 +483,10 @@ export function matchScreen(opts: MatchOptions) {
         const id = match.balls.filter((b) => b.onTable && b.id > 0).reduce((lo, b) => Math.min(lo, b.id), Infinity);
         nextBall.replaceChildren('Bi tiếp theo', Number.isFinite(id) ? miniBall(id) : '', Number.isFinite(id) ? String(id) : 'Hết bi');
       } else nextBall.hidden = true;
-      objKicker.textContent = solo ? opts.label : `${MODE_NAMES[match.setup.mode]} · chạm ${match.setup.raceTo} · ván ${match.rackNo}`;
-      objText.textContent = opts.practice ? (arranging ? 'Kéo bi để xếp thế, xong thì chạm Xong · Đánh' : 'Đánh tự do · bi cái rơi được đặt lại') : opts.challenge ? opts.challenge.goal : match.setup.mode === 'carom-3c' ? 'Chạm bi thứ nhất, đủ 3 băng trước bi thứ hai.' : match.objective();
+      objKicker.textContent = desk ? desk.plate().kicker : solo ? opts.label : `${MODE_NAMES[match.setup.mode]} · chạm ${match.setup.raceTo} · ván ${match.rackNo}`;
+      objText.textContent = desk ? desk.plate().text : opts.challenge ? opts.challenge.goal : match.setup.mode === 'carom-3c' ? 'Chạm bi thứ nhất, đủ 3 băng trước bi thứ hai.' : match.objective();
       renderSkills();
-      renderPractice();
+      desk?.render();
       renderChips();
       renderControls();
       skillSheet?.refresh();
@@ -1091,11 +1044,11 @@ export function matchScreen(opts: MatchOptions) {
 
     // ---------- Pointer input on the table ----------
     const canvas = app.pixi.canvas;
-    let drag: { id: number; mode: 'aim' | 'cue' | 'arrange'; ball?: number; sx: number; sy: number; lastA: number; moved: boolean; cue0: { x: number; y: number }; p0: { x: number; y: number } } | null = null;
+    let drag: { id: number; mode: 'aim' | 'cue'; sx: number; sy: number; lastA: number; moved: boolean; cue0: { x: number; y: number }; p0: { x: number; y: number } } | null = null;
 
     const onDown = (e: PointerEvent) => {
       sound.unlock();
-      if (arranging && !paused && !drag && match.phase === 'aim') return arrangeDown(e);
+      if (!paused && !drag && desk?.down(e)) return;
       if (!canAct() || charging || drag) return;
       const p = view.toTable(e.clientX, e.clientY);
       const t = match.table;
@@ -1126,12 +1079,7 @@ export function matchScreen(opts: MatchOptions) {
       canvas.setPointerCapture(e.pointerId);
     };
     const onMove = (e: PointerEvent) => {
-      if (drag?.mode === 'arrange' && e.pointerId === drag.id && arranging) {
-        const p = view.toTable(e.clientX, e.clientY);
-        match.arrangeBall(drag.ball!, drag.cue0.x + p.x - drag.p0.x, drag.cue0.y + p.y - drag.p0.y);
-        drag.moved = true;
-        return;
-      }
+      if (desk?.move(e)) return;
       if (!drag || e.pointerId !== drag.id || !canAct()) return;
       if (!drag.moved && Math.hypot(e.clientX - drag.sx, e.clientY - drag.sy) < 6) return;
       drag.moved = true;
@@ -1155,10 +1103,10 @@ export function matchScreen(opts: MatchOptions) {
       drag.lastA = a;
     };
     const onUp = (e: PointerEvent) => {
+      if (desk?.up(e)) return;
       if (!drag || e.pointerId !== drag.id) return;
       const d = drag;
       drag = null;
-      if (d.mode === 'arrange') return;
       if (d.moved || !canAct() || e.type === 'pointercancel') return;
       // A tap: place the ball there, aim straight at a tapped ball, or aim at the tapped spot.
       const p = view.toTable(e.clientX, e.clientY);
@@ -1203,24 +1151,6 @@ export function matchScreen(opts: MatchOptions) {
       ballTagTimer = window.setTimeout(() => ballTag.classList.remove('show'), 1400);
     }
 
-    /** Luyện thế: grab the nearest ball and drag it, or tap the cloth to move the picked ball there. */
-    function arrangeDown(e: PointerEvent) {
-      const p = view.toTable(e.clientX, e.clientY);
-      const grab = Math.max(match.table.R * 1.8, 22 / view.pxPerM);
-      const hit = match.balls
-        .filter((b) => b.onTable && Math.hypot(p.x - b.x, p.y - b.y) < grab)
-        .sort((a, b) => Math.hypot(p.x - a.x, p.y - a.y) - Math.hypot(p.x - b.x, p.y - b.y))[0];
-      if (hit) {
-        picked = hit.id;
-        showBallTag(hit.id);
-        drag = { id: e.pointerId, mode: 'arrange', ball: hit.id, sx: e.clientX, sy: e.clientY, moved: false, lastA: 0, cue0: { x: hit.x, y: hit.y }, p0: p };
-        canvas.setPointerCapture(e.pointerId);
-        haptic(8);
-      } else if (picked !== null) {
-        match.arrangeBall(picked, p.x, p.y);
-      }
-      renderHud();
-    }
     canvas.addEventListener('pointerdown', onDown);
     canvas.addEventListener('pointermove', onMove);
     canvas.addEventListener('pointerup', onUp);
@@ -1528,6 +1458,7 @@ export function matchScreen(opts: MatchOptions) {
     }
 
     function onResolved(r: Resolution, side: Side) {
+      if (desk) return desk.resolved();
       const potN = Math.max(0, match.potted[side].length - pottedBefore[side]);
       if (r.foul && !opts.challenge) {
         sound.foul();
@@ -2089,7 +2020,7 @@ export function matchScreen(opts: MatchOptions) {
           renderControls();
         }
       }
-      const humanAim = !arranging && match.phase === 'aim' && (isHumanTurn() || showAiCue);
+      const humanAim = !desk?.arranging && match.phase === 'aim' && (isHumanTurn() || showAiCue);
       // Preview the cue while aiming in hand, while confirmation still gates shooting.
       const showCue = (humanAim || strikeT > 0) && (!placingNow() || !skillPlacement && placementAim);
       const ct = match.callType();

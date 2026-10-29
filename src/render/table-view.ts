@@ -473,7 +473,7 @@ export class TableView {
         g.stroke({ width: 1, color: 0xffffff, alpha: 0.4 });
       }
     }
-    if (m.eagle || m.passiveInfo || m.activeEffects.some(e => e.target === m.turn)) {
+    if (m.eagle || m.sight || m.passiveInfo || m.activeEffects.some(e => e.target === m.turn)) {
       // The simulated paths follow the chosen power, spin and terrain, so they move when the
       // power changes. Keep the straight aim to the ghost ball as a fixed reference beneath
       // them; otherwise a power change reads as the aim itself drifting.
@@ -551,7 +551,7 @@ export class TableView {
   /** Thần Nhãn: simulate the exact shot and draw every moving ball's path. */
   private drawEagle(aim: AimView) {
     const m = this.match;
-    const key = `${m.triplePreview}|${m.previewSpread}|${m.passiveInfo}|${aim.angle.toFixed(4)}|${aim.power.toFixed(2)}|${aim.side.toFixed(2)}|${aim.vert.toFixed(2)}|${(aim.elevation ?? 0).toFixed(3)}|${m.cueBall().x.toFixed(3)}|${JSON.stringify(m.simulationWorld())}`;
+    const key = `${m.sight}|${m.triplePreview}|${m.previewSpread}|${m.passiveInfo}|${aim.angle.toFixed(4)}|${aim.power.toFixed(2)}|${aim.side.toFixed(2)}|${aim.vert.toFixed(2)}|${(aim.elevation ?? 0).toFixed(3)}|${m.balls.map((b) => b.onTable ? `${b.x.toFixed(3)},${b.y.toFixed(3)}` : '-').join(';')}|${JSON.stringify(m.simulationWorld())}`;
     if (!this.eagleCache || this.eagleCache.key !== key) {
       const allPaths: { id: number; pts: number[] }[] = [];
       for (const offset of m.triplePreview ? [-m.previewSpread, 0, m.previewSpread] : [0]) {

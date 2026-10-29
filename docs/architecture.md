@@ -87,12 +87,14 @@ Code/shader cho bi và bàn phục vụ hình học và trạng thái mô phỏn
 ## `src/ui`
 
 Màn hình là DOM phủ trên canvas (`app.ts` quản lý ngăn xếp màn hình). `menus.ts` (trang chủ, Luận Cơ, Song Đấu,
-Tàng Các, cài đặt), `journey.ts` (bản đồ Hành trình), `codex.ts` (Cơ Tiên Lục), `story.ts` (đọc truyện có tranh, mở chương theo Hành trình), `match-screen.ts`
+Tàng Các, cài đặt), `journey.ts` (bản đồ Hành trình), `codex.ts` (nội dung Cơ Tiên Lục, hiện trong Tàng Các), `practice.ts` và `practice-desk.ts` (Luyện thế: màn chọn thế và bảng bên bàn), `story.ts` (đọc truyện có tranh, mở chương theo Hành trình), `match-screen.ts`
 (HUD, kéo/chạm bàn, nút xoay, thanh lực, chiêu, cut-in, AI diễn hoạt), `install-gate.ts` (bắt cài PWA trên điện thoại),
 `viewport-guard.ts` (bắt xoay ngang, kiểm tra cửa sổ trên máy tính), `hints.ts` / `intro.ts` (hướng dẫn).
 `icons.ts` cung cấp `icon(name)` để tạo icon tranh từ `public/art/ui/icons/`.
 
-Tàng Các và Cơ Tiên Lục gộp các tab vào thanh tiêu đề gọn để dành chiều cao cho nội dung. Tổng số tướng đã khám phá của Cơ Tiên Lục nằm trong nội dung tab **Tướng**, không nằm trên thanh tiêu đề chung; từng thẻ vùng đất vẫn có số tướng đã gặp riêng. Tướng được xem là đã khám phá khi đã gặp hoặc đã sở hữu (`known`).
+Tàng Các gộp các tab vào thanh tiêu đề gọn để dành chiều cao cho nội dung: **Tướng, Cơ, Bàn** là đồ sở hữu, **Vùng đất, Hệ, Luật** là Cơ Tiên Lục. Trang tướng có nút **Tiểu sử** mở trang Cơ Tiên Lục của tướng đó (tiểu sử, câu nói, bộ tranh) khi tướng đã được khám phá, tức đã gặp hoặc đã sở hữu (`known`). Từng thẻ vùng đất có số tướng đã gặp riêng.
+
+**Luyện thế** là ô thứ sáu ở trang chủ. Màn chọn thế liệt kê thế mẫu (`PRACTICE_DRILLS` trong `src/game/practice.ts`) và Thế của tôi (tối đa 12, lưu ở khoá `cotien.practice.v1`, qua `sanitizeSaved`), với hình bàn vẽ từ chính hình học và màu bi của mô phỏng. Trong bàn, `practice-desk.ts` chiếm cột chiêu: chế độ **Xếp bi** có khay chứa mọi bi chưa ra bàn (chạm để đặt hoặc cất, kéo ra bàn, kéo bi ra mép để cất), chế độ **Đánh** có số cú/số bi vào, **Đánh lại** (`Match.undoShot` dùng ảnh chụp trước cú), **Về thế đầu**, **Lưu thế** và **Đường đi** (`Match.sight`, mô phỏng đường của mọi bi như Thần Nhãn).
 
 `src/main.ts` nạp năm tệp CSS: `base.css` đặt nền tảng Thuỷ Mặc (màu, chữ, nền đọc và safe area);
 `kit.css` chứa thành phần dùng chung như nút, thẻ chọn và hộp thoại. `screens.css` dành cho các màn hình,
@@ -175,7 +177,7 @@ Cổ Điển và thử thách không kích hoạt kỹ năng, nội tại hoặc
 
 `Champion.kind` có sáu loại tạo hình: Hiệp Khách, Nữ Hiệp, Yêu Tộc, Tinh Linh, Linh Tượng, Ma Vật; `cls` là một trong bảy hệ nội tại, độc lập với loại. `roster.json` giữ 65 tướng × 3 tên chiêu; `sects.ts` dựng slot 0/1/2, mô tả, hồi chiêu và sức mạnh. Tám cơ chế đặt bàn là `slick`, `sand`, `bumper`, `railcraft`, `wind`, `well`, `spinwash`, `vortex`; danh sách và hành vi nằm trong World Bible.
 
-Tên màn hình: **Luận Cơ** (đấu AI), **Song Đấu** (hai người chung máy), **Luyện Cơ** (thử thách), **Tàng Các** (tướng/cơ/bàn), **Hành trình**, **Cơ Tiên Truyện**, **Cơ Tiên Lục**. **Tiên Đạo / Cổ Điển** là lựa chọn luật hiệu ứng trong thiết lập trận, độc lập với thể loại 8/9/10 bi hoặc phăng.
+Tên màn hình: **Luận Cơ** (đấu AI), **Song Đấu** (hai người chung máy), **Luyện Cơ** (thử thách), **Tàng Các** (tướng/cơ/bàn và Cơ Tiên Lục), **Hành trình**, **Cơ Tiên Truyện**, **Luyện thế** (bàn tập tự do). **Tiên Đạo / Cổ Điển** là lựa chọn luật hiệu ứng trong thiết lập trận, độc lập với thể loại 8/9/10 bi hoặc phăng.
 
 Nội tại đi qua cùng `Match` cho người và AI: Thần Xạ khoá hướng và mở khoá khi đổi góc; Cuồng Chiến tăng lực 10%, giảm tầm áp phê 25%; Pháp Tu chọn trục áp phê (trục chọn ×1,2, trục kia ×0,8); Hộ Pháp chọn băng mềm một lần mỗi lượt cơ; Chú Sư để vùng cát sau cú hợp lệ kết thúc lượt; Ảnh Sát cần ăn liền 4 bi (`ASSASSIN_RUN`) rồi mới chọn thông tin hoặc lực ×1,12, dùng xong phải gom lại chuỗi; Luân Hồi giảm một lượt hồi chiêu khi luân phiên hai slot cơ bản.
 

@@ -1,20 +1,13 @@
 import { CHALLENGES, FAMILY_INFO, type ChallengeFamily } from '../../game/content/challenges';
 import { screenEl, type App, type Screen } from '../app';
-import { btn, h, stars, tap, toast } from '../dom';
+import { h, stars, tap, toast } from '../dom';
 import { icon } from '../icons';
-import { startChallenge, startPractice, statChip, topbar } from './menus';
+import { startChallenge, statChip, topbar } from './menus';
 
 export function challengesScreen(app: App): Screen {
   const el = screenEl('challenges');
   const solved = CHALLENGES.filter((c) => app.profile.challenges[c.id] > 0).length;
   const list = h('div.scroll.challenge-list', { tabindex: '0' });
-  // Luyện thế: the free counterpart of the graded drills below.
-  list.append(h('section.challenge-family.sheet.practice-entry', null,
-    h('div.family-heading', null, h('div.grow', null, h('h2', null, 'Luyện thế'),
-      h('p', null, 'Tự xếp bi trên bàn thật rồi đánh tự do, không luật, không đổi lượt. Đặt lại thế bất cứ lúc nào để luyện lại.'))),
-    h('div.practice-tables', null,
-      btn('Bàn lỗ', () => startPractice(app, 'pool')),
-      btn('Bàn phăng', () => startPractice(app, 'carom'), 'secondary'))));
   for (const family of Object.keys(FAMILY_INFO) as ChallengeFamily[]) {
     const info = FAMILY_INFO[family];
     const tasks = CHALLENGES.filter((c) => c.family === family);

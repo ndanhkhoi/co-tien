@@ -10,16 +10,16 @@ import {
   CHAMPION_PRICE, CHAMPIONS, champion, classInfo, cutoutUrl, sect, sectArtUrl, SECTS, skillIconUrl, type Champion, KIND_LABEL } from '../../game/content/sects';
 import { cueStats, tableStats, TABLE_NOTE, type StatLine } from '../../game/content/stat-text';
 import { defaultProfile, exportCode, importCode, levelProgress } from '../../game/profile';
-import { practiceLayout, type PracticeTable } from '../../game/practice';
 import { enterFullscreen, isTouchDevice, toggleFullscreen } from '../../platform/device';
-import { motionModal as modal, screenEl, type App, type Screen } from '../app';
+import { motionModal as modal, screenEl, turnPage, type App, type Screen } from '../app';
 import { avatar } from '../avatar';
 import { bar5, btn, chip, h, iconBtn, item, slider, stars, tabs, tap, toast, toggle } from '../dom';
 import { icon, type IconName } from '../icons';
 import { showIntro } from '../intro';
 import { resetHints } from '../hints';
 import { challengesScreen } from './challenges';
-import { codexScreen } from './codex';
+import { champPage, classList, known, landList, rulesPage } from './codex';
+import { practiceScreen } from './practice';
 import { journeyScreen } from './journey';
 import { storyScreen } from './story';
 import { matchScreen } from './match-screen';
@@ -221,7 +221,12 @@ export function championModal(app: App, c: Champion, onChange?: () => void) {
           h('p.cp-passive', null, h('b', null, `Nội tại · ${cls.name}: `), cls.passive),
         ),
         skillButtons(c)),
-        h('div.cp-foot', null, btn('Đóng', close, 'ghost'), action),
+        h('div.cp-foot', null, btn('Đóng', close, 'ghost'),
+          known(app, c.id) ? btn('Tiểu sử', () => {
+            close();
+            champPage(app, c);
+          }, 'secondary') : null,
+          action),
       ),
       closeX(close),
     );
@@ -344,7 +349,7 @@ export function homeScreen(app: App): Screen {
         tablet('target', 'Luyện Cơ', `Luyện cú · ${chDone}/${CHALLENGES.length}`, () => app.go(challengesScreen)),
         tablet('collection', 'Tàng Các', `Chiêu mộ · ${p.champions.length}/${CHAMPIONS.length}`, () => app.go(collectionScreen)),
         tablet('story', 'Cơ Tiên Truyện', read ? `Đã đọc ${read} chương` : '15 chương', () => app.go(storyScreen)),
-        tablet('codex', 'Cơ Tiên Lục', 'Bách khoa', () => app.go(codexScreen)),
+        tablet('place', 'Luyện thế', 'Tự bày thế tập', () => app.go(practiceScreen)),
       ),
     ),
   );
@@ -489,20 +494,6 @@ function setupScreen(app: App, local: boolean): Screen {
   return { el };
 }
 
-/** Luyện thế: lay out any position on a real table, then shoot it freely. */
-export function startPractice(app: App, kind: PracticeTable) {
-  const me = { name: app.profile.name, kind: 'human' as const, cue: app.cue, champion: app.profile.champion };
-  app.go(matchScreen({
-    setup: {
-      mode: kind === 'pool' ? 'eight' : 'carom-libre', raceTo: 1, mutator: null, tableSkin: app.tableSkin, classic: true,
-      players: [me, { ...me, name: 'Luyện thế' }], layout: practiceLayout(kind), practice: true,
-    },
-    label: kind === 'pool' ? 'Luyện thế · bàn lỗ' : 'Luyện thế · bàn phăng',
-    practice: true,
-    onExit: () => app.pop(),
-  }));
-}
-
 export const quickScreen = (app: App) => setupScreen(app, false);
 export const localScreen = (app: App) => setupScreen(app, true);
 
@@ -640,7 +631,8 @@ function startChallengeReplace(app: App, c: ChallengeDef, table: TableSkin) {
 
 // ---------- Collection ----------
 
-type CollTab = 'champ' | 'cue' | 'table';
+/** Tàng Các keeps what you own (champions, cues, tables) and Cơ Tiên Lục, the world's library. */
+type CollTab = 'champ' | 'cue' | 'table' | 'land' | 'class' | 'rules';
 
 export function collectionScreen(app: App): Screen {
   const el = screenEl('collection');
@@ -653,6 +645,11 @@ export function collectionScreen(app: App): Screen {
   const render = () => {
     content.replaceChildren();
     content.scrollTop = 0;
+    if (tab === 'land' || tab === 'class' || tab === 'rules') {
+      note.textContent = tab === 'land' ? 'Cơ Tiên Lục · mười ba môn phái, bàn và cơ của từng vùng.' : tab === 'class' ? 'Cơ Tiên Lục · bảy hệ, mỗi hệ một nội tại.' : 'Cơ Tiên Lục · luật của từng lối chơi.';
+      content.append(tab === 'land' ? landList(app) : tab === 'class' ? classList() : rulesPage());
+      return;
+    }
     if (tab === 'champ') {
       note.textContent = `Đã chiêu mộ ${p.champions.length}/${CHAMPIONS.length} tướng. Chạm một tướng để xem nội tại và 3 chiêu.`;
       content.append(championPicker(app, () => p.champion, (c) => championModal(app, c, () => {
@@ -705,9 +702,14 @@ export function collectionScreen(app: App): Screen {
     if (locked) return btn(h('span.btn-in', null, icon('lock'), `Mở ở cấp ${level}`), () => toast(`Đạt cấp ${level} để mở khoá`, 'bad'), 'ghost small block');
     return btn(h('span.btn-in', null, icon('coin', 'keep'), `Mua · ${fmt(price)} xu`), () => (p.coins >= price ? act() : toast('Chưa đủ xu', 'bad')), 'small block');
   }
-  const bar = tabs<CollTab>([{ id: 'champ', label: 'Tướng', icon: 'users' }, { id: 'cue', label: 'Cơ', icon: 'strike' }, { id: 'table', label: 'Bàn', icon: 'target' }], tab, (v) => {
+  const bar = tabs<CollTab>([
+    { id: 'champ', label: 'Tướng', icon: 'users' }, { id: 'cue', label: 'Cơ', icon: 'strike' }, { id: 'table', label: 'Bàn', icon: 'target' },
+    { id: 'land', label: 'Vùng đất', icon: 'journey' }, { id: 'class', label: 'Hệ', icon: 'shield' }, { id: 'rules', label: 'Luật', icon: 'scroll' },
+  ], tab, (v) => {
+    const order: CollTab[] = ['champ', 'cue', 'table', 'land', 'class', 'rules'];
+    const direction = order.indexOf(v) > order.indexOf(tab) ? 1 : -1;
     tab = v;
-    render();
+    turnPage(content, render, direction);
   });
   render();
   const header = topbar(app, 'Tàng Các', true, bar);

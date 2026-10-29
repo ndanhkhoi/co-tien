@@ -11,7 +11,7 @@ export function showIntro(app: App, onDone?: () => void) {
     { img: 'art/ui/keyart.webp', focus: '12% 72%', title: 'Cơ Tiên Giới', text: (lore as { world: string }).world },
     {
       img: 'art/ui/map.webp', title: `${SECTS.length} môn phái · ${CHAMPIONS.length} tướng`,
-      text: 'Mỗi môn phái có Linh Đài riêng: màu nỉ, đặc tính bàn và Thiên Tượng (gió, tuyết, bàn nghiêng…). Đi Hành trình qua từng vùng đất, thắng cao thủ để chiêu mộ họ, giải bài ở Luyện Cơ. Luận Cơ: đấu máy. Song Đấu: hai người chung máy. Tàng Các: chiêu mộ tướng. Đọc Cơ Tiên Truyện, tra cứu Cơ Tiên Lục.',
+      text: 'Mỗi môn phái có Linh Đài riêng: màu nỉ, đặc tính bàn và Thiên Tượng (gió, tuyết, bàn nghiêng…). Đi Hành trình qua từng vùng đất, thắng cao thủ để chiêu mộ họ, giải bài ở Luyện Cơ. Luận Cơ: đấu máy. Song Đấu: hai người chung máy. Luyện thế: tự xếp bàn rồi đánh tự do. Tàng Các: chiêu mộ tướng, tra cứu Cơ Tiên Lục. Đọc Cơ Tiên Truyện.',
     },
     {
       img: 'art/ui/home-bg.webp', focus: '82% 60%', title: 'Tiên Đạo hay Cổ Điển',

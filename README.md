@@ -19,12 +19,14 @@ dụng (PWA), chơi offline.
   nhiên — bão tuyết, sóng lừng, gió giật, giếng sao, rễ cây… — đều là lực và ma sát thật trong mô phỏng,
   báo trước và vẽ lên bàn. Địa Lợi cho tướng đánh trên bàn quê nhà.
 - **Luận Cơ:** so tài nhanh với máy. **Song Đấu:** hai người luân phiên trên cùng một thiết bị.
-- **Luyện Cơ:** luyện từng cú đánh qua các bài thế có lời giải; **Luyện thế** (mở từ Luyện Cơ) cho kéo xếp bi ngay trên bàn lỗ hoặc bàn phăng thật, rồi đánh tự do không luật, không đổi lượt và đặt lại thế bất cứ lúc nào. **Tàng Các:** chiêu mộ tướng, chọn cơ và bàn.
+- **Luyện Cơ:** luyện từng cú đánh qua các bài thế có lời giải, chấm sao.
+- **Luyện thế:** chọn một thế mẫu (phá bi, cắt mỏng, bi sát băng, bi kết, gỡ thế chặn, nhảy bi, ba băng…) hoặc thế mình đã lưu, xếp thêm bi từ khay bằng cách chạm hay kéo, rồi đánh tự do không luật. **Đánh lại** trả mọi bi về chỗ trước cú vừa đánh, **Đường đi** vẽ trước đường của mọi bi, **Lưu thế** giữ vị trí bàn vào Thế của tôi.
+- **Tàng Các:** chiêu mộ tướng, chọn cơ và bàn, kèm Cơ Tiên Lục.
 - **Hành trình:** bản đồ Cơ Tiên Giới; mỗi vùng có 5 cao thủ để thách đấu (thắng thì chiêu mộ được) và các
   thử thách. 60 thử thách được sinh tự động, mỗi bài có lời giải đã kiểm chứng bằng vật lý.
 - **Cơ Tiên Truyện:** truyện chữ có tranh minh hoạ thuỷ mặc, 15 chương mở dần theo Hành trình — một câu
   chuyện riêng của Cơ Tiên Giới, lấy cảm hứng từ cách kể của truyện cổ Việt Nam và Trung Hoa.
-- **Cơ Tiên Lục:** wiki trong game về vùng đất, tướng, hệ và luật chơi; tướng chưa gặp hiện "???".
+- **Cơ Tiên Lục** (các tab Vùng đất, Hệ, Luật trong Tàng Các): wiki trong game về vùng đất, tướng, hệ và luật chơi; trang tướng mở bằng nút Tiểu sử, tướng chưa gặp còn khoá.
 - **Điều khiển cảm ứng:** kéo/chạm trên bàn và nút xoay để ngắm, kéo bi cái hoặc dùng nút hướng để
   đặt bi; chuyển “Ngắm thử” để canh đường trước khi chốt. Giữ bi cái nhỏ để mở bi lớn và kéo chọn điểm áp phê
   (chạm để mở bảng chỉnh chính xác); chạm thanh lực đặt mức, kéo để tinh chỉnh, rồi chạm ĐÁNH hoặc giữ–thả để

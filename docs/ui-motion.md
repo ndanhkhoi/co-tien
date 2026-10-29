@@ -22,9 +22,9 @@ nguyên bản của repo, không lấy tên từ một trò chơi khác. Phụ �
   Bấm liên tiếp huỷ animation và xoá bản sao cũ. Không đo layout trong vòng animation.
 - Intro: tranh crossfade, phần chữ trượt theo hướng; nút Trước/Tiếp và vuốt dùng cùng luồng.
 - Truyện: chữ trượt, chỉ crossfade khi đường dẫn tranh đổi; tranh được kế thừa giữ nguyên.
-- Cơ Tiên Lục: tab chuyển theo thứ tự; chi tiết mở/đóng bằng tấm trượt. Chi tiết vùng đất và tướng
+- Tàng Các (gồm các tab Cơ Tiên Lục): tab chuyển theo thứ tự; chi tiết mở/đóng bằng tấm trượt. Chi tiết vùng đất và tướng
   có Trước/Tiếp và vuốt; tướng chỉ duyệt qua các trang đã khám phá. Hành trình dùng cùng chuyển động
-  cho tấm vùng đất và hộp thoại cao thủ. Luyện Cơ mở thẳng trận, dùng chuyển cảnh toàn màn hình.
+  cho tấm vùng đất và hộp thoại cao thủ. Luyện Cơ và Luyện thế mở thẳng bàn, dùng chuyển cảnh toàn màn hình.
 - Tướng: tranh trang chủ và trang tướng đi lên/fade; thẻ chiêu lệch 60 ms, thẻ chọn tướng lệch tối đa
   160 ms theo hàng. Hai tướng ở màn chuẩn bị quét từ hai phía, lớp mực dùng tranh cutin đã có;
   dấu Đấu đóng cuối, toàn chuỗi 900 ms.

@@ -675,7 +675,7 @@ textarea.code-box:focus { border-color: var(--accent); }
 .class-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 10px; padding-bottom: 14px; }
 .rules-list { margin: 6px 0 0; padding-left: 20px; }
 .rules-list li { margin: 4px 0; font-size: var(--fs-m); line-height: 1.55; color: var(--ink-2); }
-.codex-scroll > .col { padding-bottom: 14px; }
+.coll-scroll > .col { padding-bottom: 14px; }
 
 .modal.codex-page { width: min(780px, 100%); }
 .codex-banner { flex-shrink: 0; width: calc(100% + 40px); height: 150px; margin: -18px -20px 0; object-fit: cover; border-radius: var(--r-3) var(--r-3) 0 0; }

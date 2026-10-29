@@ -3,6 +3,7 @@ import type { AiProfile } from '../ai/types';
 import { maxSpeed, powerToSpeed } from '../core/cue-power';
 import { cloneBalls, DEFAULT_PHYS, elevatedTipOffset, step, strike, type Ball, type PhysEvent, type PhysParams, type SimWorld } from '../core/physics';
 import { canPlaceCue, nearestCueSpot, respot } from '../core/rack';
+import { canRest } from './practice';
 import { Rng } from '../core/rng';
 import { RULES } from '../core/rules';
 import { groupOf } from '../core/rules/eight-ball';
@@ -148,6 +149,10 @@ export class Match {
   private omenPocket: number | null = null;
   lastRes: Resolution | null = null;
   lastShooter: Side = 0;
+  /** What happened on the last shot, for the HUD to name it. */
+  lastShot: ShotSummary | null = null;
+  /** Luyện thế: draw every ball's full path while aiming. */
+  sight = false;
   private snapshot: Snapshot | null = null;
   private shotEvents: PhysEvent[] = [];
   private shotInput: ShotInput | null = null;
@@ -578,6 +583,7 @@ export class Match {
     const input = this.shotInput!;
     const crossed = this.balls.filter((b) => b.onTable && b.id !== 0 && b.x < this.table.headStringX).length;
     const shot = summarize(this.shotEvents, this.cueId(side), this.state.isBreak, input.call, input.pushOut, this.shotTargets, crossed);
+    this.lastShot = shot;
     if (this.setup.practice) return this.finishPracticeShot(side, shot);
     if (this.setup.judge) {
       const verdict = shot.offTable?.length
@@ -710,10 +716,8 @@ export class Match {
       cue.z = cue.vz = 0;
       Object.assign(cue, nearestCueSpot(this.table, this.balls, cue.id, this.table.headSpot.x, 0, false));
     }
-    const left = this.balls.some((b) => b.onTable && b.id !== cue.id);
     const res: Resolution = {
-      foul: null, keepTurn: true, ballInHand: scratched ? 'anywhere' : 'none', respot: [], winner: null, points: 0,
-      messages: scratched ? ['Bi cái rơi — đặt lại bi cái'] : left ? [] : ['Sạch bàn — đặt lại thế để luyện tiếp'],
+      foul: null, keepTurn: true, ballInHand: scratched ? 'anywhere' : 'none', respot: [], winner: null, points: 0, messages: [],
     };
     this.lastRes = res;
     this.lastShooter = side;
@@ -722,51 +726,76 @@ export class Match {
     this.beginTurn();
   }
 
-  /** Luyện thế: where `id` may rest — on the cloth, clear of other balls and pocket mouths. */
-  canArrange(id: number, x: number, y: number): boolean {
-    const t = this.table;
-    if (!canPlaceCue(t, this.balls, id, x, y, false)) return false;
-    return t.pockets.every((p) => Math.hypot(x - p.hx, y - p.hy) > p.hr + t.R);
-  }
-
-  /** Luyện thế: move (or bring back) ball `id` toward (x, y); false when nothing legal is near. */
-  arrangeBall(id: number, x: number, y: number): boolean {
+  /** Luyện thế: move ball `id`, from the cloth or the tray, to the free spot nearest (x, y). */
+  placeBall(id: number, x: number, y: number): boolean {
     const b = this.balls.find((v) => v.id === id);
     if (!b || !this.setup.practice || this.phase !== 'aim') return false;
-    const spot = this.arrangeSpot(id, x, y);
+    const spot = this.restSpot(id, x, y);
     if (!spot) return false;
     Object.assign(b, { x: spot.x, y: spot.y, z: 0, vx: 0, vy: 0, vz: 0, wx: 0, wy: 0, wz: 0, onTable: true });
+    this.snapshot = null;
     return true;
   }
 
   /** Nearest spot to (x, y) where `id` may rest, by spiral search; null on a full table. */
-  private arrangeSpot(id: number, x: number, y: number): { x: number; y: number } | null {
+  private restSpot(id: number, x: number, y: number): { x: number; y: number } | null {
     const t = this.table;
     const cx = Math.max(-t.L / 2, Math.min(t.L / 2, x));
     const cy = Math.max(-t.W / 2, Math.min(t.W / 2, y));
-    if (this.canArrange(id, cx, cy)) return { x: cx, y: cy };
+    if (canRest(t, this.balls, id, cx, cy)) return { x: cx, y: cy };
     for (let r = 0.004; r < t.L; r += 0.004) {
       for (let a = 0; a < 32; a++) {
         const px = cx + Math.cos((a / 32) * Math.PI * 2) * r;
         const py = cy + Math.sin((a / 32) * Math.PI * 2) * r;
-        if (this.canArrange(id, px, py)) return { x: px, y: py };
+        if (canRest(t, this.balls, id, px, py)) return { x: px, y: py };
       }
     }
     return null;
   }
 
-  /** Luyện thế: take an object ball off the cloth. The cue ball always stays. */
-  removeBall(id: number) {
+  /** Luyện thế: carry an object ball back to the tray. The cue ball always stays. */
+  liftBall(id: number): boolean {
     const b = this.balls.find((v) => v.id === id);
-    if (!b || id === this.cueId() || !this.setup.practice || this.phase !== 'aim') return;
+    if (!b || !b.onTable || id === this.cueId() || !this.setup.practice || this.phase !== 'aim') return false;
     b.onTable = false;
+    this.snapshot = null;
+    return true;
   }
 
-  /** Luyện thế: the current arrangement becomes the position "Đặt lại thế" returns to. */
-  saveLayout() {
+  /** Luyện thế: lay out a whole position; "Về thế" comes back to it. */
+  setPosition(balls: Ball[]) {
+    if (!this.setup.practice || this.phase === 'rolling') return;
+    this.setup.layout = cloneBalls(balls);
+    this.potted = [[], []];
+    this.snapshot = null;
+    this.retryLayout();
+  }
+
+  /** Luyện thế: the position on the cloth now becomes the one "Về thế" returns to. */
+  markPosition() {
     if (!this.setup.practice) return;
     this.setup.layout = cloneBalls(this.balls);
     this.placing = 'none';
+  }
+
+  /** Luyện thế: the last shot can still be taken back. */
+  get canUndo(): boolean {
+    return !!this.setup.practice && !!this.snapshot && this.phase === 'aim';
+  }
+
+  /** Luyện thế: put every ball back where it rested before the last shot. */
+  undoShot(): boolean {
+    const s = this.snapshot;
+    if (!this.canUndo || !s) return false;
+    this.balls = cloneBalls(s.balls);
+    this.world.balls = this.balls;
+    this.potted = s.potted;
+    this.placing = s.ballInHand;
+    this.snapshot = null;
+    this.lastRes = null;
+    this.emit({ type: 'new-rack' });
+    this.emit({ type: 'turn', side: this.state.turn });
+    return true;
   }
 
   private gainEnergy(side: Side, amount: number) {
