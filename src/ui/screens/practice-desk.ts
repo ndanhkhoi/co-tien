@@ -3,7 +3,7 @@ import type { Match } from '../../game/match';
 import { practiceBalls, practiceIds, saveLayout, spotsOf, PRACTICE_DRILLS, type PracticeTable } from '../../game/practice';
 import { haptic } from '../../platform/device';
 import type { TableView } from '../../render/table-view';
-import { btn, h, tap, toast, uiScale } from '../dom';
+import { btn, h, tap, toast, uiOrigin, uiScale } from '../dom';
 import { icon } from '../icons';
 
 /** What the match screen tells the practice desk about the table it sits beside. */
@@ -164,7 +164,7 @@ export function practiceDesk(host: DeskHost): PracticeDesk {
       ghost.classList.remove('show');
       return;
     }
-    const rect = document.getElementById('ui')!.getBoundingClientRect();
+    const rect = uiOrigin();
     const k = uiScale();
     ghost.src = view.ballPortrait(id, 64);
     ghost.style.left = `${(e.clientX - rect.left) / k}px`;

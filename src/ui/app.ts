@@ -41,11 +41,17 @@ export class App {
 
   async init() {
     this.pixi = new Application();
+    // The canvas spans the window, so cap its pixel count: a 4K-class buffer with MSAA cannot hold
+    // 60 fps on most GPUs, and a late frame stutters both the rolling balls and the power bar.
+    // Dense screens skip MSAA; balls are anti-aliased in their own shader.
+    const dpr = window.devicePixelRatio || 1;
+    const budget = 3_600_000;
+    const resolution = Math.max(1, Math.min(dpr, 2, Math.sqrt(budget / (innerWidth * innerHeight))));
     await this.pixi.init({
       resizeTo: window,
-      antialias: true,
+      antialias: resolution < 1.5,
       backgroundAlpha: 0,
-      resolution: Math.min(window.devicePixelRatio || 1, 2.5),
+      resolution,
       autoDensity: true,
       preference: 'webgl',
       powerPreference: 'high-performance',

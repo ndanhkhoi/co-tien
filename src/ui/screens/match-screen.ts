@@ -14,7 +14,7 @@ import { haptic, isTouchDevice, keepAwake, toggleFullscreen } from '../../platfo
 import { TableView, type AimView } from '../../render/table-view';
 import type { App, Screen } from '../app';
 import { avatar } from '../avatar';
-import { btn, h, modal, stars, tap, uiScale } from '../dom';
+import { btn, h, modal, stars, tap, uiOrigin, uiScale } from '../dom';
 import { clearHints, hintOnce, hintTurn } from '../hints';
 import { icon, type IconName } from '../icons';
 import { playCutIn } from '../skill-cutin';
@@ -386,7 +386,10 @@ export function matchScreen(opts: MatchOptions) {
     }
 
     // ---------- Layout ----------
+    let handSize = { w: 0, h: 0 };
     function layout() {
+      handSize = { w: 0, h: 0 };
+      handKey = '';
       // HUD offsets are layout px inside the scaled #ui; the table canvas works in screen px.
       const k = uiScale();
       const ui = document.getElementById('ui')!;
@@ -1169,7 +1172,7 @@ export function matchScreen(opts: MatchOptions) {
       if (!b) return;
       const k = uiScale();
       const at = view.toScreen(b.x, b.y);
-      const rect = document.getElementById('ui')!.getBoundingClientRect();
+      const rect = uiOrigin();
       const label = id === match.cueId() ? 'Bi cái' : match.isCarom ? (id === 2 ? 'Bi đỏ' : 'Bi đối thủ') : `Bi ${id}`;
       ballTag.replaceChildren(h('img.mx-bt-ball', { src: view.ballPortrait(id, 40), alt: '' }), h('span', null, label));
       ballTag.style.left = `${(at.x - rect.left) / k}px`;
@@ -1998,7 +2001,7 @@ export function matchScreen(opts: MatchOptions) {
       const p = match.table.pockets[cs.pocket];
       const k = uiScale();
       const sp0 = view.toScreen(p.hx, p.hy);
-      const rect = document.getElementById('ui')!.getBoundingClientRect();
+      const rect = uiOrigin();
       const sp = { x: (sp0.x - rect.left) / k, y: (sp0.y - rect.top) / k };
       // Push the tag toward the table centre so it never sits off-screen.
       const dirX = -Math.sign(p.hx) || 0;
@@ -2062,14 +2065,15 @@ export function matchScreen(opts: MatchOptions) {
         const c = match.cueBall();
         const k = uiScale();
         const sp0 = view.toScreen(c.x, c.y);
-        const rect = document.getElementById('ui')!.getBoundingClientRect();
+        const rect = uiOrigin();
         const sp = { x: (sp0.x - rect.left) / k, y: (sp0.y - rect.top) / k };
-        const hw = hand.offsetWidth;
-        const key = `${Math.round(sp.x * 2)},${Math.round(sp.y * 2)},${hw}`;
+        const key = `${Math.round(sp.x * 2)},${Math.round(sp.y * 2)}`;
         if (key !== handKey) {
           handKey = key;
           hand.style.display = '';
-          hand.style.transform = `translate(${sp.x - hw * HAND.cx}px, ${sp.y - hand.offsetHeight * HAND.cy}px)`;
+          // Measured once per layout: reading offset sizes every frame would force a layout each time.
+          if (!handSize.w) handSize = { w: hand.offsetWidth, h: hand.offsetHeight };
+          hand.style.transform = `translate(${sp.x - handSize.w * HAND.cx}px, ${sp.y - handSize.h * HAND.cy}px)`;
         }
       } else if (handKey !== 'off') {
         handKey = 'off';

@@ -177,6 +177,16 @@ export function chip(label: Child, selected: boolean, fn: () => void, ic?: IconN
 }
 
 /** Scale of the #ui layer (see installUiScale in main.ts): screen px = layout px × uiScale(). */
+/**
+ * Screen position of the #ui layer's top-left corner, read from the inline style main.ts sets
+ * (fixed, transform-origin 0 0). Per-frame code uses this instead of getBoundingClientRect, which
+ * would force a layout every frame.
+ */
+export function uiOrigin(): { left: number; top: number } {
+  const ui = document.getElementById('ui');
+  return { left: parseFloat(ui?.style.left ?? '') || 0, top: parseFloat(ui?.style.top ?? '') || 0 };
+}
+
 export function uiScale(): number {
   return Number(document.getElementById('ui')?.style.getPropertyValue('--ui-scale')) || 1;
 }
