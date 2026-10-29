@@ -526,7 +526,8 @@ body { background: linear-gradient(#e9e1d0d1, #e9e1d0d1), var(--paper, none) cen
 .home-tablet { display: grid; grid-template-rows: 28px 34px 27px; align-content: center; justify-items: center; gap: 1px; }
 .ht-icon { height: 28px; }
 .ht-icon .ico { width: 28px; height: 28px; }
-.ht-name, .ht-sub { align-self: center; }
+/* Rows line up across tiles: a one-line title or subtitle keeps the space a wrapped one would use. */
+.ht-name, .ht-sub { align-self: start; }
 .champion-skills { align-items: stretch; }
 .champion-skill { display: grid; grid-template-rows: 48px 15px minmax(34px, 1fr) 15px 15px; justify-items: center; align-content: start; align-items: center; }
 .champion-skill-name { align-self: start; text-align: center; }
@@ -628,6 +629,11 @@ body.cast-room .bd-cast { display: block; }
 .bd-cast.left { right: calc(100% - var(--game-l) - 70 * var(--fk)); translate: -24px 0; }
 .bd-cast.right { left: calc(var(--game-l) + var(--game-w) - 70 * var(--fk)); transform: scaleX(-1); translate: 24px 0; }
 .bd-cast.on { opacity: 1; translate: 0 0; }
+/* Tall windows: heads and shoulders rise over the top of the frame, the rest stays behind it. */
+body.cast-top .bd-cast { display: block; bottom: auto; top: calc(var(--game-t) - var(--game-t) * 0.92); height: calc(var(--game-t) * 3.4); width: calc(var(--game-w) * 0.4); object-fit: contain; object-position: left top; }
+body.cast-top .bd-cast.left { right: auto; left: calc(var(--game-l) + var(--game-w) * 0.04); translate: 0 30px; }
+body.cast-top .bd-cast.right { left: auto; right: calc(100% - var(--game-l) - var(--game-w) * 0.96); translate: 0 30px; }
+body.cast-top .bd-cast.on { translate: 0 0; }
 /* Paper under the table, reaching under the carved band so no backdrop shows between them. */
 .bd-mat {
   position: absolute; z-index: 1;
@@ -741,7 +747,7 @@ body.theatre #theatre {
 /* Tapped ball label: a small paper slip above the ball, gone after a moment. */
 .mx-balltag {
   position: absolute; z-index: 18; translate: -50% -100%; pointer-events: none;
-  display: none; align-items: center; gap: 5px; padding: 3px 9px;
+  display: none; align-items: center; gap: 7px; padding: 3px 12px 3px 4px;
   background: var(--sheet); color: var(--ink); border: 1.5px solid var(--ink); border-radius: 3px;
   font: 700 14px/1.2 var(--display); white-space: nowrap; box-shadow: 0 3px 8px rgba(26, 23, 19, 0.25);
 }
@@ -767,3 +773,16 @@ body.theatre #theatre {
 @keyframes mx-nudge-in { from { opacity: 0; translate: -8px -50%; } }
 @keyframes mx-skill-nudge { 50% { transform: scale(1.06); } }
 @media (prefers-reduced-motion: reduce) { .mx-skillnudge.show, .mx-skill.nudge { animation: none; } }
+
+/* Cards in a row share their line positions: names reserve two lines, so a wrapped name never
+   pushes its subtitle, price or description below its neighbours'. */
+.champ-card .cc-name { min-height: calc(2 * 1.15em); display: flex; align-items: flex-start; justify-content: center; }
+.gc-head { align-items: flex-start; min-height: calc(2 * 1.2 * var(--fs-l) + 4px); }
+.gc-head b { padding-top: 2px; }
+
+/* Wide phones scale the 16:9 frame down to about 0.76; secondary HUD lines stay at 12–13 px
+   in design units so they never drop below ~9 px on screen. */
+.mx-obj-k { font-size: 12px; }
+.mx-card .mx-line, .mx-card .mx-sub { font-size: 13px; }
+.mx-sk-name { font-size: 13px; }
+.mx-bt-ball { width: 32px; height: 32px; flex-shrink: 0; filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.3)); }

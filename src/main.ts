@@ -17,6 +17,7 @@ import { registerSW } from 'virtual:pwa-register';
 import { installNativeFeel } from './platform/device';
 import { captureInstallPrompt, mustInstall } from './platform/install';
 import { App } from './ui/app';
+import { toast } from './ui/dom';
 import { installGate } from './ui/screens/install-gate';
 import { splashScreen } from './ui/screens/menus';
 import { loadingScreen } from './ui/screens/loading';
@@ -68,12 +69,29 @@ function setupUpdates(app: App) {
         .filter((k) => (k === 'art' || k.startsWith('art-')) && k !== __ART_CACHE__)
         .forEach((k) => void caches.delete(k))).catch(() => undefined);
       if (!reg) return;
+      // Hold the player on the update sheet from the moment a new build starts downloading,
+      // not only once it is installed: otherwise the old build stays playable for a while.
+      const watch = (sw: ServiceWorker | null) => {
+        if (!sw || !navigator.serviceWorker.controller) return;
+        app.updateFound();
+        sw.addEventListener('statechange', () => sw.state === 'redundant' && app.updateFailed());
+      };
+      watch(reg.installing);
+      reg.addEventListener('updatefound', () => watch(reg.installing));
       const check = () => {
         if (navigator.onLine) void reg.update().catch(() => undefined);
       };
       setInterval(check, 15 * 60 * 1000);
       document.addEventListener('visibilitychange', () => {
         if (!document.hidden) check();
+      });
+      addEventListener('online', check);
+      // Settings → "Kiểm tra": answers with a toast when this build is already the newest.
+      addEventListener('cotien:check-update', () => {
+        if (!navigator.onLine) return toast('Đang ngoại tuyến — kết nối mạng để kiểm tra', 'bad');
+        reg.update().then(() => {
+          if (!reg.installing && !reg.waiting) toast('Bạn đang dùng bản mới nhất', 'good');
+        }, () => toast('Chưa kiểm tra được, thử lại sau', 'bad'));
       });
     },
   });
@@ -125,7 +143,12 @@ function installUiScale() {
     const width = native ? rect.width : DESIGN_W;
     const height = native ? rect.height : DESIGN_H;
     // Champions only flank the stage when the side margins can hold a figure.
-    document.body.classList.toggle('cast-room', theatre && (safe.width - DESIGN_W * s) / 2 >= 150);
+    const sideRoom = (safe.width - DESIGN_W * s) / 2;
+    const topRoom = (safe.height - DESIGN_H * s) / 2;
+    document.body.classList.toggle('cast-room', theatre && sideRoom >= 150);
+    // Tall windows (4:3, 5:4, tablets) have their room above and below instead: the champions
+    // lean over the top of the frame there.
+    document.body.classList.toggle('cast-top', theatre && sideRoom < 150 && topRoom >= 90);
     ui.style.width = `${width}px`;
     ui.style.height = `${height}px`;
     const left = rect.left + (rect.width - width * s) / 2;

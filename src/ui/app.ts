@@ -107,6 +107,20 @@ export class App {
     this.show(this.stack[this.stack.length - 1], 'back');
   }
 
+  /**
+   * A new version was found and is downloading. Outside a match the player waits for it on a
+   * blocking sheet rather than playing the old build; inside a match it downloads quietly.
+   */
+  updateFound() {
+    if (this.current?.usesStage) return;
+    this.showUpdateSheet('Đang tải bản mới…');
+  }
+
+  /** The download failed (offline, storage full): let the player carry on with this build. */
+  updateFailed() {
+    document.querySelector('.update-sheet')?.remove();
+  }
+
   /** A new version is ready: apply now from menus, or after the current match. */
   setPendingUpdate(apply: () => void) {
     this.pendingUpdate = apply;
@@ -119,9 +133,20 @@ export class App {
     const apply = this.pendingUpdate;
     if (!apply) return;
     this.pendingUpdate = null;
-    // A blocking sheet: nothing can be tapped while the new version loads.
-    document.body.append(h('div.update-sheet', { role: 'alert' }, h('div.us-seal'), h('b', null, 'Đang cập nhật bản mới…')));
-    setTimeout(apply, 700);
+    this.showUpdateSheet('Đang cập nhật bản mới…');
+    setTimeout(apply, 500);
+  }
+
+  /** A blocking painted sheet: nothing can be tapped while the new version loads. */
+  private showUpdateSheet(text: string) {
+    const label = document.querySelector('.update-sheet .us-text');
+    if (label) {
+      label.textContent = text;
+      return;
+    }
+    const icon = `${import.meta.env.BASE_URL}art/ui/icons/replay.webp`;
+    document.body.append(h('div.update-sheet', { role: 'alert', 'aria-live': 'assertive' },
+      h('div.us-card', null, h('img.us-icon', { src: icon, alt: '' }), h('b.us-text', null, text), h('span.us-note', null, 'Tiến trình của bạn được giữ nguyên'))));
   }
 
   /** Cross-fade the stage backdrop once the new painting has decoded. */

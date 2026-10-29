@@ -9,13 +9,13 @@ import { other, type Resolution, type ShotCall, type Side } from '../../core/rul
 import { Rng } from '../../core/rng';
 import { type SkillDef, champion, classInfo, cutoutUrl, exprUrl, portraitUrl, sect, sectArtUrl, skillIconUrl, winUrl } from '../../game/content/sects';
 import { RULES_TEXT, SKILL_RULES } from '../../game/content/rules-text';
-import { ENERGY_MAX, Match, type MatchSetup } from '../../game/match';
+import { ASSASSIN_RUN, ENERGY_MAX, Match, type MatchSetup } from '../../game/match';
 import { haptic, isTouchDevice, keepAwake, toggleFullscreen } from '../../platform/device';
 import { TableView, type AimView } from '../../render/table-view';
 import type { App, Screen } from '../app';
 import { avatar } from '../avatar';
 import { btn, h, item, modal, stars, tap, toast, toggle, uiScale } from '../dom';
-import { clearHints, hintOnce } from '../hints';
+import { clearHints, hintOnce, hintTurn } from '../hints';
 import { icon, type IconName } from '../icons';
 import { playCutIn } from '../skill-cutin';
 
@@ -403,9 +403,11 @@ export function matchScreen(opts: MatchOptions) {
       const leftEdge = !live ? 104 : colL.offsetWidth ? colL.offsetLeft + colL.offsetWidth : insetL + (!lefty && targetWidth ? targetWidth + 8 : 4);
       const rightEdge = !live ? W - 128 : colR.offsetWidth ? colR.offsetLeft : W - insetR - (lefty && targetWidth ? targetWidth + 8 : 4);
       const top = live ? topBar.offsetTop + topBar.offsetHeight : 84;
+      // Breathing room between the rails and the side columns, so the table never looks glued on.
+      const sideGap = live ? 14 : 2;
       const bounds = {
-        left: leftEdge + 2,
-        right: W - rightEdge + 2,
+        left: leftEdge + sideGap,
+        right: W - rightEdge + sideGap,
         top: top + 2,
         bottom: insetB + 2,
       };
@@ -438,7 +440,7 @@ export function matchScreen(opts: MatchOptions) {
         phaptu: match.spinAxis[match.turn] === 'side' ? 'Ưu tiên áp phê ngang' : 'Ưu tiên kéo / đẩy',
         hophap: match.guardUsed[match.turn] ? 'Đã dùng băng mềm' : 'Đặt băng mềm',
         chusu: 'Cú thủ hợp lệ để lại cát',
-        anhsat: match.assassinReady[match.turn] ? (match.assassinChoice[match.turn] === 'info' ? 'Liên hoàn · xem đường' : 'Liên hoàn · thêm lực') : 'Ăn liên tiếp để chọn lợi thế',
+        anhsat: match.assassinReady[match.turn] ? (match.assassinChoice[match.turn] === 'info' ? 'Liên hoàn · xem đường' : 'Liên hoàn · thêm lực') : `Ăn liền ${ASSASSIN_RUN} bi · đang ${match.assassinStreak[match.turn]}/${ASSASSIN_RUN}`,
         luanhoi: 'Luân phiên chiêu · hồi nhanh',
       };
       const passiveName = cls ? classInfo(cls).name : '';
@@ -1132,7 +1134,7 @@ export function matchScreen(opts: MatchOptions) {
       const at = view.toScreen(b.x, b.y);
       const rect = document.getElementById('ui')!.getBoundingClientRect();
       const label = id === match.cueId() ? 'Bi cái' : match.isCarom ? (id === 2 ? 'Bi đỏ' : 'Bi đối thủ') : `Bi ${id}`;
-      ballTag.replaceChildren(id === match.cueId() || match.isCarom ? '' : miniBall(id), label);
+      ballTag.replaceChildren(h('img.mx-bt-ball', { src: view.ballPortrait(id, 40), alt: '' }), h('span', null, label));
       ballTag.style.left = `${(at.x - rect.left) / k}px`;
       ballTag.style.top = `${(at.y - rect.top) / k - match.table.R * view.pxPerM / k - 6}px`;
       ballTag.classList.remove('show');
@@ -1502,7 +1504,7 @@ export function matchScreen(opts: MatchOptions) {
       hintOnce(app, `rules-${mode}`, `Luật ${MODE_NAMES[mode]}`, `${RULES_TEXT[mode].goal} Xem menu tạm dừng, mục Luật chơi.`, { anchor: () => (lefty ? ctrl : dock), place: 'right', highlight: false, rail: true });
       hintOnce(app, 'ctl-aim', 'Ngắm', h('span', null, 'Kéo trên bàn để xoay cơ, chạm bi để ngắm thẳng. ', icon('rotate-left'), icon('rotate-right'), ' chỉnh từng chút, ', icon('switch-target'), ' đổi mục tiêu.'),
         { anchor: () => ctrl, place: beside, rail: true, alignTop: true });
-      hintOnce(app, 'ctl-power', 'Lực và đánh', 'Kéo thanh lực rồi chạm ĐÁNH. Hoặc giữ ĐÁNH và thả đúng lực; trượt ngón ra xa để huỷ.',
+      hintOnce(app, 'ctl-power', 'Lực và đánh', 'Chạm thanh lực để đặt mức, kéo để tinh chỉnh, rồi chạm ĐÁNH. Hoặc giữ ĐÁNH và thả đúng lực; trượt ngón ra xa để huỷ.',
         { anchor: () => powerBar, place: beside });
       if (match.canMoveCue) {
         hintOnce(app, 'ctl-ballinhand', match.state.isBreak ? 'Đặt bi phá' : 'Đặt bi cái', 'Kéo bi cái hoặc chạm bàn để dời bi. Dùng nút hướng để chỉnh nhỏ. Chọn Ngắm thử để chỉnh hướng và xem đường bi trước khi bấm ĐẶT BI.',
@@ -1549,6 +1551,7 @@ export function matchScreen(opts: MatchOptions) {
           herald({ side, title: changed && !solo ? `Lượt của ${nameOf(side)}` : placingTitle, line: `${placingTitle} — dời bi, Ngắm thử, rồi ĐẶT BI` });
         }
         else if (changed && !solo) herald({ side, title: `Lượt của ${nameOf(side)}`, line: match.objective() });
+        hintTurn(app);
         coachTurn();
         if (hasSkills) {
           // Players used to plain billiards forget their kit: after a turn without casting,

@@ -25,6 +25,8 @@ interface Item extends HintOptions {
   text: string | Node;
 }
 const queue: Item[] = [];
+/** In a match a new player meets at most one tip per turn, so the first shot is not buried. */
+let turnBudget = Infinity;
 let showing: { card: HTMLElement; item: Item; target: Element | null; cleanup: () => void } | null = null;
 
 export function hintOnce(app: App, key: string, title: string, text: string | Node, opts: HintOptions = {}) {
@@ -34,9 +36,20 @@ export function hintOnce(app: App, key: string, title: string, text: string | No
   if (!showing) next(app);
 }
 
+/**
+ * A new turn in a match: tips still waiting from the last turn are dropped (they come back the
+ * next time their situation happens, being unseen) and one tip may show this turn.
+ */
+export function hintTurn(app: App) {
+  queue.length = 0;
+  turnBudget = 1;
+  if (!showing) next(app);
+}
+
 /** Drop pending and visible tips (the match screen is closing). */
 export function clearHints() {
   queue.length = 0;
+  turnBudget = Infinity;
   if (showing) {
     showing.cleanup();
     showing.card.remove();
@@ -46,12 +59,17 @@ export function clearHints() {
 }
 
 function next(app: App) {
+  const slot = document.querySelector<HTMLElement>('.screen.game.mx .mx-center');
+  if (slot && turnBudget <= 0) {
+    showing = null;
+    return;
+  }
   const item = queue.shift();
   if (!item) {
     showing = null;
     return;
   }
-  const slot = document.querySelector<HTMLElement>('.screen.game.mx .mx-center');
+  if (slot) turnBudget--;
   let dismissed = false;
   const done = () => {
     if (dismissed) return;

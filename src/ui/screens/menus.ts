@@ -824,7 +824,10 @@ export function settingsScreen(app: App): Screen {
       item('Sao lưu', btn('Lấy mã', backup, 'ghost small'), { icon: 'scroll', hint: 'Lấy mã để chuyển tiến trình sang máy khác' }),
       item('Khôi phục', btn('Nhập mã', restore, 'ghost small'), { icon: 'rewind', hint: 'Dán mã sao lưu để lấy lại tiến trình' }),
       item('Chơi lại từ đầu', btn('Xoá', wipe, 'danger small'), { icon: 'warning', hint: 'Xoá toàn bộ tiến trình trên máy này' }),
-      item('Phiên bản', h('span.set-val.num', null, __APP_VERSION__), { icon: 'info' }),
+      item('Phiên bản', btn('Kiểm tra', () => {
+        if (!import.meta.env.PROD) return toast('Bản phát triển luôn chạy mã mới nhất', 'good');
+        dispatchEvent(new Event('cotien:check-update'));
+      }, 'ghost small'), { icon: 'info', hint: __APP_VERSION__ }),
     ),
   );
   el.append(topbar(app, 'Cài đặt'), h('div.scroll.settings-scroll', null, col));

@@ -1,5 +1,5 @@
 import { applySkillBlast } from '../game/skill-cast';
-import { Container, Graphics, Sprite, Texture, type Application } from 'pixi.js';
+import { Container, Graphics, Rectangle, Sprite, Texture, type Application } from 'pixi.js';
 import { predictAim } from '../core/aim';
 import { ballStyle } from '../core/ball-styles';
 import { cloneBalls, step, type Ball } from '../core/physics';
@@ -652,6 +652,31 @@ export class TableView {
       return true;
     });
   }
+
+  /**
+   * A portrait of ball `id` drawn by the same shader as the table, number facing the viewer,
+   * for DOM labels. Cached per ball; `px` is the CSS diameter it will be shown at.
+   */
+  ballPortrait(id: number, px: number): string {
+    const key = `${id}|${px}`;
+    const hit = this.portraits.get(key);
+    if (hit) return hit;
+    const res = Math.min(3, Math.max(1, window.devicePixelRatio || 1));
+    const r = px / 2;
+    const mesh = new BallMesh(ballStyle(this.match.table.kind, id), this.numbers, this.match.setup.tableSkin.cloth, () => 0.5);
+    mesh.rot.set([1, 0, 0, 0, 1, 0, 0, 0, 1]);
+    mesh.rotate(1, 0, 0, -0.35);
+    mesh.mesh.scale.set(r);
+    mesh.mesh.position.set(r, r);
+    mesh.setPixelRadius(r * res);
+    const holder = new Container();
+    holder.addChild(mesh.mesh);
+    const url = this.app.renderer.extract.canvas({ target: holder, resolution: res, frame: new Rectangle(0, 0, px, px), clearColor: [0, 0, 0, 0] }).toDataURL!('image/png');
+    holder.destroy({ children: true });
+    this.portraits.set(key, url);
+    return url;
+  }
+  private portraits = new Map<string, string>();
 
   destroy() {
     this.disposed = true;
