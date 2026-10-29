@@ -1227,3 +1227,20 @@ body.vp-resize .size-hint { display: flex; }
 .update-sheet .us-seal { width: 56px; height: 56px; border-radius: 12px; background: #b23a26; animation: us-pulse 1.2s ease-in-out infinite; }
 @keyframes us-pulse { 50% { transform: scale(0.88); opacity: 0.7; } }
 @media (prefers-reduced-motion: reduce) { .update-sheet .us-seal { animation: none; } }
+
+/* Desktop theatre frame: the game is a composed scene, while the browser viewport becomes
+   its quiet paper surround. Entry screens intentionally remain true fullscreen. */
+@media (min-width: 900px) and (pointer: fine) {
+  html, body { background: #d8cdbb var(--paper) repeat; background-size: 520px; }
+  #stage { background: #d8cdbb var(--paper) center / 520px repeat; }
+  #ui:not(:has(.screen.splash, .screen.loading, .screen.install)) {
+    overflow: visible;
+    border: 16px solid transparent;
+    border-image: url('/art/ui/frame/panel.webp') 74 fill / 16px / 0 stretch;
+    box-shadow: 0 18px 55px rgba(36, 25, 15, 0.28), 0 0 0 9999px rgba(92, 70, 45, 0.08);
+    background: #fbf8f2;
+  }
+  #stage:has(+ #ui:not(:has(.screen.splash, .screen.loading, .screen.install))) {
+    background: #d8cdbb var(--paper) center / 520px repeat;
+  }
+}

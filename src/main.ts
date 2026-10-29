@@ -96,7 +96,9 @@ function installUiScale() {
     const gate = mustInstall();
     const entry = !gate && !!ui.querySelector('.screen.splash, .screen.loading');
     const rect = (gate || entry ? viewport : safeFrame).getBoundingClientRect();
-    const s = gate || entry ? 1 : Math.min(2.2, rect.width / 844, rect.height / 390);
+    const desktop = !gate && !entry && matchMedia('(min-width: 900px) and (pointer: fine)').matches;
+    // Desktop gets a contained theatre frame; reserve viewport space for the painted surround.
+    const s = gate || entry ? 1 : Math.min(desktop ? 1.65 : 2.2, rect.width / 844, rect.height / 390);
     const width = gate || entry ? rect.width : 844;
     const height = gate || entry ? rect.height : 390;
     ui.style.width = `${width}px`;
