@@ -181,7 +181,7 @@ export async function preloadMatch(champions: string[], sect: string) {
   const list = [...champions.flatMap(champFiles), ...sectFiles(sect)];
   await sync(list, 6);
   await Promise.all(list
-    .filter(([p]) => p.endsWith('cutout.webp') || p.includes('/flip/') || p.endsWith('cutin.webp'))
+    .filter(([p]) => p.endsWith('cutout.webp') || p.endsWith('finisher.webp') || p.endsWith('/vfx/slash.webp') || p.includes('/flip/') || p.endsWith('cutin.webp'))
     .map(([p]) => {
       const img = new Image();
       img.src = url(p);

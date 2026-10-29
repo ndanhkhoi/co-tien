@@ -314,6 +314,8 @@ const BASE = typeof document === 'undefined' ? import.meta.env.BASE_URL : new UR
 export const portraitUrl = (id: string) => `${BASE}art/champions/${id}/portrait.webp`;
 export const cutoutUrl = (id: string) => `${BASE}art/champions/${id}/cutout.webp`;
 export const winUrl = (id: string) => `${BASE}art/champions/${id}/win.webp`;
+/** Finishing-strike pose for the rack-winning shot. */
+export const finisherUrl = (id: string) => `${BASE}art/champions/${id}/finisher.webp`;
 export const exprUrl = (id: string, e: 'focus' | 'joy' | 'sad' | 'cast') => `${BASE}art/champions/${id}/expr-${e}.webp`;
 export const skillIconUrl = (id: string, slot: number) => `${BASE}art/skills/${id}-${'12u'[slot]}.webp`;
 export const sectArtUrl = (s: SectId, name: 'emblem' | 'splash' | 'cutin' | 'rail' | 'cue-a' | 'cue-b') => `${BASE}art/sects/${s}/${name}.webp`;

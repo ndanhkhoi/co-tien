@@ -18,6 +18,7 @@ import { btn, h, modal, stars, tap, uiScale } from '../dom';
 import { clearHints, hintOnce, hintTurn } from '../hints';
 import { icon, type IconName } from '../icons';
 import { playCutIn } from '../skill-cutin';
+import { playFinisher } from '../finisher';
 import { practiceDesk, type PracticeSetup } from './practice-desk';
 
 export interface MatchResult {
@@ -524,6 +525,19 @@ export function matchScreen(opts: MatchOptions) {
       const deg = (Math.atan2(f.y, f.x) * 180) / Math.PI;
       const names = ['sang phải', 'chếch phải xuống', 'xuống dưới', 'chếch trái xuống', 'sang trái', 'chếch trái lên', 'lên trên', 'chếch phải lên'];
       return `Hướng: ${names[((Math.round(deg / 45) % 8) + 8) % 8]} (theo mũi tên trên nỉ).`;
+    }
+
+    /** The ball that decided the rack: the last one pocketed, or a carom's second ball. */
+    function finalBall() {
+      const shot = match.lastShot;
+      if (!shot) return null;
+      const cue = match.cueId(match.lastShooter);
+      const potted = shot.pocketed.filter((p) => p.id !== cue);
+      const last = potted[potted.length - 1];
+      const id = last?.id ?? (match.isCarom ? shot.cueContacts[1] : undefined);
+      if (id === undefined) return null;
+      const caption = match.isCarom ? 'Ghi điểm quyết định' : `Bi ${id} vào ${POCKET_NAMES[last!.pocket]}`;
+      return { src: view.ballPortrait(id, 112), caption };
     }
 
     function miniBall(id: number) {
@@ -1444,12 +1458,20 @@ export function matchScreen(opts: MatchOptions) {
           break;
         case 'rack-over': {
           const w = e.winner;
-          if (!opts.challenge) {
-            setExpr(w, 'joy', 5000);
-            setExpr(other(w), 'sad', 5000);
-            herald({ side: w, expr: 'joy', title: `${nameOf(w)} thắng ván`, line: match.lastRes?.messages.join(' ') || undefined, ms: 3000, important: true });
-          }
-          setTimeout(() => onRackOver(w), opts.challenge ? 700 : 1100);
+          const announce = () => {
+            if (disposed) return;
+            if (!opts.challenge) {
+              setExpr(w, 'joy', 5000);
+              setExpr(other(w), 'sad', 5000);
+              herald({ side: w, expr: 'joy', title: `${nameOf(w)} thắng ván`, line: match.lastRes?.messages.join(' ') || undefined, ms: 3000, important: true });
+            }
+            setTimeout(() => onRackOver(w), opts.challenge ? 700 : 1100);
+          };
+          // Kết liễu: a rack won by the winner's own clean shot gets their finishing strike first.
+          if (!opts.challenge && match.lastShooter === w && !match.lastRes?.foul) {
+            hideSkillNudge();
+            void playFinisher(el, champion(champOf(w)), match.lastScore.names, finalBall(), w === 1).then(announce);
+          } else announce();
           break;
         }
       }

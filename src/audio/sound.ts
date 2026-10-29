@@ -221,6 +221,15 @@ class Sound {
     this.pluck(PENTATONIC[0] * 2, 0.14, 0.2);
   }
 
+  /** The rack-winning strike: a low blow, a deep bell, then a rising phrase. */
+  finisher() {
+    if (!this.ready) return;
+    this.burst(160, 0.7, 0.32, 0.4, 'lowpass');
+    this.burst(900, 0.5, 0.12, 0.5, 'bandpass', 0.05, 0.1);
+    this.bell(65.405, 0.24, 0.05, this.sfx!, 4.5);
+    for (let i = 0; i < 3; i++) this.pluck(PENTATONIC[i + 2] * 2, 0.13, 0.35 + i * 0.12);
+  }
+
   omen() {
     if (!this.ready) return;
     this.bell(196, 0.09, 0, this.sfx!, 3);

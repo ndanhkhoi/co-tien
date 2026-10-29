@@ -922,3 +922,72 @@ body.theatre #theatre {
 
 /* Long collections lay out lazily: off-screen sect groups skip layout and paint until scrolled to. */
 .collection .sect-group, .codex .sect-group, .challenge-family { content-visibility: auto; contain-intrinsic-size: auto 260px; }
+
+/* ---------- Kết liễu: the rack-winning strike ----------
+ * Stage is the 844×475 design frame. Timeline: veil + strip 0–0.3 s, lunge 0.08–0.42 s, the ball
+ * leaves the cue at 0.42 s and lands at 0.74 s, burst + shake + stamp from 0.74 s, out at 2.7 s. */
+.fin { position: absolute; inset: 0; z-index: 60; overflow: hidden; pointer-events: auto; transition: opacity 0.26s ease; }
+.fin.out { opacity: 0; }
+.fin-veil { position: absolute; inset: 0; background: radial-gradient(ellipse at 55% 50%, rgba(20, 16, 12, 0.6), rgba(20, 16, 12, 0.9)); animation: fin-fade 0.22s ease both; }
+.fin-strip {
+  position: absolute; left: -10%; right: -10%; top: 34%; height: 42%;
+  background: var(--strip) center / cover no-repeat;
+  transform: skewY(-8deg); animation: fin-strip 0.3s cubic-bezier(0.2, 0.9, 0.25, 1) both;
+}
+.fin-figure { position: absolute; left: 0; bottom: -30px; height: 500px; width: 520px; animation: fin-drift 2.2s ease-out 0.42s both; }
+.fin-hero, .fin-ghost { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; object-position: left bottom; }
+.fin-hero { animation: fin-lunge 0.34s cubic-bezier(0.15, 0.85, 0.3, 1.05) 0.08s both; filter: drop-shadow(0 10px 18px rgba(0, 0, 0, 0.45)); }
+.fin-ghost { opacity: 0; animation: fin-ghost 0.62s ease-out both; filter: grayscale(0.4) brightness(1.15); }
+.fin-ghost.g1 { animation-delay: 0.12s; --to: 0.32; --dx: -6%; }
+.fin-ghost.g2 { animation-delay: 0.16s; --to: 0.18; --dx: -12%; }
+.fin-slash {
+  position: absolute; left: 300px; top: 30px; width: 520px; height: 400px;
+  background: var(--slash) center / contain no-repeat; opacity: 0.85;
+  clip-path: inset(0 100% 0 0); animation: fin-cut 0.22s ease-out 0.72s both, fin-fade-out 0.5s ease 1.8s both;
+}
+/* The cue tip sits near (440, 370); the pocket at (735, 235). */
+.fin-play { position: absolute; inset: 0; }
+.fin-hole { position: absolute; left: 735px; top: 235px; width: 0; height: 0; }
+.fin-ring { position: absolute; left: -64px; top: -64px; width: 128px; height: 128px; border-radius: 50%; background: radial-gradient(circle, #0d0b09 0 38%, transparent 40%), var(--ring) center / contain no-repeat; animation: fin-pop 0.24s ease-out 0.3s both; }
+.fin-burst { position: absolute; left: -130px; top: -130px; width: 260px; height: 260px; background: var(--burst) center / contain no-repeat; opacity: 0; animation: fin-burst 0.7s ease-out 0.74s both; }
+.fin-trail {
+  position: absolute; left: 440px; top: 362px; width: 325px; height: 18px; transform-origin: left center; rotate: -24.6deg;
+  background: var(--trail) center / 100% 100% no-repeat; scale: 0 1; animation: fin-trail 0.32s cubic-bezier(0.3, 0.6, 0.4, 1) 0.42s both, fin-fade-out 0.6s ease 1.4s both;
+}
+.fin-ball { position: absolute; width: 56px; height: 56px; margin: -28px 0 0 -28px; left: 440px; top: 370px; filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.5)); animation: fin-fly 0.32s cubic-bezier(0.3, 0.6, 0.4, 1) 0.42s both, fin-sink 0.22s ease-in 0.74s both; opacity: 0; }
+.fin-words { position: absolute; right: 26px; top: 26px; display: flex; flex-direction: column; align-items: flex-end; gap: 10px; }
+.fin-title {
+  padding: 2px 22px 8px; background: var(--accent); color: var(--on-accent);
+  font: 700 58px/1.1 var(--display); letter-spacing: 0.04em; box-shadow: 0 6px 0 rgba(20, 16, 12, 0.35);
+  rotate: -4deg; animation: fin-stamp 0.26s cubic-bezier(0.3, 1.4, 0.5, 1) 0.8s both;
+}
+.fin-line {
+  max-width: 480px; padding: 6px 16px; background: rgba(20, 16, 12, 0.8); color: var(--sheet);
+  font: 700 17px/1.3 var(--display); text-align: right; animation: fin-rise 0.3s ease 1s both;
+}
+/* Player 2 strikes from the right: mirror the stage geometry, keep the ball's number readable. */
+.fin.rtl .fin-figure { left: auto; right: 0; scale: -1 1; }
+.fin.rtl .fin-strip { transform: skewY(8deg); }
+.fin.rtl .fin-slash, .fin.rtl .fin-play { scale: -1 1; }
+.fin.rtl .fin-slash { left: 24px; }
+.fin.rtl .fin-ball { scale: -1 1; }
+.fin.rtl .fin-words { right: auto; left: 26px; align-items: flex-start; }
+.fin.rtl .fin-line { text-align: left; }
+.fin.calm *, .fin.calm { animation-duration: 0.01s !important; animation-delay: 0s !important; }
+.fin.calm .fin-ghost, .fin.calm .fin-ball, .fin.calm .fin-trail { display: none; }
+.screen.game.fin-shake { animation: fin-shake 0.36s linear 0.74s both; }
+@keyframes fin-fade { from { opacity: 0; } }
+@keyframes fin-fade-out { to { opacity: 0; } }
+@keyframes fin-strip { from { transform: skewY(-8deg) translateX(-110%); } }
+@keyframes fin-lunge { from { opacity: 0; transform: translateX(-38%) scale(1.22); } }
+@keyframes fin-drift { from { transform: scale(1); } to { transform: scale(1.04) translateX(1%); } }
+@keyframes fin-ghost { 0% { opacity: 0; transform: translateX(-30%) scale(1.18); } 40% { opacity: var(--to); transform: translateX(var(--dx)); } 100% { opacity: 0; transform: translateX(var(--dx)); } }
+@keyframes fin-cut { to { clip-path: inset(0 0 0 0); } }
+@keyframes fin-pop { from { opacity: 0; transform: scale(0.3); } }
+@keyframes fin-burst { 0% { opacity: 0; transform: scale(0.4) rotate(-20deg); } 25% { opacity: 1; } 100% { opacity: 0; transform: scale(1.5) rotate(10deg); } }
+@keyframes fin-trail { to { scale: 1 1; } }
+@keyframes fin-fly { 0% { opacity: 1; left: 440px; top: 370px; transform: scale(0.8) rotate(0); } 100% { opacity: 1; left: 735px; top: 235px; transform: scale(1.15) rotate(540deg); } }
+@keyframes fin-sink { from { opacity: 1; left: 735px; top: 235px; transform: scale(1.15); } to { opacity: 0; left: 735px; top: 235px; transform: scale(0.15); } }
+@keyframes fin-stamp { from { opacity: 0; transform: scale(1.8); } }
+@keyframes fin-rise { from { opacity: 0; transform: translateY(10px); } }
+@keyframes fin-shake { 0%, 100% { transform: none; } 20% { transform: translate(-7px, 4px); } 40% { transform: translate(6px, -4px); } 60% { transform: translate(-3px, 2px); } 80% { transform: translate(2px, -1px); } }
