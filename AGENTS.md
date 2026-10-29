@@ -7,7 +7,7 @@ docs it links before large changes.
 
 Cơ Tiên ("bida tu tiên"): a mobile-first landscape billiards game with real physics and WPA/UMB rules, set
 in an original xianxia world of 13 sects and 65 champions with skills. TypeScript + Vite + PixiJS 8, shipped
-as a PWA on GitHub Pages (`https://ndanhkhoi.github.io/co-tien/`). No backend.
+as a PWA on Cloudflare Pages (`https://cotien.khoinda.vn/`). No backend.
 
 ## Commands
 

@@ -4,7 +4,7 @@ Game bida cho điện thoại (màn hình ngang) và máy tính, với vật lý
 tiên hiệp riêng: **Cơ Tiên Giới** — 13 môn phái, 65 tướng, mỗi tướng có nội tại và 3 chiêu. Cài được như ứng
 dụng (PWA), chơi offline.
 
-**Chơi ngay:** https://ndanhkhoi.github.io/co-tien/
+**Chơi ngay:** https://cotien.khoinda.vn/
 
 ## Tính năng
 
