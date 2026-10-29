@@ -53,12 +53,18 @@ interface Falling {
  */
 class MetreGraphics {
   k = 1;
+  // Clearing an empty Graphics still rebuilds its geometry; skip it while nothing is drawn.
+  private drawn = false;
   constructor(readonly g: Graphics) {}
-  clear() { this.g.clear(); return this; }
-  moveTo(x: number, y: number) { this.g.moveTo(x * this.k, y * this.k); return this; }
+  clear() {
+    if (this.drawn) this.g.clear();
+    this.drawn = false;
+    return this;
+  }
+  moveTo(x: number, y: number) { this.drawn = true; this.g.moveTo(x * this.k, y * this.k); return this; }
   lineTo(x: number, y: number) { this.g.lineTo(x * this.k, y * this.k); return this; }
-  circle(x: number, y: number, r: number) { this.g.circle(x * this.k, y * this.k, r * this.k); return this; }
-  rect(x: number, y: number, w: number, h: number) { this.g.rect(x * this.k, y * this.k, w * this.k, h * this.k); return this; }
+  circle(x: number, y: number, r: number) { this.drawn = true; this.g.circle(x * this.k, y * this.k, r * this.k); return this; }
+  rect(x: number, y: number, w: number, h: number) { this.drawn = true; this.g.rect(x * this.k, y * this.k, w * this.k, h * this.k); return this; }
   stroke(style: { width: number; color: number; alpha?: number; cap?: 'round' | 'butt' | 'square'; join?: 'round' | 'miter' | 'bevel' }) { this.g.stroke(style); return this; }
   fill(style: { color: number; alpha?: number }) { this.g.fill(style); return this; }
 }
@@ -332,6 +338,7 @@ export class TableView {
   }
 
   private updateFalling(dt: number) {
+    if (!this.falling.length) return;
     const R = this.match.table.R;
     this.falling = this.falling.filter((f) => {
       f.t += dt / 0.28;
@@ -642,6 +649,7 @@ export class TableView {
   }
 
   private updateParticles(dt: number) {
+    if (!this.particles.length) return;
     this.particles = this.particles.filter((p) => {
       p.life += dt;
       const k = p.life / p.max;

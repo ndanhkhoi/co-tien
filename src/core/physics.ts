@@ -488,13 +488,17 @@ export function step(w: SimWorld, dt: number, events: PhysEvent[] | null): boole
     for (const b of balls) {
       if (!b.onTable) continue;
       if (b.vx === 0 && b.vy === 0) continue;
-      for (const s of w.table.segments) {
+      // The rail multiplier depends only on where the ball is, not on which cushion it meets.
+      let cushionP = p;
+      const rails = w.terrain?.rails;
+      if (rails) {
         let multiplier = 1;
-        for (const rail of w.terrain?.rails ?? []) {
+        for (const rail of rails) {
           if (segmentDistance(b.x, b.y, rail) <= R * 1.1) multiplier *= rail.multiplier;
         }
-        collideSegment(b, s, R, multiplier === 1 ? p : { ...p, eCushion: Math.min(1, p.eCushion * multiplier) }, events);
+        if (multiplier !== 1) cushionP = { ...p, eCushion: Math.min(1, p.eCushion * multiplier) };
       }
+      for (const s of w.table.segments) collideSegment(b, s, R, cushionP, events);
       if (w.extraSegments) for (const s of w.extraSegments) collideSegment(b, s, R, p, events);
       if ((b.z ?? 0) > 0 && (Math.abs(b.x) > w.table.L / 2 + R || Math.abs(b.y) > w.table.W / 2 + R)) {
         const speed = Math.hypot(b.vx, b.vy, b.vz ?? 0);
