@@ -15,6 +15,9 @@ import { champion, skillPower, type ClassId, type SkillDef, type SkillKind } fro
 import type { CueDef, MutatorId, TableSkin } from './content/gear';
 import { OMEN_CHANCE, rollOmen, type Omen } from './terrain';
 
+/** Balls Ảnh Sát must score in one unbroken run to choose an advantage. */
+export const ASSASSIN_RUN = 4;
+
 export interface PlayerSetup {
   name: string;
   kind: 'human' | 'ai';
@@ -155,6 +158,8 @@ export class Match {
   spinAxis: ['side' | 'vert', 'side' | 'vert'] = ['side', 'side'];
   guardUsed: [boolean, boolean] = [false, false];
   assassinReady: [boolean, boolean] = [false, false];
+  /** Ảnh Sát: balls scored in the current unbroken run since the last advantage was spent. */
+  assassinStreak: [number, number] = [0, 0];
   assassinChoice: ['info' | 'power', 'info' | 'power'] = ['info', 'info'];
   lastBasic: [number | null, number | null] = [null, null];
 
@@ -366,6 +371,7 @@ export class Match {
     this.shield = [false, false];
     this.guardUsed = [false, false];
     this.assassinReady = [false, false];
+    this.assassinStreak = [0, 0];
     this.lastBasic = [null, null];
     this.aimLock = null;
     this.tremor = [1, 1];
@@ -515,6 +521,8 @@ export class Match {
     this.placing = 'none';
     this.nudgeOrigin = null;
     this.aimLock = null;
+    // A spent advantage needs a fresh run of balls before it comes back.
+    if (this.assassinReady[side]) this.assassinStreak[side] = 0;
     this.assassinReady[side] = false;
     this.phase = 'rolling';
     this.emit({ type: 'shot', side, speed, miscue });
@@ -638,7 +646,10 @@ export class Match {
     if (res.foul) s.fouls++;
     s.pots += ownPots + res.points;
     let gain = (ownPots + res.points) * 14 * (0.8 + 0.1 * this.setup.players[side].cue.energy);
-    this.assassinReady[side] = this.passive(side) === 'anhsat' && !res.foul && res.keepTurn && s.run >= 1 && ownPots + res.points > 0;
+    // Ảnh Sát earns its advantage with ASSASSIN_RUN balls in a row, not after any second pot.
+    const scored = !res.foul && res.keepTurn ? ownPots + res.points : 0;
+    this.assassinStreak[side] = scored > 0 ? this.assassinStreak[side] + scored : 0;
+    this.assassinReady[side] = this.passive(side) === 'anhsat' && scored > 0 && this.assassinStreak[side] >= ASSASSIN_RUN;
     if (this.passive(side) === 'chusu' && !res.foul && !res.keepTurn && !res.option && res.winner === null) {
       this.activeEffects.push({ ...buildCast('sand', 1, -1, this.table, this.balls, this.cueId(side), { point: { x: cue.x, y: cue.y } }), target: opp });
     }

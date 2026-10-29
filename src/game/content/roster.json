@@ -238,7 +238,7 @@
     {
       "id": "anhsat",
       "name": "Ảnh Sát",
-      "passive": "Sau chuỗi ghi điểm, chọn soi đường hoặc tăng lực cho cú tiếp theo."
+      "passive": "Ăn liền 4 bi không đứt chuỗi, chọn soi đường hoặc tăng lực cho cú tiếp theo."
     },
     {
       "id": "luanhoi",

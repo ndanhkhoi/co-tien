@@ -54,10 +54,11 @@ describe('class choices are physical and scoped', () => {
     expect(sand.activeEffects.some(e => e.kind === 'sand' && e.target === 1)).toBe(true);
     const assassin = make('anhsat');
     Object.defineProperty(assassin, 'rules', { value: { ...assassin.rules, resolve: () => ({ ...res, keepTurn: true, points: 1 }) } });
-    for (let shot = 0; shot < 2; shot++) {
+    // One ball per shot: the advantage arrives with the fourth ball in a row.
+    for (let shot = 0; shot < 4; shot++) {
       assassin.shoot({ angle: 0, power: 0, side: 0, vert: 0, call: null, pushOut: false });
       for (let i = 0; i < 3000 && assassin.phase === 'rolling'; i++) assassin.update(1 / 30);
-      expect(assassin.assassinReady[0]).toBe(shot === 1);
+      expect(assassin.assassinReady[0]).toBe(shot === 3);
     }
     expect(assassin.choosePassive('info')).toBe(true);
     expect(assassin.passiveInfo).toBe(true);

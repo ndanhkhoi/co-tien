@@ -17,7 +17,7 @@ Toàn bộ tên, truyện, môn phái, nhân vật, chiêu thức và tranh là 
 | Pháp Tu | Trước mỗi cú chọn giữ áp phê ngang hoặc tiến/lùi; trục còn lại giảm. |
 | Hộ Pháp | Mỗi lượt cơ được chọn một đoạn băng mềm cho cú của mình. |
 | Chú Sư | Sau cú hợp lệ kết thúc lượt, để lại một vùng cát nhỏ tại điểm dừng bi cái cho cú kế của đối thủ. |
-| Ảnh Sát | Sau chuỗi ghi điểm, chọn soi đường hoặc tăng lực cho cú tiếp theo. |
+| Ảnh Sát | Ăn liền 4 bi không đứt chuỗi, chọn soi đường hoặc tăng lực cho cú tiếp theo. |
 | Luân Hồi | Hai chiêu cơ bản chung nhịp: dùng luân phiên hồi nhanh hơn một lượt; lặp lại hồi bình thường. |
 
 `kind` là loại tạo hình, độc lập với hệ chiến đấu (`cls`): Hiệp Khách, Nữ Hiệp, Yêu Tộc, Tinh Linh, Linh Tượng, Ma Vật. Đây không phải cột giới tính; nội tại thuộc hệ, không thuộc loại.
