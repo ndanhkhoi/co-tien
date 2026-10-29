@@ -991,3 +991,8 @@ body.theatre #theatre {
 @keyframes fin-stamp { from { opacity: 0; transform: scale(1.8); } }
 @keyframes fin-rise { from { opacity: 0; transform: translateY(10px); } }
 @keyframes fin-shake { 0%, 100% { transform: none; } 20% { transform: translate(-7px, 4px); } 40% { transform: translate(6px, -4px); } 60% { transform: translate(-3px, 2px); } 80% { transform: translate(2px, -1px); } }
+
+/* Luyện Cơ result: the task stays in view next to the verdict. */
+.mx-mgoal { margin: 0; padding: 8px 12px; border-radius: var(--r-2); background: var(--sheet-2); border: 1px solid var(--line); font-size: 13px; line-height: 1.4; color: var(--ink-2); }
+.mx-mgoal b { color: var(--accent-2); }
+.mx-mgoal span { color: var(--muted); white-space: nowrap; }

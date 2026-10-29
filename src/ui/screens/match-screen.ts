@@ -1787,6 +1787,7 @@ export function matchScreen(opts: MatchOptions) {
         artModal(ok ? winUrl(champOf(0)) : exprUrl(champOf(0), 'sad'), (close) => [
           h('h2', null, ok ? 'Hoàn thành!' : 'Chưa được'),
           h('p.mx-mtext', null, match.lastRes?.messages[0] ?? ''),
+          h('p.mx-mgoal', null, h('b', null, 'Mục tiêu: '), opts.challenge!.goal, h('span', null, ` · lượt ${attempt}/${opts.challenge!.tries}`)),
           ok ? stars(r.stars) : h('p.muted', null, triesLeft > 0 ? `Còn ${triesLeft} lượt thử` : 'Hết lượt thử — thử lại từ đầu nhé'),
           h('div.actions', null,
             btn('Về danh sách', () => {
