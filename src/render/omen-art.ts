@@ -26,7 +26,7 @@ export class OmenArt {
     this.mask.rect(-t.L / 2, -t.W / 2, t.L, t.W).fill(0xffffff);
     this.layer.addChild(this.mask);
     // Allocate once, including the maximum ball-count tremor and decorative overlays.
-    for (let i = 0; i < 96; i++) {
+    for (let i = 0; i < 128; i++) {
       const sprite = new Sprite();
       sprite.anchor.set(0.5);
       sprite.blendMode = 'normal';
@@ -112,6 +112,23 @@ export class OmenArt {
         const k = gust ? 1 - gust.amp + gust.amp * Math.sin(gust.omega * elapsed) : 1;
         const a = Math.atan2(force.y, force.x) + (k < 0 ? Math.PI : 0);
         const name = o.id === 'swell' ? 'swell' : o.id === 'tilt' ? 'tilt' : 'wind';
+        if (name === 'wind') {
+          // A lattice of ink arrows drifting downwind across the cloth: the direction reads at a
+          // glance, and the drift speed follows the gust.
+          const ux = Math.cos(a), uy = Math.sin(a);
+          const step = 0.42;
+          const drift = ((this.clock * 0.12) % step + step) % step;
+          for (let i = -3; i <= 3; i++) {
+            for (let j = -1; j <= 1; j++) {
+              const along = i * step + drift;
+              const x = ux * along - uy * j * 0.36;
+              const y = uy * along + ux * j * 0.36;
+              if (Math.abs(x) > t.L / 2 - 0.06 || Math.abs(y) > t.W / 2 - 0.06) continue;
+              const edge = Math.min(1, (t.L / 2 - Math.abs(x)) / 0.25);
+              this.put('skill/arrow', x, y, 0.13, 0.045, (0.22 + Math.abs(k) * 0.18) * fade * edge, a);
+            }
+          }
+        }
         for (const side of [-1, 1]) {
           this.put(name, Math.sin(phase * 0.8) * 0.015, side * (t.W / 2 - 0.09), 0.32, 0.12, (0.28 + Math.abs(k) * 0.12) * fade, a);
           if (m.setup.tableSkin.sect === 'hoalinh') this.put('petal', side * t.L * 0.3, side * (t.W / 2 - 0.1), 0.07, 0.07, 0.42 * fade, a + phase * 0.12);

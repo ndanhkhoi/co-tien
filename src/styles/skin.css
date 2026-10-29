@@ -162,17 +162,22 @@
 .vs-stage .vs-seal { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%) rotate(-6deg); z-index: 2; }
 .vs-plates { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; min-width: 0; }
 /* Player plates match the match HUD: painted paper, ink type, room for two sub lines. */
-.vs-plates .vs-side { min-width: 0; min-height: max(58px, calc(44px / var(--ui-scale, 1))); padding: 9px 18px 9px 22px; background: url('/art/ui/frame/name-wide.webp') center / 100% 100% no-repeat; color: var(--ink); border-radius: 0; }
+.vs-plates .vs-side { min-width: 0; align-items: center; height: 64px; min-height: max(58px, calc(44px / var(--ui-scale, 1))); padding: 9px 18px 9px 22px; background: url('/art/ui/frame/name-wide.webp') center / 100% 100% no-repeat; color: var(--ink); border-radius: 0; }
 .vs-plates .vs-side.foe { text-align: right; justify-content: flex-end; padding: 9px 22px 9px 18px; }
 .vs-plates .vs-name { color: var(--ink); font-size: 15px; display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .vs-plates .vs-sub { color: var(--ink-2); font-size: 12px; line-height: 1.25; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; }
 .vs-plates .vs-text { min-width: 0; flex: 1; }
 .vs-plates .vs-edit .ico { width: 20px; height: 20px; }
-.vs-plates input { width: 100%; min-width: 0; max-width: 100%; min-height: max(32px, calc(44px / var(--ui-scale, 1))); padding: 0 2px; font: 700 15px/1.2 var(--display); text-align: inherit; background: transparent; color: var(--ink); border: 0; border-bottom: 1.5px solid var(--ink); border-radius: 0; box-shadow: none; }
+.vs-plates input { width: 100%; min-width: 0; max-width: 100%; min-height: max(32px, calc(44px / var(--ui-scale, 1))); padding: 0 2px; font: 700 15px/1.2 var(--display); text-align: inherit; background: transparent; color: var(--ink); border: 0; border-radius: 0; box-shadow: none; }
+.vs-plates input:focus-visible { outline: 0; background: rgba(26, 23, 19, 0.06); }
 .versus > .btn { flex-shrink: 0; }
 .setup-opts .chip { min-height: 36px; padding: 0 9px; font-size: 13px; }
 .setup-opts .chips { gap: 4px; flex-wrap: nowrap; }
-.vs-cut { height: 135%; width: 66%; bottom: -26%; }
+/* Two duellists at eye level: each cut-out is fitted into the same box and anchored at the top,
+   so a leaping champion and a crouching one still face each other instead of one sinking. */
+.vs-cut { top: 4%; bottom: auto; height: 118%; width: 60%; object-fit: contain; }
+.vs-cut.me { left: -2%; object-position: left top; }
+.vs-cut.foe { right: -2%; object-position: right top; }
 .vs-cut.me { left: -10%; }
 .vs-cut.foe { right: -10%; }
 .tb-title { font-size: 24px; padding: 10px 56px 12px 58px; min-width: 210px; }
@@ -580,13 +585,8 @@ body { background: linear-gradient(#e9e1d0d1, #e9e1d0d1), var(--paper, none) cen
 .mx-vs-av::after { inset: 0; }
 .mx-vs-title { width: 210px; max-width: 100%; overflow-wrap: anywhere; }
 
-/* Entry artwork is a viewport paint on desktop. The source key art carries a paper border;
-   a slight overscan removes that seam so browser letterboxing never reads as a second frame. */
-@media (orientation: landscape) and (min-width: 900px) {
-  body:not(.theatre) .screen.splash { background-size: auto 118%; }
-}
 
-/* Stage: on roomy screens the 844×390 game sits in a painted frame over a living backdrop.
+/* Stage: the 16:9 game always sits in a painted frame over a living backdrop.
    main.ts toggles body.theatre and publishes the game rectangle as --game-* variables. */
 #backdrop, #theatre { display: none; }
 body.stage #backdrop { display: block; position: fixed; inset: 0; z-index: 0; overflow: hidden; background: var(--frame); pointer-events: none; }
@@ -800,3 +800,60 @@ body.theatre #theatre {
 .mx-obj.calling.need .mx-obj-t { color: var(--accent); animation: mx-call-need 1.4s ease-in-out infinite; }
 @keyframes mx-call-need { 50% { opacity: 0.55; } }
 @media (prefers-reduced-motion: reduce) { .mx-obj.calling.need .mx-obj-t { animation: none; } }
+
+/* Skill nudge: a painted paper slip beside the ready skill, and a soft pulse on the slot itself. */
+#ui .mx-skillnudge {
+  position: absolute; z-index: 17; display: none; translate: 0 -50%;
+  left: calc(8px + var(--sl) + var(--colL) + var(--gap) + 6px);
+  max-width: 240px; min-height: var(--touch-target); padding: 10px 26px 10px 22px;
+  flex-direction: column; align-items: flex-start; justify-content: center; gap: 1px;
+  background: url('/art/ui/frame/quote-wide.webp') center / 100% 100% no-repeat; border: 0;
+  color: var(--ink-2); font: 500 12px/1.25 var(--body); text-align: left;
+  filter: drop-shadow(0 4px 10px rgba(26, 23, 19, 0.28));
+}
+#ui .mx-skillnudge b { color: var(--accent-2); font: 700 15px/1.2 var(--display); }
+#ui .mx-skillnudge.show { display: flex; animation: mx-nudge-in 0.3s var(--ease) both; }
+.lefty #ui .mx-skillnudge, #ui .lefty .mx-skillnudge { left: auto; right: calc(8px + var(--sr) + var(--colL) + var(--gap) + 6px); align-items: flex-end; text-align: right; }
+.mx-skill.nudge { animation: mx-skill-nudge 1.1s ease-in-out 3; }
+@keyframes mx-nudge-in { from { opacity: 0; translate: -8px -50%; } }
+@keyframes mx-skill-nudge { 50% { transform: scale(1.06); } }
+@media (prefers-reduced-motion: reduce) { #ui .mx-skillnudge.show, .mx-skill.nudge { animation: none; } }
+
+/* Cards in a row share their line positions: names reserve two lines, so a wrapped name never
+   pushes its subtitle, price or description below its neighbours'. */
+.champ-card .cc-name { min-height: calc(2 * 1.15em); display: flex; align-items: flex-start; justify-content: center; }
+.gc-head { align-items: flex-start; min-height: calc(2 * 1.2 * var(--fs-l) + 4px); }
+.gc-head b { padding-top: 2px; }
+
+/* Wide phones scale the 16:9 frame down; secondary HUD lines stay at 12–13 px in design units. */
+.mx-obj-k { font-size: 12px; }
+.mx-card .mx-line, .mx-card .mx-sub { font-size: 13px; }
+.mx-sk-name { font-size: 13px; }
+
+/* The spin sheet's close button sits above its title, which used to swallow the tap. */
+.mx-spinsheet .mx-sc-x { position: absolute; top: 6px; right: 6px; z-index: 3; }
+.mx-spinsheet .mx-sp-title { padding-right: calc(var(--touch-target) + 6px); }
+.vs-plates .vs-sub { -webkit-line-clamp: 1; white-space: nowrap; text-overflow: ellipsis; display: block; }
+.vs-plates input { min-height: 0; height: 22px; padding: 0; }
+
+/* Painted buttons carry their own ink edge; a CSS shadow would draw a box outside it. Text sits
+   on one baseline across a row of buttons, with or without an icon. */
+#ui .btn, .update-sheet .btn { box-shadow: none; line-height: 1.15; }
+#ui .btn.pressed, #ui .btn:active { box-shadow: none; }
+#ui .btn > .ico, #ui .btn .btn-in > .ico { flex-shrink: 0; }
+.modal .actions > .btn { display: inline-flex; align-items: center; justify-content: center; padding-top: 0; padding-bottom: 2px; }
+.btn-in { display: inline-flex; align-items: center; justify-content: center; gap: 8px; }
+
+/* Gear cards in one row share row tracks (subgrid): a short description leaves blank space
+   instead of pulling its stats and button up out of line with the neighbour's. */
+.gear-grid { grid-auto-rows: auto auto auto auto auto; }
+.gear-card { display: grid; grid-row: span 5; grid-template-rows: subgrid; align-content: start; row-gap: 8px; }
+.gear-card > .gc-desc { align-self: start; }
+.gear-card > .stat-sheet { align-self: start; }
+.gear-card > :last-child { align-self: end; }
+
+/* Long collections lay out lazily: off-screen sect groups skip layout and paint until scrolled to. */
+.collection .sect-group, .codex .sect-group, .challenge-family { content-visibility: auto; contain-intrinsic-size: auto 260px; }
+
+/* Long collections lay out lazily: off-screen sect groups skip layout and paint until scrolled to. */
+.collection .sect-group, .codex .sect-group, .challenge-family { content-visibility: auto; contain-intrinsic-size: auto 260px; }

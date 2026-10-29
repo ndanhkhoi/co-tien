@@ -192,7 +192,7 @@ export function championModal(app: App, c: Champion, onChange?: () => void) {
     const owned = p.champions.includes(c.id);
     const price = CHAMPION_PRICE[c.tier];
     const action = owned
-      ? (p.champion === c.id ? btn(h('span', null, icon('check'), 'Đang dùng'), () => {}, 'ghost') : btn('Chọn làm tướng đại diện', () => {
+      ? (p.champion === c.id ? btn(h('span.btn-in', null, icon('check'), 'Đang dùng'), () => {}, 'ghost') : btn('Chọn làm tướng đại diện', () => {
         p.champion = c.id;
         app.save();
         close();
@@ -388,7 +388,7 @@ function setupScreen(app: App, local: boolean): Screen {
     return `Tướng bậc ${lo}–${hi} · ${LEVEL_NAMES[st.level]}`;
   };
   const render = () => {
-    foeHint.textContent = local ? 'Cùng chơi trên máy này' : tierRange();
+    foeHint.textContent = local ? 'Chạm để đổi tên' : tierRange();
     const mut = MUTATORS.find((m) => m.id === st.mutator);
     left.replaceChildren(...[
       row('Chế độ', seg([['tc', 'Tiên Đạo · có chiêu'], ['cd', 'Cổ Điển']], st.classic ? 'cd' : 'tc', (v) => (st.classic = v === 'cd'))),
@@ -446,7 +446,7 @@ function setupScreen(app: App, local: boolean): Screen {
         h('span.vs-text', null, h('b.vs-name', null, app.profile.name), h('span.vs-sub', null, `${me.name} · ${classInfo(me.cls).name}`)),
         h('span.vs-edit', null, icon('edit')),
       ), () => profileModal(app, () => app.go(local ? localScreen : quickScreen, { replace: true }))),
-      h('div.vs-side.foe', null, h('span.vs-text', null, local ? name2 : foeName, foeHint)),
+      h('div.vs-side.foe', null, local ? h('span.vs-edit', null, icon('edit')) : null, h('span.vs-text', null, local ? name2 : foeName, foeHint)),
     ),
     btn(h('span.btn-in', null, icon('play'), 'Vào trận'), () => start(), 'big block'),
   );

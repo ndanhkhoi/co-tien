@@ -559,6 +559,14 @@ export function matchScreen(opts: MatchOptions) {
       strikeBtn.classList.toggle('place', placing);
     }
 
+    /** A force on the cloth in words, as the player sees the table: "thổi sang phải, chếch xuống". */
+    function forceDirection(f?: { x: number; y: number }): string {
+      if (!f || !Math.hypot(f.x, f.y)) return '';
+      const deg = (Math.atan2(f.y, f.x) * 180) / Math.PI;
+      const names = ['sang phải', 'chếch phải xuống', 'xuống dưới', 'chếch trái xuống', 'sang trái', 'chếch trái lên', 'lên trên', 'chếch phải lên'];
+      return `Hướng: ${names[((Math.round(deg / 45) % 8) + 8) % 8]} (theo mũi tên trên nỉ).`;
+    }
+
     function miniBall(id: number) {
       const col = ballCss('pool', id);
       return h('i.mx-ball', { class: id > 8 ? 'stripe' : '', style: `--c:${col}`, title: `Bi ${id}` });
@@ -662,6 +670,18 @@ export function matchScreen(opts: MatchOptions) {
       if (thinking) heraldEl.append(icon('thinking', 'mx-h-think'));
       center.classList.add('heralding');
     }
+    // Any touch, click or key dismisses the current announcement: the player is acting, and the
+    // banner must never stand between them and the cue ball they are placing.
+    const dismissHerald = () => {
+      if (!heraldOn) return;
+      heraldQ.length = 0;
+      clearTimeout(heraldTimer);
+      heraldOn = false;
+      idleHerald();
+    };
+    el.addEventListener('pointerdown', dismissHerald, true);
+    app.pixi.canvas.addEventListener('pointerdown', dismissHerald, true);
+    window.addEventListener('keydown', dismissHerald, true);
     function idleHerald() {
       if (thinkingSide !== null) {
         showHerald({ side: thinkingSide, expr: 'focus', title: `${nameOf(thinkingSide)} đang tính…` }, true);
@@ -1464,7 +1484,7 @@ export function matchScreen(opts: MatchOptions) {
           sound.omen();
           hintOnce(app, 'omen', 'Thiên Tượng', 'Gió, tuyết, rễ cây… tác động đường bi trong một cú đánh. Quan sát dấu trên nỉ để tính đường cơ.',
             { anchor: () => (lefty ? ctrl : dock), place: 'right', highlight: false, rail: true });
-          herald({ side: null, icon: 'warning', title: e.omen.name, line: e.omen.desc, ms: 4200 });
+          herald({ side: null, icon: 'warning', title: e.omen.name, line: [e.omen.desc, forceDirection(e.omen.terrain?.force)].filter(Boolean).join(' '), ms: 4200 });
           view.addShake(e.omen.jitter ? 0.6 : 0.2);
           break;
         case 'resolved':
@@ -1475,7 +1495,13 @@ export function matchScreen(opts: MatchOptions) {
           break;
         case 'new-rack':
           view.resync();
-          for (const c of cards) c.key = '';
+          // A sentinel, not '': an empty potted list also keys to '' and would never repaint.
+          for (const c of cards) c.key = '\u0000';
+          pottedBefore[0] = pottedBefore[1] = 0;
+          lastTurnSide = null;
+          ultAnnounced[0] = ultAnnounced[1] = false;
+          skillIdle[0] = skillIdle[1] = 0;
+          hideSkillNudge();
           break;
         case 'rack-over': {
           const w = e.winner;
@@ -2157,6 +2183,8 @@ export function matchScreen(opts: MatchOptions) {
         window.removeEventListener('cotien:ui-resize', onResize);
         cutIn?.remove();
         window.removeEventListener('keydown', onKey);
+        window.removeEventListener('keydown', dismissHerald, true);
+        app.pixi.canvas.removeEventListener('pointerdown', dismissHerald, true);
         window.removeEventListener('keyup', onKey);
         canvas.removeEventListener('pointerdown', onDown);
         canvas.removeEventListener('pointermove', onMove);

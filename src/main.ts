@@ -108,11 +108,15 @@ const DESIGN_W = 844;
 const DESIGN_H = 475;
 /** Largest scale: past this the frame stops growing and the backdrop takes the extra room. */
 const MAX_SCALE = 2.2;
-/** Design px per source pixel of the painted stage frame (art/ui/frame/stage.webp). */
-const FRAME_PX = 0.45;
-/** How far that frame reaches outside the composition, in design px (sides, top/bottom). */
-const FRAME_X = 92 * FRAME_PX;
-const FRAME_Y = 117 * FRAME_PX;
+/**
+ * Design px per source pixel of the painted stage frame (art/ui/frame/stage.webp). Every screen
+ * gets the frame; phones use a slimmer band so it does not eat into the game.
+ */
+const FRAME_PX_ROOMY = 0.45;
+const FRAME_PX_SLIM = 0.2;
+/** How far the frame reaches outside the composition per frame px (sides, top/bottom). */
+const FRAME_X = 92;
+const FRAME_Y = 117;
 
 /** Keep one 16:9 composition, contained and centred inside the usable screen on every device. */
 function installUiScale() {
@@ -124,35 +128,40 @@ function installUiScale() {
   const apply = () => {
     const gate = mustInstall();
     const safe = safeFrame.getBoundingClientRect();
-    // Roomy screens (desktop, tablet, odd window shapes) also get the painted frame and the
-    // flanking champions. Phones have no pixels to spare for a frame.
-    const framed = Math.min(
-      MAX_SCALE,
-      (safe.width * 0.92) / (DESIGN_W + 2 * FRAME_X),
-      (safe.height * 0.92) / (DESIGN_H + 2 * FRAME_Y),
-    );
-    const theatre = !gate && Math.min(safe.width, safe.height) >= 480 && framed >= 1;
-    // Without a frame, entry art (splash, loading) paints the whole viewport at native size.
-    const entry = !gate && !theatre && !!ui.querySelector('.screen.splash, .screen.loading');
-    const native = gate || entry;
-    // Everywhere else the letterbox around the 16:9 game shows the living backdrop.
+    const view = viewport.getBoundingClientRect();
+    const roomy = Math.min(safe.width, safe.height) >= 480;
+    const framePx = roomy ? FRAME_PX_ROOMY : FRAME_PX_SLIM;
+    const margin = roomy ? 0.92 : 1;
+    // The install gate is the only native-size screen; everything else, splash included, is the
+    // framed 16:9 game on its backdrop.
+    const native = gate;
     document.body.classList.toggle('stage', !native);
-    document.body.classList.toggle('theatre', theatre);
-    const rect = native ? viewport.getBoundingClientRect() : safe;
-    const s = native ? 1 : theatre ? framed : Math.min(MAX_SCALE, rect.width / DESIGN_W, rect.height / DESIGN_H);
+    document.body.classList.toggle('theatre', !native);
+    const s = native ? 1 : Math.min(
+      MAX_SCALE,
+      (safe.width * margin) / (DESIGN_W + 2 * FRAME_X * framePx),
+      (safe.height * margin) / (DESIGN_H + 2 * FRAME_Y * framePx),
+    );
+    const theatre = !native;
+    const rect = native ? view : safe;
     const width = native ? rect.width : DESIGN_W;
     const height = native ? rect.height : DESIGN_H;
     // Champions only flank the stage when the side margins can hold a figure.
     const sideRoom = (safe.width - DESIGN_W * s) / 2;
     const topRoom = (safe.height - DESIGN_H * s) / 2;
-    document.body.classList.toggle('cast-room', theatre && sideRoom >= 150);
+    document.body.classList.toggle('cast-room', theatre && roomy && sideRoom >= 150);
     // Tall windows (4:3, 5:4, tablets) have their room above and below instead: the champions
     // lean over the top of the frame there.
-    document.body.classList.toggle('cast-top', theatre && sideRoom < 150 && topRoom >= 90);
+    document.body.classList.toggle('cast-top', theatre && roomy && sideRoom < 150 && topRoom >= 90);
     ui.style.width = `${width}px`;
     ui.style.height = `${height}px`;
-    const left = rect.left + (rect.width - width * s) / 2;
-    const top = rect.top + (rect.height - height * s) / 2;
+    // Centre on the whole screen (an iPhone's home-bar inset would otherwise push the game up),
+    // then nudge back inside the safe area if the frame would reach under a notch or the bar.
+    const clamp = (v: number, lo: number, hi: number) => Math.min(Math.max(v, lo), Math.max(lo, hi));
+    const padX = native ? 0 : FRAME_X * framePx * s;
+    const padY = native ? 0 : FRAME_Y * framePx * s;
+    const left = native ? rect.left : clamp(view.left + (view.width - width * s) / 2, safe.left + padX, safe.right - padX - width * s);
+    const top = native ? rect.top : clamp(view.top + (view.height - height * s) / 2, safe.top + padY, safe.bottom - padY - height * s);
     ui.style.left = `${left}px`;
     ui.style.top = `${top}px`;
     // Native screens paint across the viewport; on the stage, surfaces stop at the game edge.
@@ -166,7 +175,7 @@ function installUiScale() {
     root.setProperty('--game-t', `${top}px`);
     root.setProperty('--game-w', `${width * s}px`);
     root.setProperty('--game-h', `${height * s}px`);
-    root.setProperty('--fk', `${theatre ? FRAME_PX * s : 0}px`);
+    root.setProperty('--fk', `${theatre ? framePx * s : 0}px`);
     // Keep a transform at scale 1 too: fixed sheets must stay within the game frame.
     ui.style.transform = `scale(${s})`;
     ui.style.setProperty('--ui-scale', String(s));
