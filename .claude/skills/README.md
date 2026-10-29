@@ -16,10 +16,14 @@ Each folder holds a `SKILL.md` (when to use it, how) plus optional references an
 | `audio-design` | The synthesized WebAudio sound (`src/audio`). |
 | `save-systems` | The player profile, migrations and save codes (`src/game/profile.ts`). |
 | `performance-optimization` | Keeping 60 fps on phones: physics stepping, draw calls, asset sizes, precache. |
+| `fiction-workshop` | Writing and editing Cơ Tiên Truyện (`src/game/content/story.json`): line editing, character voice, continuity. `docs/world-bible.md` is the story bible. |
 
 ## Third-party notice
 
-All skills except `game-art` come from
+All skills except `game-art` and `fiction-workshop` come from
 [gamedev-skills/awesome-gamedev-agent-skills](https://github.com/gamedev-skills/awesome-gamedev-agent-skills),
 licensed under the Apache License 2.0 (copy in `THIRD-PARTY-LICENSE-Apache-2.0.txt`). They are
 included unmodified. `game-art` is written for this project and is covered by the repo's MIT licence.
+
+`fiction-workshop` comes from [rhavekost/author-toolkit](https://github.com/rhavekost/author-toolkit),
+licensed under the MIT License (copy in `fiction-workshop/LICENSE`). It is included unmodified.
