@@ -36,6 +36,17 @@ export const NO_SCORE: ShotScore = { count: 0, value: 0, names: [], tier: 0 };
 
 const DEG = 180 / Math.PI;
 
+/** Does point `p` lie within `r` of the segment a→b (strictly between its ends)? */
+function crosses(a: { x: number; y: number }, b: { x: number; y: number }, p: { x: number; y: number }, r: number): boolean {
+  const dx = b.x - a.x;
+  const dy = b.y - a.y;
+  const len2 = dx * dx + dy * dy;
+  if (!len2) return false;
+  const t = ((p.x - a.x) * dx + (p.y - a.y) * dy) / len2;
+  if (t <= 0 || t >= 1) return false;
+  return Math.hypot(a.x + dx * t - p.x, a.y + dy * t - p.y) < r;
+}
+
 export function scoreShot(s: ScoreInput): ShotScore {
   const count = s.counted.length + s.points;
   if (!count) return NO_SCORE;
@@ -60,7 +71,6 @@ export function scoreShot(s: ScoreInput): ShotScore {
       feat('Bi kết', 1);
       continue;
     }
-    if (jumped) feat('Nhảy bi', 1.2);
     if (cueRailsFirst > 0) {
       feat('Gỡ băng', 1);
       continue;
@@ -77,6 +87,8 @@ export function scoreShot(s: ScoreInput): ShotScore {
     const ay = gy - cue0.y;
     const al = Math.hypot(ax, ay);
     if (al < 1e-6) continue;
+    // A jump only counts when the cue ball really had to clear a ball lying across its path.
+    if (jumped && s.before.some((b) => b.onTable && b.id !== id && b.id !== s.cueId && crosses(cue0, { x: gx, y: gy }, b, 2 * s.table.R))) feat('Nhảy bi', 1.2);
     const cut = Math.acos(Math.max(-1, Math.min(1, (ax * nx + ay * ny) / (al * nl)))) * DEG;
     if (cut >= 50) feat('Cắt mỏng', cut >= 65 ? 1.1 : 0.8);
     else if (cut >= 30) feat('', 0.3);

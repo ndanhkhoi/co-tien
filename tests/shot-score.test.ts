@@ -56,6 +56,21 @@ describe('shot score', () => {
     expect(combo.tier).toBe(1);
   });
 
+  it('counts a jump only over a ball in the way', () => {
+    const high = { elevation: (30 * Math.PI) / 180 };
+    expect(pot(0, [], high).names).not.toContain('Nhảy bi');
+    const pk = pool.pockets[2];
+    const obj = { x: pk.x - 0.35, y: pk.y + 0.25 };
+    const cue = { x: obj.x - 0.6, y: obj.y + 0.1 };
+    const mid = { x: (cue.x + obj.x) / 2, y: (cue.y + obj.y) / 2 };
+    const jump = scoreShot({
+      table: pool, cueId: 0, counted: [1], points: 0, isBreak: false, ...high,
+      before: [makeBall(0, cue.x, cue.y), makeBall(1, obj.x, obj.y), makeBall(2, mid.x, mid.y)],
+      events: [{ t: 'ball', a: 0, b: 1, speed: 2, x: obj.x - 0.02, y: obj.y }, { t: 'pocket', id: 1, pocket: 2, speed: 1 }],
+    });
+    expect(jump.names).toContain('Nhảy bi');
+  });
+
   it('gives nothing extra on the break or without a score', () => {
     expect(pot(60, [], { isBreak: true }).value).toBe(1);
     expect(pot(60, [], { counted: [] }).value).toBe(0);
