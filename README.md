@@ -25,7 +25,7 @@ tiên hiệp riêng: **Cơ Tiên Giới** với 13 môn phái, 65 tướng, mỗ
 
 **Cách chơi**
 
-| | |
+| Mục | Giới thiệu |
 |---|---|
 | **Hành trình** | Bản đồ 13 vùng đất, thách đấu cao thủ để chiêu mộ họ |
 | **Luận Cơ** | Đấu nhanh với máy: 4 cấp, 4 lối đánh, AI tìm cú bằng chính bộ mô phỏng |
@@ -50,7 +50,7 @@ Chụp ở 932×430, tướng của người chơi là Ngân Cầm.
 | Luận Cơ | Song Đấu |
 | --- | --- |
 | ![Chọn trận Luận Cơ](docs/screenshots/luan-co.webp) | ![Song Đấu: mỗi bên chọn tướng, tên và Pháp Cơ](docs/screenshots/song-dau.webp) |
-| **Trận đấu · mũi tên chỉ lượt** | **Tạm dừng** |
+| **Trận đấu** | **Tạm dừng** |
 | ![Trận đấu: mũi tên son trên chân dung người tới lượt](docs/screenshots/tran-dau.webp) | ![Menu tạm dừng](docs/screenshots/tam-dung.webp) |
 | **Chiêu thức** | **Tuyệt chiêu** |
 | ![Thẻ chiêu thức](docs/screenshots/dat-chieu.webp) | ![Thẻ tuyệt chiêu](docs/screenshots/tuyet-chieu.webp) |
