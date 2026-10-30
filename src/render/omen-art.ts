@@ -34,10 +34,16 @@ interface OmenTiming {
 /** Bounded sprite pool: shared Assets textures survive the view; sprites belong to it. */
 export class OmenArt {
   readonly layer = new Container();
+  /** Sprites clipped to the bed: the mask is set once on this container, never toggled per sprite. */
+  private readonly clipped = new Container();
+  /** Sprites that may overhang the bed (pocket seals, pocket breath). */
+  private readonly free = new Container();
   private pool: Sprite[] = [];
+  private freePool: Sprite[] = [];
   private readonly putCommand: PutCommand = { name: 'snow-drift', x: 0, y: 0, w: 0, h: 0, alpha: 0 };
   private textures = new Map<Art, Texture>();
   private used = 0;
+  private freeUsed = 0;
   private clock = 0;
   private started = 0;
   private shotTime = -Infinity;
@@ -49,25 +55,29 @@ export class OmenArt {
   constructor(private match: Match) {
     const t = match.table;
     // Terrain never paints outside the physical bed. Pocket seals use a separate unmasked layer.
+    // Toggling a shared mask on and off per sprite makes Pixi draw the white mask geometry over the
+    // bed whenever the last toggle in a frame removes it, so the mask lives on one container for good.
     this.mask.rect(-t.L / 2, -t.W / 2, t.L, t.W).fill(0xffffff);
-    this.layer.addChild(this.mask);
+    this.layer.addChild(this.mask, this.clipped, this.free);
+    this.clipped.mask = this.mask;
     // Allocate once, including the maximum ball-count tremor and decorative overlays.
-    for (let i = 0; i < 128; i++) {
-      const sprite = new Sprite();
-      sprite.anchor.set(0.5);
-      sprite.blendMode = 'normal';
-      sprite.visible = false;
-      this.pool.push(sprite);
-      this.layer.addChild(sprite);
-      // Register the mask before assets load so its white geometry never paints the bed.
-      sprite.mask = this.mask;
-    }
+    for (let i = 0; i < 128; i++) this.pool.push(this.pooledSprite(this.clipped));
+    for (let i = 0; i < 16; i++) this.freePool.push(this.pooledSprite(this.free));
     for (const name of [...names, ...skillNames.map(name => `skill/${name}` as const)]) {
       const path = name.startsWith('skill/') ? `skills/${name.slice(6)}` : `omens/${name}`;
       void Assets.load<Texture>(`${base}art/table/${path}.webp`).then(texture => {
         if (!this.layer.destroyed) this.textures.set(name, texture);
       }).catch(() => { /* Missing painted art stays absent; never substitute invented geometry. */ });
     }
+  }
+
+  private pooledSprite(parent: Container): Sprite {
+    const sprite = new Sprite();
+    sprite.anchor.set(0.5);
+    sprite.blendMode = 'normal';
+    sprite.visible = false;
+    parent.addChild(sprite);
+    return sprite;
   }
 
   shot() {
@@ -82,9 +92,10 @@ export class OmenArt {
     c.alpha = o.alpha; c.rotation = o.rotation ?? 0; c.clip = o.clip ?? true;
     const texture = this.textures.get(c.name);
     if (!texture) return;
-    const s = this.pool[this.used];
+    const s = c.clip ? this.pool[this.used] : this.freePool[this.freeUsed];
     if (!s) return;
-    this.used++;
+    if (c.clip) this.used++;
+    else this.freeUsed++;
     s.texture = texture;
     s.visible = true;
     s.position.set(c.x, c.y);
@@ -92,7 +103,6 @@ export class OmenArt {
     s.width = c.w;
     s.height = c.h;
     s.alpha = c.alpha;
-    s.mask = c.clip ? this.mask : null;
   }
 
   update(dt: number) {
@@ -104,11 +114,13 @@ export class OmenArt {
       this.shotTime = -Infinity;
     }
     this.used = 0;
+    this.freeUsed = 0;
     const timing = this.timing();
     this.paintClosedPockets();
     if (o) this.paintOmen(o, timing);
     this.paintSkillLayers();
     for (let i = this.used; i < this.pool.length; i++) this.pool[i].visible = false;
+    for (let i = this.freeUsed; i < this.freePool.length; i++) this.freePool[i].visible = false;
   }
 
   private timing(): OmenTiming {
