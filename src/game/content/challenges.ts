@@ -23,7 +23,7 @@ export interface ChallengeDef {
 
 export const FAMILY_INFO: Record<ChallengeFamily, { name: string; desc: string }> = {
   straight: { name: 'Ăn Thẳng', desc: 'Ngắm chuẩn, đánh dứt khoát.' },
-  cut: { name: 'Cắt Bi', desc: 'Cắt mỏng, cắt dày — cảm giác góc.' },
+  cut: { name: 'Cắt Bi', desc: 'Cắt mỏng, cắt dày để quen cảm giác góc.' },
   bank: { name: 'Đánh Băng', desc: 'Dội băng một lần vào lỗ.' },
   position: { name: 'Đi Bi', desc: 'Ăn bi và đặt bi cái vào vùng chỉ định.' },
   carom: { name: 'Phăng', desc: 'Bi-a ba bi: tự do và ba băng.' },

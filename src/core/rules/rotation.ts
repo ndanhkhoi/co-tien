@@ -41,7 +41,7 @@ function penalise(state: GameState, res: Resolution) {
   res.ballInHand = 'anywhere';
   if (state.fouls[side] + 1 >= 3) {
     res.winner = other(side);
-    res.messages.push('Phạm lỗi 3 lần liên tiếp — thua ván');
+    res.messages.push('Phạm lỗi 3 lần liên tiếp, thua ván');
   } else if (state.fouls[side] + 1 === 2) {
     res.messages.push('Cảnh báo: đã phạm lỗi 2 lần liên tiếp');
   }
@@ -56,7 +56,7 @@ export const nineBall: RuleSet = {
   legalTargets: (_s, balls) => [lowest(balls)],
   callType: () => 'none',
   objective(state, balls) {
-    if (state.isBreak) return 'Phá bi — chạm bi 1 trước';
+    if (state.isBreak) return 'Phá bi: chạm bi 1 trước';
     return `Chạm bi ${lowest(balls)} trước · ăn bi 9 để thắng`;
   },
   resolve(state, _balls, shot) {
@@ -76,13 +76,13 @@ export const nineBall: RuleSet = {
       if (objectsDown.length + shot.crossedHeadString < 3) {
         if (nine) res.respot.push(9);
         res.option = 'illegal-break-9';
-        res.messages.push('Phá chưa đủ 3 bi (vào lỗ / qua vạch đầu bàn) — đối thủ chọn');
+        res.messages.push('Phá chưa đủ 3 bi (vào lỗ / qua vạch đầu bàn): đối thủ chọn');
         return res;
       }
       if (nine) {
         res.winner = side;
         res.highlight = 'golden';
-        res.messages.push('Bi 9 vào khi phá — thắng ván!');
+        res.messages.push('Bi 9 vào khi phá, thắng ván!');
         return res;
       }
       res.keepTurn = objectsDown.length > 0;
@@ -97,7 +97,7 @@ export const nineBall: RuleSet = {
         return res;
       }
       res.option = 'push-out';
-      res.messages.push('Đẩy bi (push-out) — đối thủ chọn đánh hay nhường');
+      res.messages.push('Đẩy bi (push-out): đối thủ chọn đánh hay nhường');
       return res;
     }
 
@@ -110,7 +110,7 @@ export const nineBall: RuleSet = {
     if (nine) {
       res.winner = side;
       res.highlight = shot.firstHit === 9 ? 'win' : 'golden';
-      res.messages.push(objectsDown.length > 1 || shot.firstHit !== 9 ? 'Ăn bi 9 bằng kết hợp — thắng ván!' : 'Ăn bi 9 — thắng ván!');
+      res.messages.push(objectsDown.length > 1 || shot.firstHit !== 9 ? 'Ăn bi 9 bằng kết hợp, thắng ván!' : 'Ăn bi 9, thắng ván!');
       return res;
     }
     res.keepTurn = objectsDown.length > 0;
@@ -128,7 +128,7 @@ export const tenBall: RuleSet = {
   legalTargets: (_s, balls) => [lowest(balls)],
   callType: (state) => (state.isBreak ? 'none' : 'ball-pocket'),
   objective(state, balls) {
-    if (state.isBreak) return 'Phá bi — chạm bi 1 trước';
+    if (state.isBreak) return 'Phá bi: chạm bi 1 trước';
     return `Chạm bi ${lowest(balls)} trước · gọi bi & lỗ · ăn bi 10 để thắng`;
   },
   resolve(state, _balls, shot) {
@@ -141,7 +141,7 @@ export const tenBall: RuleSet = {
       res.foul = breakFoul(shot);
       if (ten) {
         res.respot.push(10);
-        res.messages.push('Bi 10 vào khi phá — đặt lại bi 10');
+        res.messages.push('Bi 10 vào khi phá, đặt lại bi 10');
       }
       if (res.foul) {
         penalise(state, res);
@@ -159,7 +159,7 @@ export const tenBall: RuleSet = {
         return res;
       }
       res.option = 'push-out';
-      res.messages.push('Đẩy bi (push-out) — đối thủ chọn đánh hay nhường');
+      res.messages.push('Đẩy bi (push-out): đối thủ chọn đánh hay nhường');
       return res;
     }
 
@@ -175,12 +175,12 @@ export const tenBall: RuleSet = {
     if (made && call!.ball === 10 && shot.targets[0] === 10) {
       res.winner = side;
       res.highlight = 'win';
-      res.messages.push('Ăn bi 10 đúng lỗ đã gọi — thắng ván!');
+      res.messages.push('Ăn bi 10 đúng lỗ đã gọi, thắng ván!');
       return res;
     }
     if (ten) {
       res.respot.push(10);
-      res.messages.push('Bi 10 vào không theo lời gọi — đặt lại');
+      res.messages.push('Bi 10 vào không theo lời gọi, đặt lại');
     }
     if (made) {
       res.keepTurn = true;
@@ -190,7 +190,7 @@ export const tenBall: RuleSet = {
     // Called ball missed (or went elsewhere): not a foul, the incoming player chooses.
     if (objectsDown.length) {
       res.option = 'wrong-call';
-      res.messages.push('Bi vào không đúng lời gọi — đối thủ chọn đánh hay nhường');
+      res.messages.push('Bi vào không đúng lời gọi: đối thủ chọn đánh hay nhường');
     }
     return res;
   },

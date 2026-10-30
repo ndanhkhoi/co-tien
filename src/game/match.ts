@@ -617,12 +617,12 @@ export class Match {
 
     if (!res.foul && !res.keepTurn && !res.option && res.winner === null && this.secondChance) {
       res.keepTurn = true;
-      res.messages.unshift('Tái chiến — được đánh tiếp!');
+      res.messages.unshift('Tái chiến: được đánh tiếp!');
     }
     this.clearShotBuffs();
     if (res.foul && this.shield[side] && res.winner === null) {
       this.shield[side] = false;
-      res.messages.unshift('Hộ thể đỡ lỗi — không mất bi trong tay');
+      res.messages.unshift('Hộ thể đỡ lỗi: không mất bi trong tay');
       res.ballInHand = 'none';
       res.option = undefined;
       res.foul = null;

@@ -60,6 +60,6 @@ export const MUTATORS: MutatorDef[] = [
   { id: 'bomb', name: 'Bi Nổ', desc: 'Một bi gắn ngòi nổ: va mạnh là nổ tung, hất văng bi xung quanh.' },
   { id: 'ghost', name: 'Hố Ma', desc: 'Mỗi lượt một lỗ bị bịt kín, đổi chỗ liên tục.' },
   { id: 'fog', name: 'Sương Mù', desc: 'Đường ngắm ngắn lại, nửa bàn xa chìm trong sương.' },
-  { id: 'ice', name: 'Nỉ Băng', desc: 'Mặt nỉ trơn như băng — bi lăn rất xa.' },
+  { id: 'ice', name: 'Nỉ Băng', desc: 'Mặt nỉ trơn như băng, bi lăn rất xa.' },
   { id: 'tight', name: 'Lỗ Hẹp', desc: 'Miệng lỗ hẹp như bàn thi đấu khó nhất.' },
 ];

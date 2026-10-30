@@ -30,7 +30,7 @@ export function installGate(): Screen {
           step(1, 'Bấm nút ', h('b', null, 'menu'), ' (ba chấm) ở góc màn hình'),
           step(2, 'Chọn ', h('b', null, 'Mở bằng trình duyệt'), ' — Safari hoặc Chrome')),
         btn(h('span.btn-in', null, icon('scroll'), 'Sao chép đường dẫn'), () => {
-          void navigator.clipboard?.writeText(location.href).then(() => toast('Đã chép — dán vào Safari hoặc Chrome', 'good'));
+          void navigator.clipboard?.writeText(location.href).then(() => toast('Đã chép. Dán vào Safari hoặc Chrome', 'good'));
         }, 'ghost block'),
       );
     } else {
@@ -80,7 +80,7 @@ export function installGate(): Screen {
           h('img.ig-splash', { src: `${base}art/ui/splash-ring.webp`, alt: '', draggable: false }),
           h('img.ig-icon', { src: `${base}icons/icon-192.png`, alt: '', draggable: false }),
         ),
-        h('img.ig-logo', { src: `${base}art/ui/logo.webp`, alt: 'Cơ Tiên — bida × tu tiên', draggable: false }),
+        h('img.ig-logo', { src: `${base}art/ui/logo.webp`, alt: 'Cơ Tiên, bida tu tiên', draggable: false }),
       ),
       h('div.install-card', null, h('h2.ig-title', null, icon('install'), 'Cài đặt để chơi'), body),
     ),

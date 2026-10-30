@@ -595,9 +595,11 @@ export function matchScreen(opts: MatchOptions) {
       objPlate.classList.toggle('calling', ct !== 'none');
       objPlate.classList.toggle('need', ct !== 'none' && callPocket === null);
       if (ct !== 'none') {
-        const ballPart = ct === 'ball-pocket' ? `bi ${callBallId() ?? '?'} → ` : '';
+        const ball = ct === 'ball-pocket' ? `bi ${callBallId() ?? '?'}` : '';
         objKicker.textContent = 'Gọi lỗ';
-        objText.textContent = callPocket === null ? `Gọi ${ballPart}chạm 1 lỗ trên bàn` : `Gọi ${ballPart}${POCKET_NAMES[callPocket]}`;
+        objText.textContent = callPocket === null
+          ? `Gọi ${ball ? `${ball}, ` : ''}chạm 1 lỗ trên bàn`
+          : `Gọi ${ball ? `${ball} vào ` : ''}${POCKET_NAMES[callPocket]}`;
       }
     }
 
@@ -750,7 +752,7 @@ export function matchScreen(opts: MatchOptions) {
       if (wait > 0) return `Hồi chiêu: còn ${wait} lượt đánh của bạn`;
       if (match.phase === 'rolling') return 'Chờ bi dừng lăn';
       if (match.phase === 'rack-over' || match.phase === 'match-over') return 'Ván đã kết thúc';
-      if (match.turn !== side || aiActing) return 'Chưa dùng được lúc này — đợi tới lượt bạn';
+      if (match.turn !== side || aiActing) return 'Chưa dùng được lúc này, đợi tới lượt bạn';
       return 'Hiệu ứng đang có tác dụng hoặc chưa hợp lúc này';
     }
 
@@ -1450,7 +1452,7 @@ export function matchScreen(opts: MatchOptions) {
             const full = e.total >= ENERGY_MAX;
             if (full && !ultAnnounced[e.side]) {
               const ult = champion(champOf(e.side)).skills[2];
-              herald({ side: e.side, expr: 'focus', title: 'Tuyệt chiêu đã đầy', line: `${ult.name} — chạm ô tuyệt chiêu để chuẩn bị`, ms: 3200 });
+              herald({ side: e.side, expr: 'focus', title: 'Tuyệt chiêu đã đầy', line: `${ult.name}: chạm ô tuyệt chiêu để chuẩn bị`, ms: 3200 });
             }
             ultAnnounced[e.side] = full;
           }
@@ -1532,7 +1534,7 @@ export function matchScreen(opts: MatchOptions) {
       if (r.foul && !opts.challenge) {
         sound.foul();
         setExpr(side, 'sad', 3000);
-        herald({ side, expr: 'sad', tone: 'red', title: r.ballInHand !== 'none' ? 'Phạm lỗi — đối thủ được đặt bi' : 'Phạm lỗi', line: r.foul, ms: 3400 });
+        herald({ side, expr: 'sad', tone: 'red', title: r.ballInHand !== 'none' ? 'Phạm lỗi, đối thủ được đặt bi' : 'Phạm lỗi', line: r.foul, ms: 3400 });
         hintOnce(app, 'foul', 'Phạm lỗi', 'Đối thủ được đặt bi cái sau lỗi; họ có thể đặt trong vùng cho phép rồi đánh. Xem lý do trong thông báo giữa bàn.',
           { anchor: () => (lefty ? ctrl : dock), place: 'right', highlight: false, rail: true });
       } else if (r.winner === null && (potN > 0 || r.points > 0) && r.keepTurn) {
@@ -1618,7 +1620,7 @@ export function matchScreen(opts: MatchOptions) {
         aimFirstTarget();
         if (match.canMoveCue) {
           const placingTitle = match.state.isBreak ? 'Đặt bi phá' : 'Đặt bi cái';
-          herald({ side, title: changed && !solo ? `Lượt của ${nameOf(side)}` : placingTitle, line: `${placingTitle} — dời bi, Ngắm thử, rồi ĐẶT BI` });
+          herald({ side, title: changed && !solo ? `Lượt của ${nameOf(side)}` : placingTitle, line: `${placingTitle}: dời bi, Ngắm thử, rồi ĐẶT BI` });
         }
         else if (changed && !solo) herald({ side, title: `Lượt của ${nameOf(side)}`, line: match.objective() });
         hintTurn(app);
@@ -1828,7 +1830,7 @@ export function matchScreen(opts: MatchOptions) {
           h('h2', null, ok ? 'Hoàn thành!' : 'Chưa được'),
           h('p.mx-mtext', null, match.lastRes?.messages[0] ?? ''),
           h('p.mx-mgoal', null, h('b', null, 'Mục tiêu: '), opts.challenge!.goal, h('span', null, ` · lượt ${attempt}/${opts.challenge!.tries}`)),
-          ok ? stars(r.stars) : h('p.muted', null, triesLeft > 0 ? `Còn ${triesLeft} lượt thử` : 'Hết lượt thử — thử lại từ đầu nhé'),
+          ok ? stars(r.stars) : h('p.muted', null, triesLeft > 0 ? `Còn ${triesLeft} lượt thử` : 'Hết lượt thử. Thử lại từ đầu nhé'),
           h('div.actions', null,
             btn('Về danh sách', () => {
               close();

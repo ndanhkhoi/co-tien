@@ -141,7 +141,7 @@ export class App {
   setPendingUpdate(apply: () => void) {
     this.pendingUpdate = apply;
     // Updates are mandatory: right away from menus, and the moment the current match ends.
-    if (this.current?.usesStage) toast('Có bản mới — game sẽ tự cập nhật ngay khi hết trận', 'gold');
+    if (this.current?.usesStage) toast('Có bản mới. Game sẽ tự cập nhật ngay khi hết trận', 'gold');
     else this.applyUpdate();
   }
 

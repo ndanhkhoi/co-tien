@@ -5,7 +5,7 @@ import { h } from '../dom';
 const TIPS = [
   'Kéo trên bàn để xoay cơ, chạm một bi để ngắm thẳng vào nó.',
   'Mỗi cú đánh nạp năng lượng; đầy thanh thì tung tuyệt chiêu.',
-  'Thiên Tượng là lực thật trên bàn — tính nó vào đường bi.',
+  'Thiên Tượng là lực thật trên bàn. Tính cả nó vào đường bi.',
   'Đánh trên bàn môn phái mình, tướng được Địa Lợi.',
   'Thắng một cao thủ ở Hành trình để mở chương truyện của vùng đó.',
 ];

@@ -60,7 +60,7 @@ function makeCarom(mode: GameMode, threeCushion: boolean): RuleSet {
           res.highlight = 'win';
         }
       } else if (both && threeCushion) {
-        res.messages.push(`Chỉ ${shot.cueRailsBeforeSecond} băng — chưa đủ 3`);
+        res.messages.push(`Chỉ ${shot.cueRailsBeforeSecond} băng, chưa đủ 3`);
       }
       return res;
     },

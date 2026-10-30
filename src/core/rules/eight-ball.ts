@@ -45,7 +45,7 @@ export const eightBall: RuleSet = {
   objective(state, balls, side) {
     if (state.isBreak) return 'Phá bi';
     const g = state.groups[side];
-    if (g === null) return 'Bàn mở — ăn bi nào nhận nhóm đó';
+    if (g === null) return 'Bàn mở: ăn bi nào nhận nhóm đó';
     if (onEight(state, balls, side)) return 'Gọi lỗ và ăn bi 8';
     return `Ăn hết ${groupName(g)} (còn ${remaining(balls, g).length})`;
   },
@@ -64,10 +64,10 @@ export const eightBall: RuleSet = {
       res.ballInHand = shot.isBreak ? 'kitchen' : 'anywhere';
       if (shot.offTable.includes(8)) {
         if (shot.isBreak) res.respot.push(8);
-        else { res.winner = opp; res.messages.push('Bi 8 văng khỏi bàn — thua ván'); }
+        else { res.winner = opp; res.messages.push('Bi 8 văng khỏi bàn, thua ván'); }
       } else if (eight) {
         if (shot.isBreak) res.respot.push(8);
-        else { res.winner = opp; res.messages.push('Phạm lỗi khi ăn bi 8 — thua ván'); }
+        else { res.winner = opp; res.messages.push('Phạm lỗi khi ăn bi 8, thua ván'); }
       }
       return res;
     }
@@ -78,7 +78,7 @@ export const eightBall: RuleSet = {
       // the incoming player accept the table or re-rack and break.
       if (eight) {
         res.respot.push(8);
-        res.messages.push('Bi 8 vào khi phá — đặt lại bi 8');
+        res.messages.push('Bi 8 vào khi phá, đặt lại bi 8');
       }
       if (cueDown || shot.firstHit === null) {
         res.foul = cueDown ? 'Bi cái rơi lỗ khi phá' : 'Phá bi không chạm bi nào';
@@ -93,7 +93,7 @@ export const eightBall: RuleSet = {
       res.keepTurn = objects.length > 0 || !!eight;
       if (objects.length) {
         const kinds = [...new Set(objects.map((id) => groupName(groupOf(id))))].join(' và ');
-        res.messages.push(`Phá vào ${objects.length} ${kinds}. Luật WPA: sau cú phá bàn vẫn mở — cú tiếp theo ăn bi nhóm nào thì nhận nhóm đó.`);
+        res.messages.push(`Phá vào ${objects.length} ${kinds}. Luật WPA: sau cú phá bàn vẫn mở. Cú tiếp theo ăn bi nhóm nào thì nhận nhóm đó.`);
       }
       return res;
     }
@@ -102,24 +102,24 @@ export const eightBall: RuleSet = {
     const shootingEight = shot.targets.length === 1 && shot.targets[0] === 8;
     if (shot.firstHit === null) res.foul = 'Không chạm bi nào';
     else if (g === null && shot.firstHit === 8) res.foul = 'Bàn mở: không được chạm bi 8 trước';
-    else if (shot.targets.length && !shot.targets.includes(shot.firstHit)) res.foul = `Chạm sai bi trước — phải chạm ${shootingEight ? 'bi 8' : g ? groupName(g) : 'bi mục tiêu'}`;
+    else if (shot.targets.length && !shot.targets.includes(shot.firstHit)) res.foul = `Chạm sai bi trước: phải chạm ${shootingEight ? 'bi 8' : g ? groupName(g) : 'bi mục tiêu'}`;
     else if (ids.length === 0 && !shot.railAfterContact) res.foul = 'Không bi nào chạm băng sau va chạm';
     if (cueDown) res.foul = 'Bi cái rơi lỗ';
 
     if (eight) {
       if (!shootingEight) {
         res.winner = opp;
-        res.messages.push('Bi 8 vào sớm — thua ván');
+        res.messages.push('Bi 8 vào sớm, thua ván');
       } else if (res.foul) {
         res.winner = opp;
-        res.messages.push('Phạm lỗi khi ăn bi 8 — thua ván');
+        res.messages.push('Phạm lỗi khi ăn bi 8, thua ván');
       } else if (shot.call && shot.call.pocket !== eight.pocket) {
         res.winner = opp;
-        res.messages.push('Bi 8 vào sai lỗ đã gọi — thua ván');
+        res.messages.push('Bi 8 vào sai lỗ đã gọi, thua ván');
       } else {
         res.winner = side;
         res.highlight = 'win';
-        res.messages.push('Ăn bi 8 — thắng ván!');
+        res.messages.push('Ăn bi 8, thắng ván!');
       }
       return res;
     }

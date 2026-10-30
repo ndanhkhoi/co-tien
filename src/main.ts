@@ -88,7 +88,7 @@ function setupUpdates(app: App) {
       addEventListener('online', check);
       // Settings → "Kiểm tra": answers with a toast when this build is already the newest.
       addEventListener('cotien:check-update', () => {
-        if (!navigator.onLine) return toast('Đang ngoại tuyến — kết nối mạng để kiểm tra', 'bad');
+        if (!navigator.onLine) return toast('Đang ngoại tuyến. Kết nối mạng để kiểm tra', 'bad');
         reg.update().then(() => {
           if (!reg.installing && !reg.waiting) toast('Game đã ở bản mới nhất, không cần cập nhật', 'good');
         }, () => toast('Chưa kiểm tra được, thử lại sau', 'bad'));

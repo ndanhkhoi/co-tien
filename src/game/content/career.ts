@@ -37,16 +37,16 @@ const ROUTE: { sect: SectId; modes: GameMode[]; mutator?: MutatorId; desc: strin
   { sect: 'thienquang', modes: ['eight'], desc: 'Chính đạo kiếm tông mở cửa đón tán tu. Nơi mọi cơ thủ bắt đầu.' },
   { sect: 'hoalinh', modes: ['eight', 'nine'], desc: 'Đảo hoa trôi giữa mây, nơi bi lăn mượt như gió xuân.' },
   { sect: 'hailong', modes: ['nine'], desc: 'Bến cảng hải tặc: đánh cược bằng vàng, thua là xuống thuyền chèo.' },
-  { sect: 'thienco', modes: ['carom-libre', 'carom-3c'], desc: 'Các cơ quan thuật đo từng milimét — đất của bida phăng.' },
+  { sect: 'thienco', modes: ['carom-libre', 'carom-3c'], desc: 'Đất của bida phăng, nơi cơ quan thuật đo từng milimét.' },
   { sect: 'bangphach', modes: ['nine'], mutator: 'ice', desc: 'Cung điện băng phương Bắc. Nỉ trơn, tâm phải lạnh.' },
   { sect: 'docvu', modes: ['ten'], mutator: 'fog', desc: 'Thung lũng chướng khí, đường ngắm chìm trong sương độc.' },
   { sect: 'kimsa', modes: ['ten'], desc: 'Hoàng triều sa mạc, nỉ cát nặng, mặt trời thiêu đốt.' },
-  { sect: 'vanthu', modes: ['eight', 'nine'], mutator: 'bomb', desc: 'Rừng linh thú — bi nổ tung như sấm giữa đại ngàn.' },
+  { sect: 'vanthu', modes: ['eight', 'nine'], mutator: 'bomb', desc: 'Rừng linh thú, nơi bi nổ tung như sấm giữa đại ngàn.' },
   { sect: 'huyetsat', modes: ['ten'], desc: 'Ma môn chinh phạt. Ở đây chỉ có thắng hoặc bị nghiền nát.' },
   { sect: 'uminh', modes: ['nine'], mutator: 'ghost', desc: 'Đảo vong hồn: lỗ bàn mở rồi đóng theo ý ma quỷ.' },
   { sect: 'tinhtu', modes: ['carom-3c'], desc: 'Đỉnh núi tinh tú, nơi đường bi vẽ thành chòm sao.' },
   { sect: 'thienhuong', modes: ['nine', 'ten'], desc: 'Lầu các lụa hồng giữa hồ trăng: mỹ nhân đánh bi, kẻ thua mất hồn.' },
-  { sect: 'hukhong', modes: ['eight', 'nine', 'ten'], mutator: 'tight', desc: 'Vực hư không — trận chung kết của Thiên Hạ Đệ Nhất Cơ Hội.' },
+  { sect: 'hukhong', modes: ['eight', 'nine', 'ten'], mutator: 'tight', desc: 'Vực hư không, nơi diễn ra trận chung kết của Thiên Hạ Đệ Nhất Cơ Hội.' },
 ];
 
 const PERSONALITY: Record<ClassId, Personality> = {

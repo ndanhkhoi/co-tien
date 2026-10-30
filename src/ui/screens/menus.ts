@@ -213,7 +213,7 @@ function championModal(app: App, c: Champion, onChange?: () => void) {
         onChange?.();
       }))
       : btn(h('span.btn-in', null, icon('coin', 'keep'), `Chiêu mộ · ${fmt(price)} xu`), () => {
-        if (p.coins < price) return toast('Chưa đủ xu — hoặc thắng tướng này ở Hành trình', 'bad');
+        if (p.coins < price) return toast('Chưa đủ xu. Bạn cũng có thể thắng tướng này ở Hành trình', 'bad');
         p.coins -= price;
         p.champions.push(c.id);
         app.save();
@@ -301,7 +301,7 @@ export function splashScreen(app: App): Screen {
   el.style.setProperty('--keyart', `url("${artUrl('ui/keyart.webp')}")`);
   el.style.setProperty('--keyart-tall', `url("${artUrl('ui/keyart-portrait.webp')}")`);
   el.append(
-    h('img.splash-logo', { src: artUrl('ui/logo.webp'), alt: 'Cơ Tiên — bida × tu tiên', draggable: false }),
+    h('img.splash-logo', { src: artUrl('ui/logo.webp'), alt: 'Cơ Tiên, bida tu tiên', draggable: false }),
     h('div.tap-hint', null, h('span', null, 'Chạm để bắt đầu')),
   );
   let started = false;
@@ -654,7 +654,7 @@ function startCareer(app: App, n: Npc) {
   let mine = app.profile.champion;
   if (mine === n.id) {
     mine = app.profile.champions.find((id) => id !== n.id) ?? CHAMPIONS.find((c) => c.id !== n.id)!.id;
-    toast(`Trận này ${champion(mine).name} ra trận thay — không ai đấu với chính mình`, 'gold');
+    toast(`Trận này ${champion(mine).name} ra trận thay, vì không ai đấu với chính mình`, 'gold');
   }
   const launch = matchScreen({
     setup: {
@@ -863,8 +863,8 @@ function settingsScreen(app: App): Screen {
       h('p', null, 'Giữ mã này ở nơi an toàn. Trên máy khác, vào Cài đặt › Khôi phục và dán mã để lấy lại tiến trình.'),
       h('textarea.code-box', { readOnly: true, rows: 4, 'aria-label': 'Mã sao lưu' }, code),
       h('div.actions', null, btn('Đóng', close, 'ghost'), btn('Sao chép', () => {
-        if (!navigator.clipboard) return toast('Máy không cho chép tự động — hãy chọn và chép mã', 'bad');
-        void navigator.clipboard.writeText(code).then(() => toast('Đã chép mã sao lưu', 'good'), () => toast('Không chép được — hãy chọn và chép mã', 'bad'));
+        if (!navigator.clipboard) return toast('Máy không cho chép tự động. Hãy chọn và chép mã', 'bad');
+        void navigator.clipboard.writeText(code).then(() => toast('Đã chép mã sao lưu', 'good'), () => toast('Không chép được. Hãy chọn và chép mã', 'bad'));
       })),
     ), { dismissable: true });
   };
@@ -876,7 +876,7 @@ function settingsScreen(app: App): Screen {
       ta,
       h('div.actions', null, btn('Huỷ', close, 'ghost'), btn('Khôi phục', () => {
         const np = importCode(ta.value);
-        if (!np) return toast('Mã không hợp lệ — kiểm tra lại đã dán đủ chưa', 'bad');
+        if (!np) return toast('Mã không hợp lệ. Kiểm tra lại đã dán đủ chưa', 'bad');
         Object.assign(p, np);
         save();
         close();
