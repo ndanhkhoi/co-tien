@@ -1,4 +1,4 @@
-# Cơ Tiên: bida tu tiên
+# Cơ Tiên: bida × tu tiên
 
 Game bida cho điện thoại (màn hình ngang) và máy tính, với vật lý và luật bida thật, đặt trong một thế giới
 tiên hiệp riêng: **Cơ Tiên Giới** với 13 môn phái, 65 tướng, mỗi tướng có một nội tại và ba chiêu. Cài được như
@@ -88,7 +88,7 @@ Tài liệu:
 
 ## Ý tưởng, nội dung và đồ hoạ đến từ đâu
 
-- **Ý tưởng và định hướng:** tác giả (Nguyễn Đức Anh Khôi): game bida tu tiên, thế giới Cơ Tiên Giới, lối
+- **Ý tưởng và định hướng:** tác giả (Nguyễn Đức Anh Khôi): game bida × tu tiên, thế giới Cơ Tiên Giới, lối
   chơi, phong cách Thuỷ Mặc, tên game, và mọi quyết định duyệt hay loại nội dung.
 - **Nguyên bản:** toàn bộ tên, truyện, môn phái, nhân vật, chiêu thức và tranh là sáng tác riêng cho Cơ Tiên,
   không dùng nội dung của bất kỳ game hay tác phẩm nào khác.

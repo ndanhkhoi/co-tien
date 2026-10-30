@@ -3,7 +3,7 @@
   "version": "3.0.0",
   "private": true,
   "type": "module",
-  "description": "Cơ Tiên — bida tu tiên cho mobile & desktop (PWA)",
+  "description": "Cơ Tiên — bida × tu tiên cho mobile & desktop (PWA)",
   "scripts": {
     "dev": "vite --host",
     "build": "tsc --noEmit && vite build",
