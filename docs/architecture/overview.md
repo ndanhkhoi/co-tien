@@ -48,5 +48,5 @@ Kiểm tra kích thước hiện tại bằng `wc -l src/**/*.ts`.
 
 ## Đọc tiếp
 
-[physics-and-rules.md](physics-and-rules.md) · [match-and-modes.md](match-and-modes.md) · [ai.md](ai.md) ·
+[tech-stack.md](tech-stack.md) · [physics-and-rules.md](physics-and-rules.md) · [match-and-modes.md](match-and-modes.md) · [ai.md](ai.md) ·
 [rendering.md](rendering.md) · [ui.md](ui.md) · [platform.md](platform.md)

@@ -9,6 +9,7 @@ ràng buộc, thuật ngữ, và chỉ đường tới đúng file. Khi tài li�
 | Việc | Đọc |
 |---|---|
 | Hiểu tổng thể, các lớp và chiều phụ thuộc | [architecture/overview.md](architecture/overview.md) |
+| Công nghệ đã chọn và vì sao, cách deploy | [architecture/tech-stack.md](architecture/tech-stack.md) |
 | Sửa vật lý, kích thước bàn, luật, chấm điểm cú | [architecture/physics-and-rules.md](architecture/physics-and-rules.md) |
 | Sửa trận đấu, chế độ, năng lượng, hồ sơ, Luyện thế | [architecture/match-and-modes.md](architecture/match-and-modes.md) |
 | Sửa AI đối thủ | [architecture/ai.md](architecture/ai.md) |
