@@ -57,8 +57,10 @@ export function createTableInput(ctx: MatchCtx, dom: MatchDom, deps: TableInputD
   const up = (e: PointerEvent) => {
     if (dom.desk?.up(e)) return;
     if (drag?.id !== e.pointerId) return;
+    // Only a tap aims at its point: lifting the finger after a drag keeps the dialled angle.
+    const tap = !drag.moved && e.type === 'pointerup';
     drag = null;
-    tapBall(ctx, e, deps);
+    if (tap) tapBall(ctx, e, deps);
   };
   const aimAroundCue = (p: { x: number; y: number }) => {
     // Relative dial around the cue ball: the cue turns by the finger's angle change, and
