@@ -60,7 +60,8 @@ export default defineConfig({
     __APP_VERSION__: JSON.stringify(`${pkg.version} · ${new Date().toISOString().slice(0, 16).replace('T', ' ')}`),
   },
   build: { target: 'es2022', chunkSizeWarningLimit: 1500 },
-  worker: { format: 'es' },
+  // Workers are bundled with their own plugin list; the AI worker imports the roster too.
+  worker: { format: 'es', plugins: () => [slimRoster()] },
   plugins: [
     artManifest(),
     slimRoster(),
