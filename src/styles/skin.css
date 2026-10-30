@@ -46,16 +46,18 @@
 }
 .tb-title {
   flex: 0 1 auto;
-  margin-right: auto;
-  padding: 8px 46px 10px 52px;
-  color: #fbf6ec;
-  background: url('/art/ui/frame/ribbon.webp') left center / 100% 100% no-repeat;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.45);
+  margin-right: auto; font-size: 24px;
+  position: relative;
+  min-width: 0;
+  color: var(--ink);
+  text-shadow: none;
+  padding: 2px 18px 12px 36px !important;
+  background: url('/art/ui/frame/ribbon.webp') 22px bottom / calc(100% - 22px) 11px no-repeat;
 }
-.topbar > :first-child.tb-title { padding-left: 52px; }
+.topbar > :first-child.tb-title { padding-left: 58px; }
 
 /* ---------- Home: hero art on the right, journey card and tablets on the left ---------- */
-.screen.home { display: block; background: var(--home-bg) right center / cover no-repeat, var(--frame); }
+.screen.home { display: block; background: none; isolation: isolate; }
 .home-left {
   position: absolute;
   z-index: 2;
@@ -68,8 +70,7 @@
   gap: 8px;
 }
 .home-left .home-logo { height: 52px; width: auto; align-self: flex-start; object-fit: contain; flex-shrink: 0; }
-.home-top { position: absolute; z-index: 3; top: calc(8px + var(--st)); right: calc(14px + var(--sr)); }
-.home-hero { height: calc(100% - 8px); max-width: calc(100% - 400px - var(--sl)); }
+.home-top { position: absolute; z-index: 3; top: calc(8px + var(--st)); right: calc(14px + var(--sr)); height: 62px; }
 
 .home-journey {
   flex-shrink: 0;
@@ -82,7 +83,7 @@
   border: 18px solid transparent;
   border-image: url('/art/ui/frame/panel.webp') 74 fill / 18px / 0 stretch;
   filter: drop-shadow(0 6px 14px rgba(40, 30, 18, 0.2));
-  transition: transform 0.12s var(--ease);
+  transition: transform 0.12s var(--ease); animation-delay: 60ms;
 }
 .home-journey.pressed { transform: scale(0.98); }
 .hj-map { width: 104px; height: 60px; flex-shrink: 0; border-radius: 6px; background: var(--map) center / cover; box-shadow: 0 0 0 2px var(--ink); }
@@ -98,27 +99,24 @@
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   grid-auto-rows: 1fr;
-  gap: 6px;
+  gap: 6px; grid-template-rows: repeat(2, minmax(0, 1fr));
 }
 .home-tablet {
   min-width: 0;
   min-height: 0;
-  display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 2px;
   padding: 0;
   border: 8px solid transparent;
   border-image: url('/art/ui/frame/panel.webp') 74 fill / 8px / 0 stretch;
   filter: drop-shadow(0 4px 10px rgba(40, 30, 18, 0.16));
-  transition: transform 0.12s var(--ease);
+  transition: transform 0.12s var(--ease); display: grid; grid-template-rows: 28px 34px 27px; align-content: center; justify-items: center; gap: 1px;
 }
 .home-tablet.pressed { transform: scale(0.96); }
-.ht-icon { display: grid; place-items: center; height: 30px; flex-shrink: 0; }
-.ht-icon .ico { width: 30px; height: 30px; }
+.ht-icon { display: grid; place-items: center; flex-shrink: 0; height: 28px; }
 .ht-name { max-width: 100%; font: 700 14px/1.15 var(--display); color: var(--ink); white-space: normal; text-align: center; }
-.ht-sub { font-size: 11px; line-height: 1.2; color: var(--muted); white-space: normal; text-align: center; max-width: 100%; }
+.ht-sub { color: var(--muted); white-space: normal; text-align: center; max-width: 100%; font-size: 11px; line-height: 1.3; }
 .player-card { border: 2px solid var(--ink); }
 
 /* Champion kind badges: ink seals, one tint per kind. */
@@ -132,7 +130,6 @@
 /* ---------- Quick match / two players: options on the left, duel stage on the right ---------- */
 .setup-body { gap: 12px; }
 .setup-opts { flex: 0 0 auto; width: min(470px, 56%); justify-content: space-evenly; gap: 2px; padding: 4px 8px !important; }
-.setup-opts .chip { min-height: 38px; padding: 0 11px; font-size: 13.5px; }
 .setup-opts .chip[aria-pressed='true'] { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
 .opt-label { font: 700 14px/1.2 var(--display); color: var(--ink); }
 .versus {
@@ -157,35 +154,28 @@
 }
 /* Each side stands on its own tinted paper (ink grey | vermilion), split on the same slant as the match VS. */
 .vs-stage::before { content: ''; position: absolute; inset: 0; background: linear-gradient(105deg, rgba(26, 23, 19, 0.2) 0 50%, rgba(176, 53, 34, 0.26) 50%), var(--paper, none) center / 640px, #ebe2cf; }
-.vs-cut { position: absolute; bottom: -4%; height: 112%; width: 56%; object-fit: contain; filter: drop-shadow(0 6px 10px rgba(40, 30, 18, 0.3)); }
-.vs-cut.me { left: -4%; object-position: left bottom; }
-.vs-cut.foe { right: -4%; object-position: right bottom; transform: scaleX(-1); }
-.vs-stage .vs-seal { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%) rotate(-6deg); z-index: 2; }
+.vs-cut { position: absolute; filter: drop-shadow(0 6px 10px rgba(40, 30, 18, 0.3)); top: 4%; bottom: auto; height: 118%; width: 60%; object-fit: contain; }
+.vs-cut.foe { transform: scaleX(-1); right: -10%; object-position: right top; animation: ct-champion-right 520ms 160ms var(--ease) backwards; }
+.vs-stage .vs-seal { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%) rotate(-6deg); z-index: 2; animation: ct-seal-stamp 240ms 560ms var(--ease) backwards; }
 /* Re-roll sits on the stage's bottom edge, below the seal and clear of both faces. */
 .vs-stage .vs-roll { position: absolute; left: 50%; bottom: 2px; translate: -50% 0; z-index: 3; min-height: max(34px, calc(44px / var(--ui-scale, 1))); padding: 0 12px; font-size: 13px; white-space: nowrap; }
 .vs-stage .vs-roll .ico { width: 18px; height: 18px; }
 .vs-plates { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; min-width: 0; }
 /* Player plates match the match HUD: painted paper, ink type, room for two sub lines. */
-.vs-plates .vs-side { min-width: 0; align-items: center; height: 64px; min-height: max(58px, calc(44px / var(--ui-scale, 1))); padding: 9px 22px; background: none; border: 1px solid transparent; border-image: url('/art/ui/frame/plate.webp') 0 80 fill / 0 18px / 0 stretch; color: var(--ink); border-radius: 0; }
-.vs-plates .vs-side.foe { text-align: right; justify-content: flex-end; padding: 9px 22px; }
+.vs-plates .vs-side { min-width: 0; align-items: center; height: 64px; min-height: max(58px, calc(44px / var(--ui-scale, 1))); padding: 9px 22px; background: none; border: 1px solid transparent; border-image: url('/art/ui/frame/plate.webp') 0 80 fill / 0 18px / 0 stretch; color: var(--ink); border-radius: 0; animation: ct-art-rise 280ms 620ms var(--ease) backwards; }
+.vs-plates .vs-side.foe { text-align: right; justify-content: flex-end; padding: 9px 22px; animation-delay: 680ms; }
 .vs-plates .vs-name { color: var(--ink); font-size: 15px; display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.vs-plates .vs-sub { color: var(--ink-2); font-size: 12px; line-height: 1.25; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; }
+.vs-plates .vs-sub { color: var(--ink-2); font-size: 12px; line-height: 1.25; -webkit-box-orient: vertical; overflow: hidden; -webkit-line-clamp: 1; white-space: nowrap; text-overflow: ellipsis; display: block; }
 .vs-plates .vs-text { min-width: 0; flex: 1; }
 .vs-plates .vs-edit .ico { width: 20px; height: 20px; }
-.vs-plates input { width: 100%; min-width: 0; max-width: 100%; min-height: max(32px, calc(44px / var(--ui-scale, 1))); padding: 0 2px; font: 700 15px/1.2 var(--display); text-align: inherit; background: transparent; color: var(--ink); border: 0; border-radius: 0; box-shadow: none; }
+.vs-plates input { width: 100%; min-width: 0; max-width: 100%; font: 700 15px/1.2 var(--display); text-align: inherit; background: transparent; color: var(--ink); border: 0; border-radius: 0; box-shadow: none; min-height: 0; height: 22px; padding: 0; }
 .vs-plates input:focus-visible { outline: 0; background: rgba(26, 23, 19, 0.06); }
 .versus > .btn { flex-shrink: 0; }
 .setup-opts .chip { min-height: 36px; padding: 0 9px; font-size: 13px; }
 .setup-opts .chips { gap: 4px; flex-wrap: nowrap; }
 /* Two duellists at eye level: each cut-out is fitted into the same box and anchored at the top,
    so a leaping champion and a crouching one still face each other instead of one sinking. */
-.vs-cut { top: 4%; bottom: auto; height: 118%; width: 60%; object-fit: contain; }
-.vs-cut.me { left: -2%; object-position: left top; }
-.vs-cut.foe { right: -2%; object-position: right top; }
-.vs-cut.me { left: -10%; }
-.vs-cut.foe { right: -10%; }
-.tb-title { font-size: 24px; padding: 10px 56px 12px 58px; min-width: 210px; }
-.topbar > :first-child.tb-title { padding-left: 58px; }
+.vs-cut.me { object-position: left top; left: -10%; animation: ct-champion-left 520ms 80ms var(--ease) backwards; }
 
 .mx-skill, .mx-btn {
   background: none;
@@ -193,24 +183,15 @@
   border-image: url('/art/ui/frame/panel.webp') 74 fill / 12px / 0 stretch;
   border-radius: 0;
   box-shadow: none;
-  filter: drop-shadow(0 3px 8px rgba(40, 30, 18, 0.18));
+  filter: drop-shadow(0 3px 8px rgba(40, 30, 18, 0.18)); border-width: 8px; border-image-width: 8px;
 }
 .mx-skill.pressed, .mx-btn.pressed { background: none; filter: brightness(0.92); }
 .mx-btn { padding: 0; }
 .mx-btn .ico { width: 76%; height: 76%; }
-.mx-skill, .mx-btn { border-width: 8px; border-image-width: 8px; }
-.mx-sk-name { font-size: 12.5px; line-height: 1.15; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
+.mx-sk-name { line-height: 1.15; overflow: hidden; text-overflow: ellipsis; max-width: 100%; white-space: normal; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; font-size: 13px; }
 
 /* Screen title: dark serif on the paper with a vermilion seal and a short brush underline (the
    full brush band made white text unreadable where the stroke thinned out). */
-.tb-title {
-  position: relative;
-  min-width: 0;
-  color: var(--ink);
-  text-shadow: none;
-  padding: 2px 18px 12px 36px !important;
-  background: url('/art/ui/frame/ribbon.webp') 22px bottom / calc(100% - 22px) 11px no-repeat;
-}
 .tb-title::before {
   content: '';
   position: absolute;
@@ -226,6 +207,7 @@
 
 /* Champion cards as collectible card frames: sect-coloured top, ink frame, name plate. */
 .champ-card {
+  animation: ct-art-rise 340ms var(--ease) both;
   padding: 0;
   gap: 0;
   background: none;
@@ -236,7 +218,7 @@
   filter: drop-shadow(0 3px 8px rgba(40, 30, 18, 0.18));
 }
 .champ-card .cc-art { border-radius: 4px; box-shadow: inset 0 -26px 22px -18px var(--sect); }
-.champ-card .cc-name { margin-top: 4px; font: 700 14px/1.15 var(--display); }
+.champ-card .cc-name { margin-top: 4px; font: 700 14px/1.15 var(--display); min-height: calc(2 * 1.15em); display: flex; align-items: flex-start; justify-content: center; }
 .champ-card .cc-sub { font-size: 12px; line-height: 1.2; }
 .champ-card.sel { border-image-source: url('/art/ui/frame/panel.webp'); filter: drop-shadow(0 0 0 var(--accent)) drop-shadow(0 0 4px var(--accent)); }
 .cc-grid { gap: 6px; }
@@ -256,7 +238,7 @@
 }
 .cp-art { position: relative; min-height: 0; background: radial-gradient(circle at 50% 70%, color-mix(in srgb, var(--sect) 32%, transparent), transparent 70%); }
 .cp-art img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; object-position: center bottom; }
-.cp-main { min-width: 0; min-height: 0; display: flex; flex-direction: column; gap: 6px; padding: 4px 8px 0 10px; }
+.cp-main { min-width: 0; min-height: 0; flex-direction: column; padding: 4px 8px 0 10px; display: grid; grid-template-rows: minmax(0, 1fr) auto; gap: 8px; }
 .cp-head { display: flex; flex-direction: column; gap: 3px; padding-right: 40px; }
 .cp-sect { display: flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 700; color: var(--muted); }
 .cp-sect img { width: 22px; height: 22px; }
@@ -264,7 +246,7 @@
 .cp-tags { display: flex; flex-wrap: wrap; gap: 5px; }
 .cp-passive { font-size: 13.5px; line-height: 1.4; color: var(--ink-2); }
 .cp-passive b { color: var(--ink); }
-.cp-skills { flex: 1; min-height: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; align-content: start; }
+.cp-skills { flex: 1; min-height: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; align-content: stretch; grid-auto-rows: 1fr; }
 .cp-skill {
   display: flex;
   flex-direction: column;
@@ -273,14 +255,14 @@
   gap: 2px;
   padding: 2px;
   border: 10px solid transparent;
-  border-image: url('/art/ui/frame/panel.webp') 74 fill / 10px / 0 stretch;
+  border-image: url('/art/ui/frame/panel.webp') 74 fill / 10px / 0 stretch; justify-content: center;
 }
 .cp-skill.ult { filter: drop-shadow(0 0 3px rgba(176, 53, 34, 0.55)); }
 .cp-sk-icon { width: 44px; height: 44px; border-radius: 8px; }
 .cp-sk-name { font: 700 13.5px/1.15 var(--display); }
 .cp-sk-cd { font-size: 11.5px; font-weight: 700; color: var(--accent-2); }
 .cp-sk-desc { font-size: 12.5px; line-height: 1.35; color: var(--ink-2); }
-.cp-foot { display: flex; justify-content: flex-end; gap: 8px; padding: 4px 0 6px; flex-shrink: 0; }
+.cp-foot { display: flex; justify-content: flex-end; gap: 8px; padding: 4px 0 6px; flex-shrink: 0; margin: 0; padding-top: 4px; }
 .champ-page > .close-x { position: absolute; top: 6px; right: 6px; }
 
 /* Secondary buttons get the full painted plate like the primary ones. */
@@ -311,7 +293,6 @@
 .setup-opts .chip, .chip { min-height: max(40px, calc(44px / var(--ui-scale, 1))); }
 
 /* Skill names may use two lines in the match dock. */
-.mx-sk-name { white-space: normal; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
 
 /* Settings groups and guard sheets wear the ink frame too. */
 .set-group, .rh-card, .vp-card { border: 14px solid transparent; border-image: url('/art/ui/frame/panel.webp') 74 fill / 14px / 0 stretch; border-radius: 0; box-shadow: none; background: none; }
@@ -319,8 +300,6 @@
 /* Flat on the paper: the rotate and window-size sheets are the whole screen, not a dialog over it. */
 .rh-card, .vp-card { filter: none; box-shadow: none; }
 .cp-art img.wide { object-fit: cover; object-position: 50% 35%; }
-.cp-skills { align-content: stretch; grid-auto-rows: 1fr; }
-.cp-skill { justify-content: center; }
 
 /* ---------- Loading screen ---------- */
 .screen.loading { display: grid; place-items: center; background: linear-gradient(rgba(233, 225, 208, 0.78), rgba(233, 225, 208, 0.78)), var(--paper, none) center / 640px, var(--frame); }
@@ -362,13 +341,10 @@
 .home-hero, .cp-art img, .codex-champ .cc-cut img { animation: ct-art-rise 480ms var(--ease) both; }
 @keyframes ct-art-rise { from { opacity: 0; translate: 0 22px; } to { opacity: 1; translate: 0 0; } }
 .cp-skill, .skill-row { animation: ct-art-rise 360ms var(--ease) both; animation-delay: var(--entry-delay, 0ms); }
-.champ-card { animation: ct-art-rise 340ms var(--ease) both; }
 .champ-card:nth-child(5n + 2) { animation-delay: 40ms; }
 .champ-card:nth-child(5n + 3) { animation-delay: 80ms; }
 .champ-card:nth-child(5n + 4) { animation-delay: 120ms; }
 .champ-card:nth-child(5n) { animation-delay: 160ms; }
-.vs-cut.me { animation: ct-duel-me 580ms var(--ease) both; }
-.vs-cut.foe { animation: ct-duel-foe 580ms 80ms var(--ease) both; }
 /* A painted ink veil sweeps off the stage; its motion reveals both side entrances. */
 .vs-stage::after {
   content: ''; position: absolute; inset: -15%; z-index: 1; pointer-events: none;
@@ -377,9 +353,6 @@
   animation: ct-ink-wipe 660ms var(--ease) both;
 }
 @keyframes ct-ink-wipe { from { opacity: .85; transform: translateX(0); } to { opacity: 0; transform: translateX(105%); } }
-@keyframes ct-duel-me { from { opacity: 0; translate: -60px 0; } to { opacity: 1; translate: 0 0; } }
-@keyframes ct-duel-foe { from { opacity: 0; translate: 60px 0; } to { opacity: 1; translate: 0 0; } }
-.vs-stage .vs-seal { animation: ct-seal-stamp 240ms 660ms var(--ease) both; }
 @keyframes ct-seal-stamp { from { opacity: 0; scale: 1.6; } to { opacity: 1; scale: 1; } }
 
 @media (prefers-reduced-motion: reduce) {
@@ -395,9 +368,7 @@
 
 /* Keep transparent champion art on a simple compositing layer on iOS.
  * Combining animated blur and clip-path on large WebP cut-outs can produce opaque tiles. */
-.vs-cut.me { animation: ct-champion-left 520ms 80ms var(--ease) backwards; }
-.vs-cut.foe { animation: ct-champion-right 520ms 160ms var(--ease) backwards; }
-.home-hero { animation: ct-champion-right 580ms 60ms var(--ease) backwards; filter: none; }
+.home-hero { animation: ct-champion-right 580ms 60ms var(--ease) backwards; filter: none; height: calc(100% - 82px); max-width: calc(100% - 400px - var(--sl)); }
 @keyframes ct-champion-left {
   from { opacity: 0; translate: -28px 0; }
   to { opacity: 1; translate: 0 0; }
@@ -406,13 +377,9 @@
   from { opacity: 0; translate: 28px 0; }
   to { opacity: 1; translate: 0 0; }
 }
-.vs-stage .vs-seal { animation: ct-seal-stamp 240ms 560ms var(--ease) backwards; }
-.vs-plates .vs-side { animation: ct-art-rise 280ms 620ms var(--ease) backwards; }
-.vs-plates .vs-side.foe { animation-delay: 680ms; }
 
 /* Home tablets drop in one after another. */
 .home-journey, .home-tablet { animation: ct-tile-in 380ms var(--ease) both; }
-.home-journey { animation-delay: 60ms; }
 .home-tablet:nth-child(1) { animation-delay: 140ms; } .home-tablet:nth-child(2) { animation-delay: 190ms; } .home-tablet:nth-child(3) { animation-delay: 240ms; }
 .home-tablet:nth-child(4) { animation-delay: 290ms; } .home-tablet:nth-child(5) { animation-delay: 340ms; } .home-tablet:nth-child(6) { animation-delay: 390ms; }
 @keyframes ct-tile-in { from { opacity: 0; translate: -18px 0; scale: 0.96; } to { opacity: 1; translate: 0 0; scale: 1; } }
@@ -422,15 +389,12 @@
 }
 .mx-castrow { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; }
 .mx-castrow:has(> .btn:not([hidden])) { margin-top: 2px; }
-.mx-castrow .btn { min-height: 40px; height: 40px; padding: 0 2px; font-size: 13px; gap: 3px; border-width: 9px; border-image-width: 9px; }
-.mx-castrow .btn .ico { width: 18px; height: 18px; }
+.mx-castrow .btn { padding: 0 2px; border-width: 9px; border-image-width: 9px; width: 100%; min-width: 0; overflow: hidden; font-size: 0; gap: 0; height: max(44px, var(--touch-target)); min-height: var(--touch-target); }
+.mx-castrow .btn .ico { width: 22px; height: 22px; }
 .mx-strike { white-space: nowrap; }
 .mx-ctrl.placing .mx-strike { font-size: 15px; }
-.mx-castrow .btn { width: 100%; min-width: 0; overflow: hidden; }
 .mx-ctrl.placing .mx-passive { display: none; }
 /* The column is too narrow for words here: icon-only (aria-labels carry the meaning). */
-.mx-castrow .btn { font-size: 0; gap: 0; }
-.mx-castrow .btn .ico { width: 22px; height: 22px; }
 
 /* Full viewport paint, with controls retained in the safe 844×390 composition. */
 #stage {
@@ -458,7 +422,7 @@
 
 /* Shared action grids use equal tracks and one button size. */
 .modal .actions { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); }
-.modal .actions > .btn { min-width: 0; white-space: normal; text-align: center; }
+.modal .actions > .btn { min-width: 0; white-space: normal; text-align: center; display: inline-flex; align-items: center; justify-content: center; padding-top: 0; padding-bottom: 2px; }
 .settings-col .item > .btn { width: 150px; flex-shrink: 0; }
 .settings-col .item > .switch { margin-right: 47px; }
 .settings-col .item > .set-val { min-width: 150px; }
@@ -480,16 +444,16 @@
 }
 
 /* Compact power ruler: reserve real travel instead of squeezing a wide tank. */
-.mx-power { flex-direction: row; justify-content: center; gap: 12px; padding: 4px 8px; background: transparent; border: 0; border-radius: 0; box-shadow: none; min-height: 64px; }
+.mx-power { flex-direction: row; justify-content: center; gap: 12px; padding: 4px 8px; background: transparent; border: 0; border-radius: 0; box-shadow: none; min-height: 88px; }
 .mx-phead { flex-direction: column; gap: 4px; font-size: 19px; }
 .mx-ppct::after { content: '%'; font: 500 11px var(--body); margin-left: 1px; }
 .mx-ptrack { flex: 0 0 40px; align-self: stretch; width: 40px; min-height: 72px; border-radius: 3px; border-color: var(--ink-2); background: var(--sheet-3); }
 .mx-pfill { background: var(--accent); }
 .mx-ptick { width: 35%; height: 1px; background: #1a171366; }
-#ui .mx-passive.btn { display: flex; flex-direction: column; gap: 3px; min-width: 0; width: 100%; padding: 3px 4px; border-width: 7px; border-image-width: 7px; border-image-source: url('/art/ui/frame/btn-secondary.webp'); color: var(--ink); text-shadow: none; font-family: var(--body); }
+#ui .mx-passive.btn { display: flex; flex-direction: column; min-width: 0; width: 100%; text-shadow: none; font-family: var(--body); flex-shrink: 0; line-height: 1.2; border-width: 8px; border-image-width: 8px; border-image-source: url('/art/ui/frame/btn-secondary.webp'); border-style: solid; color: var(--ink); min-height: var(--touch-target); padding: 1px 3px; gap: 1px; }
 .mx-passive-name { font: 700 12px/1.2 var(--display); }
-.mx-passive-detail { font: 500 11px/1.3 var(--body); }
-#ui .mx-passive:disabled { opacity: 1; border-image: none; border: 0; border-top: 1px solid var(--line-2); background: transparent; color: var(--muted); cursor: default; }
+.mx-passive-detail { font: 500 11px/1.3 var(--body); font-size: 10px; }
+#ui .mx-passive:disabled { border: 0; cursor: default; opacity: 0.82; border-image-source: url('/art/ui/frame/btn-secondary.webp'); border-width: 8px; border-style: solid; border-top: 8px solid transparent; background: none; color: var(--ink-2); }
 /* Pause: the match at a glance on the left, one column of actions on the right. */
 #ui .mx-pausebox { width: min(640px, 100%); display: grid; grid-template-columns: minmax(0, 1fr) 210px; gap: 18px; align-items: stretch; }
 .mx-pause-main { min-width: 0; display: flex; flex-direction: column; gap: 12px; }
@@ -515,14 +479,11 @@
 #ui .mx-pause-actions > .mx-leave { margin-top: auto; }
 /* HUD geometry follows the design frame, independent of the outer viewport height. */
 .screen.game.mx { --top-h: 72px; --face: 56px; --colL: 88px; --colR: max(112px, calc(2 * var(--touch-target) + var(--gap))); --btn: max(48px, var(--touch-target)); --gap: 5px; }
-.mx-ctrl > .mx-strike { height: 56px; flex-shrink: 0; }
 .mx-strike .ico { width: 28px; height: 28px; }
-#ui .mx-passive.btn { flex-shrink: 0; min-height: var(--touch-target); line-height: 1.2; }
 #ui .mx-ctrl.placing .mx-passive.btn { display: none; }
 
 
 /* Artwork screens paint once across the viewport, avoiding a visible frame seam. */
-.screen.home { background: none; isolation: isolate; }
 .screen.home::before {
   content: '';
   position: absolute;
@@ -546,46 +507,35 @@ body { background: linear-gradient(#e9e1d0d1, #e9e1d0d1), var(--paper, none) cen
 .mx-action-art { display: block; width: 100%; height: 100%; object-fit: contain; }
 .mx-strike.pressed .mx-action-art { filter: brightness(.9); }
 /* Reserve a portrait-free header and align content by rows, including wrapped names. */
-.home-hero { height: calc(100% - 82px); max-width: calc(100% - 400px - var(--sl)); }
-.home-top { height: 62px; }
-.home-grid { grid-template-rows: repeat(2, minmax(0, 1fr)); }
-.home-tablet { display: grid; grid-template-rows: 28px 34px 27px; align-content: center; justify-items: center; gap: 1px; }
-.ht-icon { height: 28px; }
 .ht-icon .ico { width: 28px; height: 28px; }
 /* Rows line up across tiles: a one-line title or subtitle keeps the space a wrapped one would use. */
 .ht-name, .ht-sub { align-self: start; }
 .champion-skills { align-items: stretch; }
-.champion-skill { display: grid; grid-template-rows: 48px 15px minmax(34px, 1fr) 15px 15px; justify-items: center; align-content: start; align-items: center; }
+.champion-skill { display: grid; justify-items: center; align-content: start; align-items: center; grid-template-rows: 48px 15px minmax(34px, auto) 15px 15px; }
 .champion-skill-name { align-self: start; text-align: center; }
-.mx-ctrl > .mx-strike { width: 82px; height: 82px; align-self: center; border-radius: 50%; overflow: hidden; }
-.mx-power { min-height: 88px; }
-#ui .mx-passive.btn { min-height: var(--touch-target); padding: 1px 3px; gap: 1px; }
-.mx-passive-detail { font-size: 10px; }
+.mx-ctrl > .mx-strike { flex-shrink: 0; width: 82px; height: 82px; align-self: center; border-radius: 50%; overflow: hidden; }
 /* Ultimate names ride an original ink sweep instead of a notification card. */
 .cutin .ci-plate { width: 64%; max-width: 64%; min-height: 132px; top: 52%; right: 1%; padding: 22px 34px; background: url('/art/ui/ultimate-banner.webp') center / 100% 100% no-repeat; color: var(--sheet); border: 0; border-radius: 0; box-shadow: none; gap: 12px; }
 .cutin .ci-seal { width: 58px; height: 58px; border-radius: 50%; border-color: var(--accent); }
-.cutin .ci-kicker { font-size: 11px; letter-spacing: .08em; color: #e7c2b0; }
+.cutin .ci-kicker { font-size: 11px; letter-spacing: .08em; color: var(--sheet); text-shadow: 0 1px 3px #000, 0 0 6px #000; }
 .cutin .ci-name { font-size: 30px; line-height: 1.25; text-shadow: 0 2px 2px #000; }
 .cutin.rtl .ci-plate { left: 1%; }
 /* Route names remain readable instead of losing the sect at an ellipsis. */
-.lp-name { white-space: normal; overflow: visible; font-size: 12px; }
+.lp-name { white-space: normal; overflow: visible; font-size: 11.5px; }
 
 /* Content scrolls within its own track; actions never cover skill hints. */
-.cp-main { display: grid; grid-template-rows: minmax(0, 1fr) auto; gap: 8px; }
 .cp-content { min-height: 0; display: flex; flex-direction: column; gap: 6px; padding-right: 4px; }
 .cp-content > * { flex-shrink: 0; }
 .cp-content .champion-skills { flex: none; }
-.cp-foot { margin: 0; padding-top: 4px; }
-.champion-skill { grid-template-rows: 48px 15px minmax(34px, auto) 15px 15px; }
 
 
 /* Painted plates are the visual surface; layout remains semantic and responsive. */
 
-.mx-vs-av { position: relative; width: 156px; padding: 18px; border: 0; border-radius: 0; background: transparent; box-shadow: none; overflow: visible; }
-.mx-vs-av::after { content: ''; position: absolute; inset: 0; background: url('/art/ui/frame/portrait-v2.webp') center / 100% 100% no-repeat; pointer-events: none; }
+.mx-vs-av { position: relative; border: 0; border-radius: 0; background: transparent; box-shadow: none; overflow: visible; width: 156px; height: 156px; padding: 0; }
+.mx-vs-av::after { content: ''; position: absolute; background: url('/art/ui/frame/portrait-v2.webp') center / 100% 100% no-repeat; pointer-events: none; inset: 0; }
 .mx-vs-side { gap: 4px; min-width: 0; }
 .mx-vs-name { width: 270px; max-width: 100%; min-height: 52px; display: grid; place-items: center; padding: 10px 36px; border-radius: 0; background: none; border: 1px solid transparent; border-image: url('/art/ui/frame/plate.webp') 0 80 fill / 0 26px / 0 stretch; font-size: 24px; overflow-wrap: anywhere; }
-.mx-vs-title { max-width: 280px; padding: 10px 40px; min-height: 40px; border-radius: 0; background: none; border: 1px solid transparent; border-image: url('/art/ui/frame/band.webp') 0 150 0 130 fill / 0 44px 0 38px / 0 stretch; text-align: center; font-size: 13px; }
+.mx-vs-title { padding: 10px 40px; min-height: 40px; border-radius: 0; background: none; border: 1px solid transparent; border-image: url('/art/ui/frame/band.webp') 0 150 0 130 fill / 0 44px 0 38px / 0 stretch; text-align: center; font-size: 13px; width: 210px; max-width: 100%; overflow-wrap: anywhere; }
 .mx-vs-quote { background: none; border: 1px solid transparent; border-image: url('/art/ui/frame/scroll.webp') 0 45 fill / 0 12px / 0 stretch; border-radius: 0; box-shadow: none; padding: 12px 30px; }
 .mx-res-art { border-radius: 0; border: 10px solid transparent; border-image: url('/art/ui/frame/portrait-v2.webp') 70 / 10px / 0 stretch; background: transparent; }
 /* Leave a dedicated gutter for the scroll affordance, clear of story copy. */
@@ -595,17 +545,10 @@ body { background: linear-gradient(#e9e1d0d1, #e9e1d0d1), var(--paper, none) cen
 /* Let the painted route remain visible behind compact, readable landmarks. */
 .land-pin { width: 138px; max-width: 138px; padding: 3px 5px; gap: 3px; }
 .land-pin.locked { background: color-mix(in srgb, var(--sheet) 78%, transparent); box-shadow: none; }
-.lp-name { font-size: 11.5px; }
 /* Secondary copy is still legible at the design frame's native scale. */
-.ht-sub { font-size: 11px; line-height: 1.3; }
 .cc-sub { font-size: 11px; line-height: 1.35; }
-.cutin .ci-kicker { color: var(--sheet); text-shadow: 0 1px 3px #000, 0 0 6px #000; }
-.mx-castrow .btn { height: max(44px, var(--touch-target)); min-height: var(--touch-target); }
 /* VS portraits use the full square aperture; the painted frame overlays the image without shrinking it. */
-.mx-vs-av { width: 156px; height: 156px; padding: 0; }
 .mx-vs-av img, .mx-vs-av > div { width: 100%; height: 100%; object-fit: cover; }
-.mx-vs-av::after { inset: 0; }
-.mx-vs-title { width: 210px; max-width: 100%; overflow-wrap: anywhere; }
 
 
 /* Stage: the 16:9 game always sits in a painted frame over a living backdrop.
@@ -759,7 +702,7 @@ body.playing .bd-scene, body.playing .bd-mist { animation-play-state: paused; }
   gap: 26px; padding: 4px 24px 4px 2px;
   background: none; border: 0; border-radius: 0; box-shadow: none;
   color: var(--ink);
-  transition: opacity 0.2s, transform 0.2s var(--ease);
+  transition: opacity 0.2s, transform 0.2s var(--ease); flex-basis: 29%; padding-right: 34px;
 }
 .mx-card::before {
   content: ''; position: absolute; z-index: -1;
@@ -767,13 +710,11 @@ body.playing .bd-scene, body.playing .bd-mist { animation-play-state: paused; }
   border: 1px solid transparent; border-image: url('/art/ui/frame/plate.webp') 0 80 fill / 0 30px / 0 stretch;
   filter: drop-shadow(0 3px 6px rgba(40, 30, 18, 0.2));
 }
-.mx-card.p2 { padding: 4px 2px 4px 24px; }
+.mx-card.p2 { padding: 4px 2px 4px 34px; }
 .mx-card.p2::before { inset: -4px calc(var(--face) / 2) -4px 0; transform: scaleX(-1); }
 .mx-card:not(.active) { opacity: 0.74; }
 .mx-card.active { transform: translateY(1px); border: 0; box-shadow: none; }
 .mx-card .mx-info { gap: 2px; padding-top: 7px; }
-.mx-card { flex-basis: 29%; padding-right: 34px; }
-.mx-card.p2 { padding: 4px 2px 4px 34px; }
 .mx-card .mx-name { font-size: 15px; color: var(--ink); }
 .mx-card.active .mx-name { color: var(--accent-2); }
 .mx-card .mx-sub { color: var(--ink-2); }
@@ -783,7 +724,7 @@ body.playing .bd-scene, body.playing .bd-mist { animation-play-state: paused; }
   inset: 2px 0; padding: 6px 26px;
   background: none; border: 1px solid transparent; border-image: url('/art/ui/frame/scroll.webp') 0 45 fill / 0 12px / 0 stretch; border-radius: 0; box-shadow: none;
 }
-.mx-obj-k { font-size: 11px; letter-spacing: 0.02em; }
+.mx-obj-k { letter-spacing: 0.02em; font-size: 12px; }
 .mx-obj-t { font-size: 14px; line-height: 1.22; }
 /* Announcements sit over the table now, so the objective stays readable meanwhile. */
 .mx-center.heralding .mx-obj { opacity: 1; }
@@ -855,7 +796,7 @@ body.playing .bd-scene, body.playing .bd-mist { animation-play-state: paused; }
 .mx-bt-ball { width: 36px; height: 36px; flex-shrink: 0; filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.3)); }
 
 /* Ready skills wear a painted vermilion brush ring that breathes; the ultimate gets the flame ring. */
-.mx-skill .mx-sk-art { overflow: visible; border-radius: 0; background: none; }
+.mx-skill .mx-sk-art { overflow: visible; border-radius: 0; background: none; margin: 3px 0 4px; }
 .mx-skill .mx-sk-img { border-radius: 10px; }
 .mx-skill.ready .mx-sk-art::before {
   content: ''; position: absolute; inset: -6px; z-index: 1; pointer-events: none;
@@ -883,15 +824,12 @@ body.playing .bd-scene, body.playing .bd-mist { animation-play-state: paused; }
 
 /* The class passive reads as a control: a painted button when it can be used, a framed plate
    showing progress when it cannot yet, never loose text. */
-#ui .mx-passive.btn { border-width: 8px; border-image-width: 8px; border-image-source: url('/art/ui/frame/btn-secondary.webp'); border-style: solid; color: var(--ink); }
 #ui .mx-passive.btn:not(:disabled) { border-image-source: url('/art/ui/frame/btn-primary.webp'); color: var(--on-accent); }
 #ui .mx-passive.btn:not(:disabled) .mx-passive-detail { color: var(--on-accent); }
 /* Fixed height whatever the line says, and only faded out between shots, so the column never reflows. */
 
 #ui .mx-passive.idle { visibility: hidden; }
-#ui .mx-passive:disabled { opacity: 0.82; border-image-source: url('/art/ui/frame/btn-secondary.webp'); border-width: 8px; border-style: solid; border-top: 8px solid transparent; background: none; color: var(--ink-2); }
 @media (prefers-reduced-motion: reduce) { #ui .mx-passive.btn:not(:disabled) { animation: none; } }
-.mx-skill .mx-sk-art { margin: 3px 0 4px; }
 
 /* Pocket calls read in the objective plate; the push-out toggle sits in the controls column. */
 .mx-ctrl .mx-chips { position: static; transform: none; flex-direction: column; gap: 4px; white-space: normal; }
@@ -922,27 +860,21 @@ body.playing .bd-scene, body.playing .bd-mist { animation-play-state: paused; }
 
 /* Cards in a row share their line positions: names reserve two lines, so a wrapped name never
    pushes its subtitle, price or description below its neighbours'. */
-.champ-card .cc-name { min-height: calc(2 * 1.15em); display: flex; align-items: flex-start; justify-content: center; }
 .gc-head { align-items: flex-start; min-height: calc(2 * 1.2 * var(--fs-l) + 4px); }
 .gc-head b { padding-top: 2px; }
 
 /* Wide phones scale the 16:9 frame down; secondary HUD lines stay at 12–13 px in design units. */
-.mx-obj-k { font-size: 12px; }
 .mx-card .mx-line, .mx-card .mx-sub { font-size: 13px; }
-.mx-sk-name { font-size: 13px; }
 
 /* The spin sheet's close button sits above its title, which used to swallow the tap. */
 .mx-spinsheet .mx-sc-x { position: absolute; top: 6px; right: 6px; z-index: 3; }
 .mx-spinsheet .mx-sp-title { padding-right: calc(var(--touch-target) + 6px); }
-.vs-plates .vs-sub { -webkit-line-clamp: 1; white-space: nowrap; text-overflow: ellipsis; display: block; }
-.vs-plates input { min-height: 0; height: 22px; padding: 0; }
 
 /* Painted buttons carry their own ink edge; a CSS shadow would draw a box outside it. Text sits
    on one baseline across a row of buttons, with or without an icon. */
 #ui .btn, .update-sheet .btn { box-shadow: none; line-height: 1.15; }
 #ui .btn.pressed, #ui .btn:active { box-shadow: none; }
 #ui .btn > .ico, #ui .btn .btn-in > .ico { flex-shrink: 0; }
-.modal .actions > .btn { display: inline-flex; align-items: center; justify-content: center; padding-top: 0; padding-bottom: 2px; }
 .btn-in { display: inline-flex; align-items: center; justify-content: center; gap: 8px; }
 
 /* Gear cards in one row share row tracks (subgrid): a short description leaves blank space
@@ -957,7 +889,6 @@ body.playing .bd-scene, body.playing .bd-mist { animation-play-state: paused; }
 .collection .sect-group, .codex .sect-group, .challenge-family { content-visibility: auto; contain-intrinsic-size: auto 260px; }
 
 /* Long collections lay out lazily: off-screen sect groups skip layout and paint until scrolled to. */
-.collection .sect-group, .codex .sect-group, .challenge-family { content-visibility: auto; contain-intrinsic-size: auto 260px; }
 
 /* ---------- Kết liễu: the rack-winning strike ----------
  * Stage is the 844×475 design frame. Timeline: veil + strip 0–0.3 s, lunge 0.08–0.42 s, the ball

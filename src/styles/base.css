@@ -70,13 +70,16 @@ html, body {
   margin: 0;
   height: 100%;
   overflow: hidden;
-  background: var(--frame);
   color: var(--ink);
   font: 500 var(--fs-m)/1.5 var(--body);
   overscroll-behavior: none;
   touch-action: none;
   -webkit-text-size-adjust: 100%;
   -webkit-font-smoothing: antialiased;
+}
+
+html {
+  background: var(--frame);
 }
 
 input, textarea { -webkit-user-select: text; user-select: text; touch-action: manipulation; font: inherit; color: inherit; }
@@ -87,7 +90,7 @@ img, svg { pointer-events: none; }
 [hidden] { display: none !important; }
 h1, h2, h3, p { margin: 0; }
 
-#stage { position: fixed; inset: 0; height: 100dvh; z-index: 0; background: var(--frame); }
+#stage { position: fixed; inset: 0; height: 100dvh; z-index: 0; }
 #stage canvas { display: block; width: 100%; height: 100%; touch-action: none; }
 #ui {
   /* The outer frame already excludes safe areas. Touch targets stay in screen pixels. */
@@ -121,13 +124,10 @@ body.gate #ui {
   inset: 0;
   display: flex;
   flex-direction: column;
-  gap: 10px;
   padding: calc(10px + var(--st)) calc(16px + var(--sr)) calc(10px + var(--sb)) calc(16px + var(--sl));
   /* A calm, nearly flat paper: the fibre texture is kept faint so it never fights the text. */
   background: linear-gradient(rgba(233, 225, 208, 0.82), rgba(233, 225, 208, 0.82)), var(--paper, none) center / 640px;
-  animation: screen-in 0.24s var(--ease) both;
 }
-.screen.out { animation: screen-out 0.16s ease-in both; pointer-events: none; }
 #ui > .screen.game { background: transparent; padding: 0; gap: 0; pointer-events: none; }
 #ui > .screen.game > * { pointer-events: auto; }
 @keyframes screen-in { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
