@@ -8,7 +8,7 @@ import { screenEl, type App, type Screen } from '../app';
 import { btn, h, tabs, tap, toast, uiScale } from '../dom';
 import { icon } from '../icons';
 import { matchScreen } from './match-screen';
-import { topbar } from './menus';
+import { topbar } from '../screen-bits';
 
 /** One entry of the list: a drill from the book or a position the player kept. */
 interface Choice {
@@ -121,6 +121,14 @@ function startPractice(app: App, c: Choice) {
 
 const hex = (n: number) => `#${n.toString(16).padStart(6, '0')}`;
 
+interface TablePaint {
+  g: CanvasRenderingContext2D;
+  t: ReturnType<typeof practiceGeom>;
+  k: number;
+  X(x: number): number;
+  Y(y: number): number;
+}
+
 /**
  * Top-down picture of a position: rails, cloth, pockets and balls, drawn from the simulation's
  * own geometry and ball colours so it matches the table you will play on.
@@ -137,21 +145,24 @@ function drawTable(canvas: HTMLCanvasElement, kind: PracticeTable, spots: Practi
   const t = practiceGeom(kind);
   const rail = t.railWidth;
   const k = Math.min(w / (t.L + 2 * rail), hgt / (t.W + 2 * rail));
-  const cx = w / 2;
-  const cy = hgt / 2;
-  const X = (x: number) => cx + x * k;
-  const Y = (y: number) => cy + y * k;
-  const round = (x: number, y: number, rw: number, rh: number, r: number) => {
-    g.beginPath();
-    g.roundRect(x, y, rw, rh, r);
-  };
-  // Rails and cloth.
-  round(X(-t.L / 2 - rail), Y(-t.W / 2 - rail), (t.L + 2 * rail) * k, (t.W + 2 * rail) * k, rail * k * 0.6);
+  const paint = { g, t, k, X: (x: number) => w / 2 + x * k, Y: (y: number) => hgt / 2 + y * k };
+  drawTableSurface(paint, skin);
+  drawBalls(paint, kind, spots);
+}
+
+
+function drawTableSurface(p: TablePaint, skin: TableSkin) {
+  const { g, t, k, X, Y } = p;
+  const rail = t.railWidth;
+  g.beginPath();
+  g.roundRect(X(-t.L / 2 - rail), Y(-t.W / 2 - rail), (t.L + 2 * rail) * k, (t.W + 2 * rail) * k, rail * k * 0.6);
   g.fillStyle = hex(skin.rail);
   g.fill();
   g.lineWidth = Math.max(1, k * 0.008);
   g.strokeStyle = hex(skin.railDark);
   g.stroke();
+  const cx = X(0);
+  const cy = Y(0);
   const cloth = g.createRadialGradient(cx, cy, 0, cx, cy, (t.L / 2) * k);
   cloth.addColorStop(0, hex(skin.cloth));
   cloth.addColorStop(1, hex(skin.clothDark));
@@ -164,9 +175,9 @@ function drawTable(canvas: HTMLCanvasElement, kind: PracticeTable, spots: Practi
     g.fill();
   }
   g.fillStyle = '#121212';
-  for (const p of t.pockets) {
+  for (const pocket of t.pockets) {
     g.beginPath();
-    g.arc(X(p.hx), Y(p.hy), p.hr * k, 0, Math.PI * 2);
+    g.arc(X(pocket.hx), Y(pocket.hy), pocket.hr * k, 0, Math.PI * 2);
     g.fill();
   }
   // Head string, faint.
@@ -176,43 +187,51 @@ function drawTable(canvas: HTMLCanvasElement, kind: PracticeTable, spots: Practi
   g.moveTo(X(t.headStringX), Y(-t.W / 2));
   g.lineTo(X(t.headStringX), Y(t.W / 2));
   g.stroke();
-  // Balls.
+}
+
+
+function drawBalls(p: TablePaint, kind: PracticeTable, spots: PracticeSpot[]) {
+  const { t, k, X, Y } = p;
   const r = Math.max(2.2, t.R * k);
   for (const s of [...spots].sort((a, b) => (a.id === 0 ? 1 : 0) - (b.id === 0 ? 1 : 0))) {
-    const st = ballStyle(kind, s.id);
-    const x = X(s.x);
-    const y = Y(s.y);
-    g.beginPath();
-    g.arc(x + r * 0.18, y + r * 0.22, r, 0, Math.PI * 2);
-    g.fillStyle = 'rgba(0,0,0,0.35)';
-    g.fill();
-    g.save();
-    g.beginPath();
-    g.arc(x, y, r, 0, Math.PI * 2);
-    g.clip();
-    g.fillStyle = st.stripe ? '#f4f1e6' : hex(st.color);
-    g.fillRect(x - r, y - r, 2 * r, 2 * r);
-    if (st.stripe) {
-      g.fillStyle = hex(st.color);
-      g.fillRect(x - r, y - r * 0.55, 2 * r, r * 1.1);
-    }
-    if (st.number && r >= 5) {
-      g.fillStyle = '#f8f6ee';
-      g.beginPath();
-      g.arc(x, y, r * 0.48, 0, Math.PI * 2);
-      g.fill();
-      g.fillStyle = '#161616';
-      g.font = `700 ${Math.round(r * 0.72)}px "Noto Serif", serif`;
-      g.textAlign = 'center';
-      g.textBaseline = 'middle';
-      g.fillText(String(st.number), x, y + r * 0.04);
-    }
-    const shine = g.createRadialGradient(x - r * 0.35, y - r * 0.4, 0, x, y, r);
-    shine.addColorStop(0, 'rgba(255,255,255,0.55)');
-    shine.addColorStop(0.35, 'rgba(255,255,255,0.08)');
-    shine.addColorStop(1, 'rgba(0,0,0,0.28)');
-    g.fillStyle = shine;
-    g.fillRect(x - r, y - r, 2 * r, 2 * r);
-    g.restore();
+    drawBall(p, { style: ballStyle(kind, s.id), x: X(s.x), y: Y(s.y), r });
   }
+}
+
+
+function drawBall(p: TablePaint, b: { style: ReturnType<typeof ballStyle>; x: number; y: number; r: number }) {
+  const { g } = p;
+  const { style: st, x, y, r } = b;
+  g.beginPath();
+  g.arc(x + r * 0.18, y + r * 0.22, r, 0, Math.PI * 2);
+  g.fillStyle = 'rgba(0,0,0,0.35)';
+  g.fill();
+  g.save();
+  g.beginPath();
+  g.arc(x, y, r, 0, Math.PI * 2);
+  g.clip();
+  g.fillStyle = st.stripe ? '#f4f1e6' : hex(st.color);
+  g.fillRect(x - r, y - r, 2 * r, 2 * r);
+  if (st.stripe) {
+    g.fillStyle = hex(st.color);
+    g.fillRect(x - r, y - r * 0.55, 2 * r, r * 1.1);
+  }
+  if (st.number && r >= 5) {
+    g.fillStyle = '#f8f6ee';
+    g.beginPath();
+    g.arc(x, y, r * 0.48, 0, Math.PI * 2);
+    g.fill();
+    g.fillStyle = '#161616';
+    g.font = `700 ${Math.round(r * 0.72)}px "Noto Serif", serif`;
+    g.textAlign = 'center';
+    g.textBaseline = 'middle';
+    g.fillText(String(st.number), x, y + r * 0.04);
+  }
+  const shine = g.createRadialGradient(x - r * 0.35, y - r * 0.4, 0, x, y, r);
+  shine.addColorStop(0, 'rgba(255,255,255,0.55)');
+  shine.addColorStop(0.35, 'rgba(255,255,255,0.08)');
+  shine.addColorStop(1, 'rgba(0,0,0,0.28)');
+  g.fillStyle = shine;
+  g.fillRect(x - r, y - r, 2 * r, 2 * r);
+  g.restore();
 }

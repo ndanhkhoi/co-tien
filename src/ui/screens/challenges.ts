@@ -2,7 +2,8 @@ import { CHALLENGES, FAMILY_INFO, type ChallengeFamily } from '../../game/conten
 import { screenEl, type App, type Screen } from '../app';
 import { h, stars, tap, toast } from '../dom';
 import { icon } from '../icons';
-import { startChallenge, statChip, topbar } from './menus';
+import { startChallenge } from './challenge-start';
+import { statChip, topbar } from '../screen-bits';
 
 export function challengesScreen(app: App): Screen {
   const el = screenEl('challenges');

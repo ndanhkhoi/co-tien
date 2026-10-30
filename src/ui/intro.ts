@@ -2,6 +2,7 @@ import lore from '../game/content/lore.json';
 import { CHAMPIONS, SECTS } from '../game/content/sects';
 import { turnPage, type App } from './app';
 import { btn, h, modal } from './dom';
+import { swipeDirection, type SwipeStart } from './swipe';
 
 /** First-run introduction to Cơ Tiên Giới: four short pages, skippable, replayable from Settings. */
 export function showIntro(app: App, onDone?: () => void) {
@@ -59,15 +60,13 @@ export function showIntro(app: App, onDone?: () => void) {
       h('div.intro-art', null, img),
       h('div.intro-body', null, h('div.intro-progress', null, count, dots), scroll,
         h('div.intro-foot', null, h('div.intro-actions', null, btn('Bỏ qua', finish, 'ghost'), prev, next))));
-    let start: { x: number; y: number } | null = null;
+    let start: SwipeStart = null;
     panel.addEventListener('pointerdown', (e) => { start = { x: e.clientX, y: e.clientY }; });
     panel.addEventListener('pointercancel', () => { start = null; });
     panel.addEventListener('pointerup', (e) => {
-      if (!start) return;
-      const dx = e.clientX - start.x;
-      const dy = e.clientY - start.y;
+      const direction = swipeDirection(start, e);
       start = null;
-      if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy) * 1.5) go(i + (dx < 0 ? 1 : -1));
+      if (direction) go(i + direction);
     });
     return panel;
   });

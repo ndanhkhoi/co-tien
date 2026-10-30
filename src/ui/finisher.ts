@@ -2,11 +2,12 @@ import { sound } from '../audio/sound';
 import { cutoutUrl, finisherUrl, sect, sectArtUrl, type Champion } from '../game/content/sects';
 import { h } from './dom';
 
+
 const hex6 = (n: number) => '#' + n.toString(16).padStart(6, '0');
 const BASE = import.meta.env.BASE_URL;
 
 /** The deciding ball: its painted portrait and how to say it ("Bi 8 vào lỗ"). */
-export interface FinalBall { src: string; caption: string }
+interface FinalBall { src: string; caption: string }
 
 /**
  * Kết liễu: the shot that wins a rack, told as one action. An ink stroke tears across the stage,
@@ -14,7 +15,16 @@ export interface FinalBall { src: string; caption: string }
  * on an ink trail and slams into an ink pocket that bursts, the stage shakes, and "Kết liễu" is
  * stamped with the shot's name. About 2.6 s; any tap ends it early. Resolves once it is gone.
  */
-export function playFinisher(stage: HTMLElement, c: Champion, feats: string[], ball: FinalBall | null, fromRight: boolean): Promise<void> {
+export interface FinisherOptions {
+  stage: HTMLElement;
+  champion: Champion;
+  feats: string[];
+  ball: FinalBall | null;
+  fromRight: boolean;
+}
+
+export function playFinisher(opts: FinisherOptions): Promise<void> {
+  const { stage, champion: c, feats, ball, fromRight } = opts;
   const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const s = sect(c.sect);
   const art = finisherUrl(c.id);

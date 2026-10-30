@@ -1,3 +1,4 @@
+import { champion } from '../../game/content/sects';
 import { firstLaunch, preloadCore } from '../../platform/preload';
 import { screenEl, type App, type Screen } from '../app';
 import { h } from '../dom';
@@ -38,7 +39,7 @@ export function loadingScreen(next: (app: App) => Screen) {
     let timer: ReturnType<typeof setTimeout> | undefined;
     const mb = (n: number) => (n / 1048576).toFixed(n < 10485760 ? 1 : 0).replace('.', ',');
     const first = firstLaunch();
-    void preloadCore(app.profile.champion, (f, got, total) => {
+    void preloadCore(app.profile.champion, champion(app.profile.champion).sect, (f, got, total) => {
       if (disposed) return;
       // Big downloads say how much is left; an update with a few new paintings just fills up.
       if (total > 5 * 1048576) {

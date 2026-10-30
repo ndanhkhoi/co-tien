@@ -10,19 +10,19 @@ export function h<K extends keyof HTMLElementTagNameMap>(tag: K | `${K}.${string
   const [name, ...classes] = tag.split('.');
   const el = document.createElement(name) as HTMLElementTagNameMap[K];
   if (classes.length) el.className = classes.join(' ');
-  if (props) {
-    for (const [k, v] of Object.entries(props)) {
-      if (v === undefined || v === null || v === false) continue;
-      if (k === 'class') el.className = [el.className, v].filter(Boolean).join(' ');
-      else if (k === 'style') el.setAttribute('style', String(v));
-      else if (k === 'html') el.innerHTML = String(v);
-      else if (k.startsWith('on') && typeof v === 'function') el.addEventListener(k.slice(2), v as EventListener);
-      else if (k in el && typeof v !== 'string') (el as unknown as Record<string, unknown>)[k] = v;
-      else el.setAttribute(k, String(v));
-    }
-  }
+  if (props) for (const [k, v] of Object.entries(props)) setProp(el, k, v);
   append(el, kids);
   return el;
+}
+
+function setProp(el: HTMLElement, k: string, v: unknown) {
+  if (v === undefined || v === null || v === false) return;
+  if (k === 'class') el.className = [el.className, v].filter(Boolean).join(' ');
+  else if (k === 'style') el.setAttribute('style', String(v));
+  else if (k === 'html') el.innerHTML = String(v);
+  else if (k.startsWith('on') && typeof v === 'function') el.addEventListener(k.slice(2), v as EventListener);
+  else if (k in el && typeof v !== 'string') (el as unknown as Record<string, unknown>)[k] = v;
+  else el.setAttribute(k, String(v));
 }
 
 function append(el: Element, kids: Child[]) {

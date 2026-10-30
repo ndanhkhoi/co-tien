@@ -11,7 +11,9 @@ import { cueStats, tableStats } from '../../game/content/stat-text';
 import { OMEN_INFO } from '../../game/terrain';
 import { motionModal as modal, turnPage, type App } from '../app';
 import { btn, h, tap, toast } from '../dom';
-import { champCard, closeX, cueArtEl, hex6, skillButtons, statRows, tablePreview } from './menus';
+import { swipeDirection, type SwipeStart } from '../swipe';
+import { skillButtons } from './profile';
+import { champCard, closeX, cueArtEl, hex6, statRows, tablePreview } from '../screen-bits';
 
 /**
  * Cơ Tiên Lục — the world's library, shown as tabs of Tàng Các: lands, classes and rules, plus
@@ -155,16 +157,14 @@ function showDetail(build: (close: () => void) => HTMLElement, page: DetailPage 
     }, { dismissable: true });
   }
   const el = page!.el;
-  let start: { x: number; y: number } | null = null;
+  let start: SwipeStart = null;
   // Replacing handlers keeps rapid navigation from accumulating stale page callbacks.
   el.onpointerdown = (e) => { start = { x: e.clientX, y: e.clientY }; };
   el.onpointercancel = () => { start = null; };
   el.onpointerup = (e) => {
-    if (!start) return;
-    const dx = e.clientX - start.x;
-    const dy = e.clientY - start.y;
+    const direction = swipeDirection(start, e);
     start = null;
-    if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy) * 1.5) navigate(dx < 0 ? 1 : -1);
+    if (direction) navigate(direction);
   };
   return page!;
 }

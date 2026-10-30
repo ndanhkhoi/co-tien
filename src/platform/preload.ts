@@ -1,5 +1,4 @@
 import ART from 'virtual:art-manifest';
-import { CHAMPIONS } from '../game/content/sects';
 
 /**
  * Art lives in one lasting Cache Storage bucket ("art"), filled by this loader and served by the
@@ -29,16 +28,15 @@ function sectFiles(sect: string): Entry[] {
   return ART.filter(([p]) => p.startsWith(`art/sects/${sect}/`));
 }
 
-function coreList(champion: string): Entry[] {
-  const own = CHAMPIONS.find((c) => c.id === champion);
+function coreList(own: { champion: string; sect: string }): Entry[] {
   const set = new Map<string, Entry>();
   for (const e of ART) {
     const p = e[0];
     if (p.startsWith('art/ui/') || p.startsWith('art/table/') || p.startsWith('art/skills/') ||
       p.endsWith('/portrait.webp') || p.endsWith('/emblem.webp')) set.set(p, e);
   }
-  for (const e of champFiles(champion)) set.set(e[0], e);
-  if (own) for (const e of sectFiles(own.sect)) set.set(e[0], e);
+  for (const e of champFiles(own.champion)) set.set(e[0], e);
+  for (const e of sectFiles(own.sect)) set.set(e[0], e);
   return [...set.values()];
 }
 
@@ -136,9 +134,9 @@ export function coreReady(): boolean {
 }
 
 /** Loading screen: the whole set (or the core with data saver on), with byte progress. */
-export async function preloadCore(champion: string, onProgress: (f: number, got: number, total: number) => void) {
+export async function preloadCore(champion: string, sect: string, onProgress: (f: number, got: number, total: number) => void) {
   const whole = !saveData();
-  const ok = await sync(whole ? ART : coreList(champion), 6, onProgress);
+  const ok = await sync(whole ? ART : coreList({ champion, sect }), 6, onProgress);
   mark(ok && whole ? 'all' : 'core');
   if (ok && whole) {
     void prune();

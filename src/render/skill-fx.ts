@@ -3,6 +3,23 @@ import { sect as sectInfo, vfxUrl, type SectId, type SkillKind } from '../game/c
 
 type Pt = { x: number; y: number };
 
+interface PieceOptions {
+  tex: Texture | null;
+  tint: number;
+  at: Pt;
+  recipe: Recipe;
+  follow?: () => Pt;
+  frames?: Texture[];
+}
+
+interface PlayOptions {
+  kinds: SkillKind[];
+  sect: SectId;
+  ultimate: boolean;
+  cue: () => Pt;
+  pockets: Pt[];
+}
+
 interface Piece {
   s: Sprite;
   t: number;
@@ -64,7 +81,8 @@ export class SkillFx {
     return p;
   }
 
-  private add(tex: Texture | null, tint: number, at: Pt, r: Recipe, follow?: () => Pt, frames?: Texture[]) {
+  private add(o: PieceOptions) {
+    const { tex, tint, at, recipe: r, follow, frames } = o;
     const s = new Sprite(tex ?? this.fallback);
     s.anchor.set(0.5);
     // Ink brushwork is painted over the cloth (normal blending), never added as light.
@@ -77,15 +95,16 @@ export class SkillFx {
   }
 
   /** Play every family of a cast; ultimates add the sect's flipbook and grow 40%. */
-  play(kinds: SkillKind[], sect: SectId, ultimate: boolean, cue: () => Pt, pockets: Pt[]) {
+  play(o: PlayOptions) {
+    const { kinds, sect, ultimate, cue, pockets } = o;
     const tint = sectInfo(sect).glow;
     const boost = ultimate ? 1.4 : 1;
     for (const kind of kinds) {
       for (const r0 of RECIPES[kind]) {
         const r = { ...r0, size: [r0.size[0] * boost, r0.size[1] * boost] as [number, number] };
         void this.load(vfxUrl(sect, r.el)).then((tex) => {
-          if (r.where === 'pockets') for (const p of pockets) this.add(tex, tint, p, r);
-          else this.add(tex, tint, cue(), r, r.follow ? cue : undefined);
+          if (r.where === 'pockets') for (const p of pockets) this.add({ tex, tint, at: p, recipe: r });
+          else this.add({ tex, tint, at: cue(), recipe: r, follow: r.follow ? cue : undefined });
         });
       }
     }
@@ -93,7 +112,7 @@ export class SkillFx {
       const urls = Array.from({ length: 16 }, (_, i) => `${BASE}art/sects/${sect}/flip/${String(i).padStart(2, '0')}.webp`);
       void Promise.all(urls.map((u) => this.load(u))).then((frames) => {
         if (frames.some((f) => !f)) return;
-        this.add(frames[0], tint, cue(), { el: '', size: [0.42, 0.42], alpha: [1, 1], dur: 0.8, where: 'cue' }, undefined, frames as Texture[]);
+        this.add({ tex: frames[0], tint, at: cue(), recipe: { el: '', size: [0.42, 0.42], alpha: [1, 1], dur: 0.8, where: 'cue' }, frames: frames as Texture[] });
       });
     }
   }

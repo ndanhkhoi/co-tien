@@ -19,7 +19,7 @@ import { captureInstallPrompt, mustInstall } from './platform/install';
 import { App } from './ui/app';
 import { toast } from './ui/dom';
 import { installGate } from './ui/screens/install-gate';
-import { splashScreen } from './ui/screens/menus';
+import { splashScreen } from './ui/screens/splash';
 import { loadingScreen } from './ui/screens/loading';
 import { coreReady } from './platform/preload';
 import { installScrollHints } from './ui/scroll-hint';
@@ -69,34 +69,45 @@ function setupUpdates(app: App) {
         .filter((k) => k.startsWith('art-'))
         .forEach((k) => void caches.delete(k))).catch(() => undefined);
       if (!reg) return;
-      // Hold the player on the update sheet from the moment a new build starts downloading,
-      // not only once it is installed: otherwise the old build stays playable for a while.
-      const watch = (sw: ServiceWorker | null) => {
-        if (!sw || !navigator.serviceWorker.controller) return;
-        app.updateFound();
-        sw.addEventListener('statechange', () => sw.state === 'redundant' && app.updateFailed());
-      };
-      watch(reg.installing);
-      reg.addEventListener('updatefound', () => watch(reg.installing));
-      const check = () => {
-        if (navigator.onLine) void reg.update().catch(() => undefined);
-      };
-      setInterval(check, 15 * 60 * 1000);
-      document.addEventListener('visibilitychange', () => {
-        if (!document.hidden) check();
-      });
-      addEventListener('online', check);
-      // Settings → "Kiểm tra": answers with a toast when this build is already the newest.
-      addEventListener('cotien:check-update', () => {
-        if (!navigator.onLine) return toast('Đang ngoại tuyến. Kết nối mạng để kiểm tra', 'bad');
-        reg.update().then(() => {
-          if (!reg.installing && !reg.waiting) toast('Game đã ở bản mới nhất, không cần cập nhật', 'good');
-        }, () => toast('Chưa kiểm tra được, thử lại sau', 'bad'));
-      });
+      watchServiceWorker(app, reg);
+      checkPeriodically(reg);
+      answerManualCheck(reg);
     },
   });
 }
 
+function watchServiceWorker(app: App, reg: ServiceWorkerRegistration) {
+  // Hold the player on the update sheet from the moment a new build starts downloading,
+  // not only once it is installed: otherwise the old build stays playable for a while.
+  const watch = (sw: ServiceWorker | null) => {
+    if (!sw || !navigator.serviceWorker.controller) return;
+    app.updateFound();
+    sw.addEventListener('statechange', () => sw.state === 'redundant' && app.updateFailed());
+  };
+  watch(reg.installing);
+  reg.addEventListener('updatefound', () => watch(reg.installing));
+}
+
+function checkPeriodically(reg: ServiceWorkerRegistration) {
+  const check = () => {
+    if (navigator.onLine) void reg.update().catch(() => undefined);
+  };
+  setInterval(check, 15 * 60 * 1000);
+  document.addEventListener('visibilitychange', () => {
+    if (!document.hidden) check();
+  });
+  addEventListener('online', check);
+}
+
+function answerManualCheck(reg: ServiceWorkerRegistration) {
+  // Settings → "Kiểm tra": answers with a toast when this build is already the newest.
+  addEventListener('cotien:check-update', () => {
+    if (!navigator.onLine) return toast('Đang ngoại tuyến. Kết nối mạng để kiểm tra', 'bad');
+    reg.update().then(() => {
+      if (!reg.installing && !reg.waiting) toast('Game đã ở bản mới nhất, không cần cập nhật', 'good');
+    }, () => toast('Chưa kiểm tra được, thử lại sau', 'bad'));
+  });
+}
 boot().catch((err) => {
   const el = document.getElementById('boot');
   if (el) el.textContent = `Không khởi động được: ${err instanceof Error ? err.message : String(err)}`;
@@ -118,6 +129,98 @@ const FRAME_PX_SLIM = 0.2;
 const FRAME_X = 92;
 const FRAME_Y = 117;
 
+interface StageRects {
+  ui: HTMLElement;
+  viewport: HTMLElement;
+  safeFrame: HTMLElement;
+}
+
+function applyUiScale({ ui, viewport, safeFrame }: StageRects) {
+  const native = mustInstall();
+  const safe = safeFrame.getBoundingClientRect();
+  const view = viewport.getBoundingClientRect();
+  const roomy = Math.min(safe.width, safe.height) >= 480;
+  const framePx = roomy ? FRAME_PX_ROOMY : FRAME_PX_SLIM;
+  // The install gate is the only native-size screen; everything else, splash included, is the
+  // framed 16:9 game on its backdrop.
+  document.body.classList.toggle('stage', !native);
+  document.body.classList.toggle('theatre', !native);
+  const scale = native ? 1 : Math.min(
+    MAX_SCALE,
+    // As large as the screen allows: only the painted frame band stays outside the game.
+    safe.width / (DESIGN_W + 2 * FRAME_X * framePx),
+    safe.height / (DESIGN_H + 2 * FRAME_Y * framePx),
+  );
+  const layout = stageLayout({ native, safe, view, framePx, scale, roomy });
+  paintStage(ui, viewport, layout);
+}
+
+interface StageLayout {
+  native: boolean;
+  framePx: number;
+  scale: number;
+  rect: DOMRect;
+  width: number;
+  height: number;
+  left: number;
+  top: number;
+}
+
+function stageLayout(x: { native: boolean; safe: DOMRect; view: DOMRect; framePx: number; scale: number; roomy: boolean }): StageLayout {
+  const { native, safe, view, framePx, scale, roomy } = x;
+  const theatre = !native;
+  const rect = native ? view : safe;
+  const width = native ? rect.width : DESIGN_W;
+  const height = native ? rect.height : DESIGN_H;
+  // Champions only flank the stage when the side margins can hold a figure.
+  // Measured on the whole screen: the backdrop paints under notches and the home bar too.
+  const sideRoom = (view.width - DESIGN_W * scale) / 2;
+  const topRoom = (safe.height - DESIGN_H * scale) / 2;
+  document.body.classList.toggle('cast-room', theatre && sideRoom >= 60);
+  document.documentElement.style.setProperty('--side-room', `${Math.max(0, sideRoom)}px`);
+  // Tall windows (4:3, 5:4, tablets) have their room above and below instead: the champions
+  // lean over the top of the frame there.
+  document.body.classList.toggle('cast-top', theatre && roomy && sideRoom < 60 && topRoom >= 90);
+  return { native, framePx, scale, rect, width, height, ...stagePosition({ native, safe, view, width, height, framePx, scale }) };
+}
+
+function stagePosition(x: { native: boolean; safe: DOMRect; view: DOMRect; width: number; height: number; framePx: number; scale: number }) {
+  const { native, safe, view, width, height, framePx, scale } = x;
+  const clamp = (v: number, lo: number, hi: number) => Math.min(Math.max(v, lo), Math.max(lo, hi));
+  const padX = native ? 0 : FRAME_X * framePx * scale;
+  const padY = native ? 0 : FRAME_Y * framePx * scale;
+  // Centre on the whole screen (an iPhone's home-bar inset would otherwise push the game up),
+  // then nudge back inside the safe area if the frame would reach under a notch or the bar.
+  return {
+    left: native ? view.left : clamp(view.left + (view.width - width * scale) / 2, safe.left + padX, safe.right - padX - width * scale),
+    top: native ? view.top : clamp(view.top + (view.height - height * scale) / 2, safe.top + padY, safe.bottom - padY - height * scale),
+  };
+}
+
+function paintStage(ui: HTMLElement, viewport: HTMLElement, l: StageLayout) {
+  const { native, framePx, scale, width, height, left, top } = l;
+  ui.style.width = `${width}px`;
+  ui.style.height = `${height}px`;
+  ui.style.left = `${left}px`;
+  ui.style.top = `${top}px`;
+  // Native screens paint across the viewport; on the stage, surfaces stop at the game edge.
+  ui.style.setProperty('--bleed-left', `${native ? left / scale : 0}px`);
+  ui.style.setProperty('--bleed-top', `${native ? top / scale : 0}px`);
+  ui.style.setProperty('--bleed-right', `${native ? (viewport.clientWidth - left - width * scale) / scale : 0}px`);
+  ui.style.setProperty('--bleed-bottom', `${native ? (viewport.clientHeight - top - height * scale) / scale : 0}px`);
+  // The painted frame and the paper mat under the table both follow the game rectangle.
+  const root = document.documentElement.style;
+  root.setProperty('--game-l', `${left}px`);
+  root.setProperty('--game-t', `${top}px`);
+  root.setProperty('--game-w', `${width * scale}px`);
+  root.setProperty('--game-h', `${height * scale}px`);
+  root.setProperty('--fk', `${native ? 0 : framePx * scale}px`);
+  // Keep a transform at scale 1 too: fixed sheets must stay within the game frame.
+  ui.style.transform = `scale(${scale})`;
+  ui.style.setProperty('--ui-scale', String(scale));
+  window.dispatchEvent(new Event('cotien:ui-resize'));
+}
+
 /** Keep one 16:9 composition, contained and centred inside the usable screen on every device. */
 function installUiScale() {
   const ui = document.getElementById('ui')!;
@@ -125,64 +228,7 @@ function installUiScale() {
   const safeFrame = document.createElement('div');
   safeFrame.style.cssText = 'position:fixed;inset:env(safe-area-inset-top,0px) env(safe-area-inset-right,0px) env(safe-area-inset-bottom,0px) env(safe-area-inset-left,0px);visibility:hidden;pointer-events:none';
   document.body.append(safeFrame);
-  const apply = () => {
-    const gate = mustInstall();
-    const safe = safeFrame.getBoundingClientRect();
-    const view = viewport.getBoundingClientRect();
-    const roomy = Math.min(safe.width, safe.height) >= 480;
-    const framePx = roomy ? FRAME_PX_ROOMY : FRAME_PX_SLIM;
-    // The install gate is the only native-size screen; everything else, splash included, is the
-    // framed 16:9 game on its backdrop.
-    const native = gate;
-    document.body.classList.toggle('stage', !native);
-    document.body.classList.toggle('theatre', !native);
-    const s = native ? 1 : Math.min(
-      MAX_SCALE,
-      // As large as the screen allows: only the painted frame band stays outside the game.
-      safe.width / (DESIGN_W + 2 * FRAME_X * framePx),
-      safe.height / (DESIGN_H + 2 * FRAME_Y * framePx),
-    );
-    const theatre = !native;
-    const rect = native ? view : safe;
-    const width = native ? rect.width : DESIGN_W;
-    const height = native ? rect.height : DESIGN_H;
-    // Champions only flank the stage when the side margins can hold a figure.
-    // Measured on the whole screen: the backdrop paints under notches and the home bar too.
-    const sideRoom = (view.width - DESIGN_W * s) / 2;
-    const topRoom = (safe.height - DESIGN_H * s) / 2;
-    document.body.classList.toggle('cast-room', theatre && sideRoom >= 60);
-    document.documentElement.style.setProperty('--side-room', `${Math.max(0, sideRoom)}px`);
-    // Tall windows (4:3, 5:4, tablets) have their room above and below instead: the champions
-    // lean over the top of the frame there.
-    document.body.classList.toggle('cast-top', theatre && roomy && sideRoom < 60 && topRoom >= 90);
-    ui.style.width = `${width}px`;
-    ui.style.height = `${height}px`;
-    // Centre on the whole screen (an iPhone's home-bar inset would otherwise push the game up),
-    // then nudge back inside the safe area if the frame would reach under a notch or the bar.
-    const clamp = (v: number, lo: number, hi: number) => Math.min(Math.max(v, lo), Math.max(lo, hi));
-    const padX = native ? 0 : FRAME_X * framePx * s;
-    const padY = native ? 0 : FRAME_Y * framePx * s;
-    const left = native ? rect.left : clamp(view.left + (view.width - width * s) / 2, safe.left + padX, safe.right - padX - width * s);
-    const top = native ? rect.top : clamp(view.top + (view.height - height * s) / 2, safe.top + padY, safe.bottom - padY - height * s);
-    ui.style.left = `${left}px`;
-    ui.style.top = `${top}px`;
-    // Native screens paint across the viewport; on the stage, surfaces stop at the game edge.
-    ui.style.setProperty('--bleed-left', `${native ? left / s : 0}px`);
-    ui.style.setProperty('--bleed-top', `${native ? top / s : 0}px`);
-    ui.style.setProperty('--bleed-right', `${native ? (viewport.clientWidth - left - width * s) / s : 0}px`);
-    ui.style.setProperty('--bleed-bottom', `${native ? (viewport.clientHeight - top - height * s) / s : 0}px`);
-    // The painted frame and the paper mat under the table both follow the game rectangle.
-    const root = document.documentElement.style;
-    root.setProperty('--game-l', `${left}px`);
-    root.setProperty('--game-t', `${top}px`);
-    root.setProperty('--game-w', `${width * s}px`);
-    root.setProperty('--game-h', `${height * s}px`);
-    root.setProperty('--fk', `${theatre ? framePx * s : 0}px`);
-    // Keep a transform at scale 1 too: fixed sheets must stay within the game frame.
-    ui.style.transform = `scale(${s})`;
-    ui.style.setProperty('--ui-scale', String(s));
-    window.dispatchEvent(new Event('cotien:ui-resize'));
-  };
+  const apply = () => applyUiScale({ ui, viewport, safeFrame });
   const observer = new ResizeObserver(apply);
   observer.observe(viewport);
   const screenObserver = new MutationObserver(apply);

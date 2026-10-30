@@ -1,6 +1,44 @@
 // Synthesised instruments and table sounds; no audio assets.
 const PENTATONIC = [130.81, 146.83, 164.81, 196, 220]; // Cung, thương, giốc, chuỷ, vũ.
 
+interface VoiceOptions {
+  src: AudioScheduledSourceNode;
+  input: AudioNode;
+  gain: number;
+  decay: number;
+  bus: GainNode;
+  t: number;
+  attack?: number;
+}
+
+interface BurstOptions {
+  freq: number;
+  q: number;
+  gain: number;
+  decay: number;
+  type?: BiquadFilterType;
+  when?: number;
+  attack?: number;
+}
+
+interface ToneOptions {
+  freq: number;
+  gain: number;
+  decay: number;
+  when?: number;
+  bus?: GainNode;
+  slide?: number;
+  attack?: number;
+}
+
+interface BellOptions {
+  freq: number;
+  gain: number;
+  when?: number;
+  bus?: GainNode;
+  decay?: number;
+}
+
 class Sound {
   private ctx: AudioContext | null = null;
   private sfx: GainNode | null = null;
@@ -75,7 +113,9 @@ class Sound {
   private get ready() { return !!this.ctx && this.ctx.state === 'running' && !this.hidden; }
   private unit(v: number) { return Number.isFinite(v) ? Math.max(0, Math.min(1, v)) : 0; }
 
-  private voice(src: AudioScheduledSourceNode, input: AudioNode, gain: number, decay: number, bus: GainNode, t: number, attack = 0.002) {
+  private voice(o: VoiceOptions) {
+    const { src, input, gain, decay, bus, t } = o;
+    const attack = o.attack ?? 0.002;
     const c = this.ctx!;
     // Reserve room for physical impacts even while a musical phrase is ringing.
     if (this.voices.size >= 32 || (bus === this.music && this.voices.size >= 20)) {
@@ -99,7 +139,11 @@ class Sound {
     src.stop(t + decay + 0.02);
   }
 
-  private burst(freq: number, q: number, gain: number, decay: number, type: BiquadFilterType = 'bandpass', when = 0, attack = 0.001) {
+  private burst(o: BurstOptions) {
+    const { freq, q, gain, decay } = o;
+    const type = o.type ?? 'bandpass';
+    const when = o.when ?? 0;
+    const attack = o.attack ?? 0.001;
     const c = this.ctx!;
     const src = c.createBufferSource();
     src.buffer = this.noise;
@@ -110,16 +154,21 @@ class Sound {
     f.frequency.value = freq;
     f.Q.value = q;
     src.connect(f);
-    this.voice(src, f, gain, decay, this.sfx!, c.currentTime + when, attack);
+    this.voice({ src, input: f, gain, decay, bus: this.sfx!, t: c.currentTime + when, attack });
   }
 
-  private tone(freq: number, gain: number, decay: number, when = 0, bus = this.sfx!, slide = 1, attack = 0.003) {
+  private tone(o: ToneOptions) {
+    const { freq, gain, decay } = o;
+    const when = o.when ?? 0;
+    const bus = o.bus ?? this.sfx!;
+    const slide = o.slide ?? 1;
+    const attack = o.attack ?? 0.003;
     const c = this.ctx!;
     const t = c.currentTime + when;
-    const o = c.createOscillator();
-    o.frequency.setValueAtTime(freq, t);
-    if (slide !== 1) o.frequency.exponentialRampToValueAtTime(freq * slide, t + decay);
-    this.voice(o, o, gain, decay, bus, t, attack);
+    const osc = c.createOscillator();
+    osc.frequency.setValueAtTime(freq, t);
+    if (slide !== 1) osc.frequency.exponentialRampToValueAtTime(freq * slide, t + decay);
+    this.voice({ src: osc, input: osc, gain, decay, bus, t, attack });
   }
 
   private makePluck(freq: number) {
@@ -135,12 +184,16 @@ class Sound {
   private pluck(freq: number, gain: number, when = 0, bus = this.sfx!) {
     const src = this.ctx!.createBufferSource();
     src.buffer = this.plucks.get(freq)!;
-    this.voice(src, src, gain, 2.8, bus, this.ctx!.currentTime + when);
+    this.voice({ src, input: src, gain, decay: 2.8, bus, t: this.ctx!.currentTime + when });
   }
 
-  private bell(freq: number, gain: number, when = 0, bus = this.sfx!, decay = 2.4) {
+  private bell(o: BellOptions) {
+    const { freq, gain } = o;
+    const when = o.when ?? 0;
+    const bus = o.bus ?? this.sfx!;
+    const decay = o.decay ?? 2.4;
     for (const [ratio, level, length] of [[1, 1, 1], [2.71, 0.3, 0.6], [4.08, 0.12, 0.3]]) {
-      this.tone(freq * ratio, gain * level, decay * length, when, bus);
+      this.tone({ freq: freq * ratio, gain: gain * level, decay: decay * length, when, bus });
     }
   }
 
@@ -150,9 +203,9 @@ class Sound {
     if (now - this.lastClick < 0.012) return;
     this.lastClick = now;
     const v = this.unit(speed / 5);
-    this.burst(3200 + v * 2200, 2, 0.08 + v * 0.48, 0.018 + v * 0.015);
-    this.tone(2100 + v * 900, 0.04 + v * 0.16, 0.025);
-    this.tone(480, v * 0.015 + 0.001, 0.055);
+    this.burst({ freq: 3200 + v * 2200, q: 2, gain: 0.08 + v * 0.48, decay: 0.018 + v * 0.015 });
+    this.tone({ freq: 2100 + v * 900, gain: 0.04 + v * 0.16, decay: 0.025 });
+    this.tone({ freq: 480, gain: v * 0.015 + 0.001, decay: 0.055 });
   }
 
   cushion(speed: number) {
@@ -161,84 +214,84 @@ class Sound {
     if (now - this.lastCushion < 0.02) return;
     this.lastCushion = now;
     const v = this.unit(speed / 4);
-    this.burst(380 + v * 180, 0.7, 0.08 + v * 0.35, 0.07, 'lowpass');
-    this.tone(140, 0.02 + v * 0.09, 0.065, 0, this.sfx!, 0.8);
+    this.burst({ freq: 380 + v * 180, q: 0.7, gain: 0.08 + v * 0.35, decay: 0.07, type: 'lowpass' });
+    this.tone({ freq: 140, gain: 0.02 + v * 0.09, decay: 0.065, when: 0, bus: this.sfx!, slide: 0.8 });
   }
 
   pocket(speed: number) {
     if (!this.ready) return;
     const v = this.unit(speed / 3);
-    this.burst(1900, 2, 0.08 + v * 0.2, 0.025);
-    this.burst(1100, 2, 0.04 + v * 0.1, 0.035, 'bandpass', 0.045);
-    this.burst(260, 0.7, 0.12 + v * 0.18, 0.12, 'lowpass', 0.12);
-    this.tone(105, 0.05 + v * 0.08, 0.12, 0.12, this.sfx!, 0.7);
+    this.burst({ freq: 1900, q: 2, gain: 0.08 + v * 0.2, decay: 0.025 });
+    this.burst({ freq: 1100, q: 2, gain: 0.04 + v * 0.1, decay: 0.035, when: 0.045 });
+    this.burst({ freq: 260, q: 0.7, gain: 0.12 + v * 0.18, decay: 0.12, type: 'lowpass', when: 0.12 });
+    this.tone({ freq: 105, gain: 0.05 + v * 0.08, decay: 0.12, when: 0.12, bus: this.sfx!, slide: 0.7 });
   }
 
   cueStrike(power: number) {
     if (!this.ready) return;
     const v = this.unit(power);
-    this.burst(1500 + v * 1000, 1, 0.1 + v * 0.35, 0.025);
-    this.tone(650, 0.025 + v * 0.1, 0.028);
+    this.burst({ freq: 1500 + v * 1000, q: 1, gain: 0.1 + v * 0.35, decay: 0.025 });
+    this.tone({ freq: 650, gain: 0.025 + v * 0.1, decay: 0.028 });
   }
 
   miscue() {
     if (!this.ready) return;
-    this.burst(3600, 5, 0.25, 0.055);
-    this.burst(1800, 1, 0.12, 0.08, 'highpass');
+    this.burst({ freq: 3600, q: 5, gain: 0.25, decay: 0.055 });
+    this.burst({ freq: 1800, q: 1, gain: 0.12, decay: 0.08, type: 'highpass' });
   }
 
   tap() {
     if (!this.ready) return;
-    this.tone(740, 0.09, 0.055);
-    this.tone(1190, 0.025, 0.025);
-    this.burst(2200, 1, 0.035, 0.012);
+    this.tone({ freq: 740, gain: 0.09, decay: 0.055 });
+    this.tone({ freq: 1190, gain: 0.025, decay: 0.025 });
+    this.burst({ freq: 2200, q: 1, gain: 0.035, decay: 0.012 });
   }
 
   tick(level: number) {
     if (!this.ready || this.ctx!.currentTime - this.lastTick < 0.045) return;
     this.lastTick = this.ctx!.currentTime;
-    this.tone(PENTATONIC[Math.round(this.unit(level) * 4)] * 4, 0.035, 0.035);
-    this.burst(2400, 1, 0.02, 0.01);
+    this.tone({ freq: PENTATONIC[Math.round(this.unit(level) * 4)] * 4, gain: 0.035, decay: 0.035 });
+    this.burst({ freq: 2400, q: 1, gain: 0.02, decay: 0.01 });
   }
 
   explode() {
     if (!this.ready) return;
-    this.burst(180, 0.7, 0.28, 0.35, 'lowpass');
-    this.bell(65.405, 0.18, 0, this.sfx!, 2);
+    this.burst({ freq: 180, q: 0.7, gain: 0.28, decay: 0.35, type: 'lowpass' });
+    this.bell({ freq: 65.405, gain: 0.18, when: 0, bus: this.sfx!, decay: 2 });
   }
 
   skill() {
     if (!this.ready) return;
-    this.burst(1200, 0.5, 0.1, 0.45, 'bandpass', 0, 0.12);
+    this.burst({ freq: 1200, q: 0.5, gain: 0.1, decay: 0.45, attack: 0.12 });
     this.pluck(PENTATONIC[1] * 2, 0.15);
     this.pluck(PENTATONIC[3] * 2, 0.12, 0.1);
   }
 
   ultimate() {
     if (!this.ready) return;
-    this.burst(700, 0.5, 0.15, 0.65, 'bandpass', 0, 0.15);
-    this.bell(65.405, 0.23, 0.08, this.sfx!, 3.8);
+    this.burst({ freq: 700, q: 0.5, gain: 0.15, decay: 0.65, attack: 0.15 });
+    this.bell({ freq: 65.405, gain: 0.23, when: 0.08, bus: this.sfx!, decay: 3.8 });
     this.pluck(PENTATONIC[0] * 2, 0.14, 0.2);
   }
 
   /** The rack-winning strike: a low blow, a deep bell, then a rising phrase. */
   finisher() {
     if (!this.ready) return;
-    this.burst(160, 0.7, 0.32, 0.4, 'lowpass');
-    this.burst(900, 0.5, 0.12, 0.5, 'bandpass', 0.05, 0.1);
-    this.bell(65.405, 0.24, 0.05, this.sfx!, 4.5);
+    this.burst({ freq: 160, q: 0.7, gain: 0.32, decay: 0.4, type: 'lowpass' });
+    this.burst({ freq: 900, q: 0.5, gain: 0.12, decay: 0.5, when: 0.05, attack: 0.1 });
+    this.bell({ freq: 65.405, gain: 0.24, when: 0.05, bus: this.sfx!, decay: 4.5 });
     for (let i = 0; i < 3; i++) this.pluck(PENTATONIC[i + 2] * 2, 0.13, 0.35 + i * 0.12);
   }
 
   omen() {
     if (!this.ready) return;
-    this.bell(196, 0.09, 0, this.sfx!, 3);
-    this.burst(800, 0.5, 0.055, 0.8, 'bandpass', 0, 0.22);
+    this.bell({ freq: 196, gain: 0.09, when: 0, bus: this.sfx!, decay: 3 });
+    this.burst({ freq: 800, q: 0.5, gain: 0.055, decay: 0.8, attack: 0.22 });
   }
 
   page() {
     if (!this.ready) return;
-    this.burst(1700, 0.5, 0.055, 0.24, 'bandpass', 0, 0.055);
+    this.burst({ freq: 1700, q: 0.5, gain: 0.055, decay: 0.24, attack: 0.055 });
   }
 
   foul() {
@@ -250,19 +303,19 @@ class Sound {
 
   good() {
     if (!this.ready) return;
-    this.bell(392, 0.075, 0, this.sfx!, 1.5);
+    this.bell({ freq: 392, gain: 0.075, when: 0, bus: this.sfx!, decay: 1.5 });
   }
 
   win() {
     if (!this.ready) return;
-    this.bell(130.81, 0.18, 0, this.sfx!, 4);
+    this.bell({ freq: 130.81, gain: 0.18, when: 0, bus: this.sfx!, decay: 4 });
     for (let i = 0; i < 5; i++) this.pluck(PENTATONIC[i] * 2, 0.15, 0.18 + i * 0.22);
   }
 
   lose() {
     if (!this.ready) return;
     for (let i = 0; i < 4; i++) this.pluck(PENTATONIC[3 - i], 0.11, i * 0.25);
-    this.tone(65.405, 0.1, 0.5, 0.8, this.sfx!, 0.8);
+    this.tone({ freq: 65.405, gain: 0.1, decay: 0.5, when: 0.8, bus: this.sfx!, slide: 0.8 });
   }
 
   startMusic() {
@@ -277,14 +330,14 @@ class Sound {
         const delay = this.nextNote - now;
         const step = this.musicStep++;
         if (step % 8 === 0) {
-          this.tone(65.405, 0.045, 12, delay, this.music!, 1, 1.5);
-          this.tone(98, 0.018, 12, delay, this.music!, 1, 1.8);
+          this.tone({ freq: 65.405, gain: 0.045, decay: 12, when: delay, bus: this.music!, slide: 1, attack: 1.5 });
+          this.tone({ freq: 98, gain: 0.018, decay: 12, when: delay, bus: this.music!, slide: 1, attack: 1.8 });
         }
         if (Math.random() > 0.2) {
           const degree = (step + Math.floor(Math.random() * 3)) % 5;
           this.pluck(PENTATONIC[degree] * (Math.random() < 0.25 ? 2 : 1), 0.13, delay, this.music!);
         }
-        if (step % 16 === 12 && Math.random() < 0.65) this.bell(392, 0.025, delay, this.music!, 4);
+        if (step % 16 === 12 && Math.random() < 0.65) this.bell({ freq: 392, gain: 0.025, when: delay, bus: this.music!, decay: 4 });
         this.nextNote += 1.3 + Math.random() * 0.65;
       }
     };

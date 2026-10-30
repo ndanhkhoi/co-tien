@@ -7,7 +7,9 @@ import { MODE_NAMES } from '../../core/rules';
 import { motionModal as modal, screenEl, type App, type Screen } from '../app';
 import { btn, h, stars, tap, toast } from '../dom';
 import { icon } from '../icons';
-import { artUrl, champCard, closeX, hex6, npcModal, startChallenge, statChip, topbar } from './menus';
+import { npcModal } from './career';
+import { startChallenge } from './challenge-start';
+import { artUrl, champCard, closeX, hex6, statChip, topbar } from '../screen-bits';
 
 /**
  * Hành trình: one painted map of Cơ Tiên Giới shared by duels and challenges. Each land has

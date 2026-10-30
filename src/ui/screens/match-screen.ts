@@ -740,8 +740,8 @@ export function matchScreen(opts: MatchOptions) {
         s.b.setAttribute('aria-label', `${sk.name}${ult ? ' (tuyệt chiêu)' : ''}: ${can ? 'sẵn sàng' : skillBlock(side, sk.slot) ?? ''}. Chạm để xem.`);
       }
       if (begun && anyReady && isHumanTurn()) {
-        hintOnce(app, 'skill-dock', 'Chiêu thức', 'Chạm ô sáng để đọc và dùng chiêu. Hai chiêu đầu hồi chiêu theo lượt đánh của bạn; tuyệt chiêu cần đầy thanh năng lượng.',
-          { anchor: () => dock, place: lefty ? 'left' : 'right', rail: true });
+        hintOnce(app, { key: 'skill-dock', title: 'Chiêu thức', text: 'Chạm ô sáng để đọc và dùng chiêu. Hai chiêu đầu hồi chiêu theo lượt đánh của bạn; tuyệt chiêu cần đầy thanh năng lượng.',
+          anchor: () => dock, place: lefty ? 'left' : 'right', rail: true });
       }
     }
 
@@ -1411,7 +1411,7 @@ export function matchScreen(opts: MatchOptions) {
           const p = e.e;
           if (p.t === 'ball') {
             sound.ballHit(p.speed);
-            if (p.speed > 2.4) view.burst(p.x, p.y, 0xffffff, 3, 0.4, 0.008);
+            if (p.speed > 2.4) view.burst(p.x, p.y, { color: 0xffffff, count: 3, speed: 0.4, size: 0.008 });
           } else if (p.t === 'cushion') {
             sound.cushion(p.speed);
           } else if (p.t === 'pocket') {
@@ -1442,7 +1442,7 @@ export function matchScreen(opts: MatchOptions) {
         case 'explode':
           sound.explode();
           view.ring(e.x, e.y, 0xb23a26, 0.4);
-          view.burst(e.x, e.y, 0x1c1a17, 30, 1.5, 0.02);
+          view.burst(e.x, e.y, { color: 0x1c1a17, count: 30, speed: 1.5, size: 0.02 });
           view.addShake(1.1);
           haptic([40, 20, 80]);
           break;
@@ -1457,8 +1457,8 @@ export function matchScreen(opts: MatchOptions) {
             ultAnnounced[e.side] = full;
           }
           if (hasSkills && match.setup.players[e.side].kind === 'human') {
-            hintOnce(app, 'energy', 'Năng lượng', 'Mỗi cú +6, mỗi bi vào +11, cú khó còn thêm. Đầy vòng (100) thì dùng tuyệt chiêu.',
-              { anchor: () => cards[e.side].ringWrap, place: e.side === 0 ? 'right' : 'left', alignTop: true });
+            hintOnce(app, { key: 'energy', title: 'Năng lượng', text: 'Mỗi cú +6, mỗi bi vào +11, cú khó còn thêm. Đầy vòng (100) thì dùng tuyệt chiêu.',
+              anchor: () => cards[e.side].ringWrap, place: e.side === 0 ? 'right' : 'left', alignTop: true });
           }
           break;
         case 'skill': {
@@ -1475,8 +1475,8 @@ export function matchScreen(opts: MatchOptions) {
         }
         case 'omen':
           sound.omen();
-          hintOnce(app, 'omen', 'Thiên Tượng', 'Gió, tuyết, rễ cây… tác động đường bi trong một cú đánh. Quan sát dấu trên nỉ để tính đường cơ.',
-            { anchor: () => (lefty ? ctrl : dock), place: 'right', highlight: false, rail: true });
+          hintOnce(app, { key: 'omen', title: 'Thiên Tượng', text: 'Gió, tuyết, rễ cây… tác động đường bi trong một cú đánh. Quan sát dấu trên nỉ để tính đường cơ.',
+            anchor: () => (lefty ? ctrl : dock), place: 'right', highlight: false, rail: true });
           herald({ side: null, icon: 'warning', title: e.omen.name, line: [e.omen.desc, forceDirection(e.omen.terrain?.force)].filter(Boolean).join(' '), ms: 4200 });
           view.addShake(e.omen.jitter ? 0.6 : 0.2);
           break;
@@ -1510,7 +1510,7 @@ export function matchScreen(opts: MatchOptions) {
           // Kết liễu: a rack won by the winner's own clean shot gets their finishing strike first.
           if (!opts.challenge && match.lastShooter === w && !match.lastRes?.foul) {
             hideSkillNudge();
-            void playFinisher(el, champion(champOf(w)), match.lastScore.names, finalBall(), w === 1).then(announce);
+            void playFinisher({ stage: el, champion: champion(champOf(w)), feats: match.lastScore.names, ball: finalBall(), fromRight: w === 1 }).then(announce);
           } else announce();
           break;
         }
@@ -1535,8 +1535,8 @@ export function matchScreen(opts: MatchOptions) {
         sound.foul();
         setExpr(side, 'sad', 3000);
         herald({ side, expr: 'sad', tone: 'red', title: r.ballInHand !== 'none' ? 'Phạm lỗi, đối thủ được đặt bi' : 'Phạm lỗi', line: r.foul, ms: 3400 });
-        hintOnce(app, 'foul', 'Phạm lỗi', 'Đối thủ được đặt bi cái sau lỗi; họ có thể đặt trong vùng cho phép rồi đánh. Xem lý do trong thông báo giữa bàn.',
-          { anchor: () => (lefty ? ctrl : dock), place: 'right', highlight: false, rail: true });
+        hintOnce(app, { key: 'foul', title: 'Phạm lỗi', text: 'Đối thủ được đặt bi cái sau lỗi; họ có thể đặt trong vùng cho phép rồi đánh. Xem lý do trong thông báo giữa bàn.',
+          anchor: () => (lefty ? ctrl : dock), place: 'right', highlight: false, rail: true });
       } else if (r.winner === null && (potN > 0 || r.points > 0) && r.keepTurn) {
         sound.good();
         setExpr(side, 'joy');
@@ -1567,22 +1567,22 @@ export function matchScreen(opts: MatchOptions) {
       const mode = match.setup.mode;
       if (hasSkills) {
         const side = humanSide() ?? match.turn;
-        hintOnce(app, 'energy', 'Năng lượng', 'Mỗi cú +6, mỗi bi vào +11, cú khó còn thêm. Đầy vòng (100) thì dùng tuyệt chiêu.',
-          { anchor: () => cards[side].ringWrap, place: side === 0 ? 'right' : 'left', alignTop: true });
+        hintOnce(app, { key: 'energy', title: 'Năng lượng', text: 'Mỗi cú +6, mỗi bi vào +11, cú khó còn thêm. Đầy vòng (100) thì dùng tuyệt chiêu.',
+          anchor: () => cards[side].ringWrap, place: side === 0 ? 'right' : 'left', alignTop: true });
       }
       const beside = lefty ? 'right' : 'left';
-      hintOnce(app, `rules-${mode}`, `Luật ${MODE_NAMES[mode]}`, `${RULES_TEXT[mode].goal} Xem menu tạm dừng, mục Luật chơi.`, { anchor: () => (lefty ? ctrl : dock), place: 'right', highlight: false, rail: true });
-      hintOnce(app, 'ctl-aim', 'Ngắm', h('span', null, 'Kéo trên bàn để xoay cơ, chạm bi để ngắm thẳng. ', icon('rotate-left'), icon('rotate-right'), ' chỉnh từng chút, ', icon('switch-target'), ' đổi mục tiêu.'),
-        { anchor: () => ctrl, place: beside, rail: true, alignTop: true });
-      hintOnce(app, 'ctl-power', 'Lực và đánh', 'Chạm thanh lực để đặt mức, kéo để tinh chỉnh, rồi chạm ĐÁNH. Hoặc giữ ĐÁNH và thả đúng lực; trượt ngón ra xa để huỷ.',
-        { anchor: () => powerBar, place: beside });
+      hintOnce(app, { key: `rules-${mode}`, title: `Luật ${MODE_NAMES[mode]}`, text: `${RULES_TEXT[mode].goal} Xem menu tạm dừng, mục Luật chơi.`, anchor: () => (lefty ? ctrl : dock), place: 'right', highlight: false, rail: true });
+      hintOnce(app, { key: 'ctl-aim', title: 'Ngắm', text: h('span', null, 'Kéo trên bàn để xoay cơ, chạm bi để ngắm thẳng. ', icon('rotate-left'), icon('rotate-right'), ' chỉnh từng chút, ', icon('switch-target'), ' đổi mục tiêu.'),
+        anchor: () => ctrl, place: beside, rail: true, alignTop: true });
+      hintOnce(app, { key: 'ctl-power', title: 'Lực và đánh', text: 'Chạm thanh lực để đặt mức, kéo để tinh chỉnh, rồi chạm ĐÁNH. Hoặc giữ ĐÁNH và thả đúng lực; trượt ngón ra xa để huỷ.',
+        anchor: () => powerBar, place: beside });
       if (match.canMoveCue) {
-        hintOnce(app, 'ctl-ballinhand', match.state.isBreak ? 'Đặt bi phá' : 'Đặt bi cái', 'Kéo bi cái hoặc chạm bàn để dời bi. Dùng nút hướng để chỉnh nhỏ. Chọn Ngắm thử để chỉnh hướng và xem đường bi trước khi bấm ĐẶT BI.',
-          { anchor: () => dpad, place: beside });
+        hintOnce(app, { key: 'ctl-ballinhand', title: match.state.isBreak ? 'Đặt bi phá' : 'Đặt bi cái', text: 'Kéo bi cái hoặc chạm bàn để dời bi. Dùng nút hướng để chỉnh nhỏ. Chọn Ngắm thử để chỉnh hướng và xem đường bi trước khi bấm ĐẶT BI.',
+          anchor: () => dpad, place: beside });
       }
       if (match.callType() !== 'none') {
-        hintOnce(app, 'call', 'Gọi lỗ', 'Chạm bi và lỗ định đánh trước khi ra cơ. Bi vào lỗ khác không được tính.',
-          { anchor: () => objPlate, place: 'below' });
+        hintOnce(app, { key: 'call', title: 'Gọi lỗ', text: 'Chạm bi và lỗ định đánh trước khi ra cơ. Bi vào lỗ khác không được tính.',
+          anchor: () => objPlate, place: 'below' });
       }
     }
 
