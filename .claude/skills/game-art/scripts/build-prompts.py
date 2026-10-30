@@ -33,7 +33,7 @@ COMMON = (
     "Exactly one billiard cue, straight and whole, held plausibly, never passing through the body and with nothing "
     "hanging from it unless the spec says so. Anything partly hidden behind the body, an arm, hair, wings or cloth "
     "(an instrument, the cue, a bow, a tail) continues in the same line, angle and width on both sides. "
-    "Anyone wearing shoes wears flat shoes or boots, never high heels."
+    "Anyone wearing shoes wears completely flat shoes or boots with zero heel height, the whole sole on the ground, never heels of any size."
 )
 
 
