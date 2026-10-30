@@ -52,6 +52,34 @@ npm run gen:challenges
    from the shipped build by `vite.config.ts`; game code must not read them.
 9. Conventional commits, one concern per commit, no AI references in commit messages. Run `npm test` and
    `npm run build` first.
+10. **Code principles (mandatory for every new feature and change): DRY, KISS, YAGNI, SOLID.** See below.
+
+## Code principles
+
+Every change must follow these. A reviewer rejects code that breaks them; "the old code does it too" is not a
+reason. When you touch code that already breaks them, do not make it worse, and leave it better if the fix is local.
+
+- **DRY.** One source of truth per fact: rules, numbers, Vietnamese labels, sect data, CSS declarations. Before
+  writing a helper or constant, search for an existing one (`src/ui/dom.ts`, `src/core/*`, `content/*`). A
+  second copy of logic means extract it; a CSS property set in two stylesheets for the same selector means
+  one of them is dead, so keep it in the owning file only (layout in `base/kit/screens/match`, painted look in `skin`).
+- **KISS.** The simplest code that is correct. Prefer plain functions and data over classes, flags and
+  indirection. Functions stay under ~80 lines and files under ~500 lines; a new file must not cross that, and
+  new code for a file already over it (`match-screen.ts`, `match.ts`, `menus.ts`, `table-view.ts`, `brain.ts`)
+  goes into a new focused module that the big file calls.
+- **YAGNI.** Build only what the current request needs. No speculative options, parameters, exports, config
+  or "for later" hooks. Delete code that nothing uses (an `export` with no importer is dead unless a test uses it).
+- **SOLID.**
+  - *Single responsibility:* one module, one reason to change (a screen, a game system, a rule set, a painter).
+    Do not add a new concern to `Match` or the `matchScreen` closure; give it its own module with a narrow API.
+  - *Open/closed:* add a sect, champion, skill kind, omen or mode through data or a registry entry, not by
+    adding `if (mode === …)` / `kind === …` branches across files.
+  - *Liskov:* every `RuleSet` (`src/core/rules`) and every placed-skill family honours the same contract, so
+    match, preview and AI can use any of them unchanged.
+  - *Interface segregation:* pass the narrow type a consumer needs (`Pick<Match, …>`, a plain view model)
+    instead of the whole `Match` or `App`.
+  - *Dependency direction:* `core` imports nothing from the app; `game` imports `core`; `ai` and `render`
+    import `core`/`game`; `ui` sits on top; `platform` and `audio` stay leaves. Never import upward.
 
 ## Loading and modes
 

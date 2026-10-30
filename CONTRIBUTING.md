@@ -31,6 +31,32 @@ npm run build      # typecheck + bản production vào dist/
   `uiOrigin()`/`uiScale()` và đo một lần mỗi lần đổi bố cục.
 - Commit theo Conventional Commits (`feat:`, `fix:`, `docs:`…), mỗi commit một việc.
 
+## Nguyên tắc code (bắt buộc)
+
+Mọi tính năng mới và mọi thay đổi phải theo **DRY, KISS, YAGNI, SOLID**. Người duyệt sẽ trả lại code vi phạm;
+“code cũ cũng làm vậy” không phải lý do. Khi sửa vào chỗ đã vi phạm, không làm tệ thêm, và gỡ luôn nếu sửa được tại chỗ.
+
+- **DRY — không lặp.** Mỗi sự thật chỉ có một nguồn: luật, con số, nhãn tiếng Việt, dữ liệu môn phái, khai báo
+  CSS. Tìm hàm/hằng có sẵn trước khi viết mới (`src/ui/dom.ts`, `src/core/*`, `content/*`). Logic xuất hiện lần
+  hai thì tách ra dùng chung. Cùng một thuộc tính CSS cho cùng selector ở hai file thì một bên là code chết: bố
+  cục ở `base/kit/screens/match`, lớp tranh vẽ ở `skin`, không khai báo hai lần.
+- **KISS — đơn giản.** Code đơn giản nhất mà vẫn đúng. Ưu tiên hàm thường và dữ liệu hơn class, cờ và tầng
+  trung gian. Hàm dưới khoảng 80 dòng, file dưới khoảng 500 dòng. File mới không được vượt ngưỡng; code mới cho
+  file đã vượt (`match-screen.ts`, `match.ts`, `menus.ts`, `table-view.ts`, `brain.ts`) đặt vào module mới, nhỏ,
+  rõ việc, rồi gọi từ file lớn.
+- **YAGNI — chưa cần thì chưa làm.** Chỉ làm đúng thứ yêu cầu hiện tại cần. Không thêm tuỳ chọn, tham số, export,
+  cấu hình hay “móc để sau”. Xoá code không ai dùng (một `export` không có nơi import là code chết, trừ khi test dùng).
+- **SOLID.**
+  - *Một trách nhiệm:* mỗi module chỉ có một lý do để sửa (một màn hình, một hệ thống trong trận, một bộ luật,
+    một bộ vẽ). Không nhồi thêm việc vào `Match` hay closure `matchScreen`; tạo module riêng với API hẹp.
+  - *Mở để mở rộng, đóng để sửa:* thêm môn phái, tướng, nhóm chiêu, Thiên Tượng hay chế độ chơi bằng dữ liệu
+    hoặc một mục đăng ký, không rải thêm nhánh `if (mode === …)` / `kind === …` qua nhiều file.
+  - *Thay thế được:* mọi `RuleSet` trong `src/core/rules` và mọi nhóm chiêu đặt bàn giữ cùng một hợp đồng, để
+    trận thật, dự đoán và AI dùng cái nào cũng được mà không sửa gì.
+  - *Giao diện hẹp:* truyền đúng kiểu nơi nhận cần (`Pick<Match, …>`, một view model) thay vì cả `Match` hay `App`.
+  - *Chiều phụ thuộc:* `core` không import gì của app; `game` dùng `core`; `ai` và `render` dùng `core`/`game`;
+    `ui` nằm trên cùng; `platform` và `audio` là lá. Không bao giờ import ngược lên.
+
 ## Thêm một tướng
 
 1. Thêm vào `src/game/content/roster.json`: `id`, `name`, `sect`, `tier`, `kind`, `cls`, `look` (ghi rõ giới tính và
