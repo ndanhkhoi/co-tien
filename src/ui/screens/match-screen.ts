@@ -509,8 +509,8 @@ export function matchScreen(opts: MatchOptions) {
         // The next two balls in order, so the player can plan position for the one after.
         const [first, second] = match.balls.filter((b) => b.onTable && b.id > 0).map((b) => b.id).sort((x, y) => x - y);
         nextBall.replaceChildren(...(first === undefined ? ['Hết bi'] : [
-          h('span.mx-next-k', null, 'Bi tiếp theo'), miniBall(first), String(first),
-          ...(second === undefined ? [] : [h('span.mx-next-then', null, '›'), miniBall(second), String(second)]),
+          h('span.mx-next-k', null, 'Bi tiếp theo'), numberedBall(first),
+          ...(second === undefined ? [] : [h('span.mx-next-then', null, '›'), numberedBall(second)]),
         ]));
       } else nextBall.hidden = true;
       objKicker.textContent = desk ? desk.plate().kicker : solo ? opts.label : `${MODE_NAMES[match.setup.mode]} · ${raceName(match.setup.raceTo)} · ván ${match.rackNo}`;
@@ -566,6 +566,13 @@ export function matchScreen(opts: MatchOptions) {
     function miniBall(id: number) {
       const col = ballCss('pool', id);
       return h('i.mx-ball', { class: id > 8 ? 'stripe' : '', style: `--c:${col}`, title: `Bi ${id}` });
+    }
+
+    // A ball with its number painted on a white spot, so ball and number never wrap apart.
+    function numberedBall(id: number) {
+      const ball = miniBall(id);
+      ball.append(h('b', null, String(id)));
+      return ball;
     }
 
     function humanSide(): Side | null {

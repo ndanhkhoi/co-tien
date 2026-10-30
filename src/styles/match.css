@@ -615,7 +615,8 @@
 /* Persistent rotation target stays outside the cloth even while a turn banner speaks. */
 .mx-next { position: absolute; left: calc(8px + var(--sl)); bottom: calc(8px + var(--sb)); width: var(--colL); padding: 5px; display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 4px; border: 1px solid var(--line-2); border-radius: var(--r-1); background: var(--sheet); color: var(--ink); font-size: 13px; font-weight: 700; }
 .mx-next:empty, .mx-next[hidden] { display: none; }
-.mx-next .mx-ball { width: 22px; height: 22px; }
+.mx-next .mx-ball { width: 24px; height: 24px; display: inline-grid; place-items: center; }
+.mx-next .mx-ball b { min-width: 13px; height: 13px; padding: 0 1px; border-radius: 7px; background: #f4f1e6; color: #1a1713; font-size: 9px; line-height: 13px; text-align: center; font-weight: 800; }
 .lefty .mx-next { left: auto; right: calc(8px + var(--sr)); }
 .mx:has(.mx-next:not(:empty):not([hidden])) .mx-dock { bottom: calc(66px + var(--sb)); }
 /* Compact controls must fit within 375px landscape without shrinking touch targets. */
