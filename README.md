@@ -100,12 +100,10 @@ Tài liệu:
 ## Giấy phép
 
 - **Mã nguồn:** MIT, xem [LICENSE](LICENSE).
-- **Agent skill bên thứ ba** trong `.claude/skills`, giữ nguyên bản gốc:
-  - các skill game dev lấy từ
-    [gamedev-skills/awesome-gamedev-agent-skills](https://github.com/gamedev-skills/awesome-gamedev-agent-skills),
-    giấy phép Apache-2.0;
-  - `fiction-workshop` lấy từ [rhavekost/author-toolkit](https://github.com/rhavekost/author-toolkit), giấy phép MIT.
+- **Agent skill bên thứ ba** trong `.claude/skills`: các skill game dev lấy nguyên bản từ
+  [gamedev-skills/awesome-gamedev-agent-skills](https://github.com/gamedev-skills/awesome-gamedev-agent-skills),
+  giấy phép Apache-2.0.
 - **Skill viết riêng cho dự án**, theo giấy phép MIT của repo: `game-art` (vẽ và duyệt tranh) và `anti-slop`
-  (soát chữ người đọc thấy để không mang dấu vết văn máy).
+  (viết truyện, lore và soát chữ người đọc thấy để không mang dấu vết văn máy).
 
 Danh sách đầy đủ và bản giấy phép: [.claude/skills/README.md](.claude/skills/README.md).

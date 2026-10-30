@@ -1,17 +1,19 @@
 ---
 name: anti-slop
-description: Viết và soát chữ cho Cơ Tiên (copy trong game, truyện, lore, docs, README) để không mang dấu vết văn máy - ký tự kiểu AI (gạch dài chen câu, mũi tên, emoji, ký tự vô hình), cụm từ sáo, cấu trúc rập khuôn. Dùng trước khi viết chữ người đọc thấy, khi audit văn bản, hoặc khi được nhờ "chống AI slop".
+description: Viết và soát chữ cho Cơ Tiên (copy trong game, Cơ Tiên Truyện, lore tướng, docs, README) để không mang dấu vết văn máy - ký tự kiểu AI (gạch dài chen câu, mũi tên, emoji, ký tự vô hình), cụm từ sáo, cấu trúc rập khuôn - và giữ giọng văn, xưng hô, mạch truyện khớp với world bible. Dùng trước khi viết chữ người đọc thấy, khi viết hay biên tập chương truyện, khi audit văn bản, hoặc khi được nhờ "chống AI slop".
 ---
 
 # Chống văn máy
 
 Văn máy dễ nhận ra qua ba thứ: ký tự lạ mà người gõ tay hiếm dùng, cụm từ đúng cho mọi chủ đề, và nhịp câu
-lặp khuôn. Skill này có một script bắt phần máy móc (ký tự) và hai bảng để người viết tự soát phần còn lại.
+lặp khuôn. Skill này có một script bắt phần máy móc (ký tự) và các bảng để người viết tự soát phần còn lại.
 
 Đọc trước khi viết:
 
 - `references/characters.md`: ký tự nào cấm, ký tự nào được dùng và dùng ở đâu
 - `references/phrases.md`: cụm từ và cấu trúc cần tránh, tiếng Việt và tiếng Anh
+- `references/story.md`: khi viết truyện, tiểu sử hay câu nói tướng. Gồm nguồn sự thật, dữ liệu `story.json`,
+  giọng văn, thoại, xưng hô, biên tập từng câu và kiểm tra liên tục
 
 ## Quét
 
