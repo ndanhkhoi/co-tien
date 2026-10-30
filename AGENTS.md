@@ -1,4 +1,4 @@
-# AGENTS.md — working on Cơ Tiên
+# AGENTS.md: working on Cơ Tiên
 
 Rules for AI coding agents in this repo. Cơ Tiên is a mobile-first landscape billiards PWA (TypeScript, Vite,
 PixiJS 8) with an original xianxia world; no backend. Find the doc for the area you touch in
@@ -39,6 +39,8 @@ Done means `npm test` and `npm run build` both pass, and the owning doc is updat
 
 ## Always
 
+- Run `node .claude/skills/anti-slop/scripts/scan.mjs` after writing player-facing copy, story or docs; it must
+  report no errors (rules in `.claude/skills/anti-slop`).
 - Write all player-facing copy in Vietnamese. Keep the Thuỷ Mặc look: paper, black ink, one vermilion accent,
   Noto Serif display, Be Vietnam Pro body, no glow or gold 3D text.
 - New felt colours must pass `tests/sect-contrast.test.ts`.
