@@ -39,7 +39,7 @@ dụng (PWA), chơi offline.
   tròn để đặt bi; chuyển “Ngắm thử” để canh đường trước khi chốt. Giữ bi cái nhỏ để mở bi lớn và kéo chọn điểm áp phê
   (chạm để mở bảng chỉnh chính xác); chạm thanh lực đặt mức, kéo để tinh chỉnh, rồi chạm ĐÁNH hoặc giữ–thả để
   nạp lực; chạm bi trên bàn để xem số bi; gọi lỗ bằng cách chạm lỗ, lỗ đã gọi hiện ở ô thông tin phía trên;
-  9 bi và 10 bi hiện hai bi tiếp theo; chấm kim cương trên băng là chấm trắng như bàn thật, to hơn một chút.
+  9 bi và 10 bi hiện hai bi tiếp theo (chạm một bi để thấy nó nằm đâu trên bàn); chấm kim cương trên băng là chấm trắng như bàn thật, to hơn một chút.
   Mũi tên son nhấp nhô trên chân dung người đang tới lượt; khay bi dưới tên mỗi bên hiện bi đã ăn (8 bi: đủ
   bảy bi của nhóm, bi còn trên bàn mờ đi). Thông báo giữa bàn là dải giấy thuỷ mặc, đóng khi chạm bất kỳ hoặc
   nút ✕, tắt được trong Cài đặt và menu Tạm dừng (lỗi và thắng ván vẫn báo). Rung,

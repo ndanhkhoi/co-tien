@@ -569,10 +569,11 @@ export function matchScreen(opts: MatchOptions) {
     }
 
     // A ball with its number painted on a white spot, so ball and number never wrap apart.
+    // Tapping it names the ball on the cloth, as tapping the ball itself does.
     function numberedBall(id: number) {
       const ball = miniBall(id);
       ball.append(h('b', null, String(id)));
-      return ball;
+      return tap(h('button.mx-next-ball', { 'aria-label': `Bi ${id}: chạm để xem trên bàn` }, ball), () => showBallTag(id));
     }
 
     function humanSide(): Side | null {

@@ -1039,8 +1039,9 @@ body.playing .bd-scene, body.playing .bd-mist { animation-play-state: paused; }
 .mx-sk-state span { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
 .mx-next-k { flex-basis: 100%; text-align: center; font-size: 11px; font-weight: 600; color: var(--muted); }
 .mx-next-then { margin: 0 2px; color: var(--muted); font-weight: 700; }
-#ui .mx-next { gap: 1px 3px; padding: 4px; }
-.mx:has(.mx-next:not(:empty):not([hidden])) .mx-dock { bottom: calc(62px + var(--sb)); }
+#ui .mx-next { gap: 0 1px; padding: 3px 2px; }
+/* Clears the next-ball panel: kicker, padding and gaps plus its touch-sized ball buttons. */
+.mx:has(.mx-next:not(:empty):not([hidden])) .mx-dock { bottom: calc(38px + max(32px, calc(44px / var(--ui-scale, 1))) + var(--sb)); }
 
 /* Tabs: no pill. The chosen tab is vermilion ink over a brush stroke (art/ui/tap-stroke.webp),
    like the screen title's underline, with room around the label. */
