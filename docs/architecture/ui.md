@@ -94,5 +94,6 @@ Nút hành động trong ván là tranh tròn có chữ thư pháp; tên thao t�
 - Tab Tướng, Pháp Cơ, Linh Đài là đồ sở hữu; Vùng đất, Hệ, Luật là Cơ Tiên Lục.
 - Trang tướng có ba nút icon chiêu riêng của tướng (`skillIconUrl(champion.id, slot)`). Chạm mở thẻ chi tiết
   trước, không dùng ngay.
-- Nút Tiểu sử chỉ mở với tướng đã gặp hoặc đã sở hữu.
+- Nút Tiểu sử chỉ mở với tướng đã gặp hoặc đã sở hữu. "Đã gặp" không tính Luận Cơ và Song Đấu (đối thủ bốc
+  ngẫu nhiên), chỉ tính các trận có đối thủ định sẵn như Hành trình.
 - Xem trước bàn giữ đúng tỉ lệ bàn WPA gồm cả viền.

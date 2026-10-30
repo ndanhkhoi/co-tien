@@ -292,6 +292,7 @@ function setupMatch(app: App, x: { local: boolean; st: SetupState; seats: Seat[]
     },
     titles: (local ? ['Người chơi 1', 'Người chơi 2'] : [`Cấp ${app.level}`, `${LEVEL_NAMES[st.level]} · ${PERSONALITY_NAMES[st.pers]}`]) as [string, string],
     label: local ? 'Song Đấu' : 'Luận Cơ',
+    randomOpponents: true,
   };
   let launch: ReturnType<typeof matchScreen>;
   launch = matchScreen({ ...options, onExit: () => app.pop(), onEnd: (result) => {

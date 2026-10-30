@@ -75,7 +75,7 @@ function landPage(app: App, id: SectId, page?: DetailPage, direction = 1) {
 function thumb(app: App, c: Champion, open: () => void): HTMLElement {
   const k = known(app, c.id);
   return champCard(c, { locked: !k, name: c.name, sub: k ? classInfo(c.cls).name : 'Gặp ở Hành trình để mở' },
-    () => (k ? open() : toast('Gặp tướng này ở Hành trình hoặc Luận Cơ để mở trang', 'bad')));
+    () => (k ? open() : toast('Gặp tướng này ở Hành trình để mở trang', 'bad')));
 }
 
 export function champPage(app: App, c: Champion, page?: DetailPage, direction = 1) {

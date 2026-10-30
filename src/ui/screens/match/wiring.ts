@@ -43,10 +43,12 @@ function createCtx(app: App, opts: MatchOptions): MatchCtx {
   (window as unknown as { __match?: Match }).__match = match;
   const view = new TableView(app.pixi, match);
   (window as unknown as { __view?: TableView }).__view = view;
-  for (const pl of opts.setup.players) {
-    if (!app.profile.met.includes(pl.champion)) app.profile.met.push(pl.champion);
+  if (!opts.randomOpponents) {
+    for (const pl of opts.setup.players) {
+      if (!app.profile.met.includes(pl.champion)) app.profile.met.push(pl.champion);
+    }
+    app.save();
   }
-  app.save();
   for (const p of opts.setup.players) {
     for (const e of ['focus', 'joy', 'sad', 'cast'] as const) new Image().src = exprUrl(p.champion, e);
     new Image().src = winUrl(p.champion);
