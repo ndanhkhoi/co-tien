@@ -49,7 +49,7 @@ Chụp ở 932×430, tướng của người chơi là Ngân Cầm.
 
 | Luận Cơ | Song Đấu |
 | --- | --- |
-| ![Chọn trận Luận Cơ](docs/screenshots/luan-co.webp) | ![Song Đấu: mỗi bên chọn tướng, tên và Pháp Cơ](docs/screenshots/song-dau.webp) |
+| ![Chọn trận Luận Cơ](docs/screenshots/luan-co.webp) | ![Song Đấu: mỗi bên chọn tướng (thẻ ghi bậc), tên và Pháp Cơ](docs/screenshots/song-dau.webp) |
 | **Trận đấu** | **Tạm dừng** |
 | ![Trận đấu: mũi tên son trên chân dung người tới lượt](docs/screenshots/tran-dau.webp) | ![Menu tạm dừng](docs/screenshots/tam-dung.webp) |
 | **Chiêu thức** | **Tuyệt chiêu** |
