@@ -1,8 +1,10 @@
 import { buildCast, PLACED_KINDS, type SkillCast } from '../skill-cast';
 import { cloneBalls } from '../../core/physics';
 import { other, type Side } from '../../core/rules/types';
+import type { Hex } from './types';
 import { champion, skillPower, type SkillDef, type SkillKind } from '../content/sects';
 import { ENERGY_MAX } from './energy';
+import { decoySegments, displaceBalls, swapBalls } from './tricks';
 import type { Match } from './match';
 
 /** One skill family taking effect: which cast, by whom, at what strength. */
@@ -12,8 +14,30 @@ interface KindCast {
   slot: number;
   cast?: SkillCast;
   target?: SkillDef['target'];
+  turns?: number;
   ult?: SkillDef['ult'];
   shape?: SkillDef['shape'];
+}
+
+/** Normalised duration in recipient shots. */
+function skillTurns(turns: number | undefined): number {
+  return Math.max(1, turns ?? 1);
+}
+
+/** Add or refresh one hex on one side; the newer cast replaces the old stack. */
+function addHex(list: Hex[], hex: Hex): void {
+  const old = list.find((e) => e.kind === hex.kind && e.target === hex.target);
+  if (old) Object.assign(old, hex);
+  else list.push(hex);
+}
+
+export function hexFor(list: Hex[], side: Side, kind: SkillKind): Hex | undefined {
+  return list.find((e) => e.kind === kind && e.target === side);
+}
+
+/** Whether a placed piece affects this shooter. */
+export function appliesTo(target: Side | 'both', side: Side): boolean {
+  return target === 'both' || target === side;
 }
 
 /** Whether one effect family can take effect for `side` right now. */
@@ -37,7 +61,11 @@ function ownShotReady(m: Match, kind: SkillKind, side: Side): boolean {
     case 'gravity': return m.pull === 0 && !m.isCarom;
     case 'second': return !m.secondChance;
     case 'nudge': return m.placing === 'none';
+    case 'displace': return !m.isCarom && m.balls.every((b) => !b.onTable || (b.vx === 0 && b.vy === 0));
+    case 'swap': return !m.isCarom && m.balls.every((b) => !b.onTable || (b.vx === 0 && b.vy === 0));
+    case 'decoy': return !m.activeEffects.some((e) => e.kind === 'decoy' && e.target === other(side));
     case 'teleport': return m.placing !== 'anywhere' && !m.isCarom;
+    case 'puppet': return !m.puppeteer;
     default: return false;
   }
 }
@@ -46,6 +74,7 @@ function ownShotReady(m: Match, kind: SkillKind, side: Side): boolean {
 function controlReady(m: Match, kind: SkillKind, side: Side, live: boolean): boolean {
   switch (kind) {
     case 'shield': return live && !m.shield[side];
+    case 'counter': return live && !m.activeEffects.some((e) => e.kind === 'counter' && e.target === side);
     case 'rewind':
       return !!m.snapshot && m.snapshot.side === side && m.lastShooter === side
         && (m.phase === 'rack-over' ? m.lastRes?.winner !== side : live && m.state.turn !== side);
@@ -58,9 +87,12 @@ function hexReady(m: Match, kind: SkillKind, side: Side, live: boolean): boolean
   const opp = other(side);
   switch (kind) {
     case 'drain': return live && m.energy[opp] > 0;
-    case 'chill': return live && m.tremor[opp] === 1 && !(m.state.turn === opp && m.tremorNow > 1);
-    case 'freeze': return live && m.freeze[opp] === 1 && !(m.state.turn === opp && m.freezeNow < 1);
-    case 'seal': return live && m.seal[opp] === 0 && !m.isCarom;
+    case 'chill': return live && !hexFor(m.hexes, opp, 'chill');
+    case 'freeze': return live && !hexFor(m.hexes, opp, 'freeze');
+    case 'seal': return live && !hexFor(m.hexes, opp, 'seal') && !m.isCarom;
+    case 'blind': return live && !hexFor(m.hexes, opp, 'blind');
+    case 'drift': return live && !hexFor(m.hexes, opp, 'drift');
+    case 'called': return live && m.legalTargets(opp).filter((id) => id !== m.cueId(opp)).length >= 2;
     default: return false;
   }
 }
@@ -82,6 +114,7 @@ export function sealPockets(m: Match, side: Side, count: number) {
 export function applyKind(m: Match, kind: SkillKind, spec: KindCast) {
   if (PLACED_KINDS.includes(kind)) { placeCast(m, kind, spec); return; }
   const pw = skillPower(kind, spec.tier) as Record<string, number>;
+  if (applyTrick(m, kind, spec, pw)) return;
   if (armShot(m, kind, spec, pw)) return;
   if (applyDefense(m, kind, spec, pw)) return;
   applyHex(m, kind, spec, pw);
@@ -89,10 +122,11 @@ export function applyKind(m: Match, kind: SkillKind, spec: KindCast) {
 
 /** Families that lay something on the cloth stay there until the shot resolves. */
 function placeCast(m: Match, kind: SkillKind, spec: KindCast) {
-  const { tier, side, slot, cast, ult, shape, target } = spec;
+  const { tier, side, slot, cast, ult, shape, target, turns } = spec;
   m.activeEffects.push({
     ...buildCast(kind, tier, slot, { table: m.table, balls: m.balls, cueId: m.cueId(side), cast, ult, shape }),
-    target: target === 'opponent' ? other(side) : side,
+    target: target === 'opponent' ? other(side) : target === 'both' ? 'both' : side,
+    shotsLeft: skillTurns(turns),
   });
   m.syncObstacles();
 }
@@ -118,6 +152,7 @@ function armShot(m: Match, kind: SkillKind, spec: KindCast, pw: Record<string, n
     case 'maw': m.mawScale = pw.scale; return true;
     case 'gravity': m.pull = pw.pull; return true;
     case 'second': m.secondChance = true; return true;
+    case 'puppet': m.puppeteer = side; return true;
     default: return false;
   }
 }
@@ -139,11 +174,60 @@ function applyDefense(m: Match, kind: SkillKind, spec: KindCast, pw: Record<stri
   }
 }
 
-/** Debuffs cast on the opponent: drain, chill, freeze and sealed pockets. */
-function applyHex(m: Match, kind: SkillKind, spec: KindCast, pw: Record<string, number>): boolean {
-  const { side } = spec;
+/** Instant and armed outplay families that are not ordinary buffs or hexes. */
+function applyTrick(m: Match, kind: SkillKind, spec: KindCast, pw: Record<string, number>): boolean {
+  const { side, slot, cast, turns } = spec;
   const opp = other(side);
-  const oppNow = m.state.turn === opp && m.phase === 'aim';
+  switch (kind) {
+    case 'called': {
+      const point = cast?.point;
+      const ids = m.legalTargets(opp).filter((id) => id !== m.cueId(opp));
+      const ball = point
+        ? m.balls.filter((b) => b.onTable && ids.includes(b.id)).sort((a, b) => Math.hypot(a.x - point.x, a.y - point.y) - Math.hypot(b.x - point.x, b.y - point.y))[0]
+        : nearestPocketBall(m, ids);
+      if (ball) {
+        m.called = { by: side, ball: ball.id, shotsLeft: skillTurns(turns) };
+        m.calledNow = m.state.turn === opp ? ball.id : null;
+      }
+      return !!ball;
+    }
+    case 'displace': {
+      const moved = displaceBalls(m, side, pw.pockets);
+      if (moved.length) m.emit({ type: 'displace', side, moved });
+      return true;
+    }
+    case 'swap': {
+      const swap = swapBalls(m, side);
+      if (swap) m.emit({ type: 'swap', side, balls: swap.balls, at: swap.at });
+      return true;
+    }
+    case 'decoy': {
+      m.activeEffects.push({ kind, slot, cast: cast ?? {}, terrain: {}, segments: decoySegments(m, side, pw.count).flat(), target: opp, shotsLeft: skillTurns(turns) });
+      m.syncObstacles();
+      return true;
+    }
+    case 'counter': {
+      m.activeEffects.push({ kind, slot, cast: cast ?? {}, terrain: {}, segments: [], target: side, shotsLeft: 1, amount: pw.amount });
+      return true;
+    }
+    default: return false;
+  }
+}
+
+function nearestPocketBall(m: Match, ids: number[]): BallLike | undefined {
+  return m.balls.filter((b) => b.onTable && ids.includes(b.id)).sort((a, b) => pocketDistance(m, a) - pocketDistance(m, b))[0];
+}
+
+interface BallLike { id: number; x: number; y: number }
+
+function pocketDistance(m: Match, b: BallLike): number {
+  return Math.min(...m.table.pockets.map((p) => Math.hypot(b.x - p.ax, b.y - p.ay)));
+}
+
+/** Debuffs cast on the opponent; long families live in the shared hex list. */
+function applyHex(m: Match, kind: SkillKind, spec: KindCast, pw: Record<string, number>): boolean {
+  const { side, turns } = spec;
+  const opp = other(side);
   switch (kind) {
     case 'drain': {
       const take = Math.min(m.energy[opp], pw.amount);
@@ -151,18 +235,11 @@ function applyHex(m: Match, kind: SkillKind, spec: KindCast, pw: Record<string, 
       m.energy[side] = Math.min(ENERGY_MAX, m.energy[side] + take);
       return true;
     }
-    case 'chill':
-      if (oppNow) m.tremorNow = pw.tremor;
-      else m.tremor[opp] = pw.tremor;
-      return true;
-    case 'freeze':
-      if (oppNow) m.freezeNow = pw.power;
-      else m.freeze[opp] = pw.power;
-      return true;
-    case 'seal':
-      if (oppNow) sealPockets(m, opp, pw.pockets);
-      else m.seal[opp] = pw.pockets;
-      return true;
+    case 'chill': addHex(m.hexes, { kind, by: side, target: opp, value: pw.tremor, shotsLeft: skillTurns(turns) }); return true;
+    case 'freeze': addHex(m.hexes, { kind, by: side, target: opp, value: pw.power, shotsLeft: skillTurns(turns) }); return true;
+    case 'seal': addHex(m.hexes, { kind, by: side, target: opp, value: pw.pockets, shotsLeft: skillTurns(turns) }); return true;
+    case 'blind': addHex(m.hexes, { kind, by: side, target: opp, value: 1, shotsLeft: skillTurns(turns) }); return true;
+    case 'drift': addHex(m.hexes, { kind, by: side, target: opp, value: pw.angle, shotsLeft: skillTurns(turns), sense: spec.cast?.sense ?? 'cw' }); return true;
     default: return false;
   }
 }
@@ -185,6 +262,13 @@ function rewindShot(m: Match) {
   m.bombId = s.bombId;
   m.bombUsed = s.bombUsed;
   m.potted = s.potted;
+  m.activeEffects = structuredClone(s.activeEffects);
+  m.hexes = structuredClone(s.hexes);
+  m.tremorNow = s.tremorNow;
+  m.freezeNow = s.freezeNow;
+  m.blindNow = s.blindNow;
+  m.driftNow = s.driftNow;
+  m.calledNow = s.calledNow;
   m.snapshot = null;
   m.lastRes = null;
   m.phase = 'aim';

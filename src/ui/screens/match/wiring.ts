@@ -2,6 +2,7 @@ import type { App, Screen } from '../../app';
 import { preloadMatch } from '../../../platform/preload';
 import { exprUrl, winUrl } from '../../../game/content/sects';
 import { Match } from '../../../game/match';
+import { rotateDirection } from '../../../game/skill-cast';
 import { Rng } from '../../../core/rng';
 import { TableView } from '../../../render/table-view';
 import { practiceDesk } from '../practice/desk';
@@ -61,7 +62,7 @@ function createCtx(app: App, opts: MatchOptions): MatchCtx {
     aim: { angle: 0, side: 0, vert: 0, elevation: 0 },
     power: { preset: 0.55, presets: [0.55, 0.55], heldPower: null, barActive: false, power: 0, charging: false, chargeT: 0, holdT: 0, strikeT: 0, strikePull: 0 },
     flags: { aiActing: false, aiToken: 0, begun: false, callBall: null, callPocket: null, disposed: false, lastTurnSide: null, paused: false, placeConfirmed: false, placementAim: false, presenting: false, pushOut: false, showAiCue: false, targetIdx: -1 },
-    skill: { placement: null, pendingUltimate: null, spinDrag: null, preview: () => {}, moveCast: () => {} },
+    skill: { placement: null, pendingUltimate: null, spinDrag: null, preview: () => {}, moveCast: () => {}, rotateCast: () => {} },
     turn: { attempt: 1, pottedBefore: [0, 0], skillIdle: [0, 0], ultAnnounced: [false, false] },
     renderState: { handKey: '', powerKey: '', lastTick: 0, handSize: { w: 0, h: 0 }, callTagKey: '', callTagPos: '', pauseWrap: null, cutIn: null },
     hasSkills: !opts.challenge && !match.setup.classic,
@@ -120,6 +121,7 @@ function createSections(ctx: MatchCtx): MatchSections {
   };
   ctx.skill.preview = (cast) => previewCast(ctx, cast);
   ctx.skill.moveCast = (x, y) => moveCast(ctx, x, y);
+  ctx.skill.rotateCast = (deg) => rotateCast(ctx, deg);
   const layout = createLayoutProxy(ctx);
   const dom = createMatchDom(ctx, opts, {
     openPause: () => late.openPause(),
@@ -195,8 +197,9 @@ function createLayoutProxy(ctx: MatchCtx): { attach(): void; layout(): void; dis
 }
 
 function startGuard(ctx: MatchCtx, dom: MatchDom): void {
-  ctx.skill.placement = { side: ctx.match.turn, slot: -1, cast: {} };
-  previewCast(ctx, { point: ctx.match.cueBall() });
+  const aim = ctx.aim;
+  ctx.skill.placement = { side: ctx.match.turn, slot: -1, cast: { direction: { x: Math.cos(aim.angle), y: Math.sin(aim.angle) } } };
+  previewCast(ctx, ctx.skill.placement.cast);
   dom.cancelCast.hidden = false;
   dom.castSense.hidden = true;
 }
@@ -262,7 +265,7 @@ function buildSections(x: {
     canAct: guards.canAct, placingNow: guards.placingNow,
     confirmPlace: shooting.confirmPlace, startCharge: shooting.startCharge,
     cancelCharge: shooting.cancelCharge, releaseCharge: shooting.releaseCharge,
-    fireAtPreset: shooting.fireAtPreset, rotate: aim.rotate, nudgeCue: aim.nudgeCue,
+    fireAtPreset: shooting.fireAtPreset, rotate: aim.rotate, rotateCast: aim.rotateCast, nudgeCue: aim.nudgeCue,
     setPreset: (v) => setPreset(ctx, v), canAdjustAim: guards.canAdjustAim,
     cancelPlacement: () => cancelPlacement(ctx, dom, hud.render), toggleSense: () => toggleSense(ctx),
     openPause: dialogs.openPause, back: () => ctx.app.back(), switchTarget: aim.switchTarget,
@@ -374,6 +377,11 @@ function finishScreen(ctx: MatchCtx, s: MatchSections): Screen {
 function moveCast(ctx: MatchCtx, x: number, y: number): void {
   const placement = ctx.skill.placement;
   if (!placement) return;
-  const c = ctx.match.cueBall();
-  previewCast(ctx, { ...placement.cast, point: { x, y }, rail: undefined, direction: { x: x - c.x, y: y - c.y } });
+  previewCast(ctx, { ...placement.cast, point: { x, y }, rail: undefined });
+}
+
+function rotateCast(ctx: MatchCtx, deg: number): void {
+  const placement = ctx.skill.placement;
+  if (!placement) return;
+  previewCast(ctx, { ...placement.cast, direction: rotateDirection(placement.cast.direction, deg) });
 }

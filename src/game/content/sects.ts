@@ -18,7 +18,8 @@ export const KIND_LABEL: Record<ChampionKind, string> = {
 export type SkillKind =
   | 'vision' | 'rewind' | 'shield' | 'chill' | 'spin' | 'nudge' | 'reveal' | 'power'
   | 'blast' | 'seal' | 'maw' | 'drain' | 'gravity' | 'freeze' | 'teleport' | 'second'
-  | 'slick' | 'sand' | 'bumper' | 'railcraft' | 'wind' | 'well' | 'spinwash' | 'vortex';
+  | 'slick' | 'sand' | 'bumper' | 'railcraft' | 'wind' | 'well' | 'spinwash' | 'vortex'
+  | 'blind' | 'drift' | 'called' | 'displace' | 'swap' | 'decoy' | 'counter' | 'puppet' | 'silk' | 'quake';
 
 export interface Sect {
   id: SectId;
@@ -47,7 +48,9 @@ export interface SkillDef {
   kinds: SkillKind[];
   /** Strength tier fed to skillPower (champion tier, +2 for the ultimate). */
   tier: number;
-  target?: 'self' | 'opponent';
+  target?: 'self' | 'opponent' | 'both';
+  /** How many of the recipient's shots the effect lasts. */
+  turns?: number;
   cooldown: number;
   desc: string;
 }
@@ -62,7 +65,7 @@ export interface Champion {
   skills: [SkillDef, SkillDef, SkillDef];
 }
 
-interface RawSkill { name: string; kinds: string[]; ult?: UltId; shape?: SkillShape; target?: SkillDef['target'] }
+interface RawSkill { name: string; kinds: string[]; ult?: UltId; shape?: SkillShape; target?: SkillDef['target']; turns?: number }
 interface RawChampion { id: string; name: string; sect: string; tier: number; kind: ChampionKind; cls: string; skills: RawSkill[] }
 
 const hex = (s: string) => parseInt(s.slice(1), 16);
@@ -78,6 +81,7 @@ const KIND_COOLDOWN: Record<SkillKind, number> = {
   slick: 2, sand: 3, bumper: 3, railcraft: 2, wind: 2, well: 3, spinwash: 2, vortex: 3,
   vision: 3, rewind: 3, shield: 3, chill: 3, spin: 2, nudge: 3, reveal: 2, power: 2,
   blast: 3, seal: 3, maw: 3, drain: 2, gravity: 3, freeze: 3, teleport: 3, second: 3,
+  blind: 2, drift: 2, called: 3, displace: 3, swap: 3, decoy: 3, counter: 3, puppet: 3, silk: 3, quake: 3,
 };
 
 /** Strength numbers per family and tier, shared by the match engine and the UI text. */
@@ -100,6 +104,13 @@ export function skillPower(kind: SkillKind, tier: number) {
     case 'drain': return { amount: 10 + 6 * tier };
     case 'gravity': return { pull: 0.6 + 0.25 * tier };
     case 'freeze': return { power: Math.max(0.5, 0.85 - 0.06 * tier) };
+    case 'drift': return { angle: 0.6 + 0.25 * tier };
+    case 'displace': return { pockets: tier >= 4 ? 2 : 1 };
+    case 'decoy': return { count: tier >= 4 ? 3 : 2 };
+    case 'counter': return { amount: 20 + 5 * tier };
+    case 'silk': return { radius: 0.09 + 0.01 * tier, acceleration: 0.015 + 0.003 * tier };
+    case 'quake': return { time: 1.2, factor: 1.6 };
+    case 'blind': case 'called': case 'swap': case 'puppet': return {};
     default: return {};
   }
 }
@@ -132,6 +143,17 @@ function describeKind(kind: SkillKind, tier: number): string {
     case 'freeze': return `Lực tối đa của đối thủ chỉ còn ${pct(p.power)} ở cú kế tiếp.`;
     case 'teleport': return 'Cầm bi trong tay: đặt bi cái ở bất kỳ đâu trên bàn.';
     case 'second': return 'Nếu cú này không vào bi và không phạm lỗi, bạn được đánh tiếp.';
+    case 'blind': return 'Đối thủ mất đường ngắm và đường bi dự đoán ở các cú tiếp theo.';
+    case 'drift': return `Hướng đánh của đối thủ bị dắt lệch ${p.angle.toFixed(1)} độ theo chiều chọn.`;
+    case 'called': return 'Chỉ định một bi đối thủ phải chạm trước; chạm bi khác trước là lỗi.';
+    case 'displace': return `Dời tối đa ${p.pockets} bi đối thủ đang sát lỗ tới chỗ trống an toàn về giữa bàn.`;
+    case 'swap': return 'Đổi chỗ bi của bạn xa nhất với bi đối thủ dễ ăn nhất.';
+    case 'decoy': return `Đặt ${p.count} bi giả là vật chắn tròn cạnh bi mục tiêu của đối thủ.`;
+    case 'counter': return `Đặt úp: hoá giải chiêu đối thủ ở lượt kế và hút ${p.amount} năng lượng.`;
+    case 'puppet': return 'Bạn đánh trọn cú kế của đối thủ bằng bi cái của họ; cú đó không tính lỗi.';
+    case 'silk': return 'Trải dải lụa chữ S bằng ba xoáy nhỏ, bẻ cong đường bi bằng lực thật.';
+    case 'quake': return `Nghiêng bàn theo hướng chọn (${p.time.toFixed(1)} giây), bi nằm yên cũng bị kéo theo.`;
+    default: return '';
   }
 }
 
@@ -176,10 +198,11 @@ function makeSkill(raw: RawSkill, slot: 0 | 1 | 2, tier: number): SkillDef {
   const kinds = raw.kinds as SkillKind[];
   const t = slot === 2 ? tier + 2 : tier;
   const base = KIND_COOLDOWN[kinds[0]];
+  const duration = raw.turns === undefined || raw.turns <= 1 ? '' : ` Trong ${raw.turns} cú của ${raw.target === 'self' ? 'bạn' : 'đối thủ'}.`;
   return {
-    slot, name: raw.name, kinds, tier: t, ult: raw.ult, shape: raw.shape, target: raw.target,
+    slot, name: raw.name, kinds, tier: t, ult: raw.ult, shape: raw.shape, target: raw.target, turns: raw.turns,
     cooldown: slot === 2 ? 0 : base,
-    desc: [raw.ult ? ULT_DESCRIPTIONS[raw.ult] : raw.shape ? SHAPE_DESCRIPTIONS[raw.shape] : '', ...kinds.map((k) => describeKind(k, t))].filter(Boolean).join(' '),
+    desc: [raw.ult ? ULT_DESCRIPTIONS[raw.ult] : raw.shape ? SHAPE_DESCRIPTIONS[raw.shape] : '', ...kinds.map((k) => describeKind(k, t))].filter(Boolean).join(' ') + duration,
   };
 }
 

@@ -13,6 +13,7 @@ export function createAim(ctx: MatchCtx, deps: {
   aimFirstTarget(): void;
   switchTarget(): void;
   rotate(deg: number): void;
+  rotateCast(deg: number): void;
   nudgeCue(dx: number, dy: number, metres: number): void;
   wobbleAmp(): number;
   wobbleNow(): number;
@@ -51,6 +52,10 @@ export function createAim(ctx: MatchCtx, deps: {
     if (!deps.canAdjustAim()) return;
     aim.angle += deg * DEG;
   };
+  const rotateCast = (deg: number) => {
+    if (!deps.placingNow() || !skill.placement) return;
+    ctx.skill.rotateCast(deg);
+  };
   const nudgeCue = (dx: number, dy: number, metres: number) => {
     if (!deps.placingNow()) return;
     if (skill.placement) {
@@ -72,6 +77,6 @@ export function createAim(ctx: MatchCtx, deps: {
     const t = performance.now() / 1000;
     return wobbleAmp() * (0.62 * Math.sin(t * 7.3) + 0.38 * Math.sin(t * 13.1 + 1.7));
   };
-  return { aimAt, targetList, aimFirstTarget, switchTarget, rotate, nudgeCue, wobbleAmp, wobbleNow,
+  return { aimAt, targetList, aimFirstTarget, switchTarget, rotate, rotateCast, nudgeCue, wobbleAmp, wobbleNow,
     guideScale: () => 0.55 + 0.12 * match.current.cue.aim };
 }

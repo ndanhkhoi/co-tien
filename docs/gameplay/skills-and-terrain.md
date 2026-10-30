@@ -4,8 +4,11 @@ Tất cả chỉ có hiệu lực trong **Tiên Đạo**. Cổ Điển, Luyện 
 
 ## Nguyên tắc
 
-- Mọi chiêu và Thiên Tượng phải là **lực, ma sát, vật chắn hoặc kích thước lỗ trong mô phỏng**.
-- Lực đều (nghiêng, gió) luôn dưới lực cản lăn, nên bi đứng yên không trôi.
+- Không chạy bi theo kịch bản khi bi đang lăn và không đổi kết quả sau khi cú chốt. Khi mọi bi đứng yên, chiêu có thể
+  tạo thay đổi trạng thái rời rạc, tất định; vật thể mô phỏng và hiệu ứng thông tin cũng được dùng chung cho trận,
+  đường dự đoán và AI.
+- Lực đều (nghiêng, gió) luôn dưới lực cản lăn, nên bi đứng yên không trôi. Ngoại lệ duy nhất là tuyệt chiêu
+  Địa Chấn bậc 5: 1,6 × lực cản lăn trong 1,2 giây đầu và luôn báo trước.
 - Một hiệu ứng chỉ được thêm khi trận thật, đường dự đoán và AI dùng chung nó qua `Match.simulationWorld()`.
 
 Lý do: [decisions/real-physics.md](../decisions/real-physics.md).
@@ -16,13 +19,18 @@ Lý do: [decisions/real-physics.md](../decisions/real-physics.md).
 - Mỗi chiêu là một danh sách nhóm cơ chế (`kinds`). Danh sách nhóm là `SkillKind` trong
   `src/game/content/sects.ts`; hồi chiêu theo nhóm đầu tiên (`KIND_COOLDOWN`), sức mạnh theo bậc ở cùng file.
   Tuyệt chiêu cần đầy năng lượng và mạnh hơn bậc tướng.
-- **Tám nhóm đặt trên bàn** (`slick`, `sand`, `bumper`, `railcraft`, `wind`, `well`, `spinwash`, `vortex`)
-  nhận một `SkillCast` (`src/game/skill-cast.ts`): tâm, hướng, đoạn băng, chiều xoáy, băng mềm/cứng. Bỏ trống
-  thì `buildCast` chọn mặc định hợp lệ (trong nỉ, không đè bi, vật chắn tránh bi và lỗ). Ý nghĩa từng nhóm:
-  [world/world-bible.md](../world/world-bible.md#kỹ-năng).
+- **Mười nhóm đặt trên bàn** (`slick`, `sand`, `bumper`, `railcraft`, `wind`, `well`, `spinwash`, `vortex`,
+  `silk`, `quake`) nhận một `SkillCast` (`src/game/skill-cast.ts`): tâm, hướng, đoạn băng, chiều xoáy, băng
+  mềm/cứng. Bỏ trống thì `buildCast` chọn mặc định hợp lệ (trong nỉ, không đè bi, vật chắn tránh bi và lỗ).
+  Ý nghĩa từng nhóm: [world/world-bible.md](../world/world-bible.md#kỹ-năng).
 - Mọi nhóm đặt bàn giữ cùng hợp đồng, để trận, dự đoán và AI dùng nhóm nào cũng được mà không rẽ nhánh.
-- `target: opponent` lưu hiệu ứng cho cú kế của đối thủ (ví dụ bẫy cát); mặc định áp cho bên dùng. Hiệu ứng
-  hết sau cú của bên nhận (`Match.activeEffects`).
+- `target: opponent` lưu hiệu ứng cho cú của đối thủ (ví dụ bẫy cát); `target: both` áp cho cả hai bên; mặc định áp
+  cho bên dùng. `turns` cho biết hiệu ứng kéo dài bao nhiêu cú của bên nhận, tối đa 2 (3 chỉ cho tuyệt chiêu tướng
+  bậc 5). Hiệu ứng hết sau đúng số cú của bên nhận (`Match.activeEffects`).
+- **Hex** (`chill`, `freeze`, `seal`, `blind`, `drift`) nằm trong `Match.hexes`, mỗi loại một tầng cho mỗi bên;
+ _cast lại chỉ làm mới thời gian. `called` chỉ định bi phải chạm trước, sai là lỗi và đối thủ được đặt bi bất kỳ.
+- **Outplay** gồm `displace`, `swap`, `decoy`, `counter`, `puppet`: dời/đổi chỗ bi khi bàn đứng yên, đặt bi giả,
+  đặt úp phản chiêu, hoặc đánh thay một cú của đối thủ mà không tính lỗi.
 - `ult` chọn hình học riêng của tuyệt chiêu bậc 5 theo môn phái; `shape` chọn cổng, rễ chữ V hoặc hút miệng lỗ.
 - **Bàn phăng không có lỗ**: `Match.effectiveKind` đổi các nhóm chỉ có nghĩa với lỗ sang hiệu ứng tương đương.
   Kiểm tra mỗi thay đổi chiêu trên cả bàn lỗ và bàn phăng, cùng bước đặt/huỷ.

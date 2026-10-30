@@ -18,8 +18,10 @@ function addWells(wells: NonNullable<Terrain['wells']>, b: Ball) {
   }
 }
 
-function addForces(forces: NonNullable<Terrain['forces']>, time: number, b: Ball) {
+function addForces(forces: NonNullable<Terrain['forces']>, time: number, b: Ball, quake = false) {
   for (const f of forces) {
+    if (f.window && (time < f.window.start || time > f.window.start + f.window.duration)) continue;
+    if (f.window && quake) continue;
     if (f.region && Math.hypot(b.x - f.region.x, b.y - f.region.y) > f.region.r) continue;
     const k = f.gust ? gustScale(f.gust, time) : 1;
     accel.x += f.x * k;
@@ -54,25 +56,35 @@ function clampAcceleration(w: SimWorld, tr: Terrain) {
 }
 
 export function applyTerrain(w: SimWorld, tr: Terrain, h: number) {
-  let fx = 0;
-  let fy = 0;
-  if (tr.force) {
-    const k = tr.gust ? gustScale(tr.gust, w.time ?? 0) : 1;
-    fx = tr.force.x * k;
-    fy = tr.force.y * k;
-  }
+  const gust = tr.gust;
+  const gustK = gust ? gustScale(gust, w.time ?? 0) : 1;
+  const quake = unclampedForce(tr, w.time ?? 0);
   for (const b of w.balls) {
-    if (!b.onTable || (b.z ?? 0) > 0 || (b.vz ?? 0) > 0 || (b.vx === 0 && b.vy === 0)) continue;
-    accel.x = fx;
-    accel.y = fy;
+    if (resting(b, !!quake)) continue;
+    accel.x = tr.force ? tr.force.x * gustK : 0;
+    accel.y = tr.force ? tr.force.y * gustK : 0;
     if (tr.wells) addWells(tr.wells, b);
-    addForces(tr.forces ?? [], w.time ?? 0, b);
+    addForces(tr.forces ?? [], w.time ?? 0, b, !!quake);
     addVortices(tr.vortices ?? [], b);
     clampAcceleration(w, tr);
+    if (quake) {
+      accel.x += quake.x;
+      accel.y += quake.y;
+    }
     // A force through the centre of a rolling ball; cloth friction then re-establishes rolling.
     b.vx += accel.x * h;
     b.vy += accel.y * h;
   }
+}
+
+function resting(b: Ball, quake: boolean): boolean {
+  return !b.onTable || (b.z ?? 0) > 0 || (b.vz ?? 0) > 0 || (b.vx === 0 && b.vy === 0 && !quake);
+}
+
+/** The one force exempt from rolling-resistance clamping, while its time window is open. */
+function unclampedForce(tr: Terrain, time: number) {
+  if (!tr.unclamped) return null;
+  return (tr.forces ?? []).find((f) => f.window && time >= f.window.start && time <= f.window.start + f.window.duration) ?? null;
 }
 
 /** Moving object balls within reach of an open pocket are drawn toward it. */

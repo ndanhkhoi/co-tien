@@ -2,7 +2,7 @@ import { powerToSpeed } from '../core/cue-power';
 import { cloneBalls, step, strike, type Ball, type PhysEvent, type PhysParams, type SimWorld } from '../core/physics';
 import { Rng } from '../core/rng';
 import { RULES } from '../core/rules';
-import { other, summarize, type GameState, type Resolution, type RuleSet, type Side } from '../core/rules/types';
+import { other, summarize, type GameState, type Resolution, type RuleSet, type ShotSummary, type Side } from '../core/rules/types';
 import { makeCaromTable, makePoolTable, type TableGeom } from '../core/table';
 import { applySkillBlast } from '../game/skill-cast';
 import type { AiProfile, AiRequest, AiShot } from './types';
@@ -102,7 +102,13 @@ function stillRolling(run: ShotRun, moving: boolean, blasted: boolean): boolean 
   return run.balls.some(b => b.onTable && Math.hypot(b.vx,b.vy)>0);
 }
 
-function settleBalls(ctx: Ctx, res: Resolution): void {
+function settleBalls(ctx: Ctx, sum: ShotSummary, res: Resolution): void {
+  const called = ctx.req.calledBall;
+  if (called !== null && called !== undefined && res.winner === null && sum.firstHit !== called) {
+    res.foul = `Phải chạm bi ${called} trước`;
+    res.keepTurn = false;
+    res.ballInHand = 'anywhere';
+  }
   if (ctx.req.secondChance && !res.foul && !res.keepTurn && !res.option && res.winner === null) res.keepTurn = true;
   if (ctx.req.shield && res.foul && res.winner === null) { res.foul = null; res.ballInHand = 'none'; res.option = undefined; }
 }
@@ -133,7 +139,7 @@ function resolveShot(ctx: Ctx, shot: AiShot, targets: number[], run: ShotRun): O
   });
   const state = structuredClone(ctx.req.state);
   const res = ctx.rules.resolve(state, balls, sum);
-  settleBalls(ctx, res);
+  settleBalls(ctx, sum, res);
   if (res.assignGroup) {
     state.groups[ctx.side] = res.assignGroup;
     state.groups[other(ctx.side)] = res.assignGroup === 'solid' ? 'stripe' : 'solid';

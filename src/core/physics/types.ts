@@ -51,7 +51,10 @@ export interface Terrain {
   gust?: { amp: number; omega: number };
   /** Friction patches (snow, sand, poison puddles): multipliers inside the circle. */
   patches?: { x: number; y: number; r: number; roll: number; slide: number; spin?: number }[];
-  forces?: { x: number; y: number; region?: { x: number; y: number; r: number }; gust?: { amp: number; omega: number } }[];
+  forces?: { x: number; y: number; region?: { x: number; y: number; r: number }; gust?: { amp: number; omega: number }; window?: { start: number; duration: number } }[];
+  /** Forces exempt from the below-rolling-resistance rule (tier-5 quake, strictly time-boxed). */
+  unclamped?: boolean;
+  quakeWindow?: { duration: number };
   vortices?: { x: number; y: number; r: number; a: number; sense: number }[];
   rails?: { ax: number; ay: number; bx: number; by: number; multiplier: number }[];
   /** Point attractors (m/s² at the centre, fading to 0 at radius r). */

@@ -47,6 +47,7 @@ interface SkillState {
   spinDrag: { id: number; x: number; y: number; side: number; vert: number; live: boolean; timer: number } | null;
   preview(cast: SkillCast): void;
   moveCast(x: number, y: number): void;
+  rotateCast(deg: number): void;
 }
 
 interface TurnState {

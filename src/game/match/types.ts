@@ -6,6 +6,8 @@ import type {
 import type { SkillDef } from '../content/sects';
 import type { CueDef, MutatorId, TableSkin } from '../content/gear';
 import type { Omen } from '../terrain';
+import type { CastEffect } from '../skill-cast';
+import type { SkillKind } from '../content/sects';
 
 export interface PlayerSetup {
   name: string;
@@ -58,7 +60,21 @@ export type MatchEvent =
   | { type: 'omen'; side: Side; omen: Omen }
   | { type: 'rack-over'; winner: Side }
   | { type: 'match-over'; winner: Side }
+  | { type: 'displace'; side: Side; moved: { id: number; from: { x: number; y: number }; to: { x: number; y: number } }[] }
+  | { type: 'swap'; side: Side; balls: [number, number]; at: [{ x: number; y: number }, { x: number; y: number }] }
   | { type: 'new-rack' };
+
+export type EffectTarget = Side | 'both';
+
+/** Opponent-facing hexes that can outlast one shot. */
+export interface Hex {
+  kind: SkillKind;
+  by: Side;
+  target: Side;
+  value: number;
+  shotsLeft: number;
+  sense?: 'cw' | 'ccw';
+}
 
 export interface PlayerStats {
   shots: number;
@@ -81,4 +97,11 @@ export interface Snapshot {
   bombUsed: boolean;
   pushOutAvailable: boolean;
   potted: [number[], number[]];
+  activeEffects: (CastEffect & { target: EffectTarget; shotsLeft: number; amount?: number })[];
+  hexes: Hex[];
+  tremorNow: number;
+  freezeNow: number;
+  blindNow: boolean;
+  driftNow: number;
+  calledNow: number | null;
 }

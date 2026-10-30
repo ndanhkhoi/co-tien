@@ -8,6 +8,7 @@ import { other, type OptionKind, type Resolution, type ShotSummary, type Side } 
 import { advanceAssassin, gainEnergy, spendAssassin, ENERGY_PER_SHOT, ENERGY_PER_VALUE } from './energy';
 import { endOmen } from './omen';
 import { clearShotBuffs } from './skills';
+import { spendTurnEffects } from './hexes';
 import type { Match } from './match';
 import type { ShotInput, Snapshot } from './types';
 
@@ -40,12 +41,20 @@ function takeSnapshot(m: Match, side: Side): Snapshot {
     bombUsed: m.bombUsed,
     pushOutAvailable: m.state.pushOutAvailable,
     potted: [[...m.potted[0]], [...m.potted[1]]],
+    activeEffects: structuredClone(m.activeEffects),
+    hexes: structuredClone(m.hexes),
+    tremorNow: m.tremorNow,
+    freezeNow: m.freezeNow,
+    blindNow: m.blindNow,
+    driftNow: m.driftNow,
+    calledNow: m.calledNow,
   };
 }
 
 /** Strike the cue ball: spin reach, the miscue roll, then the strike itself. */
 function strikeCue(m: Match, side: Side, input: ShotInput, cue: Ball): { speed: number; miscue: boolean } {
   let { angle, power, side: sp, vert } = input;
+  if (m.driftNow) angle += (m.hexes.find((e) => e.kind === 'drift' && e.target === side)?.sense === 'ccw' ? -1 : 1) * m.driftNow * Math.PI / 180;
   if (m.blast?.direction) m.blast.direction = { x: Math.cos(angle), y: Math.sin(angle) };
   const reach = m.spinReach(side);
   sp *= reach.side;
@@ -169,13 +178,16 @@ export function finishRulesShot(m: Match, side: Side, shot: ShotSummary) {
 function resolveShot(m: Match, side: Side, shot: ShotSummary): Resolution {
   const res = m.rules.resolve(m.state, m.balls, shot);
   m.activeEffects = m.activeEffects.filter(e => e.target !== side);
+  spendTurnEffects(m, side);
   endOmen(m);
+  calledFoul(m, shot, res);
   if (!res.foul && !res.keepTurn && !res.option && res.winner === null && m.secondChance) {
     res.keepTurn = true;
     res.messages.unshift('Tái chiến: được đánh tiếp!');
   }
   clearShotBuffs(m);
-  if (res.foul && m.shield[side] && res.winner === null) {
+  const puppeted = spendPuppet(m, side, res);
+  if (res.foul && !puppeted && m.shield[side] && res.winner === null) {
     m.shield[side] = false;
     res.messages.unshift('Hộ thể đỡ lỗi: không mất bi trong tay');
     res.ballInHand = 'none';
@@ -183,6 +195,35 @@ function resolveShot(m: Match, side: Side, shot: ShotSummary): Resolution {
     res.foul = null;
   }
   return res;
+}
+
+function calledFoul(m: Match, shot: ShotSummary, res: Resolution): void {
+  const called = m.calledNow;
+  if (called === null || shot.firstHit === called || res.winner !== null) return;
+  res.foul = `Chạm sai bi trước: phải chạm bi ${called} theo chiêu chỉ định`;
+  res.ballInHand = 'anywhere';
+  res.keepTurn = false;
+  res.option = undefined;
+  res.messages.unshift(res.foul);
+}
+
+/** Mị Cơ: the forced shot never fouls, never wins the rack for the caster, and hands the turn back. */
+function spendPuppet(m: Match, side: Side, res: Resolution): boolean {
+  if (m.puppeteer !== other(side)) return false;
+  const caster = m.puppeteer;
+  m.puppeteer = null;
+  if (res.winner === caster) {
+    res.winner = null;
+    const key = m.balls.find((b) => b.id === 8 && !b.onTable);
+    if (key && m.setup.mode === 'eight' && !res.respot.includes(8)) res.respot.push(8);
+  }
+  if (res.winner !== null) return true;
+  res.foul = null;
+  res.ballInHand = 'none';
+  res.option = undefined;
+  res.keepTurn = false;
+  res.messages.unshift('Khuynh thành: cú đánh hộ không tính lỗi, lượt về người thi triển');
+  return true;
 }
 
 /** Bring back every ball the resolution respots; a scratched cue returns in hand. */
@@ -258,7 +299,7 @@ function sandGift(m: Match, side: Side, res: Resolution) {
   const cue = m.cueBall(side);
   m.activeEffects.push({
     ...buildCast('sand', 1, -1, { table: m.table, balls: m.balls, cueId: m.cueId(side), cast: { point: { x: cue.x, y: cue.y } } }),
-    target: other(side),
+    target: other(side), shotsLeft: 1,
   });
 }
 

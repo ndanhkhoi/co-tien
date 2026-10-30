@@ -89,6 +89,15 @@ export function drawShotHint(m: Match, g: MetreGraphics, aim: AimView, cue: { x:
   drawObjectHint(m, g, aim, pred);
 }
 
+/** Đất Dắt: keep the intended line, then mark the unavoidable rotation in vermilion. */
+export function drawDriftNote(m: Match, g: MetreGraphics, aim: AimView): void {
+  if (!m.driftNow) return;
+  const cue = m.cueBall();
+  const x = cue.x + Math.cos(aim.angle + m.driftNow * Math.PI / 180) * 0.45;
+  const y = cue.y + Math.sin(aim.angle + m.driftNow * Math.PI / 180) * 0.45;
+  g.circle(x, y, 0.012).stroke({ width: 2, color: 0xb03522, alpha: 0.9 });
+}
+
 function drawFogHint(g: MetreGraphics, aim: AimView, aimLine: { cue: { x: number; y: number }; dx: number; dy: number }, pred: Prediction): boolean {
   if (!aim.fog) return false;
   // Fog: the line fades out before reaching anything, no ghost ball.

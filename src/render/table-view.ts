@@ -1,4 +1,4 @@
-import { drawAimLock, drawCue, drawEagleReference, drawJumpPath, drawShotHint, hasPathPreview } from './aim-drawing';
+import { drawAimLock, drawCue, drawDriftNote, drawEagleReference, drawJumpPath, drawShotHint, hasPathPreview } from './aim-drawing';
 import { drawEagle, type EagleRun } from './eagle-preview';
 import { Container, Graphics, Sprite, Texture, type Application } from 'pixi.js';
 import { FrameDiff, MetreGraphics } from './frame-diff';
@@ -460,6 +460,7 @@ export class TableView {
       return;
     }
     drawShotHint(m, this.guide, aim!, cue);
+    drawDriftNote(m, this.guide, aim!);
   }
 
   // ---------- Effects ----------

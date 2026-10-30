@@ -7,18 +7,20 @@ import type { Ctx } from './search-context';
 
 export function addNoise(ctx: Ctx, shot: AiShot): AiShot {
   const t = ctx.tune;
+  const blind = ctx.req.blind ? 1.6 : 1;
   const pers = ctx.req.profile.personality;
   const aimMul = pers === 'aggressive' ? 1.15 : pers === 'defensive' ? 0.9 : 1;
   return {
     ...shot,
-    angle: shot.angle + ctx.rng.gauss() * t.aimSigma * aimMul,
+    angle: shot.angle - (ctx.req.driftAngle ?? 0) * Math.PI / 180 + ctx.rng.gauss() * t.aimSigma * blind * (ctx.req.driftAngle ? 1.3 : 1) * aimMul,
     power: Math.max(0.03, Math.min(1, shot.power * (1 + ctx.rng.gauss() * t.powerSigma))),
   };
 }
 
 /** Families that help when the coming shot looks hard, and ones that hurt the opponent. */
 const RESCUE: SkillKind[] = ['maw', 'gravity', 'second', 'shield', 'blast', 'sand', 'bumper', 'spinwash'];
-const HEX: SkillKind[] = ['chill', 'freeze', 'seal', 'drain'];
+const HEX: SkillKind[] = ['chill', 'freeze', 'seal', 'drain', 'blind', 'drift', 'called'];
+const TRICK: SkillKind[] = ['displace', 'swap', 'decoy', 'counter', 'puppet'];
 
 export function chooseSkill(ctx: Ctx, confidence: number): AiDecision['skill'] {
   const { skills, profile } = ctx.req;
@@ -43,6 +45,8 @@ function basicForLaterLevel(ctx: Ctx, usable: CastSkill[], confidence: number): 
   if (ctx.rng.next() > 0.42) return undefined;
   const rescue = usable.find((s) => !s.ultimate && RESCUE.includes(s.kind));
   if (rescue && confidence < 0.5) return rescue.slot;
+  const trick = usable.find((s) => !s.ultimate && TRICK.includes(s.kind));
+  if (trick && ctx.rng.next() < 0.5) return trick.slot;
   const hex = usable.find((s) => !s.ultimate && HEX.includes(s.kind));
   if (hex && tableEase(ctx, ctx.req.balls, ctx.req.state, other(ctx.side)) > 0.6) return hex.slot;
   const terrain = usable.find(s => !s.ultimate && PLACED_KINDS.includes(s.kind));

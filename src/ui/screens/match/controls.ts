@@ -15,6 +15,7 @@ interface ControlsDeps {
   releaseCharge(): void;
   fireAtPreset(): void;
   rotate(deg: number): void;
+  rotateCast(deg: number): void;
   nudgeCue(dx: number, dy: number, metres: number): void;
   setPreset(v: number): void;
   canAdjustAim(): boolean;
@@ -69,10 +70,11 @@ function holdRepeat(ctx: MatchCtx, b: HTMLButtonElement, step: () => void, hold:
 }
 
 function attachHoldButtons(ctx: MatchCtx, dom: MatchDom, deps: ControlsDeps): void {
-  // One tap = 0.1°; holding sweeps faster and faster.
+  // One tap = 0.1°; holding sweeps faster and faster. Placement turns the cast, not the cue.
   const rotRate = (t: number) => Math.min(40, 1 + 14 * t * t);
-  holdRepeat(ctx, dom.rotL, () => deps.rotate(-0.1), (dt, t) => deps.rotate(-rotRate(t) * dt));
-  holdRepeat(ctx, dom.rotR, () => deps.rotate(0.1), (dt, t) => deps.rotate(rotRate(t) * dt));
+  const turn = (deg: number) => (ctx.skill.placement ? deps.rotateCast(deg) : deps.rotate(deg));
+  holdRepeat(ctx, dom.rotL, () => turn(-0.1), (dt, t) => turn(-rotRate(t) * dt));
+  holdRepeat(ctx, dom.rotR, () => turn(0.1), (dt, t) => turn(rotRate(t) * dt));
   // One tap = 3 mm; holding walks the ball, then runs.
   const walk = (t: number) => Math.min(0.6, 0.05 + 0.5 * t * t);
   holdRepeat(ctx, dom.upB, () => deps.nudgeCue(0, -1, 0.003), (dt, t) => deps.nudgeCue(0, -1, walk(t) * dt));
@@ -162,8 +164,8 @@ function attachKeys(ctx: MatchCtx, sheets: Sheets, deps: ControlsDeps): () => vo
   const canvas = ctx.app.pixi.canvas;
   const onKey = (e: KeyboardEvent) => keyEvent({ ctx, sheets, deps, e });
   const onWheel = (e: WheelEvent) => {
-    if (!deps.canAdjustAim()) return;
-    ctx.aim.angle += Math.sign(e.deltaY) * 0.06 * DEG;
+    if (ctx.skill.placement && deps.placingNow()) deps.rotateCast(Math.sign(e.deltaY) * 3);
+    else if (deps.canAdjustAim()) ctx.aim.angle += Math.sign(e.deltaY) * 0.06 * DEG;
   };
   // Rotating to portrait or squeezing the window hides the table: pause instead of playing blind.
   const onBlocked = () => {
@@ -216,6 +218,8 @@ function placementKey(x: { ctx: MatchCtx; deps: ControlsDeps; e: KeyboardEvent }
   if (!skill.placement) return false;
   if (x.e.code === 'Escape') x.deps.cancelPlacement();
   else if (x.e.code === 'KeyR') x.deps.toggleSense();
+  else if (x.e.code === 'KeyQ') x.deps.rotateCast(-3);
+  else if (x.e.code === 'KeyE') x.deps.rotateCast(3);
   else return false;
   return true;
 }
@@ -240,7 +244,7 @@ function moveKey(x: { ctx: MatchCtx; deps: ControlsDeps; e: KeyboardEvent }): vo
   const { flags, skill, power } = x.ctx;
   const fine = x.e.shiftKey ? 0.05 : 0.5;
   if (x.deps.placingNow() && (!flags.placementAim || skill.placement)) arrowPlace(x.deps, x.e);
-  else arrowAim({ deps: x.deps, e: x.e, fine, preset: power.preset });
+  else arrowAim({ ctx: x.ctx, deps: x.deps, e: x.e, fine, preset: power.preset });
 }
 
 function arrowPlace(deps: ControlsDeps, e: KeyboardEvent): void {
@@ -251,10 +255,10 @@ function arrowPlace(deps: ControlsDeps, e: KeyboardEvent): void {
   if (e.code === 'ArrowDown') deps.nudgeCue(0, 1, m);
 }
 
-function arrowAim(x: { deps: ControlsDeps; e: KeyboardEvent; fine: number; preset: number }): void {
-  const { deps, e, fine } = x;
-  if (e.code === 'ArrowLeft') deps.rotate(-fine);
-  if (e.code === 'ArrowRight') deps.rotate(fine);
+function arrowAim(x: { ctx: MatchCtx; deps: ControlsDeps; e: KeyboardEvent; fine: number; preset: number }): void {
+  const { ctx, deps, e, fine } = x;
+  if (e.code === 'ArrowLeft') ctx.skill.placement ? deps.rotateCast(-fine) : deps.rotate(-fine);
+  if (e.code === 'ArrowRight') ctx.skill.placement ? deps.rotateCast(fine) : deps.rotate(fine);
   if (e.code === 'ArrowUp' && deps.canAct()) deps.setPreset(x.preset + 0.05);
   if (e.code === 'ArrowDown' && deps.canAct()) deps.setPreset(x.preset - 0.05);
 }

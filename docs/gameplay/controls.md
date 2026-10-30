@@ -13,6 +13,12 @@ Nguồn: `src/ui/screens/match/` (trận) và `src/ui/screens/practice/desk.ts` 
 - Chạm một bi để ngắm thẳng vào nó, chạm chỗ trống để ngắm tới đó.
 - Hai nút xoay chỉnh từng nấc nhỏ; giữ để xoay nhanh dần.
 
+## Đặt chiêu
+
+- Kéo hoặc chạm bàn chỉ dời tâm vùng đặt; hướng giữ nguyên.
+- Khi đang đặt chiêu, hai nút xoay, phím mũi tên trái/phải, Q/E và con lăn chuột xoay hướng chiêu (bấm giữ xoay nhanh dần).
+- Hướng ban đầu là hướng ngắm hiện tại. `R` đổi chiều xoáy hoặc độ băng mềm/cứng.
+
 ## Áp phê và nâng cơ
 
 - **Giữ hoặc kéo** bi cái nhỏ: mở một bi lớn tạm thời, ngón tay dời điểm đánh, thả là đóng.
@@ -45,8 +51,8 @@ Nguồn: `src/ui/screens/match/` (trận) và `src/ui/screens/practice/desk.ts` 
 ## Chiêu (Tiên Đạo)
 
 - Ba ô icon tranh riêng của tướng; chạm mở thẻ chi tiết, không thi triển ngay.
-- Chiêu đặt bàn vào bước đặt: kéo/chạm bàn hoặc mũi tên, đổi chiều/băng (phím R), **THI TRIỂN** xác nhận,
-  **Huỷ đặt chiêu** không tiêu chiêu.
+- Chiêu đặt bàn vào bước đặt: kéo/chạm bàn hoặc mũi tên dời tâm; xoay hướng bằng nút xoay, phím mũi tên trái/phải, Q/E
+  hoặc con lăn chuột; đổi chiều/băng (phím R); **THI TRIỂN** xác nhận, **Huỷ đặt chiêu** không tiêu chiêu.
 - Tuyệt chiêu được ghi nhận khi xác nhận, nhưng diễn hoạt chờ ĐÁNH. Thứ tự là khoá điều khiển, cut-in, hiệu ứng
   bàn, cơ vung, rồi mô phỏng. Người và AI đi cùng luồng; tạm dừng và rời trận đều huỷ đúng.
 

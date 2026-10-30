@@ -22,8 +22,10 @@ Done means `npm test`, `npm run lint` and `npm run build` all pass, and the owni
 
 - Never rename the save key `thancong.profile.v1` or bypass `sanitize` in `src/game/profile.ts`.
   Practice saves (`cotien.practice.v1`) go through `sanitizeSaved`.
-- Never move balls by script. Skills and terrain are forces, friction, obstacles or pocket size in the
-  simulation; tilt/wind stays below rolling resistance (μr·g ≈ 0.108 m/s²). Wind keeps one direction per turn.
+- Never script a trajectory while balls roll or rewrite a shot's result after it resolves. Discrete,
+  deterministic state changes while every ball rests, simulated objects and information effects are allowed.
+  Tilt/wind stays below rolling resistance (μr·g ≈ 0.108 m/s²), except the announced tier-5 Địa Chấn
+  ultimate (1.6× μr·g for 1.2 s). Wind keeps one direction per turn.
 - Never use names, art or abilities from another game or franchise, and never mention any game as inspiration
   in the repo, docs or commits.
 - Never add hand-drawn SVG, emoji, icon libraries or internet images. Illustrations, icons and UI decoration

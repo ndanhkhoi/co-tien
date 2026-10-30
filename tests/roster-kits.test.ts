@@ -28,7 +28,7 @@ it('casts every champion slot with a real effect on a carom table', () => {
       players: [0, 1].map(() => ({name: champion.name, kind: 'human', cue: CUES[0], champion: champion.id})) as Match['setup']['players'] });
     m.energy[0] = 100;
     const state = () => JSON.stringify({ world: m.simulationWorld(), blast: m.blast, eagle: m.eagle, reveal: m.reveal,
-      power: m.vmax(), spin: m.spinReach(), placing: m.placing, second: m.secondChance, tremor: m.tremor, shield: m.shield });
+      power: m.vmax(), spin: m.spinReach(), placing: m.placing, second: m.secondChance, tremor: m.tremorNow, shield: m.shield });
     const before = state();
     expect(m.useSkill(0, slot), `${champion.id}/${slot}`).toBe(true);
     expect(state(), `${champion.id}/${slot} must change simulation or shot information`).not.toBe(before);

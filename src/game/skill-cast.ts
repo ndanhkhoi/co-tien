@@ -17,7 +17,13 @@ export interface CastEffect {
   terrain: Terrain;
   segments: Segment[];
 }
-export const PLACED_KINDS: SkillKind[] = ['slick', 'sand', 'bumper', 'railcraft', 'wind', 'well', 'spinwash', 'vortex'];
+export const PLACED_KINDS: SkillKind[] = ['slick', 'sand', 'bumper', 'railcraft', 'wind', 'well', 'spinwash', 'vortex', 'silk', 'quake'];
+
+/** Rotate a placement axis while its centre stays put; finite aim is normalised. */
+export function rotateDirection(direction: { x: number; y: number } | undefined, deg: number): { x: number; y: number } {
+  const radians = Math.atan2(direction?.y ?? 0, direction?.x ?? 1) + deg * Math.PI / 180;
+  return { x: Math.cos(radians), y: Math.sin(radians) };
+}
 
 export function mergeTerrain(...sources: (Terrain | null | undefined)[]): Terrain {
   return {
@@ -53,6 +59,7 @@ export function buildCast(kind: SkillKind, tier: number, slot: number, ctx: Cast
     resolved.rail = { index: rail.index, position: rail.pos };
     effect.terrain.rails = [{ ax: rail.a.x, ay: rail.a.y, bx: rail.b.x, by: rail.b.y, multiplier: 1 + (resolved.hardness === 'hard' ? 1 : -1) * p.restitution }];
   }
+  if (kind === 'quake') Object.assign(effect.terrain, { unclamped: true, quakeWindow: { duration: p.time } });
   if (slot === 2 && ctx.ult || ctx.shape) {
     applyGeometry({
       kind, tier, table: ctx.table, balls: ctx.balls, cast: resolved, terrain: effect.terrain, segments: effect.segments,
@@ -123,6 +130,18 @@ function nearestLegalPoint(table: TableGeom, margin: number, desired: { x: numbe
   return found;
 }
 
+/** Đường Cong Mê Hồn: three alternating small vortices on a smooth S. */
+function silkVortex(place: ResolvedPlacement, along: number, p: Record<string, number>, index: number): NonNullable<Terrain['vortices']>[number] {
+  const d = place.direction;
+  const n = { x: -d.y, y: d.x };
+  const across = Math.sin(along * Math.PI / 0.32) * 0.055;
+  return {
+    x: place.point.x + d.x * along + n.x * across,
+    y: place.point.y + d.y * along + n.y * across,
+    r: p.radius, a: p.acceleration, sense: (index % 2 === 0 ? 1 : -1),
+  };
+}
+
 /** The cast's own terrain and segments, before any sect geometry is added. */
 function baseEffect(kind: SkillKind, p: Record<string, number>, place: ResolvedPlacement, resolved: SkillCast): { terrain: Terrain; segments: Segment[] } {
   const terrain: Terrain = {};
@@ -131,6 +150,8 @@ function baseEffect(kind: SkillKind, p: Record<string, number>, place: ResolvedP
   if (kind === 'wind') terrain.force = { x: place.direction.x * p.acceleration, y: place.direction.y * p.acceleration };
   if (kind === 'well') terrain.wells = [{ ...place.point, r: p.radius, a: p.acceleration }];
   if (kind === 'vortex') terrain.vortices = [{ ...place.point, r: p.radius, a: p.acceleration, sense: resolved.sense === 'cw' ? 1 : -1 }];
+  if (kind === 'silk') terrain.vortices = [-0.16, 0, 0.16].map((along, i) => silkVortex(place, along, p, i));
+  if (kind === 'quake') terrain.forces = [{ x: place.direction.x * 0.173 * p.factor, y: place.direction.y * 0.173 * p.factor, window: { start: 0, duration: p.time } }];
   if (kind === 'bumper' && place.legal(place.point)) segments.push(place.segmentAt(place.point));
   return { terrain, segments };
 }

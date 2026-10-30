@@ -14,7 +14,8 @@ export interface CastSkill {
   ultimate: boolean;
   tier?: number;
   kinds?: SkillKind[];
-  target?: 'self' | 'opponent';
+  target?: 'self' | 'opponent' | 'both';
+  turns?: number;
   ult?: SectId;
   shape?: 'gate' | 'roots' | 'rim';
   directionalBlast?: boolean;
@@ -48,6 +49,10 @@ export interface AiRequest {
   option: boolean;
   pushOutAvailable: boolean;
   energy: number;
+  /** Sight effects on this shot: guide hidden, forced first contact, unavoidable angle drift. */
+  blind?: boolean;
+  calledBall?: number | null;
+  driftAngle?: number;
   /** Skills castable right now (checked by the match), with their leading effect family. */
   skills: CastSkill[];
 }

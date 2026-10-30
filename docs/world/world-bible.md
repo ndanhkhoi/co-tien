@@ -31,7 +31,7 @@ Toàn bộ tên, truyện, môn phái, nhân vật, chiêu thức và tranh là 
 Mỗi tướng có **2 chiêu cơ bản** và **1 tuyệt chiêu**. 65 bộ chiêu có 65 tập cơ chế khác nhau. Các vùng, vật chắn, gió, giếng hút, băng và dòng xoáy được mô phỏng chung cho trận thật, đường dự đoán và AI. Tuyệt chiêu bậc 5 dùng hình học riêng qua trường `ult`; cổng, rễ và hút miệng lỗ qua `shape`. Trên bàn phăng, hút miệng lỗ trở thành giếng trên nỉ, cổng đặt thành hành lang. Trên bàn phăng, hộ thể chuyển thành chỉnh băng; các chiêu chỉ có ý nghĩa với lỗ được đổi sang hiệu ứng phù hợp. Cổ Điển và thử thách không dùng kỹ năng hoặc nội tại.
 
 
-Có **24 nhóm cơ chế**, trong đó tám cơ chế đặt trên bàn gồm:
+Có **34 nhóm cơ chế**, trong đó mười cơ chế đặt trên bàn gồm:
 
 | Mã | Cơ chế | Thao tác và tác động |
 |---|---|---|
@@ -43,6 +43,15 @@ Có **24 nhóm cơ chế**, trong đó tám cơ chế đặt trên bàn gồm:
 | `well` | Tinh Điểm | Đặt tâm hút bẻ cong đường lăn; hình `rim` hút sát miệng lỗ. |
 | `spinwash` | Tán Toàn | Đặt vùng làm tiêu áp phê. |
 | `vortex` | Toàn Lưu | Đặt tâm và chọn chiều xoáy thuận/nghịch. |
+| `silk` | Lụa Mê Hồn | Trải ba xoáy nhỏ thành dải chữ S theo hướng chọn, bẻ cong đường bi bằng lực thật. |
+| `quake` | Địa Chấn | Tuyệt chiêu bậc 5: nghiêng bàn theo hướng chọn đúng 1,2 giây đầu, có báo trước. |
+
+Chiêu có thể kéo dài bằng `turns`: tối đa 2 cú của người nhận; chỉ tuyệt chiêu của tướng bậc 5 được 3 cú.
+`target: both` áp dụng cho cả hai bên.
+
+Các nhóm quấy phá và outplay (kể cả trên bàn phăng): `blind` mất đường dự đoán; `drift` dắt lệch hướng đánh;
+`called` chỉ định bi phải chạm trước; `displace` dời bi sát lỗ; `swap` đổi chỗ bi; `decoy` đặt bi giả làm vật chắn;
+`counter` đặt úp hoá giải chiêu và hút năng lượng; `puppet` đánh thay một cú của đối thủ mà không tính lỗi.
 
 Chiêu đặt cần xác nhận “THI TRIỂN”; huỷ bước đặt không tiêu chiêu. Chiêu cơ bản hồi 2–3 lượt đánh của chính mình theo cơ chế đầu tiên trong `kinds`; tuyệt chiêu cần 100 năng lượng, có sức mạnh bằng bậc tướng cộng 2. `target: opponent` lưu hiệu ứng cho cú của đối thủ, mặc định áp dụng cho bên dùng.
 

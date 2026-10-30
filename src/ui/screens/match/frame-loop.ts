@@ -146,7 +146,7 @@ function aimView(ctx: MatchCtx, deps: FrameDeps, x: { humanAim: boolean; placing
     elevation: aim.elevation,
     power: aimPower(ctx),
     showCue,
-    showGuide: x.humanAim && isHumanTurn(ctx) && (!x.placing || placementAim) && match.tremorNow === 1 && power.strikeT === 0,
+    showGuide: x.humanAim && isHumanTurn(ctx) && (!x.placing || placementAim) && !match.blindNow && power.strikeT === 0,
     guideScale: deps.guideScale(),
     fog: match.setup.mutator === 'fog',
     pocketChoices: match.callType() !== 'none' && isHumanTurn(ctx) && !x.placing,

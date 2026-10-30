@@ -1,11 +1,17 @@
 import { expect, it } from 'vitest';
 import { cloneBalls, DEFAULT_PHYS, makeBall, step, type SimWorld } from '../src/core/physics';
 import { makeCaromTable } from '../src/core/table';
-import { buildCast, mergeTerrain, PLACED_KINDS } from '../src/game/skill-cast';
+import { buildCast, mergeTerrain, PLACED_KINDS, rotateDirection } from '../src/game/skill-cast';
 import { Match } from '../src/game/match';
 import { CUES, TABLES } from '../src/game/content/gear';
 
 const table = makeCaromTable();
+it('rotates a placement direction while leaving an unset direction on the aim line', () => {
+  const turned = rotateDirection({ x: 1, y: 0 }, 90);
+  expect(turned.x).toBeCloseTo(0);
+  expect(turned.y).toBeCloseTo(1);
+  expect(rotateDirection(undefined, -3).x).toBeCloseTo(Math.cos(-3 * Math.PI / 180));
+});
 function world(kind?: typeof PLACED_KINDS[number]): SimWorld {
   const balls = [makeBall(0, -0.3, 0)];
   const effect = kind && buildCast(kind, 3, 0, { table, balls, cueId: 0, cast: { point: { x: 0, y: 0.06 }, direction: { x: 0, y: 1 }, hardness: 'hard' } });
@@ -51,7 +57,7 @@ it('match and prediction use identical active terrain and strike parameters', ()
     mode: 'carom-libre', raceTo: 1, mutator: null, tableSkin: TABLES[0], seed: 42,
     players: [0, 1].map(() => ({ name: 'A', kind: 'human', cue: CUES[0], champion: 'tokiemnhi' })) as Match['setup']['players'],
   });
-  for (const kind of PLACED_KINDS) m.activeEffects.push({ ...buildCast(kind, 2, 2, { table: m.table, balls: m.balls, cueId: m.cueId() }), target: m.turn });
+  for (const kind of PLACED_KINDS) m.activeEffects.push({ ...buildCast(kind, 2, 2, { table: m.table, balls: m.balls, cueId: m.cueId() }), target: m.turn, shotsLeft: 1 });
   const input = { angle: 0.4, power: 0.45, side: 0.1, vert: 0.2, call: null, pushOut: false };
   const prediction = { ...m.simulationWorld(), balls: cloneBalls(m.balls) };
   m.strikePreview(prediction.balls.find(b => b.id === m.cueId())!, input);

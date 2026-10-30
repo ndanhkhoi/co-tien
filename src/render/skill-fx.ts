@@ -63,6 +63,16 @@ const RECIPES: Record<SkillKind, Recipe[]> = {
   freeze: [{ el: 'crack', size: [0.08, 0.3], dur: 1.2, where: 'cue' }, { el: 'mist2', size: [0.1, 0.3], dur: 1, where: 'cue' }],
   drain: [{ el: 'orb', size: [0.12, 0.03], dur: 0.9, where: 'cue' }, { el: 'trail', size: [0.1, 0.24], dur: 0.7, where: 'cue' }],
   rewind: [{ el: 'sigil', size: [0.3, 0.06], dur: 1.1, spin: -6, where: 'cue' }, { el: 'circle', size: [0.3, 0.1], dur: 1.1, spin: -3, where: 'cue' }],
+  blind: [{ el: 'mist2', size: [0.1, 0.32], dur: 1.1, where: 'cue', follow: true }],
+  drift: [{ el: 'trail', size: [0.08, 0.24], dur: 1.1, where: 'cue', follow: true }],
+  called: [{ el: 'talisman', size: [0.05, 0.13], dur: 1, where: 'cue', follow: true }],
+  displace: [{ el: 'slash', size: [0.08, 0.24], dur: 0.8, where: 'cue' }],
+  swap: [{ el: 'circle', size: [0.08, 0.2], dur: 0.9, spin: 2, where: 'cue' }],
+  decoy: [{ el: 'orb', size: [0.06, 0.14], dur: 1, where: 'cue' }],
+  counter: [{ el: 'runes', size: [0.08, 0.2], dur: 1.2, spin: -1, where: 'cue' }],
+  puppet: [{ el: 'sigil', size: [0.08, 0.22], dur: 1.2, spin: 1, where: 'cue', follow: true }],
+  silk: [{ el: 'petal', size: [0.1, 0.3], dur: 1.2, where: 'cue' }],
+  quake: [{ el: 'crack', size: [0.1, 0.34], dur: 1, where: 'cue' }],
   second: [{ el: 'cross', size: [0.06, 0.22], dur: 0.8, where: 'cue' }, { el: 'slash', size: [0.08, 0.24], dur: 0.7, spin: 2, where: 'cue' }],
 };
 

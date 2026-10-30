@@ -13,11 +13,12 @@ import { makeCaromTable, makePoolTable, type TableGeom } from '../../core/table'
 import { champion, type ClassId, type SkillDef, type SkillKind } from '../content/sects';
 import type { Omen } from '../terrain';
 import { ENERGY_MAX, startEnergy } from './energy';
+import { absorbSkill, armTurnHexes } from './hexes';
 import { rollGhost, rollOmenFor } from './omen';
-import { applyKind, clearShotBuffs, kindReady, sealPockets } from './skills';
+import { appliesTo, applyKind, clearShotBuffs, kindReady } from './skills';
 import { finishChallengeShot, finishRulesShot, strikeShot, updateSimulation } from './shot';
 import { finishPracticeShot, liftPracticeBall, markPracticePosition, placePracticeBall, setPracticePosition, undoPracticeShot } from './practice';
-import type { MatchEvent, MatchSetup, Phase, PlayerSetup, PlayerStats, ShotInput, Snapshot } from './types';
+import type { EffectTarget, Hex, MatchEvent, MatchSetup, Phase, PlayerStats, PlayerSetup, ShotInput, Snapshot } from './types';
 
 export class Match {
   readonly setup: MatchSetup;
@@ -57,13 +58,20 @@ export class Match {
   nudgeRadius = 0.12;
   /** Lasting effects. */
   shield: [boolean, boolean] = [false, false];
-  /** Debuffs waiting for each side's next turn (tremor multiplier, power multiplier, pockets sealed). */
-  tremor: [number, number] = [1, 1];
-  freeze: [number, number] = [1, 1];
-  seal: [number, number] = [0, 0];
+  /** Debuffs waiting for each side's shots (tremor, power loss, sealed pockets, sight). */
+  hexes: Hex[] = [];
   /** Debuffs on the shot being lined up now. */
   tremorNow = 1;
   freezeNow = 1;
+  blindNow = false;
+  driftNow = 0;
+  calledNow: number | null = null;
+  /** Called-ball challenge waiting for its recipient. */
+  called: { by: Side; ball: number; shotsLeft: number } | null = null;
+  /** Mị Cơ: the side who will take the opponent's next shot. */
+  puppeteer: Side | null = null;
+  /** Đắm Đuối: the face-down counter waiting for an opponent skill. */
+  counter: (typeof this.activeEffects)[number] | null = null;
   /** Thiên Tượng waiting on the shot being lined up, and the pocket it closed. */
   omen: Omen | null = null;
   omenPocket: number | null = null;
@@ -81,7 +89,7 @@ export class Match {
   shotTargets: number[] = [];
   /** Pocket capture size from the table's character (Hư Không), on every shot. */
   baseCapture = 1;
-  activeEffects: (CastEffect & { target: Side })[] = [];
+  activeEffects: (CastEffect & { target: EffectTarget; shotsLeft: number; amount?: number })[] = [];
   castPreview: CastEffect[] = [];
   aimLock: { angle: number; band: number } | null = null;
   spinAxis: ['side' | 'vert', 'side' | 'vert'] = ['side', 'side'];
@@ -171,7 +179,7 @@ export class Match {
 
   /** Every fixed obstacle on the cloth right now: closed pocket mouths and Thiên Tượng pieces. */
   obstacles() {
-    return [...this.closedPockets.map((i) => this.table.pockets[i].mouth), ...(this.omen?.segments ?? []), ...this.activeEffects.filter(e => e.target === this.turn).flatMap(e => e.segments)];
+    return [...this.closedPockets.map((i) => this.table.pockets[i].mouth), ...(this.omen?.segments ?? []), ...this.activeEffects.filter(e => appliesTo(e.target, this.turn)).flatMap(e => e.segments)];
   }
 
   syncObstacles() {
@@ -206,15 +214,19 @@ export class Match {
     this.energy = startEnergy();
     this.cooldown = [[0, 0], [0, 0]];
     this.shield = [false, false];
+    this.hexes = [];
+    this.called = null;
+    this.puppeteer = null;
+    this.counter = null;
+    this.called = null;
+    this.puppeteer = null;
+    this.counter = null;
     this.guardUsed = [false, false];
     this.assassinReady = [false, false];
     this.assassinStreak = [0, 0];
     this.assassinValue = [0, 0];
     this.lastBasic = [null, null];
     this.aimLock = null;
-    this.tremor = [1, 1];
-    this.freeze = [1, 1];
-    this.seal = [0, 0];
     clearShotBuffs(this);
     this.omen = null;
     this.omenPocket = null;
@@ -272,7 +284,7 @@ export class Match {
     if (this.phase !== 'aim' || this.passive(side) !== 'hophap' || this.guardUsed[side]) return false;
     this.activeEffects.push({
       ...buildCast('railcraft', 1, -1, { table: this.table, balls: this.balls, cueId: this.cueId(), cast: { ...cast, hardness: 'soft' } }),
-      target: side,
+      target: side, shotsLeft: 1,
     });
     this.guardUsed[side] = true;
     return true;
@@ -296,7 +308,7 @@ export class Match {
     strike(cue, this.table.R, { angle: input.angle, speed: powerToSpeed(input.power, this.vmax()), side: input.side * reach.side, vert: input.vert * reach.vert, elevation: input.elevation });
   }
 
-  terrain() { return mergeTerrain(this.omen?.terrain, ...this.activeEffects.filter(e => e.target === this.turn).map(e => e.terrain)); }
+  terrain() { return mergeTerrain(this.omen?.terrain, ...this.activeEffects.filter(e => appliesTo(e.target, this.turn)).map(e => e.terrain)); }
 
   simulationWorld(): SimWorld {
     return { table: this.table, balls: this.balls, params: this.params, terrain: this.terrain(), extraSegments: this.obstacles(), closedPockets: this.closedPockets, captureScale: this.mawScale * this.baseCapture * (this.omen?.capture ?? 1), pocketPull: this.pull, pullExempt: this.cueId(), time: 0 };
@@ -411,15 +423,8 @@ export class Match {
     const side = this.state.turn;
     if (side !== this.lastShooter) { rollGhost(this); this.guardUsed[side] = false; }
     this.aimLock = null;
-    this.tremorNow = this.tremor[side];
-    this.tremor[side] = 1;
-    this.freezeNow = this.freeze[side];
-    this.freeze[side] = 1;
-    if (this.seal[side] > 0) {
-      sealPockets(this, side, this.seal[side]);
-      this.seal[side] = 0;
-    }
     this.phase = 'aim';
+    armTurnHexes(this, side);
     // Roll first: the AI plans its shot as soon as it hears about the turn.
     rollOmenFor(this, side);
     this.syncObstacles();
@@ -502,15 +507,17 @@ export class Match {
   useSkill(side: Side, slot: number, cast?: SkillCast): boolean {
     if (!this.canUseSkill(side, slot)) return false;
     const sk = this.skills(side)[slot];
+    const absorbed = absorbSkill(this, side);
     if (slot === 2) this.energy[side] = 0;
     else {
       const alternate = this.passive(side) === 'luanhoi' && this.lastBasic[side] !== null && this.lastBasic[side] !== slot;
       this.cooldown[side][slot] = Math.max(1, sk.cooldown - (alternate ? 1 : 0));
       this.lastBasic[side] = slot;
     }
+    if (absorbed) return true;
     // Cast the entire package, including families already active.
     sk.kinds.map((k) => this.effectiveKind(k)).forEach((k) => {
-      applyKind(this, k, { tier: sk.tier, side, slot, cast, target: sk.target, ult: sk.ult, shape: sk.shape });
+      applyKind(this, k, { tier: sk.tier, side, slot, cast, target: sk.target, turns: sk.turns, ult: sk.ult, shape: sk.shape });
     });
     this.emit({ type: 'skill', side, champion: this.setup.players[side].champion, slot, skill: sk });
     return true;

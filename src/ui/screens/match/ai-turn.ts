@@ -83,6 +83,7 @@ function buildRequest(ctx: MatchCtx, side: Side, player: (typeof ctx.match.setup
     params: match.params, terrain: match.terrain(),
     extraSegments: match.obstacles().slice(match.closedPockets.length), captureScale: match.simulationWorld().captureScale ?? 1, seed: (Math.random() * 1e9) | 0, option: match.phase === 'option',
     pushOutAvailable: match.state.pushOutAvailable, energy: match.energy[side],
+    blind: match.blindNow, calledBall: match.calledNow, driftAngle: match.driftNow,
     skills: match.skills(side).filter((sk) => match.canUseSkill(side, sk.slot)).map((sk) => ({ slot: sk.slot, kind: match.effectiveKind(sk.kinds[0]), ultimate: sk.slot === 2, tier: sk.tier, kinds: sk.kinds.map(k => match.effectiveKind(k)), target: sk.target, ult: sk.ult, shape: sk.shape, directionalBlast: champion(match.current.champion).sect === 'huyetsat' })),
   };
 }
