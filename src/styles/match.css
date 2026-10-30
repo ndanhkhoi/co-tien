@@ -135,8 +135,11 @@
 .mx-line { display: flex; align-items: center; gap: 7px; min-width: 0; font-size: 13px; font-weight: 600; color: var(--ink-2); white-space: nowrap; }
 .mx-card.p2 .mx-line { flex-direction: row-reverse; }
 .mx-score { min-width: 28px; height: 24px; padding: 0 7px; border-radius: 6px; background: var(--ink); color: var(--sheet); font: 700 16px/24px var(--display); text-align: center; flex-shrink: 0; }
-.mx-sub { display: inline-flex; align-items: center; gap: 5px; min-width: 0; overflow: hidden; }
-.mx-grp { padding: 0 7px; border-radius: 999px; border: 1.5px solid var(--ink); font-size: 13px; line-height: 18px; }
+/* Group status is a decision-critical label: never clip Trơn/Sọc. When the plate is tight the
+   remaining-ball count spills toward the outer edge, never onto the score badge. */
+.mx-sub { display: inline-flex; align-items: center; gap: 5px; min-width: 0; white-space: nowrap; }
+.mx-card.p2 .mx-sub { justify-content: flex-end; }
+.mx-grp { flex-shrink: 0; padding: 0 7px; border-radius: 999px; border: 1.5px solid var(--ink); font-size: 13px; line-height: 18px; }
 .mx-grp.solid { background: var(--ink); color: var(--sheet); }
 .mx-foul { color: var(--bad); }
 .mx-potted { display: flex; gap: 2px; height: 18px; overflow: hidden; }
@@ -710,8 +713,3 @@
   .screen.game.mx .mx-ctrl.placing:not(.preview-aim) .mx-place-mode { min-width: 128px; }
   .screen.game.mx .mx-ctrl { --colR: 112px; }
 }
-
-/* Group status is a decision-critical label. Never ellipsize Trơn/Sọc inside the
-   player plate; let the remaining-ball count yield space first. */
-.mx-sub { overflow: visible; white-space: nowrap; }
-.mx-grp { flex-shrink: 0; }
