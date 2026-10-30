@@ -18,6 +18,29 @@ champs = sorted((c for c in roster["champions"] if c["sect"] == sid), key=lambda
 main, glow, el = sect["main"], sect["glow"], sect["element"]
 
 
+# Full-body figures go wrong in the same few ways; every full-body brief carries the same guard.
+# Humans follow human anatomy; creatures, spirits and constructs follow their own spec.
+HUMAN_BODY = (
+    "Anatomy must be correct: exactly two arms and two legs attached to the body, five fingers on each visible hand, "
+    "no extra, merged or floating limbs, knees and elbows bending the natural way."
+)
+CREATURE_BODY = (
+    "Anatomy must match the creature in the spec exactly: the same number of arms, legs, paws, wings, tails and horns "
+    "the spec describes, each attached naturally to the body, none extra, merged or floating; hands, paws or claws "
+    "have the digits that kind of body has."
+)
+COMMON = (
+    "Exactly one billiard cue, straight and whole, held plausibly, never passing through the body and with nothing "
+    "hanging from it unless the spec says so. Anything partly hidden behind the body, an arm, hair, wings or cloth "
+    "(an instrument, the cue, a bow, a tail) continues in the same line, angle and width on both sides. "
+    "Anyone wearing shoes wears flat shoes or boots, never high heels."
+)
+
+
+def body(c):
+    return (HUMAN_BODY if c["kind"] in ("hiepkhach", "nuhiep") else CREATURE_BODY) + " " + COMMON
+
+
 def w(name, text):
     with open(os.path.join(out, name), "w") as f:
         f.write(text.strip() + "\n")
@@ -30,6 +53,7 @@ Character: {c['name']}, {c['look']}. The billiard cue is their weapon and cultiv
 {sect['name']} sect's look ({sect['motifs']}).
 Stylish costume, tasteful and non-sexualised. Dynamic pose: {c['pose']}, slightly 3/4 view, whole body in frame
 with margin, rim light in {glow} and {main}, a few {el} particles close to the body.
+{body(c)}
 Background: fully transparent (PNG alpha). If alpha is impossible, flat pure #00ff00 green with no shadow.
 No text, no logo, no frame, no letters.
 """)
@@ -52,12 +76,15 @@ Cell 1 (top-left): focused and calm, looking down at the table, chin resting nea
 Cell 2 (top-right): overjoyed, cheering, sparkles.
 Cell 3 (bottom-left): frustrated / annoyed after a mistake, sweat drop.
 Cell 4 (bottom-right): casting a skill, glowing {el} in the eyes and around a raised hand.
+At most one cue in any cell, never two; hands, paws or claws keep the digits of the character's kind.
 """)
     w(f"win-{c['id']}.txt", f"""
 Full-body victory pose of the SAME character as the reference image (same face, species features, hair,
 outfit, cue and colours), painterly 2.5D anime style matching the reference: {c['name']} celebrating a won
 billiards match — triumphant, cue raised or resting on the shoulder, {c['expr']}, burst of {el} behind.
 Character spec (every trait must match, keep every signature prop, companion and the signature cue): {c['look']}.
+The victory pose is clearly different from the reference pose: relaxed and celebratory, never the same attack stance.
+{body(c)}
 Whole body in frame with margin, rim light in {glow}. Background: fully transparent (PNG alpha).
 If alpha is impossible, flat pure #00ff00 green with no shadow. No text, no letters.
 """)

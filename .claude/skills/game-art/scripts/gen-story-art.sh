@@ -23,7 +23,7 @@ keys=("$@")
 if [[ ${#keys[@]} -eq 0 ]]; then
   read -r -a keys <<< "$(python3 -c "import json;print(' '.join(json.load(open('$story'))['scenes']))")"
 fi
-STYLE="Book illustration painted in Chinese/Vietnamese ink-wash style (thuỷ mặc) on warm rice paper: black ink brushwork, soft grey washes and mist, delicate light colour washes only on the key figures, generous empty paper, matte, no glow, cinematic composition. Wide 16:9. No text, no letters, no seals with writing."
+STYLE="Book illustration painted in Chinese/Vietnamese ink-wash style (thuỷ mặc) on warm rice paper: black ink brushwork, soft grey washes and mist, delicate light colour washes only on the key figures, generous empty paper, matte, no glow, cinematic composition. Every figure has correct anatomy: two arms, two legs, five fingers on each visible hand, no extra or merged limbs; anything partly hidden behind a figure or object continues in the same line on both sides; billiard cues are single, straight and whole; flat shoes or bare feet, never high heels. Wide 16:9. No text, no letters, no seals with writing."
 
 # Prints the scene prompt, then one reference path per line (or "missing <id>").
 scene_info() {
