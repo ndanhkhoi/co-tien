@@ -54,7 +54,7 @@ describe('painted omen overlays', () => {
       expect(drift.width * view.layer.scale.x).toBeCloseTo(patch.r * 2 * 250);
       expect(drift.height).toBeCloseTo(patch.r * 2);
       expect(drift.alpha).toBeGreaterThanOrEqual(0.6);
-      expect(drift.mask).toBeTruthy();
+      expect(drift.parent?.mask).toBeTruthy();
     }
     match.omen = { id: 'snow', name: '', desc: '', terrain: { patches: [{ ...patches[0], x: 0.5 }] } };
     view.update(0);
