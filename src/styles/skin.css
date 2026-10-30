@@ -988,7 +988,8 @@ body.playing .bd-scene, body.playing .bd-mist { animation-play-state: paused; }
 .topbar.compact-nav .tab { padding-inline: 10px; }
 
 /* Passive control: one fixed height in every state (set after the state rules so it wins). */
-#ui .mx-passive.btn, #ui .mx-passive.btn:disabled { height: 48px; min-height: 48px; overflow: hidden; padding: 0 4px; gap: 1px; justify-content: center; border-width: 8px; border-style: solid; }
+#ui .mx-passive.btn, #ui .mx-passive.btn:disabled { height: 48px; min-height: 48px; overflow: hidden; padding: 0 4px; gap: 0; justify-content: center; border-width: 6px; border-image-width: 6px; border-style: solid; }
+/* Two full ink lines fit the 36px content box (48px minus two 6px painted borders). */
 #ui .mx-passive .mx-passive-name { font-size: 11.5px; line-height: 1.1; }
-#ui .mx-passive .mx-passive-detail { font-size: 9.5px; line-height: 1.05; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; }
+#ui .mx-passive .mx-passive-detail { font-size: 9.5px; line-height: 1.2; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; }
 #ui .mx-passive.btn:disabled { border-image: none; border-color: transparent; background: none; }
