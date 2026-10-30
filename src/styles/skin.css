@@ -131,7 +131,6 @@
 /* ---------- Quick match / two players: options on the left, duel stage on the right ---------- */
 .setup-body { gap: 12px; }
 .setup-opts { flex: 0 0 auto; width: min(470px, 56%); justify-content: space-evenly; gap: 2px; padding: 4px 8px !important; }
-.setup-opts .chip[aria-pressed='true'] { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
 .opt-label { font: 700 14px/1.2 var(--display); color: var(--ink); }
 .versus {
   flex: 1;
@@ -172,8 +171,25 @@
 .vs-plates input { width: 100%; min-width: 0; max-width: 100%; font: 700 15px/1.2 var(--display); text-align: inherit; background: transparent; color: var(--ink); border: 0; border-radius: 0; box-shadow: none; min-height: 0; height: 22px; padding: 0; }
 .vs-plates input:focus-visible { outline: 0; background: rgba(26, 23, 19, 0.06); }
 .versus > .btn { flex-shrink: 0; }
-.setup-opts .chip { min-height: 36px; padding: 0 9px; font-size: 13px; }
-.setup-opts .chips { gap: 4px; flex-wrap: nowrap; }
+/* Options read as ink on paper, not pills: plain serif words split by a painted ink tick
+   (art/ui/ink-tick.webp); the chosen one turns vermilion over a brush stroke, like the tabs. */
+.setup-opts .chips { gap: 0; flex-wrap: nowrap; align-items: center; }
+.setup-opts .chip {
+  position: relative; min-height: 36px; padding: 0 10px 4px; border: 0; border-radius: 0; background: none;
+  color: var(--ink-2); font: 600 14px/1.2 var(--display); transition: color 0.2s ease;
+}
+.setup-opts .chip + .chip::before {
+  content: ''; position: absolute; left: -2px; top: 50%; width: 4px; height: 18px; translate: 0 -50%;
+  background: url('/art/ui/ink-tick.webp') center / contain no-repeat; opacity: 0.55; pointer-events: none;
+}
+.setup-opts .chip:not([aria-pressed='true']):hover { color: var(--ink); }
+.setup-opts .chip[aria-pressed='true'] {
+  color: var(--accent-2); font-weight: 700;
+  background: url('/art/ui/tap-stroke.webp') center bottom 2px / calc(100% - 8px) 10px no-repeat;
+}
+/* Pickers that open a sheet (Linh Đài, Biến thể) show the current choice in ink with a brush edit mark. */
+.setup-opts .chip:has(.ico), .setup-opts .chip:has(.ico)[aria-pressed='true'] { color: var(--ink); background: none; }
+.setup-opts .chip .ico { order: 1; width: 18px; height: 18px; }
 /* Two duellists at eye level: each cut-out is fitted into the same box and anchored at the top,
    so a leaping champion and a crouching one still face each other instead of one sinking. */
 .vs-cut.me { object-position: left top; left: -10%; animation: ct-champion-left 520ms 80ms var(--ease) backwards; }

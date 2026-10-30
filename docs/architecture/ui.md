@@ -81,6 +81,9 @@ Khung chữ trong trận là ba tranh co giãn kiểu chín lát, hoa văn chỉ
 
 Nút hành động trong ván là tranh tròn có chữ thư pháp; tên thao tác nằm trong `aria-label`.
 
+Tab và lựa chọn ở màn thiết lập Luận Cơ, Song Đấu không dùng viên thuốc. Đó là chữ serif trên giấy, ngăn nhau
+bằng nét mực `ui/ink-tick.webp`; mục đang chọn chuyển màu son và nằm trên nét cọ `ui/tap-stroke.webp`.
+
 ## Chuyển động
 
 - Chuyển màn trong `app.ts` có hướng tiến/lùi/đặt lại; màn cũ thành `inert` rồi được gỡ khi chuyển xong.
