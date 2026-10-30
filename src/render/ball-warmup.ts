@@ -19,6 +19,7 @@ export function warmBallShader(app: Application) {
   holder.addChild(sprite, shape, mesh.mesh);
   const target = app.renderer.generateTexture({ target: holder, resolution: 1 });
   target.destroy(true);
+  mesh.destroy();
   holder.destroy({ children: true });
   numbers.destroy(true);
 }

@@ -620,10 +620,14 @@ body.stage #stage {
   background: var(--frame) center / cover no-repeat;
   filter: saturate(0.82) blur(1.5px);
   opacity: 0;
-  transition: opacity 0.9s ease;
+  /* The faded-out layer leaves the compositor once its fade ends: a hidden, blurred, drifting
+     full-window layer still costs GPU memory and a filter pass every frame. */
+  visibility: hidden;
+  transition: opacity 0.9s ease, visibility 0s linear 0.9s;
   animation: bd-drift 70s ease-in-out infinite alternate;
+  animation-play-state: paused;
 }
-.bd-scene.on { opacity: 1; }
+.bd-scene.on { opacity: 1; visibility: visible; transition: opacity 0.9s ease; animation-play-state: running; }
 /* A paper wash and ink vignette keep the painting behind the frame, never competing with it. */
 #backdrop::after {
   content: ''; position: absolute; inset: 0;
@@ -687,7 +691,7 @@ body.playing .bd-scene, body.playing .bd-mist { animation-play-state: paused; }
 @keyframes bd-mist { to { transform: translateX(-50%); } }
 @media (prefers-reduced-motion: reduce) {
   .bd-scene, .bd-mist { animation: none; }
-  .bd-scene, .bd-cast { transition: none; }
+  .bd-scene, .bd-scene.on, .bd-cast { transition: none; }
 }
 
 /* ---------- Luyện thế: position picker ---------- */

@@ -5,7 +5,7 @@ import { CUES, TABLES } from '../game/content/gear';
 import { CHAMPIONS, cutoutUrl } from '../game/content/sects';
 import { levelOf, loadProfile, saveProfile, type Profile } from '../game/profile';
 import { setHaptics } from '../platform/device';
-import { h, modal as baseModal, toast } from './dom';
+import { btn, h, modal as baseModal, toast } from './dom';
 
 export interface Screen {
   el: HTMLElement;
@@ -59,6 +59,7 @@ export class App {
     });
     this.stageEl.append(this.pixi.canvas);
     this.pixi.ticker.stop();
+    this.watchGpu(this.pixi.canvas);
     // Compile the ball shader while the player is still on the title screen; otherwise the first
     // table pays for it and the transition into a match stalls.
     const warm = () => void import('../render/ball-warmup').then((m) => m.warmBallShader(this.pixi)).catch(() => undefined);
@@ -161,6 +162,30 @@ export class App {
     document.body.append(h('div.update-sheet', { role: 'alert', 'aria-live': 'assertive' },
       h('div.us-card', null, h('img.us-logo', { src: logo, alt: 'Cơ Tiên' }), h('b.us-text', null, text),
         h('div.us-bar', { 'aria-hidden': 'true' }, h('i')), h('span.us-note', null, 'Tiến trình của bạn được giữ nguyên'))));
+  }
+
+  /**
+   * A GPU reset drops the WebGL context. PixiJS rebuilds the table once the browser restores it;
+   * when the browser keeps it away (it blocks 3D for a page after repeated resets) the table would
+   * stay blank, so the player is told and offered a reload. Only the match in progress is lost.
+   */
+  private watchGpu(canvas: HTMLCanvasElement) {
+    let timer = 0;
+    canvas.addEventListener('webglcontextlost', () => {
+      clearTimeout(timer);
+      timer = window.setTimeout(() => {
+        if (document.querySelector('.gpu-sheet')) return;
+        document.body.append(h('div.update-sheet.gpu-sheet', { role: 'alert', 'aria-live': 'assertive' },
+          h('div.us-card', null, h('img.us-logo', { src: `${import.meta.env.BASE_URL}art/ui/logo.webp`, alt: 'Cơ Tiên' }),
+            h('b.us-text', null, 'Đồ hoạ bị gián đoạn'),
+            h('span.us-note', null, 'Trình duyệt vừa tạm dừng bộ xử lý đồ hoạ. Tải lại để bàn hiện lại. Hồ sơ được giữ nguyên, riêng trận đang chơi sẽ không được lưu.'),
+            btn('Tải lại', () => location.reload()))));
+      }, 3000);
+    });
+    canvas.addEventListener('webglcontextrestored', () => {
+      clearTimeout(timer);
+      document.querySelector('.gpu-sheet')?.remove();
+    });
   }
 
   /** Cross-fade the stage backdrop once the new painting has decoded. */

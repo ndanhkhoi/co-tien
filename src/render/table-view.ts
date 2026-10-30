@@ -190,7 +190,7 @@ export class TableView {
     const art = paintTable(this.match.table, skin, want, rail);
     const previous = this.tableSprite.texture;
     this.tableSprite.texture = art.texture;
-    if (previous !== Texture.EMPTY && previous !== Texture.WHITE) previous.destroy(true);
+    dropTexture(previous);
     this.tableSprite.scale.set(1 / want);
     this.cue.scale.set(1 / want);
     this.cueShadow.scale.set(1 / want);
@@ -209,6 +209,7 @@ export class TableView {
     const want = this.artScale || this.scale;
     const c = this.match.current.cue;
     const cue = paintCue(c, want, this.cueImage(c));
+    dropTexture(this.cue.texture);
     this.cue.texture = cue.texture;
     this.cueShadow.texture = cue.texture;
   }
@@ -222,7 +223,7 @@ export class TableView {
   }
 
   private rebuildBalls() {
-    for (const m of this.meshes.values()) m.mesh.destroy();
+    for (const m of this.meshes.values()) m.destroy();
     for (const s of this.shadowSprites.values()) s.destroy();
     this.meshes.clear();
     this.shadowSprites.clear();
@@ -370,6 +371,7 @@ export class TableView {
     gr.addColorStop(1, 'rgba(150,160,172,0.86)');
     g.fillStyle = gr;
     g.fillRect(0, 0, px, px);
+    dropTexture(this.fogSprite.texture);
     this.fogSprite.texture = Texture.from(c);
     this.fogSprite.width = this.fogSprite.height = size;
   }
@@ -688,7 +690,8 @@ export class TableView {
     const holder = new Container();
     holder.addChild(mesh.mesh);
     const url = this.app.renderer.extract.canvas({ target: holder, resolution: res, frame: new Rectangle(0, 0, px, px), clearColor: [0, 0, 0, 0] }).toDataURL!('image/png');
-    holder.destroy({ children: true });
+    mesh.destroy();
+    holder.destroy();
     this.portraits.set(key, url);
     return url;
   }
@@ -696,6 +699,15 @@ export class TableView {
 
   destroy() {
     this.disposed = true;
+    // Textures painted for this table are its own; the shared art loaded through Assets is not.
+    const own = [this.tableSprite.texture, this.cue.texture, this.fogSprite.texture, this.numbers, this.shadowTex, this.glowTex];
+    for (const m of this.meshes.values()) m.destroy();
     this.root.destroy({ children: true });
+    for (const t of own) dropTexture(t);
   }
+}
+
+/** Free a canvas-painted texture and its GPU copy; every match and repaint makes new ones. */
+function dropTexture(t: Texture) {
+  if (t !== Texture.EMPTY && t !== Texture.WHITE && !t.destroyed) t.destroy(true);
 }

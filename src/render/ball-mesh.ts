@@ -139,6 +139,12 @@ export class BallMesh {
     this.faceUp(rng);
   }
 
+  /** The shader keeps the shared number atlas bound; release it with the mesh. */
+  destroy() {
+    this.mesh.shader?.destroy();
+    this.mesh.destroy();
+  }
+
   setPixelRadius(px: number) {
     this.uniforms.uPx = px;
     this.group.update();

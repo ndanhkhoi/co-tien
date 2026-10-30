@@ -98,6 +98,11 @@ theo bề dày thân cơ phía trước (đo một lần từ kênh alpha), nên
 `app.ts` giới hạn mật độ 2× và khoảng 3,6 triệu điểm ảnh, chỉ bật MSAA khi màn hình kém nét; mã chạy mỗi khung
 hình đọc vị trí lớp UI qua `uiOrigin()` thay vì đọc layout.
 
+Texture vẽ bằng canvas (mặt bàn cỡ màn hình, cơ, atlas số, bóng, sương) thuộc về một `TableView`: vẽ lại thì
+huỷ bản cũ, `destroy()` huỷ hết cùng shader của bi (`BallMesh.destroy`), nên vào–ra trận bao nhiêu lần bộ nhớ GPU
+vẫn như cũ; ảnh tải qua `Assets` dùng chung và không bị huỷ. Khi GPU reset làm mất WebGL, PixiJS tự dựng lại lúc
+trình duyệt trả context; quá 3 giây chưa trả thì `app.ts` hiện bảng “Đồ hoạ bị gián đoạn” kèm nút Tải lại.
+
 Code/shader cho bi và bàn phục vụ hình học và trạng thái mô phỏng (số/sọc, màu, ánh sáng, xoay vật lý). Tranh, icon và trang trí UI vẫn là tài sản nguyên bản sinh riêng qua pipeline; ngoại lệ vật thể mô phỏng không áp dụng cho chúng.
 
 ## `src/ui`
