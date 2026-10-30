@@ -25,8 +25,11 @@ ràng buộc, thuật ngữ, và chỉ đường tới đúng file. Khi tài li�
 | Chạy test, kiểm tra trên thiết bị, chụp ảnh README | [guides/testing.md](guides/testing.md) |
 | Vì sao chọn cách hiện tại | [decisions/](decisions/README.md) |
 
-Quy trình đóng góp và nguyên tắc code: [CONTRIBUTING.md](../CONTRIBUTING.md). Quy tắc cho AI agent:
-[AGENTS.md](../AGENTS.md). Ảnh chụp màn hình cho README nằm ở `screenshots/`.
+Ngoài `docs/`:
+
+- [CONTRIBUTING.md](../CONTRIBUTING.md): quy trình đóng góp và nguyên tắc code.
+- [AGENTS.md](../AGENTS.md): quy tắc cho AI agent.
+- `screenshots/`: ảnh chụp màn hình dùng trong README.
 
 ## Giữ tài liệu đúng
 

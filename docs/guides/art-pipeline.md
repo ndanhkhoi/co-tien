@@ -61,18 +61,30 @@ response để kiểm tra trước khi chạy lại.
 
 ## Phong cách
 
-**Thuỷ Mặc**: tranh mực trên giấy dó, mực đen, một màu son, nhiều khoảng trống, không phát sáng, không chữ
-vàng 3D. Tướng giữ tạo hình anime màu sắc trên giấy; hiệu ứng dùng nét mực màu môn phái. Dấu ấn chỉ dùng
-son và đen. Quy tắc đầy đủ: `.claude/skills/game-art/references/style-bible.md`.
+**Thuỷ Mặc.** Quy tắc đầy đủ: `.claude/skills/game-art/references/style-bible.md`.
 
-**Quy tắc tài sản:** mọi tranh, icon, minh hoạ và trang trí giao diện phải là tài sản nguyên bản được sinh riêng qua pipeline, bằng model quy định; không lấy ảnh internet, tài sản có sẵn của tác phẩm khác, emoji, thư viện icon hoặc tự vẽ SVG thay tranh. Code/shader được dùng cho vật thể mô phỏng như bi và bàn: hình học, số/sọc, màu, ánh sáng và xoay theo vật lý. Ngoại lệ này không mở rộng sang tranh, icon hay trang trí UI. Vật thể mang tính minh hoạ trong giao diện, kể cả ảnh xem cơ mặc định, vẫn dùng tranh qua pipeline.
+- Tranh mực trên giấy dó: mực đen, một màu son, nhiều khoảng trống.
+- Không phát sáng, không chữ vàng 3D.
+- Tướng giữ tạo hình anime màu sắc trên giấy.
+- Hiệu ứng dùng nét mực màu môn phái.
+- Dấu ấn chỉ dùng son và đen.
+
+**Quy tắc tài sản.**
+
+- Mọi tranh, icon, minh hoạ và trang trí giao diện là tài sản nguyên bản, sinh riêng qua pipeline bằng model
+  quy định.
+- Không dùng ảnh internet, tài sản của tác phẩm khác, emoji, thư viện icon, hay SVG tự vẽ thay tranh.
+- Code/shader chỉ được dựng vật thể mô phỏng như bi và bàn (hình học, số/sọc, màu, ánh sáng, xoay theo vật lý).
+  Ngoại lệ này không áp dụng cho tranh, icon hay trang trí UI.
+- Vật thể mang tính minh hoạ trong giao diện, kể cả ảnh xem cơ mặc định, vẫn dùng tranh qua pipeline.
 
 ## Ảnh gốc
 
-Ảnh gốc độ phân giải đầy đủ và prompt nằm **ngoài repo**, được lưu và sao lưu riêng. `public/art/` chỉ
-chứa bản đã xử lý cho game. Muốn vẽ lại hay vẽ thêm: đọc `.claude/skills/game-art/SKILL.md`, cấu hình
-`.env.image-api` rồi chạy script với API và model được quy định ở trên. Không đưa khoá hay vị trí thư
-mục riêng vào tài liệu hoặc commit.
+- Ảnh gốc độ phân giải đầy đủ và prompt nằm **ngoài repo**, được lưu và sao lưu riêng.
+- `public/art/` chỉ chứa bản đã xử lý cho game.
+- Muốn vẽ lại hay vẽ thêm: đọc `.claude/skills/game-art/SKILL.md`, cấu hình `.env.image-api`, rồi chạy script
+  với API và model quy định ở trên.
+- Không đưa khoá API hay vị trí thư mục riêng vào tài liệu hoặc commit.
 
 ## Yêu cầu riêng cho tranh giao diện
 

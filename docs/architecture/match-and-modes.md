@@ -27,23 +27,31 @@
 | Luyện Cơ | Thử thách có lời giải, chấm sao | tắt | không |
 | Luyện thế | Bày thế rồi đánh tự do, không luật | tắt | không |
 
-**Tiên Đạo / Cổ Điển** là lựa chọn trong thiết lập trận, độc lập với thể loại 8/9/10 bi hoặc phăng: Tiên Đạo
-bật chiêu, nội tại và Thiên Tượng; Cổ Điển là bida thuần. Đừng thêm `if (mode === …)` rải rác: chế độ đọc cờ
-trong `MatchSetup`.
+**Tiên Đạo / Cổ Điển** là lựa chọn trong thiết lập trận, độc lập với thể loại 8/9/10 bi hoặc phăng:
 
-Tên menu là quyết định đã chốt (xem [decisions/menu-names.md](../decisions/menu-names.md)): Hành trình, Luận
-Cơ, Song Đấu, Luyện Cơ, Tàng Các, Cơ Tiên Truyện, Luyện thế.
+- **Tiên Đạo** bật chiêu, nội tại và Thiên Tượng.
+- **Cổ Điển** là bida thuần.
+- Chế độ đọc cờ trong `MatchSetup` (`classic`, `judge`, `practice`); đừng rải `if (mode === …)` qua nhiều file.
+
+Tên menu là quyết định đã chốt: [decisions/menu-names.md](../decisions/menu-names.md).
 
 ## Năng lượng (Tiên Đạo)
 
-Mỗi cú cho một lượng cố định (`ENERGY_PER_SHOT`) cộng một lượng cho mỗi điểm cú đánh (`ENERGY_PER_VALUE`,
-điểm từ `src/core/shot-score.ts`), rồi nhân chỉ số năng lượng của cơ và Địa Lợi; đối thủ phạm lỗi thì bên kia
-được thêm. Trần là `ENERGY_MAX`; tuyệt chiêu cần đầy thanh. Cổ Điển không cộng năng lượng. `Match` phát sự
-kiện `energy` với phần tăng thực tế sau giới hạn. Các hằng nằm đầu `match.ts`; kiểm thử ở
-`tests/skill-usage.test.ts`.
+Các hằng nằm đầu `match.ts`:
 
-Lý do chấm theo độ khó thay vì đếm bi: người chơi giỏi được thưởng vì đánh đẹp, không chỉ vì đánh nhiều,
-và Ảnh Sát (`ASSASSIN_RUN`, `ASSASSIN_VALUE`) đòi một chuỗi có chất lượng chứ không chỉ chuỗi dài.
+- Mỗi cú được `ENERGY_PER_SHOT`, cộng `ENERGY_PER_VALUE` cho mỗi điểm cú đánh (điểm từ `src/core/shot-score.ts`).
+- Tổng được nhân theo chỉ số năng lượng của cơ và Địa Lợi.
+- Đối thủ phạm lỗi thì bên kia được thêm năng lượng.
+- Trần là `ENERGY_MAX`; tuyệt chiêu cần đầy thanh.
+- Cổ Điển không cộng năng lượng.
+- `Match` phát sự kiện `energy` với phần tăng thực tế sau giới hạn.
+
+Kiểm thử: `tests/skill-usage.test.ts`.
+
+Vì sao chấm theo độ khó thay vì đếm bi:
+
+- Người chơi giỏi được thưởng vì đánh đẹp, không chỉ vì đánh nhiều.
+- Ảnh Sát (`ASSASSIN_RUN`, `ASSASSIN_VALUE`) đòi một chuỗi có chất lượng, không chỉ chuỗi dài.
 
 ## Kết liễu
 
@@ -52,9 +60,11 @@ Ván thắng bằng chính cú sạch của người thắng mở màn Kết li�
 
 ## Luyện thế
 
-Màn chọn thế liệt kê thế mẫu và Thế của tôi; bàn tập dùng `Match` thật với luật tắt. Đánh lại dùng
-`Match.undoShot` (ảnh chụp trước cú), Đường đi bật `Match.sight` để mô phỏng đường của mọi bi. Giao diện:
-`src/ui/screens/practice.ts`, `practice-desk.ts`. Kiểm thử: `tests/practice.test.ts`.
+- Màn chọn thế liệt kê thế mẫu và Thế của tôi.
+- Bàn tập dùng `Match` thật với luật tắt.
+- **Đánh lại** dùng `Match.undoShot` (ảnh chụp trước cú).
+- **Đường đi** bật `Match.sight` để mô phỏng đường của mọi bi.
+- Giao diện: `src/ui/screens/practice.ts`, `practice-desk.ts`. Kiểm thử: `tests/practice.test.ts`.
 
 ## Lưu dữ liệu
 

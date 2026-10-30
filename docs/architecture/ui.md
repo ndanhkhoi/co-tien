@@ -24,10 +24,13 @@ Tìm trong `dom.ts` trước khi viết tiện ích DOM mới.
 
 ## Một khung 16:9
 
-DOM có một khung thiết kế **844×475**. `installUiScale()` trong `src/main.ts` scale đều khung này to nhất có
-thể trong vùng màn hình đã trừ safe area (tối đa 2,2), căn giữa, nằm trong khung bình phong vẽ; phần thừa là
-phông tranh, không bao giờ là màu phẳng. Chỉ màn cài app dùng kích thước thật. Lý do:
-[decisions/one-16x9-frame.md](../decisions/one-16x9-frame.md).
+DOM có một khung thiết kế **844×475**. `installUiScale()` trong `src/main.ts`:
+
+- scale đều khung này to nhất có thể trong vùng màn hình đã trừ safe area, tối đa 2,2;
+- căn giữa khung và đặt nó trong khung bình phong vẽ;
+- để phần thừa hiện phông tranh, không bao giờ là màu phẳng.
+
+Chỉ màn cài app dùng kích thước thật. Lý do: [decisions/one-16x9-frame.md](../decisions/one-16x9-frame.md).
 
 Hệ quả phải giữ:
 
@@ -59,12 +62,19 @@ bên là code chết.
 
 ## Phong cách Thuỷ Mặc
 
-Giấy, mực đen, **một** màu son nhấn, chữ tiêu đề serif (Noto Serif), chữ thân Be Vietnam Pro. Không phát
-sáng, không chữ vàng 3D. Tướng giữ tạo hình anime màu sắc trên nền giấy. Mọi chữ người chơi thấy là tiếng
-Việt. Icon và trang trí là tranh vẽ, không SVG, emoji hay thư viện icon.
+- Giấy, mực đen, **một** màu son nhấn.
+- Chữ tiêu đề Noto Serif, chữ thân Be Vietnam Pro.
+- Không phát sáng, không chữ vàng 3D.
+- Tướng giữ tạo hình anime màu sắc trên nền giấy.
+- Mọi chữ người chơi thấy là tiếng Việt.
+- Icon và trang trí là tranh vẽ; không SVG, emoji hay thư viện icon.
 
 Khung chữ trong trận là ba tranh co giãn kiểu chín lát, hoa văn chỉ ở hai đầu để chữ không đè lên:
-`ui/frame/band.webp` (thông báo), `plate.webp` (bảng tên), `scroll.webp` (ô mục tiêu, nhãn bi, lời nhắc).
+
+- `ui/frame/band.webp`: thông báo;
+- `plate.webp`: bảng tên;
+- `scroll.webp`: ô mục tiêu, nhãn bi, lời nhắc.
+
 Nút hành động trong ván là tranh tròn có chữ thư pháp; tên thao tác nằm trong `aria-label`.
 
 ## Chuyển động
@@ -77,6 +87,8 @@ Nút hành động trong ván là tranh tròn có chữ thư pháp; tên thao t�
 
 ## Tàng Các
 
-Tab Tướng, Pháp Cơ, Linh Đài là đồ sở hữu; Vùng đất, Hệ, Luật là Cơ Tiên Lục. Trang tướng có ba nút icon chiêu
-riêng của tướng (`skillIconUrl(champion.id, slot)`); chạm mở thẻ chi tiết trước, không dùng ngay. Nút Tiểu sử
-chỉ mở với tướng đã gặp hoặc đã sở hữu. Xem trước bàn giữ đúng tỉ lệ bàn WPA gồm cả viền.
+- Tab Tướng, Pháp Cơ, Linh Đài là đồ sở hữu; Vùng đất, Hệ, Luật là Cơ Tiên Lục.
+- Trang tướng có ba nút icon chiêu riêng của tướng (`skillIconUrl(champion.id, slot)`). Chạm mở thẻ chi tiết
+  trước, không dùng ngay.
+- Nút Tiểu sử chỉ mở với tướng đã gặp hoặc đã sở hữu.
+- Xem trước bàn giữ đúng tỉ lệ bàn WPA gồm cả viền.

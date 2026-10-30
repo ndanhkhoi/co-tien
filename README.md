@@ -8,14 +8,20 @@ tiên hiệp riêng: **Cơ Tiên Giới** — 13 môn phái, 65 tướng, mỗi 
 
 ## Có gì trong game
 
-**Bida thật.** 8 bi, 9 bi, 10 bi theo luật WPA và bi-a phăng tự do, ba băng theo UMB, trên bàn đúng kích thước
-chuẩn. Ma sát trượt và lăn, spin ba trục, throw, squirt, áp phê đổi góc bật băng, và cú nhảy theo góc nâng cơ —
-bi có thể văng bàn.
+**Bida thật.**
 
-**Tu tiên trên bàn bi.** Chế độ **Tiên Đạo** bật chiêu, nội tại và địa thế; **Cổ Điển** là bida thuần. Mỗi chiêu
-và mỗi Thiên Tượng (gió, bão tuyết, sóng lừng, giếng sao…) là lực và ma sát thật trong mô phỏng, nên đường dự
-đoán luôn đúng. Năng lượng nạp theo độ khó và độ đẹp của cú đánh. Cú thắng ván mở màn **Kết liễu** riêng của
-từng tướng.
+- 8 bi, 9 bi, 10 bi theo luật WPA; bi-a phăng tự do và ba băng theo UMB.
+- Bàn và bi đúng kích thước chuẩn.
+- Ma sát trượt và lăn, spin ba trục, throw, squirt, áp phê đổi góc bật băng.
+- Cú nhảy theo góc nâng cơ; bi có thể văng bàn.
+
+**Tu tiên trên bàn bi.**
+
+- **Tiên Đạo** bật chiêu, nội tại và địa thế; **Cổ Điển** là bida thuần.
+- Mỗi chiêu và mỗi Thiên Tượng (gió, bão tuyết, sóng lừng, giếng sao…) là lực và ma sát thật trong mô phỏng,
+  nên đường dự đoán luôn đúng.
+- Năng lượng nạp theo độ khó và độ đẹp của cú đánh.
+- Cú thắng ván mở màn **Kết liễu** riêng của từng tướng.
 
 **Cách chơi**
 
@@ -29,9 +35,11 @@ từng tướng.
 | **Tàng Các** | Tướng, Pháp Cơ, Linh Đài và Cơ Tiên Lục — wiki của thế giới |
 | **Cơ Tiên Truyện** | Truyện chữ có tranh thuỷ mặc, 15 chương mở dần theo Hành trình |
 
-**Làm cho điện thoại.** Điều khiển bằng chạm và kéo, giao diện trong một khung 16:9 vừa mọi màn hình. Lần đầu
-tải trọn bộ tranh (khoảng 100 MB), sau đó chơi không phải chờ; bản cập nhật chỉ tải phần tranh đã đổi. Chi
-tiết điều khiển: [docs/gameplay/controls.md](docs/gameplay/controls.md).
+**Làm cho điện thoại.**
+
+- Điều khiển bằng chạm và kéo: [docs/gameplay/controls.md](docs/gameplay/controls.md).
+- Giao diện nằm trong một khung 16:9, vừa mọi màn hình.
+- Lần đầu tải trọn bộ tranh (khoảng 100 MB), sau đó chơi không phải chờ; bản cập nhật chỉ tải phần tranh đã đổi.
 
 ## Hình ảnh
 
@@ -66,8 +74,11 @@ npm test
 npm run build
 ```
 
-TypeScript, Vite, PixiJS 8 (WebGL), vite-plugin-pwa; âm thanh tổng hợp bằng WebAudio. Không có server; deploy
-lên Cloudflare Pages khi push lên `main`. Vì sao chọn từng thứ: [docs/architecture/tech-stack.md](docs/architecture/tech-stack.md).
+- Công nghệ: TypeScript, Vite, PixiJS 8 (WebGL), vite-plugin-pwa, âm thanh tổng hợp bằng WebAudio. Không có
+  server. Vì sao chọn từng thứ: [docs/architecture/tech-stack.md](docs/architecture/tech-stack.md).
+- Deploy lên Cloudflare Pages mỗi khi push lên `main`.
+
+Tài liệu:
 
 - [docs/README.md](docs/README.md) — mục lục tài liệu: kiến trúc, lối chơi, thế giới, hướng dẫn, quyết định
 - [CONTRIBUTING.md](CONTRIBUTING.md) — quy tắc và quy trình đóng góp

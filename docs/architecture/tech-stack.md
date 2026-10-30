@@ -25,9 +25,14 @@ Không có backend, không có analytics, không có thư viện UI hay icon.
 
 ## Triển khai
 
-Push lên `main` chạy `.github/workflows/deploy.yml`: `npm ci`, `npm test`, `npm run build`, rồi
-`wrangler pages deploy dist` lên Cloudflare Pages (dự án `co-tien`, tên miền `cotien.khoinda.vn`). Token và
-account ID nằm trong GitHub Actions secrets của repo, không bao giờ nằm trong repo.
+Push lên `main` chạy `.github/workflows/deploy.yml`:
+
+1. `npm ci`
+2. `npm test`
+3. `npm run build`
+4. `wrangler pages deploy dist` lên Cloudflare Pages (dự án `co-tien`, tên miền `cotien.khoinda.vn`)
+
+Token và account ID nằm trong GitHub Actions secrets của repo, không bao giờ nằm trong repo.
 
 - Test hoặc build lỗi thì không deploy.
 - Commit chỉ đổi tài liệu có thể thêm `[skip ci]` vào tiêu đề để không deploy lại.

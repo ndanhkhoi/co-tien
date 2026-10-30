@@ -1,7 +1,11 @@
 # Điều khiển trong trận
 
-Nguồn: `src/ui/screens/match-screen.ts` (trận) và `practice-desk.ts` (Luyện thế). Đây là hợp đồng với người
-chơi: đổi một thao tác ở đây thì cập nhật file này, phần điều khiển trong README và chụp lại ảnh liên quan.
+Nguồn: `src/ui/screens/match-screen.ts` (trận) và `practice-desk.ts` (Luyện thế).
+
+Đây là hợp đồng với người chơi. Đổi một thao tác thì trong cùng thay đổi:
+
+- cập nhật file này;
+- chụp lại các ảnh README có màn đó ([guides/testing.md](../guides/testing.md#ảnh-chụp-cho-readme-và-docs)).
 
 ## Ngắm
 
@@ -32,9 +36,11 @@ chơi: đổi một thao tác ở đây thì cập nhật file này, phần đi�
 
 ## Bi trong tay
 
-Kéo bi cái hoặc chạm bàn để dời; cụm nút hướng tròn chỉnh từng nấc nhỏ, giữ để nhanh dần. **Ngắm thử** chuyển
-sang ngắm để xem đường trước khi chốt, **Dời bi** quay lại đặt. Khi dời bi, cơ và tia ngắm ẩn. **ĐẶT BI**
-xác nhận vị trí, không đánh ngay.
+- Kéo bi cái hoặc chạm bàn để dời bi.
+- Cụm nút hướng tròn chỉnh từng nấc nhỏ; giữ để nhanh dần.
+- **Ngắm thử** chuyển sang ngắm để xem đường trước khi chốt; **Dời bi** quay lại đặt.
+- Khi đang dời bi, cơ và tia ngắm ẩn.
+- **ĐẶT BI** xác nhận vị trí, không đánh ngay.
 
 ## Chiêu (Tiên Đạo)
 
@@ -55,7 +61,8 @@ xác nhận vị trí, không đánh ngay.
 
 ## Song Đấu và Luận Cơ
 
-Song Đấu: mỗi bên đặt tên, chọn tướng đã sở hữu (không trùng bên kia) và cơ, cùng chọn bàn; **Đổi tướng** bốc
-lại cả hai từ tướng đã sở hữu. Luận Cơ: **Đổi đối thủ** bốc lại tướng AI trong các bậc của cấp độ đã chọn.
+- **Song Đấu:** mỗi bên đặt tên, chọn tướng đã sở hữu (không trùng bên kia) và cơ; hai bên cùng chọn bàn.
+  **Đổi tướng** bốc lại tướng cho cả hai từ các tướng đã sở hữu.
+- **Luận Cơ:** **Đổi đối thủ** bốc lại tướng AI trong các bậc của cấp độ đã chọn.
 
 Kiểm tra trên thiết bị: [guides/testing.md](../guides/testing.md).

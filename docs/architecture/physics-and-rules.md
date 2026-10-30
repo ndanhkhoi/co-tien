@@ -31,19 +31,25 @@
 
 ## Luật
 
-Bộ luật theo WPA (8 bi, 9 bi, 10 bi: push-out, ba lỗi liên tiếp, luật phá ba bi, quyền chọn sau phá không hợp
-lệ, gọi bi gọi lỗ) và UMB (carom phăng tự do, ba băng). Văn bản luật hiện cho người chơi nằm ở
-`src/game/content/rules-text.ts`.
+- **WPA** cho 8 bi, 9 bi, 10 bi: push-out, ba lỗi liên tiếp, luật phá ba bi, quyền chọn sau phá không hợp lệ,
+  gọi bi gọi lỗ.
+- **UMB** cho carom: phăng tự do, ba băng.
+- Văn bản luật hiện cho người chơi: `src/game/content/rules-text.ts`.
 
-Mọi `RuleSet` giữ cùng hợp đồng trong `rules/types.ts` (xếp bi, bi cái, bi hợp lệ, kiểu gọi, `resolve`,
-mục tiêu HUD). Trận, dự đoán và AI dùng bất kỳ bộ luật nào mà không rẽ nhánh theo thể loại; thêm thể loại là
-thêm một `RuleSet` và đăng ký trong `rules/index.ts`.
+Mọi `RuleSet` giữ cùng hợp đồng trong `rules/types.ts`:
+
+- xếp bi, bi cái, bi được chạm trước, kiểu gọi, `resolve`, mục tiêu cho HUD;
+- trận, dự đoán và AI dùng bộ luật nào cũng được, không rẽ nhánh theo thể loại;
+- thêm thể loại là thêm một `RuleSet` và đăng ký trong `rules/index.ts`.
 
 ## Điểm cú đánh
 
-`shot-score.ts` là nguồn duy nhất cho độ khó của cú: năng lượng Tiên Đạo, điều kiện Ảnh Sát và lời khen sau
-cú đều đọc từ đây. Cú phá không có thưởng; cú lỗi không có điểm. Đổi cách chấm thì cập nhật
-`tests/shot-score.test.ts`. Cách điểm đổi ra năng lượng: [match-and-modes.md](match-and-modes.md).
+`shot-score.ts` là nguồn duy nhất cho độ khó của cú. Ba nơi đọc từ đây: năng lượng Tiên Đạo, điều kiện Ảnh Sát
+và lời khen sau cú.
+
+- Cú phá không có thưởng; cú lỗi không có điểm.
+- Đổi cách chấm thì cập nhật `tests/shot-score.test.ts`.
+- Cách điểm đổi ra năng lượng: [match-and-modes.md](match-and-modes.md#năng-lượng-tiên-đạo).
 
 ## Kiểm thử
 

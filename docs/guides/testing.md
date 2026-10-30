@@ -9,9 +9,9 @@ npm test         # Vitest, toàn bộ tests/
 npm run build    # tsc --noEmit rồi vite build
 ```
 
-Chạy một file khi đang sửa: `npx vitest run tests/physics.test.ts`. Đổi vật lý hay luật làm hỏng
-`tests/challenges.test.ts` thì sinh lại thử thách bằng `npm run gen:challenges` thay vì sửa tay
-`challenges.json`.
+- Chạy một file khi đang sửa: `npx vitest run tests/physics.test.ts`.
+- Đổi vật lý hay luật làm hỏng `tests/challenges.test.ts` thì sinh lại thử thách bằng
+  `npm run gen:challenges`, không sửa tay `challenges.json`.
 
 ## Test nào giữ gì
 

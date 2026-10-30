@@ -29,7 +29,7 @@
 
 ## Code vẽ và tranh vẽ
 
-Code/shader chỉ được dựng **vật thể mô phỏng**: hình học bàn và bi, số/sọc, màu, ánh sáng, xoay theo vật lý.
-Tranh, icon và trang trí UI luôn là tranh vẽ qua pipeline ([guides/art-pipeline.md](../guides/art-pipeline.md));
-ngoại lệ vật thể mô phỏng không mở rộng sang chúng. Màu nỉ mới phải qua `tests/sect-contrast.test.ts` để bi
-luôn dễ nhìn.
+- Code/shader chỉ được dựng **vật thể mô phỏng**: hình học bàn và bi, số/sọc, màu, ánh sáng, xoay theo vật lý.
+- Tranh, icon và trang trí UI luôn là tranh vẽ qua pipeline ([guides/art-pipeline.md](../guides/art-pipeline.md)).
+  Ngoại lệ vật thể mô phỏng không áp dụng cho chúng.
+- Màu nỉ mới phải qua `tests/sect-contrast.test.ts` để bi luôn dễ nhìn.

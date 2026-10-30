@@ -16,11 +16,17 @@ người chơi; dữ liệu người chơi nằm trong `localStorage`. Bản pro
 | `src/audio` | Âm thanh tổng hợp bằng WebAudio, không có file âm thanh | lá |
 | `src/styles` | CSS Thuỷ Mặc, xem [ui.md](ui.md) | |
 
-Không bao giờ import ngược lên (ví dụ `core` import `game`). Lý do: `core` phải chạy được trong Web Worker
-của AI và trong Vitest mà không kéo theo DOM hay PixiJS, và mọi tính năng mới phải dùng chung một mô phỏng.
+Không bao giờ import ngược lên (ví dụ `core` import `game`), vì:
 
-Điểm vào là `src/main.ts`: nạp CSS, dựng khung 16:9, đăng ký service worker, khởi động `App`
-(`src/ui/app.ts`) quản lý ngăn xếp màn hình.
+- `core` phải chạy được trong Web Worker của AI và trong Vitest mà không kéo theo DOM hay PixiJS;
+- mọi tính năng mới phải dùng chung một mô phỏng.
+
+Điểm vào là `src/main.ts`. File này:
+
+- nạp font và CSS;
+- dựng khung 16:9;
+- đăng ký service worker;
+- khởi động `App` (`src/ui/app.ts`), nơi quản lý ngăn xếp màn hình.
 
 ## Luồng một cú đánh
 

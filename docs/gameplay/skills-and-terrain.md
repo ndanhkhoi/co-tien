@@ -4,9 +4,11 @@ Tất cả chỉ có hiệu lực trong **Tiên Đạo**. Cổ Điển, Luyện 
 
 ## Nguyên tắc
 
-Mọi chiêu và Thiên Tượng phải là **lực, ma sát, vật chắn hoặc kích thước lỗ trong mô phỏng**. Lực đều (nghiêng,
-gió) luôn dưới lực cản lăn, nên bi đứng yên không trôi. Một hiệu ứng chỉ được thêm khi trận thật, đường dự đoán
-và AI dùng chung nó qua `Match.simulationWorld()`. Lý do: [decisions/real-physics.md](../decisions/real-physics.md).
+- Mọi chiêu và Thiên Tượng phải là **lực, ma sát, vật chắn hoặc kích thước lỗ trong mô phỏng**.
+- Lực đều (nghiêng, gió) luôn dưới lực cản lăn, nên bi đứng yên không trôi.
+- Một hiệu ứng chỉ được thêm khi trận thật, đường dự đoán và AI dùng chung nó qua `Match.simulationWorld()`.
+
+Lý do: [decisions/real-physics.md](../decisions/real-physics.md).
 
 ## Chiêu
 
@@ -30,10 +32,12 @@ Kiểm thử: `tests/skill-cast.test.ts`, `ultimate-geometry.test.ts`, `roster-k
 
 ## Nội tại
 
-`cls` của tướng chọn một trong bảy hệ (Thần Xạ, Cuồng Chiến, Pháp Tu, Hộ Pháp, Chú Sư, Ảnh Sát, Luân Hồi),
-độc lập với `kind` (sáu loại tạo hình). Mô tả cho người chơi: [world-bible.md](../world/world-bible.md#hệ-lớp-và-nội-tại).
-Hành vi nằm trong `match.ts` (`passive`, `spinReach`, `lockAim`, `choosePassive`, `useGuard`) và đi qua cùng
-`Match` cho người và AI. Kiểm thử: `tests/class-passives.test.ts`.
+- `cls` của tướng chọn một trong bảy hệ: Thần Xạ, Cuồng Chiến, Pháp Tu, Hộ Pháp, Chú Sư, Ảnh Sát, Luân Hồi.
+- `cls` độc lập với `kind` (sáu loại tạo hình).
+- Hành vi nằm trong `match.ts` (`passive`, `spinReach`, `lockAim`, `choosePassive`, `useGuard`) và đi qua cùng
+  `Match` cho người và AI.
+- Mô tả cho người chơi: [world-bible.md](../world/world-bible.md#hệ-lớp-và-nội-tại).
+- Kiểm thử: `tests/class-passives.test.ts`.
 
 ## Linh Đài và Thiên Tượng
 
