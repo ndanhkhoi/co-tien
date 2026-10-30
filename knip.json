@@ -1,0 +1,6 @@
+{
+  "$schema": "https://unpkg.com/knip@6/schema.json",
+  "entry": ["src/main.ts", "src/ai/ai-worker.ts", "tools/*.ts", "tests/**/*.test.ts"],
+  "project": ["src/**/*.ts", "tools/**/*.ts", "tests/**/*.ts"],
+  "ignoreExportsUsedInFile": false
+}
