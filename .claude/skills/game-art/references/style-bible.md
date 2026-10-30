@@ -24,6 +24,10 @@ the master art folder.
   readable at 48–64 px, no text.
 - **Outfits**: stylish fantasy costumes may show skin (slits, bare shoulders, midriff) like typical
   xianxia/gacha art, but never sexualised or lewd: no nudity, no fetish framing, no suggestive poses.
+- **Footwear**: embroidered flat cloth shoes, silk slippers, flat-soled boots or bare feet. Never high heels;
+  name the footwear in a look whenever feet show, or the model adds heels to women.
+- **Body variety**: not every woman is tall and long-legged. Petite, short-legged, rounded, athletic and curvy
+  figures all appear; a petite adult still has an adult face and proportions.
 - **State gender explicitly** in every champion look ("a man", "a woman"): without it the model drifts
   towards young women, even for kings and emperors.
 - **Original designs only**: no resemblance to characters from existing works. If a result evokes a known character, reject it.
