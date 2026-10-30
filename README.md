@@ -105,6 +105,7 @@ Tài liệu:
     [gamedev-skills/awesome-gamedev-agent-skills](https://github.com/gamedev-skills/awesome-gamedev-agent-skills),
     giấy phép Apache-2.0;
   - `fiction-workshop` lấy từ [rhavekost/author-toolkit](https://github.com/rhavekost/author-toolkit), giấy phép MIT.
-- **`game-art`** viết riêng cho dự án, theo giấy phép MIT của repo.
+- **Skill viết riêng cho dự án**, theo giấy phép MIT của repo: `game-art` (vẽ và duyệt tranh) và `anti-slop`
+  (soát chữ người đọc thấy để không mang dấu vết văn máy).
 
 Danh sách đầy đủ và bản giấy phép: [.claude/skills/README.md](.claude/skills/README.md).
