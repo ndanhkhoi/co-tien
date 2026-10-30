@@ -24,8 +24,9 @@ dụng (PWA), chơi offline.
   nhiên — bão tuyết, sóng lừng, gió giật, giếng sao, rễ cây… — đều là lực và ma sát thật trong mô phỏng,
   báo trước và vẽ lên bàn. Gió giữ một chiều suốt lượt, thông báo nêu hướng và sức gió (nhẹ, vừa, mạnh), mũi
   tên mực trên nỉ to và trôi nhanh theo sức gió. Địa Lợi cho tướng đánh trên bàn quê nhà.
-- **Luận Cơ:** so tài nhanh với máy. **Song Đấu:** hai người luân phiên trên cùng một thiết bị; mỗi bên tự đặt
-  tên, chọn tướng đã mở khoá (không trùng nhau) và cây cơ, cùng chọn bàn — không phụ thuộc tướng đại diện.
+- **Luận Cơ:** so tài nhanh với máy; nút **Đổi đối thủ** bốc ngẫu nhiên tướng đối thủ khác hợp cấp độ. **Song Đấu:**
+  hai người luân phiên trên cùng một thiết bị; mỗi bên tự đặt tên, chọn tướng đã mở khoá (không trùng nhau) và cây
+  cơ, cùng chọn bàn — không phụ thuộc tướng đại diện; nút **Đổi tướng** bốc ngẫu nhiên lại tướng cho cả hai.
 - **Luyện Cơ:** luyện từng cú đánh qua các bài thế có lời giải, chấm sao.
 - **Luyện thế:** chọn một thế mẫu (phá bi, cắt mỏng, bi sát băng, bi kết, gỡ thế chặn, nhảy bi, ba băng…) hoặc thế mình đã lưu, xếp thêm bi từ khay bằng cách chạm hay kéo, rồi đánh tự do không luật. **Đánh lại** trả mọi bi về chỗ trước cú vừa đánh, **Đường đi** vẽ trước đường của mọi bi, **Lưu thế** giữ vị trí bàn vào Thế của tôi.
 - **Tàng Các:** chiêu mộ tướng, chọn Pháp Cơ và Linh Đài; các tab Vùng đất, Hệ, Luật là **Cơ Tiên Lục**, wiki trong game

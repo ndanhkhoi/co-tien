@@ -447,9 +447,11 @@ function setupScreen(app: App, local: boolean): Screen {
   const foeName = h('b.vs-name');
   const foeCut = h('img.vs-cut.foe', { alt: '', draggable: false, decoding: 'async' });
   let foe: Champion;
+  const pickFrom = <T>(list: T[]): T | undefined => list[Math.floor(Math.random() * list.length)];
+  /** A fresh opponent for the level; a re-roll never lands on the one already shown. */
   const chooseFoe = () => {
     const pool = CHAMPIONS.filter((c) => c.id !== app.profile.champion && (local ? app.profile.champions.includes(c.id) : Math.abs(c.tier - (st.level + 1)) <= 1));
-    foe = pool[Math.floor(Math.random() * pool.length)] ?? CHAMPIONS.find((c) => c.id !== app.profile.champion)!;
+    foe = pickFrom(pool.filter((c) => c !== foe)) ?? pickFrom(pool) ?? CHAMPIONS.find((c) => c.id !== app.profile.champion)!;
     seats[1].champion = foe.id;
     foePortrait.replaceChildren(avatar(foe.id));
     foeName.textContent = foe.name;
@@ -535,6 +537,18 @@ function setupScreen(app: App, local: boolean): Screen {
     foeCut.src = cutoutUrl(seats[1].champion);
   }
   if (local) paintSeats();
+  /** Song Đấu re-rolls both seats from the owned champions (never the same one twice). */
+  const rollSeats = () => {
+    const owned = CHAMPIONS.filter((c) => app.profile.champions.includes(c.id));
+    for (const seat of seats) {
+      const other = seats.find((x) => x !== seat)!.champion;
+      const fresh = owned.filter((c) => c.id !== other && c.id !== seat.champion);
+      seat.champion = (pickFrom(fresh) ?? pickFrom(owned.filter((c) => c.id !== other)) ?? champion(seat.champion)).id;
+    }
+    paintSeats();
+  };
+  const roll = btn(h('span.btn-in', null, icon('replay'), local ? 'Đổi tướng' : 'Đổi đối thủ'), () => (local ? rollSeats() : chooseFoe()), 'small secondary vs-roll');
+  roll.setAttribute('aria-label', local ? 'Đổi ngẫu nhiên tướng của cả hai người chơi' : 'Đổi ngẫu nhiên tướng đối thủ');
   // A duel stage: both champions full-body facing each other, the seal between, the start stamp below.
   const versus = h('div.versus',
     null,
@@ -542,6 +556,7 @@ function setupScreen(app: App, local: boolean): Screen {
       meCut,
       foeCut,
       h('div.vs-seal', { 'aria-hidden': 'true' }, 'đấu'),
+      roll,
     ),
     h('div.vs-plates', null, ...(local ? plates : [
       tap(h('button.vs-side.me', { 'aria-label': 'Đổi tướng' },
