@@ -84,7 +84,10 @@ phê, chấm điểm theo vị trí bi cái cho cú sau, chọn phòng thủ khi
 Tượng như người chơi. `chooseSkill` trong `brain.ts` chọn chiêu ở cả bốn cấp AI, kể cả cấp 1;
 chỉ chọn trong các chiêu sẵn dùng được truyền vào. Sau khi chọn chiêu, AI dựng lại đầy đủ gói hiệu ứng
 và tìm lại cú đánh; chiêu dời bi dùng vị trí được trận thật chấp nhận, trên cả bàn lỗ và bàn phăng.
-Metadata hình học và xung lực hình quạt đi cùng yêu cầu worker. Chạy trong Web Worker (`ai-worker.ts`) qua `ai-client.ts` để không giật hình.
+Khi có bi trong tay, cấp 3–4 xem nhanh mọi vị trí đặt (hai đường dễ nhất, một kiểu đánh) rồi chỉ tìm đầy đủ
+ở 4 vị trí hứa hẹn nhất (`shortlist`), thay cho hàng nghìn cú mô phỏng trên mười bốn vị trí.
+Metadata hình học và xung lực hình quạt đi cùng yêu cầu worker. Chạy trong Web Worker (`ai-worker.ts`) qua `ai-client.ts` để không giật hình;
+rời trận khi AI còn đang tính thì worker bị thay mới thay vì chạy nốt.
 
 ## `src/render`
 
@@ -97,6 +100,14 @@ theo bề dày thân cơ phía trước (đo một lần từ kênh alpha), nên
 `omen-art.ts` vẽ lưới mũi tên mực trôi theo hướng gió, to và nhanh hơn khi gió mạnh. Canvas phủ cả cửa sổ nên
 `app.ts` giới hạn mật độ 2× và khoảng 3,6 triệu điểm ảnh, chỉ bật MSAA khi màn hình kém nét; mã chạy mỗi khung
 hình đọc vị trí lớp UI qua `uiOrigin()` thay vì đọc layout.
+
+Bàn chỉ được vẽ lại khi hình thay đổi: mỗi khung `TableView` ghi mọi biến đổi, texture, hướng xoay bi và lệnh
+vẽ đường ngắm thành một dãy số và so với khung trước; `App` bỏ lệnh render tự động của ticker, màn trận gọi
+`app.pixi.render()` khi `shouldRender()` đúng (thêm các khung bắt buộc sau khi đổi kích thước, quay lại ứng
+dụng, khôi phục WebGL, và một nhịp mỗi giây). Bàn đứng yên lúc ngắm hay chờ AI vì thế không tốn GPU. Đường
+đi của Thần Nhãn / Luyện thế mô phỏng khoảng 4 ms mỗi khung (`EAGLE_BUDGET_MS`) và mọc dần tới điểm dừng, nên
+kéo ngắm vẫn mượt. Texture cơ được vẽ một lần cho mỗi cây cơ ở mỗi mật độ; ảnh bi cho nhãn DOM được giữ
+suốt phiên.
 
 Texture vẽ bằng canvas (mặt bàn cỡ màn hình, cơ, atlas số, bóng, sương) thuộc về một `TableView`: vẽ lại thì
 huỷ bản cũ, `destroy()` huỷ hết cùng shader của bi (`BallMesh.destroy`), nên vào–ra trận bao nhiêu lần bộ nhớ GPU
