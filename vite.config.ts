@@ -1,4 +1,5 @@
 import { defineConfig } from 'vitest/config';
+import type { Plugin } from 'vitest/config';
 import pkg from './package.json' with { type: 'json' };
 import { VitePWA } from 'vite-plugin-pwa';
 import { createHash } from 'node:crypto';
@@ -24,7 +25,7 @@ const ART_VERSION = createHash('sha1').update(JSON.stringify(ART)).digest('hex')
  * The roster also carries the art briefs (looks, poses, icon prompts) that only the art pipeline
  * reads. The shipped game drops them; tests and scripts still read the full file.
  */
-function slimRoster() {
+function slimRoster(): Plugin {
   return {
     name: 'slim-roster',
     apply: 'build' as const,
