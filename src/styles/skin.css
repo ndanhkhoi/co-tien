@@ -683,19 +683,23 @@ body.playing .bd-scene, body.playing .bd-mist { animation-play-state: paused; }
 }
 .mx-card::before {
   content: ''; position: absolute; z-index: -1;
-  inset: -4px 0 -4px calc(var(--face) / 2);
+  inset: -4px 0 -9px calc(var(--face) / 2);
   border: 1px solid transparent; border-image: url('/art/ui/frame/plate.webp') 0 80 fill / 0 30px / 0 stretch;
   filter: drop-shadow(0 3px 6px rgba(40, 30, 18, 0.2));
 }
 .mx-card.p2 { padding: 4px 2px 4px 34px; }
-.mx-card.p2::before { inset: -4px calc(var(--face) / 2) -4px 0; transform: scaleX(-1); }
+.mx-card.p2::before { inset: -4px calc(var(--face) / 2) -9px 0; transform: scaleX(-1); }
 .mx-card:not(.active) { opacity: 0.74; }
 .mx-card.active { transform: translateY(1px); border: 0; box-shadow: none; }
-.mx-card .mx-info { gap: 2px; padding-top: 7px; }
+/* Name, score line and ball tray stay inside the plate's paper: the plate reaches 9px below the
+   card so the ball tray clears its bottom ink edge. */
+.mx-card .mx-info { gap: 2px; padding-top: 4px; }
+.mx-card .mx-potted { height: 16px; align-items: center; }
+.mx-card .mx-pot { width: 14px; height: 14px; }
 .mx-card .mx-name { font-size: 15px; color: var(--ink); }
 .mx-card.active .mx-name { color: var(--accent-2); }
 .mx-card .mx-sub { color: var(--ink-2); }
-.mx-card .mx-score { background: var(--accent); color: var(--on-accent); border-radius: 3px; }
+.mx-card .mx-score { height: 22px; line-height: 22px; background: var(--accent); color: var(--on-accent); border-radius: 3px; }
 
 .mx-obj {
   inset: 2px 0; padding: 6px 26px;
