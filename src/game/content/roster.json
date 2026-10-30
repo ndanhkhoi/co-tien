@@ -254,7 +254,7 @@
       "tier": 1,
       "kind": "nuhiep",
       "cls": "thanxa",
-      "look": "a sporty 14-year-old tomboy girl with short cropped jet-black hair, a white headband, a small bandage on her cheek, white-and-gold short robes with a gold sash, a small flying sword hovering at her shoulder, slim white-jade cue; must clearly show: a clearly visible white bandage plaster on her cheek",
+      "look": "a sporty, energetic 14-year-old girl (clearly a girl at first glance: a soft, round girlish face, big bright eyes with long lashes, small nose, cheerful smile), a short glossy jet-black bob with side-swept bangs and a small gold hair clip (neat, not spiky), a white headband, a small bandage on her cheek, white-and-gold short robes with a gold sash over leggings, flat white boots, a small flying sword hovering at her shoulder, slim white-jade cue; must clearly show: a clearly visible white bandage plaster on her cheek and that she is a girl",
       "pose": "aiming the cue like a sword thrust",
       "expr": "eager grin",
       "skills": [
@@ -815,7 +815,7 @@
       "tier": 1,
       "kind": "linh",
       "cls": "phaptu",
-      "look": "an elegant fairy maiden woman of 20 with very long straight jet-black hair and a straight fringe, ice-blue eyes, a single ice-lotus crystal hairpin, flowing white and pale-blue layered hanfu with sheer ribbons, flat white embroidered cloth shoes (no heels), slender crystal cue with a lotus tip; must clearly show: sleek perfectly straight hair (no waves) with a blunt straight-cut fringe; also clearly: completely straight hair with no waves at all",
+      "look": "an elegant fairy maiden woman of 20 with very long straight jet-black hair and a straight fringe, ice-blue eyes, a single ice-lotus crystal hairpin, flowing white and pale-blue layered hanfu with sheer ribbons, completely flat white cloth slippers with zero heel height, her heels resting on the ground like ballet flats, slender crystal cue with a lotus tip; must clearly show: sleek perfectly straight hair (no waves) with a blunt straight-cut fringe; also clearly: completely straight hair with no waves at all",
       "pose": "mage casting, one hand weaving a swirl of frost petals, cue held vertically",
       "expr": "gentle serene smile",
       "skills": [
@@ -965,7 +965,7 @@
       "tier": 5,
       "kind": "nuhiep",
       "cls": "chusu",
-      "look": "the regal ice-palace mistress, tall woman about 30, crescent-moon ice crown, long silver-white hair, cold pale-violet eyes, long trailing cloak of frost silk with snowflake embroidery, flat-soled silver-white boots (no heels), an ornate moon-crested ice cue; must clearly show: pale-violet eyes",
+      "look": "the regal ice-palace mistress, tall woman about 30, crescent-moon ice crown, long silver-white hair, cold pale-violet eyes, long trailing cloak of frost silk with snowflake embroidery, silver-white riding boots with completely flat soles and zero heel height, the whole sole touching the ground, an ornate moon-crested ice cue; must clearly show: pale-violet eyes",
       "pose": "hexer channelling, cue raised, free hand casting a freezing moon sigil",
       "expr": "cold regal half-smile",
       "skills": [
@@ -1453,7 +1453,7 @@
       "tier": 3,
       "kind": "nuhiep",
       "cls": "anhsat",
-      "look": "a tiny agile 14-year-old pirate girl with dark tanned skin, short messy sea-green hair, a leather eyepatch, a gap-tooth grin, an orange bandana, a striped teal shirt, a parrot on her shoulder, a fish-shaped cue; must clearly show: a plain brown leather eyepatch and a visible gap between her front teeth (no fangs); also clearly: a visible gap between her two front teeth when she grins",
+      "look": "a tiny agile 14-year-old pirate girl (clearly a girl at first glance: a round girlish face, big eyes with long lashes) with dark tanned skin, sea-green hair in two short pigtails tied with orange cord, a leather eyepatch, a gap-tooth grin, an orange bandana, a striped teal shirt, a parrot on her shoulder, a fish-shaped cue; must clearly show: a plain brown leather eyepatch and a visible gap between her front teeth (no fangs); also clearly: a visible gap between her two front teeth when she grins",
       "pose": "assassin leaping with the cue",
       "expr": "cocky grin",
       "skills": [
@@ -1832,7 +1832,7 @@
       "tier": 3,
       "kind": "linh",
       "cls": "thanxa",
-      "look": "a moon fairy archer woman of 20 with dark-navy hair in ONE thick braid down her back (no loose hair), pale moonlit skin, a clear silver crescent mark on her forehead, a compact silver-violet archer outfit with a short skirt, arm guards and flat-soled boots (no heels) (no long flowing dress), a large moon bow on her back, a moonlight cue",
+      "look": "a moon fairy archer woman of 20 with dark-navy hair in ONE thick braid down her back (no loose hair), pale moonlit skin, a clear silver crescent mark on her forehead, a compact silver-violet archer outfit with a short skirt, arm guards and soft archer boots with completely flat soles and zero heel height (no long flowing dress), a large moon bow on her back, a moonlight cue",
       "pose": "archer aiming the cue along a moonbeam",
       "expr": "focused gentle look",
       "skills": [
@@ -1869,7 +1869,7 @@
       "tier": 4,
       "kind": "linh",
       "cls": "cuongchien",
-      "look": "a sun war goddess, golden sun-disc armour, red-gold cape, bronze skin, fiery orange hair, a solar spear-like cue; must clearly show: deep bronze-brown skin (not fair skin)",
+      "look": "a sun war goddess, golden sun-disc armour, red-gold cape, armoured greaves over completely flat sandals with zero heel height, bronze skin, fiery orange hair, a solar spear-like cue; must clearly show: deep bronze-brown skin (not fair skin)",
       "pose": "warrior thrusting the spear-cue skyward",
       "expr": "fierce joyful shout",
       "skills": [
