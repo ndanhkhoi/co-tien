@@ -56,7 +56,8 @@ Vì sao chấm theo độ khó thay vì đếm bi:
 ## Kết liễu
 
 Ván thắng bằng chính cú sạch của người thắng mở màn Kết liễu (`src/ui/finisher.ts`) với tranh
-`champions/{id}/finisher.webp` (thiếu thì dùng cut-out), ở mọi chế độ trừ Luyện Cơ và Luyện thế.
+`champions/{id}/finisher.webp` (thiếu thì dùng cut-out), ở mọi chế độ trừ Luyện Cơ và Luyện thế. Cú đánh xong
+trong 0,74 giây, tranh và dòng kết quả giữ rõ đến 2,9 giây; bật giảm chuyển động thì bản tĩnh 1,8 giây. Chạm để bỏ qua.
 
 ## Luyện thế
 

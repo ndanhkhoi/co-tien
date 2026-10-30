@@ -11,6 +11,7 @@ import { npcModal } from './career';
 import { startChallenge } from './challenge-start';
 import { artUrl, champCard, closeX, statChip, topbar } from '../widgets';
 import { hex6 } from '../dom';
+import { journeyFocus } from '../player-focus';
 
 /**
  * Hành trình: one painted map of Cơ Tiên Giới shared by duels and challenges. Each land has
@@ -65,13 +66,14 @@ const taskOpen = (app: App, task: ChallengeDef) => {
   return i === 0 || (app.profile.challenges[family[i - 1].id] ?? 0) > 0;
 };
 
-export function journeyScreen(app: App): Screen {
+export function journeyScreen(app: App, focusLand?: SectId): Screen {
   const el = screenEl('journey');
   const p = app.profile;
   const byLand = challengesByLand();
   const map = h('div.journey-map', null, h('img.journey-art', { src: artUrl('ui/map.webp'), alt: 'Bản đồ Cơ Tiên Giới', draggable: false }));
-  // The land to go next: the first open land with a master still unbeaten.
-  const current = CHAPTERS.findIndex((ch, i) => landOpen(app, i) && ch.npcs.some((n) => p.career[n.id] === undefined));
+  // Returning from a duel focuses its land; otherwise go to the first land still to play.
+  const target = journeyFocus(focusLand, CHAPTERS.map((ch, i) => ({ id: ch.id, open: landOpen(app, i), beaten: ch.npcs.every((n) => p.career[n.id] !== undefined) })));
+  const current = CHAPTERS.findIndex((ch) => ch.id === target);
   let focus: HTMLElement | null = null;
   CHAPTERS.forEach((ch, i) => {
     const [x, y] = PINS[ch.id];

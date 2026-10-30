@@ -9,6 +9,7 @@ import { btn, h, stars, toast } from '../dom';
 import { icon } from '../icons';
 import { closeX, fmt, statChip } from '../widgets';
 import { hex6 } from '../dom';
+import { journeyScreen } from './journey';
 import { matchScreen } from './match';
 
 const tableOf = (n: Npc): TableSkin => TABLES.find((t) => t.id === n.sect) ?? TABLES[0];
@@ -80,7 +81,7 @@ function careerEnd(app: App, n: Npc, { won, match }: { won: boolean; match: Matc
   if (!won) {
     const xp = Math.round(n.xp * 0.15);
     app.reward(0, xp);
-    return { lines: [`${n.name}: “${n.winLine}”`, `+${xp} EXP`], again };
+    return { lines: [`${n.name}: “${n.winLine}”`, `+${xp} EXP`], again, ...journeyReturn(app, n) };
   }
   p.stats.won++;
   const oppRacks = match.rackWins[1];
@@ -94,5 +95,10 @@ function careerEnd(app: App, n: Npc, { won, match }: { won: boolean; match: Matc
   return {
     lines: [`${n.name}: “${n.loseLine}”`, `Đạt ${st}/3 sao`, `+${coins} xu · +${n.xp} EXP`, ...(up ? [`Lên cấp ${app.level}!`] : []), ...(recruit ? [`Chiêu mộ được ${n.name}!`] : [])],
     again,
+    ...journeyReturn(app, n),
   };
+}
+
+function journeyReturn(app: App, n: Npc): { exit: () => void; exitLabel: string } {
+  return { exit: () => app.go(() => journeyScreen(app, n.sect), { replace: true }), exitLabel: `Về ${sect(n.sect).name}` };
 }

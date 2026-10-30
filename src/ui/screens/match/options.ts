@@ -12,8 +12,8 @@ export interface MatchOptions {
   randomOpponents?: boolean;
   /** Rack/challenge overrides for the end-of-rack dialog. */
   challenge?: { tries: number; goal: string; marks?: { pocket?: number; zone?: [number, number, number] }; onResult: (ok: boolean, attempt: number) => { stars: number; next?: () => void } };
-  /** Match end: return reward lines to show and optional actions. */
-  onEnd?: (r: { won: boolean; match: Match }) => { lines: string[]; again?: () => void };
+  /** Match end: reward lines, replay, and an optional journey-return action replacing Về menu. */
+  onEnd?: (r: { won: boolean; match: Match }) => { lines: string[]; again?: () => void; exit?: () => void; exitLabel?: string };
   onExit: () => void;
   /** Luyện thế: the left column becomes the practice desk; no rules, no opponent. */
   practice?: PracticeSetup;

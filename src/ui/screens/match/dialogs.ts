@@ -162,7 +162,7 @@ function onMatchOver(ctx: MatchCtx, winner: Side): void {
 }
 
 function matchOverBody(ctx: MatchCtx, x: {
-  winner: Side; won: boolean; vsAi: boolean; me: Side; lines: string[]; again?: () => void;
+  winner: Side; won: boolean; vsAi: boolean; me: Side; lines: string[]; again?: () => void; exit?: () => void; exitLabel?: string;
 }): (Node | null)[] {
   const { match, opts } = ctx;
   return [
@@ -172,7 +172,7 @@ function matchOverBody(ctx: MatchCtx, x: {
     h('p.muted', null, `${match.stats[x.me].pots} bi · loạt dài nhất ${match.stats[x.me].bestRun} · ${match.stats[x.me].fouls} lỗi`),
     x.lines.length ? h('div.mx-res-lines', null, ...x.lines.map((l) => h('div.kv', null, h('span', null, l)))) : null,
     h('div.actions', null,
-      btn('Về menu', () => opts.onExit(), 'ghost'),
+      btn(x.exitLabel ?? (x.exit ? 'Về vùng đất' : 'Về menu'), x.exit ?? opts.onExit, 'ghost'),
       x.again ? btn('Đấu lại', () => x.again!()) : null,
     ),
   ];
