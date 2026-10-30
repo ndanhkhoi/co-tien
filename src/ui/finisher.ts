@@ -1,6 +1,7 @@
 import { sound } from '../audio/sound';
 import { cutoutUrl, finisherUrl, sect, sectArtUrl, type Champion } from '../game/content/sects';
 import { h, hex6 } from './dom';
+import { finisherDuration } from './player-focus';
 
 
 const BASE = import.meta.env.BASE_URL;
@@ -12,7 +13,8 @@ interface FinalBall { src: string; caption: string }
  * Kết liễu: the shot that wins a rack, told as one action. An ink stroke tears across the stage,
  * the champion lunges in with after-images and drives the cue, the deciding ball flies off the tip
  * on an ink trail and slams into an ink pocket that bursts, the stage shakes, and "Kết liễu" is
- * stamped with the shot's name. About 2.6 s; any tap ends it early. Resolves once it is gone.
+ * stamped with the shot's name. The strike lands at 0.74 s, then the art and verdict hold; any
+ * tap ends it early. Resolves once it is gone.
  */
 export interface FinisherOptions {
   stage: HTMLElement;
@@ -67,6 +69,6 @@ export function playFinisher(opts: FinisherOptions): Promise<void> {
       }, 260);
     };
     el.addEventListener('pointerdown', end, { once: true });
-    setTimeout(end, reduced ? 1800 : 2700);
+    setTimeout(end, finisherDuration(reduced));
   });
 }
