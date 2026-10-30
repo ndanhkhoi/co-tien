@@ -92,7 +92,7 @@ function hexReady(m: Match, kind: SkillKind, side: Side, live: boolean): boolean
     case 'seal': return live && !hexFor(m.hexes, opp, 'seal') && !m.isCarom;
     case 'blind': return live && !hexFor(m.hexes, opp, 'blind');
     case 'drift': return live && !hexFor(m.hexes, opp, 'drift');
-    case 'called': return live && m.legalTargets(opp).filter((id) => id !== m.cueId(opp)).length >= 2;
+    case 'called': return live && calledCandidates(m, opp).length >= 2;
     default: return false;
   }
 }
@@ -181,7 +181,7 @@ function applyTrick(m: Match, kind: SkillKind, spec: KindCast, pw: Record<string
   switch (kind) {
     case 'called': {
       const point = cast?.point;
-      const ids = m.legalTargets(opp).filter((id) => id !== m.cueId(opp));
+      const ids = calledCandidates(m, opp);
       const ball = point
         ? m.balls.filter((b) => b.onTable && ids.includes(b.id)).sort((a, b) => Math.hypot(a.x - point.x, a.y - point.y) - Math.hypot(b.x - point.x, b.y - point.y))[0]
         : nearestPocketBall(m, ids);
@@ -212,6 +212,13 @@ function applyTrick(m: Match, kind: SkillKind, spec: KindCast, pw: Record<string
     }
     default: return false;
   }
+}
+
+/** Balls the opponent may be ordered to hit first: their legal targets, or every object ball on a carom table. */
+function calledCandidates(m: Match, opp: Side): number[] {
+  const cue = m.cueId(opp);
+  const ids = m.isCarom ? m.balls.filter((b) => b.onTable).map((b) => b.id) : m.legalTargets(opp);
+  return ids.filter((id) => id !== cue);
 }
 
 function nearestPocketBall(m: Match, ids: number[]): BallLike | undefined {

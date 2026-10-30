@@ -488,7 +488,7 @@ export class Match {
    */
   effectiveKind(kind: SkillKind): SkillKind {
     if (!this.isCarom) return kind;
-    const swap: Partial<Record<SkillKind, SkillKind>> = { shield: 'railcraft', seal: 'chill', maw: 'spin', gravity: 'vision', teleport: 'nudge' };
+    const swap: Partial<Record<SkillKind, SkillKind>> = { shield: 'railcraft', seal: 'chill', maw: 'spin', gravity: 'vision', teleport: 'nudge', displace: 'chill', swap: 'nudge' };
     return swap[kind] ?? kind;
   }
 
