@@ -44,7 +44,8 @@ Done means `npm test` and `npm run build` both pass, and the owning doc is updat
 - New felt colours must pass `tests/sect-contrast.test.ts`.
 - Nine-slice frames (`border-image`) keep a 1px transparent border (WebKit paints none on zero-width borders).
 - Touch targets ≥ 44 px after scaling; respect `prefers-reduced-motion`.
-- Check UI changes at 932×430 touch and 1280×800 mouse; WebKit-specific bugs need a real iPhone.
+- Check UI changes at 932×430 touch, 1536×864 mouse (Full HD laptop at 125%) and 2560×1440 mouse;
+  WebKit-specific bugs need a real iPhone.
 - Keep `docs/world/world-bible.md` in sync with `roster.json`/`lore.json`, and all 195 skill names unique.
   Slots 0/1 are basics, slot 2 the ultimate; `kind` is appearance, `cls` the passive.
 - Add sects, champions, skill kinds, omens and modes through data or a registry entry, not new

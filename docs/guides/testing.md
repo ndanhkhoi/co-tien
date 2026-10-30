@@ -32,7 +32,8 @@ Test sai thì sửa code, không sửa test cho qua — trừ khi quy tắc th�
 
 Test tự động không bắt được lỗi bố cục và cảm ứng. Với thay đổi giao diện hay điều khiển:
 
-- Thử ở **932×430 cảm ứng** (điện thoại ngang) và **1280×800 chuột**. Vùng chạm hiển thị ≥ 44 px sau scale.
+- Thử ở **932×430 cảm ứng** (điện thoại ngang), **1536×864 chuột** (laptop Full HD zoom 125%) và **2560×1440 chuột** (màn 2K).
+  Vùng chạm hiển thị ≥ 44 px sau scale.
 - Thử với `prefers-reduced-motion`.
 - Thay đổi khung nine-slice hay safe area thì thử trên WebKit (Safari/iOS); ảnh chụp từ trình duyệt desktop không
   thấy lỗi compositing của iOS.

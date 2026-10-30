@@ -18,6 +18,6 @@ Media query theo cửa sổ và đơn vị `vw`/`vh` bên trong khung.
 
 ## Hệ quả
 
-- Chỉ cần thử hai cỡ: 932×430 cảm ứng và 1280×800 chuột.
+- Chỉ cần thử ba cỡ: 932×430 cảm ứng, 1536×864 chuột (lề hẹp) và 2560×1440 chuột (scale tối đa, tướng hai bên).
 - Vùng chạm phải bù scale (token trong `base.css`) để vẫn ≥ 44 px trên điện thoại.
 - Safe area chỉ trừ một lần, ở khung ngoài.
