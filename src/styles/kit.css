@@ -24,8 +24,6 @@
   box-shadow: var(--sh-1);
 }
 .btn.ghost .ico, .btn.secondary .ico { filter: none; }
-.btn.quiet { color: var(--ink); box-shadow: none; border: 0; }
-.btn.quiet .ico { filter: none; }
 .btn.small { font-size: var(--fs-m); }
 .btn.big { padding: 0 28px; font-size: var(--fs-xl); }
 .btn.block { width: 100%; }
@@ -248,25 +246,6 @@ input[type='text']:focus, input:not([type]):focus { border-color: var(--accent);
 @keyframes toast-in { from { opacity: 0; transform: translateY(-8px); } }
 @keyframes toast-out { to { opacity: 0; transform: translateY(-6px); } }
 @keyframes tbar { to { transform: scaleX(0); } }
-
-.big-banner {
-  position: fixed;
-  z-index: 55;
-  top: 42%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  padding: 14px 34px;
-  border-radius: var(--r-2);
-  background: var(--ink);
-  color: var(--sheet);
-  font: 800 var(--fs-2xl)/1.1 var(--display);
-  letter-spacing: 0.04em;
-  pointer-events: none;
-  box-shadow: var(--sh-2);
-  animation: banner 1.6s var(--ease) both;
-}
-.big-banner.bad { background: var(--accent); color: var(--on-accent); }
-@keyframes banner { 0% { opacity: 0; transform: translate(-50%, -40%); } 12%, 80% { opacity: 1; transform: translate(-50%, -50%); } 100% { opacity: 0; } }
 
 /* ---------- Mandatory update sheet ---------- */
 

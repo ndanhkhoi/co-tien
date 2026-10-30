@@ -31,7 +31,7 @@ const ALL_NPCS = CHAPTERS.flatMap((c) => c.npcs);
  * Challenges dealt along the route: interleave the five families level by level (so every
  * land mixes shot types and difficulty rises along the path), then cut into one chunk per land.
  */
-export function challengesByLand(): Map<SectId, ChallengeDef[]> {
+function challengesByLand(): Map<SectId, ChallengeDef[]> {
   const byFam = FAMILIES.map((f) => CHALLENGES.filter((c) => c.family === f));
   const ordered: ChallengeDef[] = [];
   for (let i = 0; i < Math.max(...byFam.map((l) => l.length)); i++) for (const l of byFam) if (l[i]) ordered.push(l[i]);

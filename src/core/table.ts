@@ -8,7 +8,7 @@ export interface Segment {
   ax: number; ay: number; bx: number; by: number;
 }
 
-export interface Pocket {
+interface Pocket {
   /** Capture centre: a ball whose centre comes within `r` of it drops. */
   x: number; y: number; r: number;
   /** Visual hole centre and radius. */
@@ -47,7 +47,7 @@ export interface PoolSpec {
  * Pool table spec: 7-ft playing surface (78 × 39 in). Ball diameter 57.15 mm.
  * Pocket mouths inside the WPA ranges (corner 114.3–117.5 mm, side 127–130.2 mm).
  */
-export const POOL_SPEC: PoolSpec = {
+const POOL_SPEC: PoolSpec = {
   L: 1.981,
   W: 0.991,
   R: 0.028575,
@@ -56,7 +56,7 @@ export const POOL_SPEC: PoolSpec = {
 };
 
 /** UMB match table: 2.84 × 1.42 m playing surface, 61.5 mm balls. */
-export const CAROM_SPEC = { L: 2.84, W: 1.42, R: 0.03075 };
+const CAROM_SPEC = { L: 2.84, W: 1.42, R: 0.03075 };
 
 function seg(ax: number, ay: number, bx: number, by: number): Segment {
   return { ax, ay, bx, by };
@@ -176,9 +176,4 @@ export function makeCaromTable(): TableGeom {
     diamonds,
     railWidth,
   };
-}
-
-/** True when a ball centred at (x, y) lies fully on the playing surface. */
-export function insideCloth(t: TableGeom, x: number, y: number, margin = 0): boolean {
-  return Math.abs(x) <= t.L / 2 - t.R - margin && Math.abs(y) <= t.W / 2 - t.R - margin;
 }

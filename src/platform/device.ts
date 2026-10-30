@@ -60,8 +60,6 @@ export function installNativeFeel() {
 /** Touch devices go fullscreen on first tap; desktops only when the player asks. */
 export const isTouchDevice = () => matchMedia('(pointer: coarse)').matches && navigator.maxTouchPoints > 0;
 
-export const isFullscreen = () => !!document.fullscreenElement;
-
 export async function toggleFullscreen() {
   if (document.fullscreenElement) await document.exitFullscreen().catch(() => undefined);
   else await enterFullscreen();

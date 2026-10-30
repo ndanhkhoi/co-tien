@@ -92,11 +92,11 @@ export function cloneBalls(balls: Ball[]): Ball[] {
   return balls.map((b) => ({ ...b }));
 }
 
-export function isMoving(b: Ball): boolean {
+function isMoving(b: Ball): boolean {
   return b.onTable && ((b.z ?? 0) > 0 || (b.vz ?? 0) !== 0 || Math.abs(b.vx) > 0 || Math.abs(b.vy) > 0 || Math.abs(b.wz) > 0 || Math.abs(b.wx) > 0 || Math.abs(b.wy) > 0);
 }
 
-export function anyMoving(balls: Ball[]): boolean {
+function anyMoving(balls: Ball[]): boolean {
   for (const b of balls) if (isMoving(b)) return true;
   return false;
 }
@@ -596,7 +596,7 @@ export interface StrikeParams {
 }
 
 /** Miscue limit as a fraction of R. */
-export const TIP_LIMIT = 0.5;
+const TIP_LIMIT = 0.5;
 
 /** The visible tip-contact circle foreshortens as the cue becomes steep.
  * Offset is measured in the existing face-on spin control; steep strokes therefore

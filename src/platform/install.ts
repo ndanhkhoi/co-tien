@@ -46,7 +46,7 @@ export function detectPlatform(): Platform {
   return 'other';
 }
 
-export function isStandalone(): boolean {
+function isStandalone(): boolean {
   return matchMedia('(display-mode: standalone), (display-mode: fullscreen), (display-mode: minimal-ui)').matches ||
     (navigator as Navigator & { standalone?: boolean }).standalone === true;
 }

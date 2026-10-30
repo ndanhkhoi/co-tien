@@ -10,12 +10,12 @@ import { icon } from './icons';
  * While either sheet is up, `cotien:blocked` fires so an ongoing match can pause itself.
  * The rotate sheet's markup lives in index.html so it shows even before the app boots.
  */
-export const MIN_W = 640;
-export const MIN_H = 360;
+const MIN_W = 640;
+const MIN_H = 360;
 
 const COARSE = '(pointer: coarse)';
 
-export function viewportBlocked(): 'rotate' | 'resize' | null {
+function viewportBlocked(): 'rotate' | 'resize' | null {
   // The install screen comes first and is laid out for any orientation; rotation only matters once installed.
   if (mustInstall()) return null;
   const w = window.innerWidth;

@@ -63,5 +63,3 @@ export const MUTATORS: MutatorDef[] = [
   { id: 'ice', name: 'Nỉ Băng', desc: 'Mặt nỉ trơn như băng — bi lăn rất xa.' },
   { id: 'tight', name: 'Lỗ Hẹp', desc: 'Miệng lỗ hẹp như bàn thi đấu khó nhất.' },
 ];
-
-export const mutatorDef = (id: MutatorId) => MUTATORS.find((m) => m.id === id)!;

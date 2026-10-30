@@ -1,6 +1,6 @@
-// Fails when two stylesheets set the same property for the same selector (in the same @media/@supports
-// context): the one loaded first is dead code. Also fails on a @keyframes name defined in two files.
-import { readFileSync } from 'node:fs';
+// Fails on dead CSS: a property two stylesheets set for the same selector (in the same @media/@supports
+// context, the one loaded first never applies), a @keyframes name defined twice, and classes or keyframes nothing uses.
+import { readdirSync, readFileSync } from 'node:fs';
 
 const FILES = ['base', 'kit', 'screens', 'match', 'skin'].map((n) => `src/styles/${n}.css`);
 
@@ -56,9 +56,26 @@ for (const file of FILES) {
     owner.set(key, r);
   }
 }
+// Dead CSS: classes no source file mentions and keyframes no animation uses.
+const sources = readdirSync('src', { recursive: true, encoding: 'utf8' })
+  .filter((f) => f.endsWith('.ts'))
+  .map((f) => readFileSync(`src/${f}`, 'utf8'))
+  .concat(readFileSync('index.html', 'utf8'))
+  .join('\n');
+const css = FILES.map((f) => readFileSync(f, 'utf8').replace(/\/\*[\s\S]*?\*\//g, '').replace(/url\([^)]*\)/g, '')).join('\n');
+const word = (w: string, text: string) => new RegExp(`(?<![\\w-])${w.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}(?![\\w-])`).test(text);
+for (const cls of new Set([...css.matchAll(/\.(-?[a-zA-Z_][\w-]*)/g)].map((m) => m[1]))) {
+  if (!word(cls, sources)) errors.push(`.${cls} is styled but no source file uses it`);
+}
+const animations = css.replace(/@keyframes\s+[\w-]+/g, '');
+for (const k of frames.keys()) {
+  const name = k.replace(/^@keyframes\s+/, '');
+  if (!word(name, animations) && !word(name, sources)) errors.push(`${k} is never used`);
+}
+
 if (errors.length) {
   console.error(errors.join('\n'));
-  console.error(`\n${errors.length} CSS declaration(s) override another stylesheet; keep each in its owning file.`);
+  console.error(`\n${errors.length} dead CSS rule(s): keep each declaration in its owning stylesheet and delete what nothing uses.`);
   process.exit(1);
 }
-console.log('check-css: no cross-file overrides');
+console.log('check-css: no dead CSS');

@@ -193,7 +193,3 @@ export function applySkillBlast(balls: Ball[], x: number, y: number, radius: num
     b.vy += (axis?.y ?? dy / distance) * impulse;
   }
 }
-
-export function applyConeImpulse(balls: Ball[], x: number, y: number, radius: number, force: number, angle: number) {
-  applySkillBlast(balls, x, y, radius, force, { x: Math.cos(angle), y: Math.sin(angle) });
-}

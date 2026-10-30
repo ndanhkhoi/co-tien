@@ -4,9 +4,9 @@ import type { TableGeom } from '../table';
 import type { GameMode, Resolution, RuleSet, Side } from './types';
 
 /** Ball ids on the carom table: 0 white (player 1), 1 yellow (player 2), 2 red. */
-export const CAROM_WHITE = 0;
-export const CAROM_YELLOW = 1;
-export const CAROM_RED = 2;
+const CAROM_WHITE = 0;
+const CAROM_YELLOW = 1;
+const CAROM_RED = 2;
 
 /**
  * UMB opening position: red on the foot spot, the opponent's ball on the head spot,

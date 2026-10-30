@@ -1,7 +1,7 @@
 import { CUES, TABLES } from './content/gear';
 import { CHAMPIONS } from './content/sects';
 
-export interface Settings {
+interface Settings {
   sfx: number;
   music: number;
   haptics: boolean;

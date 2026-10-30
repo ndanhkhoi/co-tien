@@ -43,7 +43,7 @@ export function topbar(app: App, title: string, back = true, ...extra: Kid[]): H
   );
 }
 
-export function wallet(app: App): HTMLElement {
+function wallet(app: App): HTMLElement {
   return h('span.chip.stat.wallet', { 'aria-label': `${fmt(app.profile.coins)} xu` }, icon('coin'), h('span.num', null, fmt(app.profile.coins)));
 }
 
@@ -60,7 +60,7 @@ export function statChip(ic: IconName, text: string, label = ''): HTMLElement {
 }
 
 /** Single-choice chip group. */
-export function seg<T extends string | number>(options: [T, string][], value: T, onChange: (v: T) => void): HTMLElement {
+function seg<T extends string | number>(options: [T, string][], value: T, onChange: (v: T) => void): HTMLElement {
   const box = h('div.chips', { role: 'radiogroup' });
   const render = (v: T) => box.replaceChildren(...options.map(([k, label]) => chip(label, k === v, () => {
     if (k === v) return;
@@ -198,7 +198,7 @@ function profileModal(app: App, onDone: () => void, first = false) {
 }
 
 /** Champion detail: cut-out art, class passive and the three skills with their real numbers. */
-export function championModal(app: App, c: Champion, onChange?: () => void) {
+function championModal(app: App, c: Champion, onChange?: () => void) {
   const p = app.profile;
   const s = sect(c.sect);
   const cls = classInfo(c.cls);
@@ -319,7 +319,7 @@ export function splashScreen(app: App): Screen {
 
 // ---------- Home ----------
 
-export function homeScreen(app: App): Screen {
+function homeScreen(app: App): Screen {
   const el = screenEl('home');
   preloadBackground(app.profile.champion);
   const p = app.profile;
@@ -609,8 +609,8 @@ function setupScreen(app: App, local: boolean): Screen {
   return { el };
 }
 
-export const quickScreen = (app: App) => setupScreen(app, false);
-export const localScreen = (app: App) => setupScreen(app, true);
+const quickScreen = (app: App) => setupScreen(app, false);
+const localScreen = (app: App) => setupScreen(app, true);
 
 // ---------- Journey duels ----------
 
@@ -749,7 +749,7 @@ function startChallengeReplace(app: App, c: ChallengeDef, table: TableSkin) {
 /** Tàng Các keeps what you own (champions, cues, tables) and Cơ Tiên Lục, the world's library. */
 type CollTab = 'champ' | 'cue' | 'table' | 'land' | 'class' | 'rules';
 
-export function collectionScreen(app: App): Screen {
+function collectionScreen(app: App): Screen {
   const el = screenEl('collection');
   let tab: CollTab = 'champ';
   const content = h('div.scroll.coll-scroll');
@@ -835,7 +835,7 @@ export function collectionScreen(app: App): Screen {
 
 // ---------- Settings ----------
 
-export function settingsScreen(app: App): Screen {
+function settingsScreen(app: App): Screen {
   const el = screenEl('settings');
   const p = app.profile;
   const s = p.settings;

@@ -25,7 +25,7 @@ export function h<K extends keyof HTMLElementTagNameMap>(tag: K | `${K}.${string
   return el;
 }
 
-export function append(el: Element, kids: Child[]) {
+function append(el: Element, kids: Child[]) {
   for (const k of kids) {
     if (k === null || k === undefined || k === false) continue;
     el.append(k instanceof Node ? k : document.createTextNode(String(k)));
@@ -96,12 +96,6 @@ export function toast(text: string, kind: '' | 'bad' | 'good' | 'gold' = '') {
     t.classList.add('leaving');
     setTimeout(() => t.remove(), 220);
   }, ms);
-}
-
-export function banner(text: string, bad = false) {
-  const b = h('div.big-banner', { class: bad ? 'bad' : '' }, text);
-  document.getElementById('ui')!.append(b);
-  setTimeout(() => b.remove(), 1650);
 }
 
 export function modal(build: (close: () => void) => HTMLElement, opts: { dismissable?: boolean; onClose?: () => void; backDismissable?: boolean } = {}): () => void {

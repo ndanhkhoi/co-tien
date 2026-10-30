@@ -92,7 +92,6 @@ export const CHAPTERS: Chapter[] = ROUTE.map((r, ci) => {
 });
 
 export const ALL_NPCS = CHAPTERS.flatMap((c) => c.npcs);
-export const npcById = (id: string) => ALL_NPCS.find((n) => n.id === id);
 
 export const LEVEL_NAMES = ['', 'Dễ', 'Vừa', 'Khó', 'Tông Sư'] as const;
 export const PERSONALITY_NAMES: Record<Personality, string> = {

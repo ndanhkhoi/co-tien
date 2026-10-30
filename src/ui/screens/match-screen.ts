@@ -22,7 +22,7 @@ import { playFinisher } from '../finisher';
 import { forceStrength } from '../../game/terrain';
 import { practiceDesk, type PracticeSetup } from './practice-desk';
 
-export interface MatchResult {
+interface MatchResult {
   won: boolean;
   match: Match;
 }

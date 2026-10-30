@@ -22,8 +22,8 @@ export const ASSASSIN_RUN = 4;
 /** …worth this much shot value together, so four hangers alone are not enough. */
 export const ASSASSIN_VALUE = 5;
 /** Energy for every shot, and per point of shot value (1 per plain ball, more for hard shots). */
-export const ENERGY_PER_SHOT = 6;
-export const ENERGY_PER_VALUE = 11;
+const ENERGY_PER_SHOT = 6;
+const ENERGY_PER_VALUE = 11;
 
 export interface PlayerSetup {
   name: string;

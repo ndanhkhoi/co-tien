@@ -111,23 +111,3 @@ export function predictAim(t: TableGeom, balls: Ball[], cueId: number, angle: nu
   }
   return { gx, gy, hitBall: null, objDir: null, cueDir: null, cut: 0, cushionNormal: null };
 }
-
-/** Pocket the object ball is heading for, if its path ends in one (for auto-calling). */
-export function pocketAlong(t: TableGeom, x: number, y: number, dx: number, dy: number, closed: number[] = []): number | null {
-  let best: number | null = null;
-  let bestScore = Infinity;
-  t.pockets.forEach((p, i) => {
-    if (closed.includes(i)) return;
-    const vx = p.ax - x;
-    const vy = p.ay - y;
-    const along = vx * dx + vy * dy;
-    if (along <= 0) return;
-    const off = Math.abs(vx * dy - vy * dx);
-    const score = off / Math.max(0.05, along);
-    if (score < bestScore && off < 0.12 + along * 0.08) {
-      bestScore = score;
-      best = i;
-    }
-  });
-  return best;
-}

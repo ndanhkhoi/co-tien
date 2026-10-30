@@ -20,7 +20,7 @@ export type IconName = (typeof FILES)[number] | keyof typeof ALIAS;
 
 const BASE = new URL(`${import.meta.env.BASE_URL}art/ui/icons/`, document.baseURI).href;
 
-export function iconUrl(name: IconName): string {
+function iconUrl(name: IconName): string {
   return `${BASE}${(ALIAS as Record<string, string>)[name] ?? name}.webp`;
 }
 

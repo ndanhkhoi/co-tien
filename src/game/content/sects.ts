@@ -74,7 +74,7 @@ export const CLASSES: ClassInfo[] = roster.classes.map((c) => ({ id: c.id as Cla
 export const classInfo = (id: ClassId): ClassInfo => CLASSES.find((c) => c.id === id)!;
 
 /** Turns a basic skill of each family waits before it can be cast again. */
-export const KIND_COOLDOWN: Record<SkillKind, number> = {
+const KIND_COOLDOWN: Record<SkillKind, number> = {
   slick: 2, sand: 3, bumper: 3, railcraft: 2, wind: 2, well: 3, spinwash: 2, vortex: 3,
   vision: 3, rewind: 3, shield: 3, chill: 3, spin: 2, nudge: 3, reveal: 2, power: 2,
   blast: 3, seal: 3, maw: 3, drain: 2, gravity: 3, freeze: 3, teleport: 3, second: 3,
@@ -104,7 +104,7 @@ export function skillPower(kind: SkillKind, tier: number) {
   }
 }
 
-export function describeKind(kind: SkillKind, tier: number): string {
+function describeKind(kind: SkillKind, tier: number): string {
   const p = skillPower(kind, tier) as Record<string, number>;
   const pct = (x: number) => `${Math.round(x * 100)}%`;
   switch (kind) {
@@ -135,14 +135,6 @@ export function describeKind(kind: SkillKind, tier: number): string {
   }
 }
 
-export const KIND_NAMES: Record<SkillKind, string> = {
-  slick: 'Dải Trượt', sand: 'Sa Trận', bumper: 'Trấn Vật', railcraft: 'Chỉnh Băng', wind: 'Dẫn Phong', well: 'Tinh Điểm', spinwash: 'Tán Toàn', vortex: 'Toàn Lưu',
-  vision: 'Tiên tri', rewind: 'Tua thời gian', shield: 'Hộ thể', chill: 'Làm run', spin: 'Áp phê thần',
-  nudge: 'Dời bi', reveal: 'Soi đường', power: 'Cuồng lực', blast: 'Bộc phá', seal: 'Phong ấn lỗ',
-  maw: 'Nuốt chửng', drain: 'Hút năng lượng', gravity: 'Hấp dẫn', freeze: 'Đóng băng',
-  teleport: 'Dịch chuyển', second: 'Tái chiến',
-};
-
 export const SECT_SIGNATURES: Record<SectId, string> = {
   thienquang: 'Kiếm nhãn: so sánh ba đường dự đoán theo lực đánh hoặc áp phê.',
   huyetsat: 'Huyết bộc: xung lực hình quạt theo hướng đánh.',
@@ -159,7 +151,7 @@ export const SECT_SIGNATURES: Record<SectId, string> = {
   thienhuong: 'Toàn lưu: đặt dòng xoáy và chọn chiều thuận hoặc nghịch.',
 };
 
-export const ULT_DESCRIPTIONS: Record<UltId, string> = {
+const ULT_DESCRIPTIONS: Record<UltId, string> = {
   thienquang: 'Ba đường dự đoán để so sánh lực đánh hoặc áp phê trước khi ra cơ.',
   huyetsat: 'Xung lực hình quạt chỉ hất những bi nằm phía trước hướng đánh.',
   hoalinh: 'Hai vùng gió song song thổi ngược chiều nhau.',

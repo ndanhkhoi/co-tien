@@ -16,10 +16,6 @@
 #ui > .screen.game > .mx-hand,
 #ui > .screen.game > .mx-calltag { pointer-events: none; }
 
-.ico.rot90 { transform: rotate(90deg); }
-.ico.rot180 { transform: rotate(180deg); }
-.ico.rot270 { transform: rotate(270deg); }
-
 /* ---------- Top strip ---------- */
 
 .mx-top {
@@ -242,7 +238,6 @@
 .mx-sk-state:empty { display: none; }
 .mx-sk-state .ico { filter: brightness(0) invert(1); }
 .mx-sk-name { flex-shrink: 0; font: 600 13px/1.15 var(--body); text-align: center; color: var(--ink); }
-@keyframes mx-ult { 50% { transform: scale(1.07); } }
 
 /* Controls. */
 .mx-pad { display: flex; flex-direction: column; gap: var(--gap); }

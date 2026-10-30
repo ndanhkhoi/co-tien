@@ -4,7 +4,7 @@
  */
 
 /* Framed sheets: an ink-brush border with cloud-scroll corners around smooth paper. */
-.panel, .modal, .home-menu, .sheet {
+.panel, .modal, .sheet {
   border: 22px solid transparent;
   border-image: url('/art/ui/frame/panel.webp') 74 fill / 22px / 0 stretch;
   background: none;
@@ -14,7 +14,6 @@
 }
 .modal { border-width: 26px; border-image-width: 26px; padding: 6px 10px; }
 .panel { padding: 4px 6px; }
-.home-menu { padding: 0; }
 
 /* Seal-stamp primary buttons and ink-outline secondary buttons. */
 .btn {
@@ -28,8 +27,10 @@
   text-shadow: 0 1px 0 rgba(60, 10, 4, 0.35);
 }
 .btn.pressed, .btn:active { background: none; box-shadow: none; filter: brightness(0.9); transform: translateY(2px); }
-.btn.ghost, .btn.secondary, .btn.quiet {
-  border-image-source: url('/art/ui/frame/btn-secondary.webp');
+.btn.ghost, .btn.secondary {
+  /* Secondary buttons get the full painted plate like the primary ones. */
+  border: 14px solid transparent;
+  border-image: url('/art/ui/frame/btn-secondary.webp') 56 fill / 14px / 0 stretch;
   background: none;
   text-shadow: none;
 }
@@ -246,34 +247,13 @@
 .cp-tags { display: flex; flex-wrap: wrap; gap: 5px; }
 .cp-passive { font-size: 13.5px; line-height: 1.4; color: var(--ink-2); }
 .cp-passive b { color: var(--ink); }
-.cp-skills { flex: 1; min-height: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; align-content: stretch; grid-auto-rows: 1fr; }
-.cp-skill {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  gap: 2px;
-  padding: 2px;
-  border: 10px solid transparent;
-  border-image: url('/art/ui/frame/panel.webp') 74 fill / 10px / 0 stretch; justify-content: center;
-}
-.cp-skill.ult { filter: drop-shadow(0 0 3px rgba(176, 53, 34, 0.55)); }
-.cp-sk-icon { width: 44px; height: 44px; border-radius: 8px; }
-.cp-sk-name { font: 700 13.5px/1.15 var(--display); }
-.cp-sk-cd { font-size: 11.5px; font-weight: 700; color: var(--accent-2); }
-.cp-sk-desc { font-size: 12.5px; line-height: 1.35; color: var(--ink-2); }
 .cp-foot { display: flex; justify-content: flex-end; gap: 8px; padding: 4px 0 6px; flex-shrink: 0; margin: 0; padding-top: 4px; }
 .champ-page > .close-x { position: absolute; top: 6px; right: 6px; }
 
-/* Secondary buttons get the full painted plate like the primary ones. */
-.btn.ghost, .btn.secondary { border: 14px solid transparent; border-image: url('/art/ui/frame/btn-secondary.webp') 56 fill / 14px / 0 stretch; }
 .btn.ghost.small, .btn.secondary.small { border-width: 12px; border-image-width: 12px; }
 .champ-page .cp-main, .champ-page .cp-head { text-align: left; align-items: stretch; }
 .champ-page .cp-head .cp-tags, .champ-page .cp-sect { justify-content: flex-start; }
 .champ-page .cp-name { text-align: left; }
-.champ-page .cp-skill p.cp-sk-desc { font-size: 12px !important; line-height: 1.32 !important; margin: 0; }
-.champ-page .cp-sk-icon { width: 34px; height: 34px; }
-.champ-page .cp-skill { gap: 1px; }
 
 /* Keep navigation in one row so the introduction has room for its copy. */
 .modal.intro { grid-template-columns: minmax(0, 38%) minmax(0, 1fr); }
@@ -340,7 +320,6 @@
 @keyframes ct-sheet-in { from { opacity: 0; transform: translateX(36px); } to { opacity: 1; transform: none; } }
 .home-hero, .cp-art img, .codex-champ .cc-cut img { animation: ct-art-rise 480ms var(--ease) both; }
 @keyframes ct-art-rise { from { opacity: 0; translate: 0 22px; } to { opacity: 1; translate: 0 0; } }
-.cp-skill, .skill-row { animation: ct-art-rise 360ms var(--ease) both; animation-delay: var(--entry-delay, 0ms); }
 .champ-card:nth-child(5n + 2) { animation-delay: 40ms; }
 .champ-card:nth-child(5n + 3) { animation-delay: 80ms; }
 .champ-card:nth-child(5n + 4) { animation-delay: 120ms; }
@@ -356,9 +335,7 @@
 @keyframes ct-seal-stamp { from { opacity: 0; scale: 1.6; } to { opacity: 1; scale: 1; } }
 
 @media (prefers-reduced-motion: reduce) {
-  .screen, .screen.out, .motion-sheet, .home-hero, .cp-art img,
-  .codex-champ .cc-cut img, .cp-skill, .skill-row, .champ-card,
-  .vs-cut.me, .vs-cut.foe, .vs-stage .vs-seal { animation: none !important; }
+  .screen, .screen.out, .motion-sheet, .home-hero, .cp-art img, .codex-champ .cc-cut img, .champ-card, .vs-cut.me, .vs-cut.foe, .vs-stage .vs-seal { animation: none !important; }
   .vs-stage::after { display: none; }
 }
 

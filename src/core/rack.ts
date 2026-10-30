@@ -22,7 +22,7 @@ function jitter(b: Ball, rng: Rng) {
   b.y += rng.range(-0.00006, 0.00006);
 }
 
-export function cueBallAtHead(t: TableGeom, rng: Rng): Ball {
+function cueBallAtHead(t: TableGeom, rng: Rng): Ball {
   return makeBall(0, t.headStringX - rng.range(0.03, 0.12), rng.range(-0.18, 0.18));
 }
 

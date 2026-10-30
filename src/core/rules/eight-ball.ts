@@ -2,10 +2,10 @@ import type { Ball } from '../physics';
 import { rackEight } from '../rack';
 import { other, type GameState, type Group, type Resolution, type RuleSet, type ShotSummary, type Side } from './types';
 
-export const isSolid = (id: number) => id >= 1 && id <= 7;
-export const isStripe = (id: number) => id >= 9 && id <= 15;
+const isSolid = (id: number) => id >= 1 && id <= 7;
+const isStripe = (id: number) => id >= 9 && id <= 15;
 export const groupOf = (id: number): Group => (isSolid(id) ? 'solid' : isStripe(id) ? 'stripe' : null);
-export const groupName = (g: Group) => (g === 'solid' ? 'bi trơn' : 'bi sọc');
+const groupName = (g: Group) => (g === 'solid' ? 'bi trơn' : 'bi sọc');
 
 function remaining(balls: Ball[], g: Group): number[] {
   return balls.filter((b) => b.onTable && groupOf(b.id) === g).map((b) => b.id);
