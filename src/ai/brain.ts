@@ -417,6 +417,31 @@ function placements(ctx: Ctx, balls: Ball[], kitchen: boolean): { x: number; y: 
   return ctx.rng.shuffle(out).slice(0, ctx.req.profile.level >= 3 ? 14 : 7);
 }
 
+/** Spots that get the full search once the deep levels have taken a quick look at all of them. */
+const FINALISTS = 4;
+
+/**
+ * Ball in hand at levels 3–4: every spot first gets a quick look (its two easiest pots, one
+ * natural stroke each) and only the most promising spots get every line and stroke. A full search
+ * of all fourteen spots costs thousands of simulated shots, several seconds on a phone.
+ */
+function shortlist(ctx: Ctx, balls: Ball[], spots: { x: number; y: number }[]): { x: number; y: number }[] {
+  if (ctx.req.profile.level < 3 || spots.length <= FINALISTS) return spots;
+  const v = variants(ctx)[0];
+  const targets = ctx.rules.legalTargets(ctx.req.state, balls, ctx.side);
+  const rated = spots.map((pos) => {
+    const lines = potLines(ctx, balls, pos.x, pos.y, targets);
+    let best = -1e9;
+    for (const line of lines.slice(0, 2)) {
+      const shot = makeShot(line.angle, speedFor(line.dist, ctx) * v.mul, ctx, v.side, v.vert, { call: callFor(ctx, line), cue: { x: pos.x, y: pos.y } });
+      const o = play(ctx, balls, shot);
+      if (o.res.keepTurn || o.res.winner === ctx.side) best = Math.max(best, judge(ctx, o));
+    }
+    return { pos, best, ease: lines[0]?.ease ?? 0 };
+  });
+  return rated.sort((a, b) => b.best - a.best || b.ease - a.ease).slice(0, FINALISTS).map((r) => r.pos);
+}
+
 // ---------- Carom ----------
 
 function caromPlan(ctx: Ctx): Plan {
@@ -540,7 +565,7 @@ function planShot(req: AiRequest): AiDecision {
   const balls = req.balls;
   let best: Plan | null = null;
   if (req.ballInHand !== 'none') {
-    for (const pos of placements(ctx, balls, req.ballInHand === 'kitchen')) {
+    for (const pos of shortlist(ctx, balls, placements(ctx, balls, req.ballInHand === 'kitchen'))) {
       const plans = potPlans(ctx, balls, pos, true);
       if (plans[0] && (!best || plans[0].ev > best.ev)) best = plans[0];
     }
