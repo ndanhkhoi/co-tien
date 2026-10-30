@@ -715,7 +715,9 @@ body.playing .bd-scene, body.playing .bd-mist { animation-play-state: paused; }
 .mx-card .mx-name { font-size: 15px; color: var(--ink); }
 .mx-card.active .mx-name { color: var(--accent-2); }
 .mx-card .mx-sub { color: var(--ink-2); }
-.mx-card .mx-hexes { height: 15px; align-items: center; }
+/* Effect chips hang just under the plate, aligned with the text column, so they never push the name up. */
+.mx-card .mx-hexes { position: absolute; bottom: -12px; left: calc(var(--face) + 36px); height: 15px; align-items: center; }
+.mx-card.p2 .mx-hexes { left: auto; right: calc(var(--face) + 36px); }
 .mx-card .mx-hex { background: color-mix(in srgb, var(--sheet) 72%, transparent); border-color: var(--line-2); color: var(--ink-2); }
 .mx-card .mx-score { height: 22px; line-height: 22px; background: var(--accent); color: var(--on-accent); border-radius: 3px; }
 
