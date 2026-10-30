@@ -7,8 +7,9 @@ import { motionModal as modal, type App } from '../app';
 import { avatar } from '../avatar';
 import { btn, h, stars, toast } from '../dom';
 import { icon } from '../icons';
-import { closeX, fmt, hex6, statChip } from '../screen-bits';
-import { matchScreen } from './match-screen';
+import { closeX, fmt, statChip } from '../widgets';
+import { hex6 } from '../dom';
+import { matchScreen } from './match';
 
 const tableOf = (n: Npc): TableSkin => TABLES.find((t) => t.id === n.sect) ?? TABLES[0];
 

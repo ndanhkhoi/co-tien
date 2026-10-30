@@ -4,7 +4,7 @@ import { cueStats, tableStats, TABLE_NOTE, type StatLine } from '../../game/cont
 import { screenEl, turnPage, type App, type Screen } from '../app';
 import { btn, h, tabs, toast } from '../dom';
 import { icon } from '../icons';
-import { championPicker, cueArtEl, fmt, statChip, statRows, tablePreview, topbar, wallet } from '../screen-bits';
+import { championPicker, cueArtEl, fmt, statChip, statRows, tablePreview, topbar, wallet } from '../widgets';
 import { classList, landList, rulesPage } from './codex';
 import { championModal } from './profile';
 

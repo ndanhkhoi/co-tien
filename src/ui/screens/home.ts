@@ -8,7 +8,7 @@ import { avatar } from '../avatar';
 import { h, iconBtn, tap } from '../dom';
 import { icon, type IconName } from '../icons';
 import { showIntro } from '../intro';
-import { artUrl, fmt } from '../screen-bits';
+import { artUrl, fmt } from '../widgets';
 import { challengesScreen } from './challenges';
 import { collectionScreen } from './collection';
 import { journeyScreen } from './journey';

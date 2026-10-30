@@ -3,7 +3,7 @@ import { screenEl, type App, type Screen } from '../app';
 import { h, stars, tap, toast } from '../dom';
 import { icon } from '../icons';
 import { startChallenge } from './challenge-start';
-import { statChip, topbar } from '../screen-bits';
+import { statChip, topbar } from '../widgets';
 
 export function challengesScreen(app: App): Screen {
   const el = screenEl('challenges');

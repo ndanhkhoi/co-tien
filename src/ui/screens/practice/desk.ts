@@ -1,11 +1,11 @@
-import { sound } from '../../audio/sound';
-import type { Match } from '../../game/match';
-import { practiceBalls, practiceIds, saveLayout, spotsOf, PRACTICE_DRILLS, type PracticeTable } from '../../game/practice';
-import { haptic } from '../../platform/device';
-import type { TableView } from '../../render/table-view';
-import type { TableGeom } from '../../core/table';
-import { btn, h, tap, toast, uiOrigin, uiScale } from '../dom';
-import { icon } from '../icons';
+import { sound } from '../../../audio/sound';
+import type { Match } from '../../../game/match';
+import { practiceBalls, practiceIds, saveLayout, spotsOf, PRACTICE_DRILLS, type PracticeTable } from '../../../game/practice';
+import { haptic } from '../../../platform/device';
+import type { TableView } from '../../../render/table-view';
+import type { TableGeom } from '../../../core/table';
+import { btn, h, tap, toast, uiOrigin, uiScale } from '../../dom';
+import { icon } from '../../icons';
 
 /** What the match screen tells the practice desk about the table it sits beside. */
 export interface PracticeSetup {

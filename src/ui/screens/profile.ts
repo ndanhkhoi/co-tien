@@ -3,7 +3,8 @@ import { motionModal as modal, type App } from '../app';
 import { btn, h, tap, toast } from '../dom';
 import { icon } from '../icons';
 import { champPage, known } from './codex';
-import { championPicker, championPreview, closeX, fmt, hex6 } from '../screen-bits';
+import { championPicker, championPreview, closeX, fmt } from '../widgets';
+import { hex6 } from '../dom';
 
 /** Name + champion editor; shown on first launch and from the home player card. */
 export function profileModal(app: App, onDone: () => void, first = false) {

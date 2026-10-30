@@ -4,7 +4,7 @@ import story from '../../game/content/story.json';
 import { screenEl, turnPage, type App, type Screen } from '../app';
 import { btn, h, iconBtn, tap, toast } from '../dom';
 import { icon } from '../icons';
-import { statChip, topbar } from '../screen-bits';
+import { statChip, topbar } from '../widgets';
 
 /**
  * Cơ Tiên Truyện: an illustrated reader for the world's story. Chapters open as the player

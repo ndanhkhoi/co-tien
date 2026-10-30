@@ -6,6 +6,9 @@ type Child = Node | string | number | null | undefined | false;
 type Props = Record<string, unknown> & { class?: string; style?: string };
 
 /** Tiny element builder: h('div.card.sel', { onclick }, child, …). */
+/** CSS colour from a 0xRRGGBB number. */
+export const hex6 = (n: number) => '#' + n.toString(16).padStart(6, '0');
+
 export function h<K extends keyof HTMLElementTagNameMap>(tag: K | `${K}.${string}`, props: Props | null = null, ...kids: Child[]): HTMLElementTagNameMap[K] {
   const [name, ...classes] = tag.split('.');
   const el = document.createElement(name) as HTMLElementTagNameMap[K];

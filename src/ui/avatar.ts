@@ -1,7 +1,6 @@
 import { champion, portraitUrl, sect } from '../game/content/sects';
-import { h } from './dom';
+import { h, hex6 } from './dom';
 
-const hex6 = (n: number) => '#' + n.toString(16).padStart(6, '0');
 
 /**
  * Champion portrait (chibi) on its sect colour. If the portrait is missing (art not

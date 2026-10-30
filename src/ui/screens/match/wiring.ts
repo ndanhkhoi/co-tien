@@ -4,7 +4,7 @@ import { exprUrl, winUrl } from '../../../game/content/sects';
 import { Match } from '../../../game/match';
 import { Rng } from '../../../core/rng';
 import { TableView } from '../../../render/table-view';
-import { practiceDesk } from '../practice-desk';
+import { practiceDesk } from '../practice/desk';
 import type { MatchOptions } from './options';
 import type { MatchCtx } from './context';
 import { attachSpinInput, createMatchDom, type MatchDom } from './dom';
@@ -120,7 +120,6 @@ function createSections(ctx: MatchCtx): MatchSections {
   ctx.skill.moveCast = (x, y) => moveCast(ctx, x, y);
   const layout = createLayoutProxy(ctx);
   const dom = createMatchDom(ctx, opts, {
-    hex6: (n) => '#' + n.toString(16).padStart(6, '0'),
     openPause: () => late.openPause(),
     openSkill: (slot) => late.openSkill(slot),
     openSpin: () => late.openSpin(),

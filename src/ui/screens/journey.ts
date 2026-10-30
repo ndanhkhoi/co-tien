@@ -9,7 +9,8 @@ import { btn, h, stars, tap, toast } from '../dom';
 import { icon } from '../icons';
 import { npcModal } from './career';
 import { startChallenge } from './challenge-start';
-import { artUrl, champCard, closeX, hex6, statChip, topbar } from '../screen-bits';
+import { artUrl, champCard, closeX, statChip, topbar } from '../widgets';
+import { hex6 } from '../dom';
 
 /**
  * Hành trình: one painted map of Cơ Tiên Giới shared by duels and challenges. Each land has

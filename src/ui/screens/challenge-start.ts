@@ -1,7 +1,7 @@
 import type { GameMode } from '../../core/rules/types';
 import { CHALLENGES, challengeBalls, FAMILY_INFO, goalText, judgeChallenge, type ChallengeDef } from '../../game/content/challenges';
 import type { TableSkin } from '../../game/content/gear';
-import { matchScreen } from './match-screen';
+import { matchScreen } from './match';
 import type { App } from '../app';
 
 const POCKET_LABEL = ['lỗ góc trên trái', 'lỗ giữa trên', 'lỗ góc trên phải', 'lỗ góc dưới trái', 'lỗ giữa dưới', 'lỗ góc dưới phải'];

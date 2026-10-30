@@ -1,9 +1,8 @@
 import { sound } from '../audio/sound';
 import { cutoutUrl, finisherUrl, sect, sectArtUrl, type Champion } from '../game/content/sects';
-import { h } from './dom';
+import { h, hex6 } from './dom';
 
 
-const hex6 = (n: number) => '#' + n.toString(16).padStart(6, '0');
 const BASE = import.meta.env.BASE_URL;
 
 /** The deciding ball: its painted portrait and how to say it ("Bi 8 vào lỗ"). */

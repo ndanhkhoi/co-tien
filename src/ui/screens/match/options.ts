@@ -1,5 +1,5 @@
 import type { Match } from '../../../game/match';
-import type { PracticeSetup } from '../practice-desk';
+import type { PracticeSetup } from '../practice/desk';
 
 export interface MatchOptions {
   setup: Match['setup'];

@@ -9,8 +9,8 @@ import { avatar } from '../avatar';
 import { motionModal as modal, screenEl, type App, type Screen } from '../app';
 import { btn, chip, h, item, tap } from '../dom';
 import { icon } from '../icons';
-import { championPicker, championPreview, closeX, seg, topbar } from '../screen-bits';
-import { matchScreen } from './match-screen';
+import { championPicker, championPreview, closeX, seg, topbar } from '../widgets';
+import { matchScreen } from './match';
 import { profileModal } from './profile';
 
 type MatchEndResult = Parameters<NonNullable<Parameters<typeof matchScreen>[0]['onEnd']>>[0];

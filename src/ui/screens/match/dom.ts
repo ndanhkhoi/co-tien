@@ -1,7 +1,7 @@
 import { champion, portraitUrl, sect } from '../../../game/content/sects';
 import { haptic } from '../../../platform/device';
 import type { Side } from '../../../core/rules/types';
-import { btn, h, tap, uiScale } from '../../dom';
+import { btn, h, hex6, tap, uiScale } from '../../dom';
 import { icon } from '../../icons';
 import type { MatchOptions } from './options';
 import type { AimState, MatchCtx } from './context';
@@ -97,7 +97,7 @@ export const frag = (...kids: (Node | string)[]): DocumentFragment => {
   return f;
 };
 
-function playerCard(opts: MatchOptions, side: Side, hex6: (n: number) => string, hasSkills: boolean): CardView {
+function playerCard(opts: MatchOptions, side: Side, hasSkills: boolean): CardView {
   const p = opts.setup.players[side];
   const c = champion(p.champion);
   const face = h('img.mx-face', { src: portraitUrl(p.champion), alt: c.name, draggable: false, decoding: 'async' });
@@ -116,7 +116,6 @@ function playerCard(opts: MatchOptions, side: Side, hex6: (n: number) => string,
 }
 
 export interface DomHost {
-  hex6: (n: number) => string;
   openPause(): void;
   openSkill(slot: number): void;
   openSpin(): void;
@@ -138,7 +137,7 @@ export function createMatchDom(ctx: MatchCtx, opts: MatchOptions, host: DomHost)
     el,
     probe: h('div.mx-probe', { 'aria-hidden': 'true' }),
     pauseBtn: tap(h('button.icon-btn.mx-pause', { 'aria-label': 'Tạm dừng' }, icon('pause')), () => host.openPause()),
-    cards: [playerCard(opts, 0, host.hex6, ctx.hasSkills), playerCard(opts, 1, host.hex6, ctx.hasSkills)],
+    cards: [playerCard(opts, 0, ctx.hasSkills), playerCard(opts, 1, ctx.hasSkills)],
     objKicker: h('div.mx-obj-k'),
     objText: h('div.mx-obj-t'),
     objPlate: null!,

@@ -13,7 +13,8 @@ import { motionModal as modal, turnPage, type App } from '../app';
 import { btn, h, tap, toast } from '../dom';
 import { swipeDirection, type SwipeStart } from '../swipe';
 import { skillButtons } from './profile';
-import { champCard, closeX, cueArtEl, hex6, statRows, tablePreview } from '../screen-bits';
+import { champCard, closeX, cueArtEl, statRows, tablePreview } from '../widgets';
+import { hex6 } from '../dom';
 
 /**
  * Cơ Tiên Lục — the world's library, shown as tabs of Tàng Các: lands, classes and rules, plus

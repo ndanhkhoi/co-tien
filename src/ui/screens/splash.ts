@@ -2,7 +2,7 @@ import { sound } from '../../audio/sound';
 import { enterFullscreen, isTouchDevice } from '../../platform/device';
 import { screenEl, type App, type Screen } from '../app';
 import { h } from '../dom';
-import { artUrl } from '../screen-bits';
+import { artUrl } from '../widgets';
 import { homeScreen } from './home';
 
 export function splashScreen(app: App): Screen {

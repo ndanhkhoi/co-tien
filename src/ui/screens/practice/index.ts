@@ -1,14 +1,14 @@
-import { ballStyle } from '../../core/ball-styles';
-import type { TableSkin } from '../../game/content/gear';
+import { ballStyle } from '../../../core/ball-styles';
+import type { TableSkin } from '../../../game/content/gear';
 import {
   deleteSaved, loadSaved, practiceBalls, practiceGeom, PRACTICE_DRILLS, PRACTICE_TABLE_NAMES, SAVED_MAX,
   type PracticeSpot, type PracticeTable,
-} from '../../game/practice';
-import { screenEl, type App, type Screen } from '../app';
-import { btn, h, tabs, tap, toast, uiScale } from '../dom';
-import { icon } from '../icons';
-import { matchScreen } from './match-screen';
-import { topbar } from '../screen-bits';
+} from '../../../game/practice';
+import { screenEl, type App, type Screen } from '../../app';
+import { btn, h, tabs, tap, toast, uiScale } from '../../dom';
+import { icon } from '../../icons';
+import { matchScreen } from '../match';
+import { topbar } from '../../widgets';
 
 /** One entry of the list: a drill from the book or a position the player kept. */
 interface Choice {

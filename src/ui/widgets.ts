@@ -3,13 +3,12 @@ import type { StatLine } from '../game/content/stat-text';
 import type { CueDef, TableSkin } from '../game/content/gear';
 import type { App } from './app';
 import { avatar } from './avatar';
-import { bar5, chip, h, iconBtn, tap } from './dom';
+import { bar5, chip, h, hex6, iconBtn, tap } from './dom';
 import { icon, type IconName } from './icons';
 
 const BASE = new URL(import.meta.env.BASE_URL, document.baseURI).href;
 /** Absolute URL of a file under public/art (safe inside CSS variables too). */
 export const artUrl = (path: string) => `${BASE}art/${path}`;
-export const hex6 = (n: number) => '#' + n.toString(16).padStart(6, '0');
 export const fmt = (n: number) => n.toLocaleString('vi-VN');
 export type Kid = Node | string | null | undefined | false;
 

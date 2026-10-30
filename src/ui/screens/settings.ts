@@ -7,7 +7,7 @@ import { btn, h, item, slider, toggle, toast, tap } from '../dom';
 import { icon } from '../icons';
 import { resetHints } from '../hints';
 import { showIntro } from '../intro';
-import { topbar, type Kid } from '../screen-bits';
+import { topbar, type Kid } from '../widgets';
 import { homeScreen } from './home';
 import { profileModal } from './profile';
 

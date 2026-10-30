@@ -1,8 +1,7 @@
 import { sound } from '../audio/sound';
 import { cutoutUrl, sect, sectArtUrl, skillIconUrl, type Champion, type SkillDef } from '../game/content/sects';
-import { h } from './dom';
+import { h, hex6 } from './dom';
 
-const hex6 = (n: number) => '#' + n.toString(16).padStart(6, '0');
 
 /**
  * Ultimate cut-in: a great ink brush stroke sweeps across the screen, the champion's cut-out
