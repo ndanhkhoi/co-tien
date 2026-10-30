@@ -308,6 +308,9 @@ function collideSegment(
 ): boolean {
   // A ball whose bottom clears the cushion top can leave the table.
   if ((b.z ?? 0) > 0.04) return false;
+  // Outside the segment's box grown by R the ball cannot touch it; most balls are nowhere near.
+  if (b.x - R > (s.ax > s.bx ? s.ax : s.bx) || b.x + R < (s.ax < s.bx ? s.ax : s.bx) ||
+    b.y - R > (s.ay > s.by ? s.ay : s.by) || b.y + R < (s.ay < s.by ? s.ay : s.by)) return false;
   const ex = s.bx - s.ax;
   const ey = s.by - s.ay;
   const l2 = ex * ex + ey * ey;
@@ -400,6 +403,8 @@ export function step(w: SimWorld, dt: number, events: PhysEvent[] | null): boole
   const balls = w.balls;
   let remaining = dt;
   let guard = 0;
+  // Which balls move this substep: the pair search below asks once per ball, not once per pair.
+  const moving: boolean[] = new Array(balls.length);
   while (remaining > 1e-9) {
     let vmax = 0;
     for (const b of balls) {
@@ -426,13 +431,14 @@ export function step(w: SimWorld, dt: number, events: PhysEvent[] | null): boole
     let hitA: Ball | null = null;
     let hitB: Ball | null = null;
     const D = 2 * R;
+    for (let i = 0; i < balls.length; i++) moving[i] = isMoving(balls[i]);
     for (let i = 0; i < balls.length; i++) {
       const a = balls[i];
       if (!a.onTable) continue;
       for (let j = i + 1; j < balls.length; j++) {
         const b = balls[j];
         if (!b.onTable) continue;
-        if (!isMoving(a) && !isMoving(b)) continue;
+        if (!moving[i] && !moving[j]) continue;
         const t = timeOfImpact(a, b, D, h);
         if (t < h) {
           h = t;
@@ -463,6 +469,8 @@ export function step(w: SimWorld, dt: number, events: PhysEvent[] | null): boole
       for (const b of balls) {
         if (!b.onTable) continue;
         if ((b.z ?? 0) > 0 || (b.vz ?? 0) > 0) continue;
+        // Cloth friction leaves a ball at complete rest exactly as it is.
+        if (b.vx === 0 && b.vy === 0 && b.wx === 0 && b.wy === 0 && b.wz === 0) continue;
         let slideK = 1;
         let rollK = 1;
         let spinK = 1;
