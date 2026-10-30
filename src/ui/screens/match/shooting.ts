@@ -47,6 +47,7 @@ export function createShooting(ctx: MatchCtx, dom: MatchDom, deps: ShootingDeps)
     flags.placeConfirmed = true;
     haptic(15);
     sound.tap();
+    deps.renderControls();
   };
   const charge = createCharge(ctx, dom, deps);
   const fireAtPreset = () => {
