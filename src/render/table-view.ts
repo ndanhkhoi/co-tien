@@ -2,7 +2,7 @@ import { applySkillBlast } from '../game/skill-cast';
 import { Container, Graphics, Rectangle, Sprite, Texture, type Application } from 'pixi.js';
 import { predictAim } from '../core/aim';
 import { ballStyle } from '../core/ball-styles';
-import { cloneBalls, step, type Ball } from '../core/physics';
+import { cloneBalls, step, type Ball, type PhysEvent, type SimWorld } from '../core/physics';
 import { champion, sectArtUrl, type SkillDef } from '../game/content/sects';
 import type { CueDef } from '../game/content/gear';
 import type { Match } from '../game/match';
@@ -39,6 +39,20 @@ interface Particle {
   grow: number;
 }
 
+/** One simulated shot of a path preview, advanced a slice at a time. */
+interface EagleRun {
+  world: SimWorld;
+  cue: Ball;
+  angle: number;
+  paths: Map<number, number[]>;
+  frames: number;
+  blastDone: boolean;
+  done: boolean;
+}
+
+/** Physics time a path preview may take per frame (ms), so aiming stays smooth while it builds. */
+const EAGLE_BUDGET_MS = 4;
+
 interface Falling {
   mesh: BallMesh;
   shadow: Sprite;
@@ -48,25 +62,55 @@ interface Falling {
 }
 
 /**
+ * The numbers that make up one frame (every transform and texture, each ball's orientation and
+ * every line drawn), compared with the frame before: a table where nothing changed is not drawn again.
+ */
+class FrameDiff {
+  private prev: number[] = [];
+  private cur: number[] = [];
+  private same = true;
+  begin() {
+    const spare = this.prev;
+    this.prev = this.cur;
+    this.cur = spare;
+    this.cur.length = 0;
+    this.same = true;
+  }
+  add(v: number) {
+    if (this.same && this.prev[this.cur.length] !== v) this.same = false;
+    this.cur.push(v);
+  }
+  /** True when this frame differs from the one before. */
+  changed() {
+    return !this.same || this.cur.length !== this.prev.length;
+  }
+}
+
+/**
  * Draws in table metres onto a Graphics that lives in pixel space, so circle
  * tessellation is based on on-screen size (metre-sized radii would turn into diamonds).
+ * Every command is also written into the frame description.
  */
 class MetreGraphics {
   k = 1;
   // Clearing an empty Graphics still rebuilds its geometry; skip it while nothing is drawn.
   private drawn = false;
-  constructor(readonly g: Graphics) {}
+  constructor(readonly g: Graphics, private frame: FrameDiff) {}
   clear() {
     if (this.drawn) this.g.clear();
     this.drawn = false;
     return this;
   }
-  moveTo(x: number, y: number) { this.drawn = true; this.g.moveTo(x * this.k, y * this.k); return this; }
-  lineTo(x: number, y: number) { this.g.lineTo(x * this.k, y * this.k); return this; }
-  circle(x: number, y: number, r: number) { this.drawn = true; this.g.circle(x * this.k, y * this.k, r * this.k); return this; }
-  rect(x: number, y: number, w: number, h: number) { this.drawn = true; this.g.rect(x * this.k, y * this.k, w * this.k, h * this.k); return this; }
-  stroke(style: { width: number; color: number; alpha?: number; cap?: 'round' | 'butt' | 'square'; join?: 'round' | 'miter' | 'bevel' }) { this.g.stroke(style); return this; }
-  fill(style: { color: number; alpha?: number }) { this.g.fill(style); return this; }
+  private note(op: number, a: number, b: number, c = 0, d = 0) {
+    const f = this.frame;
+    f.add(op); f.add(a); f.add(b); f.add(c); f.add(d);
+  }
+  moveTo(x: number, y: number) { this.drawn = true; this.note(1, x, y); this.g.moveTo(x * this.k, y * this.k); return this; }
+  lineTo(x: number, y: number) { this.note(2, x, y); this.g.lineTo(x * this.k, y * this.k); return this; }
+  circle(x: number, y: number, r: number) { this.drawn = true; this.note(3, x, y, r); this.g.circle(x * this.k, y * this.k, r * this.k); return this; }
+  rect(x: number, y: number, w: number, h: number) { this.drawn = true; this.note(4, x, y, w, h); this.g.rect(x * this.k, y * this.k, w * this.k, h * this.k); return this; }
+  stroke(style: { width: number; color: number; alpha?: number; cap?: 'round' | 'butt' | 'square'; join?: 'round' | 'miter' | 'bevel' }) { this.note(5, style.width, style.color, style.alpha ?? 1); this.g.stroke(style); return this; }
+  fill(style: { color: number; alpha?: number }) { this.note(6, style.color, style.alpha ?? 1); this.g.fill(style); return this; }
 }
 
 export class TableView {
@@ -78,8 +122,14 @@ export class TableView {
   private ballsLayer = new Container();
   private guideG = new Graphics();
   private overlayG = new Graphics();
-  private guide = new MetreGraphics(this.guideG);
-  private overlay = new MetreGraphics(this.overlayG);
+  private frame = new FrameDiff();
+  private guide = new MetreGraphics(this.guideG, this.frame);
+  private overlay = new MetreGraphics(this.overlayG, this.frame);
+  /** Frame drawing: whether the picture changed, a window of forced frames, the last draw time. */
+  private dirty = true;
+  private forceUntil = 0;
+  private lastDrawn = 0;
+  private readonly invalidateSoon = () => this.invalidate();
   private pxLayer = new Container();
   private pxTop = new Container();
   private cueShadow = new Sprite();
@@ -101,7 +151,7 @@ export class TableView {
   private artScale = 0;
   private shake = 0;
   private time = 0;
-  private eagleCache: { key: string; paths: { id: number; pts: number[] }[] } | null = null;
+  private eagle: { key: string; runs: EagleRun[] } | null = null;
   private lastPocketOf = new Map<number, number>();
   /** The shooter's declared call, shown to everyone (pocket -1 = ball chosen, pocket not yet). */
   calledShot: { ball: number | null; pocket: number } | null = null;
@@ -127,6 +177,10 @@ export class TableView {
     this.fogSprite.anchor.set(0.5);
     this.fogSprite.visible = false;
     this.rebuildBalls();
+    // A resized, restored or re-shown canvas may come back blank: draw it whatever it holds.
+    window.addEventListener('resize', this.invalidateSoon);
+    document.addEventListener('visibilitychange', this.invalidateSoon);
+    app.canvas.addEventListener('webglcontextrestored', this.invalidateSoon);
     match.on((e) => {
       if (this.disposed) return;
       if (e.type === 'shot') this.omenArt.startShot();
@@ -168,6 +222,42 @@ export class TableView {
     const want = scale * res;
     if (Math.abs(want - this.artScale) / Math.max(1, this.artScale) > 0.08) this.paintArt(want);
     for (const m of this.meshes.values()) m.setPixelRadius(this.match.table.R * scale * res);
+    this.invalidate();
+  }
+
+  /**
+   * Whether the canvas must be drawn this frame. A still table (aiming, waiting for the AI,
+   * reading an announcement) is left on screen as it is instead of being drawn 60–120 times a second.
+   */
+  shouldRender(now = performance.now()): boolean {
+    // A slow heartbeat as well, in case the browser ever drops the canvas contents unannounced.
+    const due = this.dirty || now < this.forceUntil || now - this.lastDrawn > 1000;
+    if (due) {
+      this.dirty = false;
+      this.lastDrawn = now;
+    }
+    return due;
+  }
+
+  /** Draw the next frames whatever they hold. */
+  invalidate(ms = 300) {
+    this.forceUntil = Math.max(this.forceUntil, performance.now() + ms);
+  }
+
+  /** Write every visible transform and texture under `o` into the frame description. */
+  private describe(o: Container) {
+    const f = this.frame;
+    if (!o.visible) {
+      f.add(0);
+      return;
+    }
+    f.add(o.x); f.add(o.y); f.add(o.scale.x); f.add(o.scale.y); f.add(o.rotation); f.add(o.alpha);
+    f.add(o.pivot.x); f.add(o.pivot.y); f.add(o.mask ? 1 : 2);
+    if (o instanceof Sprite) {
+      f.add(o.texture.uid);
+      f.add(o.tint);
+    }
+    for (const c of o.children) this.describe(c);
   }
 
   private repaintQueued = false;
@@ -203,16 +293,29 @@ export class TableView {
     return artImage(sectArtUrl(c.sect, c.id.endsWith('-b') ? 'cue-b' : 'cue-a'), () => this.refreshCue());
   }
 
-  /** Cue texture follows whoever is shooting. */
+  /** Cue texture follows whoever is shooting; each player's cue is painted once per pixel density. */
   refreshCue() {
     if (this.disposed) return;
     const want = this.artScale || this.scale;
     const c = this.match.current.cue;
-    const cue = paintCue(c, want, this.cueImage(c));
-    dropTexture(this.cue.texture);
-    this.cue.texture = cue.texture;
-    this.cueShadow.texture = cue.texture;
+    const img = this.cueImage(c);
+    const key = `${c.id}|${want}|${img ? 'art' : 'plain'}`;
+    let texture = this.cueTextures.get(key);
+    if (!texture) {
+      // A new density or the painting arriving replaces that cue's older texture.
+      for (const [k, t] of this.cueTextures) {
+        if (k.startsWith(`${c.id}|`) || !k.includes(`|${want}|`)) {
+          dropTexture(t);
+          this.cueTextures.delete(k);
+        }
+      }
+      texture = paintCue(c, want, img).texture;
+      this.cueTextures.set(key, texture);
+    }
+    this.cue.texture = texture;
+    this.cueShadow.texture = texture;
   }
+  private cueTextures = new Map<string, Texture>();
 
   toTable(sx: number, sy: number): { x: number; y: number } {
     return { x: (sx - this.world.position.x) / this.scale, y: (sy - this.world.position.y) / this.scale };
@@ -248,7 +351,7 @@ export class TableView {
       this.shadowSprites.set(b.id, sh);
       this.onTable.set(b.id, b.onTable);
     }
-    this.eagleCache = null;
+    this.eagle = null;
   }
 
   /** After a rewind the ball set is the same but positions jump; resync visibility. */
@@ -271,6 +374,7 @@ export class TableView {
   }
 
   update(dt: number, aim: AimView | null) {
+    this.frame.begin();
     this.time += dt;
     this.skills.update(dt);
     this.omenArt.update(dt);
@@ -327,6 +431,9 @@ export class TableView {
     } else {
       this.world.pivot.set(0, 0);
     }
+    this.describe(this.root);
+    for (const m of this.meshes.values()) m.describe(this.frame);
+    if (this.frame.changed()) this.dirty = true;
   }
 
   private startFall(b: Ball, mesh: BallMesh, sh: Sprite) {
@@ -498,7 +605,7 @@ export class TableView {
       const world = { ...m.simulationWorld(), balls };
       g.moveTo(cue.x, cue.y);
       for (let i = 0; i < 24; i++) {
-        const events: import('../core/physics').PhysEvent[] = [];
+        const events: PhysEvent[] = [];
         step(world, 1 / 120, events);
         if (!probe.onTable) break;
         g.lineTo(probe.x, probe.y - (probe.z ?? 0) * 0.7);
@@ -555,48 +662,63 @@ export class TableView {
     }
   }
 
-  /** Thần Nhãn: simulate the exact shot and draw every moving ball's path. */
+  /**
+   * Thần Nhãn: simulate the exact shot and draw every moving ball's path. A full preview is up to
+   * three whole shots of physics, far more than one frame can hold on a phone, so the simulation
+   * runs a few milliseconds per frame and the paths grow until they reach their rest points.
+   */
   private drawEagle(aim: AimView) {
     const m = this.match;
-    const key = `${m.sight}|${m.triplePreview}|${m.previewSpread}|${m.passiveInfo}|${aim.angle.toFixed(4)}|${aim.power.toFixed(2)}|${aim.side.toFixed(2)}|${aim.vert.toFixed(2)}|${(aim.elevation ?? 0).toFixed(3)}|${m.balls.map((b) => b.onTable ? `${b.x.toFixed(3)},${b.y.toFixed(3)}` : '-').join(';')}|${JSON.stringify(m.simulationWorld())}`;
-    if (!this.eagleCache || this.eagleCache.key !== key) {
-      const allPaths: { id: number; pts: number[] }[] = [];
-      for (const offset of m.triplePreview ? [-m.previewSpread, 0, m.previewSpread] : [0]) {
-      const balls = cloneBalls(m.balls);
-      const cue = balls.find((b) => b.id === m.cueId())!;
-      const power = Math.max(0.05, Math.min(1, aim.power + offset));
-      m.strikePreview(cue, { angle: aim.angle, power, side: Math.max(-1, Math.min(1, aim.side + offset)), vert: Math.max(-1, Math.min(1, aim.vert - offset)), elevation: aim.elevation, call: null, pushOut: false });
-      const world = { ...m.simulationWorld(), balls };
-      const paths = new Map<number, number[]>();
-      for (const b of balls) paths.set(b.id, [b.x, b.y]);
-      let blastDone = false;
-      for (let i = 0; i < 600; i++) {
-        const events: import('../core/physics').PhysEvent[] = [];
-        const moving = step(world, 1 / 30, events);
-        if (m.blast && !blastDone) {
-          const contact = events.find(e => e.t === 'ball' && (e.a === cue.id || e.b === cue.id));
-          if (contact && contact.t === 'ball') {
-            applySkillBlast(balls, contact.x, contact.y, m.blast.radius, m.blast.force, m.blast.direction ? { x: Math.cos(aim.angle), y: Math.sin(aim.angle) } : undefined); blastDone = true;
-          }
-        }
-        for (const b of balls) {
-          const p = paths.get(b.id)!;
-          if (b.onTable && (p[p.length - 2] !== b.x || p[p.length - 1] !== b.y)) p.push(b.x, b.y);
-        }
-        if (!moving) break;
-      }
-      allPaths.push(...[...paths.entries()].filter(([, p]) => p.length > 4).map(([id, pts]) => ({ id, pts })));
-      }
-      this.eagleCache = { key, paths: allPaths };
+    const w = m.simulationWorld();
+    // Everything the preview depends on; the table and cloth constants are fixed for the match.
+    const key = `${m.sight}|${m.triplePreview}|${m.previewSpread}|${m.passiveInfo}|${aim.angle.toFixed(4)}|${aim.power.toFixed(2)}|${aim.side.toFixed(2)}|${aim.vert.toFixed(2)}|${(aim.elevation ?? 0).toFixed(3)}|${m.balls.map((b) => b.onTable ? `${b.x.toFixed(3)},${b.y.toFixed(3)}` : '-').join(';')}|${JSON.stringify([w.terrain, w.extraSegments, w.closedPockets, w.captureScale, w.pocketPull, w.pullExempt, m.blast])}`;
+    if (!this.eagle || this.eagle.key !== key) {
+      const runs = (m.triplePreview ? [-m.previewSpread, 0, m.previewSpread] : [0]).map((offset): EagleRun => {
+        const balls = cloneBalls(m.balls);
+        const cue = balls.find((b) => b.id === m.cueId())!;
+        const power = Math.max(0.05, Math.min(1, aim.power + offset));
+        m.strikePreview(cue, { angle: aim.angle, power, side: Math.max(-1, Math.min(1, aim.side + offset)), vert: Math.max(-1, Math.min(1, aim.vert - offset)), elevation: aim.elevation, call: null, pushOut: false });
+        const paths = new Map<number, number[]>();
+        for (const b of balls) paths.set(b.id, [b.x, b.y]);
+        return { world: { ...w, balls }, cue, angle: aim.angle, paths, frames: 0, blastDone: false, done: false };
+      });
+      this.eagle = { key, runs };
+    }
+    const deadline = performance.now() + EAGLE_BUDGET_MS;
+    for (const run of this.eagle.runs) {
+      while (!run.done && performance.now() < deadline) this.stepEagle(run);
     }
     const g = this.guide;
-    for (const p of this.eagleCache.paths) {
-      g.circle(p.pts[p.pts.length - 2], p.pts[p.pts.length - 1], m.table.R * 0.55).stroke({ width: 1, color: 0xffffff, alpha: 0.7 });
-      const col = p.id === m.cueId() ? 0xffffff : 0xffd34d;
-      g.moveTo(p.pts[0], p.pts[1]);
-      for (let i = 2; i < p.pts.length; i += 2) g.lineTo(p.pts[i], p.pts[i + 1]);
-      g.stroke({ width: 1.6, color: col, alpha: 0.75 });
+    for (const run of this.eagle.runs) {
+      for (const [id, pts] of run.paths) {
+        if (pts.length <= 4) continue;
+        // The rest mark only once the ball has really stopped there.
+        if (run.done) g.circle(pts[pts.length - 2], pts[pts.length - 1], m.table.R * 0.55).stroke({ width: 1, color: 0xffffff, alpha: 0.7 });
+        g.moveTo(pts[0], pts[1]);
+        for (let i = 2; i < pts.length; i += 2) g.lineTo(pts[i], pts[i + 1]);
+        g.stroke({ width: 1.6, color: id === m.cueId() ? 0xffffff : 0xffd34d, alpha: 0.75 });
+      }
     }
+  }
+
+  /** One 1/30 s slice of a path preview, recording where every ball goes. */
+  private stepEagle(run: EagleRun) {
+    const m = this.match;
+    const balls = run.world.balls;
+    const events: PhysEvent[] = [];
+    const moving = step(run.world, 1 / 30, events);
+    if (m.blast && !run.blastDone) {
+      const contact = events.find(e => e.t === 'ball' && (e.a === run.cue.id || e.b === run.cue.id));
+      if (contact && contact.t === 'ball') {
+        applySkillBlast(balls, contact.x, contact.y, m.blast.radius, m.blast.force, m.blast.direction ? { x: Math.cos(run.angle), y: Math.sin(run.angle) } : undefined);
+        run.blastDone = true;
+      }
+    }
+    for (const b of balls) {
+      const p = run.paths.get(b.id)!;
+      if (b.onTable && (p[p.length - 2] !== b.x || p[p.length - 1] !== b.y)) p.push(b.x, b.y);
+    }
+    if (!moving || ++run.frames >= 600) run.done = true;
   }
 
   // ---------- Effects ----------
@@ -676,10 +798,10 @@ export class TableView {
    * for DOM labels. Cached per ball; `px` is the CSS diameter it will be shown at.
    */
   ballPortrait(id: number, px: number): string {
-    const key = `${id}|${px}`;
-    const hit = this.portraits.get(key);
-    if (hit) return hit;
     const res = Math.min(3, Math.max(1, window.devicePixelRatio || 1));
+    const key = `${this.match.table.kind}|${this.match.setup.tableSkin.cloth}|${id}|${px}|${res}`;
+    const hit = portraits.get(key);
+    if (hit) return hit;
     const r = px / 2;
     const mesh = new BallMesh(ballStyle(this.match.table.kind, id), this.numbers, this.match.setup.tableSkin.cloth, () => 0.5);
     mesh.rot.set([1, 0, 0, 0, 1, 0, 0, 0, 1]);
@@ -692,20 +814,28 @@ export class TableView {
     const url = this.app.renderer.extract.canvas({ target: holder, resolution: res, frame: new Rectangle(0, 0, px, px), clearColor: [0, 0, 0, 0] }).toDataURL!('image/png');
     mesh.destroy();
     holder.destroy();
-    this.portraits.set(key, url);
+    portraits.set(key, url);
     return url;
   }
-  private portraits = new Map<string, string>();
 
   destroy() {
     this.disposed = true;
+    window.removeEventListener('resize', this.invalidateSoon);
+    document.removeEventListener('visibilitychange', this.invalidateSoon);
+    this.app.canvas.removeEventListener('webglcontextrestored', this.invalidateSoon);
     // Textures painted for this table are its own; the shared art loaded through Assets is not.
-    const own = [this.tableSprite.texture, this.cue.texture, this.fogSprite.texture, this.numbers, this.shadowTex, this.glowTex];
+    const own = [this.tableSprite.texture, ...this.cueTextures.values(), this.fogSprite.texture, this.numbers, this.shadowTex, this.glowTex];
     for (const m of this.meshes.values()) m.destroy();
     this.root.destroy({ children: true });
     for (const t of own) dropTexture(t);
   }
 }
+
+/**
+ * Ball portraits for DOM labels, kept for the whole session: each one costs a GPU read-back and a
+ * PNG encode, and the same balls on the same cloth return in every match.
+ */
+const portraits = new Map<string, string>();
 
 /** Free a canvas-painted texture and its GPU copy; every match and repaint makes new ones. */
 function dropTexture(t: Texture) {

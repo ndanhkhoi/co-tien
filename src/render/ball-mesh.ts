@@ -145,6 +145,13 @@ export class BallMesh {
     this.mesh.destroy();
   }
 
+  /** Orientation and shader state, for the table's frame comparison. */
+  describe(frame: { add(v: number): void }) {
+    for (let i = 0; i < 9; i++) frame.add(this.rot[i]);
+    frame.add(this.uniforms.uAlpha);
+    frame.add(this.uniforms.uPx);
+  }
+
   setPixelRadius(px: number) {
     this.uniforms.uPx = px;
     this.group.update();

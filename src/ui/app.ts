@@ -59,6 +59,9 @@ export class App {
     });
     this.stageEl.append(this.pixi.canvas);
     this.pixi.ticker.stop();
+    // Screens draw the stage themselves, and only when its picture changed (TableView.shouldRender):
+    // a still table must not cost a full redraw and composite every frame.
+    this.pixi.ticker.remove(this.pixi.render, this.pixi);
     this.watchGpu(this.pixi.canvas);
     // Compile the ball shader while the player is still on the title screen; otherwise the first
     // table pays for it and the transition into a match stalls.

@@ -1,5 +1,5 @@
 import { buildCast, PLACED_KINDS, type SkillCast } from '../../game/skill-cast';
-import type { Ticker } from 'pixi.js';
+import { UPDATE_PRIORITY, type Ticker } from 'pixi.js';
 import type { AiRequest } from '../../ai/types';
 import { sound } from '../../audio/sound';
 import { preloadMatch } from '../../platform/preload';
@@ -2164,6 +2164,11 @@ export function matchScreen(opts: MatchOptions) {
       }
     };
     app.pixi.ticker.add(tick);
+    // After the frame's updates: the table is drawn only when its picture changed.
+    const draw = () => {
+      if (view.shouldRender()) app.pixi.render();
+    };
+    app.pixi.ticker.add(draw, undefined, UPDATE_PRIORITY.LOW);
 
     // ---------- Start ----------
     function showVs(done: () => void) {
@@ -2218,6 +2223,7 @@ export function matchScreen(opts: MatchOptions) {
         clearHints();
         app.ai.cancelAll();
         app.pixi.ticker.remove(tick);
+        app.pixi.ticker.remove(draw);
         window.removeEventListener('resize', onResize);
         window.removeEventListener('cotien:ui-resize', onResize);
         cutIn?.remove();
