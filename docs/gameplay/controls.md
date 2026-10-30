@@ -70,10 +70,10 @@ Nguồn: `src/ui/screens/match/` (trận) và `src/ui/screens/practice/desk.ts` 
 
 - Thông báo giữa bàn đóng khi chạm bất kỳ đâu hoặc ✕. Công tắc *Thông báo giữa bàn* (Cài đặt, menu Tạm dừng)
   tắt chúng, trừ lỗi và thắng ván.
-- Mỗi lượt hiện tối đa một mẹo (`hintTurn`).
+- Mỗi lượt hiện tối đa một mẹo (`hintTurn`); mẹo đóng ngay bằng ✕ hoặc “Đã hiểu”.
 - Menu Tạm dừng: tỉ số, ba công tắc nhanh (âm thanh, nhạc, thông báo) và một cột hành động. Thoát trận luôn
   hỏi xác nhận.
-- Kết liễu: chạm để bỏ qua.
+- Kết liễu giữ tranh và dòng kết quả đủ lâu để đọc (bản thường 2,9 giây); chạm để bỏ qua.
 
 ## Song Đấu và Luận Cơ
 

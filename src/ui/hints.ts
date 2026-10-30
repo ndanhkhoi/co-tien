@@ -1,5 +1,5 @@
 import type { App } from './app';
-import { btn, h, uiScale } from './dom';
+import { btn, h, iconBtn, uiScale } from './dom';
 import { icon } from './icons';
 
 interface HintOptions {
@@ -96,7 +96,9 @@ function next(app: App) {
   const card = h('div.coach', { role: 'status' },
     h('div.coach-head', null, icon('hint'), h('div.coach-title', null, item.title)),
     h('div.coach-text', null, item.text),
-    h('div.coach-actions', null, btn('Đã hiểu', done, 'small')),
+    h('div.coach-actions', null,
+      btn('Đã hiểu', done, 'small'),
+      iconBtn(icon('close'), done, 'Đóng mẹo')),
   );
   const it = item;
   const target = item.anchor?.() ?? null;

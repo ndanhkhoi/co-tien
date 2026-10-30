@@ -850,6 +850,7 @@ body.playing .bd-scene, body.playing .bd-mist { animation-play-state: paused; }
   filter: drop-shadow(0 4px 10px rgba(26, 23, 19, 0.28));
 }
 #ui .mx-skillnudge b { color: var(--accent-2); font: 700 15px/1.2 var(--display); }
+#ui .mx-skillnudge .close-x { position: absolute; top: -8px; right: -8px; width: 44px; height: 44px; background: var(--sheet); border: 1px solid var(--line-2); border-radius: 50%; box-shadow: var(--sh-1); }
 #ui .mx-skillnudge.show { display: flex; animation: mx-nudge-in 0.3s var(--ease) both; }
 .lefty #ui .mx-skillnudge, #ui .lefty .mx-skillnudge { left: auto; right: calc(8px + var(--sr) + var(--colL) + var(--gap) + 6px); align-items: flex-end; text-align: right; }
 .mx-skill.nudge { animation: mx-skill-nudge 1.1s ease-in-out 3; }
@@ -891,7 +892,8 @@ body.playing .bd-scene, body.playing .bd-mist { animation-play-state: paused; }
 
 /* ---------- Kết liễu: the rack-winning strike ----------
  * Stage is the 844×475 design frame. Timeline: veil + strip 0–0.3 s, lunge 0.08–0.42 s, the ball
- * leaves the cue at 0.42 s and lands at 0.74 s, burst + shake + stamp from 0.74 s, out at 2.7 s. */
+ * leaves the cue at 0.42 s and lands at 0.74 s, burst + shake + stamp from 0.74 s. The painted
+ * strike then holds readable until 2.9 s and fades out. */
 .fin { position: absolute; inset: 0; z-index: 60; overflow: hidden; pointer-events: auto; transition: opacity 0.26s ease; }
 .fin.out { opacity: 0; }
 .fin-veil { position: absolute; inset: 0; background: radial-gradient(ellipse at 55% 50%, rgba(20, 16, 12, 0.6), rgba(20, 16, 12, 0.9)); animation: fin-fade 0.22s ease both; }
@@ -900,7 +902,7 @@ body.playing .bd-scene, body.playing .bd-mist { animation-play-state: paused; }
   background: var(--strip) center / cover no-repeat;
   transform: skewY(-8deg); animation: fin-strip 0.3s cubic-bezier(0.2, 0.9, 0.25, 1) both;
 }
-.fin-figure { position: absolute; left: 0; bottom: -30px; height: 500px; width: 520px; animation: fin-drift 2.2s ease-out 0.42s both; }
+.fin-figure { position: absolute; left: 0; bottom: -30px; height: 500px; width: 520px; animation: fin-drift 2.48s ease-out 0.42s both; }
 .fin-hero, .fin-ghost { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; object-position: left bottom; }
 .fin-hero { animation: fin-lunge 0.34s cubic-bezier(0.15, 0.85, 0.3, 1.05) 0.08s both; filter: drop-shadow(0 10px 18px rgba(0, 0, 0, 0.45)); }
 .fin-ghost { opacity: 0; animation: fin-ghost 0.62s ease-out both; filter: grayscale(0.4) brightness(1.15); }
@@ -909,16 +911,16 @@ body.playing .bd-scene, body.playing .bd-mist { animation-play-state: paused; }
 .fin-slash {
   position: absolute; left: 300px; top: 30px; width: 520px; height: 400px;
   background: var(--slash) center / contain no-repeat; opacity: 0.85;
-  clip-path: inset(0 100% 0 0); animation: fin-cut 0.22s ease-out 0.72s both, fin-fade-out 0.5s ease 1.8s both;
+  clip-path: inset(0 100% 0 0); animation: fin-cut 0.22s ease-out 0.72s both, fin-fade-out 0.42s ease 2.48s both;
 }
 /* The cue tip sits near (440, 370); the pocket at (735, 235). */
 .fin-play { position: absolute; inset: 0; }
 .fin-hole { position: absolute; left: 735px; top: 235px; width: 0; height: 0; }
 .fin-ring { position: absolute; left: -64px; top: -64px; width: 128px; height: 128px; border-radius: 50%; background: radial-gradient(circle, #0d0b09 0 38%, transparent 40%), var(--ring) center / contain no-repeat; animation: fin-pop 0.24s ease-out 0.3s both; }
-.fin-burst { position: absolute; left: -130px; top: -130px; width: 260px; height: 260px; background: var(--burst) center / contain no-repeat; opacity: 0; animation: fin-burst 0.7s ease-out 0.74s both; }
+.fin-burst { position: absolute; left: -130px; top: -130px; width: 260px; height: 260px; background: var(--burst) center / contain no-repeat; opacity: 0; animation: fin-burst 1s ease-out 0.74s both, fin-fade-out 0.42s ease 2.48s both; }
 .fin-trail {
   position: absolute; left: 440px; top: 362px; width: 325px; height: 18px; transform-origin: left center; rotate: -24.6deg;
-  background: var(--trail) center / 100% 100% no-repeat; scale: 0 1; animation: fin-trail 0.32s cubic-bezier(0.3, 0.6, 0.4, 1) 0.42s both, fin-fade-out 0.6s ease 1.4s both;
+  background: var(--trail) center / 100% 100% no-repeat; scale: 0 1; animation: fin-trail 0.32s cubic-bezier(0.3, 0.6, 0.4, 1) 0.42s both, fin-fade-out 0.42s ease 2.48s both;
 }
 .fin-ball { position: absolute; width: 56px; height: 56px; margin: -28px 0 0 -28px; left: 440px; top: 370px; filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.5)); animation: fin-fly 0.32s cubic-bezier(0.3, 0.6, 0.4, 1) 0.42s both, fin-sink 0.22s ease-in 0.74s both; opacity: 0; }
 .fin-words { position: absolute; right: 26px; top: 26px; display: flex; flex-direction: column; align-items: flex-end; gap: 10px; }
@@ -946,11 +948,11 @@ body.playing .bd-scene, body.playing .bd-mist { animation-play-state: paused; }
 @keyframes fin-fade-out { to { opacity: 0; } }
 @keyframes fin-strip { from { transform: skewY(-8deg) translateX(-110%); } }
 @keyframes fin-lunge { from { opacity: 0; transform: translateX(-38%) scale(1.22); } }
-@keyframes fin-drift { from { transform: scale(1); } to { transform: scale(1.04) translateX(1%); } }
+@keyframes fin-drift { from { transform: scale(1); } to { transform: scale(1.05) translateX(1.5%); } }
 @keyframes fin-ghost { 0% { opacity: 0; transform: translateX(-30%) scale(1.18); } 40% { opacity: var(--to); transform: translateX(var(--dx)); } 100% { opacity: 0; transform: translateX(var(--dx)); } }
 @keyframes fin-cut { to { clip-path: inset(0 0 0 0); } }
 @keyframes fin-pop { from { opacity: 0; transform: scale(0.3); } }
-@keyframes fin-burst { 0% { opacity: 0; transform: scale(0.4) rotate(-20deg); } 25% { opacity: 1; } 100% { opacity: 0; transform: scale(1.5) rotate(10deg); } }
+@keyframes fin-burst { 0% { opacity: 0; transform: scale(0.4) rotate(-20deg); } 22% { opacity: 1; } 72% { opacity: 0.7; transform: scale(1.35) rotate(4deg); } 100% { opacity: 0; transform: scale(1.5) rotate(10deg); } }
 @keyframes fin-trail { to { scale: 1 1; } }
 @keyframes fin-fly { 0% { opacity: 1; left: 440px; top: 370px; transform: scale(0.8) rotate(0); } 100% { opacity: 1; left: 735px; top: 235px; transform: scale(1.15) rotate(540deg); } }
 @keyframes fin-sink { from { opacity: 1; left: 735px; top: 235px; transform: scale(1.15); } to { opacity: 0; left: 735px; top: 235px; transform: scale(0.15); } }

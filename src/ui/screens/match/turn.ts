@@ -7,6 +7,7 @@ import type { MatchDom } from './dom';
 import type { HeraldMsg } from './herald';
 import { updateSpinDot } from './spin';
 import { controllerIsHuman, controllerPlayer, puppetHeraldLine, shotController } from './controller';
+import { closeX } from '../../widgets';
 import type { Sheets } from './sheet';
 
 interface TurnDeps {
@@ -119,7 +120,7 @@ function createNudge(ctx: MatchCtx, dom: MatchDom, sheets: Sheets, deps: TurnDep
     const ready = champion(ctx.match.setup.players[side].champion).skills.filter((sk) => ctx.match.canUseSkill(side, sk.slot));
     const sk = ready.find((x) => x.slot === 2) ?? ready[0];
     if (!sk) return;
-    paintNudge(dom, sk);
+    paintNudge(dom, sk, hide);
     dom.skillNudge.onclick = () => {
       hide();
       deps.openSkill(sk.slot);
@@ -130,10 +131,26 @@ function createNudge(ctx: MatchCtx, dom: MatchDom, sheets: Sheets, deps: TurnDep
   return { hide, nudge };
 }
 
-function paintNudge(dom: MatchDom, sk: { name: string; slot: number }): void {
+function paintNudge(dom: MatchDom, sk: { name: string; slot: number }, dismiss: () => void): void {
   const slot = dom.slots[sk.slot].b;
-  dom.skillNudge.replaceChildren(h('b', null, sk.name), sk.slot === 2 ? 'Tuyệt chiêu sẵn sàng · chạm để dùng' : 'Chiêu sẵn sàng · chạm để dùng');
+  dom.skillNudge.replaceChildren(
+    h('b', null, sk.name),
+    sk.slot === 2 ? 'Tuyệt chiêu sẵn sàng · chạm để dùng' : 'Chiêu sẵn sàng · chạm để dùng',
+    dismissNudge(dismiss),
+  );
   dom.skillNudge.style.top = `${slot.offsetTop + dom.dock.offsetTop + slot.offsetHeight / 2}px`;
   dom.skillNudge.classList.add('show');
   slot.classList.add('nudge');
+}
+
+function dismissNudge(hide: () => void): HTMLElement {
+  const x = closeX(hide);
+  x.addEventListener('pointerdown', stopNudgeOpen);
+  x.addEventListener('pointerup', stopNudgeOpen);
+  x.addEventListener('click', stopNudgeOpen);
+  return x;
+}
+
+function stopNudgeOpen(e: Event): void {
+  e.stopPropagation();
 }
