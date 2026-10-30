@@ -6,6 +6,7 @@ import { icon } from '../../icons';
 import type { MatchOptions } from './options';
 import type { AimState, MatchCtx } from './context';
 import { spinCaption, updateSpinDot } from './spin';
+import { shotController } from './controller';
 
 interface SlotView {
   b: HTMLButtonElement;
@@ -24,6 +25,8 @@ export interface CardView {
   score: HTMLElement;
   sub: HTMLElement;
   potted: HTMLElement;
+  hexes: HTMLElement;
+  hexKey: string;
   temp: 'focus' | 'joy' | 'sad' | 'cast' | null;
   focus: boolean;
   timer: number;
@@ -110,9 +113,10 @@ function playerCard(opts: MatchOptions, side: Side, hasSkills: boolean): CardVie
   const score = h('span.mx-score.num');
   const sub = h('span.mx-sub');
   const potted = h('div.mx-potted', { 'aria-label': 'Bi đã ăn' });
+  const hexes = h('div.mx-hexes', { 'aria-label': 'Ảnh hưởng đang tác dụng' });
   const card = h('div.mx-card', { class: side ? 'p2' : 'p1' }, ringWrap,
-    h('div.mx-info', null, h('div.mx-name', null, p.name), h('div.mx-line', null, score, sub), potted));
-  return { el: card, face, ring, ringWrap, epill, score, sub, potted, temp: null, focus: false, timer: 0, key: '' };
+    h('div.mx-info', null, h('div.mx-name', null, p.name), h('div.mx-line', null, score, sub), potted, hexes));
+  return { el: card, face, ring, ringWrap, epill, score, sub, potted, hexes, hexKey: '', temp: null, focus: false, timer: 0, key: '' };
 }
 
 export interface DomHost {
@@ -289,15 +293,16 @@ function buildPassive(dom: MatchDom, ctx: MatchCtx, host: DomHost): HTMLButtonEl
   const { aim, match } = ctx;
   const passiveChip = btn('Nội tại', () => {
     if (!host.canAct()) return;
-    const cls = match.passive(match.turn);
+    const side = shotController(match);
+    const cls = match.passive(side);
     if (cls === 'thanxa') match.aimLock ? match.aimLock = null : match.lockAim(aim.angle, host.wobbleAmp());
-    if (cls === 'phaptu') match.choosePassive(match.spinAxis[match.turn] === 'side' ? 'vert' : 'side');
+    if (cls === 'phaptu') match.choosePassive(match.spinAxis[side] === 'side' ? 'vert' : 'side');
     if (cls === 'hophap') {
       host.startGuard();
       dom.cancelCast.hidden = false;
       dom.castSense.hidden = true;
     }
-    if (cls === 'anhsat') match.choosePassive(match.assassinChoice[match.turn] === 'info' ? 'power' : 'info');
+    if (cls === 'anhsat') match.choosePassive(match.assassinChoice[side] === 'info' ? 'power' : 'info');
     host.renderHud();
   });
   passiveChip.classList.add('mx-passive');

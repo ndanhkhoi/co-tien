@@ -1,5 +1,6 @@
 import type { Match } from '../../../game/match';
 import type { MatchCtx } from './context';
+import { controllerPlayer } from './controller';
 
 const DEG = Math.PI / 180;
 type Ball = ReturnType<Match['cueBall']>;
@@ -67,7 +68,7 @@ export function createAim(ctx: MatchCtx, deps: {
     match.placeCue(c.x + dx * metres, c.y + dy * metres);
   };
   const wobbleAmp = () => {
-    const control = match.current.cue.control;
+    const control = controllerPlayer(match).cue.control;
     const base = 0.0034 * (1.3 - control * 0.2);
     const fatigue = 1 + Math.max(0, power.holdT - 1.8) * 0.75;
     return match.aimBand(aim.angle, base * (0.2 + 1.7 * (power.charging ? power.power : power.preset) ** 2) * fatigue * match.tremorNow);
@@ -78,5 +79,5 @@ export function createAim(ctx: MatchCtx, deps: {
     return wobbleAmp() * (0.62 * Math.sin(t * 7.3) + 0.38 * Math.sin(t * 13.1 + 1.7));
   };
   return { aimAt, targetList, aimFirstTarget, switchTarget, rotate, rotateCast, nudgeCue, wobbleAmp, wobbleNow,
-    guideScale: () => 0.55 + 0.12 * match.current.cue.aim };
+    guideScale: () => 0.55 + 0.12 * controllerPlayer(match).cue.aim };
 }

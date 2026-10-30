@@ -5,6 +5,7 @@ import { sound } from '../../../audio/sound';
 import { btn, h } from '../../dom';
 import { hintOnce } from '../../hints';
 import { icon } from '../../icons';
+import { controllerIsHuman, shotController } from './controller';
 import type { MatchCtx } from './context';
 import { frag, type MatchDom } from './dom';
 import { closeCatcher, sheetCloseButton, type Sheets } from './sheet';
@@ -29,7 +30,7 @@ export function createSkillDock(ctx: MatchCtx, dom: MatchDom, sheets: Sheets, de
 
 export function humanSide(ctx: MatchCtx): 0 | 1 | null {
   const { match } = ctx;
-  if (match.current.kind === 'human') return match.turn;
+  if (controllerIsHuman(match)) return shotController(match);
   const hs = match.setup.players.findIndex((p) => p.kind === 'human');
   return hs < 0 ? null : (hs as 0 | 1);
 }
@@ -80,7 +81,7 @@ function showSkillHint(ctx: MatchCtx, dom: MatchDom, champ: ReturnType<typeof ch
 }
 
 function isHumanTurn(ctx: MatchCtx): boolean {
-  return ctx.match.current.kind === 'human' && !ctx.flags.aiActing;
+  return controllerIsHuman(ctx.match) && !ctx.flags.aiActing;
 }
 
 export function canInspectSkills(ctx: MatchCtx): boolean {

@@ -53,6 +53,8 @@ export interface AiRequest {
   blind?: boolean;
   calledBall?: number | null;
   driftAngle?: number;
+  /** Puppet shot: the caster whose next table ease the forced shot should maximise. */
+  benefitingSide?: Side;
   /** Skills castable right now (checked by the match), with their leading effect family. */
   skills: CastSkill[];
 }

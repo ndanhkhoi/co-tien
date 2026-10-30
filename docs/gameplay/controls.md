@@ -39,6 +39,10 @@ Nguồn: `src/ui/screens/match/` (trận) và `src/ui/screens/practice/desk.ts` 
 - Gọi lỗ bằng cách chạm lỗ. Lỗ đã gọi hiện trong ô mục tiêu phía trên; không có gì đặt trên băng bàn.
 - 9 bi và 10 bi hiện hai bi tiếp theo, số in trên bi; chạm một bi hiện nhãn ngay trên bi đó ở bàn.
 - Chân dung người tới lượt có mũi tên son nhấp nhô; mỗi thẻ có khay bi (8 bi: cả nhóm, bi còn trên bàn mờ).
+- Mỗi thẻ cũng gắn chip ảnh hưởng đang tác dụng cho bên đó (run tay, giảm lực, che mắt, dắt lệch, phong lỗ,
+  bi chỉ định, bi giả, phản chiêu úp) cùng số lượt còn lại. Chiêu úp chỉ ghi “một chiêu đang úp”, không lộ tên.
+- Khi bị dắt lệch, ô mục tiêu ghi rõ “Hướng bị dắt lệch X°”; trên nỉ vẫn có chấm son theo hướng thật.
+- Bi bị chỉ định có vòng son quanh bi, ô mục tiêu yêu cầu “phải chạm bi đó trước”.
 
 ## Bi trong tay
 
@@ -55,6 +59,12 @@ Nguồn: `src/ui/screens/match/` (trận) và `src/ui/screens/practice/desk.ts` 
   hoặc con lăn chuột; đổi chiều/băng (phím R); **THI TRIỂN** xác nhận, **Huỷ đặt chiêu** không tiêu chiêu.
 - Tuyệt chiêu được ghi nhận khi xác nhận, nhưng diễn hoạt chờ ĐÁNH. Thứ tự là khoá điều khiển, cut-in, hiệu ứng
   bàn, cơ vung, rồi mô phỏng. Người và AI đi cùng luồng; tạm dừng và rời trận đều huỷ đúng.
+- Khuynh thành chuyển tay điều khiển trong một cú: thông báo nêu người đánh hộ, thẻ và nút điều khiển theo
+  người thi triển, còn bi cái và luật cú đánh vẫn thuộc bên đang tới lượt.
+- Bi giả vẽ giống bi mục tiêu thật; khi chúng đang tác dụng, đường dự đoán của bi mục tiêu bị ẩn, chỉ còn
+  đường bi cái.
+- Địa chấn có mũi tên gió/nghiêng sẵn trên nỉ và thông báo nêu hướng, độ mạnh trước khi đánh.
+- Dời/đổi bi chạy một nét mực ngắn tới chỗ mới; bật giảm chuyển động thì bi hiện ngay tại vị trí đã chốt.
 
 ## Thông báo và tạm dừng
 

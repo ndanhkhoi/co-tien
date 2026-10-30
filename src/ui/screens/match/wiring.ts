@@ -13,6 +13,7 @@ import { createLayout } from './layout';
 import { createHud } from './hud';
 import { createExpressions } from './expressions';
 import { createHerald, type HeraldMsg } from './herald';
+import { controllerIsHuman } from './controller';
 import { createSkillDock, humanSide, previewCast } from './skill';
 import { createSpin, updateSpinDot } from './spin';
 import { removeSheets, type Sheets } from './sheet';
@@ -179,11 +180,11 @@ function createGuards(ctx: MatchCtx): {
   placingNow(): boolean; canAdjustAim(): boolean;
 } {
   return {
-    isHumanTurn: () => ctx.match.current.kind === 'human' && !ctx.flags.aiActing,
-    canAct: () => !ctx.dom.desk?.arranging && ctx.match.current.kind === 'human' && !ctx.flags.aiActing && ctx.match.phase === 'aim' && ctx.power.strikeT === 0 && !ctx.flags.paused && !ctx.flags.presenting,
+    isHumanTurn: () => controllerIsHuman(ctx.match) && !ctx.flags.aiActing,
+    canAct: () => !ctx.dom.desk?.arranging && controllerIsHuman(ctx.match) && !ctx.flags.aiActing && ctx.match.phase === 'aim' && ctx.power.strikeT === 0 && !ctx.flags.paused && !ctx.flags.presenting,
     canInspectSkills: () => !ctx.flags.presenting && !ctx.flags.paused && ctx.power.strikeT === 0,
-    placingNow: () => !ctx.dom.desk?.arranging && ctx.match.current.kind === 'human' && !ctx.flags.aiActing && ctx.match.phase === 'aim' && ctx.power.strikeT === 0 && !ctx.flags.paused && !ctx.flags.presenting && (!!ctx.skill.placement || ctx.match.canMoveCue && !ctx.flags.placeConfirmed),
-    canAdjustAim: () => !ctx.dom.desk?.arranging && ctx.match.current.kind === 'human' && !ctx.flags.aiActing && ctx.match.phase === 'aim' && ctx.power.strikeT === 0 && !ctx.flags.paused && !ctx.flags.presenting && !ctx.skill.placement && (!ctx.match.canMoveCue || ctx.flags.placeConfirmed || ctx.flags.placementAim),
+    placingNow: () => !ctx.dom.desk?.arranging && controllerIsHuman(ctx.match) && !ctx.flags.aiActing && ctx.match.phase === 'aim' && ctx.power.strikeT === 0 && !ctx.flags.paused && !ctx.flags.presenting && (!!ctx.skill.placement || ctx.match.canMoveCue && !ctx.flags.placeConfirmed),
+    canAdjustAim: () => !ctx.dom.desk?.arranging && controllerIsHuman(ctx.match) && !ctx.flags.aiActing && ctx.match.phase === 'aim' && ctx.power.strikeT === 0 && !ctx.flags.paused && !ctx.flags.presenting && !ctx.skill.placement && (!ctx.match.canMoveCue || ctx.flags.placeConfirmed || ctx.flags.placementAim),
   };
 }
 

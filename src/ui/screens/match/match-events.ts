@@ -46,6 +46,8 @@ function handleEvent(ctx: MatchCtx, dom: MatchDom, deps: EventDeps, e: MatchEven
     case 'resolved': return deps.onResolved(e.res, e.side);
     case 'turn': return deps.onTurn();
     case 'new-rack': return newRack(ctx, dom, deps);
+    case 'displace': return displace(ctx, e);
+    case 'swap': return swap(ctx, e);
     case 'rack-over': return rackOver(ctx, dom, deps, e.winner);
   }
 }
@@ -117,11 +119,31 @@ function skill(ctx: MatchCtx, deps: EventDeps, e: Extract<MatchEvent, { type: 's
   deps.setExpr(e.side, 'cast', 2400);
   const human = ctx.match.setup.players[e.side].kind === 'human';
   deps.herald({ side: e.side, expr: 'cast', title: e.skill.name, line: e.slot === 2 ? (human ? 'Đã chuẩn bị · bấm ĐÁNH để thi triển' : 'Đã chuẩn bị · chờ cú đánh') : `${ctx.match.setup.players[e.side].name} dùng chiêu` });
-  if (e.skill.kinds.includes('rewind')) ctx.view.resync();
+  if (e.skill.kinds.includes('rewind')) ctx.view.clearTransient();
+  announceQuake(ctx, deps, e);
   if (e.slot !== 2) {
     ctx.view.skillFx(e.champion, e.skill, e.side);
     haptic(25);
   }
+}
+
+function displace(ctx: MatchCtx, e: Extract<MatchEvent, { type: 'displace' }>): void {
+  ctx.view.slideBalls(e.moved);
+}
+
+function swap(ctx: MatchCtx, e: Extract<MatchEvent, { type: 'swap' }>): void {
+  const b = ctx.match.balls;
+  ctx.view.slideBalls(e.balls.map((id, i) => {
+    const ball = b.find((x) => x.id === id);
+    return { id, from: e.at[i], to: ball ? { x: ball.x, y: ball.y } : e.at[i] };
+  }));
+}
+
+/** Địa Chấn is announced before the shot with the same direction wording as wind. */
+function announceQuake(ctx: MatchCtx, deps: EventDeps, e: Extract<MatchEvent, { type: 'skill' }>): void {
+  const force = ctx.match.activeEffects.find((x) => x.kind === 'quake')?.terrain.forces?.[0];
+  if (!e.skill.kinds.includes('quake') || !force) return;
+  deps.herald({ side: e.side, icon: 'warning', title: 'Địa Chấn', line: `${forceDirection(force)} Bốn lỗ tránh văng bi (1,2 giây đầu).`, ms: 4200 });
 }
 
 function omen(ctx: MatchCtx, dom: MatchDom, e: Extract<MatchEvent, { type: 'omen' }>, herald: EventDeps['herald']): void {
@@ -133,7 +155,7 @@ function omen(ctx: MatchCtx, dom: MatchDom, e: Extract<MatchEvent, { type: 'omen
 }
 
 function newRack(ctx: MatchCtx, dom: MatchDom, deps: EventDeps): void {
-  ctx.view.resync();
+  ctx.view.clearTransient();
   // A sentinel, not '': an empty potted list also keys to '' and would never repaint.
   for (const c of dom.cards) c.key = '\u0000';
   ctx.turn.pottedBefore[0] = ctx.turn.pottedBefore[1] = 0;

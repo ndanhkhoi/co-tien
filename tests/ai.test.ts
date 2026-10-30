@@ -25,6 +25,11 @@ function playShot(m: Match, d: ReturnType<typeof think>): void {
   }
 }
 
+
+function shortAngle(a: number, b: number): number {
+  return Math.abs(Math.atan2(Math.sin(a - b), Math.cos(a - b)));
+}
+
 describe('AI', () => {
   it('finds and makes an easy pot', () => {
     const state = newGameState('nine', 0);
@@ -36,6 +41,19 @@ describe('AI', () => {
     expect(d.shot).not.toBeNull();
     expect(d.confidence).toBeGreaterThan(0.3);
     expect(ms).toBeLessThan(4000);
+  });
+
+  it("ranks a puppet shot by the caster's next table ease", () => {
+    const state = newGameState('nine', 0);
+    state.isBreak = false;
+    state.groups = ['solid', 'stripe'];
+    const balls = [makeBall(0, -0.4, 0), makeBall(1, 0.5, -0.28), makeBall(9, 0.2, 0.3)];
+    const forced = think(req({ balls, state, side: 1, benefitingSide: 0 }));
+    expect(forced.shot).not.toBeNull();
+    expect(forced.skill).toBeUndefined();
+    // The shot remains planned from the recipient's cue ball, not an invented caster cue.
+    const aim = Math.atan2(balls[1].y - balls[0].y, balls[1].x - balls[0].x);
+    expect(shortAngle(forced.shot!.angle, aim)).toBeLessThan(0.1);
   });
 
   it('a level-4 AI wins most 9-ball racks against a level-1 AI', () => {

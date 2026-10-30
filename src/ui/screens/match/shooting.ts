@@ -6,6 +6,7 @@ import { playCutIn } from '../../skill-cutin';
 import type { MatchCtx } from './context';
 import type { MatchDom } from './dom';
 import { callBallId } from './hud';
+import { controllerIsHuman, controllerPlayer, shotController } from './controller';
 import type { HeraldMsg } from './herald';
 import type { Sleep } from './timing';
 
@@ -58,7 +59,7 @@ export function createShooting(ctx: MatchCtx, dom: MatchDom, deps: ShootingDeps)
     shootWith(aim.angle + w + rng.gauss() * amp * 0.3, power.preset);
   };
   const shootWith = (angle: number, pw: number) => {
-    const err = 0.012 + 0.008 * (5 - match.current.cue.control);
+    const err = 0.012 + 0.008 * (5 - controllerPlayer(match).cue.control);
     const finalPower = Math.max(0.01, Math.min(1, pw * (1 + rng.gauss() * err)));
     fireInternal(angle, finalPower, aim.side, aim.vert);
   };
@@ -107,10 +108,10 @@ function createCharge(ctx: MatchCtx, dom: MatchDom, deps: ShootingDeps): {
     power.power = 0;
     ctx.cancelArmed = false;
     dom.strikeBtn.classList.add('charging');
-    deps.setFocus(match.turn, true);
+    deps.setFocus(shotController(match), true);
   };
   const cancelCharge = () => {
-    if (power.charging) deps.setFocus(match.turn, false);
+    if (power.charging) deps.setFocus(shotController(match), false);
     power.charging = false;
     power.power = 0;
     ctx.strikePress = null;
@@ -132,13 +133,13 @@ function release(ctx: MatchCtx, dom: MatchDom, deps: ShootingDeps, cancelCharge:
   const amp = deps.wobbleAmp();
   const finalAngle = aim.angle + deps.wobbleNow() + rng.gauss() * amp * 0.3;
   power.charging = false;
-  deps.setFocus(match.turn, false);
+  deps.setFocus(shotController(match), false);
   shootWith(ctx, deps, finalAngle, power.power);
 }
 
 function shootWith(ctx: MatchCtx, deps: ShootingDeps, angle: number, pw: number): void {
   const { aim, rng, match } = ctx;
-  const err = 0.012 + 0.008 * (5 - match.current.cue.control);
+  const err = 0.012 + 0.008 * (5 - controllerPlayer(match).cue.control);
   const finalPower = Math.max(0.01, Math.min(1, pw * (1 + rng.gauss() * err)));
   void fireShot(ctx, deps, { angle, pw: finalPower, spinSide: aim.side, vert: aim.vert });
 }
@@ -157,7 +158,7 @@ async function fireShot(ctx: MatchCtx, deps: ShootingDeps, x: {
   if (flags.disposed) return;
   power.strikePull = x.pw;
   power.strikeT = 0.0001;
-  if (match.current.kind === 'human') power.presets[match.turn] = power.preset;
+  if (controllerIsHuman(match)) power.presets[shotController(match)] = power.preset;
   const call = chooseCall(ctx, x.aiShotCall);
   ctx.firedCall = call;
   ctx.aiCall = null;

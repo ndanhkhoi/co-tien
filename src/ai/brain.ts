@@ -59,11 +59,22 @@ function planShot(req: AiRequest): AiDecision {
     return { shot: addNoise(ctx, plan.shot), confidence: plan.p, skill: chooseSkill(ctx, plan.p) };
   }
 
+  if (req.benefitingSide !== undefined) return forcedPuppetPlan(ctx);
+
   let best = attackPlan(ctx);
   const threshold = { aggressive: 15, balanced: 40, defensive: 70, trickster: 35 }[req.profile.personality];
   if ((!best || best.ev < threshold) && req.profile.level >= 2) best = safetyPlan(ctx, best);
   if (!best) return fallbackDecision(ctx);
   return { shot: addNoise(ctx, best.shot), confidence: best.p, skill: chooseSkill(ctx, best.p) };
+}
+
+/** Khuynh thành: the recipient strikes, but rank only how good the caster's next table is. */
+function forcedPuppetPlan(ctx: Ctx): AiDecision {
+  const { req } = ctx;
+  const cue = req.balls.find((b) => b.id === ctx.cueId)!;
+  const plan = safetyPlans(ctx, req.balls, cue, req.ballInHand !== 'none')[0];
+  if (!plan) return fallbackDecision(ctx);
+  return { shot: addNoise(ctx, plan.shot), confidence: plan.p };
 }
 
 /** Nothing found: roll softly into the lowest legal ball. */

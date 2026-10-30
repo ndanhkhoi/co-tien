@@ -4,9 +4,12 @@ import { ballCss } from '../../../core/ball-styles';
 import { ASSASSIN_RUN, ASSASSIN_VALUE, ENERGY_MAX } from '../../../game/match';
 import { classInfo } from '../../../game/content/sects';
 import { h, tap } from '../../dom';
+import { icon } from '../../icons';
 import type { MatchCtx } from './context';
 import type { MatchDom, CardView } from './dom';
 import { canInspectSkills } from './skill';
+import { controllerIsHuman, shotController } from './controller';
+import { hexChips } from './hex-chips';
 import type { Sheets } from './sheet';
 
 export function miniBall(id: number): HTMLElement {
@@ -53,18 +56,19 @@ function renderHud(ctx: MatchCtx, dom: MatchDom, sheets: Sheets, deps: HudDeps):
 
 function renderPassive(ctx: MatchCtx, dom: MatchDom): void {
   const { match } = ctx;
-  const cls = match.passive(match.turn);
+  const controller = shotController(match);
+  const cls = match.passive(controller);
   // Hide the passive only when there is none: between shots it keeps its room (just invisible)
   // so the power bar and ĐÁNH above it never jump.
   dom.passiveChip.hidden = !cls;
-  dom.passiveChip.classList.toggle('idle', match.current.kind !== 'human' || match.phase !== 'aim');
+  dom.passiveChip.classList.toggle('idle', !controllerIsHuman(match) || match.phase !== 'aim');
   const passiveLabels: Record<string, string> = {
     thanxa: match.aimLock ? 'Đã khoá ngắm · chạm để mở' : 'Khoá ngắm',
     cuongchien: 'Tăng lực · giảm xoáy',
-    phaptu: match.spinAxis[match.turn] === 'side' ? 'Ưu tiên áp phê ngang' : 'Ưu tiên kéo / đẩy',
-    hophap: match.guardUsed[match.turn] ? 'Đã dùng băng mềm' : 'Đặt băng mềm',
+    phaptu: match.spinAxis[controller] === 'side' ? 'Ưu tiên áp phê ngang' : 'Ưu tiên kéo / đẩy',
+    hophap: match.guardUsed[controller] ? 'Đã dùng băng mềm' : 'Đặt băng mềm',
     chusu: 'Cú thủ hợp lệ để lại cát',
-    anhsat: match.assassinReady[match.turn] ? (match.assassinChoice[match.turn] === 'info' ? 'Liên hoàn · xem đường' : 'Liên hoàn · thêm lực') : `Chuỗi ${match.assassinStreak[match.turn]}/${ASSASSIN_RUN} bi · ${match.assassinValue[match.turn].toFixed(1).replace('.', ',')}/${ASSASSIN_VALUE} điểm`,
+    anhsat: match.assassinReady[controller] ? (match.assassinChoice[controller] === 'info' ? 'Liên hoàn · xem đường' : 'Liên hoàn · thêm lực') : `Chuỗi ${match.assassinStreak[controller]}/${ASSASSIN_RUN} bi · ${match.assassinValue[controller].toFixed(1).replace('.', ',')}/${ASSASSIN_VALUE} điểm`,
     luanhoi: 'Luân phiên chiêu · hồi nhanh',
   };
   const passiveName = cls ? classInfo(cls).name : '';
@@ -77,7 +81,7 @@ function renderCard(ctx: MatchCtx, dom: MatchDom, s: Side): void {
   const st = match.state;
   const c = dom.cards[s];
   const carom = match.isCarom;
-  c.el.classList.toggle('active', match.turn === s && match.phase !== 'match-over');
+  c.el.classList.toggle('active', shotController(match) === s && match.phase !== 'match-over');
   c.score.textContent = dom.desk ? dom.desk.card().score : opts.challenge ? `${turnState.attempt}/${opts.challenge.tries}` : carom ? `${st.scores[s]}/${st.caromTarget}` : String(match.rackWins[s]);
   c.sub.replaceChildren();
   renderCardSub(ctx, dom, s);
@@ -87,6 +91,19 @@ function renderCard(ctx: MatchCtx, dom: MatchDom, s: Side): void {
   c.epill.textContent = `${e}%`;
   c.ringWrap.setAttribute('aria-label', `Năng lượng ${match.setup.players[s].name}: ${e}/${ENERGY_MAX}`);
   c.ringWrap.classList.toggle('full', hasSkills && e >= ENERGY_MAX);
+  renderHexes(ctx, c, s);
+}
+
+function renderHexes(ctx: MatchCtx, c: CardView, s: Side): void {
+  const chips = hexChips(ctx.match)[s];
+  const key = chips.map((x) => `${x.icon}|${x.label}|${x.shotsLeft}`).join(';');
+  if (key === c.hexKey) return;
+  c.hexKey = key;
+  c.hexes.replaceChildren(...chips.map((x) => h('span.mx-hex', {
+    title: `${x.label}: còn ${x.shotsLeft} lượt`,
+    'aria-label': `${x.label}, còn ${x.shotsLeft} lượt`,
+  }, icon(x.icon), h('b', null, `${x.shotsLeft}`))));
+  c.hexes.classList.toggle('has', chips.length > 0);
 }
 
 function renderCardSub(ctx: MatchCtx, dom: MatchDom, s: Side): void {
@@ -116,7 +133,7 @@ function renderFoulSub(ctx: MatchCtx, c: CardView, s: Side): void {
   const { match } = ctx;
   const f = match.state.fouls[s];
   if (f > 0) c.sub.append(h('b.mx-foul', null, `${f} lỗi`));
-  else if (s === match.turn) {
+  else if (s === shotController(match)) {
     const lo = match.legalTargets(s)[0];
     if (lo) c.sub.append('Bi', miniBall(lo));
   }
@@ -152,17 +169,33 @@ function renderNextBall(ctx: MatchCtx, dom: MatchDom, showTag: (id: number) => v
 }
 
 function renderObjective(ctx: MatchCtx, dom: MatchDom): void {
-  const { match, opts, solo } = ctx;
-  dom.objKicker.textContent = dom.desk ? dom.desk.plate().kicker : solo ? opts.label : `${MODE_NAMES[match.setup.mode]} · ${raceName(match.setup.raceTo)} · ván ${match.rackNo}`;
-  dom.objText.textContent = dom.desk ? dom.desk.plate().text : opts.challenge ? opts.challenge.goal : match.setup.mode === 'carom-3c' ? 'Chạm bi thứ nhất, đủ 3 băng trước bi thứ hai.' : match.objective();
+  const { match, opts } = ctx;
+  const base = dom.desk ? dom.desk.plate().kicker : ctx.solo ? opts.label
+    : `${MODE_NAMES[match.setup.mode]} · ${raceName(match.setup.raceTo)} · ván ${match.rackNo}`;
+  dom.objKicker.textContent = base;
+  dom.objText.textContent = objectiveText(ctx);
+  dom.objPlate.classList.toggle('calling', match.calledNow !== null);
+  if (match.driftNow) dom.objText.textContent += ` · Hướng bị dắt lệch ${formatAngle(match.driftNow)}°`;
+}
+
+function objectiveText(ctx: MatchCtx): string {
+  const { match, opts } = ctx;
+  if (ctx.dom.desk) return ctx.dom.desk.plate().text;
+  if (opts.challenge) return opts.challenge.goal;
+  if (match.calledNow !== null) return `Phải chạm bi ${match.calledNow} trước`;
+  return match.setup.mode === 'carom-3c' ? 'Chạm bi thứ nhất, đủ 3 băng trước bi thứ hai.' : match.objective();
+}
+
+function formatAngle(value: number): string {
+  return value.toFixed(1).replace('.', ',');
 }
 
 function renderControls(ctx: MatchCtx, dom: MatchDom, deps: HudDeps): void {
   const { match, power, flags, skill } = ctx;
   const act = deps.canAct();
   for (const slot of dom.slots) slot.b.disabled = !canInspectSkills(ctx);
-  const passive = match.passive(match.turn);
-  dom.passiveChip.disabled = !act || passive === 'cuongchien' || passive === 'chusu' || passive === 'luanhoi' || (passive === 'hophap' && match.guardUsed[match.turn]) || (passive === 'anhsat' && !match.assassinReady[match.turn]);
+  const passive = match.passive(shotController(match));
+  dom.passiveChip.disabled = !act || passive === 'cuongchien' || passive === 'chusu' || passive === 'luanhoi' || (passive === 'hophap' && match.guardUsed[shotController(match)]) || (passive === 'anhsat' && !match.assassinReady[shotController(match)]);
   const placing = deps.placingNow();
   dom.ctrl.classList.toggle('placing', placing);
   dom.ctrl.classList.toggle('preview-aim', placing && !skill.placement && flags.placementAim);
@@ -180,15 +213,20 @@ function renderChips(ctx: MatchCtx, dom: MatchDom, deps: HudDeps): void {
   const { match, flags } = ctx;
   dom.chips.replaceChildren();
   if (!deps.canAct()) return;
-  if (match.state.pushOutAvailable && match.current.kind === 'human') {
+  if (match.state.pushOutAvailable && controllerIsHuman(match)) {
     dom.chips.append(tap(h('button.chip.mx-chip', { 'aria-pressed': String(flags.pushOut) }, 'Đẩy bi (push-out)'), () => {
       flags.pushOut = !flags.pushOut;
       deps.renderHud();
     }));
   }
   const ct = match.callType();
-  dom.objPlate.classList.toggle('calling', ct !== 'none');
-  dom.objPlate.classList.toggle('need', ct !== 'none' && flags.callPocket === null);
+  const called = match.calledNow !== null;
+  dom.objPlate.classList.toggle('calling', called || ct !== 'none');
+  dom.objPlate.classList.toggle('need', !called && ct !== 'none' && flags.callPocket === null);
+  if (match.calledNow !== null) {
+    dom.objPlate.classList.add('calling');
+    return;
+  }
   if (ct !== 'none') paintCall(ctx, dom, ct);
 }
 

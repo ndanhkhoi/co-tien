@@ -259,7 +259,7 @@ export class OmenArt {
     }
     for (const p of e.terrain.wells ?? []) this.put({ name: 'skill/well', x: p.x, y: p.y, w: p.r * 2, h: p.r * 2, alpha });
     this.paintVortices(e, alpha);
-    this.paintObstacles(e, alpha);
+    if (e.kind !== 'decoy') this.paintObstacles(e, alpha);
     this.paintForces(e, alpha);
     this.paintCastTarget(e);
   }
@@ -307,7 +307,7 @@ export class OmenArt {
       this.put({ name: 'skill/target', x: point.x, y: point.y, w: radius * 2, h: radius * 2, alpha: 0.8 });
       this.put({ name: 'skill/mark', x: point.x, y: point.y, w: 0.035, h: 0.035, alpha: 0.95 });
     }
-    if (direction && point && (this.match.castPreview?.includes(e) || e.kind === 'wind')) {
+    if (direction && point && (this.match.castPreview?.includes(e) || e.kind === 'wind' || e.kind === 'quake')) {
       this.put({ name: 'skill/arrow', x: point.x, y: point.y, w: 0.16, h: 0.05, alpha: 0.85, rotation: Math.atan2(direction.y, direction.x) });
     }
   }

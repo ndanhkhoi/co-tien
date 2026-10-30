@@ -21,6 +21,9 @@
 - **Chạy trong Web Worker** để không giật hình. Rời trận khi AI còn tính thì worker bị thay mới thay vì chạy nốt.
 - **Chiêu ở mọi cấp, kể cả cấp 1**, nhưng chỉ chọn trong các chiêu đang dùng được. Sau khi chọn chiêu, AI dựng
   lại gói hiệu ứng rồi tìm lại cú; chiêu dời bi dùng vị trí mà trận thật chấp nhận.
+- **Khuynh thành:** yêu cầu worker vẫn lấy bên đang tới lượt làm bên đánh (đúng bi cái, luật và hiệu ứng),
+  nhưng gán `benefitingSide` cho người thi triển. Yêu cầu này chạy nhánh riêng bằng cú phòng thủ và
+  `tableEase` cho người hưởng lợi, nên AI chọn cách để lại bàn tốt cho chính người điều khiển.
 - **Bi trong tay ở cấp cao** xét nhanh mọi vị trí rồi chỉ tìm đầy đủ ở vài vị trí hứa hẹn nhất (`shortlist`),
   để giữ thời gian suy nghĩ trong giới hạn trên điện thoại.
 - **Diễn cho người xem:** mỗi lượt máy nghĩ, xoay cơ, nạp lực khoảng 1–2 giây ở phía UI

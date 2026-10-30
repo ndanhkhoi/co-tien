@@ -7,6 +7,7 @@ import type { MatchCtx } from './context';
 import type { MatchDom } from './dom';
 import { HAND } from './layout';
 import { miniBall } from './hud';
+import { controllerIsHuman } from './controller';
 
 export interface FrameDeps {
   renderHud(): void;
@@ -66,7 +67,7 @@ function charge(ctx: MatchCtx): void {
   const { power, renderState, match } = ctx;
   if (!power.charging) return;
   power.holdT += ctx.frameDt;
-  if (match.current.kind !== 'human') return;
+  if (!controllerIsHuman(match)) return;
   const speed = 0.9 * (1 + Math.floor(power.chargeT) * 0.14);
   power.chargeT += ctx.frameDt * speed;
   const ph = power.chargeT % 2;
@@ -168,7 +169,7 @@ function aimPower(ctx: MatchCtx): number {
 }
 
 function isHumanTurn(ctx: MatchCtx): boolean {
-  return ctx.match.current.kind === 'human' && !ctx.flags.aiActing;
+  return controllerIsHuman(ctx.match) && !ctx.flags.aiActing;
 }
 
 function paintPower(ctx: MatchCtx, dom: MatchDom): void {

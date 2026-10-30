@@ -86,7 +86,7 @@ export function drawShotHint(m: Match, g: MetreGraphics, aim: AimView, cue: { x:
     return;
   }
   drawCuePath(m, g, aim, pred);
-  drawObjectHint(m, g, aim, pred);
+  if (!decoysAim(m)) drawObjectHint(m, g, aim, pred);
 }
 
 /** Đất Dắt: keep the intended line, then mark the unavoidable rotation in vermilion. */
@@ -125,6 +125,11 @@ function drawCuePath(m: Match, g: MetreGraphics, aim: AimView, pred: Prediction)
   g.moveTo(pred.gx + ux * R, pred.gy + uy * R)
     .lineTo(pred.gx + ux * len, pred.gy + uy * len)
     .stroke({ width: 1.6, color: 0xffffff, alpha: 0.65 });
+}
+
+/** Bi Giả hides the real object-ball route; the cue guide remains readable. */
+function decoysAim(m: Match): boolean {
+  return m.activeEffects.some((e) => e.kind === 'decoy' && (e.target === m.turn || e.target === 'both'));
 }
 
 function drawObjectHint(m: Match, g: MetreGraphics, aim: AimView, pred: Prediction): void {

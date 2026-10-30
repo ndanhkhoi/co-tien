@@ -6,6 +6,7 @@ import type { MatchCtx } from './context';
 import type { MatchDom } from './dom';
 import type { HeraldMsg } from './herald';
 import { updateSpinDot } from './spin';
+import { controllerIsHuman, controllerPlayer, puppetHeraldLine, shotController } from './controller';
 import type { Sheets } from './sheet';
 
 interface TurnDeps {
@@ -51,19 +52,20 @@ function onTurn(ctx: MatchCtx, dom: MatchDom, deps: TurnDeps, nudge: (side: Side
 
 function optionTurn(ctx: MatchCtx, deps: TurnDeps): void {
   const { flags, match } = ctx;
-  if (match.current.kind === 'ai') void deps.aiTurn();
+  if (!controllerIsHuman(match)) void deps.aiTurn();
   else setTimeout(() => !flags.disposed && deps.openOption(), 500);
 }
 
 function turnSide(ctx: MatchCtx, dom: MatchDom, deps: TurnDeps, nudge: (side: Side) => void): void {
   const { aim, power, flags, match } = ctx;
-  const side = match.turn;
+  const side = shotController(match);
   const changed = flags.lastTurnSide !== side;
   flags.lastTurnSide = side;
-  if (match.current.kind === 'ai') {
+  if (!controllerIsHuman(match)) {
     void deps.aiTurn();
     return;
   }
+  announcePuppet(ctx, deps, match.turn);
   aim.side = 0;
   aim.vert = 0;
   power.heldPower = null;
@@ -76,14 +78,20 @@ function turnSide(ctx: MatchCtx, dom: MatchDom, deps: TurnDeps, nudge: (side: Si
   if (ctx.hasSkills) nudgeIdle(ctx, nudge, side);
 }
 
+function announcePuppet(ctx: MatchCtx, deps: TurnDeps, shooter: Side): void {
+  const line = puppetHeraldLine(ctx.match);
+  if (line === null) return;
+  deps.herald({ side: ctx.match.puppeteer, expr: 'cast', icon: 'thinking', title: 'Khuynh thành', line: `${line} (bi cái của ${ctx.match.setup.players[shooter].name})`, ms: 3400 });
+}
+
 function announceTurn(ctx: MatchCtx, deps: TurnDeps, x: { side: Side; changed: boolean }): void {
   const { match, solo } = ctx;
   if (!match.canMoveCue) {
-    if (x.changed && !solo) deps.herald({ side: x.side, title: `Lượt của ${match.setup.players[x.side].name}`, line: match.objective() });
+    if (x.changed && !solo) deps.herald({ side: x.side, title: `Lượt của ${controllerPlayer(match).name}`, line: match.objective() });
     return;
   }
   const placingTitle = match.state.isBreak ? 'Đặt bi phá' : 'Đặt bi cái';
-  deps.herald({ side: x.side, title: x.changed && !solo ? `Lượt của ${match.setup.players[x.side].name}` : placingTitle, line: `${placingTitle}: dời bi, Ngắm thử, rồi ĐẶT BI` });
+  deps.herald({ side: x.side, title: x.changed && !solo ? `Lượt của ${controllerPlayer(match).name}` : placingTitle, line: `${placingTitle}: dời bi, Ngắm thử, rồi ĐẶT BI` });
 }
 
 function hintTurnApp(ctx: MatchCtx): void {

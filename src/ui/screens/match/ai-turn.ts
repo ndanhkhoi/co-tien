@@ -5,6 +5,7 @@ import type { MatchCtx } from './context';
 import type { FireArgs } from './shooting';
 import { POCKET_NAMES } from './hud';
 import type { HeraldMsg } from './herald';
+import { controllerPlayer, shotController } from './controller';
 
 export interface AiTurnDeps {
   renderHud(): void;
@@ -23,14 +24,15 @@ export function createAiTurn(ctx: MatchCtx, deps: AiTurnDeps): { turn(): Promise
 async function aiTurn(ctx: MatchCtx, deps: AiTurnDeps): Promise<void> {
   const { flags, match, rng, app } = ctx;
   const token = ++flags.aiToken;
-  const side = match.turn;
-  const player = match.setup.players[side];
+  const side = shotController(match);
+  const player = controllerPlayer(match);
+  const puppet = match.puppeteer !== null;
   flags.aiActing = true;
   flags.showAiCue = false;
   deps.setFocus(side, true);
   deps.setThinking(side);
   deps.renderHud();
-  if (match.phase === 'aim') choosePassive(ctx, side);
+  if (match.phase === 'aim' && !puppet) choosePassive(ctx, side);
   const req = buildRequest(ctx, side, player);
   const started = performance.now();
   const decision = await app.ai.think(req);
@@ -47,7 +49,7 @@ async function aiTurn(ctx: MatchCtx, deps: AiTurnDeps): Promise<void> {
     return;
   }
   if (shot.call) announceCall(ctx, deps, { side, name: player.name, call: shot.call });
-  await useSkill(ctx, deps, side, decision);
+  if (!puppet) await useSkill(ctx, deps, side, decision);
   flags.showAiCue = true;
   await moveCue(ctx, deps, shot);
   if (cancelled(ctx, token)) return;
@@ -76,6 +78,7 @@ function choosePassive(ctx: MatchCtx, side: Side): void {
 
 function buildRequest(ctx: MatchCtx, side: Side, player: (typeof ctx.match.setup.players)[number]): AiRequest {
   const { match } = ctx;
+  const puppet = match.puppeteer !== null;
   const view0 = match.aiView();
   return {
     balls: view0.balls, state: view0.state, side, profile: player.ai!, maxSpeed: match.vmax(side), spinReach: match.spinReach(side), secondChance: match.secondChance, shield: match.shield[side], pocketPull: match.pull, blast: match.blast ? { radius: match.blast.radius, force: match.blast.force, directional: !!match.blast.direction } : undefined,
@@ -84,7 +87,9 @@ function buildRequest(ctx: MatchCtx, side: Side, player: (typeof ctx.match.setup
     extraSegments: match.obstacles().slice(match.closedPockets.length), captureScale: match.simulationWorld().captureScale ?? 1, seed: (Math.random() * 1e9) | 0, option: match.phase === 'option',
     pushOutAvailable: match.state.pushOutAvailable, energy: match.energy[side],
     blind: match.blindNow, calledBall: match.calledNow, driftAngle: match.driftNow,
-    skills: match.skills(side).filter((sk) => match.canUseSkill(side, sk.slot)).map((sk) => ({ slot: sk.slot, kind: match.effectiveKind(sk.kinds[0]), ultimate: sk.slot === 2, tier: sk.tier, kinds: sk.kinds.map(k => match.effectiveKind(k)), target: sk.target, ult: sk.ult, shape: sk.shape, directionalBlast: champion(match.current.champion).sect === 'huyetsat' })),
+    benefitingSide: puppet ? match.puppeteer! : undefined,
+    // A forced puppet shot plans the recipient's physics, but not another skill cast.
+    skills: puppet ? [] : match.skills(side).filter((sk) => match.canUseSkill(side, sk.slot)).map((sk) => ({ slot: sk.slot, kind: match.effectiveKind(sk.kinds[0]), ultimate: sk.slot === 2, tier: sk.tier, kinds: sk.kinds.map(k => match.effectiveKind(k)), target: sk.target, ult: sk.ult, shape: sk.shape, directionalBlast: champion(match.current.champion).sect === 'huyetsat' })),
   };
 }
 

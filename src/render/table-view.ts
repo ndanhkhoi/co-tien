@@ -3,16 +3,19 @@ import { drawEagle, type EagleRun } from './eagle-preview';
 import { Container, Graphics, Sprite, Texture, type Application } from 'pixi.js';
 import { FrameDiff, MetreGraphics } from './frame-diff';
 import { drawOverlay, type OverlayView } from './table-overlays';
-import { ballStyle } from '../core/ball-styles';
 import type { Ball } from '../core/physics';
 import { champion, sectArtUrl, type SkillDef } from '../game/content/sects';
 import type { CueDef } from '../game/content/gear';
 import type { Match } from '../game/match';
+import { controllerPlayer } from '../game/match/controller';
 import { artImage, paintCue, paintGlow, paintNumberAtlas, paintShadow, paintTable } from './art';
 import { BallMesh } from './ball-mesh';
 import { SkillFx } from './skill-fx';
 import { OmenArt } from './omen-art';
 import { ballPortrait } from './ball-portrait';
+import { DecoyBalls } from './decoy-balls';
+import { BallSlides, type BallMove } from './ball-slides';
+import { BallLayers } from './ball-layers';
 
 export interface AimView {
   /** Cue elevation in radians. */
@@ -74,9 +77,9 @@ export class TableView {
   private cue = new Sprite();
   private fxLayer = new Container();
   private fogSprite = new Sprite();
-  private meshes = new Map<number, BallMesh>();
-  private shadowSprites = new Map<number, Sprite>();
-  private onTable = new Map<number, boolean>();
+  private balls: BallLayers;
+  private decoys: DecoyBalls;
+  private slides = new BallSlides();
   private falling: Falling[] = [];
   private particles: Particle[] = [];
   private numbers: Texture;
@@ -101,6 +104,9 @@ export class TableView {
     this.numbers = paintNumberAtlas();
     this.shadowTex = paintShadow();
     this.glowTex = paintGlow();
+    const paint = { layer: this.ballsLayer, shadowLayer: this.shadows, numbers: this.numbers, shadowTex: this.shadowTex, scale: () => this.scale, resolution: () => this.app.renderer.resolution };
+    this.balls = new BallLayers(match, paint);
+    this.decoys = new DecoyBalls(match, paint);
     this.omenArt = new OmenArt(match);
     this.under.addChild(this.omenArt.layer);
     this.skills = new SkillFx(this.fxLayer, this.glowTex);
@@ -160,7 +166,8 @@ export class TableView {
     const res = this.app.renderer.resolution;
     const want = scale * res;
     if (Math.abs(want - this.artScale) / Math.max(1, this.artScale) > 0.08) this.paintArt(want);
-    for (const m of this.meshes.values()) m.setPixelRadius(this.match.table.R * scale * res);
+    this.balls.setPixelRadius();
+    this.decoys.setPixelRadius();
     this.invalidate();
   }
 
@@ -236,7 +243,7 @@ export class TableView {
   refreshCue() {
     if (this.disposed) return;
     const want = this.artScale || this.scale;
-    const c = this.match.current.cue;
+    const c = controllerPlayer(this.match).cue;
     const img = this.cueImage(c);
     const key = `${c.id}|${want}|${img ? 'art' : 'plain'}`;
     let texture = this.cueTextures.get(key);
@@ -264,51 +271,31 @@ export class TableView {
     return { x: this.world.position.x + x * this.scale, y: this.world.position.y + y * this.scale };
   }
 
-  private rebuildBalls() {
-    for (const m of this.meshes.values()) m.destroy();
-    for (const s of this.shadowSprites.values()) s.destroy();
-    this.meshes.clear();
-    this.shadowSprites.clear();
-    this.onTable.clear();
+  private rebuildBalls(): void {
+    this.balls.rebuild();
+    this.decoys.destroy();
+    this.slides.clear();
     this.falling = [];
-    const t = this.match.table;
-    let seed = this.match.rackNo * 97;
-    const rng = () => {
-      seed = (seed * 16807) % 2147483647;
-      return seed / 2147483647;
-    };
-    for (const b of this.match.balls) {
-      const mesh = new BallMesh(ballStyle(t.kind, b.id), this.numbers, this.match.setup.tableSkin.cloth, rng);
-      mesh.mesh.scale.set(t.R);
-      mesh.setPixelRadius(t.R * this.scale * this.app.renderer.resolution);
-      this.ballsLayer.addChild(mesh.mesh);
-      this.meshes.set(b.id, mesh);
-      const sh = new Sprite(this.shadowTex);
-      sh.anchor.set(0.5);
-      sh.width = sh.height = t.R * 2.7;
-      this.shadows.addChild(sh);
-      this.shadowSprites.set(b.id, sh);
-      this.onTable.set(b.id, b.onTable);
-    }
     this.eagle = null;
   }
 
+  /** Dời/Đổi Bi: the rules state is final; the ink only follows from the old spot to the new one. */
+  slideBalls(moved: BallMove[]): void {
+    this.slides.start(this.match, moved, this.balls.meshes, this.balls.shadows);
+    if (this.slides.active) this.invalidate(450);
+  }
+
+  /** Rewind/new rack: drop cosmetic-only animations and resync to the rules state. */
+  clearTransient() {
+    this.slides.clear();
+    this.falling = [];
+    this.resync();
+  }
+
   /** After a rewind the ball set is the same but positions jump; resync visibility. */
-  resync() {
-    for (const b of this.match.balls) {
-      this.onTable.set(b.id, b.onTable);
-      const m = this.meshes.get(b.id);
-      if (m) {
-        m.mesh.visible = b.onTable;
-        m.setAlpha(1);
-        m.mesh.scale.set(this.match.table.R);
-      }
-      const sh = this.shadowSprites.get(b.id);
-      if (sh) {
-        sh.visible = b.onTable;
-        sh.alpha = 1;
-      }
-    }
+  resync(): void {
+    this.slides.clear();
+    this.balls.resync();
     this.falling = [];
   }
 
@@ -317,15 +304,16 @@ export class TableView {
     this.time += dt;
     this.skills.update(dt);
     this.omenArt.update(dt);
-    const R = this.match.table.R;
     // Balls.
     for (const b of this.match.balls) {
-      const mesh = this.meshes.get(b.id);
-      const sh = this.shadowSprites.get(b.id);
+      const mesh = this.balls.meshes.get(b.id);
+      const sh = this.balls.shadows.get(b.id);
       if (!mesh || !sh) continue;
-      if (!this.syncBallPresence(b, mesh, sh, R)) continue;
+      if (!this.trackPresence(b, mesh, sh)) continue;
       this.poseBall(b, mesh, sh, dt);
     }
+    this.decoys.sync();
+    this.slides.update(this.match, dt);
     this.updateFalling(dt);
     this.updateParticles(dt);
     this.drawOverlay(aim);
@@ -345,30 +333,8 @@ export class TableView {
       this.world.pivot.set(0, 0);
     }
     this.describe(this.root);
-    for (const m of this.meshes.values()) m.describe(this.frame);
+    for (const m of this.balls.meshes.values()) m.describe(this.frame);
     if (this.frame.changed()) this.dirty = true;
-  }
-
-  private syncBallPresence(b: Ball, mesh: BallMesh, sh: Sprite, R: number): boolean {
-    const was = this.onTable.get(b.id);
-    if (was && !b.onTable) this.startFall(b, mesh, sh);
-    if (!was && b.onTable) {
-      // A ball can come back (scratch respot) before its drop animation ends: cancel the
-      // drop, or it would finish by shrinking the ball into the pocket and hiding it.
-      this.falling = this.falling.filter((f) => f.mesh !== mesh);
-      sh.alpha = 1;
-      mesh.mesh.visible = true;
-      mesh.setAlpha(1);
-      mesh.mesh.scale.set(R);
-      sh.visible = true;
-    }
-    this.onTable.set(b.id, b.onTable);
-    if (b.onTable) return true;
-    if (!this.falling.some((f) => f.mesh === mesh)) {
-      mesh.mesh.visible = false;
-      sh.visible = false;
-    }
-    return false;
   }
 
   private poseBall(b: Ball, mesh: BallMesh, sh: Sprite, dt: number) {
@@ -380,6 +346,22 @@ export class TableView {
     sh.position.set(b.x + R * 0.28, b.y + R * 0.38);
     const w = Math.hypot(b.wx, b.wy, b.wz);
     if (w > 0) mesh.rotate(b.wx, b.wy, b.wz, w * dt);
+  }
+
+  /** Track on/off-table transitions; false means no live pose this frame. */
+  private trackPresence(b: Ball, mesh: BallMesh, sh: Sprite): boolean {
+    if (this.balls.returned(b, mesh, sh)) this.cancelFall(mesh);
+    if (this.balls.leftTable(b)) this.startFall(b, mesh, sh);
+    if (!b.onTable && this.falling.some((f) => f.mesh === mesh)) return false;
+    if (!b.onTable) {
+      mesh.mesh.visible = false;
+      sh.visible = false;
+    }
+    return true;
+  }
+
+  private cancelFall(mesh: BallMesh): void {
+    this.falling = this.falling.filter((f) => f.mesh !== mesh);
   }
 
   private startFall(b: Ball, mesh: BallMesh, sh: Sprite) {
@@ -551,7 +533,8 @@ export class TableView {
     this.app.canvas.removeEventListener('webglcontextrestored', this.invalidateSoon);
     // Textures painted for this table are its own; the shared art loaded through Assets is not.
     const own = [this.tableSprite.texture, ...this.cueTextures.values(), this.fogSprite.texture, this.numbers, this.shadowTex, this.glowTex];
-    for (const m of this.meshes.values()) m.destroy();
+    for (const m of this.balls.meshes.values()) m.destroy();
+    this.decoys.destroy();
     this.root.destroy({ children: true });
     for (const t of own) dropTexture(t);
   }

@@ -1,6 +1,7 @@
 import type { AimView } from './table-view';
 import type { MetreGraphics } from './frame-diff';
 import type { Match } from '../game/match';
+import { controllerIsHuman } from '../game/match/controller';
 
 export interface OverlayView {
   guide: MetreGraphics;
@@ -17,6 +18,7 @@ export function drawOverlay(v: OverlayView, aim: AimView | null): void {
   drawGoal(v);
   drawBomb(v);
   drawCalledShot(v);
+  drawCalledBall(v);
   if (!aim) return;
   drawBallInHand(v);
   if (aim.pocketChoices) drawPocketChoices(v);
@@ -63,6 +65,16 @@ function drawCalledShot(v: OverlayView): void {
   if (b && b.onTable) g.circle(b.x, b.y, t.R * (1.3 + pulse * 0.12)).stroke({ width: 2.5, color: 0xb03522, alpha: 0.9 });
 }
 
+function drawCalledBall(v: OverlayView): void {
+  const id = v.match.calledNow;
+  if (id === null) return;
+  const b = v.match.balls.find((x) => x.id === id);
+  if (!b?.onTable) return;
+  const pulse = 0.5 + 0.5 * Math.sin(v.time * 6);
+  v.overlay.circle(b.x, b.y, v.match.table.R * (1.3 + pulse * 0.12))
+    .stroke({ width: 2.5, color: 0xb03522, alpha: 0.88 });
+}
+
 function drawCalledPocket(v: OverlayView, pocket: number, pulse: number): void {
   const p = v.match.table.pockets[pocket];
   const g = v.overlay;
@@ -73,7 +85,7 @@ function drawCalledPocket(v: OverlayView, pocket: number, pulse: number): void {
 function drawBallInHand(v: OverlayView): void {
   const { overlay: g, match: m, time } = v;
   const t = m.table;
-  if (!m.canMoveCue || m.current.kind !== 'human') return;
+  if (!m.canMoveCue || !controllerIsHuman(m)) return;
   if (m.placing === 'kitchen') {
     g.rect(-t.L / 2, -t.W / 2, t.L / 4, t.W).fill({ color: 0xffffff, alpha: 0.05 });
     g.moveTo(t.headStringX, -t.W / 2).lineTo(t.headStringX, t.W / 2).stroke({ width: 1.5, color: 0xffffff, alpha: 0.35 });

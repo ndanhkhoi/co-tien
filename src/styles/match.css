@@ -124,6 +124,11 @@
 .mx-grp.solid { background: var(--ink); color: var(--sheet); }
 .mx-foul { color: var(--bad); }
 .mx-potted { display: flex; gap: 2px; height: 18px; overflow: hidden; }
+.mx-hexes { display: none; min-height: 14px; }
+.mx-hexes.has { display: flex; gap: 3px; overflow: hidden; }
+.mx-card.p2 .mx-hexes.has { justify-content: flex-end; }
+.mx-hex { display: inline-flex; align-items: center; gap: 2px; padding: 0 5px; height: 15px; border-radius: 999px; border: 1px solid var(--ink); color: var(--ink-2); font: 600 10px/13px var(--body); white-space: nowrap; }
+.mx-hex .ico { width: 10px; height: 10px; }
 .mx-pot { width: 18px; height: 18px; flex-shrink: 0; filter: drop-shadow(0 1px 1px rgba(26, 23, 19, 0.35)); }
 .mx-pot.left { opacity: 0.3; filter: grayscale(0.6); }
 .mx-card.p2 .mx-potted { justify-content: flex-end; }

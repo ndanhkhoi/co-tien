@@ -149,9 +149,11 @@ function heldEase(ctx: Ctx, o: Outcome, side: Side): number {
   return o.res.ballInHand === 'none' ? tableEase(ctx, o.balls, o.state, side) : 0.9;
 }
 
-/** Value of an outcome for the shooter. */
+/** Value of an outcome for the shooter (or the puppeteer owning this forced shot). */
 export function judge(ctx: Ctx, o: Outcome): number {
   const { res } = o;
+  const owner = ctx.req.benefitingSide;
+  if (owner !== undefined) return puppetValue(ctx, o, owner);
   const me = ctx.side;
   if (res.winner === me) return 1000;
   if (res.winner === other(me)) return -1000;
@@ -164,4 +166,10 @@ export function judge(ctx: Ctx, o: Outcome): number {
   if (res.foul) v -= 90;
   if (res.option) v -= 20;
   return v;
+}
+
+/** A forced puppet shot always hands the next turn to its caster; rank only the caster's table. */
+function puppetValue(ctx: Ctx, o: Outcome, owner: Side): number {
+  if (o.res.winner !== null) return -1000;
+  return tableEase(ctx, o.balls, o.state, owner);
 }

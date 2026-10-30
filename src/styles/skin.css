@@ -715,6 +715,8 @@ body.playing .bd-scene, body.playing .bd-mist { animation-play-state: paused; }
 .mx-card .mx-name { font-size: 15px; color: var(--ink); }
 .mx-card.active .mx-name { color: var(--accent-2); }
 .mx-card .mx-sub { color: var(--ink-2); }
+.mx-card .mx-hexes { height: 15px; align-items: center; }
+.mx-card .mx-hex { background: color-mix(in srgb, var(--sheet) 72%, transparent); border-color: var(--line-2); color: var(--ink-2); }
 .mx-card .mx-score { height: 22px; line-height: 22px; background: var(--accent); color: var(--on-accent); border-radius: 3px; }
 
 .mx-obj {
