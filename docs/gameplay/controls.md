@@ -1,6 +1,6 @@
 # Điều khiển trong trận
 
-Nguồn: `src/ui/screens/match-screen.ts` (trận) và `practice-desk.ts` (Luyện thế).
+Nguồn: `src/ui/screens/match/` (trận) và `src/ui/screens/practice/desk.ts` (Luyện thế).
 
 Đây là hợp đồng với người chơi. Đổi một thao tác thì trong cùng thay đổi:
 

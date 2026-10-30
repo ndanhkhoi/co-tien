@@ -7,20 +7,24 @@ chuyển cảnh.
 
 | File | Sở hữu |
 |---|---|
-| `screens/menus.ts` | Trang chủ, Luận Cơ, Song Đấu, Tàng Các, Cài đặt |
+| `screens/splash.ts`, `home.ts`, `profile.ts` | Màn mở đầu, trang chủ, hồ sơ cơ thủ |
+| `screens/setup.ts` | Thiết lập Luận Cơ và Song Đấu |
+| `screens/collection.ts`, `settings.ts` | Tàng Các, Cài đặt |
+| `screens/career.ts`, `challenge-start.ts` | Trận Hành trình, mở một thử thách Luyện Cơ |
 | `screens/journey.ts` | Bản đồ Hành trình; mốc lấy thứ tự từ `CHAPTERS` |
 | `screens/codex.ts` | Cơ Tiên Lục (tab Vùng đất, Hệ, Luật trong Tàng Các) |
 | `screens/challenges.ts` | Luyện Cơ |
-| `screens/practice.ts`, `practice-desk.ts` | Luyện thế: chọn thế và bảng bên bàn |
+| `screens/practice/` | Luyện thế: `index.ts` chọn thế, `desk.ts` bảng bên bàn |
 | `screens/story.ts` | Đọc Cơ Tiên Truyện (chunk riêng, chỉ tải khi mở) |
-| `screens/match-screen.ts` | HUD trận, điều khiển, chiêu, cut-in |
+| `screens/match/` | Màn trận: `index.ts` là `matchScreen`, `wiring.ts` nối các phần dùng chung `MatchCtx` (`context.ts`); mỗi phần một file: HUD, herald, dock chiêu, áp phê, ngắm, bắn, điều khiển, chạm bàn, lượt AI, hộp thoại, menu tạm dừng, vòng khung hình |
 | `screens/loading.ts`, `install-gate.ts` | Màn tải tranh, màn bắt cài PWA (xem [platform.md](platform.md)) |
 | `finisher.ts`, `skill-cutin.ts` | Kết liễu, cut-in tuyệt chiêu |
 | `hints.ts`, `intro.ts`, `scroll-hint.ts` | Hướng dẫn người mới, gợi ý cuộn |
 | `viewport-guard.ts` | Bắt xoay ngang, cảnh báo cửa sổ quá nhỏ |
-| `icons.ts`, `avatar.ts`, `dom.ts` | Icon tranh `icon(name)`, chân dung, tiện ích DOM dùng chung (`uiOrigin`, `uiScale`) |
+| `icons.ts`, `avatar.ts`, `dom.ts` | Icon tranh `icon(name)`, chân dung, tiện ích DOM dùng chung (`h`, `hex6`, `uiOrigin`, `uiScale`) |
+| `widgets.ts`, `swipe.ts` | Widget màn hình dùng chung (thanh tiêu đề, ví, chip, thẻ và bộ chọn tướng), cử chỉ vuốt |
 
-Tìm trong `dom.ts` trước khi viết tiện ích DOM mới.
+Tìm trong `dom.ts` và `widgets.ts` trước khi viết tiện ích mới.
 
 ## Một khung 16:9
 

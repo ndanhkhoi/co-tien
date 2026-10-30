@@ -11,7 +11,7 @@ nghệ và việc deploy chạy thế nào.
 | Build, dev server | Vite | Khởi động nhanh, ES module gốc, Web Worker dạng ES (`worker.format`), và plugin trong `vite.config.ts` sinh manifest tranh, lược trường vẽ khỏi `roster.json` |
 | Vẽ bàn | PixiJS 8 (WebGL) | Shader cầu cho bi, batch sprite cho hiệu ứng, chạy mượt trên điện thoại. Chỉ dùng cho bàn: [decisions/pixi-and-dom.md](../decisions/pixi-and-dom.md) |
 | Giao diện | DOM + CSS thuần, không framework | Số màn ít, trạng thái nằm trong `Match` và hồ sơ; một framework UI chỉ thêm tầng trung gian và dung lượng. Tiện ích dựng DOM ở `src/ui/dom.ts` |
-| Mô phỏng | Tự viết (`src/core/physics.ts`) | Engine vật lý chung không có ma sát trượt/lăn, spin ba trục, throw, squirt và hình học lỗ theo WPA; tự viết cũng để AI chạy cùng mô phỏng trong worker |
+| Mô phỏng | Tự viết (`src/core/physics/`) | Engine vật lý chung không có ma sát trượt/lăn, spin ba trục, throw, squirt và hình học lỗ theo WPA; tự viết cũng để AI chạy cùng mô phỏng trong worker |
 | AI | Web Worker | Tìm cú bằng hàng nghìn mô phỏng mà không giật khung hình |
 | PWA | vite-plugin-pwa (Workbox) | Chơi offline, cài như app; tranh lớn đi qua kho riêng: [platform.md](platform.md) |
 | Âm thanh | WebAudio tổng hợp (`src/audio/sound.ts`) | Không có file âm thanh để tải, giữ bản cài nhẹ |

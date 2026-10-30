@@ -24,7 +24,7 @@
 - **Bi trong tay ở cấp cao** xét nhanh mọi vị trí rồi chỉ tìm đầy đủ ở vài vị trí hứa hẹn nhất (`shortlist`),
   để giữ thời gian suy nghĩ trong giới hạn trên điện thoại.
 - **Diễn cho người xem:** mỗi lượt máy nghĩ, xoay cơ, nạp lực khoảng 1–2 giây ở phía UI
-  (`src/ui/screens/match-screen.ts`), tách khỏi thời gian tìm kiếm thật.
+  (`src/ui/screens/match/ai-turn.ts`), tách khỏi thời gian tìm kiếm thật.
 
 ## Kiểm thử
 

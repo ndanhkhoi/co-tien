@@ -37,7 +37,7 @@ Tên menu là quyết định đã chốt: [decisions/menu-names.md](../decision
 
 ## Năng lượng (Tiên Đạo)
 
-Các hằng nằm đầu `match.ts`:
+Các hằng nằm trong `match/energy.ts`:
 
 - Mỗi cú được `ENERGY_PER_SHOT`, cộng `ENERGY_PER_VALUE` cho mỗi điểm cú đánh (điểm từ `src/core/shot-score.ts`).
 - Tổng được nhân theo chỉ số năng lượng của cơ và Địa Lợi.
@@ -64,7 +64,7 @@ Ván thắng bằng chính cú sạch của người thắng mở màn Kết li�
 - Bàn tập dùng `Match` thật với luật tắt.
 - **Đánh lại** dùng `Match.undoShot` (ảnh chụp trước cú).
 - **Đường đi** bật `Match.sight` để mô phỏng đường của mọi bi.
-- Giao diện: `src/ui/screens/practice.ts`, `practice-desk.ts`. Kiểm thử: `tests/practice.test.ts`.
+- Giao diện: `src/ui/screens/practice/` (`index.ts`, `desk.ts`). Kiểm thử: `tests/practice.test.ts`.
 
 ## Lưu dữ liệu
 

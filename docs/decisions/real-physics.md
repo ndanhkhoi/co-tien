@@ -7,7 +7,7 @@ trận thật sẽ lệch nhau, và người chơi mất niềm tin vào vật l
 
 ## Quyết định
 
-- Mọi chiêu và Thiên Tượng chỉ được là lực, vùng ma sát, vật chắn hoặc kích thước lỗ trong `src/core/physics.ts`.
+- Mọi chiêu và Thiên Tượng chỉ được là lực, vùng ma sát, vật chắn hoặc kích thước lỗ trong `src/core/physics/`.
 - Trận, dự đoán và AI dùng chung một world (`Match.simulationWorld()`).
 - Lực đều (nghiêng, gió) luôn dưới lực cản lăn μr·g ≈ 0,108 m/s², để bi đứng yên không trôi.
 - Gió giữ một chiều suốt lượt và luôn báo sức gió, để người chơi tính được cú.
@@ -20,4 +20,4 @@ dùng được.
 ## Hệ quả
 
 - Một hiệu ứng mới phải mô tả được bằng vật lý trước khi làm.
-- Giới hạn lực được chặn trong `physics.ts` và kiểm thử ở `tests/terrain-wind.test.ts`.
+- Giới hạn lực được chặn trong `src/core/physics/terrain.ts` và kiểm thử ở `tests/terrain-wind.test.ts`.

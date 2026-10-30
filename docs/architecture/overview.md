@@ -46,11 +46,12 @@ UI (ngắm, lực, ĐÁNH) ─► Match.shoot(input)
 Trận thật, đường dự đoán và AI dùng cùng một `world` mô phỏng (`Match.simulationWorld()`), nên mọi chiêu và
 Thiên Tượng tự động đúng ở cả ba nơi.
 
-## File lớn
+## Kích thước và chiều phụ thuộc
 
-`match-screen.ts`, `match/match.ts`, `menus.ts`, `table-view.ts`, `brain.ts` đã vượt ngưỡng ~500 dòng. Code mới
-cho chúng đặt vào module riêng, nhỏ, rồi để file lớn gọi tới (xem CONTRIBUTING.md, *Nguyên tắc code*).
-Kiểm tra kích thước hiện tại bằng `wc -l src/**/*.ts`.
+`npm run lint` giữ mọi file dưới 500 dòng code, mọi hàm dưới 80 dòng và độ phức tạp nhận thức dưới 15, chặn
+import ngược tầng (`eslint.config.js`), export, class CSS và keyframe không ai dùng, và code lặp. Thành phần lớn
+nằm trong thư mục riêng có `index.ts` làm cổng: `core/physics/`, `game/match/`, `ui/screens/match/`,
+`ui/screens/practice/` (xem CONTRIBUTING.md, *Nguyên tắc code*).
 
 ## Đọc tiếp
 

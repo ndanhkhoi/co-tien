@@ -6,7 +6,7 @@
 
 | File | Sở hữu |
 |---|---|
-| `physics.ts` | Mô phỏng: ma sát trượt/lăn, spin ba trục, throw, ném băng có áp phê, cú nhảy 2.5D, lực địa thế |
+| `physics/` | Mô phỏng, cổng `index.ts`: `types.ts` (bi, thế giới, sự kiện, địa thế), `strike.ts` (cú cơ, squirt, trượt cơ, nảy 2.5D), `collision.ts` (bi, băng, lỗ), `terrain.ts` (lực đều, vùng ma sát, giếng, xoáy), `step.ts` (vòng bước thời gian) |
 | `table.ts` | Kích thước bàn lỗ WPA 7 ft và bàn carom UMB (miệng lỗ, hàm lỗ, viền, nút ngắm) |
 | `rack.ts` | Xếp bi 8/9/10 bi và carom, đặt lại bi |
 | `rules/` | Mỗi thể loại một `RuleSet` (`types.ts`): `eight-ball.ts`, `rotation.ts` (9/10 bi), `carom.ts` |
@@ -19,7 +19,7 @@
 - **Vật lý thật, không dịch chuyển bi tuỳ tiện.** Chiêu và Thiên Tượng chỉ được là lực, vùng ma sát, vật chắn
   hoặc kích thước lỗ trong mô phỏng. Nhờ vậy trận thật, đường dự đoán và AI luôn khớp nhau.
 - **Lực đều nhỏ hơn lực cản lăn.** Nghiêng bàn và gió phải dưới μr·g ≈ 0,108 m/s², nên bi đứng yên không bao giờ
-  tự trôi. `physics.ts` còn chặn tổng lực (kể cả vùng chồng nhau) dưới một phần lực cản lăn nhỏ nhất. Lực địa
+  tự trôi. `physics/terrain.ts` (`clampAcceleration`) còn chặn tổng lực (kể cả vùng chồng nhau) dưới một phần lực cản lăn nhỏ nhất. Lực địa
   thế chỉ tác động lên bi đang lăn.
 - **Bước thời gian theo thời điểm va chạm**, không bước cố định, để bi nhanh không xuyên nhau. Khối bi khít lúc
   phá được giải bằng tiếp xúc mềm bước nhỏ.

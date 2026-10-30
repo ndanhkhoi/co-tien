@@ -37,9 +37,9 @@ cũng làm vậy" không phải lý do. Khi sửa vào chỗ đã vi phạm, kh�
   sẵn trước khi viết mới (`src/ui/dom.ts`, `src/core/*`, `src/game/content/*`). Logic xuất hiện lần hai thì tách
   ra dùng chung. Cùng thuộc tính CSS cho cùng selector ở hai file thì một bên là code chết: bố cục ở
   `base/kit/screens/match`, lớp tranh vẽ ở `skin`.
-- **KISS.** Code đơn giản nhất mà vẫn đúng; ưu tiên hàm và dữ liệu hơn class, cờ và tầng trung gian. Hàm dưới
-  khoảng 80 dòng, file dưới khoảng 500 dòng. Code mới cho file đã vượt ngưỡng (`match-screen.ts`, `match.ts`,
-  `menus.ts`, `table-view.ts`, `brain.ts`) đặt vào module mới, nhỏ, rồi gọi từ file lớn.
+- **KISS.** Code đơn giản nhất mà vẫn đúng; ưu tiên hàm và dữ liệu hơn class, cờ và tầng trung gian. File tối đa
+  500 dòng code, hàm tối đa 80, độ phức tạp nhận thức tối đa 15, lồng tối đa 4 cấp, tối đa 4 tham số (nhiều hơn thì
+  gom thành một object). Module mới đặt tên theo đúng việc nó làm, không đặt kiểu `utils`, `helpers`, `bits`.
 - **YAGNI.** Chỉ làm thứ yêu cầu hiện tại cần: không tuỳ chọn, tham số, export hay "móc để sau". Xoá code không
   ai dùng (một `export` không nơi import là code chết, trừ khi test dùng).
 - **SOLID.**
@@ -55,7 +55,9 @@ cũng làm vậy" không phải lý do. Khi sửa vào chỗ đã vi phạm, kh�
 
 1. Sửa code và tài liệu sở hữu phần đó trong cùng thay đổi (bảng ở [docs/README.md](docs/README.md)).
 2. Đổi màn hình có ảnh trong README thì chụp lại đúng ảnh đó ([docs/guides/testing.md](docs/guides/testing.md)).
-3. Chạy `npm test` và `npm run build`; cả hai phải qua.
+3. Chạy `npm test`, `npm run lint` và `npm run build`; cả ba phải qua. `npm run lint` gồm ESLint (kích thước,
+   độ phức tạp, chiều phụ thuộc), Stylelint, `tools/check-css.ts` (CSS chết), knip (export thừa) và jscpd (code
+   lặp). Không dùng `eslint-disable` hay nới cấu hình để qua lint; sửa code.
 4. Commit theo Conventional Commits (`feat:`, `fix:`, `docs:`, `perf:`…), mỗi commit một việc.
 
 Thêm tướng hoặc môn phái: [docs/guides/add-champion.md](docs/guides/add-champion.md).

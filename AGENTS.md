@@ -12,10 +12,11 @@ npm run dev               # dev server; ?gate shows the install screen, ?loading
 npm test                  # vitest
 npx vitest run tests/X.test.ts
 npm run build             # tsc + vite build
+npm run lint              # size, complexity, layering, dead code, duplication (eslint, stylelint, check-css, knip, jscpd)
 npm run gen:challenges    # regenerate challenges.json after physics/rule changes; never hand-edit it
 ```
 
-Done means `npm test` and `npm run build` both pass, and the owning doc is updated in the same change.
+Done means `npm test`, `npm run lint` and `npm run build` all pass, and the owning doc is updated in the same change.
 
 ## Never
 
@@ -52,8 +53,9 @@ Done means `npm test` and `npm run build` both pass, and the owning doc is updat
   Slots 0/1 are basics, slot 2 the ultimate; `kind` is appearance, `cls` the passive.
 - Add sects, champions, skill kinds, omens and modes through data or a registry entry, not new
   `if (mode === …)` / `kind === …` branches.
-- Put new code for `match-screen.ts`, `match.ts`, `menus.ts`, `table-view.ts` or `brain.ts` in a new focused
-  module; new files stay under ~500 lines, functions under ~80.
+- Silence or loosen a lint rule: no `eslint-disable`, no config edits to make code pass. `npm run lint` enforces
+  files ≤ 500 and functions ≤ 80 code lines, cognitive complexity ≤ 15, depth ≤ 4, ≤ 4 parameters, the layer
+  direction, no unused exports/classes/keyframes and no copy-paste; fix the code instead.
 - Treat [docs/gameplay/controls.md](docs/gameplay/controls.md) and the mode table in
   [docs/architecture/match-and-modes.md](docs/architecture/match-and-modes.md) as the player contract: preserve
   them, or update them in the same change when the request changes them.
