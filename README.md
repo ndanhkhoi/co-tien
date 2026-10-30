@@ -63,7 +63,7 @@ Chụp ở 932×430, tướng của người chơi là Ngân Cầm.
 | **Cơ Tiên Lục** | **Cơ Tiên Truyện** |
 | ![Cơ Tiên Lục trong Tàng Các](docs/screenshots/co-tien-luc.webp) | ![Đọc Cơ Tiên Truyện](docs/screenshots/co-tien-truyen.webp) |
 
-Trên màn hình lớn (1280×800), khung 16:9 nằm giữa phông tranh, tướng đứng hai bên:
+Trên màn hình 2K (2560×1440), khung 16:9 nằm giữa phông tranh, tướng đứng hai bên:
 
 ![Khung sân khấu trên desktop](docs/screenshots/desktop-san-khau.webp)
 

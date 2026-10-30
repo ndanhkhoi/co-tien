@@ -43,7 +43,7 @@ Test tự động không bắt được lỗi bố cục và cảm ứng. Với 
 
 ## Ảnh chụp cho README và docs
 
-- Chụp ở khung **932×430 @2x** (ảnh màn hình lớn ở 1280×800), lưu webp vào `docs/screenshots/` với tên hiện có.
+- Chụp ở khung **932×430 @2x** (ảnh màn hình lớn ở 2K, 2560×1440 @1x), lưu webp vào `docs/screenshots/` với tên hiện có.
 - Tướng của người chơi luôn là **Ngân Cầm** (`ngancam`). Chỉ đổi trong hồ sơ của trình duyệt chụp ảnh, không
   bao giờ đổi mặc định của game.
 - Thay đổi làm khác một màn đã có ảnh thì chụp lại đúng những ảnh đó, cùng trạng thái màn hình, trong cùng
