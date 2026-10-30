@@ -159,7 +159,7 @@ function paintSeatPlates(x: SeatPlate) {
   seats.forEach((seat, i) => {
     const c = champion(seat.champion);
     const cue = CUES.find((q) => q.id === seat.cue) ?? CUES[0];
-    const text = h('span.vs-text', null, h('b.vs-name', null, seat.name), h('span.vs-sub', null, `${c.name} · ${cue.name}`));
+    const text = h('span.vs-text', null, h('b.vs-name', null, seat.name), h('span.vs-sub', null, `Bậc ${c.tier} · ${c.name} · ${cue.name}`));
     plates[i].replaceChildren(...(i ? [h('span.vs-edit', null, icon('edit')), text] : [text, h('span.vs-edit', null, icon('edit'))]));
   });
   meCut.src = cutoutUrl(seats[0].champion);

@@ -78,6 +78,7 @@ Nguồn: `src/ui/screens/match/` (trận) và `src/ui/screens/practice/desk.ts` 
 ## Song Đấu và Luận Cơ
 
 - **Song Đấu:** mỗi bên đặt tên, chọn tướng đã sở hữu (không trùng bên kia) và cơ; hai bên cùng chọn bàn.
+  Thẻ mỗi bên ghi bậc của tướng, vì hai bên được chọn tướng khác bậc.
   **Đổi tướng** bốc lại tướng cho cả hai từ các tướng đã sở hữu.
 - **Luận Cơ:** **Đổi đối thủ** bốc lại tướng AI trong các bậc của cấp độ đã chọn.
 
