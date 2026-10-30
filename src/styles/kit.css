@@ -138,13 +138,14 @@ input[type='text']:focus, input:not([type]):focus { border-color: var(--accent);
 
 /* ---------- Surfaces ---------- */
 
-.card {
+/* One paper surface for cards and the sheets that look like them. */
+.card, .sect-group, .setup-opts, .gear-card, .story-card, .sr-sheet {
   background: var(--sheet);
   border: 1px solid var(--line);
   border-radius: var(--r-3);
   box-shadow: var(--sh-1);
-  padding: 12px;
 }
+.card { padding: 12px; }
 .panel { display: flex; flex-direction: column; gap: 8px; min-height: 0; }
 .card.tap { transition: transform 0.12s var(--ease); }
 .card.tap.pressed { transform: scale(0.98); }
