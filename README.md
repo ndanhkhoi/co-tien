@@ -43,27 +43,29 @@ tiên hiệp riêng: **Cơ Tiên Giới** — 13 môn phái, 65 tướng, mỗi 
 
 ## Hình ảnh
 
-Chụp ở 932×430 (màn hình lớn: 1280×800), tướng của người chơi là Ngân Cầm.
+Chụp ở 932×430, tướng của người chơi là Ngân Cầm.
 
-| Trang chủ | Luận Cơ |
+![Trang chủ](docs/screenshots/trang-chu.webp)
+
+| Luận Cơ | Song Đấu |
 | --- | --- |
-| ![Trang chủ](docs/screenshots/trang-chu.webp) | ![Chọn trận Luận Cơ](docs/screenshots/luan-co.webp) |
-| Song Đấu | |
-| ![Song Đấu: mỗi bên chọn tướng, tên và Pháp Cơ](docs/screenshots/song-dau.webp) | |
-| Trận đấu · mũi tên chỉ lượt | Chiêu thức |
-| ![Trận đấu: mũi tên son trên chân dung người tới lượt](docs/screenshots/tran-dau.webp) | ![Thẻ chiêu thức](docs/screenshots/dat-chieu.webp) |
-| Tuyệt chiêu | Kết liễu |
-| ![Thẻ tuyệt chiêu](docs/screenshots/tuyet-chieu.webp) | ![Hiệu ứng kết liễu khi thắng ván](docs/screenshots/ket-lieu.webp) |
-| Tạm dừng | Luyện thế · chọn thế |
-| ![Menu tạm dừng](docs/screenshots/tam-dung.webp) | ![Chọn thế luyện](docs/screenshots/luyen-the-chon.webp) |
-| Luyện thế · Đường đi | Tàng Các |
-| ![Bàn Luyện thế với đường đi của mọi bi](docs/screenshots/luyen-the.webp) | ![Tàng Các](docs/screenshots/tang-cac.webp) |
-| Trang tướng | Cơ Tiên Lục |
-| ![Thông tin tướng và ba icon kỹ năng](docs/screenshots/trang-tuong.webp) | ![Cơ Tiên Lục trong Tàng Các](docs/screenshots/co-tien-luc.webp) |
-| Hành trình | Cơ Tiên Truyện |
-| ![Bản đồ Hành trình](docs/screenshots/hanh-trinh.webp) | ![Đọc Cơ Tiên Truyện](docs/screenshots/co-tien-truyen.webp) |
-| Màn hình lớn | |
-| ![Khung sân khấu trên desktop](docs/screenshots/desktop-san-khau.webp) | |
+| ![Chọn trận Luận Cơ](docs/screenshots/luan-co.webp) | ![Song Đấu: mỗi bên chọn tướng, tên và Pháp Cơ](docs/screenshots/song-dau.webp) |
+| **Trận đấu · mũi tên chỉ lượt** | **Tạm dừng** |
+| ![Trận đấu: mũi tên son trên chân dung người tới lượt](docs/screenshots/tran-dau.webp) | ![Menu tạm dừng](docs/screenshots/tam-dung.webp) |
+| **Chiêu thức** | **Tuyệt chiêu** |
+| ![Thẻ chiêu thức](docs/screenshots/dat-chieu.webp) | ![Thẻ tuyệt chiêu](docs/screenshots/tuyet-chieu.webp) |
+| **Kết liễu** | **Hành trình** |
+| ![Hiệu ứng kết liễu khi thắng ván](docs/screenshots/ket-lieu.webp) | ![Bản đồ Hành trình](docs/screenshots/hanh-trinh.webp) |
+| **Luyện thế · chọn thế** | **Luyện thế · Đường đi** |
+| ![Chọn thế luyện](docs/screenshots/luyen-the-chon.webp) | ![Bàn Luyện thế với đường đi của mọi bi](docs/screenshots/luyen-the.webp) |
+| **Tàng Các** | **Trang tướng** |
+| ![Tàng Các](docs/screenshots/tang-cac.webp) | ![Thông tin tướng và ba icon kỹ năng](docs/screenshots/trang-tuong.webp) |
+| **Cơ Tiên Lục** | **Cơ Tiên Truyện** |
+| ![Cơ Tiên Lục trong Tàng Các](docs/screenshots/co-tien-luc.webp) | ![Đọc Cơ Tiên Truyện](docs/screenshots/co-tien-truyen.webp) |
+
+Trên màn hình lớn (1280×800), khung 16:9 nằm giữa phông tranh, tướng đứng hai bên:
+
+![Khung sân khấu trên desktop](docs/screenshots/desktop-san-khau.webp)
 
 ## Phát triển
 
