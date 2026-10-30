@@ -23,68 +23,118 @@ function run(t: TableGeom, layout: [number, number, number][], shot: [number, nu
   return judgeChallenge(def, sum, balls).ok;
 }
 
-/** Search a fine angle sweep for each power/spin; return the widest contiguous winning window. */
-function solve(t: TableGeom, layout: [number, number, number][], goal: ChallengeGoal, center: number, span: number, powers: number[], spins: [number, number][], step = 0.05) {
-  let best: { shot: [number, number, number, number]; window: number } | null = null;
-  for (const p of powers) {
-    for (const [sd, vt] of spins) {
-      let runStart = -1;
-      let prevOk = false;
-      for (let a = -span; a <= span + 1e-9; a += step) {
-        const ok = run(t, layout, [center + a * DEG, p, sd, vt], goal);
-        if (ok && !prevOk) runStart = a;
-        if ((!ok || a + step > span) && prevOk) {
-          const end = ok ? a : a - step;
-          const width = end - runStart + step;
-          if (!best || width > best.window) best = { shot: [center + ((runStart + end) / 2) * DEG, p, sd, vt], window: width };
-        }
-        prevOk = ok;
-      }
-    }
-  }
-  return best;
+interface ShotWindow { shot: [number, number, number, number]; window: number }
+interface SolveInput {
+  t: TableGeom;
+  layout: [number, number, number][];
+  goal: ChallengeGoal;
+  center: number;
+  span: number;
+  powers: number[];
+  spins: [number, number][];
+  step?: number;
 }
 
-const free = (balls: [number, number, number][], x: number, y: number, t: TableGeom, gap = 0.01) =>
+/** Search a fine angle sweep for each power/spin; return the widest contiguous winning window. */
+function solve(input: SolveInput): ShotWindow | null {
+  const search: AngleSweep = { ...input, p: 0, sd: 0, vt: 0, best: null };
+  for (const p of input.powers) {
+    search.p = p;
+    for (const [sd, vt] of input.spins) {
+      search.sd = sd;
+      search.vt = vt;
+      search.best = sweepPower(search);
+    }
+  }
+  return search.best;
+}
+
+interface AngleSweep extends SolveInput {
+  p: number;
+  sd: number;
+  vt: number;
+  best: ShotWindow | null;
+}
+
+function sweepPower(sweep: AngleSweep): ShotWindow | null {
+  let runStart = -1;
+  let prevOk = false;
+  const { center, span, step = 0.05, t, layout, goal, p, sd, vt } = sweep;
+  for (let a = -span; a <= span + 1e-9; a += step) {
+    const ok = run(t, layout, [center + a * DEG, p, sd, vt], goal);
+    if (ok && !prevOk) runStart = a;
+    if ((!ok || a + step > span) && prevOk) sweep.best = widerWindow(sweep, { angle: a, runStart, ok });
+    prevOk = ok;
+  }
+  return sweep.best;
+}
+
+function widerWindow(sweep: AngleSweep, state: { angle: number; runStart: number; ok: boolean }): ShotWindow | null {
+  const end = state.ok ? state.angle : state.angle - (sweep.step ?? 0.05);
+  const width = end - state.runStart + (sweep.step ?? 0.05);
+  if (sweep.best && width <= sweep.best.window) return sweep.best;
+  const { center, p, sd, vt } = sweep;
+  return { shot: [center + ((state.runStart + end) / 2) * DEG, p, sd, vt], window: width };
+}
+
+interface FreePoint { balls: [number, number, number][]; x: number; y: number; t: TableGeom; gap?: number }
+
+const free = ({ balls, x, y, t, gap = 0.01 }: FreePoint) =>
   Math.abs(x) < t.L / 2 - t.R - 0.01 && Math.abs(y) < t.W / 2 - t.R - 0.01 &&
   balls.every(([, bx, by]) => Math.hypot(bx - x, by - y) > 2 * t.R + gap);
 
-function poolCandidate(rng: Rng, family: ChallengeFamily): { layout: [number, number, number][]; goal: ChallengeGoal; center: number; span: number } | null {
+type PoolCandidate = { layout: [number, number, number][]; goal: ChallengeGoal; center: number; span: number };
+
+interface PoolCandidateInput {
+  rng: Rng;
+  family: ChallengeFamily;
+  pk: TableGeom['pockets'][number];
+  pocket: number;
+  ball: number;
+  layout: [number, number, number][];
+}
+
+function bankCandidate(input: PoolCandidateInput) {
+  const { rng, pk, ball, pocket, layout } = input;
+  const t = pool;
+  const R = t.R;
+  // Object ball near the opposite long rail, banking across the table into a side/corner.
+  const ox = rng.range(-t.L / 2 + 0.25, t.L / 2 - 0.25);
+  const oy = (pk.ay > 0 ? -1 : 1) * (t.W / 2 - R - rng.range(0.03, 0.18));
+  if (!free({ balls: layout, x: ox, y: oy, t })) return null;
+  layout.push([ball, ox, oy]);
+  const mirrorY = 2 * (pk.ay > 0 ? -t.W / 2 + R : t.W / 2 - R) - pk.ay;
+  const ang = Math.atan2(mirrorY - oy, pk.ax - ox);
+  const gx = ox - Math.cos(ang) * 2 * R;
+  const gy = oy - Math.sin(ang) * 2 * R;
+  const cd = rng.range(0.3, 0.8);
+  const ca = ang + Math.PI + rng.range(-25, 25) * DEG;
+  const cx = gx + Math.cos(ca) * cd;
+  const cy = gy + Math.sin(ca) * cd;
+  if (!free({ balls: layout, x: cx, y: cy, t, gap: 0.03 })) return null;
+  layout.unshift([0, cx, cy]);
+  return { layout, goal: { kind: 'pot', ball, pocket } as ChallengeGoal, center: Math.atan2(gy - cy, gx - cx), span: 2.5 };
+}
+
+function poolCandidate(rng: Rng, family: ChallengeFamily): PoolCandidate | null {
   const t = pool;
   const R = t.R;
   const pocket = rng.int(0, 5);
   const pk = t.pockets[pocket];
   const ball = rng.int(1, 15);
   const layout: [number, number, number][] = [];
+  const input = { rng, family, pk, pocket, ball, layout };
   // Object ball somewhere with a clear line to the pocket.
   const dist = family === 'straight' ? rng.range(0.25, 0.9) : rng.range(0.2, 0.75);
   const pickDir = () => {
-    const toCentre = Math.atan2(-pk.ay, -pk.ax);
     const lim = pk.kind === 'side' ? 35 : 38;
-    return toCentre + rng.range(-lim, lim) * DEG;
+    return Math.atan2(-pk.ay, -pk.ax) + rng.range(-lim, lim) * DEG;
   };
-  if (family === 'bank') {
-    // Object ball near the opposite long rail, banking across the table into a side/corner.
-    const ox = rng.range(-t.L / 2 + 0.25, t.L / 2 - 0.25);
-    const oy = (pk.ay > 0 ? -1 : 1) * (t.W / 2 - R - rng.range(0.03, 0.18));
-    if (!free(layout, ox, oy, t)) return null;
-    layout.push([ball, ox, oy]);
-    const mirrorY = 2 * (pk.ay > 0 ? -t.W / 2 + R : t.W / 2 - R) - pk.ay;
-    const ang = Math.atan2(mirrorY - oy, pk.ax - ox);
-    const gx = ox - Math.cos(ang) * 2 * R;
-    const gy = oy - Math.sin(ang) * 2 * R;
-    const cd = rng.range(0.3, 0.8);
-    const ca = ang + Math.PI + rng.range(-25, 25) * DEG;
-    const cx = gx + Math.cos(ca) * cd;
-    const cy = gy + Math.sin(ca) * cd;
-    if (!free(layout, cx, cy, t, 0.03)) return null;
-    layout.unshift([0, cx, cy]);
-    return { layout, goal: { kind: 'pot', ball, pocket }, center: Math.atan2(gy - cy, gx - cx), span: 2.5 };
-  }
+  if (family === 'bank') return bankCandidate(input);
   const dir = pickDir();
   const ox = pk.ax + Math.cos(dir) * dist;
   const oy = pk.ay + Math.sin(dir) * dist;
-  if (!free(layout, ox, oy, t, 0.05)) return null;
+  if (!free({ balls: layout, x: ox, y: oy, t, gap: 0.05 })) return null;
   layout.push([ball, ox, oy]);
   const toPocket = Math.atan2(pk.ay - oy, pk.ax - ox);
   const gx = ox - Math.cos(toPocket) * 2 * R;
@@ -94,30 +144,16 @@ function poolCandidate(rng: Rng, family: ChallengeFamily): { layout: [number, nu
   const ca = toPocket + Math.PI + cut * DEG;
   const cx = gx + Math.cos(ca) * cd;
   const cy = gy + Math.sin(ca) * cd;
-  if (!free(layout, cx, cy, t, 0.03)) return null;
+  if (!free({ balls: layout, x: cx, y: cy, t, gap: 0.03 })) return null;
   layout.unshift([0, cx, cy]);
-  // A few decoys that stay out of the shot lines.
   const decoys = family === 'straight' ? rng.int(0, 2) : rng.int(1, 4);
-  for (let i = 0; i < decoys; i++) {
-    const id = rng.int(1, 15);
-    if (layout.some((b) => b[0] === id)) continue;
-    const x = rng.range(-t.L / 2 + 0.1, t.L / 2 - 0.1);
-    const y = rng.range(-t.W / 2 + 0.1, t.W / 2 - 0.1);
-    const nearLine = (ax: number, ay: number, bx: number, by: number) => {
-      const ex = bx - ax, ey = by - ay;
-      const l2 = ex * ex + ey * ey;
-      const k = Math.max(0, Math.min(1, ((x - ax) * ex + (y - ay) * ey) / l2));
-      return Math.hypot(x - ax - ex * k, y - ay - ey * k) < 4 * R;
-    };
-    if (!free(layout, x, y, t, 0.05) || nearLine(cx, cy, gx, gy) || nearLine(ox, oy, pk.ax, pk.ay)) continue;
-    layout.push([id, x, y]);
-  }
+  addDecoys({ rng, layout, lines: [[cx, cy, gx, gy], [ox, oy, pk.ax, pk.ay]], count: decoys });
   const center = Math.atan2(gy - cy, gx - cx);
   if (family === 'position') {
     // Zone placed where a natural follow/draw/stun shot would send the cue ball.
     return { layout, goal: { kind: 'pot-zone', ball, pocket, zone: [0, 0, 0] }, center, span: 1.2 };
   }
-  return { layout, goal: { kind: 'pot', ball, pocket }, center, span: family === 'straight' ? 1.2 : 1.6 };
+  return { layout, goal: { kind: 'pot', ball, pocket } as ChallengeGoal, center, span: family === 'straight' ? 1.2 : 1.6 };
 }
 
 function caromCandidate(rng: Rng, three: boolean) {
@@ -127,7 +163,7 @@ function caromCandidate(rng: Rng, three: boolean) {
     for (let k = 0; k < 50; k++) {
       const x = rng.range(-t.L / 2 + 0.12, t.L / 2 - 0.12);
       const y = rng.range(-t.W / 2 + 0.12, t.W / 2 - 0.12);
-      if (free(layout, x, y, t, 0.15)) {
+      if (free({ balls: layout, x, y, t, gap: 0.15 })) {
         layout.push([id, x, y]);
         break;
       }
@@ -136,62 +172,116 @@ function caromCandidate(rng: Rng, three: boolean) {
   return layout.length === 3 ? { layout, goal: { kind: 'carom', three } as ChallengeGoal } : null;
 }
 
+interface DecoyInput {
+  rng: Rng;
+  layout: [number, number, number][];
+  lines: [number, number, number, number][];
+  count: number;
+}
+
+/** A few decoys that stay out of the shot lines. */
+function addDecoys(input: DecoyInput): void {
+  const t = pool;
+  const R = t.R;
+  for (let i = 0; i < input.count; i++) {
+    const id = input.rng.int(1, 15);
+    if (input.layout.some((b) => b[0] === id)) continue;
+    const x = input.rng.range(-t.L / 2 + 0.1, t.L / 2 - 0.1);
+    const y = input.rng.range(-t.W / 2 + 0.1, t.W / 2 - 0.1);
+    if (!free({ balls: input.layout, x, y, t, gap: 0.05 })) continue;
+    if (input.lines.some((line) => nearPoint({ x, y, r: R, line }))) continue;
+    input.layout.push([id, x, y]);
+  }
+}
+
+interface NearPoint { x: number; y: number; r: number; line: [number, number, number, number] }
+
+function nearPoint({ x, y, r, line: [ax, ay, bx, by] }: NearPoint): boolean {
+  const ex = bx - ax, ey = by - ay;
+  const l2 = ex * ex + ey * ey;
+  const k = Math.max(0, Math.min(1, ((x - ax) * ex + (y - ay) * ey) / l2));
+  return Math.hypot(x - ax - ex * k, y - ay - ey * k) < 4 * r;
+}
+
+function poolFamily(rng: Rng, family: ChallengeFamily): ChallengeDef[] {
+  const found: ChallengeDef[] = [];
+  let tries = 0;
+  while (found.length < 18 && tries++ < 4000) {
+    const cand = poolCandidate(rng, family);
+    if (!cand) continue;
+    const def = family === 'position' ? positionChallenge(rng, cand) : potChallenge(family, cand);
+    if (def) found.push(def);
+  }
+  console.log(family, found.length, 'candidates');
+  return pickSpread(found, 12);
+}
+
+function potChallenge(family: ChallengeFamily, cand: PoolCandidate): ChallengeDef | null {
+  const powers = family === 'bank' ? [0.4, 0.55] : [0.3, 0.45];
+  const sol = solve({ t: pool, layout: cand.layout, goal: cand.goal, center: cand.center, span: cand.span, powers, spins: [[0, 0], [0, -0.4]] });
+  const minW = family === 'straight' ? 0.35 : 0.2;
+  if (!sol || sol.window < minW) return null;
+  return { id: '', family, table: 'pool', balls: round(cand.layout), goal: cand.goal, solution: round4(sol.shot), window: +sol.window.toFixed(2) };
+}
+
+function positionChallenge(rng: Rng, cand: PoolCandidate): ChallengeDef | null {
+  // Solve the pot first, then put the zone where a natural follow/draw/stun shot would send the cue ball.
+  const potGoal: ChallengeGoal = { kind: 'pot', ball: (cand.goal as { ball: number }).ball, pocket: (cand.goal as { pocket: number }).pocket };
+  const sol = solve({ t: pool, layout: cand.layout, goal: potGoal, center: cand.center, span: cand.span, powers: [0.32, 0.45], spins: [[0, -0.8], [0, 0.7], [0, -0.3]] });
+  if (!sol || sol.window < 0.3) return null;
+  const cue = stoppingCueBall(cand, sol.shot);
+  if (!cue?.onTable) return null;
+  const zr = rng.range(0.1, 0.16);
+  const goal: ChallengeGoal = { ...(cand.goal as { kind: 'pot-zone'; ball: number; pocket: number }), zone: [+cue.x.toFixed(4), +cue.y.toFixed(4), +zr.toFixed(3)] };
+  const check = solve({ t: pool, layout: cand.layout, goal, center: sol.shot[0], span: 0.6, powers: [sol.shot[1]], spins: [[sol.shot[2], sol.shot[3]]], step: 0.05 });
+  if (!check || check.window < 0.2) return null;
+  return { id: '', family: 'position', table: 'pool', balls: round(cand.layout), goal, solution: round4(check.shot), window: +check.window.toFixed(2) };
+}
+
+function stoppingCueBall(cand: PoolCandidate, shot: [number, number, number, number]): Ball | undefined {
+  const balls = cand.layout.map(([id, x, y]) => makeBall(id, x, y));
+  strike(balls[0], pool.R, { angle: shot[0], speed: powerToSpeed(shot[1], maxSpeed('pool', REFERENCE_POWER)), side: shot[2], vert: shot[3] });
+  simulate({ table: pool, balls, params: DEFAULT_PHYS });
+  return balls[0];
+}
+
+function caromChallenge(cand: { layout: [number, number, number][]; goal: ChallengeGoal }, three: boolean): ChallengeDef | null {
+  for (let degree = 0; degree < 360; degree += 3) {
+    const def = caromShot(cand, three, degree);
+    if (def) return def;
+  }
+  return null;
+}
+
+function caromShot(cand: { layout: [number, number, number][]; goal: ChallengeGoal }, three: boolean, degree: number): ChallengeDef | null {
+  for (const p of three ? [0.6, 0.75] : [0.35, 0.5]) {
+    for (const sd of three ? [-0.6, 0.6] : [0]) {
+      const def = checkedCaromShot({ cand, three, degree, power: p, spin: sd });
+      if (def) return def;
+    }
+  }
+  return null;
+}
+
+interface CaromProbe { cand: { layout: [number, number, number][]; goal: ChallengeGoal }; three: boolean; degree: number; power: number; spin: number }
+
+function checkedCaromShot({ cand, three, degree, power, spin }: CaromProbe): ChallengeDef | null {
+  if (!run(carom, cand.layout, [degree * DEG, power, spin, 0.3], cand.goal)) return null;
+  const sol = solve({ t: carom, layout: cand.layout, goal: cand.goal, center: degree * DEG, span: 2, powers: [power], spins: [[spin, 0.3]], step: 0.1 });
+  if (!sol || sol.window < (three ? 0.4 : 0.8)) return null;
+  return { id: '', family: 'carom', table: 'carom', balls: round(cand.layout), goal: cand.goal, solution: round4(sol.shot), window: +sol.window.toFixed(2) };
+}
+
 function generate(): ChallengeDef[] {
   const out: ChallengeDef[] = [];
   const rng = new Rng(20261027);
-  const families: ChallengeFamily[] = ['straight', 'cut', 'bank', 'position'];
-  for (const family of families) {
-    const found: ChallengeDef[] = [];
-    let tries = 0;
-    while (found.length < 18 && tries++ < 4000) {
-      const cand = poolCandidate(rng, family);
-      if (!cand) continue;
-      if (family === 'position') {
-        // Solve the pot first, then put the zone where the cue ball stops for one solution.
-        const sol = solve(pool, cand.layout, { kind: 'pot', ball: (cand.goal as { ball: number }).ball, pocket: (cand.goal as { pocket: number }).pocket }, cand.center, cand.span, [0.32, 0.45], [[0, -0.8], [0, 0.7], [0, -0.3]]);
-        if (!sol || sol.window < 0.3) continue;
-        const balls = cand.layout.map(([id, x, y]) => makeBall(id, x, y));
-        strike(balls[0], pool.R, { angle: sol.shot[0], speed: powerToSpeed(sol.shot[1], maxSpeed('pool', REFERENCE_POWER)), side: sol.shot[2], vert: sol.shot[3] });
-        simulate({ table: pool, balls, params: DEFAULT_PHYS });
-        const cue = balls[0];
-        if (!cue.onTable) continue;
-        const zr = rng.range(0.1, 0.16);
-        const goal: ChallengeGoal = { ...(cand.goal as { kind: 'pot-zone'; ball: number; pocket: number }), zone: [+cue.x.toFixed(4), +cue.y.toFixed(4), +zr.toFixed(3)] };
-        const check = solve(pool, cand.layout, goal, sol.shot[0], 0.6, [sol.shot[1]], [[sol.shot[2], sol.shot[3]]], 0.05);
-        if (!check || check.window < 0.2) continue;
-        found.push({ id: '', family, table: 'pool', balls: round(cand.layout), goal, solution: round4(check.shot), window: +check.window.toFixed(2) });
-        continue;
-      }
-      const powers = family === 'bank' ? [0.4, 0.55] : [0.3, 0.45];
-      const sol = solve(pool, cand.layout, cand.goal, cand.center, cand.span, powers, [[0, 0], [0, -0.4]]);
-      const minW = family === 'straight' ? 0.35 : 0.2;
-      if (!sol || sol.window < minW) continue;
-      found.push({ id: '', family, table: 'pool', balls: round(cand.layout), goal: cand.goal, solution: round4(sol.shot), window: +sol.window.toFixed(2) });
-    }
-    out.push(...pickSpread(found, 12));
-    console.log(family, found.length, 'candidates');
-  }
+  for (const family of ['straight', 'cut', 'bank', 'position'] as ChallengeFamily[]) out.push(...poolFamily(rng, family));
   const caromFound: ChallengeDef[] = [];
   let tries = 0;
   while (caromFound.length < 16 && tries++ < 1500) {
     const three = caromFound.length >= 8;
     const cand = caromCandidate(rng, three);
-    if (!cand) continue;
-    let best: ChallengeDef | null = null;
-    for (let a = 0; a < 360 && !best; a += 3) {
-      for (const p of three ? [0.6, 0.75] : [0.35, 0.5]) {
-        for (const sd of three ? [-0.6, 0.6] : [0]) {
-          if (run(carom, cand.layout, [a * DEG, p, sd, 0.3], cand.goal)) {
-            const sol = solve(carom, cand.layout, cand.goal, a * DEG, 2, [p], [[sd, 0.3]], 0.1);
-            if (sol && sol.window >= (three ? 0.4 : 0.8)) {
-              best = { id: '', family: 'carom', table: 'carom', balls: round(cand.layout), goal: cand.goal, solution: round4(sol.shot), window: +sol.window.toFixed(2) };
-              break;
-            }
-          }
-        }
-        if (best) break;
-      }
-    }
+    const best = cand ? caromChallenge(cand, three) : null;
     if (best) caromFound.push(best);
   }
   const libre = caromFound.filter((c) => !(c.goal as { three: boolean }).three);

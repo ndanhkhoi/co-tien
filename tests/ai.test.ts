@@ -15,6 +15,16 @@ function req(over: Partial<AiRequest>): AiRequest {
   };
 }
 
+function playShot(m: Match, d: ReturnType<typeof think>): void {
+  if (d.shot!.cue) m.placeCue(d.shot!.cue.x, d.shot!.cue.y);
+  m.shoot(d.shot!);
+  let t = 0;
+  while (m.phase === 'rolling' && t < 60) {
+    m.update(1 / 30);
+    t += 1 / 30;
+  }
+}
+
 describe('AI', () => {
   it('finds and makes an easy pot', () => {
     const state = newGameState('nine', 0);
@@ -53,13 +63,7 @@ describe('AI', () => {
           m.chooseOption(d.option ?? 'play');
           continue;
         }
-        if (d.shot!.cue) m.placeCue(d.shot!.cue.x, d.shot!.cue.y);
-        m.shoot(d.shot!);
-        let t = 0;
-        while (m.phase === 'rolling' && t < 60) {
-          m.update(1 / 30);
-          t += 1 / 30;
-        }
+        playShot(m, d);
       }
       expect(m.phase).toBe('match-over');
       if (m.rackWins[0] > m.rackWins[1]) wins++;

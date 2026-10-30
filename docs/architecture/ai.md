@@ -2,7 +2,12 @@
 
 | File | Sở hữu |
 |---|---|
-| `brain.ts` | Tìm cú đánh và chọn chiêu (`chooseSkill`) |
+| `brain.ts` | Luỹ tuyến một lượt: tìm cú, chọn chiêu, dựng lại cú sau khi chọn chiêu |
+| `search-context.ts` | Bối cảnh tìm kiếm và một lần mô phỏng (`play`) |
+| `shot-lines.ts` | Đường ăn thẳng/băng và giá trị thế trận |
+| `shot-plans.ts` | Các nhóm cú ứng viên, vị trí bi trong tay và cú carom |
+| `skill-choice.ts` | Nhiễu thực hiện và chọn chiêu thông thường |
+| `skill-replan.ts` | Dựng lại cú đánh với hiệu ứng chiêu đã chọn |
 | `ai-worker.ts` | Web Worker chạy `brain.ts` |
 | `ai-client.ts` | Phía giao diện: gửi yêu cầu, huỷ worker khi rời trận |
 | `types.ts` | Gói dữ liệu gửi worker; `AiProfile` (cấp 1–4, lối đánh) định nghĩa ở `game/ai-profile.ts` |

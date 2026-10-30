@@ -7,6 +7,16 @@ import { Match } from '../src/game/match';
 import { CUES, TABLES } from '../src/game/content/gear';
 import { CHAMPIONS } from '../src/game/content/sects';
 
+function applyDecision(m: Match, side: 0 | 1, d: ReturnType<typeof think>): void {
+  if (d.skill !== undefined) expect(m.useSkill(side, d.skill, d.cast)).toBe(true);
+  expect(d.shot).not.toBeNull();
+  if (d.shot!.cue) m.placeCue(d.shot!.cue.x, d.shot!.cue.y);
+  m.shoot(d.shot!);
+  let frames = 0;
+  while (m.phase === 'rolling' && frames++ < 1800) m.update(1 / 30);
+  expect(m.phase).not.toBe('rolling');
+}
+
 it('uses basic skills and ultimates across seeded AI 8-ball racks', () => {
   const started = performance.now();
   let uses = 0;
@@ -42,18 +52,7 @@ it('uses basic skills and ultimates across seeded AI 8-ball racks', () => {
           tier: s.tier, kinds: s.kinds.map(k => m.effectiveKind(k)), ult: s.ult, shape: s.shape, target: s.target, directionalBlast: CHAMPIONS.find(c => c.id === m.current.champion)?.sect === 'huyetsat',
         })),
       };
-      const d = think(request);
-      if (m.phase === 'option') {
-        m.chooseOption(d.option ?? 'play');
-        continue;
-      }
-      if (d.skill !== undefined) expect(m.useSkill(side, d.skill, d.cast)).toBe(true);
-      expect(d.shot).not.toBeNull();
-      if (d.shot!.cue) m.placeCue(d.shot!.cue.x, d.shot!.cue.y);
-      m.shoot(d.shot!);
-      let frames = 0;
-      while (m.phase === 'rolling' && frames++ < 1800) m.update(1 / 30);
-      expect(m.phase).not.toBe('rolling');
+      applyDecision(m, side, think(request));
     }
     expect(m.phase).toBe('match-over');
   }

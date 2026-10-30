@@ -19,15 +19,10 @@ function parse(file: string): { rules: Rule[]; keyframes: string[] } {
       const close = text.indexOf('}', i);
       const nextOpen = text.indexOf('{', i + 1);
       if (head.startsWith('@keyframes')) keyframes.push(head);
-      if (head.startsWith('@') || stack.some((s) => s.startsWith('@keyframes')) || (nextOpen !== -1 && nextOpen < close)) {
+      if (isGroup(head, stack, close, nextOpen)) {
         stack.push(head);
       } else {
-        const body = text.slice(i + 1, close);
-        rules.push({
-          file, line: text.slice(0, i).split('\n').length, context: stack.join(' '),
-          selectors: head.split(',').map((s) => s.trim().replace(/\s+/g, ' ')),
-          props: body.split(';').map((d) => d.split(':')[0].trim()).filter(Boolean),
-        });
+        pushRule(rules, { file, text, head, stack, close, openBrace: i });
         i = close;
       }
       start = i + 1;
@@ -37,6 +32,30 @@ function parse(file: string): { rules: Rule[]; keyframes: string[] } {
     } else if (ch === ';' && !stack.length) start = i + 1;
   }
   return { rules, keyframes };
+}
+
+interface CssRuleInput {
+  file: string;
+  text: string;
+  head: string;
+  stack: string[];
+  close: number;
+  openBrace: number;
+}
+
+function isGroup(head: string, stack: string[], close: number, nextOpen: number): boolean {
+  return head.startsWith('@') || stack.some((s) => s.startsWith('@keyframes')) || (nextOpen !== -1 && nextOpen < close);
+}
+
+function pushRule(rules: Rule[], input: CssRuleInput): void {
+  const body = input.text.slice(input.openBrace + 1, input.close);
+  rules.push({
+    file: input.file,
+    line: input.text.slice(0, input.openBrace).split('\n').length,
+    context: input.stack.join(' '),
+    selectors: input.head.split(',').map((s) => s.trim().replace(/\s+/g, ' ')),
+    props: body.split(';').map((d) => d.split(':')[0].trim()).filter(Boolean),
+  });
 }
 
 const owner = new Map<string, Rule>();
@@ -49,13 +68,20 @@ for (const file of FILES) {
     if (prev && prev !== file) errors.push(`${file}: "${k}" is already defined in ${prev}`);
     frames.set(k, file);
   }
-  for (const r of rules) for (const sel of r.selectors) for (const prop of r.props) {
-    const key = `${r.context}|${sel}|${prop}`;
-    const prev = owner.get(key);
-    if (prev && prev.file !== r.file) errors.push(`${r.file}:${r.line}: ${sel} { ${prop} } overrides ${prev.file}:${prev.line}`);
-    owner.set(key, r);
+  for (const r of rules) checkRule(r, owner, errors);
+}
+
+function checkRule(rule: Rule, owner: Map<string, Rule>, errors: string[]): void {
+  for (const sel of rule.selectors) {
+    for (const prop of rule.props) {
+      const key = `${rule.context}|${sel}|${prop}`;
+      const prev = owner.get(key);
+      if (prev && prev.file !== rule.file) errors.push(`${rule.file}:${rule.line}: ${sel} { ${prop} } overrides ${prev.file}:${prev.line}`);
+      owner.set(key, rule);
+    }
   }
 }
+
 // Dead CSS: classes no source file mentions and keyframes no animation uses.
 const sources = readdirSync('src', { recursive: true, encoding: 'utf8' })
   .filter((f) => f.endsWith('.ts'))

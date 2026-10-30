@@ -8,6 +8,18 @@ import type { AiProfile } from '../game/ai-profile';
 // The profile lives in the game layer so match setup and career data can use it without importing ai.
 export type { AiProfile, Personality } from '../game/ai-profile';
 
+export interface CastSkill {
+  slot: number;
+  kind: SkillKind;
+  ultimate: boolean;
+  tier?: number;
+  kinds?: SkillKind[];
+  target?: 'self' | 'opponent';
+  ult?: SectId;
+  shape?: 'gate' | 'roots' | 'rim';
+  directionalBlast?: boolean;
+}
+
 export interface AiRequest {
   balls: Ball[];
   state: GameState;
@@ -37,7 +49,7 @@ export interface AiRequest {
   pushOutAvailable: boolean;
   energy: number;
   /** Skills castable right now (checked by the match), with their leading effect family. */
-  skills: { slot: number; kind: SkillKind; ultimate: boolean; tier?: number; kinds?: SkillKind[]; target?: 'self' | 'opponent'; ult?: SectId; shape?: 'gate' | 'roots' | 'rim'; directionalBlast?: boolean }[];
+  skills: CastSkill[];
 }
 
 export interface AiShot {
