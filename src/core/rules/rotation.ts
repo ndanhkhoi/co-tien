@@ -47,6 +47,72 @@ function penalise(state: GameState, res: Resolution) {
   }
 }
 
+function pushOutResolution(state: GameState, shot: ShotSummary, moneyId: number): Resolution {
+  const res = blank();
+  res.foul = basicFoul(shot, true);
+  if (moneyId) res.respot.push(moneyId);
+  if (res.foul) {
+    penalise(state, res);
+    return res;
+  }
+  res.option = 'push-out';
+  res.messages.push('Đẩy bi (push-out): đối thủ chọn đánh hay nhường');
+  return res;
+}
+
+function fouledRotation(state: GameState, shot: ShotSummary, res: Resolution, moneyId: number): boolean {
+  res.foul = basicFoul(shot, false);
+  if (!res.foul) return false;
+  if (moneyId) res.respot.push(moneyId);
+  penalise(state, res);
+  return true;
+}
+
+function nineBreakResolution(state: GameState, shot: ShotSummary): Resolution {
+  const res = blank();
+  const side = state.turn;
+  const nine = shot.pocketed.some((p) => p.id === 9) || !!shot.offTable?.includes(9);
+  const objectsDown = shot.pocketed.filter((p) => p.id !== 0);
+  res.foul = breakFoul(shot);
+  if (res.foul) {
+    if (nine) res.respot.push(9);
+    penalise(state, res);
+    return res;
+  }
+  // WPA Regulation 16: at least three object balls pocketed and/or above the head string.
+  if (objectsDown.length + shot.crossedHeadString < 3) {
+    if (nine) res.respot.push(9);
+    res.option = 'illegal-break-9';
+    res.messages.push('Phá chưa đủ 3 bi (vào lỗ / qua vạch đầu bàn): đối thủ chọn');
+    return res;
+  }
+  if (nine) {
+    res.winner = side;
+    res.highlight = 'golden';
+    res.messages.push('Bi 9 vào khi phá, thắng ván!');
+    return res;
+  }
+  res.keepTurn = objectsDown.length > 0;
+  return res;
+}
+
+function tenBreakResolution(state: GameState, shot: ShotSummary): Resolution {
+  const res = blank();
+  const ten = shot.pocketed.some((p) => p.id === 10) || !!shot.offTable?.includes(10);
+  const objectsDown = shot.pocketed.filter((p) => p.id !== 0);
+  res.foul = breakFoul(shot);
+  if (ten) {
+    res.respot.push(10);
+    res.messages.push('Bi 10 vào khi phá, đặt lại bi 10');
+  }
+  if (res.foul) {
+    penalise(state, res);
+    return res;
+  }
+  res.keepTurn = objectsDown.length > 0;
+  return res;
+}
+
 /** WPA 9-ball. */
 export const nineBall: RuleSet = {
   mode: 'nine',
@@ -60,53 +126,13 @@ export const nineBall: RuleSet = {
     return `Chạm bi ${lowest(balls)} trước · ăn bi 9 để thắng`;
   },
   resolve(state, _balls, shot) {
+    if (shot.isBreak) return nineBreakResolution(state, shot);
+    if (shot.pushOut) return pushOutResolution(state, shot, 9);
     const res = blank();
     const side = state.turn;
     const nine = shot.pocketed.some((p) => p.id === 9) || !!shot.offTable?.includes(9);
     const objectsDown = shot.pocketed.filter((p) => p.id !== 0);
-
-    if (shot.isBreak) {
-      res.foul = breakFoul(shot);
-      if (res.foul) {
-        if (nine) res.respot.push(9);
-        penalise(state, res);
-        return res;
-      }
-      // WPA Regulation 16: at least three object balls pocketed and/or above the head string.
-      if (objectsDown.length + shot.crossedHeadString < 3) {
-        if (nine) res.respot.push(9);
-        res.option = 'illegal-break-9';
-        res.messages.push('Phá chưa đủ 3 bi (vào lỗ / qua vạch đầu bàn): đối thủ chọn');
-        return res;
-      }
-      if (nine) {
-        res.winner = side;
-        res.highlight = 'golden';
-        res.messages.push('Bi 9 vào khi phá, thắng ván!');
-        return res;
-      }
-      res.keepTurn = objectsDown.length > 0;
-      return res;
-    }
-
-    if (shot.pushOut) {
-      res.foul = basicFoul(shot, true);
-      if (nine) res.respot.push(9);
-      if (res.foul) {
-        penalise(state, res);
-        return res;
-      }
-      res.option = 'push-out';
-      res.messages.push('Đẩy bi (push-out): đối thủ chọn đánh hay nhường');
-      return res;
-    }
-
-    res.foul = basicFoul(shot, false);
-    if (res.foul) {
-      if (nine) res.respot.push(9);
-      penalise(state, res);
-      return res;
-    }
+    if (fouledRotation(state, shot, res, 9)) return res;
     if (nine) {
       res.winner = side;
       res.highlight = shot.firstHit === 9 ? 'win' : 'golden';
@@ -137,38 +163,9 @@ export const tenBall: RuleSet = {
     const ten = shot.pocketed.some((p) => p.id === 10) || !!shot.offTable?.includes(10);
     const objectsDown = shot.pocketed.filter((p) => p.id !== 0);
 
-    if (shot.isBreak) {
-      res.foul = breakFoul(shot);
-      if (ten) {
-        res.respot.push(10);
-        res.messages.push('Bi 10 vào khi phá, đặt lại bi 10');
-      }
-      if (res.foul) {
-        penalise(state, res);
-        return res;
-      }
-      res.keepTurn = objectsDown.length > 0;
-      return res;
-    }
-
-    if (shot.pushOut) {
-      res.foul = basicFoul(shot, true);
-      if (ten) res.respot.push(10);
-      if (res.foul) {
-        penalise(state, res);
-        return res;
-      }
-      res.option = 'push-out';
-      res.messages.push('Đẩy bi (push-out): đối thủ chọn đánh hay nhường');
-      return res;
-    }
-
-    res.foul = basicFoul(shot, false);
-    if (res.foul) {
-      if (ten) res.respot.push(10);
-      penalise(state, res);
-      return res;
-    }
+    if (shot.isBreak) return tenBreakResolution(state, shot);
+    if (shot.pushOut) return pushOutResolution(state, shot, 10);
+    if (fouledRotation(state, shot, res, 10)) return res;
     const call = shot.call;
     const made = !!call && shot.pocketed.some((p) => p.id === call.ball && p.pocket === call.pocket);
     // The 10 only wins as the last object ball; pocketed any earlier it is spotted.

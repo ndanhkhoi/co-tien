@@ -4,7 +4,7 @@
 
 | File | Sở hữu |
 |---|---|
-| `match.ts` | Máy trạng thái một trận (`Phase`: `aim → rolling → option / rack-over / match-over`), năng lượng, hồi chiêu, nội tại, Thiên Tượng, Địa Lợi, đánh lại |
+| `match/` | Máy trạng thái một trận (`Phase`: `aim → rolling → option / rack-over / match-over`), năng lượng, hồi chiêu, nội tại, Thiên Tượng, Địa Lợi, đánh lại. Trong thư mục: `match.ts` giữ lớp `Match`, `shot.ts` lo đánh, mô phỏng và kết liễu, `skills.ts` lo chiêu, `energy.ts` lo năng lượng và Ảnh Sát, `omen.ts` lo Thiên Tượng, `practice.ts` lo Luyện thế, `types.ts` chứa kiểu dùng chung |
 | `skill-cast.ts` | `SkillCast` và `buildCast`: vị trí, hướng, đoạn băng, chiều xoáy của chiêu đặt bàn |
 | `terrain.ts` | Thiên Tượng của từng môn phái (`rollOmen`, `OMEN_INFO`, `OMEN_CHANCE`) |
 | `practice.ts` | Thế mẫu Luyện thế (`PRACTICE_DRILLS`), Thế của tôi (`sanitizeSaved`), kiểm tra chỗ đặt bi (`canRest`) |

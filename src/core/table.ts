@@ -43,6 +43,23 @@ export interface PoolSpec {
   cornerMouth: number; sideMouth: number;
 }
 
+interface Point {
+  x: number; y: number;
+}
+
+interface Jaw {
+  angle: number;
+  length: number;
+}
+
+interface CushionSpec {
+  p: Point;
+  q: Point;
+  outward: Point;
+  pJaw: Jaw;
+  qJaw: Jaw;
+}
+
 /**
  * Pool table spec: 7-ft playing surface (78 × 39 in). Ball diameter 57.15 mm.
  * Pocket mouths inside the WPA ranges (corner 114.3–117.5 mm, side 127–130.2 mm).
@@ -76,6 +93,19 @@ function diamondsFor(L: number, W: number, off: number): { x: number; y: number 
   return out;
 }
 
+function jaw(angle: number, length: number): Jaw {
+  return { angle, length };
+}
+
+function tableMarks(L: number) {
+  return {
+    headStringX: -L / 4,
+    headSpot: { x: -L / 4, y: 0 },
+    footSpot: { x: L / 4, y: 0 },
+    centerSpot: { x: 0, y: 0 },
+  };
+}
+
 export function makePoolTable(spec: PoolSpec = POOL_SPEC): TableGeom {
   const { L, W, R } = spec;
   const hl = L / 2;
@@ -91,28 +121,26 @@ export function makePoolTable(spec: PoolSpec = POOL_SPEC): TableGeom {
 
   // Helper adds a cushion with jaws at both ends. Rail runs from p to q along unit u,
   // with outward normal o (pointing away from the playing surface).
-  const cushion = (
-    px: number, py: number, qx: number, qy: number,
-    ox: number, oy: number, angP: number, lenP: number, angQ: number, lenQ: number,
-  ) => {
-    const len = Math.hypot(qx - px, qy - py);
-    const ux = (qx - px) / len;
-    const uy = (qy - py) / len;
-    segments.push(seg(px, py, qx, qy));
+  const cushion = (c: CushionSpec) => {
+    const { p, q, outward, pJaw, qJaw } = c;
+    const len = Math.hypot(q.x - p.x, q.y - p.y);
+    const ux = (q.x - p.x) / len;
+    const uy = (q.y - p.y) / len;
+    segments.push(seg(p.x, p.y, q.x, q.y));
     // Jaw at p heads back along -u bent outward.
-    segments.push(seg(px, py, px + (-ux * Math.cos(angP) + ox * Math.sin(angP)) * lenP, py + (-uy * Math.cos(angP) + oy * Math.sin(angP)) * lenP));
-    segments.push(seg(qx, qy, qx + (ux * Math.cos(angQ) + ox * Math.sin(angQ)) * lenQ, qy + (uy * Math.cos(angQ) + oy * Math.sin(angQ)) * lenQ));
+    segments.push(seg(p.x, p.y, p.x + (-ux * Math.cos(pJaw.angle) + outward.x * Math.sin(pJaw.angle)) * pJaw.length, p.y + (-uy * Math.cos(pJaw.angle) + outward.y * Math.sin(pJaw.angle)) * pJaw.length));
+    segments.push(seg(q.x, q.y, q.x + (ux * Math.cos(qJaw.angle) + outward.x * Math.sin(qJaw.angle)) * qJaw.length, q.y + (uy * Math.cos(qJaw.angle) + outward.y * Math.sin(qJaw.angle)) * qJaw.length));
   };
 
   // Top long rail, two halves.
-  cushion(-hl + c, -hw, -s, -hw, 0, -1, ca, jawC, sa, jawS);
-  cushion(s, -hw, hl - c, -hw, 0, -1, sa, jawS, ca, jawC);
+  cushion({ p: { x: -hl + c, y: -hw }, q: { x: -s, y: -hw }, outward: { x: 0, y: -1 }, pJaw: jaw(ca, jawC), qJaw: jaw(sa, jawS) });
+  cushion({ p: { x: s, y: -hw }, q: { x: hl - c, y: -hw }, outward: { x: 0, y: -1 }, pJaw: jaw(sa, jawS), qJaw: jaw(ca, jawC) });
   // Bottom long rail.
-  cushion(-hl + c, hw, -s, hw, 0, 1, ca, jawC, sa, jawS);
-  cushion(s, hw, hl - c, hw, 0, 1, sa, jawS, ca, jawC);
+  cushion({ p: { x: -hl + c, y: hw }, q: { x: -s, y: hw }, outward: { x: 0, y: 1 }, pJaw: jaw(ca, jawC), qJaw: jaw(sa, jawS) });
+  cushion({ p: { x: s, y: hw }, q: { x: hl - c, y: hw }, outward: { x: 0, y: 1 }, pJaw: jaw(sa, jawS), qJaw: jaw(ca, jawC) });
   // Short rails.
-  cushion(-hl, -hw + c, -hl, hw - c, -1, 0, ca, jawC, ca, jawC);
-  cushion(hl, -hw + c, hl, hw - c, 1, 0, ca, jawC, ca, jawC);
+  cushion({ p: { x: -hl, y: -hw + c }, q: { x: -hl, y: hw - c }, outward: { x: -1, y: 0 }, pJaw: jaw(ca, jawC), qJaw: jaw(ca, jawC) });
+  cushion({ p: { x: hl, y: -hw + c }, q: { x: hl, y: hw - c }, outward: { x: 1, y: 0 }, pJaw: jaw(ca, jawC), qJaw: jaw(ca, jawC) });
 
   const pockets: Pocket[] = [];
   const cornerOff = 0.012;
@@ -144,10 +172,7 @@ export function makePoolTable(spec: PoolSpec = POOL_SPEC): TableGeom {
   const railWidth = 0.127;
   return {
     kind: 'pool', L, W, R, segments, pockets,
-    headStringX: -L / 4,
-    headSpot: { x: -L / 4, y: 0 },
-    footSpot: { x: L / 4, y: 0 },
-    centerSpot: { x: 0, y: 0 },
+    ...tableMarks(L),
     diamonds: diamondsFor(L, W, 0.0936),
     railWidth,
   };
@@ -169,10 +194,7 @@ export function makeCaromTable(): TableGeom {
   diamonds.push({ x: 0, y: -hw - off }, { x: 0, y: hw + off });
   return {
     kind: 'carom', L, W, R, segments, pockets: [],
-    headStringX: -L / 4,
-    headSpot: { x: -L / 4, y: 0 },
-    footSpot: { x: L / 4, y: 0 },
-    centerSpot: { x: 0, y: 0 },
+    ...tableMarks(L),
     diamonds,
     railWidth,
   };

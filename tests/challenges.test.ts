@@ -25,7 +25,8 @@ describe('challenges', () => {
       const [angle, power, side, vert] = c.solution;
       strike(balls.find((b) => b.id === 0)!, t.R, { angle, speed: powerToSpeed(power, maxSpeed(t.kind, REFERENCE_POWER)), side, vert });
       const ev = simulate({ table: t, balls, params: DEFAULT_PHYS });
-      if (!judgeChallenge(c, summarize(ev, 0, false, null, false, [], 0), balls).ok) failed.push(c.id);
+      const sum = summarize({ events: ev, cueId: 0, isBreak: false, call: null, pushOut: false, targets: [] });
+      if (!judgeChallenge(c, sum, balls).ok) failed.push(c.id);
     }
     expect(failed).toEqual([]);
   });

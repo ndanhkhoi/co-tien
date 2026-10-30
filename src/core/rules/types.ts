@@ -95,45 +95,85 @@ export interface RuleSet {
   objective(state: GameState, balls: Ball[], side: Side): string;
 }
 
-export function summarize(
-  events: PhysEvent[], cueId: number, isBreak: boolean, call: ShotCall | null, pushOut: boolean, targets: number[],
-  crossedHeadString = 0,
-): ShotSummary {
-  let firstHit: number | null = null;
-  let contacted = false;
-  let railAfterContact = false;
-  const railBalls = new Set<number>();
-  const cueContacts: number[] = [];
-  let cueRails = 0;
-  let cueRailsBeforeSecond = -1;
-  const pocketed: { id: number; pocket: number }[] = [];
-  const offTable: number[] = [];
-  for (const e of events) {
-    if (e.t === 'ball') {
-      if (e.a === cueId || e.b === cueId) {
-        const other = e.a === cueId ? e.b : e.a;
-        if (firstHit === null) firstHit = other;
-        if (!cueContacts.includes(other)) {
-          cueContacts.push(other);
-          if (cueContacts.length === 2 && cueRailsBeforeSecond < 0) cueRailsBeforeSecond = cueRails;
-        }
-      }
-      contacted = true;
-    } else if (e.t === 'cushion') {
-      if (contacted) railAfterContact = true;
-      if (e.id !== cueId) railBalls.add(e.id);
-      if (e.id === cueId) cueRails++;
-    } else if (e.t === 'off-table') {
-      if (!offTable.includes(e.id)) offTable.push(e.id);
-    } else if (e.t === 'pocket') {
-      pocketed.push({ id: e.id, pocket: e.pocket });
-    }
-  }
+export interface SummarizeInput {
+  events: PhysEvent[];
+  cueId: number;
+  isBreak: boolean;
+  call: ShotCall | null;
+  pushOut: boolean;
+  targets: number[];
+  crossedHeadString?: number;
+}
+
+interface SummaryState {
+  firstHit: number | null;
+  contacted: boolean;
+  railAfterContact: boolean;
+  railBalls: Set<number>;
+  cueContacts: number[];
+  cueRails: number;
+  cueRailsBeforeSecond: number;
+  pocketed: { id: number; pocket: number }[];
+  offTable: number[];
+}
+
+function newSummaryState(): SummaryState {
   return {
-    isBreak, cueId, firstHit, pocketed, offTable, railAfterContact,
-    objectBallsToRail: railBalls.size, cueContacts,
-    cueRailsBeforeSecond: cueRailsBeforeSecond < 0 ? cueRails : cueRailsBeforeSecond,
-    call, pushOut, targets, crossedHeadString,
+    firstHit: null,
+    contacted: false,
+    railAfterContact: false,
+    railBalls: new Set<number>(),
+    cueContacts: [],
+    cueRails: 0,
+    cueRailsBeforeSecond: -1,
+    pocketed: [],
+    offTable: [],
+  };
+}
+
+function noteBallEvent(s: SummaryState, e: Extract<PhysEvent, { t: 'ball' }>, cueId: number) {
+  s.contacted = true;
+  if (e.a !== cueId && e.b !== cueId) return;
+  const other = e.a === cueId ? e.b : e.a;
+  if (s.firstHit === null) s.firstHit = other;
+  if (!s.cueContacts.includes(other)) {
+    s.cueContacts.push(other);
+    if (s.cueContacts.length === 2 && s.cueRailsBeforeSecond < 0) s.cueRailsBeforeSecond = s.cueRails;
+  }
+}
+
+function noteCushionEvent(s: SummaryState, e: Extract<PhysEvent, { t: 'cushion' }>, cueId: number) {
+  if (s.contacted) s.railAfterContact = true;
+  if (e.id !== cueId) s.railBalls.add(e.id);
+  if (e.id === cueId) s.cueRails++;
+}
+
+function applySummaryEvent(s: SummaryState, e: PhysEvent, cueId: number) {
+  if (e.t === 'ball') noteBallEvent(s, e, cueId);
+  else if (e.t === 'cushion') noteCushionEvent(s, e, cueId);
+  else if (e.t === 'off-table') {
+    if (!s.offTable.includes(e.id)) s.offTable.push(e.id);
+  } else s.pocketed.push({ id: e.id, pocket: e.pocket });
+}
+
+export function summarize(input: SummarizeInput): ShotSummary {
+  const s = newSummaryState();
+  for (const e of input.events) applySummaryEvent(s, e, input.cueId);
+  const cueRailsBeforeSecond = s.cueRailsBeforeSecond < 0 ? s.cueRails : s.cueRailsBeforeSecond;
+  return {
+    isBreak: input.isBreak,
+    cueId: input.cueId,
+    firstHit: s.firstHit,
+    pocketed: s.pocketed,
+    offTable: s.offTable,
+    railAfterContact: s.railAfterContact,
+    objectBallsToRail: s.railBalls.size,
+    cueContacts: s.cueContacts,
+    cueRailsBeforeSecond,
+    call: input.call,
+    pushOut: input.pushOut,
+    targets: input.targets,
+    crossedHeadString: input.crossedHeadString ?? 0,
   };
 }
 

@@ -4,14 +4,9 @@ import type { GameState, ShotCall, Side } from '../core/rules/types';
 import type { PhysParams, Terrain } from '../core/physics';
 import type { Segment } from '../core/table';
 import type { SkillKind, SectId } from '../game/content/sects';
-
-export type Personality = 'balanced' | 'aggressive' | 'defensive' | 'trickster';
-
-export interface AiProfile {
-  /** 1 Dễ · 2 Vừa · 3 Khó · 4 Tông Sư */
-  level: 1 | 2 | 3 | 4;
-  personality: Personality;
-}
+import type { AiProfile } from '../game/ai-profile';
+// The profile lives in the game layer so match setup and career data can use it without importing ai.
+export type { AiProfile, Personality } from '../game/ai-profile';
 
 export interface AiRequest {
   balls: Ball[];

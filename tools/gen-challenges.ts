@@ -18,7 +18,7 @@ function run(t: TableGeom, layout: [number, number, number][], shot: [number, nu
   const cue = balls.find((b) => b.id === 0)!;
   strike(cue, t.R, { angle: shot[0], speed: powerToSpeed(shot[1], maxSpeed(t.kind, REFERENCE_POWER)), side: shot[2], vert: shot[3] });
   const ev = simulate({ table: t, balls, params: DEFAULT_PHYS });
-  const sum = summarize(ev, 0, false, null, false, [], 0);
+  const sum = summarize({ events: ev, cueId: 0, isBreak: false, call: null, pushOut: false, targets: [] });
   const def = { goal } as ChallengeDef;
   return judgeChallenge(def, sum, balls).ok;
 }

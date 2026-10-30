@@ -48,7 +48,7 @@ Thiên Tượng tự động đúng ở cả ba nơi.
 
 ## File lớn
 
-`match-screen.ts`, `match.ts`, `menus.ts`, `table-view.ts`, `brain.ts` đã vượt ngưỡng ~500 dòng. Code mới
+`match-screen.ts`, `match/match.ts`, `menus.ts`, `table-view.ts`, `brain.ts` đã vượt ngưỡng ~500 dòng. Code mới
 cho chúng đặt vào module riêng, nhỏ, rồi để file lớn gọi tới (xem CONTRIBUTING.md, *Nguyên tắc code*).
 Kiểm tra kích thước hiện tại bằng `wc -l src/**/*.ts`.
 

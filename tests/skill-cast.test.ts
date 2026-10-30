@@ -8,7 +8,7 @@ import { CUES, TABLES } from '../src/game/content/gear';
 const table = makeCaromTable();
 function world(kind?: typeof PLACED_KINDS[number]): SimWorld {
   const balls = [makeBall(0, -0.3, 0)];
-  const effect = kind && buildCast(kind, 3, 0, table, balls, 0, { point: { x: 0, y: 0.06 }, direction: { x: 0, y: 1 }, hardness: 'hard' });
+  const effect = kind && buildCast(kind, 3, 0, { table, balls, cueId: 0, cast: { point: { x: 0, y: 0.06 }, direction: { x: 0, y: 1 }, hardness: 'hard' } });
   return { table, balls, params: DEFAULT_PHYS, terrain: effect ? mergeTerrain(effect.terrain) : null, extraSegments: effect ? effect.segments : [] };
 }
 it.each(PLACED_KINDS)('%s leaves resting balls stationary', kind => {
@@ -21,7 +21,7 @@ it.each(PLACED_KINDS)('%s measurably changes a moving shot', kind => {
     const w = world(effect ? kind : undefined), b = w.balls[0];
     if (kind === 'railcraft') {
       b.x = 0; b.y = -table.W / 2 + 0.2;
-      if (effect) w.terrain = buildCast(kind, 3, 0, table, w.balls, 0, { rail: { index: 0, position: 0.5 }, hardness: 'hard' }).terrain;
+      if (effect) w.terrain = buildCast(kind, 3, 0, { table, balls: w.balls, cueId: 0, cast: { rail: { index: 0, position: 0.5 }, hardness: 'hard' } }).terrain;
     }
     b.vx = kind === 'railcraft' ? 0 : 1.2; b.vy = kind === 'railcraft' ? -1.2 : 0; b.wx = -b.vy / table.R; b.wy = b.vx / table.R; b.wz = 50;
     for (let i = 0; i < 90; i++) step(w, 1 / 120, null);
@@ -51,7 +51,7 @@ it('match and prediction use identical active terrain and strike parameters', ()
     mode: 'carom-libre', raceTo: 1, mutator: null, tableSkin: TABLES[0], seed: 42,
     players: [0, 1].map(() => ({ name: 'A', kind: 'human', cue: CUES[0], champion: 'tokiemnhi' })) as Match['setup']['players'],
   });
-  for (const kind of PLACED_KINDS) m.activeEffects.push({ ...buildCast(kind, 2, 2, m.table, m.balls, m.cueId()), target: m.turn });
+  for (const kind of PLACED_KINDS) m.activeEffects.push({ ...buildCast(kind, 2, 2, { table: m.table, balls: m.balls, cueId: m.cueId() }), target: m.turn });
   const input = { angle: 0.4, power: 0.45, side: 0.1, vert: 0.2, call: null, pushOut: false };
   const prediction = { ...m.simulationWorld(), balls: cloneBalls(m.balls) };
   m.strikePreview(prediction.balls.find(b => b.id === m.cueId())!, input);

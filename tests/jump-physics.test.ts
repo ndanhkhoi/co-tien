@@ -82,10 +82,13 @@ import { eightBall } from '../src/core/rules/eight-ball';
 import { caromLibre } from '../src/core/rules/carom';
 
 describe('balls driven off the table', () => {
-  const shot = (id: number) => summarize([
-    { t: 'ball', a: 0, b: 1, speed: 1, x: 0, y: 0 },
-    { t: 'off-table', id, speed: 1 },
-  ], 0, false, null, false, [1]);
+  const shot = (id: number) => summarize({
+    events: [
+      { t: 'ball', a: 0, b: 1, speed: 1, x: 0, y: 0 },
+      { t: 'off-table', id, speed: 1 },
+    ],
+    cueId: 0, isBreak: false, call: null, pushOut: false, targets: [1],
+  });
 
   it('distinguishes an off-table ball from a pocket for scoring and calls', () => {
     expect(shot(9).pocketed).toEqual([]);

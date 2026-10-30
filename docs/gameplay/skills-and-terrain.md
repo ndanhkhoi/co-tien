@@ -34,7 +34,7 @@ Kiểm thử: `tests/skill-cast.test.ts`, `ultimate-geometry.test.ts`, `roster-k
 
 - `cls` của tướng chọn một trong bảy hệ: Thần Xạ, Cuồng Chiến, Pháp Tu, Hộ Pháp, Chú Sư, Ảnh Sát, Luân Hồi.
 - `cls` độc lập với `kind` (sáu loại tạo hình).
-- Hành vi nằm trong `match.ts` (`passive`, `spinReach`, `lockAim`, `choosePassive`, `useGuard`) và đi qua cùng
+- Hành vi nằm trong `match/match.ts` (`passive`, `spinReach`, `lockAim`, `choosePassive`, `useGuard`) và đi qua cùng
   `Match` cho người và AI.
 - Mô tả cho người chơi: [world-bible.md](../world/world-bible.md#hệ-lớp-và-nội-tại).
 - Kiểm thử: `tests/class-passives.test.ts`.

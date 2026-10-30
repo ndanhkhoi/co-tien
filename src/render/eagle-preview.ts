@@ -76,7 +76,7 @@ function applyBlast(m: Match, run: EagleRun, events: PhysEvent[], balls: Ball[])
   const contact = events.find(e => e.t === 'ball' && (e.a === run.cue.id || e.b === run.cue.id));
   if (!contact || contact.t !== 'ball') return;
   const direction = m.blast.direction ? { x: Math.cos(run.angle), y: Math.sin(run.angle) } : undefined;
-  applySkillBlast(balls, contact.x, contact.y, m.blast.radius, m.blast.force, direction);
+  applySkillBlast(balls, contact, { radius: m.blast.radius, force: m.blast.force, direction });
   run.blastDone = true;
 }
 

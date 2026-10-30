@@ -27,7 +27,7 @@ describe('Luyện thế drills', () => {
       const t = practiceGeom(d.table);
       expect(d.spots.some((s) => s.id === 0), d.id).toBe(true);
       expect(new Set(d.spots.map((s) => s.id)).size, d.id).toBe(d.spots.length);
-      for (const s of d.spots) expect(canRest(t, d.spots, s.id, s.x, s.y), `${d.id} ball ${s.id}`).toBe(true);
+      for (const s of d.spots) expect(canRest({ table: t, balls: d.spots }, s.id, s.x, s.y), `${d.id} ball ${s.id}`).toBe(true);
     }
   });
 

@@ -57,7 +57,8 @@ const pocket = (i: number): V => {
 };
 
 /** Object ball `d` metres out from a pocket, and a cue ball set up to cut it in by `cut` degrees. */
-function potLine(pk: number, from: V, d: number, cut: number, cueDist: number): { ball: V; cue: V } {
+function potLine(pk: number, from: V, spec: { d: number; cut: number; cueDist: number }): { ball: V; cue: V } {
+  const { d, cut, cueDist } = spec;
   const p = pocket(pk);
   const ball = along(p, unit(p, from), d);
   const travel = unit(ball, p);
@@ -67,8 +68,8 @@ function potLine(pk: number, from: V, d: number, cut: number, cueDist: number): 
 function poolDrills(): PracticeDrill[] {
   const t = tables.pool;
   const R = t.R;
-  const straight = potLine(2, { x: -0.3, y: 0.15 }, 0.42, 0, 0.55);
-  const cut = potLine(5, { x: 0.2, y: -0.05 }, 0.34, 52, 0.5);
+  const straight = potLine(2, { x: -0.3, y: 0.15 }, { d: 0.42, cut: 0, cueDist: 0.55 });
+  const cut = potLine(5, { x: 0.2, y: -0.05 }, { d: 0.34, cut: 52, cueDist: 0.5 });
   const railY = -(t.W / 2 - R - 0.0006);
   const comboPk = pocket(5);
   const comboU = unit(comboPk, { x: -0.1, y: -0.05 });
@@ -79,7 +80,7 @@ function poolDrills(): PracticeDrill[] {
   const kickBall = { x: 0.62, y: 0.28 };
   const kickMid = along(kickCue, unit(kickCue, kickBall), Math.hypot(kickBall.x - kickCue.x, kickBall.y - kickCue.y) * 0.55);
   const kickN = turn(unit(kickCue, kickBall), 90);
-  const jump = potLine(2, { x: -0.4, y: 0.1 }, 0.4, 0, 0.7);
+  const jump = potLine(2, { x: -0.4, y: 0.1 }, { d: 0.4, cut: 0, cueDist: 0.7 });
   const jumpBlock = along(jump.cue, unit(jump.cue, jump.ball), 0.15);
   // A hair looser than a match rack, so hand-moved balls never start pressed together.
   const rack = rackEight(t, new Rng(7)).filter((b) => b.id !== 0)
@@ -123,8 +124,15 @@ export function spotsOf(balls: Ball[]): PracticeSpot[] {
   return balls.filter((b) => b.onTable).map((b) => ({ id: b.id, x: b.x, y: b.y }));
 }
 
+/** The cloth a ball must rest on: the table and every ball already lying on it. */
+export interface RestCloth {
+  table: TableGeom;
+  balls: readonly { id: number; x: number; y: number; onTable?: boolean }[];
+}
+
 /** Where a ball may rest: on the cloth, clear of the other balls on it and of pocket mouths. */
-export function canRest(t: TableGeom, balls: readonly { id: number; x: number; y: number; onTable?: boolean }[], id: number, x: number, y: number): boolean {
+export function canRest(cloth: RestCloth, id: number, x: number, y: number): boolean {
+  const { table: t, balls } = cloth;
   if (Math.abs(x) > t.L / 2 - t.R || Math.abs(y) > t.W / 2 - t.R) return false;
   for (const b of balls) if (b.id !== id && b.onTable !== false && Math.hypot(b.x - x, b.y - y) < 2 * t.R + 1e-5) return false;
   return t.pockets.every((p) => Math.hypot(x - p.hx, y - p.hy) > p.hr + t.R);
@@ -141,34 +149,45 @@ export function sanitizeSaved(raw: unknown): SavedLayout[] {
   if (!Array.isArray(list)) return [];
   const out: SavedLayout[] = [];
   for (const e of list) {
-    if (!e || typeof e !== 'object') continue;
-    const v = e as Record<string, unknown>;
-    if (v.table !== 'pool' && v.table !== 'carom') continue;
-    const kind = v.table;
-    const t = tables[kind];
-    const ids = practiceIds(kind);
-    const spots: PracticeSpot[] = [];
-    for (const s of Array.isArray(v.spots) ? v.spots : []) {
-      const p = s as Record<string, unknown>;
-      const id = p?.id;
-      const x = p?.x;
-      const y = p?.y;
-      if (typeof id !== 'number' || !ids.includes(id) || spots.some((q) => q.id === id)) continue;
-      if (typeof x !== 'number' || typeof y !== 'number' || !Number.isFinite(x) || !Number.isFinite(y)) continue;
-      if (Math.abs(x) > t.L / 2 || Math.abs(y) > t.W / 2) continue;
-      spots.push({ id, x, y });
-    }
-    if (!spots.some((s) => s.id === 0)) continue;
-    out.push({
-      id: typeof v.id === 'string' && v.id ? v.id.slice(0, 40) : `s${out.length}`,
-      table: kind,
-      name: typeof v.name === 'string' && v.name.trim() ? v.name.trim().slice(0, 32) : 'Thế không tên',
-      spots,
-      at: typeof v.at === 'number' && Number.isFinite(v.at) ? v.at : 0,
-    });
+    const entry = parseSavedEntry(e, out.length);
+    if (entry) out.push(entry);
     if (out.length >= SAVED_MAX) break;
   }
   return out;
+}
+
+/** One stored entry, or null when anything about it is malformed. */
+function parseSavedEntry(e: unknown, index: number): SavedLayout | null {
+  if (!e || typeof e !== 'object') return null;
+  const v = e as Record<string, unknown>;
+  if (v.table !== 'pool' && v.table !== 'carom') return null;
+  const spots = parseSpots(v.spots, v.table);
+  if (!spots.some((s) => s.id === 0)) return null;
+  return {
+    id: typeof v.id === 'string' && v.id ? v.id.slice(0, 40) : `s${index}`,
+    table: v.table,
+    name: typeof v.name === 'string' && v.name.trim() ? v.name.trim().slice(0, 32) : 'Thế không tên',
+    spots,
+    at: typeof v.at === 'number' && Number.isFinite(v.at) ? v.at : 0,
+  };
+}
+
+/** Spots that belong on that table: known ids, once each, inside the rails. */
+function parseSpots(raw: unknown, kind: PracticeTable): PracticeSpot[] {
+  const t = tables[kind];
+  const ids = practiceIds(kind);
+  const spots: PracticeSpot[] = [];
+  for (const s of Array.isArray(raw) ? raw : []) {
+    const p = s as Record<string, unknown>;
+    const id = p?.id;
+    const x = p?.x;
+    const y = p?.y;
+    if (typeof id !== 'number' || !ids.includes(id) || spots.some((q) => q.id === id)) continue;
+    if (typeof x !== 'number' || typeof y !== 'number' || !Number.isFinite(x) || !Number.isFinite(y)) continue;
+    if (Math.abs(x) > t.L / 2 || Math.abs(y) > t.W / 2) continue;
+    spots.push({ id, x, y });
+  }
+  return spots;
 }
 
 export function loadSaved(): SavedLayout[] {

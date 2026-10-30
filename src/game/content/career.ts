@@ -1,6 +1,6 @@
-import type { Personality } from '../../ai/types';
 import type { GameMode } from '../../core/rules/types';
 import type { MutatorId } from './gear';
+import type { Personality } from '../ai-profile';
 import { CHAMPIONS, classInfo, sect, type ClassId, type SectId } from './sects';
 
 /** Career: travel the sects of Cơ Tiên Giới and beat each of their five masters. */

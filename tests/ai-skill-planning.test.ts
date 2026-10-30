@@ -17,10 +17,10 @@ it('plans a mixed placement and well ultimate from its actual cue position on ca
   expect(decision.skill).toBe(2);
   const point=decision.shot!.cue!;
   expect(point).toBeDefined();
-  expect(canPlaceCue(makeCaromTable(),request.balls,0,point.x,point.y,false)).toBe(true);
+  expect(canPlaceCue({ table: makeCaromTable(), balls: request.balls, cueId: 0, kitchen: false }, point.x, point.y)).toBe(true);
   expect(Math.hypot(point.x+0.5,point.y)).toBeLessThanOrEqual(0.185);
   const fixed=think({...request, balls:request.balls.map(b=>b.id===0?{...b,...point}:b), ballInHand:'none',skills:[],
-    terrain: buildCast('well',5,2,makeCaromTable(),request.balls,0,decision.cast).terrain });
+    terrain: buildCast('well',5,2,{ table: makeCaromTable(), balls: request.balls, cueId: 0, cast: decision.cast }).terrain });
   expect(fixed.shot!.angle).toBeCloseTo(decision.shot!.angle, 10);
   expect(fixed.shot!.power).toBeCloseTo(decision.shot!.power, 10);
 });

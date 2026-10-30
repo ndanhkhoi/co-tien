@@ -71,6 +71,31 @@ function distToSeg(x: number, y: number, s: Segment): number {
   return Math.hypot(x - (s.ax + ex * k), y - (s.ay + ey * k));
 }
 
+/** Hoà Linh / Thiên Quang: gusts that keep one direction for the whole turn. */
+function windOmen(rng: Rng, sect: SectId): Omen {
+  return {
+    id: 'wind', name: sect === 'hoalinh' ? 'Xuân Phong' : 'Gió Núi', desc: 'Gió giật từng cơn đẩy bi đang lăn theo hướng gió.',
+    // One direction for the whole turn: gusts only ease off (to 10%), never blow back.
+    terrain: { force: dir(rng, MAX_FORCE * rng.range(0.45, 0.95)), gust: { amp: 0.45, omega: rng.range(2.5, 4) } },
+  };
+}
+
+/** Vạn Thụ: one root lying on the cloth where no ball rests. */
+function rootsOmen(rng: Rng, t: TableGeom, balls: Ball[]): Omen | null {
+  const seg = rootSegment(rng, t, balls);
+  return seg ? { id: 'roots', name: 'Rễ Cổ Thụ', desc: 'Rễ cây trồi lên nỉ: bi chạm rễ bật lại như chạm băng.', segments: [seg] } : null;
+}
+
+/** Hư Không: pockets breathe in or out for this one shot. */
+function breathOmen(rng: Rng): Omen {
+  const grow = rng.next() < 0.5;
+  return {
+    id: 'breath', name: grow ? 'Hư Không Hít Vào' : 'Hư Không Thở Ra',
+    desc: grow ? 'Miệng lỗ phình to trong cú này.' : 'Miệng lỗ co hẹp trong cú này.',
+    capture: grow ? 1.18 : 0.84,
+  };
+}
+
 export function rollOmen(sect: SectId, rng: Rng, t: TableGeom, balls: Ball[]): Omen | null {
   const pockets = t.pockets.length > 0;
   switch (sect) {
@@ -91,11 +116,7 @@ export function rollOmen(sect: SectId, rng: Rng, t: TableGeom, balls: Ball[]): O
       };
     case 'hoalinh':
     case 'thienquang':
-      return {
-        id: 'wind', name: sect === 'hoalinh' ? 'Xuân Phong' : 'Gió Núi', desc: 'Gió giật từng cơn đẩy bi đang lăn theo hướng gió.',
-        // One direction for the whole turn: gusts only ease off (to 10%), never blow back.
-        terrain: { force: dir(rng, MAX_FORCE * rng.range(0.45, 0.95)), gust: { amp: 0.45, omega: rng.range(2.5, 4) } },
-      };
+      return windOmen(rng, sect);
     case 'kimsa':
       return {
         id: 'sandstorm', name: 'Bão Cát', desc: 'Gió cát thổi ngang và cát phủ dày làm bi chậm.',
@@ -117,8 +138,7 @@ export function rollOmen(sect: SectId, rng: Rng, t: TableGeom, balls: Ball[]): O
       };
     }
     case 'vanthu': {
-      const seg = rootSegment(rng, t, balls);
-      return seg ? { id: 'roots', name: 'Rễ Cổ Thụ', desc: 'Rễ cây trồi lên nỉ: bi chạm rễ bật lại như chạm băng.', segments: [seg] } : null;
+      return rootsOmen(rng, t, balls);
     }
     case 'huyetsat':
       return { id: 'quake', name: 'Địa Chấn', desc: 'Mặt đất rung chuyển: các bi đang nằm yên bị xê dịch nhẹ khi bạn đánh.', jitter: 0.06 };
@@ -130,12 +150,9 @@ export function rollOmen(sect: SectId, rng: Rng, t: TableGeom, balls: Ball[]): O
         terrain: { patches: spots(rng, t, 3, [0.12, 0.18]).map((s) => ({ ...s, roll: 0.55, slide: 0.6 })) },
       };
     case 'hukhong': {
-      const grow = rng.next() < 0.5;
-      return pockets ? {
-        id: 'breath', name: grow ? 'Hư Không Hít Vào' : 'Hư Không Thở Ra',
-        desc: grow ? 'Miệng lỗ phình to trong cú này.' : 'Miệng lỗ co hẹp trong cú này.',
-        capture: grow ? 1.18 : 0.84,
-      } : null;
+      // The coin is tossed even on a pocketless table, so the RNG stream stays the same.
+      const omen = breathOmen(rng);
+      return pockets ? omen : null;
     }
   }
 }

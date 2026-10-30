@@ -5,7 +5,7 @@
 | `brain.ts` | Tìm cú đánh và chọn chiêu (`chooseSkill`) |
 | `ai-worker.ts` | Web Worker chạy `brain.ts` |
 | `ai-client.ts` | Phía giao diện: gửi yêu cầu, huỷ worker khi rời trận |
-| `types.ts` | `AiProfile` (cấp 1–4, lối đánh) và gói dữ liệu gửi worker |
+| `types.ts` | Gói dữ liệu gửi worker; `AiProfile` (cấp 1–4, lối đánh) định nghĩa ở `game/ai-profile.ts` |
 
 ## Quyết định
 

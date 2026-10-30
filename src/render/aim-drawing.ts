@@ -48,7 +48,7 @@ export function drawEagleReference(m: Match, g: MetreGraphics, aim: AimView, cue
   // The simulated paths follow the chosen power, spin and terrain, so they move when the
   // power changes. Keep the straight aim to the ghost ball as a fixed reference beneath
   // them; otherwise a power change reads as the aim itself drifting.
-  const ref = predictAim(m.table, m.balls, m.cueId(), aim.angle, m.obstacles());
+  const ref = predictAim({ table: m.table, balls: m.balls, cueId: m.cueId(), angle: aim.angle, extraSegments: m.obstacles() });
   g.moveTo(cue.x + dx * R, cue.y + dy * R).lineTo(ref.gx - dx * R, ref.gy - dy * R).stroke({ width: 1, color: 0xffffff, alpha: 0.45 });
   g.circle(ref.gx, ref.gy, R).stroke({ width: 1, color: 0xffffff, alpha: 0.5 });
 }
@@ -75,7 +75,7 @@ export function drawShotHint(m: Match, g: MetreGraphics, aim: AimView, cue: { x:
   const R = m.table.R;
   // Line to the first thing the cue ball meets and the ghost ball there, plus a short
   // chevron hint of where the object ball leaves: enough to read the cut, never a full path.
-  const pred = predictAim(m.table, m.balls, m.cueId(), aim.angle, m.obstacles());
+  const pred = predictAim({ table: m.table, balls: m.balls, cueId: m.cueId(), angle: aim.angle, extraSegments: m.obstacles() });
   const legal = m.legalTargets();
   const illegal = pred.hitBall !== null && legal.length > 0 && !legal.includes(pred.hitBall) && !m.state.pushOutAvailable;
   if (drawFogHint(g, aim, { cue, dx, dy }, pred)) return;

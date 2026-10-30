@@ -141,12 +141,12 @@ export function matchScreen(opts: MatchOptions) {
       if (!skillPlacement) return;
       const { side, slot } = skillPlacement;
       if (slot === -1) {
-        match.castPreview = [buildCast('railcraft', 1, -1, match.table, match.balls, match.cueId(side), { ...cast, hardness: 'soft' })];
+        match.castPreview = [buildCast('railcraft', 1, -1, { table: match.table, balls: match.balls, cueId: match.cueId(side), cast: { ...cast, hardness: 'soft' } })];
         skillPlacement.cast = match.castPreview[0].cast;
         return;
       }
       const sk = match.skills(side)[slot];
-      match.castPreview = sk.kinds.filter(k => PLACED_KINDS.includes(k)).map(k => buildCast(k, sk.tier, slot, match.table, match.balls, match.cueId(side), cast, sk.ult, sk.shape));
+      match.castPreview = sk.kinds.filter(k => PLACED_KINDS.includes(k)).map(k => buildCast(k, sk.tier, slot, { table: match.table, balls: match.balls, cueId: match.cueId(side), cast, ult: sk.ult, shape: sk.shape }));
       skillPlacement.cast = match.castPreview[0]?.cast ?? cast;
     }
     function moveCast(x: number, y: number) {

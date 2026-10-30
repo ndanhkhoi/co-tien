@@ -91,7 +91,7 @@ function play(ctx: Ctx, start: Ball[], shot: AiShot, earlyStop?: (ev: PhysEvent[
       const hit = events.slice(from).find(e => e.t === 'ball' && (e.a === ctx.cueId || e.b === ctx.cueId));
       if (hit && hit.t === 'ball') {
         blasted = true;
-        applySkillBlast(balls, hit.x, hit.y, ctx.req.blast.radius, ctx.req.blast.force, ctx.req.blast.directional ? { x: Math.cos(shot.angle), y: Math.sin(shot.angle) } : undefined);
+        applySkillBlast(balls, hit, { radius: ctx.req.blast.radius, force: ctx.req.blast.force, direction: ctx.req.blast.directional ? { x: Math.cos(shot.angle), y: Math.sin(shot.angle) } : undefined });
       }
     }
     if (!moving && !blasted) break;
@@ -99,7 +99,10 @@ function play(ctx: Ctx, start: Ball[], shot: AiShot, earlyStop?: (ev: PhysEvent[
     if (earlyStop && earlyStop(events)) break;
   }
   const crossed = balls.filter((b) => b.onTable && b.id !== 0 && b.x < ctx.table.headStringX).length;
-  const sum = summarize(events, ctx.cueId, ctx.req.state.isBreak, shot.call, shot.pushOut, targets, crossed);
+  const sum = summarize({
+    events, cueId: ctx.cueId, isBreak: ctx.req.state.isBreak, call: shot.call,
+    pushOut: shot.pushOut, targets, crossedHeadString: crossed,
+  });
   const state = structuredClone(ctx.req.state);
   const res = ctx.rules.resolve(state, balls, sum);
   if (ctx.req.secondChance && !res.foul && !res.keepTurn && !res.option && res.winner === null) res.keepTurn = true;
@@ -378,6 +381,7 @@ function breakShot(ctx: Ctx): AiShot {
 /** Candidate cue positions for ball in hand. */
 function placements(ctx: Ctx, balls: Ball[], kitchen: boolean): { x: number; y: number }[] {
   const t = ctx.table;
+  const place = { table: t, balls, cueId: ctx.cueId, kitchen };
   const out: { x: number; y: number }[] = [];
   const targets = ctx.rules.legalTargets(ctx.req.state, balls, ctx.side);
   const ids = targets.length ? targets : balls.filter((b) => b.onTable && b.id !== ctx.cueId).map((b) => b.id);
@@ -392,7 +396,7 @@ function placements(ctx: Ctx, balls: Ball[], kitchen: boolean): { x: number; y: 
           const a = ang + Math.PI + off;
           const x = ob.x + Math.cos(a) * (dist + 2 * t.R);
           const y = ob.y + Math.sin(a) * (dist + 2 * t.R);
-          if (canPlaceCue(t, balls, ctx.cueId, x, y, kitchen)) out.push({ x, y });
+          if (canPlaceCue(place, x, y)) out.push({ x, y });
         }
       }
     });
@@ -401,16 +405,17 @@ function placements(ctx: Ctx, balls: Ball[], kitchen: boolean): { x: number; y: 
     for (let i = 0; i < 12; i++) {
       const x = kitchen ? ctx.rng.range(-t.L / 2 + t.R, t.headStringX) : ctx.rng.range(-t.L / 2 + t.R, t.L / 2 - t.R);
       const y = ctx.rng.range(-t.W / 2 + t.R, t.W / 2 - t.R);
-      if (canPlaceCue(t, balls, ctx.cueId, x, y, kitchen)) out.push({ x, y });
+      if (canPlaceCue(place, x, y)) out.push({ x, y });
     }
   }
   if (ctx.req.nudge) {
     const n = ctx.req.nudge;
+    place.kitchen = false;
     for (let i = 0; i < 12; i++) {
       const a = i * Math.PI / 6;
       const x = n.x + Math.cos(a) * n.radius * 0.95;
       const y = n.y + Math.sin(a) * n.radius * 0.95;
-      if (canPlaceCue(t, balls, ctx.cueId, x, y, false)) out.push({ x, y });
+      if (canPlaceCue(place, x, y)) out.push({ x, y });
     }
     return ctx.rng.shuffle(out.filter((p) => Math.hypot(p.x - n.x, p.y - n.y) <= n.radius)).slice(0, 7);
   }
@@ -617,6 +622,7 @@ export function think(req: AiRequest): AiDecision {
     const positionSkill = kinds.includes('teleport') || kinds.includes('nudge');
     const start = cloneBalls(req.balls);
     const cue = start.find(b => b.id === cueId)!;
+    const place = { table, balls: start, cueId, kitchen: false };
     let cuePosition: {x:number;y:number} | undefined;
     if (positionSkill) {
       const radius = kinds.includes('teleport') ? table.L : (skillPower('nudge', tier) as {radius:number}).radius;
@@ -624,14 +630,14 @@ export function think(req: AiRequest): AiDecision {
       if (target) for (const sign of [-1,1]) {
         const x = cue.x + sign * Math.sin(decision.shot.angle) * Math.min(radius * 0.9,0.25);
         const y = cue.y - sign * Math.cos(decision.shot.angle) * Math.min(radius * 0.9,0.25);
-        if (canPlaceCue(table,start,cueId,x,y,false)) { cuePosition={x,y}; break; }
+        if (canPlaceCue(place, x, y)) { cuePosition={x,y}; break; }
       }
       cuePosition ??= {x:cue.x,y:cue.y};
       Object.assign(cue,cuePosition);
     }
-    const effects = (selected.kinds ?? [selected.kind]).filter(k => PLACED_KINDS.includes(k)).map(k => buildCast(k, selected.tier ?? 1, selected.slot, table, req.balls, cueId, cast, selected.ult, selected.shape));
+    const effects = (selected.kinds ?? [selected.kind]).filter(k => PLACED_KINDS.includes(k)).map(k => buildCast(k, selected.tier ?? 1, selected.slot, { table, balls: req.balls, cueId, cast, ult: selected.ult, shape: selected.shape }));
     const submitted = effects[0]?.cast ?? cast;
-    const actualEffects = kinds.filter(k => PLACED_KINDS.includes(k)).map(k => buildCast(k,tier,selected.slot,table,req.balls,cueId,submitted,selected.ult,selected.shape));
+    const actualEffects = kinds.filter(k => PLACED_KINDS.includes(k)).map(k => buildCast(k,tier,selected.slot,{ table, balls: req.balls, cueId, cast: submitted, ult: selected.ult, shape: selected.shape }));
     const p = (kind: SkillKind) => skillPower(kind, tier) as Record<string, number>;
     const planned = planShot({ ...req, balls: start, skills: [], ballInHand: positionSkill ? 'none' : req.ballInHand,
       maxSpeed: req.maxSpeed * (kinds.includes('power') ? p('power').speed : 1),
