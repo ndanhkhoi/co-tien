@@ -16,7 +16,7 @@ Lý do: [decisions/real-physics.md](../decisions/real-physics.md).
 - Mỗi chiêu là một danh sách nhóm cơ chế (`kinds`). Danh sách nhóm là `SkillKind` trong
   `src/game/content/sects.ts`; hồi chiêu theo nhóm đầu tiên (`KIND_COOLDOWN`), sức mạnh theo bậc ở cùng file.
   Tuyệt chiêu cần đầy năng lượng và mạnh hơn bậc tướng.
-- **Tám nhóm đặt trên bàn** — `slick`, `sand`, `bumper`, `railcraft`, `wind`, `well`, `spinwash`, `vortex` —
+- **Tám nhóm đặt trên bàn** (`slick`, `sand`, `bumper`, `railcraft`, `wind`, `well`, `spinwash`, `vortex`)
   nhận một `SkillCast` (`src/game/skill-cast.ts`): tâm, hướng, đoạn băng, chiều xoáy, băng mềm/cứng. Bỏ trống
   thì `buildCast` chọn mặc định hợp lệ (trong nỉ, không đè bi, vật chắn tránh bi và lỗ). Ý nghĩa từng nhóm:
   [world/world-bible.md](../world/world-bible.md#kỹ-năng).

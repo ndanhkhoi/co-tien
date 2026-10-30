@@ -27,33 +27,33 @@ response để kiểm tra trước khi chạy lại.
 
 ## Quy trình
 
-1. **Thiết kế bằng chữ** — `src/game/content/roster.json` giữ `look` của từng tướng: giới tính, tuổi,
+1. **Thiết kế bằng chữ**: `src/game/content/roster.json` giữ `look` của từng tướng: giới tính, tuổi,
    tóc, trang phục, cây cơ, dấu hiệu riêng; cùng dữ liệu môn phái và chiêu.
-2. **Sinh prompt** — `build-prompts.py` ghép đề bài với khối phong cách. Prompt chân dung, biểu cảm và
+2. **Sinh prompt**: `build-prompts.py` ghép đề bài với khối phong cách. Prompt chân dung, biểu cảm và
    ăn mừng đều chèn **toàn bộ `look`**, dưới chỉ dẫn “Character spec … must match”. Icon dùng mực đen
    và một màu nhấn môn phái, cấm phát sáng, ánh kim và màu thừa; ô biểu tượng là dấu son + đen.
    Flipbook dùng mực màu môn phái, mép cọ trắng giấy, cấm glow và mảng trắng sáng. Khi duyệt prompt,
    áp dụng chung quy tắc không ánh kim, không màu thừa cho icon, biểu tượng và flipbook.
-3. **Vẽ** — `gen-sect.sh` vẽ cut-out trước cho từng tướng, rồi chân dung và tư thế ăn mừng tham chiếu
+3. **Vẽ**: `gen-sect.sh` vẽ cut-out trước cho từng tướng, rồi chân dung và tư thế ăn mừng tham chiếu
    cut-out; bảng 2×2 biểu cảm tham chiếu chân dung. Script còn vẽ splash, cut-in, bảng 4×4 icon,
    bảng 5×5 VFX, flipbook 4×4, viền bàn và hai cây cơ; bỏ qua ảnh gốc đã có.
-4. **Cắt và xuất** — `process-sect.py` cắt lưới, tách nền và xuất webp vào `public/art/`, tạo bảng duyệt.
+4. **Cắt và xuất**: `process-sect.py` cắt lưới, tách nền và xuất webp vào `public/art/`, tạo bảng duyệt.
    Riêng icon UI dùng `slice-ui-icons.py SHEET.png OUT_DIR name1 … name16`: cắt bảng 4×4, flood fill
    từ mép từng ô để xoá giấy, giữ phần trắng nằm trong viền mực như bi và bàn tay, xuất tối đa 128 px.
    Icon UI ở `public/art/ui/icons/`, được `src/ui/icons.ts` phục vụ qua `icon(name)`.
-5. **Duyệt** — đóng vai người duyệt khó tính: so từng tranh với `look`, ảnh tham chiếu và các tướng
+5. **Duyệt**: đóng vai người duyệt khó tính: so từng tranh với `look`, ảnh tham chiếu và các tướng
    khác. Loại ảnh sai giới tính, mặt/tóc/mắt/dấu nhận diện/trang phục/cơ; loại tướng giống nhau hoặc
    giống nhân vật đã có, chữ sai dấu, vật thể sai nghĩa, màu thừa, ánh kim hay lạc phong cách.
    Không chấp nhận chỉ vì ảnh đẹp. Khi vẽ lại tướng, **vẽ lại cả những cảnh truyện có tướng trong `cast`**.
-6. **Đồng bộ nền** — `rebackground.sh WORK SECT [ids]` dùng ảnh cũ làm tham chiếu, chỉ vẽ lại nền chân
+6. **Đồng bộ nền**: `rebackground.sh WORK SECT [ids]` dùng ảnh cũ làm tham chiếu, chỉ vẽ lại nền chân
    dung và biểu cảm thành giấy dó, giữ nhân vật; chuyển bản cũ vào `raw/old/`, bỏ qua ảnh đã có nền giấy.
-7. **Tranh truyện** — `gen-story-art.sh WORK [scenes]` đọc `scenes` và `cast` trong `story.json`, gửi
+7. **Tranh truyện**: `gen-story-art.sh WORK [scenes]` đọc `scenes` và `cast` trong `story.json`, gửi
    cut-out của từng tướng trong cảnh làm tham chiếu kèm `look`; `vodanh` dùng `references/story-vodanh.webp`
    trong skill. Nếu thiếu cut-out của bất kỳ tướng nào trong cảnh, script bỏ qua cảnh để chạy lại sau.
    Bỏ qua PNG gốc đã có; đặt `REDO=1` để vẽ lại các cảnh được chỉ định, xuất vào
    `public/art/story/`.
 
-8. **Tư thế kết liễu** — mỗi tướng có `champions/{id}/finisher.webp` cho hiệu ứng Kết liễu: cùng nhân vật với
+8. **Tư thế kết liễu**: mỗi tướng có `champions/{id}/finisher.webp` cho hiệu ứng Kết liễu: cùng nhân vật với
    cut-out (gửi cut-out làm `--ref`, chèn toàn bộ `look`), lao người theo đường chéo từ trên trái xuống dưới
    phải, đầu cơ thúc về góc dưới phải, một vệt mực màu môn phái theo sau đầu cơ, nền trong suốt, khổ
    1536×1024. Xuất bản cắt sát, tối đa 820 px, webp chất lượng 74 (khoảng 230 KB mỗi tướng). Nếu thiếu tranh,

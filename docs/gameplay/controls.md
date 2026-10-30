@@ -16,7 +16,7 @@ Nguồn: `src/ui/screens/match-screen.ts` (trận) và `practice-desk.ts` (Luy�
 ## Áp phê và nâng cơ
 
 - **Giữ hoặc kéo** bi cái nhỏ: mở một bi lớn tạm thời, ngón tay dời điểm đánh, thả là đóng.
-- **Chạm** bi cái nhỏ: mở bảng chỉnh chính xác — kéo điểm đánh trên bi lớn hoặc chọn nhanh (Giữa, Trô, Cule,
+- **Chạm** bi cái nhỏ: mở bảng chỉnh chính xác: kéo điểm đánh trên bi lớn hoặc chọn nhanh (Giữa, Trô, Cule,
   Giật, Trái, Phải), và thanh Nâng cơ cho cú nhảy. Góc nâng cơ điều khiển cú nhảy vật lý 2.5D; bi có thể văng
   bàn và luật xử lý văng bàn phải giữ đúng.
 
@@ -47,8 +47,8 @@ Nguồn: `src/ui/screens/match-screen.ts` (trận) và `practice-desk.ts` (Luy�
 - Ba ô icon tranh riêng của tướng; chạm mở thẻ chi tiết, không thi triển ngay.
 - Chiêu đặt bàn vào bước đặt: kéo/chạm bàn hoặc mũi tên, đổi chiều/băng (phím R), **THI TRIỂN** xác nhận,
   **Huỷ đặt chiêu** không tiêu chiêu.
-- Tuyệt chiêu được ghi nhận khi xác nhận, nhưng diễn hoạt chờ ĐÁNH: khoá điều khiển → cut-in → hiệu ứng bàn →
-  cơ vung → mô phỏng. Người và AI đi cùng luồng; tạm dừng và rời trận đều huỷ đúng.
+- Tuyệt chiêu được ghi nhận khi xác nhận, nhưng diễn hoạt chờ ĐÁNH. Thứ tự là khoá điều khiển, cut-in, hiệu ứng
+  bàn, cơ vung, rồi mô phỏng. Người và AI đi cùng luồng; tạm dừng và rời trận đều huỷ đúng.
 
 ## Thông báo và tạm dừng
 

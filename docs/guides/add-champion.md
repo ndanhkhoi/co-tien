@@ -5,18 +5,18 @@ chạy `npm test` và `npm run build` sau mỗi bước.
 
 ## Thêm một tướng
 
-1. **Dữ liệu** — thêm vào `src/game/content/roster.json`: `id`, `name`, `sect`, `tier`, `kind` (một trong sáu
+1. **Dữ liệu**: thêm vào `src/game/content/roster.json`: `id`, `name`, `sect`, `tier`, `kind` (một trong sáu
    loại tạo hình), `cls` (một trong bảy hệ), ba `skills` (slot 0/1 cơ bản, slot 2 tuyệt chiêu; `kinds` lấy từ
    `SkillKind`). Phần mô tả để vẽ: `look` (ghi rõ giới tính và một tổ hợp nét nhận diện không trùng tướng
    khác), `pose`, `expr`, và `icon` cho từng chiêu. Bản build lược các trường mô tả vẽ; code game không đọc chúng.
-2. **Tên** — tên tướng và chiêu phải nguyên bản, không lấy từ game hay tác phẩm khác.
+2. **Tên**: tên tướng và chiêu phải nguyên bản, không lấy từ game hay tác phẩm khác.
    `tests/roster-names.test.ts` kiểm tra tên chiêu không trùng và không lặp chữ đầu quá nhiều trong môn phái.
-3. **Truyện** — tiểu sử và câu nói vào `src/game/content/lore.json`.
-4. **Tranh** — theo [art-pipeline.md](art-pipeline.md): cut-out, chân dung, biểu cảm, ăn mừng, ba icon chiêu
+3. **Truyện**: tiểu sử và câu nói vào `src/game/content/lore.json`.
+4. **Tranh**: theo [art-pipeline.md](art-pipeline.md): cut-out, chân dung, biểu cảm, ăn mừng, ba icon chiêu
    và tư thế Kết liễu `champions/{id}/finisher.webp`. Duyệt từng tấm trước khi xuất vào `public/art/`.
-5. **Tài liệu** — thêm tướng vào bảng môn phái trong [world/world-bible.md](../world/world-bible.md) (tên, loại,
+5. **Tài liệu**: thêm tướng vào bảng môn phái trong [world/world-bible.md](../world/world-bible.md) (tên, loại,
    hệ, tên và nhóm cơ chế của ba chiêu).
-6. **Kiểm tra** — `npm test`, `npm run build`, rồi mở trang tướng và một trận Tiên Đạo để thử ba chiêu.
+6. **Kiểm tra**: `npm test`, `npm run build`, rồi mở trang tướng và một trận Tiên Đạo để thử ba chiêu.
 
 ## Thêm một môn phái
 

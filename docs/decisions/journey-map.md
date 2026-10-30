@@ -3,8 +3,8 @@
 ## Bối cảnh
 
 Bản đồ `public/art/ui/map.webp` (3:2) phải vẽ đúng tuyến `CHAPTERS` trong `src/game/content/career.ts`:
-Thiên Quang → Hoa Linh → Hải Long → Thiên Cơ → Băng Phách → Độc Vụ → Kim Sa → Vạn Thú → Huyết Sát → U Minh →
-Tinh Tú → Thiên Hương → Hư Không.
+lần lượt Thiên Quang, Hoa Linh, Hải Long, Thiên Cơ, Băng Phách, Độc Vụ, Kim Sa, Vạn Thú, Huyết Sát, U Minh,
+Tinh Tú, Thiên Hương và cuối cùng là Hư Không.
 
 ## Quyết định
 

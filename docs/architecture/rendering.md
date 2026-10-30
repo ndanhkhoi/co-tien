@@ -15,12 +15,12 @@
 - **Chỉ vẽ lại khi hình đổi.** Mỗi khung `TableView` gom mọi biến đổi, texture, hướng xoay bi và lệnh vẽ đường
   ngắm thành một dãy số và so với khung trước; `App` tắt render tự động của ticker và màn trận chỉ gọi
   `app.pixi.render()` khi `shouldRender()` đúng (cộng vài khung bắt buộc sau đổi kích thước, quay lại ứng dụng,
-  khôi phục WebGL). Bàn đứng yên lúc ngắm hay chờ AI vì thế không tốn GPU — quan trọng cho pin điện thoại.
+  khôi phục WebGL). Bàn đứng yên lúc ngắm hay chờ AI vì thế không tốn GPU, điều quan trọng với pin điện thoại.
 - **Đường đi của Thần Nhãn / Luyện thế mọc dần** trong ngân sách `EAGLE_BUDGET_MS` mỗi khung, nên kéo ngắm vẫn mượt.
 - **Giới hạn mật độ canvas** ở 2× và khoảng 3,6 MP (`src/ui/app.ts`) vì canvas phủ cả cửa sổ; MSAA chỉ bật khi
   màn hình kém nét.
 - **Texture canvas thuộc về một `TableView`**: vẽ lại thì huỷ bản cũ, `destroy()` huỷ hết cùng shader bi, nên
-  vào–ra trận bao nhiêu lần bộ nhớ GPU vẫn như cũ. Ảnh tải qua `Assets` dùng chung và không bị huỷ.
+  vào ra trận bao nhiêu lần bộ nhớ GPU vẫn như cũ. Ảnh tải qua `Assets` dùng chung và không bị huỷ.
 - **Mất WebGL**: PixiJS tự dựng lại khi trình duyệt trả context; quá lâu thì `app.ts` hiện bảng "Đồ hoạ bị gián
   đoạn" với nút Tải lại.
 - **Cây cơ tranh được phóng theo bề dày thân phía đầu cơ** (đo một lần từ kênh alpha), nên tua rua hay chạm

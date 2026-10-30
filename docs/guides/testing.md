@@ -26,7 +26,7 @@ Tên file trong `tests/` nói lên phạm vi. Những test giữ một quy tắc
 | `shot-score.test.ts` | Cách chấm điểm cú |
 | `skill-usage.test.ts` | AI dùng chiêu, năng lượng và hồi chiêu |
 
-Test sai thì sửa code, không sửa test cho qua — trừ khi quy tắc thực sự đổi và đã được đồng ý.
+Test sai thì sửa code, không sửa test cho qua, trừ khi quy tắc thực sự đổi và đã được đồng ý.
 
 ## Kiểm tra trên thiết bị
 

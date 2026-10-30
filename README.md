@@ -1,7 +1,7 @@
-# Cơ Tiên — bida × tu tiên
+# Cơ Tiên: bida tu tiên
 
 Game bida cho điện thoại (màn hình ngang) và máy tính, với vật lý và luật bida thật, đặt trong một thế giới
-tiên hiệp riêng: **Cơ Tiên Giới** — 13 môn phái, 65 tướng, mỗi tướng có một nội tại và ba chiêu. Cài được như
+tiên hiệp riêng: **Cơ Tiên Giới** với 13 môn phái, 65 tướng, mỗi tướng có một nội tại và ba chiêu. Cài được như
 ứng dụng (PWA), chơi offline, không cần tài khoản.
 
 **Chơi ngay:** https://cotien.khoinda.vn/
@@ -32,7 +32,7 @@ tiên hiệp riêng: **Cơ Tiên Giới** — 13 môn phái, 65 tướng, mỗi 
 | **Song Đấu** | Hai người chung một máy, mỗi bên chọn tướng và cơ riêng |
 | **Luyện Cơ** | 60 thử thách có lời giải đã kiểm chứng, chấm sao |
 | **Luyện thế** | Tự bày thế, đánh tự do, đánh lại, xem trước đường đi của mọi bi |
-| **Tàng Các** | Tướng, Pháp Cơ, Linh Đài và Cơ Tiên Lục — wiki của thế giới |
+| **Tàng Các** | Tướng, Pháp Cơ, Linh Đài và Cơ Tiên Lục: wiki của thế giới |
 | **Cơ Tiên Truyện** | Truyện chữ có tranh thuỷ mặc, 15 chương mở dần theo Hành trình |
 
 **Làm cho điện thoại.**
@@ -82,24 +82,24 @@ npm run build
 
 Tài liệu:
 
-- [docs/README.md](docs/README.md) — mục lục tài liệu: kiến trúc, lối chơi, thế giới, hướng dẫn, quyết định
-- [CONTRIBUTING.md](CONTRIBUTING.md) — quy tắc và quy trình đóng góp
-- [AGENTS.md](AGENTS.md) — quy tắc cho AI agent
+- [docs/README.md](docs/README.md): mục lục tài liệu gồm kiến trúc, lối chơi, thế giới, hướng dẫn, quyết định
+- [CONTRIBUTING.md](CONTRIBUTING.md): quy tắc và quy trình đóng góp
+- [AGENTS.md](AGENTS.md): quy tắc cho AI agent
 
 ## Ý tưởng, nội dung và đồ hoạ đến từ đâu
 
-- **Ý tưởng và định hướng:** tác giả (Nguyễn Đức Anh Khôi) — game bida tu tiên, thế giới Cơ Tiên Giới, lối
+- **Ý tưởng và định hướng:** tác giả (Nguyễn Đức Anh Khôi): game bida tu tiên, thế giới Cơ Tiên Giới, lối
   chơi, phong cách Thuỷ Mặc, tên game, và mọi quyết định duyệt hay loại nội dung.
 - **Nguyên bản:** toàn bộ tên, truyện, môn phái, nhân vật, chiêu thức và tranh là sáng tác riêng cho Cơ Tiên,
   không dùng nội dung của bất kỳ game hay tác phẩm nào khác.
-- **Viết nội dung và code:** phát triển cùng trợ lý AI (Claude, qua Claude Code) theo chỉ đạo của tác giả —
+- **Viết nội dung và code:** phát triển cùng trợ lý AI (Claude, qua Claude Code) theo chỉ đạo của tác giả;
   trợ lý đề xuất và viết, tác giả chọn và duyệt.
 - **Đồ hoạ:** toàn bộ tranh vẽ bằng mô hình sinh ảnh AI (`cx/gpt-6-sol-image` qua 9router) theo prompt viết
   riêng cho game, rồi duyệt và chỉnh từng tấm: [docs/guides/art-pipeline.md](docs/guides/art-pipeline.md).
 
 ## Giấy phép
 
-- **Mã nguồn:** MIT — xem [LICENSE](LICENSE).
+- **Mã nguồn:** MIT, xem [LICENSE](LICENSE).
 - **Agent skill bên thứ ba** trong `.claude/skills`, giữ nguyên bản gốc:
   - các skill game dev lấy từ
     [gamedev-skills/awesome-gamedev-agent-skills](https://github.com/gamedev-skills/awesome-gamedev-agent-skills),
