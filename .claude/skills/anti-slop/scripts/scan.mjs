@@ -31,8 +31,8 @@ const RULES = [
     hint: 'tiếng Việt không dùng nháy đơn cong; dùng “ ” hoặc bỏ' },
   { id: 'approx', level: 'error', re: /≈/g, allow: (t, i) => nearDigit(t, i),
     hint: '"≈" chỉ đứng cạnh số; trong câu viết "khoảng"' },
-  { id: 'times', level: 'error', re: /×/g, allow: (t, i) => nearDigit(t, i),
-    hint: '"×" chỉ dùng giữa số (844×475, ×2)' },
+  { id: 'times', level: 'error', re: /×/g, allow: allowTimes,
+    hint: '"×" chỉ dùng giữa số (844×475, ×2), trừ đúng tên "bida × tu tiên"' },
   { id: 'space-before-punct', level: 'error', re: / +[,.;:!?](?=\s|$)/g, allow: allowSpaceBeforePunct,
     hint: 'tiếng Việt không có khoảng trắng trước dấu câu' },
   { id: 'emoji', level: 'error', re: /\p{Extended_Pictographic}/gu,
@@ -69,6 +69,11 @@ function allowEnDash(t, i) {
 function nearDigit(t, i) {
   const l = t.slice(Math.max(0, i - 2), i), r = t.slice(i + 1, i + 3);
   return /[0-9\u0001]\s?$/.test(l) || /^\s?[0-9\u0001]/.test(r);
+}
+// Tên game do chủ dự án chọn; chỉ chính cụm này được dùng "×" ngoài số.
+function allowTimes(t, i) {
+  if (nearDigit(t, i)) return true;
+  return /bida\s*$/iu.test(t.slice(Math.max(0, i - 12), i)) && /^\s*tu\s+tiên/iu.test(t.slice(i + 1, i + 16));
 }
 
 // Gạch dài hợp lệ: gạch đầu lời thoại (đầu đoạn) và gạch dẫn lời trong cùng đoạn thoại;

@@ -11,7 +11,7 @@ nên chúng là dấu hiệu dễ thấy nhất. Bảng dưới là luật scrip
 | `…` ba chấm | Lời bỏ lửng, chữ "Đang tải…" | `...` ba dấu chấm: đổi thành `…` cho thống nhất |
 | `“ ”` nháy kép cong | Trích lời, tên gọi trong văn tiếng Việt | Mở mà không đóng, hoặc trộn với `"` thẳng trong cùng đoạn văn |
 | `‘ ’` nháy đơn cong | Không dùng | Đổi thành `“ ”` hoặc bỏ |
-| `×` | Giữa số hoặc cạnh số (`844×475`, `×2`) | Nối hai khái niệm ("bida × tu tiên"); viết bằng chữ |
+| `×` | Giữa số hoặc cạnh số (`844×475`, `×2`); đúng tên game "bida × tu tiên" | Mọi cách nối hai khái niệm khác; viết bằng chữ |
 | `≈` | Cạnh số trong docs kỹ thuật | Trong câu, viết "khoảng" |
 | Emoji | Không dùng | Icon và trang trí đi qua art pipeline (`game-art`) |
 | NBSP, ZWSP, soft hyphen, BOM | Không dùng | Xoá; thường lọt vào khi chép từ web hay từ chat |
