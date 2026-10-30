@@ -6,7 +6,7 @@
 | `ball-mesh.ts` | Shader cầu của bi, lăn theo vận tốc góc thật |
 | `ball-warmup.ts` | Biên dịch sẵn shader trước trận |
 | `skill-fx.ts` | Ghép nét mực VFX môn phái theo nhóm cơ chế, flipbook tuyệt chiêu |
-| `omen-art.ts` | Lưới mũi tên mực của gió, to và nhanh theo sức gió |
+| `omen-art.ts` | Tranh phủ Thiên Tượng và chiêu đặt trên bàn (lưới gió, dải lụa, vật chắn) |
 | `art.ts` | Hình vẽ bằng canvas một lần rồi đưa lên texture: mặt bàn, cơ, atlas số bi, bóng |
 
 ## Quyết định
@@ -33,3 +33,5 @@
 - Tranh, icon và trang trí UI luôn là tranh vẽ qua pipeline ([guides/art-pipeline.md](../guides/art-pipeline.md)).
   Ngoại lệ vật thể mô phỏng không áp dụng cho chúng.
 - Màu nỉ mới phải qua `tests/sect-contrast.test.ts` để bi luôn dễ nhìn.
+- Tranh vùng đặt lấy kích thước từ terrain thật: dải lụa của Đường Cong Mê Hồn phủ đúng ba xoáy theo bậc chiêu,
+  kèm dấu chiều xoáy ở từng xoáy.

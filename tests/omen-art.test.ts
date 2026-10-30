@@ -65,6 +65,40 @@ describe('painted omen overlays', () => {
     expect(sprites()).toHaveLength(0);
     view.layer.destroy({ children: true });
   });
+  it('draws one silk ribbon over its vortices and keeps their spin marks readable', async () => {
+    const { match, view, sprites } = fixture();
+    await Promise.resolve();
+    const vortices = [
+      { x: -0.16, y: -0.08, r: 0.1, sense: 1 },
+      { x: 0, y: 0, r: 0.1, sense: -1 },
+      { x: 0.16, y: 0.08, r: 0.1, sense: 1 },
+    ];
+    match.activeEffects = [{
+      kind: 'silk', slot: 0, segments: [],
+      cast: { point: { x: 0.2, y: -0.1 }, direction: { x: 1, y: 2 } },
+      terrain: { vortices },
+    }] as unknown as Match['activeEffects'];
+    view.update(0);
+    const painted = sprites();
+    expect(painted).toHaveLength(4);
+    const [ribbon, ...spins] = painted;
+    const angle = Math.atan2(2, 1);
+    const axis = { x: Math.cos(angle), y: Math.sin(angle) };
+    const halfLength = vortices.reduce((reach, p) => Math.max(reach,
+      Math.abs((p.x - 0.2) * axis.x + (p.y + 0.1) * axis.y) + p.r), 0);
+    expect(ribbon.rotation).toBeCloseTo(angle);
+    expect(ribbon.x).toBeCloseTo(0.2);
+    expect(ribbon.y).toBeCloseTo(-0.1);
+    expect(ribbon.width * view.layer.scale.x).toBeCloseTo(halfLength * 2 * 250);
+    expect(ribbon.parent?.mask).toBeTruthy();
+    for (const [i, spin] of spins.entries()) {
+      expect(spin.x).toBeCloseTo(vortices[i].x);
+      expect(spin.y).toBeCloseTo(vortices[i].y);
+      expect(spin.rotation).toBe(0);
+    }
+    view.layer.destroy({ children: true });
+  });
+
   it('never lets the white bed mask draw when a pocket seal sits beside clipped terrain', async () => {
     const { match, view } = fixture();
     await Promise.resolve();

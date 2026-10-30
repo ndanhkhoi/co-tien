@@ -4,7 +4,7 @@ import type { CastEffect } from '../game/skill-cast';
 import type { Match } from '../game/match';
 
 const names = ['snow-drift', 'snowflakes', 'wind', 'petal', 'swell', 'sand', 'puddle', 'star-fall', 'star-well', 'roots', 'quake', 'gate-seal', 'silk', 'tilt', 'breath', 'mist'] as const;
-const skillNames = ['bumper-stone', 'bumper-wood', 'bumper-bronze', 'rail-soft', 'rail-hard', 'spinwash', 'slick', 'sand', 'well', 'vortex', 'wind', 'arrow', 'spin-cw', 'spin-ccw', 'target', 'mark'] as const;
+const skillNames = ['bumper-stone', 'bumper-wood', 'bumper-bronze', 'rail-soft', 'rail-hard', 'spinwash', 'slick', 'sand', 'well', 'vortex', 'silk', 'wind', 'arrow', 'spin-cw', 'spin-ccw', 'target', 'mark'] as const;
 type Art = typeof names[number] | `skill/${typeof skillNames[number]}`;
 const base = new URL(import.meta.env.BASE_URL, document.baseURI).href;
 
@@ -277,10 +277,21 @@ export class OmenArt {
   }
 
   private paintVortices(e: CastEffect, alpha: number): void {
-    for (const p of e.terrain.vortices ?? []) {
-      this.put({ name: 'skill/vortex', x: p.x, y: p.y, w: p.r * 2, h: p.r * 2, alpha });
-      this.put({ name: p.sense < 0 ? 'skill/spin-ccw' : 'skill/spin-cw', x: p.x, y: p.y, w: p.r * 1.4, h: p.r * 1.4, alpha: alpha + 0.2 });
-    }
+    const vortices = e.terrain.vortices ?? [];
+    if (e.kind === 'silk') this.paintSilk(e, vortices, alpha);
+    else for (const p of vortices) this.put({ name: 'skill/vortex', x: p.x, y: p.y, w: p.r * 2, h: p.r * 2, alpha });
+    for (const p of vortices) this.put({ name: p.sense < 0 ? 'skill/spin-ccw' : 'skill/spin-cw', x: p.x, y: p.y, w: p.r * 1.4, h: p.r * 1.4, alpha: alpha + 0.2 });
+  }
+
+  /** The ribbon replaces generic vortex discs; its length still comes from the simulated vortices. */
+  private paintSilk(e: CastEffect, vortices: NonNullable<CastEffect['terrain']['vortices']>, alpha: number): void {
+    const point = e.cast.point;
+    const direction = e.cast.direction;
+    if (!point || !direction || !vortices.length) return;
+    const axis = { x: direction.x / (Math.hypot(direction.x, direction.y) || 1), y: direction.y / (Math.hypot(direction.x, direction.y) || 1) };
+    const halfLength = vortices.reduce((reach, p) => Math.max(reach, Math.abs((p.x - point.x) * axis.x + (p.y - point.y) * axis.y) + p.r), 0);
+    const width = halfLength * 2;
+    this.put({ name: 'skill/silk', x: point.x, y: point.y, w: width, h: width * 161 / 512, alpha, rotation: Math.atan2(direction.y, direction.x) });
   }
 
   private paintObstacles(e: CastEffect, alpha: number): void {
