@@ -166,7 +166,7 @@ Theo đúng thứ tự Hành trình trong game. Mỗi chương: một vùng đ�
 
 ## Dùng trong game
 
-**Cơ Tiên Truyện** trong menu Truyện: mỗi chương mở khi thắng một cao thủ của vùng tương ứng trên Hành trình
+**Cơ Tiên Truyện** (ô riêng ở trang chủ): mỗi chương mở khi thắng một cao thủ của vùng tương ứng trên Hành trình
 (chương Hư Không và Vĩ thanh cần cao thủ bậc 5). Dữ liệu ở `src/game/content/story.json`: `chapters` (lời văn),
 `scenes` (đề bài tranh), `cast` (ai xuất hiện trong tranh). Tranh vẽ bằng
 `.claude/skills/game-art/scripts/gen-story-art.sh`, gửi kèm ảnh gốc của từng tướng để giữ đúng thiết kế; Vô

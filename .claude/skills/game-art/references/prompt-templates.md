@@ -1,6 +1,6 @@
 # Prompt templates
 
-Fill the `{…}` slots from `docs/world-bible.md` and the palette table in `style-bible.md`.
+Fill the `{…}` slots from `docs/world/world-bible.md` and the palette table in `style-bible.md`.
 Keep the fixed sentences verbatim: they are what keeps 60 champions looking like one game.
 
 ## Character cut-out (do this FIRST for each champion; it is the reference for the rest)

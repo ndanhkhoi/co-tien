@@ -8,7 +8,7 @@ description: Vẽ mới hoặc vẽ lại tài sản nguyên bản cho Cơ Tiên
 Mọi tranh, icon, minh hoạ và trang trí UI phải được sinh riêng, nguyên bản cho Cơ Tiên qua 9router với model `cx/gpt-6-sol-image`; không tải từ internet, không dùng nhân vật, tên hay biểu tượng của tác phẩm khác, không tự vẽ SVG, không emoji hoặc thư viện icon. Code/shader chỉ được vẽ vật thể mô phỏng như bi và bàn (hình học, số/sọc, màu, ánh sáng và xoay theo vật lý); không dùng ngoại lệ này để thay tranh, icon hay trang trí UI.
 Đọc trước khi vẽ:
 
-- `docs/world-bible.md` — môn phái, hệ, tướng, chiêu
+- `docs/world/world-bible.md` — môn phái, hệ, tướng, chiêu
 - `references/style-bible.md` — phong cách, bảng màu, nền, kích thước
 - `references/prompt-templates.md` — khối prompt theo loại tài sản
 

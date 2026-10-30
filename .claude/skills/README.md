@@ -16,7 +16,7 @@ Each folder holds a `SKILL.md` (when to use it, how) plus optional references an
 | `audio-design` | The synthesized WebAudio sound (`src/audio`). |
 | `save-systems` | The player profile, migrations and save codes (`src/game/profile.ts`). |
 | `performance-optimization` | Keeping 60 fps on phones: physics stepping, draw calls, asset sizes, precache. |
-| `fiction-workshop` | Writing and editing Cơ Tiên Truyện (`src/game/content/story.json`): line editing, character voice, continuity. `docs/world-bible.md` is the story bible. |
+| `fiction-workshop` | Writing and editing Cơ Tiên Truyện (`src/game/content/story.json`): line editing, character voice, continuity. `docs/world/world-bible.md` is the story bible. |
 
 ## Third-party notice
 

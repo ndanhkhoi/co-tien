@@ -89,8 +89,10 @@ npm run gen:challenges # sinh lại bộ thử thách (có kiểm chứng lời 
 ```
 
 TypeScript, Vite, PixiJS 8 (WebGL), vite-plugin-pwa. Âm thanh tổng hợp bằng WebAudio, không có file âm
-thanh. Tài liệu: [kiến trúc](docs/architecture.md) · [thế giới](docs/world-bible.md) · [cốt truyện](docs/story.md) ·
-[đồ hoạ](docs/art-pipeline.md) · [đóng góp](CONTRIBUTING.md) · [AGENTS.md](AGENTS.md) cho AI agent.
+thanh.
+
+**Tài liệu:** bắt đầu từ [docs/README.md](docs/README.md) (kiến trúc, lối chơi, thế giới, hướng dẫn, quyết
+định). Đóng góp: [CONTRIBUTING.md](CONTRIBUTING.md). AI agent: [AGENTS.md](AGENTS.md).
 
 ## Ý tưởng, nội dung và đồ hoạ đến từ đâu
 
@@ -102,7 +104,7 @@ thanh. Tài liệu: [kiến trúc](docs/architecture.md) · [thế giới](docs/
   giả — trợ lý đề xuất và viết, tác giả chọn và duyệt.
 - **Đồ hoạ:** toàn bộ tranh được vẽ bằng mô hình sinh ảnh AI (`cx/gpt-6-sol-image` qua
   9router) theo prompt viết riêng cho game, rồi duyệt và chỉnh từng
-  tấm. Quy trình, công cụ và tiêu chí duyệt: [docs/art-pipeline.md](docs/art-pipeline.md) và skill
+  tấm. Quy trình, công cụ và tiêu chí duyệt: [docs/guides/art-pipeline.md](docs/guides/art-pipeline.md) và skill
   `.claude/skills/game-art`.
 
 ## Giấy phép

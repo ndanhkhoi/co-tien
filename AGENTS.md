@@ -1,97 +1,65 @@
 # AGENTS.md — working on Cơ Tiên
 
-Instructions for AI coding agents (and humans) contributing to this repo. Read `CONTRIBUTING.md` and the
-docs it links before large changes.
-
-## What this is
-
-Cơ Tiên ("bida × tu tiên"): a mobile-first landscape billiards game with real physics and WPA/UMB rules, set
-in an original xianxia world of 13 sects and 65 champions with skills. TypeScript + Vite + PixiJS 8, shipped
-as a PWA on Cloudflare Pages (`https://cotien.khoinda.vn/`). No backend.
+Rules for AI coding agents in this repo. Cơ Tiên is a mobile-first landscape billiards PWA (TypeScript, Vite,
+PixiJS 8) with an original xianxia world; no backend. Find the doc for the area you touch in
+[docs/README.md](docs/README.md); contribution rules and the full code principles are in
+[CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## Commands
 
 ```bash
-npm run dev          # dev server (append ?gate to preview the install screen)
-npm test             # vitest: physics, rules, AI, challenges, practice, shot score, wind, ball/felt contrast
-npm run build        # tsc + vite build (must pass before committing)
-npm run gen:challenges
+npm run dev               # dev server; ?gate shows the install screen, ?loading the art loader
+npm test                  # vitest
+npx vitest run tests/X.test.ts
+npm run build             # tsc + vite build
+npm run gen:challenges    # regenerate challenges.json after physics/rule changes; never hand-edit it
 ```
 
-## Map
+Done means `npm test` and `npm run build` both pass, and the owning doc is updated in the same change.
 
-- `src/core` physics, table geometry (WPA sizes), racks, rules, shot score (`shot-score.ts`) — pure, no DOM
-- `src/game` match state machine, terrain (Thiên Tượng), profile, Luyện thế drills and saved positions (`practice.ts`); `content/` holds the data
-  (`roster.json` sects/champions/skills, `lore.json` stories, `story.json` Cơ Tiên Truyện, `career.ts`, `challenges.json`)
-- `src/ai` shot-search opponent in a Web Worker
-- `src/render` PixiJS table, ball shader, skill FX
-- `src/ui` DOM screens over the canvas (`finisher.ts` is the Kết liễu sequence, `screens/practice*.ts` Luyện thế); `src/styles/{base,kit,screens,match,skin}.css` define the Thuỷ Mặc UI
-- `src/platform` device, install gate and the art loader (`preload.ts`)
-- `public/art` processed art (webp); master art lives outside the repo
-- `.claude/skills` agent skills; `game-art` is this project's art pipeline
+## Never
 
-## Rules
+- Never rename the save key `thancong.profile.v1` or bypass `sanitize` in `src/game/profile.ts`.
+  Practice saves (`cotien.practice.v1`) go through `sanitizeSaved`.
+- Never move balls by script. Skills and terrain are forces, friction, obstacles or pocket size in the
+  simulation; tilt/wind stays below rolling resistance (μr·g ≈ 0.108 m/s²). Wind keeps one direction per turn.
+- Never use names, art or abilities from another game or franchise, and never mention any game as inspiration
+  in the repo, docs or commits.
+- Never add hand-drawn SVG, emoji, icon libraries or internet images. Illustrations, icons and UI decoration
+  come from the art pipeline (`.claude/skills/game-art`, model `cx/gpt-6-sol-image` via 9router). Code and
+  shaders may only render simulated objects (balls, table).
+- Never commit `.env.image-api` or any API key.
+- Never import upward: `core` ← `game` ← `ai`/`render` ← `ui`; `platform` and `audio` are leaves.
+- Never read layout (`getBoundingClientRect`, `offsetWidth`) in per-frame code; use `uiOrigin()`/`uiScale()`.
+- Never use viewport media queries, `vw` or `vh` inside the 844×475 frame.
+- Never key art caches by build, and never apply a PWA update during a match.
+- Never read the roster art briefs (`look`, `pose`, `expr`, skill `icon`, sect `motifs`/`emblem`/`element`)
+  from game code; `vite.config.ts` strips them from the build.
+- Never change game defaults for screenshots.
 
-1. **Real physics.** Skills and terrain must be forces, friction, obstacles or pocket size in the simulation.
-   Tilt/wind stays below rolling resistance (μr·g ≈ 0.108 m/s²) so resting balls never creep. Wind keeps one
-   direction for the turn (gusts only ease off, `tests/terrain-wind.test.ts`) and its strength is shown.
-2. **Original IP only.** Never use names, art or abilities from any other game or franchise. Reject
-   generated art that resembles a known character.
-3. **Thuỷ Mặc look.** Paper, black ink, one vermilion accent, serif display type (Noto Serif), body in Be
-   Vietnam Pro; no glow, no gold 3D text. Champions keep their colourful anime design on paper backgrounds.
-4. **Readable balls.** Any felt colour must pass `tests/sect-contrast.test.ts`.
-5. **One 16:9 frame.** DOM design is 844×475; `main.ts` uniformly scales it as large as the safe viewport allows (maximum scale 2.2), centred, inside the painted stage frame, except the native-size install gate. Nothing inside the frame may depend on the window (no viewport media queries or `vw`/`vh`). The letterbox shows the painted backdrop, never a flat colour. Nine-slice frames (`border-image`) keep a 1px transparent border: WebKit paints no border image on zero-width borders. Canvas table fitting includes the DOM frame offset. Test at 932×430 touch and 1280×800 mouse; touch targets ≥ 44 px; respect reduced motion.
-6. **Data first.** Champions/sects are data; keep all 195 skill names in sync. `kind` is one of six appearance types, `cls` selects one of seven passives; slots 0/1 are basics, slot 2 is ultimate. Eight placed families are `slick`, `sand`, `bumper`, `railcraft`, `wind`, `well`, `spinwash`, `vortex`; keep `docs/world-bible.md` in sync with `roster.json`/`lore.json`.
-7. **Saves are sacred.** Profile changes go through `sanitize` in `src/game/profile.ts`; never rename the
-   storage key `thancong.profile.v1`.
-8. **Art and simulation rendering.** All illustrations, icons and UI decoration must be original painted assets generated through the art pipeline; no internet assets, franchise material, hand-drawn SVG, emoji or icon libraries. Code/shaders may render simulated objects such as balls and the table: geometry, numbers/stripes, colours, lighting and rotation driven by physics. This exception does not cover illustrations, icons or UI decoration.
-   **Art via the skill.** Use `.claude/skills/game-art` (prompts, references, scripts). The image API key lives
-   in `.env.image-api` (gitignored) — never commit it. Generate through 9router with model `cx/gpt-6-sol-image`.
-   **Vietnamese UI.** Write all player-facing UI copy in Vietnamese.
-   The roster's art briefs (`look`, `pose`, `expr`, skill `icon`, sect `motifs`/`emblem`/`element`) are stripped
-   from the shipped build by `vite.config.ts`; game code must not read them.
-9. Conventional commits, one concern per commit, no AI references in commit messages. Run `npm test` and
-   `npm run build` first.
-10. **Code principles (mandatory for every new feature and change): DRY, KISS, YAGNI, SOLID.** See below.
+## Always
 
-## Code principles
+- Write all player-facing copy in Vietnamese. Keep the Thuỷ Mặc look: paper, black ink, one vermilion accent,
+  Noto Serif display, Be Vietnam Pro body, no glow or gold 3D text.
+- New felt colours must pass `tests/sect-contrast.test.ts`.
+- Nine-slice frames (`border-image`) keep a 1px transparent border (WebKit paints none on zero-width borders).
+- Touch targets ≥ 44 px after scaling; respect `prefers-reduced-motion`.
+- Check UI changes at 932×430 touch and 1280×800 mouse; WebKit-specific bugs need a real iPhone.
+- Keep `docs/world/world-bible.md` in sync with `roster.json`/`lore.json`, and all 195 skill names unique.
+  Slots 0/1 are basics, slot 2 the ultimate; `kind` is appearance, `cls` the passive.
+- Add sects, champions, skill kinds, omens and modes through data or a registry entry, not new
+  `if (mode === …)` / `kind === …` branches.
+- Put new code for `match-screen.ts`, `match.ts`, `menus.ts`, `table-view.ts` or `brain.ts` in a new focused
+  module; new files stay under ~500 lines, functions under ~80.
+- Treat [docs/gameplay/controls.md](docs/gameplay/controls.md) and the mode table in
+  [docs/architecture/match-and-modes.md](docs/architecture/match-and-modes.md) as the player contract: preserve
+  them, or update them in the same change when the request changes them.
+- Use the art loader in `src/platform/preload.ts` for art; add new art under paths the manifest picks up.
+- When a change alters a screen pictured in README or docs, retake exactly those screenshots (932×430 @2x,
+  player champion Ngân Cầm `ngancam` in the screenshot browser's profile only) and update their captions.
+- Commit with Conventional Commits, one concern per commit, no AI references in messages.
 
-Every change must follow these. A reviewer rejects code that breaks them; "the old code does it too" is not a
-reason. When you touch code that already breaks them, do not make it worse, and leave it better if the fix is local.
+## Skills
 
-- **DRY.** One source of truth per fact: rules, numbers, Vietnamese labels, sect data, CSS declarations. Before
-  writing a helper or constant, search for an existing one (`src/ui/dom.ts`, `src/core/*`, `content/*`). A
-  second copy of logic means extract it; a CSS property set in two stylesheets for the same selector means
-  one of them is dead, so keep it in the owning file only (layout in `base/kit/screens/match`, painted look in `skin`).
-- **KISS.** The simplest code that is correct. Prefer plain functions and data over classes, flags and
-  indirection. Functions stay under ~80 lines and files under ~500 lines; a new file must not cross that, and
-  new code for a file already over it (`match-screen.ts`, `match.ts`, `menus.ts`, `table-view.ts`, `brain.ts`)
-  goes into a new focused module that the big file calls.
-- **YAGNI.** Build only what the current request needs. No speculative options, parameters, exports, config
-  or "for later" hooks. Delete code that nothing uses (an `export` with no importer is dead unless a test uses it).
-- **SOLID.**
-  - *Single responsibility:* one module, one reason to change (a screen, a game system, a rule set, a painter).
-    Do not add a new concern to `Match` or the `matchScreen` closure; give it its own module with a narrow API.
-  - *Open/closed:* add a sect, champion, skill kind, omen or mode through data or a registry entry, not by
-    adding `if (mode === …)` / `kind === …` branches across files.
-  - *Liskov:* every `RuleSet` (`src/core/rules`) and every placed-skill family honours the same contract, so
-    match, preview and AI can use any of them unchanged.
-  - *Interface segregation:* pass the narrow type a consumer needs (`Pick<Match, …>`, a plain view model)
-    instead of the whole `Match` or `App`.
-  - *Dependency direction:* `core` imports nothing from the app; `game` imports `core`; `ai` and `render`
-    import `core`/`game`; `ui` sits on top; `platform` and `audio` stay leaves. Never import upward.
-
-## Loading and modes
-
-Use the loader in `src/platform/preload.ts`: art lives in the lasting `art` cache with a content revision per file; the first launch downloads the whole set, builds with changed art refetch only those files, data saver limits it to the core, menus fill gaps when idle, and matches check and decode their champions. Never key art caches by build. PWA updates apply from menus or on leaving the stage; preserve that match boundary. Outside a match, a new build blocks the menus from the moment it starts downloading, so nobody keeps playing an old build. `skin.css` loads last; preserve reduced-motion handling. Tiên Đạo enables skills/passives/terrain; Cổ Điển and challenges disable them. Energy is +6 per shot plus +11 per point of shot score (`src/core/shot-score.ts`); Ảnh Sát needs a run of ≥4 balls worth ≥5 points. A rack won by the winner's own clean shot plays Kết liễu (`champions/{id}/finisher.webp`) in every mode except Luyện Cơ and Luyện thế. The renderer caps canvas density at 2× and about 3.6 MP; per-frame HUD code must not force layout (use `uiOrigin()`). Menu names: Hành trình, Luận Cơ, Song Đấu, Luyện Cơ (graded drills), Tàng Các (owned champions, cues, tables, plus Cơ Tiên Lục as the Vùng đất/Hệ/Luật tabs), Cơ Tiên Truyện, Luyện thế (pick a drill or a saved position, arrange it from the ball tray, shoot freely, Đánh lại takes the last shot back; saved positions live in `cotien.practice.v1`, sanitized in `src/game/practice.ts`).
-
-## Screenshots
-
-README and docs screenshots always use **Ngân Cầm** (`ngancam`) as the player's champion (home, setup screens, matches, skill and ultimate cards, Kết liễu, Tàng Các and the champion page). This only applies to the screenshot browser's profile; never change game defaults for it.
-
-When a change alters a screen that appears in a README or docs screenshot, retake exactly those screenshots
-(same 932×430 @2x frame, same screen state) in the same change and update the text that describes them.
-
-## Current controls
-
-Aim by dragging/tapping the table or the two rotation buttons. Holding or dragging the small cue-ball button opens a large ball to steer spin; tapping it opens the precise sheet (draggable point on the large ball, presets). Tap the power bar to set a level, drag to fine-tune, then tap ĐÁNH; after any shot the bar keeps showing that shot's power until a human turn starts, then shows that seat's own setting (each Song Đấu seat keeps its own); tapping a ball on the table names it; announcements close on any tap or their ✕, and the Thông báo giữa bàn setting (Settings and pause menu) hides them except fouls and rack wins; pocket calls show in the objective plate and nothing sits on the rails; nine- and ten-ball show the next two balls with the number on each ball, and tapping one names it on the cloth; holding ĐÁNH charges an oscillating meter, sliding away cancels. Ball-in-hand uses drag/tap or the round painted direction pad, Ngắm thử / Dời bi, then ĐẶT BI. In Luyện thế a tap on a ball names it, a drag only moves it. The active player's portrait carries a bobbing turn arrow; each card shows a ball tray (eight-ball: the whole group, balls still on the table faded). Leaving a match asks for confirmation. Song Đấu lets each player set name, owned champion (never the same as the other) and cue, plus the table; its Đổi tướng button re-rolls both champions from the owned ones, and Luận Cơ's Đổi đối thủ re-rolls the AI champion within the level's tiers. The pause menu shows the score, three quick switches (sound, music, announcements) and one column of actions. Preserve the three champion-specific painted skill icons and detail-before-use flow. The outer frame excludes safe areas once; touch-target tokens compensate for DOM scale. Verify rendered sizes. Cue elevation in the spin sheet drives physical 2.5D jumps; preserve off-table rule handling. Ultimate presentation waits for ĐÁNH, then cut-in → table FX → cue strike → simulation.
+`.claude/skills/README.md` lists the agent skills; `game-art` is this project's art pipeline and the place to
+start for any image work.

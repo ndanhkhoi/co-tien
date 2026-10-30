@@ -1,5 +1,8 @@
 # Đồ hoạ: được tạo thế nào
 
+Hướng dẫn vẽ, cắt và duyệt tranh. Chi tiết từng bước và script nằm trong skill
+`.claude/skills/game-art/SKILL.md`; file này giữ quy tắc và lý do.
+
 Toàn bộ tranh trong game (tướng, môn phái, icon chiêu, hiệu ứng, bản đồ, logo, icon ứng dụng, giao diện)
 được **vẽ bằng mô hình sinh ảnh AI** theo prompt riêng, rồi **duyệt nghiêm từng tấm**. Không tải ảnh từ
 internet hay lấy từ tác phẩm khác.
@@ -71,25 +74,13 @@ chứa bản đã xử lý cho game. Muốn vẽ lại hay vẽ thêm: đọc `.
 `.env.image-api` rồi chạy script với API và model được quy định ở trên. Không đưa khoá hay vị trí thư
 mục riêng vào tài liệu hoặc commit.
 
-## Bộ UI và bản đồ hành trình
+## Yêu cầu riêng cho tranh giao diện
 
-Các nút hành động dùng bộ tranh tròn `ui/actions/{strike,place,cast,cancel}.webp`, gồm cả icon và chữ
-thư pháp tiếng Việt; DOM chỉ giữ tên trợ năng. Icon cài đặt dùng bánh răng có lỗ trục rõ nghĩa.
-Tên tuyệt chiêu đặt trên tranh nét mực `ui/ultimate-banner.webp`.
-
-Khung chữ trong trận là ba tranh có phần giữa trơn để co giãn kiểu 9 lát: dải mực `ui/frame/band.webp`
-(thông báo), bảng tên `ui/frame/plate.webp` (khung người chơi, tên ở màn VS và thiết lập trận) và cuộn giấy
-`ui/frame/scroll.webp` (ô mục tiêu, nhãn bi, lời nhắc chiêu). Hoa văn chỉ nằm ở hai đầu để chữ không bao
-giờ đè lên. Nút đóng thông báo là icon vẽ `close` thu nhỏ, mực nhạt ở góc trên dải giấy. Logo `ui/logo.webp` ghi dòng phụ “BIDA × TU TIÊN” (dấu × màu son); mũi tên `ui/rotate-arrow.webp` ở màn xoay ngang dùng màu son của game. Khi vẽ khung mới
-cho 9 lát, yêu cầu rõ trong prompt: phần giữa phẳng, đều, trống; trang trí chỉ ở hai đầu ngắn.
-
-Cây cơ môn phái (`sects/{id}/cue-a|b.webp`) có thể kèm tua rua hay chạm khắc chìa ra; game đo bề dày thân
-cơ phía trước để phóng, nên thân cơ trong tranh phải thẳng và đều phía đầu cơ.
-
-Bản đồ `ui/map.webp` có tỷ lệ 3:2, được chọn từ ba phương án vẽ theo tuyến trong `career.ts`:
-Thiên Quang → Hoa Linh → Hải Long → Thiên Cơ → Băng Phách → Độc Vụ → Kim Sa → Vạn Thú →
-Huyết Sát → U Minh → Tinh Tú → Thiên Hương → Hư Không. Phương án hai được chọn vì đường đi
-liên tục và giữ địa hình tuyết phía bắc, biển phía đông, hoang mạc và vết nứt Hư Không.
-Loại phương án một có đường tắt sai tuyến và phương án ba đặt đường lệch đài Tinh Tú.
-Các mốc tương tác trong `journey.ts` phải khớp quảng trường trên tranh; số thứ tự lấy từ `CHAPTERS`,
-không tạo một tuyến độc lập trong UI. Khi thay tranh phải duyệt lại cả đường nối và tọa độ mốc.
+- **Khung chín lát** (`ui/frame/*.webp`): ghi rõ trong prompt rằng phần giữa phẳng, đều, trống và hoa văn chỉ
+  nằm ở hai đầu ngắn, để chữ không bao giờ đè lên hoa văn khi khung co giãn.
+- **Nút hành động** (`ui/actions/*.webp`) gồm cả icon và chữ thư pháp tiếng Việt; DOM chỉ giữ tên trợ năng.
+- **Cây cơ môn phái** (`sects/{id}/cue-a|b.webp`) có thể có tua rua hay chạm khắc chìa ra, nhưng thân cơ phía
+  đầu cơ phải thẳng và đều, vì game đo bề dày phần đó để phóng.
+- **Bản đồ Hành trình** (`ui/map.webp`, 3:2) phải khớp tuyến `CHAPTERS` trong `career.ts`; mốc tương tác trong
+  `journey.ts` nằm đúng quảng trường trên tranh. Thay tranh thì duyệt lại cả đường nối và toạ độ mốc. Vì sao
+  chọn phương án hiện tại: [decisions/journey-map.md](../decisions/journey-map.md).

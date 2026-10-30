@@ -1,0 +1,82 @@
+# Giao diện (`src/ui`, `src/styles`)
+
+Màn hình là DOM phủ trên canvas PixiJS. `src/ui/app.ts` giữ ngăn xếp màn hình, phông nền (`setBackdrop`) và
+chuyển cảnh.
+
+## Bản đồ
+
+| File | Sở hữu |
+|---|---|
+| `screens/menus.ts` | Trang chủ, Luận Cơ, Song Đấu, Tàng Các, Cài đặt |
+| `screens/journey.ts` | Bản đồ Hành trình; mốc lấy thứ tự từ `CHAPTERS` |
+| `screens/codex.ts` | Cơ Tiên Lục (tab Vùng đất, Hệ, Luật trong Tàng Các) |
+| `screens/challenges.ts` | Luyện Cơ |
+| `screens/practice.ts`, `practice-desk.ts` | Luyện thế: chọn thế và bảng bên bàn |
+| `screens/story.ts` | Đọc Cơ Tiên Truyện (chunk riêng, chỉ tải khi mở) |
+| `screens/match-screen.ts` | HUD trận, điều khiển, chiêu, cut-in |
+| `screens/loading.ts`, `install-gate.ts` | Màn tải tranh, màn bắt cài PWA (xem [platform.md](platform.md)) |
+| `finisher.ts`, `skill-cutin.ts` | Kết liễu, cut-in tuyệt chiêu |
+| `hints.ts`, `intro.ts`, `scroll-hint.ts` | Hướng dẫn người mới, gợi ý cuộn |
+| `viewport-guard.ts` | Bắt xoay ngang, cảnh báo cửa sổ quá nhỏ |
+| `icons.ts`, `avatar.ts`, `dom.ts` | Icon tranh `icon(name)`, chân dung, tiện ích DOM dùng chung (`uiOrigin`, `uiScale`) |
+
+Tìm trong `dom.ts` trước khi viết tiện ích DOM mới.
+
+## Một khung 16:9
+
+DOM có một khung thiết kế **844×475**. `installUiScale()` trong `src/main.ts` scale đều khung này to nhất có
+thể trong vùng màn hình đã trừ safe area (tối đa 2,2), căn giữa, nằm trong khung bình phong vẽ; phần thừa là
+phông tranh, không bao giờ là màu phẳng. Chỉ màn cài app dùng kích thước thật. Lý do:
+[decisions/one-16x9-frame.md](../decisions/one-16x9-frame.md).
+
+Hệ quả phải giữ:
+
+- Bên trong khung **không có media query, `vw` hay `vh`**; mọi thứ co dãn theo khung, không theo cửa sổ.
+- Safe area chỉ được trừ một lần, ở khung ngoài. Token vùng chạm trong `base.css` bù ngược `--ui-scale` để
+  vùng chạm hiển thị luôn ≥ 44 px.
+- Bố cục bàn canvas quy đổi biên HUD và độ lệch khung DOM sang pixel màn hình; sự kiện `cotien:ui-resize`
+  báo khung đổi kích thước.
+- Mã chạy mỗi khung hình không được đọc layout (`getBoundingClientRect`, `offsetWidth`); dùng `uiOrigin()` /
+  `uiScale()` và đo một lần khi bố cục đổi.
+- Khung nine-slice (`border-image`) giữ viền 1px trong suốt: WebKit không vẽ ảnh viền trên viền dày 0.
+- Trong trận (`body.playing`) phông và sương dừng trôi, vì chuyển động sau canvas trong suốt làm bàn giật trên
+  điện thoại.
+
+## CSS
+
+`src/main.ts` nạp năm file theo thứ tự; mỗi khai báo chỉ ở một file:
+
+| File | Sở hữu |
+|---|---|
+| `base.css` | Màu, chữ, nền đọc, safe area, token vùng chạm |
+| `kit.css` | Thành phần dùng chung: nút, thẻ chọn, hộp thoại |
+| `screens.css` | Bố cục các màn hình |
+| `match.css` | Bố cục giao diện trận |
+| `skin.css` | Nạp cuối: lớp tranh vẽ (khung, nút dấu son, chuyển trang, màn xuất hiện tướng) |
+
+Bố cục ở bốn file đầu, lớp tranh vẽ ở `skin.css`. Cùng một thuộc tính cho cùng selector ở hai file nghĩa là một
+bên là code chết.
+
+## Phong cách Thuỷ Mặc
+
+Giấy, mực đen, **một** màu son nhấn, chữ tiêu đề serif (Noto Serif), chữ thân Be Vietnam Pro. Không phát
+sáng, không chữ vàng 3D. Tướng giữ tạo hình anime màu sắc trên nền giấy. Mọi chữ người chơi thấy là tiếng
+Việt. Icon và trang trí là tranh vẽ, không SVG, emoji hay thư viện icon.
+
+Khung chữ trong trận là ba tranh co giãn kiểu chín lát, hoa văn chỉ ở hai đầu để chữ không đè lên:
+`ui/frame/band.webp` (thông báo), `plate.webp` (bảng tên), `scroll.webp` (ô mục tiêu, nhãn bi, lời nhắc).
+Nút hành động trong ván là tranh tròn có chữ thư pháp; tên thao tác nằm trong `aria-label`.
+
+## Chuyển động
+
+- Chuyển màn trong `app.ts` có hướng tiến/lùi/đặt lại; màn cũ thành `inert` rồi được gỡ khi chuyển xong.
+  `turnPage` giữ một bản sao không tương tác của nội dung cũ trong lúc nội dung thật đổi ngay.
+- Không đo layout trong vòng animation; bấm liên tiếp huỷ animation cũ.
+- Mọi chuyển động tôn trọng `prefers-reduced-motion`: trang cập nhật tức thời, Kết liễu hiện tĩnh, không rung.
+- Thời lượng và keyframe nằm trong `src/styles/skin.css` và `src/ui/finisher.ts`; đó là nguồn duy nhất.
+
+## Tàng Các
+
+Tab Tướng, Pháp Cơ, Linh Đài là đồ sở hữu; Vùng đất, Hệ, Luật là Cơ Tiên Lục. Trang tướng có ba nút icon chiêu
+riêng của tướng (`skillIconUrl(champion.id, slot)`); chạm mở thẻ chi tiết trước, không dùng ngay. Nút Tiểu sử
+chỉ mở với tướng đã gặp hoặc đã sở hữu. Xem trước bàn giữ đúng tỉ lệ bàn WPA gồm cả viền.

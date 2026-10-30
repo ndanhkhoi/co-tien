@@ -1,6 +1,6 @@
 # Style bible — Cơ Tiên Giới
 
-World, sects, classes and the champion roster live in `docs/world-bible.md`. This file is
+World, sects, classes and the champion roster live in `docs/world/world-bible.md`. This file is
 the visual contract every generated image must follow.
 
 ## Brand look: Thuỷ Mặc (chosen)

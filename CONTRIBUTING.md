@@ -1,94 +1,61 @@
 # Đóng góp cho Cơ Tiên
 
-Cảm ơn bạn muốn mở rộng Cơ Tiên. Tài liệu nên đọc trước:
-
-- `docs/architecture.md` — code được tổ chức thế nào, luồng một cú đánh
-- `docs/world-bible.md` — thế giới, môn phái, hệ, tướng, chiêu
-- `docs/art-pipeline.md` — đồ hoạ được tạo và duyệt thế nào
-- `AGENTS.md` — quy tắc làm việc (cho người lẫn AI agent)
+Cảm ơn bạn muốn mở rộng Cơ Tiên. Trước thay đổi lớn, đọc [docs/README.md](docs/README.md) để tìm tài liệu
+đúng phần mình sửa.
 
 ## Cài đặt
 
 ```bash
 npm install
-npm run dev        # http://localhost:5173  (thêm ?gate để xem màn hình cài đặt PWA)
-npm test           # vật lý, luật, AI, thử thách, Luyện thế, chấm điểm cú, gió, tương phản bi–nỉ
-npm run build      # typecheck + bản production vào dist/
+npm run dev        # http://localhost:5173 (thêm ?gate để xem màn cài app)
 ```
 
-## Quy tắc
+Lệnh test và kiểm tra trên thiết bị: [docs/guides/testing.md](docs/guides/testing.md).
 
-- **Vật lý và luật là thật.** Mọi chiêu và Thiên Tượng phải biểu diễn bằng lực, ma sát, chướng ngại hoặc
-  kích thước lỗ trong mô phỏng — không dịch chuyển bi tuỳ tiện. Lực nghiêng/gió phải nhỏ hơn lực cản lăn; gió
-  giữ một chiều suốt lượt (cơn giật chỉ làm yếu đi, không đảo chiều) và có sức gió hiện cho người chơi.
-- **Không dùng tài sản của game khác.** Không dùng tên, hình, chiêu thức hay biểu tượng của bất kỳ game hay tác phẩm nào khác.
-- **Tranh và mô phỏng.** Tranh, icon, minh hoạ và trang trí UI phải được sinh riêng, nguyên bản qua pipeline với `cx/gpt-6-sol-image`; không tải tài sản internet, không tự vẽ SVG, emoji hay thư viện icon. Code/shader chỉ được dựng vật thể mô phỏng như bi/bàn (hình học, số/sọc, màu, ánh sáng, xoay theo vật lý), không thay tranh hoặc icon.
-- **Giữ bi dễ nhìn.** Màu nỉ mới phải qua `tests/sect-contrast.test.ts` (ΔE ≥ 25 với mọi bi).
-- **Giao diện theo Thuỷ Mặc** (`src/styles/{base,kit,screens,match,skin}.css`, `skin.css` nạp cuối): giấy, mực, một màu son, không phát sáng.
-- **Một khung 16:9.** Kiểm tra điện thoại ngang 932×430 và desktop 1280×800, vùng chạm ≥ 44 px. Khung 9 lát
-  (`border-image`) giữ viền 1px trong suốt, vì Safari/iOS không vẽ ảnh viền trên viền dày 0; kiểm tra trên WebKit.
-- **Hiệu năng.** Mã chạy mỗi khung hình không được đọc layout (`getBoundingClientRect`, `offsetWidth`); dùng
-  `uiOrigin()`/`uiScale()` và đo một lần mỗi lần đổi bố cục.
-- Commit theo Conventional Commits (`feat:`, `fix:`, `docs:`…), mỗi commit một việc.
+## Quy tắc của dự án
+
+- **Vật lý thật.** Chiêu và Thiên Tượng là lực, ma sát, vật chắn hoặc kích thước lỗ trong mô phỏng; lực đều
+  dưới lực cản lăn. Xem [docs/decisions/real-physics.md](docs/decisions/real-physics.md).
+- **Chỉ nội dung nguyên bản.** Không dùng tên, tranh, chiêu thức hay biểu tượng của game hay tác phẩm nào khác.
+- **Tranh vẽ qua pipeline.** Tranh, icon và trang trí UI là tranh vẽ riêng qua
+  [docs/guides/art-pipeline.md](docs/guides/art-pipeline.md); không ảnh internet, SVG tự vẽ, emoji hay thư
+  viện icon. Code/shader chỉ dựng vật thể mô phỏng (bi, bàn).
+- **Thuỷ Mặc và tiếng Việt.** Giấy, mực, một màu son, không phát sáng; mọi chữ người chơi thấy là tiếng Việt.
+  Xem [docs/architecture/ui.md](docs/architecture/ui.md).
+- **Bi dễ nhìn.** Màu nỉ mới phải qua `tests/sect-contrast.test.ts`.
+- **Một khung 16:9.** Không media query hay `vw`/`vh` trong khung; vùng chạm ≥ 44 px.
+- **Save là bất khả xâm phạm.** Không đổi khoá `thancong.profile.v1`; trường mới đi qua `sanitize`.
+- **Dữ liệu trước.** Tướng, môn phái, chiêu là dữ liệu trong `src/game/content/`; giữ
+  [docs/world/world-bible.md](docs/world/world-bible.md) khớp với `roster.json` và `lore.json`.
 
 ## Nguyên tắc code (bắt buộc)
 
-Mọi tính năng mới và mọi thay đổi phải theo **DRY, KISS, YAGNI, SOLID**. Người duyệt sẽ trả lại code vi phạm;
-“code cũ cũng làm vậy” không phải lý do. Khi sửa vào chỗ đã vi phạm, không làm tệ thêm, và gỡ luôn nếu sửa được tại chỗ.
+Mọi tính năng mới và mọi thay đổi theo **DRY, KISS, YAGNI, SOLID**. Người duyệt trả lại code vi phạm; "code cũ
+cũng làm vậy" không phải lý do. Khi sửa vào chỗ đã vi phạm, không làm tệ thêm, và gỡ luôn nếu sửa được tại chỗ.
 
-- **DRY — không lặp.** Mỗi sự thật chỉ có một nguồn: luật, con số, nhãn tiếng Việt, dữ liệu môn phái, khai báo
-  CSS. Tìm hàm/hằng có sẵn trước khi viết mới (`src/ui/dom.ts`, `src/core/*`, `content/*`). Logic xuất hiện lần
-  hai thì tách ra dùng chung. Cùng một thuộc tính CSS cho cùng selector ở hai file thì một bên là code chết: bố
-  cục ở `base/kit/screens/match`, lớp tranh vẽ ở `skin`, không khai báo hai lần.
-- **KISS — đơn giản.** Code đơn giản nhất mà vẫn đúng. Ưu tiên hàm thường và dữ liệu hơn class, cờ và tầng
-  trung gian. Hàm dưới khoảng 80 dòng, file dưới khoảng 500 dòng. File mới không được vượt ngưỡng; code mới cho
-  file đã vượt (`match-screen.ts`, `match.ts`, `menus.ts`, `table-view.ts`, `brain.ts`) đặt vào module mới, nhỏ,
-  rõ việc, rồi gọi từ file lớn.
-- **YAGNI — chưa cần thì chưa làm.** Chỉ làm đúng thứ yêu cầu hiện tại cần. Không thêm tuỳ chọn, tham số, export,
-  cấu hình hay “móc để sau”. Xoá code không ai dùng (một `export` không có nơi import là code chết, trừ khi test dùng).
+- **DRY.** Mỗi sự thật một nguồn: luật, con số, nhãn tiếng Việt, dữ liệu môn phái, khai báo CSS. Tìm hàm/hằng có
+  sẵn trước khi viết mới (`src/ui/dom.ts`, `src/core/*`, `src/game/content/*`). Logic xuất hiện lần hai thì tách
+  ra dùng chung. Cùng thuộc tính CSS cho cùng selector ở hai file thì một bên là code chết: bố cục ở
+  `base/kit/screens/match`, lớp tranh vẽ ở `skin`.
+- **KISS.** Code đơn giản nhất mà vẫn đúng; ưu tiên hàm và dữ liệu hơn class, cờ và tầng trung gian. Hàm dưới
+  khoảng 80 dòng, file dưới khoảng 500 dòng. Code mới cho file đã vượt ngưỡng (`match-screen.ts`, `match.ts`,
+  `menus.ts`, `table-view.ts`, `brain.ts`) đặt vào module mới, nhỏ, rồi gọi từ file lớn.
+- **YAGNI.** Chỉ làm thứ yêu cầu hiện tại cần: không tuỳ chọn, tham số, export hay "móc để sau". Xoá code không
+  ai dùng (một `export` không nơi import là code chết, trừ khi test dùng).
 - **SOLID.**
-  - *Một trách nhiệm:* mỗi module chỉ có một lý do để sửa (một màn hình, một hệ thống trong trận, một bộ luật,
-    một bộ vẽ). Không nhồi thêm việc vào `Match` hay closure `matchScreen`; tạo module riêng với API hẹp.
-  - *Mở để mở rộng, đóng để sửa:* thêm môn phái, tướng, nhóm chiêu, Thiên Tượng hay chế độ chơi bằng dữ liệu
-    hoặc một mục đăng ký, không rải thêm nhánh `if (mode === …)` / `kind === …` qua nhiều file.
-  - *Thay thế được:* mọi `RuleSet` trong `src/core/rules` và mọi nhóm chiêu đặt bàn giữ cùng một hợp đồng, để
-    trận thật, dự đoán và AI dùng cái nào cũng được mà không sửa gì.
-  - *Giao diện hẹp:* truyền đúng kiểu nơi nhận cần (`Pick<Match, …>`, một view model) thay vì cả `Match` hay `App`.
-  - *Chiều phụ thuộc:* `core` không import gì của app; `game` dùng `core`; `ai` và `render` dùng `core`/`game`;
-    `ui` nằm trên cùng; `platform` và `audio` là lá. Không bao giờ import ngược lên.
+  - *Một trách nhiệm:* mỗi module một lý do để sửa. Không nhồi việc mới vào `Match` hay closure `matchScreen`.
+  - *Mở rộng bằng dữ liệu:* thêm môn phái, tướng, nhóm chiêu, Thiên Tượng hay chế độ bằng dữ liệu hoặc mục đăng
+    ký, không rải `if (mode === …)` / `kind === …` qua nhiều file.
+  - *Thay thế được:* mọi `RuleSet` và mọi nhóm chiêu đặt bàn giữ cùng hợp đồng.
+  - *Giao diện hẹp:* truyền đúng kiểu nơi nhận cần (`Pick<Match, …>`, view model), không cả `Match` hay `App`.
+  - *Chiều phụ thuộc:* `core` → `game` → `ai`/`render` → `ui`; `platform`, `audio` là lá. Không import ngược.
+    Xem [docs/architecture/overview.md](docs/architecture/overview.md).
 
-## Thêm một tướng
+## Quy trình
 
-1. Thêm vào `src/game/content/roster.json`: `id`, `name`, `sect`, `tier`, `kind`, `cls`, `look` (ghi rõ giới tính và
-   một tổ hợp nét nhận diện không trùng tướng khác), `pose`, `expr`, 3 `skills` (`kinds` từ 24 nhóm cơ chế,
-   `icon` mô tả icon).
-2. Thêm tiểu sử và câu nói vào `src/game/content/lore.json`.
-3. Vẽ tranh theo `.claude/skills/game-art/SKILL.md` (`gen-sect.sh <môn-phái> <thư-mục>` chỉ vẽ phần còn thiếu),
-   duyệt bảng tổng hợp, chạy `process-sect.py` để xuất vào `public/art/`. Vẽ thêm tư thế kết liễu
-   `champions/{id}/finisher.webp` (thân người chéo từ trên trái xuống dưới phải, đầu cơ thúc về góc dưới phải,
-   nền trong suốt; xem `docs/art-pipeline.md`).
-4. Cập nhật `docs/world-bible.md` (cả tên và nhóm cơ chế của ba chiêu, giữ tiểu sử), chạy `npm test` và `npm run build`.
+1. Sửa code và tài liệu sở hữu phần đó trong cùng thay đổi (bảng ở [docs/README.md](docs/README.md)).
+2. Đổi màn hình có ảnh trong README thì chụp lại đúng ảnh đó ([docs/guides/testing.md](docs/guides/testing.md)).
+3. Chạy `npm test` và `npm run build`; cả hai phải qua.
+4. Commit theo Conventional Commits (`feat:`, `fix:`, `docs:`, `perf:`…), mỗi commit một việc.
 
-## Thêm một môn phái
-
-Thêm môn phái vào `roster.json` (màu, bối cảnh, biểu tượng, 2 cây cơ), 5 tướng bậc 1–5, rồi:
-`SectId` và các bảng `TABLE_LOOK` / `CUE_STATS` / `CUE_NAMES` trong `src/game/content/sects.ts`, Thiên Tượng
-trong `src/game/terrain.ts` (`rollOmen` + `OMEN_INFO`), chương trong `src/game/content/career.ts`, mốc trên
-bản đồ trong `src/ui/screens/journey.ts`, truyện trong `lore.json`.
-
-
-## Hợp đồng cần giữ
-
-- `kind` là loại tạo hình (Hiệp Khách, Nữ Hiệp, Yêu Tộc, Tinh Linh, Linh Tượng, Ma Vật), `cls` chọn hệ nội tại. Hai chiêu thường ở slot 0/1, tuyệt chiêu ở slot 2; không suy ra slot từ bậc sức mạnh.
-- Chiêu đặt bàn dùng tám nhóm `slick`, `sand`, `bumper`, `railcraft`, `wind`, `well`, `spinwash`, `vortex`. Dùng cùng `SkillCast`/world cho trận thật, dự đoán và AI; kiểm tra cả bàn lỗ, bàn phăng và bước huỷ/xác nhận đặt chiêu.
-- Tiên Đạo có chiêu, nội tại, địa thế; Cổ Điển và Luyện Cơ không bật các hiệu ứng này. Năng lượng và lợi thế Ảnh Sát
-  trả theo điểm cú đánh (`src/core/shot-score.ts`); đổi cách chấm thì cập nhật `tests/shot-score.test.ts`. Giữ tên menu hiện tại: Hành trình, Luận Cơ, Song Đấu, Luyện Cơ, Tàng Các (có Cơ Tiên Lục), Cơ Tiên Truyện, Luyện thế.
-- DOM giữ khung 16:9 (844×475), scale đều to nhất vừa vùng safe area, chừa dải khung tranh, và căn giữa (tối đa 2,2) trong `main.ts`; không dùng media query hay `vw`/`vh` bên trong khung; canvas quy đổi cả độ lệch khung. Màn cài PWA dùng kích thước thật. Kiểm tra cuộn, modal, chuyển tiến/lùi và giảm chuyển động.
-- Giữ khoá save `thancong.profile.v1`; thêm trường qua mặc định và `sanitize`, giữ tương thích mã `TC1.`. Thế đã lưu
-  của Luyện thế nằm ở khoá riêng `cotien.practice.v1`, đọc qua `sanitizeSaved`.
-- Tranh đi qua loader trong `src/platform/preload.ts`: lần đầu tải trọn bộ vào kho `art`, mỗi file có mã nội dung nên bản mới chỉ tải lại tranh đã đổi; nền lúc rảnh bù phần thiếu, trận kiểm tra và giải mã trước. Bổ sung tranh mới vào đường dẫn mà manifest nhận; không bỏ cơ chế cập nhật PWA chờ người chơi rời bàn.
-
-
-## Kiểm tra điều khiển
-
-Ngắm bằng kéo/chạm bàn và hai nút xoay; áp phê nhanh bằng giữ/kéo bi cái nhỏ (mở bi lớn tạm thời), chính xác bằng điểm đánh trên bi lớn hoặc các lựa chọn nhanh. Chạm thanh lực để đặt mức, kéo để tinh chỉnh; chạm bi trên bàn hiện số bi (trong Luyện thế, kéo bi chỉ dời bi, không hiện nhãn); thông báo giữa bàn đóng khi chạm hoặc bấm ✕ và tắt được trong cài đặt; giữ ĐÁNH dùng lực dao động và trượt ra xa để huỷ. Khi bi trong tay, kiểm tra dời bằng kéo/chạm hoặc cụm nút hướng tròn, chuyển “Ngắm thử” / “Dời bi”, rồi “ĐẶT BI”. Kiểm tra ba icon chiêu đúng tướng, mở chi tiết trước khi dùng, hồi chiêu và năng lượng. Safe area được trừ một lần ở khung ngoài; vùng chạm bù ngược `--ui-scale`. Kiểm tra kích thước hiển thị sau scale, cả giả lập iPhone ngang 932×430 CSS pixel và cửa sổ desktop 1280×800, 1920×1080. Kiểm tra góc nâng cơ, nhảy qua bi chắn, tiếp đất và bi văng bàn; tuyệt chiêu phải chờ ĐÁNH rồi mới hiện cut-in, hiệu ứng bàn và cú đánh. Thắng ván bằng cú sạch phải hiện Kết liễu (chạm để bỏ qua). Màn cài app có hướng dẫn cho cả iPhone/iPad và Android.
+Thêm tướng hoặc môn phái: [docs/guides/add-champion.md](docs/guides/add-champion.md).
