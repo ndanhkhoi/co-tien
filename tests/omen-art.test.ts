@@ -20,7 +20,8 @@ function fixture() {
   const view = new OmenView(match);
   // Mirrors TableView.world's metre-to-pixel transform.
   view.layer.scale.set(250);
-  const sprites = () => view.layer.children.filter((s): s is Sprite => s instanceof Sprite && s.visible && s.alpha > 0);
+  const sprites = () => view.layer.children.flatMap(c => c.children.length ? c.children : [c])
+    .filter((s): s is Sprite => s instanceof Sprite && s.visible && s.alpha > 0);
   return { match, view, sprites };
 }
 
