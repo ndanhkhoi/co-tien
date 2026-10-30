@@ -1,5 +1,5 @@
 import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest';
-import { Assets, Sprite, Texture } from 'pixi.js';
+import { Assets, Graphics, Sprite, Texture } from 'pixi.js';
 import type { Match } from '../src/game/match';
 import type { OmenArt } from '../src/render/omen-art';
 
@@ -63,6 +63,19 @@ describe('painted omen overlays', () => {
     match.omen = null;
     view.update(0);
     expect(sprites()).toHaveLength(0);
+    view.layer.destroy({ children: true });
+  });
+  it('never lets the white bed mask draw when a pocket seal sits beside clipped terrain', async () => {
+    const { match, view } = fixture();
+    await Promise.resolve();
+    // A sealed pocket paints unclipped; roots paint clipped to the bed. Mixing both in one frame used to
+    // leave the shared white mask switched on, painting the cloth white.
+    Object.assign(match.table, { pockets: [{ hx: 0.95, hy: 0.45, hr: 0.05 }] });
+    match.closedPockets = [0];
+    match.omen = { id: 'roots', name: '', desc: '', segments: [{ ax: -0.1, ay: -0.1, bx: 0.2, by: 0.3 }] };
+    for (let i = 0; i < 3; i++) view.update(0.016);
+    const mask = view.layer.children.find((c): c is Graphics => c instanceof Graphics)!;
+    expect(mask.includeInBuild).toBe(false);
     view.layer.destroy({ children: true });
   });
 });
