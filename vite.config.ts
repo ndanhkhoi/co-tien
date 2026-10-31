@@ -1,7 +1,7 @@
 import { defineConfig } from 'vitest/config';
 import type { Plugin } from 'vitest/config';
-import pkg from './package.json' with { type: 'json' };
 import { VitePWA } from 'vite-plugin-pwa';
+import { execSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import { readdirSync, readFileSync, statSync } from 'node:fs';
 import { join, relative } from 'node:path';
@@ -20,6 +20,22 @@ function walkArt(dir = 'public/art'): [string, number, string][] {
 const ART = walkArt();
 /** Changes only when some painting changes; the loading screen checks the art again only then. */
 const ART_VERSION = createHash('sha1').update(JSON.stringify(ART)).digest('hex').slice(0, 12);
+
+/**
+ * `YYYY.MM.DD-<commit>` from the build date (Vietnam time) and the commit being built. Only the CI
+ * deploy ships a release; every other build or dev server adds `-dev`.
+ */
+function appVersion(): string {
+  const date = new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Ho_Chi_Minh' })
+    .format(new Date()).replaceAll('-', '.');
+  let sha = process.env.GITHUB_SHA?.slice(0, 7);
+  try {
+    sha ??= execSync('git rev-parse --short=7 HEAD', { stdio: ['ignore', 'pipe', 'ignore'] }).toString().trim();
+  } catch {
+    sha = 'nogit';
+  }
+  return `${date}-${sha}${process.env.CI ? '' : '-dev'}`;
+}
 
 /**
  * The roster also carries the art briefs (looks, poses, icon prompts) that only the art pipeline
@@ -58,7 +74,7 @@ export default defineConfig({
   base: './',
   define: {
     __ART_VERSION__: JSON.stringify(ART_VERSION),
-    __APP_VERSION__: JSON.stringify(`${pkg.version} · ${new Date().toISOString().slice(0, 16).replace('T', ' ')}`),
+    __APP_VERSION__: JSON.stringify(appVersion()),
   },
   build: { target: 'es2022', chunkSizeWarningLimit: 1500 },
   // Workers are bundled with their own plugin list; the AI worker imports the roster too.

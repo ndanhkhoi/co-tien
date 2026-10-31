@@ -36,4 +36,7 @@ Token và account ID nằm trong GitHub Actions secrets của repo, không bao g
 
 - Test hoặc build lỗi thì không deploy.
 - Commit chỉ đổi tài liệu có thể thêm `[skip ci]` vào tiêu đề để không deploy lại.
+- Phiên bản hiện trong Cài đặt do `vite.config.ts` sinh khi build: `năm.tháng.ngày-<commit 7 ký tự>` theo
+  giờ Việt Nam, ví dụ `2026.10.31-ca8d376`. Chỉ build trong CI (`CI` được đặt) mới là bản phát hành; dev
+  server và build trên máy thêm `-dev`. Trường `version` trong `package.json` không được dùng.
 - Bản mới đến người chơi qua cơ chế cập nhật PWA, không giữa trận: [platform.md](platform.md#cập-nhật-bản-mới).
