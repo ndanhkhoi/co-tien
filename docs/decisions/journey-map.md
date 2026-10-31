@@ -42,8 +42,10 @@ Hai vết còn sót sau lần vẽ lại:
   màu giấy, rồi vẽ lại nét đỏ gốc lên trên. Đường nổi trên mọi nền mà vẫn đọc như khoảng chừa giấy
   của tranh, không phải hiệu ứng sáng.
 - Nền tiêu đề từ đầu bị lỗi cú pháp CSS: màu đặt ở layer đầu của `background` shorthand khiến cả
-  khai báo vô hiệu, tiêu đề thực chất không có nền nên chìm vào tranh. Sửa cú pháp, dùng nền giấy
-  đặc với viền đậm và bóng nhẹ, cùng công thức với nút và chip của thanh trên.
+  khai báo vô hiệu, tiêu đề thực chất không có nền nên chìm vào tranh. Không dùng tấm nền riêng cho
+  tiêu đề (lệch với mọi màn khác, nơi tiêu đề nằm trần trên giấy); thay vào đó, phần trên tranh được
+  pha dần thành màu giấy của trang bằng một scrim chìm dưới mốc, nên tiêu đề, triện son và nét bút
+  đọc như trên mọi màn hình khác.
 
 ## Phương án bị loại
 

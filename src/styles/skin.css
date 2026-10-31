@@ -437,10 +437,13 @@
 .journey-map { isolation: isolate; }
 .journey-art { object-fit: cover; }
 .screen.journey > .topbar { position: relative; z-index: 2; padding: 8px 16px 0; }
-.screen.journey > .topbar .tb-title {
-  background: var(--sheet) url('/art/ui/frame/ribbon.webp') 22px bottom / calc(100% - 22px) 11px no-repeat;
-  border: 1.5px solid var(--line-2);
-  box-shadow: var(--sh-1);
+/* The paper scrim sits under the pins (z 1) and never blocks them. */
+.journey-map::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(var(--frame), color-mix(in srgb, var(--frame) 60%, transparent) 9%, transparent 21%);
 }
 
 /* Compact power ruler: reserve real travel instead of squeezing a wide tank. */
