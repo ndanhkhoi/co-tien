@@ -32,7 +32,7 @@ tiên hiệp riêng: **Cơ Tiên Giới** với 13 môn phái, 65 tướng, mỗ
 | **Song Đấu** | Hai người chung một máy, mỗi bên chọn tướng và cơ riêng |
 | **Luyện Cơ** | 60 thử thách có lời giải đã kiểm chứng, chấm sao |
 | **Luyện thế** | Tự bày thế, đánh tự do, đánh lại, xem trước đường đi của mọi bi |
-| **Tàng Các** | Tướng, Pháp Cơ, Linh Đài và Cơ Tiên Lục: wiki của thế giới |
+| **Tàng Các** | Tướng, Pháp Cơ, Linh Đài, trang từng môn phái và luật chơi |
 | **Cơ Tiên Truyện** | Truyện chữ có tranh thuỷ mặc, 15 chương mở dần theo Hành trình |
 
 **Làm cho điện thoại.**
@@ -59,9 +59,9 @@ Chụp ở 932×430, tướng của người chơi là Ngân Cầm.
 | **Luyện thế · chọn thế** | **Luyện thế · Đường đi** |
 | ![Chọn thế luyện](docs/screenshots/luyen-the-chon.webp) | ![Bàn Luyện thế với đường đi của mọi bi](docs/screenshots/luyen-the.webp) |
 | **Tàng Các** | **Trang tướng** |
-| ![Tàng Các](docs/screenshots/tang-cac.webp) | ![Thông tin tướng và ba icon kỹ năng](docs/screenshots/trang-tuong.webp) |
-| **Cơ Tiên Lục** | **Cơ Tiên Truyện** |
-| ![Cơ Tiên Lục trong Tàng Các](docs/screenshots/co-tien-luc.webp) | ![Đọc Cơ Tiên Truyện](docs/screenshots/co-tien-truyen.webp) |
+| ![Tàng Các](docs/screenshots/tang-cac.webp) | ![Trang tướng: ba icon chiêu, mục Tiểu sử và Tranh](docs/screenshots/trang-tuong.webp) |
+| **Trang môn phái** | **Cơ Tiên Truyện** |
+| ![Trang môn phái trong Tàng Các](docs/screenshots/mon-phai.webp) | ![Đọc Cơ Tiên Truyện](docs/screenshots/co-tien-truyen.webp) |
 
 Trên màn hình 2K (2560×1440), khung 16:9 nằm giữa phông tranh, tướng đứng hai bên:
 
