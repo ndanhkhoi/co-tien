@@ -12,7 +12,8 @@ chuyển cảnh.
 | `screens/collection.ts`, `settings.ts` | Tàng Các, Cài đặt |
 | `screens/career.ts`, `challenge-start.ts` | Trận Hành trình, mở một thử thách Luyện Cơ |
 | `screens/journey.ts` | Bản đồ Hành trình; mốc lấy thứ tự từ `CHAPTERS`; trận trở về mở đúng vùng đất vừa đánh |
-| `screens/codex.ts` | Cơ Tiên Lục (tab Vùng đất, Hệ, Luật trong Tàng Các) |
+| `screens/champion-page.ts` | Trang tướng duy nhất: Chiêu thức, Tiểu sử, Tranh; chiêu mộ hoặc chọn đại diện |
+| `screens/library.ts` | Trang môn phái và tab Luật của Tàng Các |
 | `screens/challenges.ts` | Luyện Cơ |
 | `screens/practice/` | Luyện thế: `index.ts` chọn thế, `desk.ts` bảng bên bàn |
 | `screens/story.ts` | Đọc Cơ Tiên Truyện (chunk riêng, chỉ tải khi mở) |
@@ -107,9 +108,17 @@ bằng nét mực `ui/ink-tick.webp`; mục đang chọn chuyển màu son và n
 
 ## Tàng Các
 
-- Tab Tướng, Pháp Cơ, Linh Đài là đồ sở hữu; Vùng đất, Hệ, Luật là Cơ Tiên Lục.
+- Bốn tab: Tướng, Pháp Cơ, Linh Đài, Luật. Mỗi tướng, môn phái, Pháp Cơ và Linh Đài chỉ có nội dung ở một chỗ;
+  chỗ khác dẫn link tới, không chép lại thẻ.
+- Tab Tướng chia nhóm theo môn phái, có hàng chip lọc theo Hệ; chọn một hệ thì nội tại của hệ hiện ở dòng ghi chú.
+  Tiêu đề nhóm mở trang môn phái.
+- Trang môn phái gồm lời dẫn, dấu ấn, Thiên Tượng và ba link sang nhóm tướng, thẻ Linh Đài, thẻ Pháp Cơ của phái
+  (đổi tab, cuộn tới thẻ và đánh dấu một nhịp). Thẻ Linh Đài và Pháp Cơ thuộc phái có link ngược về trang môn phái.
+- Tab Luật mở đầu bằng Cơ Tiên Giới, sau đó là luật từng lối chơi và Tiên Đạo.
+- Mỗi tướng có một trang với ba mục ở chân trang: Chiêu thức, Tiểu sử, Tranh. Chạm tranh tướng hoặc một tranh
+  trong mục Tranh mở khung xem trọn tranh.
 - Trang tướng có ba nút icon chiêu riêng của tướng (`skillIconUrl(champion.id, slot)`). Chạm mở thẻ chi tiết
   trước, không dùng ngay.
-- Nút Tiểu sử chỉ mở với tướng đã gặp hoặc đã sở hữu. "Đã gặp" không tính Luận Cơ và Song Đấu (đối thủ bốc
-  ngẫu nhiên), chỉ tính các trận có đối thủ định sẵn như Hành trình.
+- Tiểu sử chỉ mở với tướng đã gặp hoặc đã sở hữu; Tranh chỉ mở khi đã chiêu mộ. "Đã gặp" không tính Luận Cơ và
+  Song Đấu (đối thủ bốc ngẫu nhiên), chỉ tính các trận có đối thủ định sẵn như Hành trình.
 - Xem trước bàn giữ đúng tỉ lệ bàn WPA gồm cả viền.

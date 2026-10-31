@@ -157,7 +157,7 @@ export function rollOmen(sect: SectId, rng: Rng, t: TableGeom, balls: Ball[]): O
   }
 }
 
-/** What each sect's land does, for the Cơ Tiên Lục pages (mirrors rollOmen). */
+/** What each sect's land does, for the Tàng Các sect pages (mirrors rollOmen). */
 export const OMEN_INFO: Record<SectId, { name: string; desc: string }> = {
   thienquang: { name: 'Gió Núi', desc: 'Gió giật từng cơn đẩy bi đang lăn theo hướng gió.' },
   huyetsat: { name: 'Địa Chấn', desc: 'Mặt đất rung: các bi đang nằm yên bị xê dịch nhẹ khi bạn đánh.' },

@@ -38,7 +38,7 @@ export interface Profile {
   introSeen: boolean;
   /** Story chapters read: chapter id → furthest page index. */
   storyRead: Record<string, number>;
-  /** Champions met as an opponent (unlocks their Cơ Tiên Lục page). */
+  /** Champions met as an opponent (unlocks their biography in Tàng Các). */
   met: string[];
 }
 

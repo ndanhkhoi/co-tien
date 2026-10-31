@@ -1,4 +1,4 @@
-import { CHAMPION_PRICE, CHAMPIONS, champion, classInfo, sect, sectArtUrl, SECTS, type Champion } from '../game/content/sects';
+import { CHAMPION_PRICE, CHAMPIONS, champion, classInfo, sect, sectArtUrl, SECTS, type Champion, type SectId } from '../game/content/sects';
 import type { StatLine } from '../game/content/stat-text';
 import type { CueDef, TableSkin } from '../game/content/gear';
 import type { App } from './app';
@@ -87,8 +87,21 @@ export function champCard(c: Champion, opts: { locked?: boolean; sel?: boolean; 
 }
 
 /** Champions grouped by sect, each group on its own sheet. */
-export function championPicker(app: App, opts: { selected: () => string; onPick: (c: Champion) => void; onlyOwned?: boolean; exclude?: () => string | null }): HTMLElement {
-  const { selected, onPick, onlyOwned = false, exclude = () => null } = opts;
+interface PickerOpts {
+  selected: () => string;
+  onPick: (c: Champion) => void;
+  onlyOwned?: boolean;
+  exclude?: () => string | null;
+  /** Shows only champions that pass (Tàng Các filters by class); sects left empty are hidden. */
+  match?: (c: Champion) => boolean;
+  /** Makes each sect heading a link to that sect's page. */
+  onSect?: (id: SectId) => void;
+  /** Scrolls this sect's group into view once it is painted. */
+  focus?: SectId;
+}
+
+export function championPicker(app: App, opts: PickerOpts): HTMLElement {
+  const { selected, onPick, onlyOwned = false, exclude = () => null, match = () => true } = opts;
   const wrap = h('div.sect-groups');
   const card = (c: Champion) => {
     const has = app.profile.champions.includes(c.id);
@@ -102,13 +115,11 @@ export function championPicker(app: App, opts: { selected: () => string; onPick:
     });
   };
   const group = (s: (typeof SECTS)[number]) => {
-    const all = CHAMPIONS.filter((c) => c.sect === s.id);
-    const owned = all.filter((c) => app.profile.champions.includes(c.id)).length;
-    return h('section.sect-group', null,
-      h('div.sg-head', null, h('img', { src: sectArtUrl(s.id, 'emblem'), alt: '', loading: 'lazy' }), h('b', null, s.name),
-        h('span.badge', null, `${owned}/${all.length}`)),
-      h('div.cc-grid', null, ...all.map(card)),
-    );
+    const all = CHAMPIONS.filter((c) => c.sect === s.id && match(c));
+    if (!all.length) return '';
+    const el = h('section.sect-group', { 'data-sect': s.id }, sectHead(app, s, all, opts.onSect), h('div.cc-grid', null, ...all.map(card)));
+    if (s.id === opts.focus) requestAnimationFrame(() => markJump(el));
+    return el;
   };
   let pass = 0;
   const render = () => {
@@ -130,6 +141,21 @@ export function championPicker(app: App, opts: { selected: () => string; onPick:
   };
   render();
   return wrap;
+}
+
+function sectHead(app: App, s: (typeof SECTS)[number], shown: Champion[], onSect?: (id: SectId) => void): HTMLElement {
+  const owned = shown.filter((c) => app.profile.champions.includes(c.id)).length;
+  const parts = [h('img', { src: sectArtUrl(s.id, 'emblem'), alt: '', loading: 'lazy' }), h('b', null, s.name), h('span.badge', null, `${owned}/${shown.length}`)];
+  if (!onSect) return h('div.sg-head', null, ...parts);
+  return tap(h('button.sg-head.sg-link', { type: 'button', 'aria-label': `${s.name} · Xem môn phái` }, ...parts, h('span.sg-more', null, 'Môn phái ›')), () => onSect(s.id));
+}
+
+/** Brings an element the player jumped to into view and marks it briefly. */
+export function markJump(el: Element) {
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  el.scrollIntoView({ block: 'start', behavior: reduced ? 'auto' : 'smooth' });
+  el.classList.remove('jump-mark');
+  el.classList.add('jump-mark');
 }
 
 

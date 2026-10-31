@@ -164,10 +164,12 @@ export function item(label: string, control: Child, opts: { hint?: string; icon?
 }
 
 /** Pill tabs; returns the bar and a setter. */
-export function tabs<T extends string>(items: { id: T; label: string; icon?: IconName }[], active: T, onChange: (id: T) => void): HTMLElement {
-  const bar = h('div.tabs', { role: 'tablist' });
+/** Tab row; `select` switches tabs from code as if the player tapped one. */
+export function tabs<T extends string>(items: { id: T; label: string; icon?: IconName }[], active: T, onChange: (id: T) => void): HTMLElement & { select(id: T): void } {
+  const bar = Object.assign(h('div.tabs', { role: 'tablist' }), { select: (id: T) => pick(id) });
+  const pick = (id: T) => { if (id === active) return; active = id; render(); onChange(id); };
   const render = () => bar.replaceChildren(...items.map((it) => tap(h('button.tab', { role: 'tab', 'aria-selected': String(it.id === active) },
-    it.icon ? icon(it.icon) : null, it.label), () => { if (it.id === active) return; active = it.id; render(); onChange(it.id); })));
+    it.icon ? icon(it.icon) : null, it.label), () => pick(it.id))));
   render();
   return bar;
 }
