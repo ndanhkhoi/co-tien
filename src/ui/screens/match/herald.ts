@@ -61,10 +61,9 @@ export function createHerald(ctx: MatchCtx, dom: MatchDom): {
     dom.heraldEl.replaceChildren(face,
       h('div.mx-h-text', null, h('div.mx-h-title', null, m.title), m.line ? h('div.mx-h-line', null, m.line) : null),
     );
-    // Any tap closes an announcement; the cross says so and the hairline shows the time left.
+    // Any tap closes an announcement; the hairline shows the time left.
     if (thinking) dom.heraldEl.append(icon('thinking', 'mx-h-think'));
-    else dom.heraldEl.append(h('button.mx-h-close', { type: 'button', 'aria-label': 'Đóng thông báo' }, icon('close')),
-      h('i.mx-h-timer', { style: `--ms:${Math.round(ms)}ms`, 'aria-hidden': 'true' }));
+    else dom.heraldEl.append(h('i.mx-h-timer', { style: `--ms:${Math.round(ms)}ms`, 'aria-hidden': 'true' }));
     dom.center.classList.add('heralding');
   };
   // Any touch, click or key dismisses the current announcement: the player is acting, and the

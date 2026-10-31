@@ -68,9 +68,11 @@ Nguồn: `src/ui/screens/match/` (trận) và `src/ui/screens/practice/desk.ts` 
 
 ## Thông báo và tạm dừng
 
-- Thông báo giữa bàn đóng khi chạm bất kỳ đâu hoặc ✕. Công tắc *Thông báo giữa bàn* (Cài đặt, menu Tạm dừng)
+- Thông báo giữa bàn đóng khi chạm bất kỳ đâu hoặc bấm phím; vạch son ở chân cho biết thời gian còn lại. Công tắc *Thông báo giữa bàn* (Cài đặt, menu Tạm dừng)
   tắt chúng, trừ lỗi và thắng ván.
-- Mỗi lượt hiện tối đa một mẹo (`hintTurn`); mẹo đóng ngay bằng ✕ hoặc “Đã hiểu”.
+- Mỗi lượt hiện tối đa một mẹo (`hintTurn`); mẹo đóng bằng nút “Đã hiểu”.
+- Khi chiêu sẵn sàng mà người chơi chưa dùng, một mảnh giấy gợi ý hiện cạnh ô chiêu: chạm vào để mở chiêu, chạm
+  chỗ khác để ẩn; mảnh giấy tự ẩn sau 4,5 giây.
 - Menu Tạm dừng: tỉ số, ba công tắc nhanh (âm thanh, nhạc, thông báo) và một cột hành động. Thoát trận luôn
   hỏi xác nhận.
 - Kết liễu giữ tranh và dòng kết quả đủ lâu để đọc (bản thường 2,9 giây); chạm để bỏ qua.
