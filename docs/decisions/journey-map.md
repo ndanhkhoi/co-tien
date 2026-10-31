@@ -33,12 +33,27 @@ Trong ba bản vẽ mới, lại chọn bản thứ ba: dải trên gần như t
 không tự cắt. Bản một để tháp Thiên Quang và núi tuyết Băng Phách chạm vào dải trên, đường đỏ chỉ quét mép
 đảo Hoa Linh; bản hai dày đặc chi tiết và đường đỏ bỏ sót Hải Long.
 
+## Hoàn thiện: quầng giấy cho đường đỏ, nền tiêu đề đặc
+
+Hai vết còn sót sau lần vẽ lại:
+
+- Đường đỏ son bị mực đen nuốt ở vài đoạn (Thiên Quang sang Hoa Linh, quanh Vạn Thú). Khi xuất ảnh,
+  thêm một quầng giấy mảnh ôm sát nét đỏ: chọn mask đỏ theo hue và độ bão hoà, nới mềm ra, phủ dải
+  màu giấy, rồi vẽ lại nét đỏ gốc lên trên. Đường nổi trên mọi nền mà vẫn đọc như khoảng chừa giấy
+  của tranh, không phải hiệu ứng sáng.
+- Nền tiêu đề từ đầu bị lỗi cú pháp CSS: màu đặt ở layer đầu của `background` shorthand khiến cả
+  khai báo vô hiệu, tiêu đề thực chất không có nền nên chìm vào tranh. Sửa cú pháp, dùng nền giấy
+  đặc với viền đậm và bóng nhẹ, cùng công thức với nút và chip của thanh trên.
+
 ## Phương án bị loại
 
 - Giữ tranh 3:2 và thêm một tranh nền riêng phía sau: khó giấu đường nối giữa hai tranh, nhãn vẫn chật.
 - Vẽ nối dài tranh cũ ra hai bên: công cụ vẽ hiện có không có chế độ vẽ nối theo vùng che.
 - Bản vẽ thứ nhất (lần một): Độc Vụ Cốc khó nhận ra.
 - Bản vẽ thứ hai (lần một): đường đi từ Hoa Linh sang thẳng Thiên Cơ, Hải Long thành nhánh cụt.
+- Vòng vẽ lại thứ hai nhằm làm trống hẳn góc tây bắc (chỗ tiêu đề): cả ba bản đều không đạt. Model
+  luôn vẽ núi tuyết cao ở tây bắc; hai bản cho đường đỏ phân nhánh, một bản gãy đoạn giữa Thiên Cơ
+  và Băng Phách. Giữ bản đã chọn và để tấm nền tiêu đề đặc tự che khu vực đó.
 
 ## Hệ quả
 

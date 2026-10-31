@@ -438,8 +438,9 @@
 .journey-art { object-fit: cover; }
 .screen.journey > .topbar { position: relative; z-index: 2; padding: 8px 16px 0; }
 .screen.journey > .topbar .tb-title {
-  background: color-mix(in srgb, var(--sheet) 92%, transparent), url('/art/ui/frame/ribbon.webp') 22px bottom / calc(100% - 22px) 11px no-repeat;
-  border: 1px solid var(--line);
+  background: var(--sheet) url('/art/ui/frame/ribbon.webp') 22px bottom / calc(100% - 22px) 11px no-repeat;
+  border: 1.5px solid var(--line-2);
+  box-shadow: var(--sh-1);
 }
 
 /* Compact power ruler: reserve real travel instead of squeezing a wide tank. */
