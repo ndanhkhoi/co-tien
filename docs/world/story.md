@@ -93,7 +93,8 @@ phép rơi lỗ.
 - **Vong Xuyên Bà Bà.** Người chèo đò sông lãng quên. Bà là người vớt người chơi từ Hư Không lên và cho uống
   canh, không để hại mà để người ấy có thể sống lại mà không phát điên.
 - **Ngân Cầm.** Cầm sư Thiên Hương; tiếng đàn của nàng là một cuốn sổ: mỗi khúc là tên một người đã mất. Nàng là
-  người duy nhất có thể gọi lại tên thật của người chơi.
+  người duy nhất có thể gọi lại tên thật của người chơi. Kẻ nào mê đường cong của nàng quá lâu thì thành một dây
+  đàn; nàng không cởi được họ ra, chỉ đàn họ mỗi đêm.
 - **Thôn Thiên Ma Vương.** Không phải quỷ chúa; là cơn đói của chính miệng lỗ thế giới, mang hình hài vì quá
   lâu không được cho ăn những gì đáng thuộc về nó.
 - Những sợi dây phụ: Tô Kiếm Nhi (học trò dán băng của Lăng Thiên Kỳ, người đầu tiên tin người chơi), Hắc Lang
@@ -103,24 +104,26 @@ phép rơi lỗ.
 
 ## Dàn ý 13 chương
 
-Theo đúng thứ tự Hành trình trong game. Mỗi chương: một vùng đất, năm cao thủ, một mảnh bí ẩn.
+Theo đúng thứ tự Hành trình trong game. Mỗi chương: một vùng đất, năm cao thủ, một mảnh bí ẩn. Trong mỗi chương,
+người chơi gặp và đấu với các cao thủ theo thứ tự bậc như Hành trình: tướng bậc 1 đón khách và đánh ván đầu,
+tướng bậc 5 ở cao trào. Chiêu cao thủ dùng trong truyện là chiêu thật của họ trong `roster.json`.
 
 | # | Vùng | Chuyện chính | Gieo / mở |
 |---|---|---|---|
-| Mở đầu | Bờ Vong Xuyên | Người chơi tỉnh dậy trên một con đò, không tên. Bà lão đưa bát canh và một cây cơ: "Đi đi. Lần này đánh cho xong." | Gieo: *"lần này"* |
+| Mở đầu | Bờ Vong Xuyên | Người chơi tỉnh dậy trên một con đò, không tên. Bà lão đưa bát canh, gói muối vừng và tấm thẻ ngọc nứt đã mòn tên: "Đi đi. Lần này đánh cho xong." | Gieo: *"lần này"*, tấm thẻ ngọc |
 | 1 | Thiên Quang | Tô Kiếm Nhi thách đấu kẻ lạ. Kiếm Thánh nhìn người chơi rất lâu rồi cho vào Cơ Hội không cần thi tuyển. | Gieo: Kiếm Thánh dường như *nhận ra* người chơi |
 | 2 | Hoa Linh | Đảo Chủ Mộng Hoa mời ở lại: trong mơ, người chơi có tên, có nhà. Từ chối giấc mơ là phép thử đầu tiên. | Gieo: trong mơ, người chơi có một cái tên bị xoá nhoè |
 | 3 | Hải Long | Long Vương thu phí qua cửa với các hồn. Người chơi thấy hồn mình *không có trong sổ*, như chưa từng chết. | Gieo: "Ngươi không có trong sổ âm" |
 | 4 | Thiên Cơ | Hoả Lôi Tiên Sinh cho xem thiết bị đo Hư Không: kim chỉ thẳng vào người chơi. Phòng thí nghiệm nổ lần thứ tư. | Gieo: người chơi *mang dấu Hư Không* |
-| 5 | Băng Phách | Hàn Nguyệt đóng băng thời gian ở Tuyết Cung để giữ một bông sen không tàn. Người chơi **thua** ván đầu tiên trên bàn băng; Hàn Nguyệt, người thắng, tự tay làm nứt lồng băng, và Tuyết Cung lần đầu có mùa xuân. | Chủ đề rõ dần: buông là sống. Gieo: người chơi học cách chấp nhận mất lượt |
+| 5 | Băng Phách | Hàn Nguyệt đóng băng thời gian ở Tuyết Cung để giữ một bông sen không tàn. Người chơi **thua** ván đầu tiên trên bàn băng (trước Tuyết Nhi), rồi thua cả Hàn Nguyệt, người từng đánh lại một cú hỏng rồi chọn không đánh lại cú sau; Hàn Nguyệt, người thắng, tự tay làm nứt lồng băng, và Tuyết Cung lần đầu có mùa xuân. | Chủ đề rõ dần: buông là sống. Gieo: người chơi học cách chấp nhận mất lượt |
 | 6 | Độc Vụ | Quỷ Y bắt mạch người chơi và tái mặt: "Mạch này đã ngừng một lần." Bà im lặng, đổi lấy một ván đấu. | **Gần lộ:** người chơi từng chết |
 | 7 | Kim Sa | Mặt trời không lặn; Thái Dương Nữ Hoàng kể về Đại Kiếp và "Cú Định Thiên" của một kiếm khách trẻ. | Gieo: kẻ cứu thế chính là Kiếm Thánh |
 | 8 | Vạn Thú | Rễ cổ thụ lún vào Hư Không. Thụ Mẫu: "Rừng không sợ chết. Rừng sợ không được chết." | Câu chủ đề nói thẳng lần đầu |
 | 9 | Huyết Sát | Ma Tôn giam người chơi và kể Trận Huyết Nguyệt mà hắn đã tua lại hàng trăm lần. Hắn nói người chơi *là người hắn mất*… rồi tự bác bỏ: "Không. Người ấy đã không quay về." | **Nút thắt 1 (giả):** người chơi có phải người yêu của Ma Tôn? Không, nhưng cùng đêm ấy rơi lỗ |
 | 10 | U Minh | Vong Xuyên Bà Bà kể thật: bà vớt người chơi lên từ Hư Không đêm Huyết Nguyệt. Người chơi là một **Bạch Cầu**, bi cái được trả về. | **Nút thắt 2:** người chơi là bi cái của thế giới |
 | 11 | Tinh Tú | Tinh Đế và Gia Cát Vân hợp sức đọc trời: các sao bị ghim đứng một nghìn năm, vì Cú Định Thiên chưa bao giờ kết thúc. Kiếm Thánh vẫn đang giữ cú đánh đó, bằng chính tuổi thọ của cả thế gian. | **Nút thắt 3:** đấng cứu thế là gốc rễ của tai hoạ, nhưng vì thương chứ không vì ác |
-| 12 | Thiên Hương | Ngân Cầm đàn khúc tên người đã mất; ở cuối khúc có tên người chơi: **Tạ Thanh Ca**. Người chơi nhớ lại: đệ tử Thiên Quang hay trốn tập ra sau núi đánh bi với **Nhạn**, cô gái Huyết Sát mà Ma Tôn yêu; đêm Huyết Nguyệt, Thanh Ca nhảy vào Hư Không để kéo Nhạn ra, và thất bại. | **Nút thắt 4:** người chơi từng là người của cả hai phe thù |
-| 13 | Hư Không | Thôn Thiên Ma Vương không phải để đánh bại. Ván cuối là một cụm chín quả bi buộc chín chòm sao: đánh mạnh thì chúng văng như Đại Kiếp, đánh khéo thì rơi lần lượt, nhưng bi cái phải rơi theo. Kiếm Thánh tính cú ấy một nghìn năm mà không dám đánh; người chơi đánh, và rơi lỗ lần thứ hai. | **Kết** |
+| 12 | Thiên Hương | Đấu với Ngân Cầm, người chơi mê đường cong của nàng và suýt hoá thành một dây đàn, nghe những kẻ mê trước vẫn rên trong dây; nàng cắn đứt sợi tơ. Đêm ấy nàng đàn khúc tên người đã mất; ở cuối khúc có tên người chơi: **Tạ Thanh Ca**. Người chơi nhớ lại: đệ tử Thiên Quang hay trốn tập ra sau núi đánh bi với **Nhạn**, cô gái Huyết Sát mà Ma Tôn yêu; đêm Huyết Nguyệt, Thanh Ca nhảy vào Hư Không để kéo Nhạn ra, và thất bại. | **Nút thắt 4:** người chơi từng là người của cả hai phe thù |
+| 13 | Hư Không | Thôn Thiên Ma Vương không phải để đánh bại. Ván cuối là một cụm chín quả bi buộc chín chòm sao: đánh mạnh thì chúng văng như Đại Kiếp, đánh khéo thì rơi lần lượt, nhưng bi cái phải rơi theo. Kiếm Thánh tính cú ấy một nghìn năm mà không dám đánh. Cây cơ của người chơi là cây cơ đầu tiên của thế gian, cây ông đã dùng đánh Cú Định Thiên rồi để học trò nhặt lên; ông trao lại nó, người chơi đánh, và rơi lỗ lần thứ hai. | **Kết** |
 | Vĩ thanh | Kim Sa | Lần đầu sau một nghìn năm, mặt trời lặn. Diệp Huyền Quang già đi trong một buổi chiều và bảo sửa luật cấm đánh bi với Huyết Sát; Ma Tôn đọc thư về Thanh Ca và mở cổng thành. Quỷ Y vẫn chữa bệnh, nhưng lần đầu hỏi người bệnh muốn gì. Bà Bà vớt người chơi lên lần thứ hai; người chơi nhớ lại tên, nhưng chọn giữ tên Vô Danh. | |
 
 ## Các cú ngoặt và vì sao chúng không sáo rỗng
