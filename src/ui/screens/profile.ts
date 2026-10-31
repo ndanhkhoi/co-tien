@@ -1,4 +1,5 @@
 import { CHAMPION_PRICE, classInfo, cutoutUrl, sect, sectArtUrl, skillIconUrl, KIND_LABEL, type Champion } from '../../game/content/sects';
+import { skillUsage } from '../../game/content/skill-usage';
 import { motionModal as modal, type App } from '../app';
 import { btn, h, tap, toast } from '../dom';
 import { icon } from '../icons';
@@ -136,7 +137,8 @@ function skillDetail(c: Champion, sk: Champion['skills'][number], button: HTMLBu
       h('div', null, h('span.small', null, `${c.name} · ${label}`), h('h2', { id: titleId }, sk.name))),
     h('div.champion-skill-copy.scroll', { tabindex: '0' },
       h('p.champion-skill-cost', null, sk.slot === 2 ? 'Cần đầy thanh năng lượng (100 năng lượng)' : `Hồi chiêu: ${sk.cooldown} lượt đánh của chính mình`),
-      h('p', null, sk.desc)),
+      h('p', null, sk.desc),
+      h('p', null, h('b', null, 'Cách dùng:'), ' ', skillUsage(sk))),
     h('div.actions', null, back), x);
     requestAnimationFrame(() => back.focus());
     return sheet;

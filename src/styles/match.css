@@ -381,6 +381,8 @@
 .mx-sc-kicker { font-size: 13px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: var(--accent); }
 .mx-sc-name { font: 700 21px/1.2 var(--display); }
 .mx-sc-desc { font-size: 15px; line-height: 1.5; color: var(--ink); }
+.mx-sc-use { font-size: 14px; line-height: 1.45; color: var(--ink-2); }
+.mx-sc-use b { color: var(--accent); }
 .mx-sc-req { display: flex; align-items: center; gap: 8px; padding: 8px 10px; border-radius: var(--r-1); background: var(--sheet-2); font-size: 14px; font-weight: 600; color: var(--ink-2); }
 .mx-sc-req .ico { width: 26px; height: 26px; }
 .mx-sc-foot { margin-top: auto; display: flex; align-items: center; gap: 12px; }

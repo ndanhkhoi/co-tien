@@ -55,6 +55,9 @@ Nguồn: `src/ui/screens/match/` (trận) và `src/ui/screens/practice/desk.ts` 
 ## Chiêu (Tiên Đạo)
 
 - Ba ô icon tranh riêng của tướng; chạm mở thẻ chi tiết, không thi triển ngay.
+- Thẻ chiêu (trong trận và ở trang tướng) có dòng **Cách dùng**, ghép từ cách dùng của từng nhóm trong `kinds`
+  (`src/game/content/skill-usage.ts`): đặt lên bàn, dùng trước cú của mình, dời bi cái, dời bi ngay, tác dụng lên
+  cú kế của đối thủ, bi do game tự chỉ định, chiêu úp, hay đánh lại ngay sau cú vừa đánh.
 - Chiêu đặt bàn vào bước đặt: kéo/chạm bàn hoặc mũi tên dời tâm; xoay hướng bằng nút xoay, phím mũi tên trái/phải, Q/E
   hoặc con lăn chuột; đổi chiều/băng (phím R); **THI TRIỂN** xác nhận, **Huỷ đặt chiêu** không tiêu chiêu.
 - Tuyệt chiêu được ghi nhận khi xác nhận, nhưng diễn hoạt chờ ĐÁNH. Thứ tự là khoá điều khiển, cut-in, hiệu ứng
