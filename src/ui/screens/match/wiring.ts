@@ -121,7 +121,12 @@ function createSections(ctx: MatchCtx): MatchSections {
     showBallTag: () => {}, aiTurn: () => {}, openOption: () => {}, cancelCharge: () => {}, renderControls: () => {}, startCharge: () => {}, switchTarget: () => {},
   };
   ctx.skill.preview = (cast) => previewCast(ctx, cast);
-  ctx.skill.moveCast = (x, y) => moveCast(ctx, x, y);
+  ctx.skill.moveCast = (x, y) => {
+    const marked = ctx.match.calledPreview;
+    moveCast(ctx, x, y);
+    // The objective plate names the marked ball, so it follows each tap.
+    if (ctx.match.calledPreview !== marked) late.renderHud();
+  };
   ctx.skill.rotateCast = (deg) => rotateCast(ctx, deg);
   const layout = createLayoutProxy(ctx);
   const dom = createMatchDom(ctx, opts, {
@@ -208,6 +213,7 @@ function startGuard(ctx: MatchCtx, dom: MatchDom): void {
 function cancelPlacement(ctx: MatchCtx, dom: MatchDom, renderHud: () => void): void {
   ctx.skill.placement = null;
   ctx.match.castPreview = [];
+  ctx.match.calledPreview = null;
   dom.cancelCast.hidden = true;
   dom.castSense.hidden = true;
   renderHud();

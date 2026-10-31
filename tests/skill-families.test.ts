@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { DEFAULT_PHYS, makeBall, step, type SimWorld } from '../src/core/physics';
 import { buildCast } from '../src/game/skill-cast';
-import { Match } from '../src/game/match';
+import { calledTarget, Match } from '../src/game/match';
 import { CUES, TABLES } from '../src/game/content/gear';
 import { CHAMPIONS, type SkillDef, type SkillKind } from '../src/game/content/sects';
 import { think } from '../src/ai/brain';
@@ -65,7 +65,7 @@ describe('new families', () => {
     CHAMPIONS[0].skills[0] = fixtureSkill(['called']);
     m.state.isBreak = false;
     m.state.groups = ['stripe', 'solid'] as Match['state']['groups'];
-    m.useSkill(0, 0, { point: { x: 0, y: -0.08 } });
+    m.useSkill(0, 0, { pick: { x: 0, y: -0.08 } });
     m.state.turn = 1;
     m.beginTurn();
     const blank = { foul: null, keepTurn: false, ballInHand: 'none', respot: [], winner: null, messages: [], points: 0 };
@@ -75,6 +75,25 @@ describe('new families', () => {
     expect(m.lastShot?.firstHit).toBe(1);
     expect(m.lastRes?.foul).toContain('bi 2');
     expect(m.lastRes?.ballInHand).toBe('anywhere');
+  });
+
+  it('marks the tapped ball, and the ball nearest a pocket when nothing was tapped', () => {
+    const layout = [makeBall(0, -0.4, 0), makeBall(1, 0, 0), makeBall(2, 1.1, 0.5)];
+    const make = () => {
+      const m = new Match({ mode: 'eight', raceTo: 1, mutator: null, tableSkin: TABLES[0], seed: 7, layout, players: players() });
+      CHAMPIONS[0].skills[0] = fixtureSkill(['called']);
+      m.state.isBreak = false;
+      m.state.groups = ['stripe', 'solid'] as Match['state']['groups'];
+      return m;
+    };
+    const auto = make();
+    expect(calledTarget(auto, 0)?.id).toBe(2);
+    auto.useSkill(0, 0);
+    expect(auto.called?.ball).toBe(2);
+    const tapped = make();
+    expect(calledTarget(tapped, 0, { x: 0.02, y: 0 })?.id).toBe(1);
+    tapped.useSkill(0, 0, { pick: { x: 0.02, y: 0 } });
+    expect(tapped.called?.ball).toBe(1);
   });
 
   it('displace and swap keep every ball on a legal clear resting spot', () => {

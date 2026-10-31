@@ -71,6 +71,7 @@ export function createShooting(ctx: MatchCtx, dom: MatchDom, deps: ShootingDeps)
 function clearPlacement(ctx: MatchCtx, dom: MatchDom, deps: ShootingDeps): void {
   ctx.skill.placement = null;
   ctx.match.castPreview = [];
+  ctx.match.calledPreview = null;
   dom.cancelCast.hidden = true;
   dom.castSense.hidden = true;
   deps.renderHud();

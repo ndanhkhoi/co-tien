@@ -66,7 +66,7 @@ function drawCalledShot(v: OverlayView): void {
 }
 
 function drawCalledBall(v: OverlayView): void {
-  const id = v.match.calledNow;
+  const id = v.match.calledNow ?? v.match.calledPreview;
   if (id === null) return;
   const b = v.match.balls.find((x) => x.id === id);
   if (!b?.onTable) return;

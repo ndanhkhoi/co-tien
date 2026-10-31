@@ -6,8 +6,9 @@ describe('skill usage text', () => {
   it('tells how to use every skill of every champion', () => {
     for (const c of CHAMPIONS) for (const sk of c.skills) expect(skillUsage(sk), `${c.id}/${sk.slot}`).not.toBe('');
   });
-  it('tells a called-ball skill that the game picks the ball', () => {
-    expect(skillUsage({ kinds: ['called', 'blind'] })).toContain('tự chỉ định');
+  it('tells a called-ball skill to tap the ball, and a placed one that the ball is picked for it', () => {
+    expect(skillUsage({ kinds: ['called', 'blind'] })).toContain('chạm quả bi của đối thủ');
+    expect(skillUsage({ kinds: ['called', 'slick'] })).toContain('gần lỗ nhất, có vòng son ngay khi đặt');
   });
   it('applies own-shot buffs of a rewind package to the replayed shot', () => {
     const text = skillUsage({ kinds: ['rewind', 'power'] });

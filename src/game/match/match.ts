@@ -91,6 +91,8 @@ export class Match {
   baseCapture = 1;
   activeEffects: (CastEffect & { target: EffectTarget; shotsLeft: number; amount?: number })[] = [];
   castPreview: CastEffect[] = [];
+  /** Ball a called skill being placed would mark, drawn like the live called ball. */
+  calledPreview: number | null = null;
   aimLock: { angle: number; band: number } | null = null;
   spinAxis: ['side' | 'vert', 'side' | 'vert'] = ['side', 'side'];
   guardUsed: [boolean, boolean] = [false, false];
@@ -195,6 +197,7 @@ export class Match {
   startRack() {
     this.activeEffects = [];
     this.castPreview = [];
+    this.calledPreview = null;
     this.rackNo++;
     const breaker = this.breaker;
     const target = this.state.caromTarget;

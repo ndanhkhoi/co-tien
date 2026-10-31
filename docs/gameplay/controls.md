@@ -43,6 +43,9 @@ Nguồn: `src/ui/screens/match/` (trận) và `src/ui/screens/practice/desk.ts` 
   bi chỉ định, bi giả, phản chiêu úp) cùng số lượt còn lại. Chiêu úp chỉ ghi “một chiêu đang úp”, không lộ tên.
 - Khi bị dắt lệch, ô mục tiêu ghi rõ “Hướng bị dắt lệch X°”; trên nỉ vẫn có chấm son theo hướng thật.
 - Bi bị chỉ định có vòng son quanh bi, ô mục tiêu yêu cầu “phải chạm bi đó trước”.
+- Chiêu chỉ định bi (không kèm chiêu đặt bàn), dùng trong lượt của mình: vào bước chọn, quả bi đối thủ gần lỗ nhất có
+  vòng son sẵn; chạm quả khác để đổi, ô mục tiêu ghi “Chỉ định bi N”; **THI TRIỂN** xác nhận, **Huỷ đặt chiêu** không
+  tiêu chiêu. Ngoài lượt của mình hoặc khi kèm chiêu đặt bàn, game chọn quả gần lỗ nhất.
 
 ## Bi trong tay
 

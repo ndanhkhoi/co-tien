@@ -174,7 +174,7 @@ function renderObjective(ctx: MatchCtx, dom: MatchDom): void {
     : `${MODE_NAMES[match.setup.mode]} · ${raceName(match.setup.raceTo)} · ván ${match.rackNo}`;
   dom.objKicker.textContent = base;
   dom.objText.textContent = objectiveText(ctx);
-  dom.objPlate.classList.toggle('calling', match.calledNow !== null);
+  dom.objPlate.classList.toggle('calling', match.calledNow !== null || match.calledPreview !== null);
   if (match.driftNow) dom.objText.textContent += ` · Hướng bị dắt lệch ${formatAngle(match.driftNow)}°`;
 }
 
@@ -182,6 +182,7 @@ function objectiveText(ctx: MatchCtx): string {
   const { match, opts } = ctx;
   if (ctx.dom.desk) return ctx.dom.desk.plate().text;
   if (opts.challenge) return opts.challenge.goal;
+  if (match.calledPreview !== null) return `Chỉ định bi ${match.calledPreview} · chạm bi khác của đối thủ để đổi`;
   if (match.calledNow !== null) return `Phải chạm bi ${match.calledNow} trước`;
   return match.setup.mode === 'carom-3c' ? 'Chạm bi thứ nhất, đủ 3 băng trước bi thứ hai.' : match.objective();
 }

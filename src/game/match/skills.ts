@@ -180,11 +180,7 @@ function applyTrick(m: Match, kind: SkillKind, spec: KindCast, pw: Record<string
   const opp = other(side);
   switch (kind) {
     case 'called': {
-      const point = cast?.point;
-      const ids = calledCandidates(m, opp);
-      const ball = point
-        ? m.balls.filter((b) => b.onTable && ids.includes(b.id)).sort((a, b) => Math.hypot(a.x - point.x, a.y - point.y) - Math.hypot(b.x - point.x, b.y - point.y))[0]
-        : nearestPocketBall(m, ids);
+      const ball = calledTarget(m, side, cast?.pick);
       if (ball) {
         m.called = { by: side, ball: ball.id, shotsLeft: skillTurns(turns) };
         m.calledNow = m.state.turn === opp ? ball.id : null;
@@ -212,6 +208,13 @@ function applyTrick(m: Match, kind: SkillKind, spec: KindCast, pw: Record<string
     }
     default: return false;
   }
+}
+
+/** The ball a called skill cast by `side` orders the opponent to hit first; shared by the match and its preview. */
+export function calledTarget(m: Match, side: Side, pick?: { x: number; y: number }): BallLike | undefined {
+  const ids = calledCandidates(m, other(side));
+  if (!pick) return nearestPocketBall(m, ids);
+  return m.balls.filter((b) => b.onTable && ids.includes(b.id)).sort((a, b) => Math.hypot(a.x - pick.x, a.y - pick.y) - Math.hypot(b.x - pick.x, b.y - pick.y))[0];
 }
 
 /** Balls the opponent may be ordered to hit first: their legal targets, or every object ball on a carom table. */

@@ -4,6 +4,8 @@ import { skillPower, type SkillKind, type UltId, type SkillShape } from './conte
 
 export interface SkillCast {
   point?: { x: number; y: number };
+  /** Called ball: the opponent's ball nearest this point (unset: their ball nearest a pocket). */
+  pick?: { x: number; y: number };
   direction?: { x: number; y: number };
   /** Index in table.segments; position is a fraction along that cushion. */
   rail?: { index: number; position: number };

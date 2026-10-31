@@ -1,7 +1,7 @@
 import { champion, skillIconUrl, type SkillDef, type SkillKind } from '../../../game/content/sects';
 import { skillUsage } from '../../../game/content/skill-usage';
 import { buildCast, PLACED_KINDS, type SkillCast } from '../../../game/skill-cast';
-import { ENERGY_MAX } from '../../../game/match';
+import { calledTarget, ENERGY_MAX } from '../../../game/match';
 import { sound } from '../../../audio/sound';
 import { btn, h } from '../../dom';
 import { hintOnce } from '../../hints';
@@ -152,13 +152,17 @@ function createUseButton(ctx: MatchCtx, dom: MatchDom, deps: SkillDeps, info: Sk
   return btn(frag(icon(info.ult ? 'ultimate' : 'energy'), 'Dùng'), () => {
     if (!canInspectSkills(ctx) || !match.canUseSkill(side, slot)) return;
     deps.closeSheets();
-    if (sk.kinds.some(k => PLACED_KINDS.includes(k))) {
-      ctx.skill.placement = { side, slot, cast: { direction: { x: Math.cos(aim.angle), y: Math.sin(aim.angle) } } };
-      previewCast(ctx, ctx.skill.placement.cast);
-      dom.cancelCast.hidden = false;
-      dom.castSense.hidden = false;
-      deps.renderHud();
-    } else match.useSkill(side, slot);
+    const placed = sk.kinds.some(k => PLACED_KINDS.includes(k));
+    const pick = !placed && picksBall(ctx, side, sk);
+    if (!placed && !pick) { match.useSkill(side, slot); return; }
+    // A called ball starts on the opponent's ball nearest a pocket; a tap on another ball moves the mark.
+    const start = pick ? calledTarget(match, side) : undefined;
+    const cast = start ? { point: { x: start.x, y: start.y } } : { direction: { x: Math.cos(aim.angle), y: Math.sin(aim.angle) } };
+    ctx.skill.placement = { side, slot, cast };
+    previewCast(ctx, cast);
+    dom.cancelCast.hidden = false;
+    dom.castSense.hidden = pick;
+    deps.renderHud();
   }, 'big');
 }
 
@@ -189,6 +193,24 @@ export function previewCast(ctx: MatchCtx, cast: SkillCast): void {
   const sk = match.skills(side)[slot];
   match.castPreview = sk.kinds.filter(k => PLACED_KINDS.includes(k)).map(k => buildCastFor(ctx, { sk, slot, cast, kind: k }));
   placement.cast = match.castPreview[0]?.cast ?? cast;
+  previewCalled(ctx, sk);
+}
+
+/** A called skill with nothing to lay on the cloth lets the caster tap the ball to mark, on their own turn. */
+function picksBall(ctx: MatchCtx, side: 0 | 1, sk: SkillDef): boolean {
+  const { match } = ctx;
+  return sk.kinds.some((k) => match.effectiveKind(k) === 'called') && match.phase === 'aim' && match.turn === side && controllerIsHuman(match);
+}
+
+function previewCalled(ctx: MatchCtx, sk: SkillDef): void {
+  const { match } = ctx;
+  const placement = ctx.skill.placement!;
+  if (!sk.kinds.some((k) => match.effectiveKind(k) === 'called')) { match.calledPreview = null; return; }
+  const placed = sk.kinds.some((k) => PLACED_KINDS.includes(k));
+  const pick = placed ? undefined : placement.cast.point;
+  const ball = calledTarget(match, placement.side, pick);
+  match.calledPreview = ball?.id ?? null;
+  if (pick && ball) placement.cast = { ...placement.cast, point: { x: ball.x, y: ball.y }, pick: { x: ball.x, y: ball.y } };
 }
 
 function buildRailCast(match: MatchCtx['match'], side: 0 | 1, cast: SkillCast) {
