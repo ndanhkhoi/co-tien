@@ -18,6 +18,7 @@ Mọi tranh, icon, minh hoạ và trang trí UI phải được sinh riêng, ngu
 |---|---|
 | `scripts/gen-image.sh --out f.png --prompt-file p.txt [--ref r.png]` | sinh một ảnh, có thể gửi nhiều ảnh tham chiếu |
 | `scripts/gen-sect.sh SECT WORK` | sinh prompt và bộ ảnh môn phái, bỏ qua ảnh gốc đã có |
+| `scripts/gen-gallery.sh SECT WORK [ids]` | sinh 4 tranh tư thế gallery cho tướng môn phái, bỏ qua ảnh gốc đã có; `REDO=1` để vẽ lại |
 | `scripts/rebackground.sh WORK SECT [ids]` | thay nền chân dung/biểu cảm thành giấy dó, giữ nhân vật; ảnh cũ vào `raw/old/`, bỏ qua ảnh đã trên giấy |
 | `scripts/gen-story-art.sh WORK [scenes]` | minh hoạ từ `story.json`, xuất `public/art/story/`; `REDO=1` để vẽ lại |
 | `scripts/slice-grid.py sheet.png --rows R --cols C --out dir --names a,b,… --key none\|black\|alpha\|green [--trim] --size N` | cắt lưới, tách nền, xuất webp |
@@ -79,7 +80,7 @@ sau khi đã có ảnh. Mặc định bỏ qua PNG gốc đã có, xuất webp v
 
 ```
 public/art/
-  champions/{id}/portrait.webp  cutout.webp  win.webp  finisher.webp  expr-{focus|joy|sad|cast}.webp
+  champions/{id}/portrait.webp  cutout.webp  win.webp  finisher.webp  pose-{1..4}.webp  expr-{focus|joy|sad|cast}.webp
   sects/{sect}/emblem.webp  splash.webp  cutin.webp  felt.webp  rail.webp  cue-a.webp  cue-b.webp
   sects/{sect}/vfx/{element}.webp
   sects/{sect}/flip/{00..15}.webp
@@ -98,6 +99,10 @@ lần đầu người chơi tải trọn bộ, bản sau chỉ tải lại file 
 chéo trên trái xuống dưới phải, đầu cơ thúc về góc dưới phải, vệt mực màu môn phái sau đầu cơ, nền trong suốt,
 `--size 1536x1024`; xuất cắt sát, tối đa 820 px, webp q74. Khung 9 lát cho chữ: prompt nêu rõ phần giữa phẳng và
 trống, trang trí chỉ ở hai đầu ngắn; cắt sát thân khung theo chiều dọc trước khi dùng.
+
+`pose-{1..4}.webp` (Tranh tư thế gallery): 4 tranh toàn thân đa dạng dáng và góc nhìn trong Tàng Các, gửi cut-out
+làm `--ref`, chèn `look`, phong cách splash như cut-out, nền trong suốt, khổ 1024×1536; xuất cắt sát, cao tối
+đa 1024 px, webp q86 như `win.webp`.
 
 ## How VFX turns into skill animation
 

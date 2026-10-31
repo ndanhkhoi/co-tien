@@ -14,13 +14,14 @@ chạy `npm test` và `npm run build` sau mỗi bước.
    (`KIND_RANK` trong `src/game/content/sects.ts`). Chiêu 2 đúng nấc của bậc tướng, tuyệt chiêu cao hơn một nấc
    (trần 5); test kiểm cả hai. Tên chiêu và `icon` phải nói đúng cơ chế của `kinds`.
    Phần mô tả để vẽ: `look` (ghi rõ giới tính, và với tướng không phải người thì số chi, cánh, đuôi; ghi giày đế
-   bằng hoặc chân trần, không giày cao gót; một tổ hợp nét nhận diện không trùng tướng khác), `pose`, `expr`, và
+   bằng hoặc chân trần, không giày cao gót; một tổ hợp nét nhận diện không trùng tướng khác), `pose`, `expr`,
+   `gallery` (mảng đúng 4 tranh tư thế với `label` tiếng Việt ≤ 14 ký tự và `pose` tiếng Anh), và
    `icon` cho từng chiêu. Bản build lược các trường mô tả vẽ; code game không đọc chúng.
 2. **Tên**: tên tướng và chiêu phải nguyên bản, không lấy từ game hay tác phẩm khác.
    `tests/roster-names.test.ts` kiểm tra tên chiêu không trùng và không lặp chữ đầu quá nhiều trong môn phái.
 3. **Truyện**: tiểu sử và câu nói vào `src/game/content/lore.json`.
-4. **Tranh**: theo [art-pipeline.md](art-pipeline.md): cut-out, chân dung, biểu cảm, ăn mừng, ba icon chiêu
-   và tư thế Kết liễu `champions/{id}/finisher.webp`. Duyệt từng tấm trước khi xuất vào `public/art/`, soi ảnh
+4. **Tranh**: theo [art-pipeline.md](art-pipeline.md): cut-out, chân dung, biểu cảm, ăn mừng, ba icon chiêu,
+   4 tranh tư thế `champions/{id}/pose-{1..4}.webp` và tư thế Kết liễu `champions/{id}/finisher.webp`. Duyệt từng tấm trước khi xuất vào `public/art/`, soi ảnh
    toàn thân ở bản phóng to: đúng giới tính, chi đúng loài, một cây cơ liền và cầm đúng chiều, vật bị thân che
    phải thẳng hàng hai bên, không giày cao gót; tư thế ăn mừng khác hẳn cut-out.
 5. **Tài liệu**: thêm tướng vào bảng môn phái trong [world/world-bible.md](../world/world-bible.md) (tên, loại,

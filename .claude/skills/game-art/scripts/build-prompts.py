@@ -2,7 +2,7 @@
 
     python3 build-prompts.py ROSTER.json SECT_ID OUT_DIR
 
-Produces cut-<id>.txt, port-<id>.txt (per champion) and splash.txt, cutin.txt, icons.txt,
+Produces cut-<id>.txt, port-<id>.txt, win-<id>.txt, pose-<id>-<1..4>.txt (per champion) and splash.txt, cutin.txt, icons.txt,
 vfx.txt, flip.txt, rail.txt, cues.txt (per sect). Icon cell order is written to icons.order.
 """
 import json
@@ -30,11 +30,34 @@ CREATURE_BODY = (
     "have the digits that kind of body has."
 )
 COMMON = (
-    "Exactly one billiard cue, straight and whole, held plausibly, never passing through the body and with nothing "
+    "Exactly one billiard cue, straight and whole, its striking end a plain white ferrule with a small dark leather tip "
+    "(only the butt may be decorated), held plausibly, never passing through the body and with nothing "
     "hanging from it unless the spec says so. Anything partly hidden behind the body, an arm, hair, wings or cloth "
     "(an instrument, the cue, a bow, a tail) continues in the same line, angle and width on both sides. "
+    "Anything worn on the back (a zither, a quiver, a shell, a pack) stays strapped behind the shoulders and never "
+    "crosses in front of or through the torso or hips; the cue never passes through it. "
+    "Everything is drawn at true scale next to the figure: a billiard table is a full-size table whose top reaches "
+    "the hips of a standing adult and whose length is about one and a half times her height (about forty ball widths; "
+    "a ball is only as wide as three fingers), so a person lying on it covers about two thirds of it; chairs, stools and "
+    "railings fit an adult body. "
     "Anyone wearing shoes wears completely flat shoes or boots with zero heel height, the whole sole on the ground, never heels of any size."
 )
+
+
+# Gallery poses stay modest; only Ngân Cầm may play up her hips and rear (style bible exception).
+MODEST = (
+    "Modest framing: the buttocks are always fully covered by opaque cloth, never bare, never outlined through sheer or "
+    "wet fabric; skirt slits stop below the hip; no pose bends over or turns the rear towards the viewer; no cleavage "
+    "close-up. Shoulders, arms, midriff and legs may show as the costume describes."
+)
+SHOWCASE = (
+    "Her figure is the appeal: opaque silk hugging her hips and rear, a tilted hip and an over-the-shoulder glance, "
+    "always fully clothed, no nudity, no underwear, nothing explicit."
+)
+
+
+def modesty(c):
+    return SHOWCASE if c["id"] == "ngancam" else MODEST
 
 
 def body(c):
@@ -87,6 +110,51 @@ The victory pose is clearly different from the reference pose: relaxed and celeb
 {body(c)}
 Whole body in frame with margin, rim light in {glow}. Background: fully transparent (PNG alpha).
 If alpha is impossible, flat pure #00ff00 green with no shadow. No text, no letters.
+""")
+    if "gallery" in c:
+        for idx, g in enumerate(c["gallery"]):
+            n = idx + 1
+            g_pose = g["pose"].strip().rstrip(".")
+            # A pose spread along a long object (lying on a billiard table) needs a wide canvas to keep true scale.
+            frame_text = "wide horizontal 1536x1024 composition" if g.get("frame") == "wide" else "vertical 1024x1536 composition"
+            w(f"pose-{c['id']}-{n}.txt", f"""
+Full-body character illustration of the SAME character as the reference image (same face, species features, hair, outfit, cue and colours), painterly 2.5D anime splash style matching the reference: {c['name']}.
+The billiard cue is their weapon and cultivation artifact, styled in the {sect['name']} sect's look ({sect['motifs']}).
+Character spec (every trait must match, keep every signature prop, companion and the signature cue): {c['look']}.
+This pose is clearly different from the reference pose: {g_pose}.
+Paint only the character (and companion), plus at most the one object the pose sits, leans or works on; any place named in the pose is mood only, never painted: no scenery, architecture, sky, moon, lanterns or floor beyond a small cast shadow. If the cue is not in a hand it rests visibly on that object or lies flat on the ground, never standing or floating on its own. Never fall back to a plain standing pose holding the cue upright beside the body unless the pose asks for it: act out the pose with the whole body.
+{body(c)}
+{modesty(c)}
+Whole body in frame with margin, {frame_text}, rim light in {glow} and {main}.
+Background: fully transparent (PNG alpha). If alpha is impossible, flat pure #00ff00 green with no shadow.
+No text, no logo, no frame, no letters.
+""")
+
+# Kết liễu animation: eight keyframes of one strike, all on the same canvas so they play back without jumping.
+FINISH_FRAMES = [
+    "ready: standing poised at the left of the frame, eyes narrowing on the lower right, the cue held low and level",
+    "coil: sinking low onto the back foot, body turned and coiled, the cue drawn far back along the body",
+    "launch: pushing off hard from the back foot, the body tipping forward, the cue starting to come through",
+    "lunge: airborne and stretched along the diagonal from upper left to lower right, the cue driving forward",
+    "thrust: almost at full reach, front arm extending, the cue tip a little short of the lower-right corner",
+    "impact: full extension at the instant of the strike, front arm locked, the cue tip at the lower-right corner, a burst of ink at the tip",
+    "follow-through: momentum carrying the body past the strike, the cue swinging up and across the body",
+    "finish: landed toward the right of the frame and poised, the cue resting on the shoulder or held upright, a cool victorious glance back",
+]
+
+for c in champs:
+    for i, phase in enumerate(FINISH_FRAMES):
+        w(f"fin-{c['id']}-{i + 1}.txt", f"""
+Keyframe {i + 1} of 8 of one finishing strike by the SAME character as the first reference image (same face, species features, hair, outfit, cue and colours), painterly 2.5D anime style matching it: {c['name']}.
+Phase: {phase}.
+Use the second reference image only for framing: same wide canvas, same character scale, same ground line, the whole action moving from left to right across the frame; do not copy its pose.
+Character spec (every trait must match, keep every signature prop, companion and the signature cue): {c['look']}.
+The cue is one single straight cue: slim tip toward the strike direction, thick butt behind the rear hand. A streak of {main} ink brushwork only where the phase mentions ink.
+{body(c)}
+{modesty(c)}
+Whole body in frame with margin, wide 1536x1024 composition, matte painted finish, no glow.
+Background: fully transparent (PNG alpha). If alpha is impossible, flat pure #00ff00 green with no shadow.
+No text, no logo, no frame, no letters.
 """)
 
 w("splash.txt", f"""

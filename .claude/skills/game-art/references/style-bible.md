@@ -23,9 +23,14 @@ the master art folder.
 - **Icons & VFX** — matte painted ink magic, no glow, no metallic shine or additive light; high contrast, chunky readable silhouettes,
   readable at 48–64 px, no text.
 - **Outfits**: stylish fantasy costumes may show skin (slits, bare shoulders, midriff) like typical
-  xianxia/gacha art, but never sexualised or lewd: no nudity, no fetish framing, no suggestive poses.
+  xianxia/gacha art, but never sexualised or lewd: no nudity, no fetish framing, no suggestive poses. The buttocks
+  stay fully covered by opaque cloth (never bare or shown through sheer fabric), slits stop below the hip, no pose
+  bends over or presents the rear to the viewer, no cleavage close-ups. A three-quarter back view is fine when the
+  hips are fully covered and not the focus.
 - **Footwear**: embroidered flat cloth shoes, silk slippers, flat-soled boots or bare feet. Never high heels;
   name the footwear in a look whenever feet show, or the model adds heels to women.
+- **Exception, Ngân Cầm (`ngancam`)**: her art may play up her hips and rear (form-fitting silk, three-quarter back
+  views, a tilted hip); she stays fully clothed, no nudity and no explicit framing.
 - **Body variety**: not every woman is tall and long-legged. Petite, short-legged, rounded, athletic and curvy
   figures all appear; a petite adult still has an adult face and proportions.
 - **State gender explicitly** in every champion look ("a man", "a woman"): without it the model drifts
@@ -35,6 +40,30 @@ the master art folder.
   characters or emblems, modern clothing, guns (Thiên Cơ Các may use fantasy crossbows/cannons).
 
 Code/shaders may render simulated objects such as balls and the table (geometry, numbers/stripes, colours, lighting and physics-driven rotation). This exception does not permit code-drawn illustrations, icons or UI decoration; those must be original assets generated through the prescribed art pipeline.
+
+## Full-body checklist (cut-out, win, finisher, gallery poses, story scenes)
+
+Prompts carry these as the body guard in `scripts/build-prompts.py`; reviewers reject any image that breaks one,
+however good it looks.
+
+1. **Anatomy**: humans have two arms, two legs, five fingers per visible hand, joints bending the natural way; creatures
+   have exactly the limbs, wings, tails and horns their `look` lists. Nothing extra, merged or floating.
+2. **One cue, held**: exactly one cue, gripped by a hand (or the spec's paw/claw/tail), never floating or balanced on the
+   body, never passing through it.
+3. **The cue is a cue**: one straight, unbroken shaft that tapers to a ferrule and leather tip at the striking end; never a
+   brush head, orb, blade or scepter cap. Nothing hangs from it unless the `look` says so.
+4. **Occlusion**: anything hidden behind the body, an arm, hair or cloth (cue, instrument, bow, tail) comes out on the
+   other side in the same line, angle and width. Anything worn on the back (zither, quiver, shell) stays behind the
+   shoulders and never crosses in front of or through the torso or hips; the cue never passes through it.
+5. **True scale**: props and furniture keep their real size next to the figure. A billiard table is full size: its
+   top reaches a standing adult's hips and it is about one and a half times her height long. Use the balls as a
+   ruler: a ball is 5.7 cm (three fingers wide), a table about forty balls long, so a person lying on it covers about two
+   thirds of it. Chairs, railings, cups and other props keep their everyday size against the body.
+6. **Footwear**: flat shoes, slippers, flat boots or bare feet with five toes; never heels.
+7. **Same character**: face, hair, eyes, marks, outfit, props and cue match `look` and the cut-out.
+8. **Distinct pose**: every full-body image of a champion has its own pose and expression; never a copy of the
+   cut-out, the win pose, the finisher or another gallery pose, and never the generic pose another champion uses.
+9. **Clean output**: no text or glyphs, no cropped limbs or cue, clean transparent background on cut-outs.
 
 ## Sect palettes (main / glow)
 

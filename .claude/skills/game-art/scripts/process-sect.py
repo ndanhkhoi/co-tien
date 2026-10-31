@@ -69,6 +69,10 @@ for cid in ids:
     if os.path.exists(os.path.join(raw, f"expr-{cid}.png")):
         for name, cell in zip(EXPR, cells(Image.open(os.path.join(raw, f"expr-{cid}.png")).convert("RGB"), 2, 2)):
             save(cell.resize((256, 256), Image.LANCZOS), path("champions", cid, f"expr-{name}.webp"))
+    for n in range(1, 5):
+        pose_src = os.path.join(raw, f"pose-{cid}-{n}.png")
+        if os.path.exists(pose_src):
+            save(fit_height(keyed(pose_src), 1024), path("champions", cid, f"pose-{n}.webp"))
 
 order_file = os.path.join(work, "prompts", "icons.order")
 if os.path.exists(os.path.join(raw, "icons.png")) and os.path.exists(order_file):
