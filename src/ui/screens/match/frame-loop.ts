@@ -126,6 +126,8 @@ function updateView(ctx: MatchCtx, dom: MatchDom, deps: FrameDeps, dt: number): 
   const av = humanAim || power.strikeT > 0 ? aimView(ctx, deps, { humanAim, placing }) : null;
   view.calledShot = deps.currentCall();
   placeCallTag(ctx, dom);
+  // While the aim guide runs to the called pocket, the tag dims: the line needs the pocket mouth.
+  dom.callTag.classList.toggle('dim', Boolean(av?.showGuide));
   view.update(dt, av);
 }
 

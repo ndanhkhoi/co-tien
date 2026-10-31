@@ -37,6 +37,7 @@ Nguồn: `src/ui/screens/match/` (trận) và `src/ui/screens/practice/desk.ts` 
 
 - Chạm một bi trên bàn hiện nhãn với ảnh và số bi. Trong Luyện thế chỉ chạm-thả mới hiện nhãn; kéo chỉ dời bi.
 - Gọi lỗ bằng cách chạm lỗ. Lỗ đã gọi hiện trong ô mục tiêu phía trên; không có gì đặt trên băng bàn.
+  Thẻ son "Gọi" cạnh lỗ đã gọi mờ đi khi đường ngắm đang chạy để không che điểm rơi của đường bi.
 - 9 bi và 10 bi hiện hai bi tiếp theo, số in trên bi; chạm một bi hiện nhãn ngay trên bi đó ở bàn.
 - Chân dung người tới lượt có mũi tên son nhấp nhô; mỗi thẻ có khay bi (8 bi: cả nhóm, bi còn trên bàn mờ).
 - Mỗi thẻ cũng gắn chip ảnh hưởng đang tác dụng cho bên đó (run tay, giảm lực, che mắt, dắt lệch, phong lỗ,

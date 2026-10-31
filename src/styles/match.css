@@ -342,7 +342,10 @@
   font: 700 14px/1.2 var(--display);
   white-space: nowrap;
   box-shadow: var(--sh-1);
+  transition: opacity 0.15s var(--ease);
 }
+/* The aim guide needs the pocket mouth: the tag steps back while the line is live. */
+.mx-calltag.dim { opacity: 0.2; }
 .mx-ct-label { font-size: 13px; text-transform: uppercase; letter-spacing: 0.06em; }
 .mx-calltag.pop { animation: mx-call-pop 0.32s var(--ease) both; }
 @keyframes mx-call-pop { from { opacity: 0; transform: translate(-50%, -50%) scale(0.6); } }
