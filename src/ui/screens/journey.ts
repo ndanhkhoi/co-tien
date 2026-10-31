@@ -74,7 +74,6 @@ export function journeyScreen(app: App, focusLand?: SectId): Screen {
   // Returning from a duel focuses its land; otherwise go to the first land still to play.
   const target = journeyFocus(focusLand, CHAPTERS.map((ch, i) => ({ id: ch.id, open: landOpen(app, i), beaten: ch.npcs.every((n) => p.career[n.id] !== undefined) })));
   const current = CHAPTERS.findIndex((ch) => ch.id === target);
-  let focus: HTMLElement | null = null;
   CHAPTERS.forEach((ch, i) => {
     const [x, y] = PINS[ch.id];
     const open = landOpen(app, i);
@@ -84,40 +83,30 @@ export function journeyScreen(app: App, focusLand?: SectId): Screen {
     const done = beaten === ch.npcs.length;
     const state = !open ? 'locked' : i === current ? 'current' : done ? 'done' : '';
     const pin = h('button.land-pin', {
-      class: state, style: `left:clamp(77px, ${x * 100}%, calc(100% - 77px));top:${y * 100}%;--pin-y:${y > 0.85 ? -100 : 0}%;--sect:${hex6(sect(ch.id).main)}`,
+      class: state,
+      style: `left:clamp(56px, ${x * 100}%, calc(100% - 56px));--pin-y:${y * 100}%;--sect:${hex6(sect(ch.id).main)}`,
       'aria-label': open ? `${ch.name}: ${beaten}/${ch.npcs.length} cao thủ, ${solved}/${tasks.length} thử thách` : `${ch.name}: chưa mở`,
     },
     i === current ? h('span.lp-flag', null, 'Đi tiếp') : null,
-    h('span.lp-emblem', null, h('img', { src: sectArtUrl(ch.id, 'emblem'), alt: '' })),
-    h('span.lp-text', null,
-      h('span.lp-name', null, `${i + 1}. ${ch.name}`),
-      open
-        ? h('span.lp-prog', null, icon('users'), h('b.num', null, `${beaten}/${ch.npcs.length}`), icon('target'), h('b.num', null, `${solved}/${tasks.length}`))
-        : h('span.lp-prog.lp-closed', null, icon('lock'), 'Chưa mở'),
-    ),
+    h('span.lp-emblem', null,
+      h('img', { src: sectArtUrl(ch.id, 'emblem'), alt: '' }),
+      h('span.lp-badge', null, open ? (i + 1).toString() : icon('lock')),
+      done ? icon('check', 'lp-check') : null),
+    h('span.lp-text', null, h('span.lp-name', null, `${i + 1}. ${ch.name}`)),
     );
     tap(pin, () => (open ? landSheet(app, ch.id) : toast(`Thắng ${CHAPTERS[i - 1].npcs[0].name} ở ${CHAPTERS[i - 1].name} để mở đường tới đây`, 'bad')));
-    if (i === current) focus = pin;
     map.append(pin);
   });
   const beatenAll = Object.keys(p.career).length;
   const solvedAll = Object.values(p.challenges).filter((v) => v > 0).length;
-  const scroller = h('div.scroll.journey-scroll', null, map);
   el.append(
     topbar(app, 'Hành trình', true,
       statChip('users', `${beatenAll}/${ALL_NPCS.length}`, `Đã thắng ${beatenAll}/${ALL_NPCS.length} cao thủ`),
       statChip('target', `${solvedAll}/${CHALLENGES.length}`, `Đã giải ${solvedAll}/${CHALLENGES.length} thử thách`)),
-    scroller,
+    h('div.journey-scroll', null, map),
   );
-  // Bring the land to play next into view once the map has its size.
-  requestAnimationFrame(() => requestAnimationFrame(() => {
-    const f = focus as HTMLElement | null;
-    if (!f) return;
-    scroller.scrollTop = Math.max(0, f.offsetTop - scroller.clientHeight / 2);
-  }));
   return { el };
 }
-
 function landSheet(app: App, id: SectId) {
   const ch = CHAPTERS.find((c) => c.id === id)!;
   const p = app.profile;
@@ -135,13 +124,16 @@ function landSheet(app: App, id: SectId) {
         statChip('users', `${beaten}/${ch.npcs.length} cao thủ`),
         statChip('target', `${solved}/${tasks.length} thử thách`)),
       h('h3.section-title', null, 'Cao thủ'),
-      h('div.ls-masters', null, ...ch.npcs.map((n) => {
+      h('div.ls-masters', null, ...ch.npcs.map((n, ni) => {
         const open = npcOpen(app, n);
         const best = p.career[n.id];
+        // Masters are sorted by tier, so the last one is the land's tier-5 boss.
+        const boss = ni === ch.npcs.length - 1;
+        const foot = best !== undefined ? stars(best) : n === nextNpc ? h('span.cc-cta', null, 'Thách đấu') : null;
         return champCard(champion(n.id), {
-          locked: !open, name: n.name, cls: n === nextNpc ? 'next' : '',
+          locked: !open, name: n.name, cls: `${boss ? 'ls-boss' : 'ls-master'}${n === nextNpc ? ' next' : ''}`,
           sub: open ? `${MODE_NAMES[n.mode]} · ${LEVEL_NAMES[n.level]}` : 'Thắng cao thủ trước để mở',
-          foot: best !== undefined ? stars(best) : n === nextNpc ? h('span.cc-cta', null, 'Thách đấu') : null,
+          foot: boss ? h('span.ls-boss-foot', null, h('span.ls-boss-tag', null, 'Trùm vùng'), foot) : foot,
         }, () => {
           if (!open) return toast('Thắng cao thủ trước để mở', 'bad');
           close();

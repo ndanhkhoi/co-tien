@@ -433,7 +433,7 @@
 
 /* One continuous landscape; the map is no longer a framed card. */
 .screen.journey { padding-bottom: 0; gap: 0; }
-.journey-scroll { flex: 1; min-height: 0; border-radius: 0; box-shadow: none; background: var(--frame); overscroll-behavior: none; }
+.journey-scroll { flex: 1; overflow: hidden; border-radius: 0; box-shadow: none; background: var(--frame); overscroll-behavior: none; }
 .journey-map { isolation: isolate; }
 .journey-art { object-fit: cover; }
 .journey-map::after {
@@ -441,7 +441,7 @@
   position: absolute;
   inset: 0;
   pointer-events: none;
-  background: linear-gradient(var(--frame), transparent 12%, transparent 88%, var(--frame)), linear-gradient(90deg, var(--frame), transparent 8%, transparent 92%, var(--frame));
+  background: linear-gradient(var(--frame), transparent 10%, transparent 90%, var(--frame)), linear-gradient(90deg, var(--frame), transparent 7%, transparent 93%, var(--frame));
 }
 
 /* Compact power ruler: reserve real travel instead of squeezing a wide tank. */
@@ -521,8 +521,8 @@ body { background: linear-gradient(#e9e1d0d1, #e9e1d0d1), var(--paper, none) cen
 .cutin .ci-kicker { font-size: 11px; letter-spacing: .08em; color: var(--sheet); text-shadow: 0 1px 3px #000, 0 0 6px #000; }
 .cutin .ci-name { font-size: 30px; line-height: 1.25; text-shadow: 0 2px 2px #000; }
 .cutin.rtl .ci-plate { left: 1%; }
-/* Route names remain readable instead of losing the sect at an ellipsis. */
-.lp-name { white-space: normal; overflow: visible; font-size: 11.5px; }
+/* Compact route seals leave the painted landscape visible between landmarks. */
+.land-pin { box-shadow: none; }
 
 /* Content scrolls within its own track; actions never cover skill hints. */
 .cp-content { min-height: 0; display: flex; flex-direction: column; gap: 6px; padding-right: 4px; }
@@ -544,8 +544,15 @@ body { background: linear-gradient(#e9e1d0d1, #e9e1d0d1), var(--paper, none) cen
 .sr-text { padding-bottom: 12px; }
 .sr-sheet > .more-chevron { top: auto !important; bottom: 2px; }
 /* Let the painted route remain visible behind compact, readable landmarks. */
-.land-pin { width: 138px; max-width: 138px; padding: 3px 5px; gap: 3px; }
-.land-pin.locked { background: color-mix(in srgb, var(--sheet) 78%, transparent); box-shadow: none; }
+.land-pin.locked { box-shadow: none; }
+/* Land masters read as horizontal paper cards; the boss is a single vermilion-edged row. */
+.land-sheet .ls-masters .champ-card { border-width: 6px; border-image-width: 6px; }
+.land-sheet .ls-masters .cc-lock { right: 2px; bottom: 2px; width: 22px; height: 22px; }
+.land-sheet .ls-masters .cc-lock .ico { width: 15px; height: 15px; }
+.land-sheet .ls-masters .champ-card.locked { opacity: .74; }
+.land-sheet .ls-masters .ls-boss { border: 1px solid var(--accent); border-image: none; background: color-mix(in srgb, var(--sheet) 92%, transparent); box-shadow: var(--sh-1); }
+.land-sheet .ls-boss .cc-art { box-shadow: inset 0 -18px 16px -14px var(--sect); }
+.land-sheet .ls-masters .ls-boss.locked { border-color: var(--line-2); background: var(--sheet-3); }
 /* Secondary copy is still legible at the design frame's native scale. */
 .cc-sub { font-size: 11px; line-height: 1.35; }
 /* VS portraits use the full square aperture; the painted frame overlays the image without shrinking it. */
@@ -782,8 +789,8 @@ body.playing .bd-scene, body.playing .bd-mist { animation-play-state: paused; }
 
 /* The close button sits over the top-right corner; keep the picker's note clear of it. */
 .profile-modal .pm-note { padding-right: 52px; }
-/* The "next land" flag sits fully above its pin so the land name stays readable. */
-.lp-flag { top: auto; bottom: calc(100% + 2px); line-height: 16px; }
+/* The "next land" flag rides above the seal without moving the painted landmark. */
+.lp-flag { line-height: 16px; }
 
 /* Tapped ball label: a painted paper slip holding the real ball and its name. */
 .mx-balltag {
