@@ -587,7 +587,7 @@
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
   grid-template-rows: 16px minmax(0, 1fr);
-  column-gap: 8px;
+  column-gap: 6px;
   overflow: hidden;
   animation: none;
 }
@@ -597,8 +597,8 @@
 .match-coach .coach-text { grid-column: 1; margin: 0; font-size: 13px; line-height: 16px; overflow-y: auto; }
 .match-coach .coach-text .ico { display: inline-block; width: 18px; height: 18px; vertical-align: middle; }
 /* The single "got it" plate stands centred in its own column, set off from the text by a hairline. */
-.match-coach .coach-actions { grid-column: 2; grid-row: 1 / 3; align-self: stretch; margin: 0; padding-left: 8px; border-left: 1px solid var(--line); display: flex; align-items: center; }
-.match-coach .coach-actions .btn { min-width: 0; width: 76px; min-height: 44px; padding: 0 4px; font-size: 13px; }
+.match-coach .coach-actions { grid-column: 2; grid-row: 1 / 3; align-self: stretch; margin: 0; padding-left: 5px; border-left: 1px solid var(--line); display: flex; align-items: center; }
+.match-coach .coach-actions .btn.secondary { min-width: 0; min-height: 44px; padding: 0 1px; border-width: 8px; border-image-width: 8px; font-size: 12px; letter-spacing: 0; }
 
 .mx-passive { min-height: var(--touch-target); font-size: 10px; line-height: 1.25; padding: 4px 6px; white-space: normal; }
 .mx-passive:disabled { opacity: .75; }
