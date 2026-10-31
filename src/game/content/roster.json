@@ -273,14 +273,14 @@
           "icon": "Ink-wash painted icon on warm rice paper showing a small shoulder flying sword pointing past a cheek bandage to light two dotted predicted trails, restrained vermilion accent, no lettering."
         },
         {
-          "name": "Vạn Kiếm Quy Tông",
+          "name": "Hàn Quang Kiếm Ảnh",
           "kinds": [
             "chill",
             "second"
           ],
           "target": "opponent",
           "turns": 2,
-          "icon": "Ink-wash painted icon on warm rice paper showing a white disciple headband looped around a trembling frosted hand that steadies a slim white-jade cue for a second strike, restrained vermilion accent, no lettering."
+          "icon": "Ink-wash painted icon on warm rice paper showing frosted sword shadows circling a trembling hand on a cue while a second white-jade cue waits ready behind it, restrained vermilion accent, no lettering."
         }
       ]
     },
@@ -311,14 +311,14 @@
           "icon": "Ink-wash painted icon on warm rice paper showing a thick ivory cue clamped tight in heavy blue-white ice rime, restrained vermilion accent, no lettering."
         },
         {
-          "name": "Thiết Bích Sơn Môn",
+          "name": "Thiết Sơn Áp Cơ",
           "kinds": [
-            "bumper",
-            "shield"
+            "drift",
+            "freeze"
           ],
-          "target": "both",
+          "target": "opponent",
           "turns": 2,
-          "icon": "Ink-wash painted icon on warm rice paper showing a massive sword-shaped tower shield standing as an upright reflecting bumper forming an ink shield barrier over the table, restrained vermilion accent, no lettering."
+          "icon": "Ink-wash painted icon on warm rice paper showing an iron mountain-shaped shield pressing down on a cue tip, bending it off its straight aiming line, restrained vermilion accent, no lettering."
         }
       ]
     },
@@ -341,22 +341,22 @@
           "icon": "Ink-wash painted icon on warm rice paper showing a cloud-embroidered sleeve releasing three sword-thin predicted ball paths, restrained vermilion accent, no lettering."
         },
         {
-          "name": "Vân Già Nhãn",
+          "name": "Mây Cuốn Đầu Cơ",
           "kinds": [
-            "blind"
-          ],
-          "target": "opponent",
-          "icon": "Ink-wash painted icon on warm rice paper showing a wisp of embroidered scholar cloud veiling one watching eye, restrained vermilion accent, no lettering."
-        },
-        {
-          "name": "Thiên Kiếm Vân Hải",
-          "kinds": [
-            "slick",
             "drift"
           ],
           "target": "opponent",
+          "icon": "Ink-wash painted icon on warm rice paper showing a cloud-wrapped flying sword tugging a cue tip off its straight aiming line, restrained vermilion accent, no lettering."
+        },
+        {
+          "name": "Vân Hải Phong Môn",
+          "kinds": [
+            "seal",
+            "blind"
+          ],
+          "target": "opponent",
           "turns": 2,
-          "icon": "Ink-wash painted icon on warm rice paper showing a fine silk thread pulling a cloud-wrapped jade cue off line across a glassy slick lane, restrained vermilion accent, no lettering."
+          "icon": "Ink-wash painted icon on warm rice paper showing a sea of clouds pouring over a pocket mouth sealed by a talisman and veiling an eye, restrained vermilion accent, no lettering."
         }
       ]
     },
@@ -387,14 +387,12 @@
           "icon": "Ink-wash painted icon on warm rice paper showing a vermilion ring circling a single target ball beneath the tip of a broad greatsword cue, restrained vermilion accent, no lettering."
         },
         {
-          "name": "Liệt Nhật Kiếm Uy",
+          "name": "Chấp Pháp Phản Lệnh",
           "kinds": [
-            "displace",
-            "seal"
+            "counter",
+            "reveal"
           ],
-          "target": "opponent",
-          "turns": 2,
-          "icon": "Ink-wash painted icon on warm rice paper showing a paper talisman sealing a pocket mouth as a ball slides outward along a broad greatsword cue blade, restrained vermilion accent, no lettering."
+          "icon": "Ink-wash painted icon on warm rice paper showing an upturned edict plaque lying face-down with a sword seal, two dotted ball trails glowing above it, restrained vermilion accent, no lettering."
         }
       ]
     },
@@ -417,11 +415,11 @@
           "icon": "Ink-wash painted icon on warm rice paper showing a calm golden eye inside a sun disk observing three distinct predicted ball paths, restrained vermilion accent, no lettering."
         },
         {
-          "name": "Kiếm Tâm Thông Minh",
+          "name": "Kiếm Tâm Phản Chiêu",
           "kinds": [
             "counter"
           ],
-          "icon": "Ink-wash painted icon on warm rice paper showing an upturned golden mirror shielded by an orbiting flying sword reflecting an oncoming strike, restrained vermilion accent, no lettering."
+          "icon": "Ink-wash painted icon on warm rice paper showing a sword laid face-down across an upturned mirror, reflecting a strike back, restrained vermilion accent, no lettering."
         },
         {
           "name": "Cửu Kiếm Quy Nhất",
@@ -498,14 +496,14 @@
           "icon": "Ink-wash painted icon on warm rice paper showing a heavy iron mace cue locked solid inside jagged frost ice, restrained vermilion accent, no lettering."
         },
         {
-          "name": "Xích Ngục Cuồng Phong",
+          "name": "Cuồng Phong Loạn Cơ",
           "kinds": [
-            "bumper",
-            "sand"
+            "drift",
+            "chill"
           ],
           "target": "opponent",
           "turns": 2,
-          "icon": "Ink-wash painted icon on warm rice paper showing heavy iron chains forming an upright cushion bumper over a spreading crescent of red grit sand, restrained vermilion accent, no lettering."
+          "icon": "Ink-wash painted icon on warm rice paper showing a frenzied blood-red gust shaking a hand and dragging a cue tip off its aiming line, restrained vermilion accent, no lettering."
         }
       ]
     },
@@ -528,22 +526,22 @@
           "icon": "Ink-wash painted icon on warm rice paper showing a rose-tipped crimson cue casting a lace-edged forward fan of impact sparks from a ball, restrained vermilion accent, no lettering."
         },
         {
-          "name": "Mạng La Trầm Sa",
+          "name": "Tơ Máu Khiên Hồn",
           "kinds": [
-            "sand"
+            "drift"
           ],
           "target": "opponent",
-          "icon": "Ink-wash painted icon on warm rice paper showing a draped black lace veil scattering fine coarse sand across the path of a ball, restrained vermilion accent, no lettering."
+          "icon": "Ink-wash painted icon on warm rice paper showing a thin blood-red silk thread tugging a cue tip off its aiming line, restrained vermilion accent, no lettering."
         },
         {
           "name": "Xích Nguyệt Nhiếp Tâm",
           "kinds": [
-            "drift",
+            "called",
             "chill"
           ],
           "target": "opponent",
           "turns": 2,
-          "icon": "Ink-wash painted icon on warm rice paper showing a crimson thread tugging a rose-tipped cue away while frost creeps over a trembling hand, restrained vermilion accent, no lettering."
+          "icon": "Ink-wash painted icon on warm rice paper showing a crimson moon casting a vermilion ring around one ball while a hand trembles on a cue, restrained vermilion accent, no lettering."
         }
       ]
     },
@@ -573,14 +571,12 @@
           "icon": "Ink-wash painted icon on warm rice paper showing a halberd-shaped cue blade thrusting a ball sideways away from a pocket mouth, restrained vermilion accent, no lettering."
         },
         {
-          "name": "Thiết Kỵ Phá Thành",
+          "name": "Thiết Kỵ Tái Chiến",
           "kinds": [
-            "seal",
-            "freeze"
+            "rewind",
+            "power"
           ],
-          "target": "opponent",
-          "turns": 2,
-          "icon": "Ink-wash painted icon on warm rice paper showing an iron war talisman sealed over a pocket mouth beside a halberd cue frozen in thick ice, restrained vermilion accent, no lettering."
+          "icon": "Ink-wash painted icon on warm rice paper showing an armoured war horse wheeling back along a curved ink arrow, a heavy cue charged for a second strike, restrained vermilion accent, no lettering."
         }
       ]
     },
@@ -607,7 +603,7 @@
           "kinds": [
             "counter"
           ],
-          "icon": "Ink-wash painted icon on warm rice paper showing an upturned bronze mirror bearing a glowing demonic third eye between curved crimson horns, restrained vermilion accent, no lettering."
+          "icon": "Ink-wash painted icon on warm rice paper showing a demon eye lying face-down on an upturned mirror, foreseeing and reflecting a strike, restrained vermilion accent, no lettering."
         },
         {
           "name": "Cửu U Nghịch Thiên",
@@ -677,21 +673,21 @@
           "icon": "Ink-wash painted icon on warm rice paper showing a grass blade and dangling hair bell leaning with a long directional breeze that curves a rolling ball, restrained vermilion accent, no lettering."
         },
         {
-          "name": "Trúc Ảnh Tái Hành",
+          "name": "Chuông Bạc Nhiếp Hồn",
           "kinds": [
-            "second"
+            "chill"
           ],
-          "icon": "Ink-wash painted icon on warm rice paper showing a long bamboo cue marked with a small bell delivering two swift successive strikes on a ball, restrained vermilion accent, no lettering."
+          "target": "opponent",
+          "icon": "Ink-wash painted icon on warm rice paper showing a small silver hair bell ringing sound rings that make a hand on a cue tremble, restrained vermilion accent, no lettering."
         },
         {
-          "name": "Tật Phong Liên Trảm",
+          "name": "Trúc Ảnh Phân Thân",
           "kinds": [
-            "slick",
-            "second"
+            "decoy"
           ],
-          "target": "self",
+          "target": "opponent",
           "turns": 2,
-          "icon": "Ink-wash painted icon on warm rice paper showing fluttering jade wind ribbons opening a frictionless slick path for two consecutive cue strikes, restrained vermilion accent, no lettering."
+          "icon": "Ink-wash painted icon on warm rice paper showing bamboo shadows splitting into two misty ghost balls beside a real ball on the cloth, restrained vermilion accent, no lettering."
         }
       ]
     },
@@ -722,13 +718,11 @@
           "icon": "Ink-wash painted icon on warm rice paper showing a tiny white fox tugging a silk thread that pulls a cue tip off line, restrained vermilion accent, no lettering."
         },
         {
-          "name": "Đào Hoa Nguyên",
+          "name": "Tiểu Hồ Tha Bi",
           "kinds": [
-            "decoy"
+            "displace"
           ],
-          "target": "opponent",
-          "turns": 2,
-          "icon": "Ink-wash painted icon on warm rice paper showing swirling peach blossom petals conjuring two translucent misty ghost balls beside a real ball, restrained vermilion accent, no lettering."
+          "icon": "Ink-wash painted icon on warm rice paper showing a tiny white fox carrying a ball in its mouth away from a pocket mouth toward the table centre, restrained vermilion accent, no lettering."
         }
       ]
     },
@@ -759,14 +753,14 @@
           "icon": "Ink-wash painted icon on warm rice paper showing the fluffy tip of a fox tail painting a vermilion ring around a single ball, restrained vermilion accent, no lettering."
         },
         {
-          "name": "Cửu Vĩ Mê Trận",
+          "name": "Cửu Vĩ Hoán Hồn",
           "kinds": [
-            "displace",
+            "swap",
             "blind"
           ],
           "target": "opponent",
           "turns": 2,
-          "icon": "Ink-wash painted icon on warm rice paper showing nine swirling fox tails veiling an eye while sweeping a ball away from a pocket mouth, restrained vermilion accent, no lettering."
+          "icon": "Ink-wash painted icon on warm rice paper showing nine fox tails trading two balls along two curved ink arrows while one tail veils an eye, restrained vermilion accent, no lettering."
         }
       ]
     },
@@ -798,13 +792,13 @@
         {
           "name": "Song Điệp Nghịch Mộng",
           "kinds": [
+            "swap",
             "drift",
-            "blind",
-            "chill"
+            "blind"
           ],
           "target": "opponent",
           "turns": 3,
-          "icon": "Ink-wash painted icon on warm rice paper showing twin dream butterflies casting a misty veil over an eye while frosted silk threads tug a cue tip off course, restrained vermilion accent, no lettering."
+          "icon": "Ink-wash painted icon on warm rice paper showing two dream butterflies trading two balls along ink arrows while their wings veil an eye and tug a cue off line, restrained vermilion accent, no lettering."
         }
       ]
     },
@@ -872,14 +866,14 @@
           "icon": "Ink-wash painted icon on warm rice paper showing a trembling hand covered in frost rime struggling to hold an icicle cue, restrained vermilion accent, no lettering."
         },
         {
-          "name": "Băng Thành Bất Phá",
+          "name": "Ảnh Băng Trấn Bàn",
           "kinds": [
-            "bumper",
-            "railcraft"
+            "decoy",
+            "freeze"
           ],
-          "target": "both",
+          "target": "opponent",
           "turns": 2,
-          "icon": "Ink-wash painted icon on warm rice paper showing a heavy round ice shield mounted along a cushion rail providing precise rebound arcs, restrained vermilion accent, no lettering."
+          "icon": "Ink-wash painted icon on warm rice paper showing two misty ice-copy ghost balls beside a real ball while a cue is gripped by ice, restrained vermilion accent, no lettering."
         }
       ]
     },
@@ -910,14 +904,14 @@
           "icon": "Ink-wash painted icon on warm rice paper showing a miniature ice arrow tethered to a frost thread tugging an aiming cue tip off line, restrained vermilion accent, no lettering."
         },
         {
-          "name": "Vạn Tiễn Băng Vũ",
+          "name": "Băng Tiễn Phong Khẩu",
           "kinds": [
             "seal",
             "freeze"
           ],
           "target": "opponent",
           "turns": 2,
-          "icon": "Ink-wash painted icon on warm rice paper showing a volley of miniature ice arrows sealing a pocket mouth while encasing a wooden cue in solid frosted ice, restrained vermilion accent, no lettering."
+          "icon": "Ink-wash painted icon on warm rice paper showing a crystal ice arrow pinning a talisman over a pocket mouth while frost grips a cue, restrained vermilion accent, no lettering."
         }
       ]
     },
@@ -947,14 +941,12 @@
           "icon": "Ink-wash painted icon on warm rice paper showing a heavy bear-skull cue striking the table to slide a ball away from a pocket rim, restrained vermilion accent, no lettering."
         },
         {
-          "name": "Bạch Hùng Khai Sơn",
+          "name": "Bạch Hùng Ném Bi",
           "kinds": [
-            "bumper",
-            "chill"
+            "teleport",
+            "power"
           ],
-          "target": "opponent",
-          "turns": 2,
-          "icon": "Ink-wash painted icon on warm rice paper showing a bearskin-draped ice bumper repelling a ball toward a frostbitten trembling cue hand, restrained vermilion accent, no lettering."
+          "icon": "Ink-wash painted icon on warm rice paper showing a white bear paw hurling a cue ball through the air to a new spot on the cloth, restrained vermilion accent, no lettering."
         }
       ]
     },
@@ -984,14 +976,12 @@
           "icon": "Ink-wash painted icon on warm rice paper showing two billiard balls swapping positions along arched twin ink arrows under a crescent-moon cue, restrained vermilion accent, no lettering."
         },
         {
-          "name": "Vạn Lý Băng Phong",
+          "name": "Nguyệt Ngưng Thời Khắc",
           "kinds": [
-            "freeze",
-            "seal"
+            "rewind",
+            "shield"
           ],
-          "target": "opponent",
-          "turns": 3,
-          "icon": "Ink-wash painted icon on warm rice paper showing an ornate ice talisman sealing a pocket mouth while heavy glacier frost binds an opposing cue, restrained vermilion accent, no lettering."
+          "icon": "Ink-wash painted icon on warm rice paper showing a frozen crescent moon stopping a water drop mid-fall above a curved ink arrow turning back, restrained vermilion accent, no lettering."
         }
       ]
     },
@@ -1059,14 +1049,14 @@
           "icon": "Ink-wash painted icon on warm rice paper showing interlocked brass gears jamming a wooden cue tightly into an icy standstill, restrained vermilion accent, no lettering."
         },
         {
-          "name": "Thành Lũy Cơ Quan",
+          "name": "Mộc Ngưu Kéo Cày",
           "kinds": [
-            "vortex",
+            "drift",
             "sand"
           ],
           "target": "opponent",
           "turns": 2,
-          "icon": "Ink-wash painted icon on warm rice paper showing a clockwork ox-head barrier generating a whirling gear vortex amidst a patch of brass filing sand, restrained vermilion accent, no lettering."
+          "icon": "Ink-wash painted icon on warm rice paper showing a wooden ox ploughing a sandy furrow across the cloth and tugging a cue tip off line with its yoke rope, restrained vermilion accent, no lettering."
         }
       ]
     },
@@ -1089,22 +1079,22 @@
           "icon": "Ink-wash painted icon on warm rice paper showing a clockwork bird unfolding one straight brass reflecting barrier that redirects a ball, restrained vermilion accent, no lettering."
         },
         {
-          "name": "Đồng Tước Che Mắt",
+          "name": "Đồng Tước Giả Châu",
           "kinds": [
-            "blind"
+            "decoy"
           ],
           "target": "opponent",
-          "icon": "Ink-wash painted icon on warm rice paper showing a clockwork bird spreading its bronze wings to cover an aiming eye, restrained vermilion accent, no lettering."
+          "icon": "Ink-wash painted icon on warm rice paper showing two small brass clockwork birds folded into misty ghost balls beside a real ball, restrained vermilion accent, no lettering."
         },
         {
-          "name": "Liên Nỏ Thần Cơ",
+          "name": "Thần Nỏ Điểm Châu",
           "kinds": [
             "called",
             "slick"
           ],
           "target": "opponent",
           "turns": 2,
-          "icon": "Ink-wash painted icon on warm rice paper showing a miniature brass repeating crossbow painting a vermilion ring around a ball along a polished slick groove, restrained vermilion accent, no lettering."
+          "icon": "Ink-wash painted icon on warm rice paper showing a small brass crossbow bolt planting a vermilion ring around one ball on a glossy slick patch, restrained vermilion accent, no lettering."
         }
       ]
     },
@@ -1127,22 +1117,22 @@
           "icon": "Ink-wash painted icon on warm rice paper showing a small string puppet bracing a broad wooden spinning top as a solid reflector across an approaching ball trail, restrained vermilion accent, no lettering."
         },
         {
-          "name": "Tơ Linh Khiên Ti",
+          "name": "Tơ Linh Điểm Châu",
           "kinds": [
-            "drift"
+            "called"
           ],
           "target": "opponent",
-          "icon": "Ink-wash painted icon on warm rice paper showing a fine puppet thread from a brass thimble tugging a cue tip sideways off its aiming line, restrained vermilion accent, no lettering."
+          "icon": "Ink-wash painted icon on warm rice paper showing a fine puppet string tying a vermilion ring around one ball, restrained vermilion accent, no lettering."
         },
         {
-          "name": "Khôi Lỗi Thiên Ti",
+          "name": "Khôi Lỗi Hoán Châu",
           "kinds": [
-            "displace",
+            "swap",
             "freeze"
           ],
           "target": "opponent",
           "turns": 2,
-          "icon": "Ink-wash painted icon on warm rice paper showing a small jointed wooden puppet rolling a ball away from a pocket mouth while puppet strings freeze a cue, restrained vermilion accent, no lettering."
+          "icon": "Ink-wash painted icon on warm rice paper showing puppet strings lifting two balls to trade places along two ink arrows while ice grips a cue, restrained vermilion accent, no lettering."
         }
       ]
     },
@@ -1174,12 +1164,12 @@
         {
           "name": "Thiên Cơ Đoán Mệnh",
           "kinds": [
-            "decoy",
+            "swap",
             "called"
           ],
           "target": "opponent",
           "turns": 3,
-          "icon": "Ink-wash painted icon on warm rice paper showing a bronze astrolabe compass circling one marked ball in a vermilion ring amid three misty ghost balls, restrained vermilion accent, no lettering."
+          "icon": "Ink-wash painted icon on warm rice paper showing a fortune compass trading two balls along ink arrows and ringing one ball in vermilion, restrained vermilion accent, no lettering."
         }
       ]
     },
@@ -1247,14 +1237,14 @@
           "icon": "Ink-wash painted icon on warm rice paper showing an uncorked poison calabash pouring a spreading patch of coarse toxic grit across the felt, restrained vermilion accent, no lettering."
         },
         {
-          "name": "Vạn Độc Di Sơn",
+          "name": "Độc Chướng Ảo Châu",
           "kinds": [
-            "sand",
-            "freeze"
+            "decoy",
+            "chill"
           ],
           "target": "opponent",
           "turns": 2,
-          "icon": "Ink-wash painted icon on warm rice paper showing noxious calabash fumes encasing an opposing cue in toxic frost over a wide grit trap, restrained vermilion accent, no lettering."
+          "icon": "Ink-wash painted icon on warm rice paper showing green-black poison fumes forming two misty ghost balls while a hand trembles on a cue, restrained vermilion accent, no lettering."
         }
       ]
     },
@@ -1285,14 +1275,14 @@
           "icon": "Ink-wash painted icon on warm rice paper showing a tiny silver centipede biting a cue hand and yanking a venom thread to pull the tip off line, restrained vermilion accent, no lettering."
         },
         {
-          "name": "Ngũ Độc Chuyển Châu",
+          "name": "Ngũ Độc Phong Huyệt",
           "kinds": [
-            "swap",
+            "seal",
             "chill"
           ],
           "target": "opponent",
           "turns": 2,
-          "icon": "Ink-wash painted icon on warm rice paper showing two venom-frosted balls trading places along curved twin ink arrows guided by crawling spirit bugs, restrained vermilion accent, no lettering."
+          "icon": "Ink-wash painted icon on warm rice paper showing five tiny venom creatures coiled over a pocket mouth sealed by a talisman while a hand trembles, restrained vermilion accent, no lettering."
         }
       ]
     },
@@ -1323,14 +1313,12 @@
           "icon": "Ink-wash painted icon on warm rice paper showing a fierce yellow wolf eye projecting a sharp vermilion ring to lock onto a target ball, restrained vermilion accent, no lettering."
         },
         {
-          "name": "Săn Mồi",
+          "name": "Bóng Sói Vồ Mồi",
           "kinds": [
-            "displace",
-            "chill"
+            "teleport",
+            "second"
           ],
-          "target": "opponent",
-          "turns": 2,
-          "icon": "Ink-wash painted icon on warm rice paper showing a jagged wolf claw knocking a ball away from a pocket mouth while chilling the opponent with a frost haze, restrained vermilion accent, no lettering."
+          "icon": "Ink-wash painted icon on warm rice paper showing a wolf shadow leaping to place a cue ball anywhere, claw marks promising a second strike, restrained vermilion accent, no lettering."
         }
       ]
     },
@@ -1353,12 +1341,12 @@
           "icon": "Ink-wash painted icon on warm rice paper showing a silver acupuncture cue tracing a medicine circle that straightens a billiard ball's spinning trail beside a raised beaked mask, restrained vermilion accent, no lettering."
         },
         {
-          "name": "Kim Châm Hút Mạch",
+          "name": "Kim Châm Hộ Mạch",
           "kinds": [
-            "drain",
+            "counter",
             "shield"
           ],
-          "icon": "Ink-wash painted icon on warm rice paper showing silver acupuncture needles draining a stream of spirit energy to form a protective barrier around a ball, restrained vermilion accent, no lettering."
+          "icon": "Ink-wash painted icon on warm rice paper showing a silver acupuncture needle laid face-down across an upturned medicine-box lid guarding a pulse, restrained vermilion accent, no lettering."
         },
         {
           "name": "Quỷ Y Hoàn Nguyên",
@@ -1435,14 +1423,14 @@
           "icon": "Ink-wash painted icon on warm rice paper showing a gaping shark jaw casting a cold oceanic terror over a trembling frosted hand holding a cue, restrained vermilion accent, no lettering."
         },
         {
-          "name": "Vây Mập Hộ Hải",
+          "name": "Vây Mập Cuộn Sóng",
           "kinds": [
-            "vortex",
-            "shield"
+            "drift",
+            "vortex"
           ],
           "target": "opponent",
           "turns": 2,
-          "icon": "Ink-wash painted icon on warm rice paper showing a great dorsal shark fin circling to create a protective water vortex around an allied ball, restrained vermilion accent, no lettering."
+          "icon": "Ink-wash painted icon on warm rice paper showing a shark fin cutting a curling whirlpool wake that drags a cue tip off its aiming line, restrained vermilion accent, no lettering."
         }
       ]
     },
@@ -1474,14 +1462,14 @@
           "icon": "Ink-wash painted icon on warm rice paper showing a screeching pirate parrot tugging a thread in its beak to jerk an aiming cue tip off line, restrained vermilion accent, no lettering."
         },
         {
-          "name": "Cá Chuồn Liên Hoàn",
+          "name": "Hải Tặc Cướp Bi",
           "kinds": [
-            "decoy",
-            "second"
+            "displace",
+            "decoy"
           ],
           "target": "opponent",
           "turns": 2,
-          "icon": "Ink-wash painted icon on warm rice paper showing leaping ink flying-fish spawning two misty decoy balls before a second clean cue strike, restrained vermilion accent, no lettering."
+          "icon": "Ink-wash painted icon on warm rice paper showing a parrot snatching a ball away from a pocket mouth and leaving two misty ghost balls behind, restrained vermilion accent, no lettering."
         }
       ]
     },
@@ -1515,10 +1503,10 @@
         {
           "name": "Hạm Trưởng Tái Chinh",
           "kinds": [
-            "displace",
-            "second"
+            "rewind",
+            "reveal"
           ],
-          "icon": "Ink-wash painted icon on warm rice paper showing a captain's rapier cue flicking a ball clear of a pocket mouth before taking an immediate second shot, restrained vermilion accent, no lettering."
+          "icon": "Ink-wash painted icon on warm rice paper showing a ship turning back along a curved ink arrow under a spyglass that lights two dotted trails, restrained vermilion accent, no lettering."
         }
       ]
     },
@@ -1542,12 +1530,11 @@
           "icon": "Ink-wash painted icon on warm rice paper showing a coral-crowned trident drawing a steady sea current past a scalloped rail that softens at one end and hardens at the other, restrained vermilion accent, no lettering."
         },
         {
-          "name": "Hải Môn Phong Toả",
+          "name": "Hải Triều Hoán Vị",
           "kinds": [
-            "seal"
+            "swap"
           ],
-          "target": "opponent",
-          "icon": "Ink-wash painted icon on warm rice paper showing a dragon-crested water talisman sealing shut the opening of a table pocket, restrained vermilion accent, no lettering."
+          "icon": "Ink-wash painted icon on warm rice paper showing a dragon tide wave trading two balls along two curved ink arrows, restrained vermilion accent, no lettering."
         },
         {
           "name": "Long Vương Hải Khiếu",
@@ -1578,12 +1565,11 @@
           "shape": "gate"
         },
         {
-          "name": "Canh Tán Toàn",
+          "name": "Đèn Đò Soi Bến",
           "kinds": [
-            "spinwash"
+            "reveal"
           ],
-          "target": "opponent",
-          "icon": "Ink-wash painted icon on warm rice paper showing a porcelain bowl of forgetfulness soup spilling broth that washes away all spin from a ball, restrained vermilion accent, no lettering."
+          "icon": "Ink-wash painted icon on warm rice paper showing a ferry lantern on a bent oar lighting two long dotted ball trails across dark water, restrained vermilion accent, no lettering."
         },
         {
           "name": "Cầu Luân Hồi",
@@ -1625,13 +1611,13 @@
           "icon": "Ink-wash painted icon on warm rice paper showing sharp bone splinters and frost pinning a wooden cue in place, restrained vermilion accent, no lettering."
         },
         {
-          "name": "Vạn Cốt Kiếm",
+          "name": "Đầu Lâu Giả Châu",
           "kinds": [
             "decoy"
           ],
           "target": "opponent",
           "turns": 2,
-          "icon": "Ink-wash painted icon on warm rice paper showing a vertebral bone cue summoning two translucent spectral ghost balls from underworld mist, restrained vermilion accent, no lettering."
+          "icon": "Ink-wash painted icon on warm rice paper showing two small skulls curled into misty ghost balls beside a real ball, restrained vermilion accent, no lettering."
         }
       ]
     },
@@ -1701,14 +1687,12 @@
           "icon": "Ink-wash painted icon on warm rice paper showing an iron soul hook on a chain snagging a ball to drag it away from a pocket mouth, restrained vermilion accent, no lettering."
         },
         {
-          "name": "Âm Ty Khai Lộ",
+          "name": "Câu Hồn Đoạt Phách",
           "kinds": [
-            "seal",
+            "counter",
             "drain"
           ],
-          "target": "opponent",
-          "turns": 2,
-          "icon": "Ink-wash painted icon on warm rice paper showing a soul-binding talisman sealing a pocket mouth as ghostly energy drains away along an iron chain, restrained vermilion accent, no lettering."
+          "icon": "Ink-wash painted icon on warm rice paper showing a soul-hook chain lying coiled face-down like a trap, a stream of energy flowing into it, restrained vermilion accent, no lettering."
         }
       ]
     },
@@ -1741,12 +1725,12 @@
         {
           "name": "U Minh Song Quan",
           "kinds": [
-            "seal",
-            "blind"
+            "swap",
+            "seal"
           ],
           "target": "opponent",
           "turns": 3,
-          "icon": "Ink-wash painted icon on warm rice paper showing twin jade-fire talismans sealing two pocket mouths while spectral shadow veils an aiming eye, restrained vermilion accent, no lettering."
+          "icon": "Ink-wash painted icon on warm rice paper showing two ghost gates trading two balls along ink arrows while a talisman seals a pocket mouth, restrained vermilion accent, no lettering."
         }
       ]
     },
@@ -1779,11 +1763,11 @@
           "name": "Tinh Vân Mờ Mịt",
           "kinds": [
             "blind",
-            "shield"
+            "chill"
           ],
           "target": "opponent",
           "turns": 2,
-          "icon": "Ink-wash painted icon on warm rice paper showing a nebula cloud veiling an opponent's eye while forming a protective starlight shield over a ball, restrained vermilion accent, no lettering."
+          "icon": "Ink-wash painted icon on warm rice paper showing a drifting star-dust nebula veiling an eye and frosting a small trembling hand on a cue, restrained vermilion accent, no lettering."
         }
       ]
     },
@@ -1814,14 +1798,14 @@
           "icon": "Ink-wash painted icon on warm rice paper showing constellation star chains clamping a wooden cue into an icy motionless freeze, restrained vermilion accent, no lettering."
         },
         {
-          "name": "Bắc Đẩu Thất Tinh Trận",
+          "name": "Bày Sao Giả Trận",
           "kinds": [
-            "bumper",
+            "decoy",
             "sand"
           ],
-          "target": "both",
+          "target": "opponent",
           "turns": 2,
-          "icon": "Ink-wash painted icon on warm rice paper showing the seven stars of the Big Dipper aligning into a reflecting bumper over a spread of coarse astral sand, restrained vermilion accent, no lettering."
+          "icon": "Ink-wash painted icon on warm rice paper showing a star-studded guardian shield setting two misty ghost balls in a ring of slowing star dust, restrained vermilion accent, no lettering."
         }
       ]
     },
@@ -1844,21 +1828,22 @@
           "icon": "Ink-wash painted icon on warm rice paper showing a crescent bow bending around a moon well that draws a billiard ball inward beside the archer's single braided ribbon, restrained vermilion accent, no lettering."
         },
         {
-          "name": "Nguyệt Quang Chói Mắt",
+          "name": "Nguyệt Ảnh Song Châu",
           "kinds": [
-            "blind"
+            "decoy"
           ],
           "target": "opponent",
-          "icon": "Ink-wash painted icon on warm rice paper showing a sheer lunar ribbon veiling an eye in dazzling moonlight, restrained vermilion accent, no lettering."
+          "icon": "Ink-wash painted icon on warm rice paper showing a crescent moon reflection in water turning into two misty ghost balls, restrained vermilion accent, no lettering."
         },
         {
           "name": "Mãn Nguyệt Tiễn",
           "kinds": [
             "called",
-            "maw"
+            "seal"
           ],
           "target": "opponent",
-          "icon": "Ink-wash painted icon on warm rice paper showing a silver lunar bow cue ringing a target ball in vermilion as a pocket mouth widens into a gravitational maw, restrained vermilion accent, no lettering."
+          "turns": 2,
+          "icon": "Ink-wash painted icon on warm rice paper showing a full-moon arrow ringing one ball in vermilion while a talisman seals a pocket mouth, restrained vermilion accent, no lettering."
         }
       ]
     },
@@ -1888,14 +1873,12 @@
           "icon": "Ink-wash painted icon on warm rice paper showing a fiery solar spear cue knocking a ball backward away from a pocket mouth, restrained vermilion accent, no lettering."
         },
         {
-          "name": "Thái Dương Bộc Phát",
+          "name": "Thái Dương Hồi Quang",
           "kinds": [
-            "blast",
-            "seal"
+            "rewind",
+            "blast"
           ],
-          "target": "opponent",
-          "turns": 2,
-          "icon": "Ink-wash painted icon on warm rice paper showing a sun-crest seal closing a pocket mouth beneath a radiant forward blast of solar impact rays, restrained vermilion accent, no lettering."
+          "icon": "Ink-wash painted icon on warm rice paper showing a blazing sun wheel turning backwards along a curved ink arrow and bursting in a fan of heat, restrained vermilion accent, no lettering."
         }
       ]
     },
@@ -1960,14 +1943,14 @@
           "icon": "Ink-wash painted icon on warm rice paper showing a curved sand dagger executing two successive clean strikes beside desert fox footprints, restrained vermilion accent, no lettering."
         },
         {
-          "name": "Bão Cát Liên Hoàn",
+          "name": "Bão Cát Mù Trời",
           "kinds": [
             "blind",
-            "nudge"
+            "wind"
           ],
           "target": "opponent",
           "turns": 2,
-          "icon": "Ink-wash painted icon on warm rice paper showing a swirling veil of sand covering an eye while a desert gust nudges a ball off its spot, restrained vermilion accent, no lettering."
+          "icon": "Ink-wash painted icon on warm rice paper showing a sweeping sandstorm gust with fox-tail swirls covering an eye and pushing a rolling ball sideways, restrained vermilion accent, no lettering."
         }
       ]
     },
@@ -1998,14 +1981,13 @@
           "icon": "Ink-wash painted icon on warm rice paper showing the stony gaze of a sphinx headdress petrifying a wooden cue into frozen stone, restrained vermilion accent, no lettering."
         },
         {
-          "name": "Lăng Mộ Phong Ấn",
+          "name": "Thạch Châu Trấn Lăng",
           "kinds": [
-            "bumper",
-            "spinwash"
+            "decoy"
           ],
-          "target": "both",
+          "target": "opponent",
           "turns": 2,
-          "icon": "Ink-wash painted icon on warm rice paper showing a carved sandstone tomb slab forming a solid bumper while cleansing the spin from a passing ball, restrained vermilion accent, no lettering."
+          "icon": "Ink-wash painted icon on warm rice paper showing two small stone lion statues curling into misty stone ghost balls beside a real ball, restrained vermilion accent, no lettering."
         }
       ]
     },
@@ -2074,12 +2056,12 @@
           "icon": "Ink-wash painted icon on warm rice paper showing a golden khopesh cue pointing down to engrave a vermilion ring around a single ball, restrained vermilion accent, no lettering."
         },
         {
-          "name": "Hoàng Sa Bão Tố",
+          "name": "Sa Vương Đoạt Địa",
           "kinds": [
-            "displace",
-            "wind"
+            "swap",
+            "displace"
           ],
-          "icon": "Ink-wash painted icon on warm rice paper showing a desert sandstorm gale sweeping a ball away from a pocket mouth, restrained vermilion accent, no lettering."
+          "icon": "Ink-wash painted icon on warm rice paper showing a golden sand-king gauntlet trading two balls along ink arrows and sweeping a third from a pocket mouth, restrained vermilion accent, no lettering."
         }
       ]
     },
@@ -2110,14 +2092,12 @@
           "icon": "Ink-wash painted icon on warm rice paper showing a radiant sun crown revealing two dotted trails that teleport a ball to a new point on the table, restrained vermilion accent, no lettering."
         },
         {
-          "name": "Thái Dương Khuyết Môn",
+          "name": "Thái Dương Bất Lặn",
           "kinds": [
-            "seal",
+            "rewind",
             "maw"
           ],
-          "target": "opponent",
-          "turns": 3,
-          "icon": "Ink-wash painted icon on warm rice paper showing a cobra-sceptre solar seal locking one pocket mouth while opening an opposing suction maw, restrained vermilion accent, no lettering."
+          "icon": "Ink-wash painted icon on warm rice paper showing a sun that refuses to set, turning back along a curved ink arrow above a widened pocket mouth, restrained vermilion accent, no lettering."
         }
       ]
     },
@@ -2187,14 +2167,14 @@
           "icon": "Ink-wash painted icon on warm rice paper showing a snarling leopard fang roar causing a cue hand to tremble in icy frost, restrained vermilion accent, no lettering."
         },
         {
-          "name": "Báo Vương Trấn Lâm",
+          "name": "Báo Vương Vờn Mồi",
           "kinds": [
-            "sand",
-            "power"
+            "drift",
+            "blind"
           ],
           "target": "opponent",
           "turns": 2,
-          "icon": "Ink-wash painted icon on warm rice paper showing a heavy leopard paw slamming down with accelerating power across a bed of rough forest earth, restrained vermilion accent, no lettering."
+          "icon": "Ink-wash painted icon on warm rice paper showing a leopard paw batting a cue tip off line while leaf shadows cover an eye, restrained vermilion accent, no lettering."
         }
       ]
     },
@@ -2218,22 +2198,22 @@
           "shape": "roots"
         },
         {
-          "name": "Quy Tức Hoãn Lực",
+          "name": "Đá Cuội Giả Châu",
           "kinds": [
+            "decoy"
+          ],
+          "target": "opponent",
+          "icon": "Ink-wash painted icon on warm rice paper showing an old turtle nudging two round river pebbles that look like misty ghost balls, restrained vermilion accent, no lettering."
+        },
+        {
+          "name": "Huyền Vũ Trấn Châu",
+          "kinds": [
+            "called",
             "freeze"
           ],
           "target": "opponent",
-          "icon": "Ink-wash painted icon on warm rice paper showing mossy root tendrils and hard frost clamping an opposing wooden cue motionless, restrained vermilion accent, no lettering."
-        },
-        {
-          "name": "Huyền Vũ Trấn",
-          "kinds": [
-            "called",
-            "shield"
-          ],
-          "target": "opponent",
           "turns": 2,
-          "icon": "Ink-wash painted icon on warm rice paper showing an ancient turtle-shell shield protecting a ball encircled by a glowing vermilion ring, restrained vermilion accent, no lettering."
+          "icon": "Ink-wash painted icon on warm rice paper showing a dark turtle shell pressing a vermilion ring around one ball while ice grips a cue, restrained vermilion accent, no lettering."
         }
       ]
     },
@@ -2264,14 +2244,12 @@
           "icon": "Ink-wash painted icon on warm rice paper showing a lightning eagle talon snatching a ball away from the edge of a pocket mouth, restrained vermilion accent, no lettering."
         },
         {
-          "name": "Lôi Ưng Giáng",
+          "name": "Lôi Ưng Giáng Không",
           "kinds": [
-            "blind",
-            "freeze"
+            "teleport",
+            "spin"
           ],
-          "target": "opponent",
-          "turns": 2,
-          "icon": "Ink-wash painted icon on warm rice paper showing an eagle wing feather blinding an eye while thunder frost locks a cue in place, restrained vermilion accent, no lettering."
+          "icon": "Ink-wash painted icon on warm rice paper showing a thunder eagle swooping down to drop a spinning cue ball onto a new spot, restrained vermilion accent, no lettering."
         }
       ]
     },
@@ -2304,12 +2282,12 @@
         {
           "name": "Thanh Long Thụ Giới",
           "kinds": [
-            "displace",
+            "swap",
             "sand"
           ],
           "target": "opponent",
           "turns": 3,
-          "icon": "Ink-wash painted icon on warm rice paper showing twisting dragon tree roots shoving a ball away from a pocket mouth over a floor of rough bark sand, restrained vermilion accent, no lettering."
+          "icon": "Ink-wash painted icon on warm rice paper showing green dragon roots trading two balls along ink arrows through a field of slowing sand, restrained vermilion accent, no lettering."
         }
       ]
     },
@@ -2378,14 +2356,14 @@
           "icon": "Ink-wash painted icon on warm rice paper showing a stream of spirit essence draining into the gaping fanged belly maw of a void beast, restrained vermilion accent, no lettering."
         },
         {
-          "name": "Nuốt Trời Bộc",
+          "name": "Nuốt Phách Lệch Cơ",
           "kinds": [
-            "blast",
+            "drift",
             "sand"
           ],
           "target": "opponent",
           "turns": 2,
-          "icon": "Ink-wash painted icon on warm rice paper showing an eruption of forward impact rays bursting from a fanged belly maw over a field of dark void sand, restrained vermilion accent, no lettering."
+          "icon": "Ink-wash painted icon on warm rice paper showing a gaping void maw sucking a wisp of soul from a cue, bending its tip off line over slow dark sand, restrained vermilion accent, no lettering."
         }
       ]
     },
@@ -2409,20 +2387,22 @@
           "shape": "rim"
         },
         {
-          "name": "Tịch Diện Mê Nhãn",
+          "name": "Mặt Nạ Phân Ảnh",
           "kinds": [
+            "decoy"
+          ],
+          "target": "opponent",
+          "icon": "Ink-wash painted icon on warm rice paper showing a blank porcelain mask splitting into two misty faceless ghost balls, restrained vermilion accent, no lettering."
+        },
+        {
+          "name": "Vô Diện Tha Châu",
+          "kinds": [
+            "displace",
             "blind"
           ],
           "target": "opponent",
-          "icon": "Ink-wash painted icon on warm rice paper showing the starry void fold of a faceless cloak veiling an eye in deep shadow, restrained vermilion accent, no lettering."
-        },
-        {
-          "name": "Vô Diện Luân Chuyển",
-          "kinds": [
-            "swap",
-            "teleport"
-          ],
-          "icon": "Ink-wash painted icon on warm rice paper showing two billiard balls swapping places along curved twin ink arrows through a faceless void rift, restrained vermilion accent, no lettering."
+          "turns": 2,
+          "icon": "Ink-wash painted icon on warm rice paper showing a blank mask sliding a ball away from a pocket mouth while its empty face veils an eye, restrained vermilion accent, no lettering."
         }
       ]
     },
@@ -2446,22 +2426,21 @@
           "shape": "rim"
         },
         {
-          "name": "Tam Nhãn Nhiếp Hướng",
+          "name": "Mẫu Hoàng Hấp Lỗ",
           "kinds": [
-            "drift"
+            "gravity"
           ],
-          "target": "opponent",
-          "icon": "Ink-wash painted icon on warm rice paper showing three aligned forehead eyes casting a shimmering thread that tugs a cue tip off course, restrained vermilion accent, no lettering."
+          "icon": "Ink-wash painted icon on warm rice paper showing a three-eyed void queen gaze pulling a ball into a pocket mouth, restrained vermilion accent, no lettering."
         },
         {
-          "name": "Mẫu Hoàng Giáng Uyên",
+          "name": "Vạn Trùng Hoán Ảnh",
           "kinds": [
-            "decoy",
-            "sand"
+            "swap",
+            "decoy"
           ],
           "target": "opponent",
           "turns": 2,
-          "icon": "Ink-wash painted icon on warm rice paper showing a void sceptre conjuring two misty ghost balls across a bed of coarse purple sand, restrained vermilion accent, no lettering."
+          "icon": "Ink-wash painted icon on warm rice paper showing a swarm of void insects trading two balls along ink arrows and leaving misty ghost balls, restrained vermilion accent, no lettering."
         }
       ]
     },
@@ -2485,21 +2464,20 @@
           "shape": "rim"
         },
         {
-          "name": "Ma Khẩu Thôn Môn",
+          "name": "Hư Không Thổ Châu",
           "kinds": [
-            "seal"
+            "teleport"
           ],
-          "target": "opponent",
-          "icon": "Ink-wash painted icon on warm rice paper showing a dark cosmic talisman swallowed over a pocket mouth to seal it completely, restrained vermilion accent, no lettering."
+          "icon": "Ink-wash painted icon on warm rice paper showing a void maw spitting a cue ball out onto a new spot on the cloth, restrained vermilion accent, no lettering."
         },
         {
           "name": "Thôn Thiên",
           "kinds": [
+            "swap",
             "maw",
-            "gravity",
-            "drain"
+            "gravity"
           ],
-          "icon": "Ink-wash painted icon on warm rice paper showing a vast cosmic torso maw devouring billiard balls with inward gravitational swirl and draining spirit trails, restrained vermilion accent, no lettering."
+          "icon": "Ink-wash painted icon on warm rice paper showing a world-swallowing maw widening a pocket mouth, pulling a ball in and trading two balls along ink arrows, restrained vermilion accent, no lettering."
         }
       ]
     },
@@ -2642,12 +2620,12 @@
         {
           "name": "Kim Phượng Nghịch Vũ",
           "kinds": [
-            "displace",
-            "chill"
+            "swap",
+            "drift"
           ],
           "target": "opponent",
           "turns": 2,
-          "icon": "Ink-wash painted icon on warm rice paper showing a swipe of twin steel war fans pushing a ball away from a pocket mouth amidst a chilly frost wind, restrained vermilion accent, no lettering."
+          "icon": "Ink-wash painted icon on warm rice paper showing two golden steel fans sweeping two balls into swapped places while a fan gust drags a cue tip off line, restrained vermilion accent, no lettering."
         }
       ],
       "sect": "thienhuong"

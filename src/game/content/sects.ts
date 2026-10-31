@@ -84,6 +84,19 @@ const KIND_COOLDOWN: Record<SkillKind, number> = {
   blind: 2, drift: 2, called: 3, displace: 3, swap: 3, decoy: 3, counter: 3, puppet: 3, silk: 3, quake: 3,
 };
 
+/**
+ * Ladder step of each family: 1 self or information, 2 one-shot disruption, 3 light control of the opponent,
+ * 4 forcing rules and moving balls, 5 breaking rules. Skill 2 sits on its champion's tier, the ultimate one step
+ * higher (capped at 5); a skill's step is its highest family.
+ */
+export const KIND_RANK: Record<SkillKind, 1 | 2 | 3 | 4 | 5> = {
+  vision: 1, reveal: 1, shield: 1, spin: 1, power: 1, second: 1, nudge: 1, blind: 1,
+  chill: 2, freeze: 2, sand: 2, slick: 2, spinwash: 2, bumper: 2, railcraft: 2, wind: 2, well: 2, vortex: 2, blast: 2, drain: 2,
+  drift: 3, decoy: 3,
+  silk: 4, called: 4, displace: 4, seal: 4, maw: 4, gravity: 4,
+  swap: 5, teleport: 5, counter: 5, puppet: 5, rewind: 5, quake: 5,
+};
+
 /** Strength numbers per family and tier, shared by the match engine and the UI text. */
 export function skillPower(kind: SkillKind, tier: number) {
   switch (kind) {

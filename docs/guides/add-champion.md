@@ -10,7 +10,9 @@ chạy `npm test` và `npm run build` sau mỗi bước.
    `SkillKind`). Mỗi chiêu có thể thêm `target` (`opponent` hoặc `both`; bỏ trống là bản thân) và `turns`
    (số cú của bên nhận, mặc định 1; tối đa 2, riêng tuyệt chiêu tướng bậc 5 tối đa 3). Tuyệt chiêu là cơ chế
    mới, không chung nhóm nào với chiêu 1 (`tests/roster-kits.test.ts`). Bậc cao hơn thì loại tác động mạnh hơn:
-   bậc 1 tự thân hoặc thông tin, bậc 2 quấy một cú, bậc 3 điều khiển nhẹ, bậc 4 ép luật hoặc dời bi, bậc 5 bẻ luật.
+   nấc 1 tự thân hoặc thông tin, nấc 2 quấy một cú, nấc 3 điều khiển nhẹ, nấc 4 ép luật hoặc dời bi, nấc 5 bẻ luật
+   (`KIND_RANK` trong `src/game/content/sects.ts`). Chiêu 2 đúng nấc của bậc tướng, tuyệt chiêu cao hơn một nấc
+   (trần 5); test kiểm cả hai. Tên chiêu và `icon` phải nói đúng cơ chế của `kinds`.
    Phần mô tả để vẽ: `look` (ghi rõ giới tính, và với tướng không phải người thì số chi, cánh, đuôi; ghi giày đế
    bằng hoặc chân trần, không giày cao gót; một tổ hợp nét nhận diện không trùng tướng khác), `pose`, `expr`, và
    `icon` cho từng chiêu. Bản build lược các trường mô tả vẽ; code game không đọc chúng.

@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import roster from '../src/game/content/roster.json';
 import { Match } from '../src/game/match';
 import { CUES, TABLES } from '../src/game/content/gear';
-import { CHAMPIONS } from '../src/game/content/sects';
+import { CHAMPIONS, KIND_RANK } from '../src/game/content/sects';
 
 describe('sect kits', () => {
   it('has 65 distinct sets of kinds, independent of slot order', () => {
@@ -22,6 +22,13 @@ describe('sect kits', () => {
     for (const champion of CHAMPIONS) {
       const shared = champion.skills[2].kinds.filter(k => champion.skills[0].kinds.includes(k));
       expect(shared, champion.id).toEqual([]);
+    }
+  });
+  it('puts skill 2 on the champion tier and the ultimate one step higher', () => {
+    const rank = (kinds: (keyof typeof KIND_RANK)[]) => Math.max(...kinds.map(k => KIND_RANK[k]));
+    for (const champion of CHAMPIONS) {
+      expect(rank(champion.skills[1].kinds), `${champion.id} skill 2`).toBe(champion.tier);
+      expect(rank(champion.skills[2].kinds), `${champion.id} ultimate`).toBe(Math.min(5, champion.tier + 1));
     }
   });
 });

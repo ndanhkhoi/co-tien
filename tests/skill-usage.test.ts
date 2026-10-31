@@ -103,7 +103,7 @@ it('prioritizes a ready placement ultimate and returns a legal cue position', ()
     mode: 'nine', raceTo: 1, mutator: null, tableSkin: TABLES[0], seed: 42,
     layout: [makeBall(0, -0.3, 0.1), makeBall(1, 0.5, -0.3), makeBall(9, 0.2, 0.3)],
     players: [
-      { name: 'A', kind: 'ai', cue: CUES[0], champion: 'vodienkhach' },
+      { name: 'A', kind: 'ai', cue: CUES[0], champion: 'bacminh' },
       { name: 'B', kind: 'ai', cue: CUES[0], champion: 'haclang' },
     ],
   });
