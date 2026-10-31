@@ -26,7 +26,8 @@ Cách tải:
   chỉ tải lại file có mã nội dung đổi; bản chỉ sửa code không hiện màn tải (`__ART_VERSION__` không đổi).
 - **Tiết kiệm dữ liệu** chỉ tải phần cốt lõi; ở menu, phần thiếu được tải bù lúc rảnh.
 - **Trận** kiểm tra và giải mã trước tranh của hai tướng và môn phái của bàn.
-- Tải đủ xong, file không còn trong manifest bị xoá và game xin `navigator.storage.persist()`.
+- Tải xong (trọn bộ hoặc phần cốt lõi khi tiết kiệm dữ liệu), file không còn trong manifest bị xoá. Tải đủ
+  trọn bộ thì game xin thêm `navigator.storage.persist()`.
 - Lỗi mạng không chặn khởi động: ảnh tải theo nhu cầu, lần mở sau thử lại. `?loading` giữ màn tải để xem.
 
 Hai điều không được làm:

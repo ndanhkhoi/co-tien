@@ -138,10 +138,10 @@ export async function preloadCore(champion: string, sect: string, onProgress: (f
   const whole = !saveData();
   const ok = await sync(whole ? ART : coreList({ champion, sect }), 6, onProgress);
   mark(ok && whole ? 'all' : 'core');
-  if (ok && whole) {
-    void prune();
-    keepStored();
-  }
+  if (!ok) return;
+  // Pruning keys off the manifest, so the core set alone is enough to drop removed files.
+  void prune();
+  if (whole) keepStored();
 }
 
 /** Ask the browser not to evict the art under storage pressure (granted silently or not at all). */
