@@ -20,17 +20,32 @@ Trong ba bản vẽ, chọn bản thứ ba vì:
 - giữ tuyết phía tây bắc, biển phía đông, hoang mạc phía tây và vết nứt Hư Không ở góc tây nam;
 - Độc Vụ Cốc có rừng nấm dễ nhận ra.
 
+## Vẽ lại lần hai: bớt chi tiết, thoáng dải trên
+
+Bản 16:9 đầu tiên phủ kín khung nhưng vẽ nhiều chi tiết và để núi, tháp chạm lên dải trên, khiến thanh trên
+cùng và tiêu đề bị chìm. Vẽ lại với yêu cầu chặt hơn:
+
+- dải trên 30% chỉ có sương, mây và núi xa rất mờ; không nhà cửa, đảo hay đường đỏ;
+- 13 quảng trường nằm trong khoảng y 32 đến 90% của tranh, cách nhau tối thiểu 18% bề ngang;
+- khoảng 60% mặt tranh là mảng yên tĩnh (sương, nước, giấy trống); đường đỏ mảnh, đi bằng những cung dài.
+
+Trong ba bản vẽ mới, lại chọn bản thứ ba: dải trên gần như trống, đủ 13 vùng đúng thứ tự, đường đỏ đơn tuyến
+không tự cắt. Bản một để tháp Thiên Quang và núi tuyết Băng Phách chạm vào dải trên, đường đỏ chỉ quét mép
+đảo Hoa Linh; bản hai dày đặc chi tiết và đường đỏ bỏ sót Hải Long.
+
 ## Phương án bị loại
 
 - Giữ tranh 3:2 và thêm một tranh nền riêng phía sau: khó giấu đường nối giữa hai tranh, nhãn vẫn chật.
 - Vẽ nối dài tranh cũ ra hai bên: công cụ vẽ hiện có không có chế độ vẽ nối theo vùng che.
-- Bản vẽ thứ nhất: Độc Vụ Cốc khó nhận ra.
-- Bản vẽ thứ hai: đường đi từ Hoa Linh sang thẳng Thiên Cơ, Hải Long thành nhánh cụt.
+- Bản vẽ thứ nhất (lần một): Độc Vụ Cốc khó nhận ra.
+- Bản vẽ thứ hai (lần một): đường đi từ Hoa Linh sang thẳng Thiên Cơ, Hải Long thành nhánh cụt.
 
 ## Hệ quả
 
 - Mốc tương tác (`PINS` trong `src/ui/screens/journey.ts`) là phần trăm của tranh 16:9 và phải nằm đúng quảng
   trường. Thiên Quang và Băng Phách nằm sát mép trên, nên mốc đặt ở đoạn đường ngay dưới quảng trường để không
-  chạm thanh trên cùng.
+  chạm thanh trên cùng. Mốc Độc Vụ hạ thấp hơn quảng trường một chút để nhãn Băng Phách không đè lên huy hiệu.
+- Mốc khoá thêm một vòng giấy quanh huy hiệu và đổi nền huy hiệu khoá sang mực đậm hơn để nổi trên các mảng
+  tranh tối (Vạn Thú, Huyết Sát, Hư Không).
 - Thứ tự mốc lấy từ `CHAPTERS`; UI không có tuyến riêng.
 - Thay tranh thì duyệt lại đường nối, toạ độ mốc và khoảng cách giữa mốc với thanh trên cùng.

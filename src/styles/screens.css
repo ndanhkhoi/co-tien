@@ -504,10 +504,11 @@ textarea.code-box:focus { border-color: var(--accent); }
   white-space: nowrap;
 }
 /* Locked lands keep the route visible while clearly reading as closed. */
+/* Locked pins sit on dark ink washes; a crisp paper ring lifts them off the painting. */
 .land-pin.locked { color: var(--ink-2); }
-.land-pin.locked .lp-emblem { box-shadow: 0 0 0 2px var(--muted); }
+.land-pin.locked .lp-emblem { box-shadow: 0 0 0 2px var(--muted), 0 0 0 4px color-mix(in srgb, var(--sheet) 85%, transparent); }
 .land-pin.locked .lp-emblem img { filter: grayscale(1) brightness(0.62); }
-.land-pin.locked .lp-badge { background: var(--muted); }
+.land-pin.locked .lp-badge { background: var(--ink-2); }
 .land-pin.locked .lp-name { color: var(--ink-2); background: color-mix(in srgb, var(--sheet) 78%, transparent); }
 
 .modal.land-sheet {
