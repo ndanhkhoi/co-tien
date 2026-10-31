@@ -676,9 +676,11 @@ body.playing .bd-scene, body.playing .bd-mist { animation-play-state: paused; }
 .screen.game.mx:has(.mx-practice) { --colL: 132px; }
 .mx-practice { justify-content: flex-start; }
 .pd { flex: 1; min-height: 0; display: flex; flex-direction: column; gap: 8px; padding: 8px; background: var(--sheet); border: 1.5px solid var(--line); border-radius: var(--r-3); box-shadow: var(--sh-1); }
-.pd-seg { flex-shrink: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 3px; padding: 3px; border-radius: 999px; background: var(--sheet-3); }
-#ui .pd-seg-b { min-height: 38px; min-width: 0; padding: 0 4px; border-radius: 999px; font: 700 13px/1 var(--body); color: var(--muted); transition: background 0.15s, color 0.15s; }
-#ui .pd-seg-b[aria-selected='true'] { background: var(--sheet); color: var(--ink); box-shadow: var(--sh-1); }
+/* Practice mode tabs speak the same brush-underline language as every other tab. */
+.pd-seg { flex-shrink: 0; display: flex; gap: 6px; padding: 0; border-radius: 0; background: none; }
+#ui .pd-seg-b { flex: 1; min-height: 44px; min-width: 0; padding: 0 4px 6px; border-radius: 0; font: 700 13px/1 var(--body); color: var(--muted); background: none; transition: color 0.2s ease; }
+#ui .pd-seg-b:not([aria-selected='true']):hover { color: var(--ink); }
+#ui .pd-seg-b[aria-selected='true'] { color: var(--accent-2); background: url('/art/ui/tap-stroke.webp') center bottom 2px / calc(100% - 6px) 12px no-repeat; }
 .pd-view { flex: 1; min-height: 0; display: flex; flex-direction: column; gap: 7px; }
 .pd-view[hidden] { display: none; }
 .pd-hint { font-size: 11px; line-height: 1.35; color: var(--muted); }
