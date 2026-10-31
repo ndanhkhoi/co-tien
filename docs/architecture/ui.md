@@ -11,7 +11,7 @@ chuyển cảnh.
 | `screens/setup.ts` | Thiết lập Luận Cơ và Song Đấu |
 | `screens/collection.ts`, `settings.ts` | Tàng Các, Cài đặt |
 | `screens/career.ts`, `challenge-start.ts` | Trận Hành trình, mở một thử thách Luyện Cơ |
-| `screens/journey.ts` | Bản đồ Hành trình vừa khít một màn, không cuộn; mốc lấy thứ tự từ `CHAPTERS`; trận trở về mở đúng vùng đất vừa đánh. Hộp thoại vùng đất xếp bốn cao thủ bậc 1–4 thành 2×2, trùm bậc 5 nằm riêng một hàng |
+| `screens/journey.ts` | Bản đồ Hành trình 16:9 phủ kín khung, thanh trên cùng nổi trên tranh, không cuộn; mốc lấy thứ tự từ `CHAPTERS`; trận trở về mở đúng vùng đất vừa đánh. Hộp thoại vùng đất xếp bốn cao thủ bậc 1–4 thành 2×2, trùm bậc 5 nằm riêng một hàng |
 | `screens/champion-page.ts` | Trang tướng duy nhất: Chiêu thức, Tiểu sử, Tranh; chiêu mộ hoặc chọn đại diện |
 | `screens/library.ts` | Trang môn phái và tab Luật của Tàng Các |
 | `screens/challenges.ts` | Luyện Cơ |

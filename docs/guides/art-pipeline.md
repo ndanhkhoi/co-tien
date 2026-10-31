@@ -93,6 +93,6 @@ response để kiểm tra trước khi chạy lại.
 - **Nút hành động** (`ui/actions/*.webp`) gồm cả icon và chữ thư pháp tiếng Việt; DOM chỉ giữ tên trợ năng.
 - **Cây cơ môn phái** (`sects/{id}/cue-a|b.webp`) có thể có tua rua hay chạm khắc chìa ra, nhưng thân cơ phía
   đầu cơ phải thẳng và đều, vì game đo bề dày phần đó để phóng.
-- **Bản đồ Hành trình** (`ui/map.webp`, 3:2) phải khớp tuyến `CHAPTERS` trong `career.ts`; mốc tương tác trong
-  `journey.ts` nằm đúng quảng trường trên tranh. Thay tranh thì duyệt lại cả đường nối và toạ độ mốc. Vì sao
+- **Bản đồ Hành trình** (`ui/map.webp`, 16:9, phủ kín khung) phải khớp tuyến `CHAPTERS` trong `career.ts`; mốc
+  tương tác trong `journey.ts` nằm đúng quảng trường trên tranh. Dải trên cùng để trời và mây cho thanh trên cùng. Thay tranh thì duyệt lại cả đường nối và toạ độ mốc. Vì sao
   chọn phương án hiện tại: [decisions/journey-map.md](../decisions/journey-map.md).
