@@ -5,14 +5,21 @@ import type { AiDecision, AiShot, CastSkill } from './types';
 import { tableEase } from './shot-lines';
 import type { Ctx } from './search-context';
 
+/** Share of a drift hex the AI compensates for. */
+const DRIFT_READ = 0.5;
+
 export function addNoise(ctx: Ctx, shot: AiShot): AiShot {
   const t = ctx.tune;
   const blind = ctx.req.blind ? 1.6 : 1;
   const pers = ctx.req.profile.personality;
   const aimMul = pers === 'aggressive' ? 1.15 : pers === 'defensive' ? 0.9 : 1;
+  // Like a player, the AI only half reads a drift it feels for the first time; the match then adds the full drift.
+  const drift = (ctx.req.driftAngle ?? 0) * DRIFT_READ * Math.PI / 180;
+  // Run Tay widens the hand's shake the same way the tremor widens a player's aim band.
+  const shake = t.aimSigma * blind * (ctx.req.tremor ?? 1) * aimMul;
   return {
     ...shot,
-    angle: shot.angle - (ctx.req.driftAngle ?? 0) * Math.PI / 180 + ctx.rng.gauss() * t.aimSigma * blind * (ctx.req.driftAngle ? 1.3 : 1) * aimMul,
+    angle: shot.angle - drift + ctx.rng.gauss() * shake,
     power: Math.max(0.03, Math.min(1, shot.power * (1 + ctx.rng.gauss() * t.powerSigma))),
   };
 }

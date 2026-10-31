@@ -6,16 +6,27 @@ function gustScale(gust: { amp: number; omega: number }, time: number): number {
   return 1 - gust.amp + gust.amp * Math.sin(gust.omega * time);
 }
 
-function addWells(wells: NonNullable<Terrain['wells']>, b: Ball) {
-  for (const wl of wells) {
-    const dx = wl.x - b.x;
-    const dy = wl.y - b.y;
-    const d = Math.hypot(dx, dy);
+/** Hollows and swirls turn a rolling ball's heading; a sideways push of curve·v² keeps its speed unchanged. */
+function bendHeading(tr: Terrain, b: Ball, h: number) {
+  const speed = Math.hypot(b.vx, b.vy);
+  if (speed < 1e-6) return;
+  const ux = b.vx / speed, uy = b.vy / speed;
+  let turn = 0;
+  for (const wl of tr.wells ?? []) {
+    const dx = wl.x - b.x, dy = wl.y - b.y, d = Math.hypot(dx, dy);
     if (d > wl.r || d < 1e-4) continue;
-    const a = wl.a * (1 - d / wl.r);
-    accel.x += (dx / d) * a;
-    accel.y += (dy / d) * a;
+    // Signed sideways share of the direction to the centre: + means the centre lies to the ball's left.
+    turn += wl.curve * (1 - d / wl.r) * (ux * dy - uy * dx) / d;
   }
+  for (const v of tr.vortices ?? []) {
+    const d = Math.hypot(b.x - v.x, b.y - v.y);
+    // Screen y points down, so a positive physics turn reads as clockwise on the table, matching the cw spin mark.
+    if (d > 0 && d < v.r) turn += v.curve * Math.sin(Math.PI * d / v.r) * v.sense;
+  }
+  if (turn === 0) return;
+  const angle = Math.atan2(uy, ux) + turn * speed * h;
+  b.vx = Math.cos(angle) * speed;
+  b.vy = Math.sin(angle) * speed;
 }
 
 function addForces(forces: NonNullable<Terrain['forces']>, time: number, b: Ball, quake = false) {
@@ -26,17 +37,6 @@ function addForces(forces: NonNullable<Terrain['forces']>, time: number, b: Ball
     const k = f.gust ? gustScale(f.gust, time) : 1;
     accel.x += f.x * k;
     accel.y += f.y * k;
-  }
-}
-
-function addVortices(vortices: NonNullable<Terrain['vortices']>, b: Ball) {
-  for (const v of vortices) {
-    const dx = b.x - v.x, dy = b.y - v.y, d = Math.hypot(dx, dy);
-    if (d > 0 && d < v.r) {
-      const a = v.a * Math.sin(Math.PI * d / v.r) * v.sense;
-      accel.x -= dy / d * a;
-      accel.y += dx / d * a;
-    }
   }
 }
 
@@ -63,9 +63,7 @@ export function applyTerrain(w: SimWorld, tr: Terrain, h: number) {
     if (resting(b, !!quake)) continue;
     accel.x = tr.force ? tr.force.x * gustK : 0;
     accel.y = tr.force ? tr.force.y * gustK : 0;
-    if (tr.wells) addWells(tr.wells, b);
     addForces(tr.forces ?? [], w.time ?? 0, b, !!quake);
-    addVortices(tr.vortices ?? [], b);
     clampAcceleration(w, tr);
     if (quake) {
       accel.x += quake.x;
@@ -74,6 +72,7 @@ export function applyTerrain(w: SimWorld, tr: Terrain, h: number) {
     // A force through the centre of a rolling ball; cloth friction then re-establishes rolling.
     b.vx += accel.x * h;
     b.vy += accel.y * h;
+    bendHeading(tr, b, h);
   }
 }
 

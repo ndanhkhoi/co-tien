@@ -9,6 +9,8 @@ Tất cả chỉ có hiệu lực trong **Tiên Đạo**. Cổ Điển, Luyện 
   đường dự đoán và AI.
 - Lực đều (nghiêng, gió) luôn dưới lực cản lăn, nên bi đứng yên không trôi. Ngoại lệ duy nhất là tuyệt chiêu
   Địa Chấn bậc 5: 1,6 × lực cản lăn trong 1,2 giây đầu và luôn báo trước.
+- Giếng hút, dòng xoáy và dải lụa bẻ hướng bi đang lăn (độ cong, không đẩy): xoáy bậc 3 bẻ khoảng 15–20°, tuyệt
+  chiêu bậc 5 khoảng 35–45°; bi đứng yên không bị kéo.
 - Một hiệu ứng chỉ được thêm khi trận thật, đường dự đoán và AI dùng chung nó qua `Match.simulationWorld()`.
 
 Lý do: [decisions/real-physics.md](../decisions/real-physics.md).
@@ -37,7 +39,12 @@ Lý do: [decisions/real-physics.md](../decisions/real-physics.md).
   đặt úp phản chiêu, hoặc đánh thay một cú của đối thủ mà không tính lỗi.
 - `ult` chọn hình học riêng của tuyệt chiêu bậc 5 theo môn phái; `shape` chọn cổng, rễ chữ V hoặc hút miệng lỗ.
 - **Bàn phăng không có lỗ**: `Match.effectiveKind` đổi các nhóm chỉ có nghĩa với lỗ sang hiệu ứng tương đương.
-  Kiểm tra mỗi thay đổi chiêu trên cả bàn lỗ và bàn phăng, cùng bước đặt/huỷ.
+- **9 bi và 10 bi** dùng chung một bi mục tiêu, nên không có "bi của đối thủ": chỉ định bi thành phong ấn lỗ, dời bi
+  thành run tay, đổi bi thành cầm bi tự do (cùng nấc). Thẻ chiêu trong trận ghi rõ "Ở thể loại này" khi có đổi.
+  Kiểm tra mỗi thay đổi chiêu trên bàn lỗ 8 bi, 9 bi và bàn phăng, cùng bước đặt/huỷ.
+- Đổi Bi đổi bi xa lỗ nhất của bạn với bi gần lỗ nhất của đối thủ, và chỉ dùng được khi đó là hai bi khác nhau.
+- Chiêu trói dùng giữa lượt đối thủ áp ngay vào cú họ đang ngắm. Máy cũng chịu run tay (tay rung rộng theo hệ số)
+  và chỉ bù được nửa góc dắt lệch.
 - Tranh: ba icon riêng mỗi tướng (`skillIconUrl`), vùng đặt ở `public/art/table/skills/`, VFX theo môn phái.
 
 Kiểm thử: `tests/skill-cast.test.ts`, `ultimate-geometry.test.ts`, `roster-kits.test.ts`, `skill-usage.test.ts`.

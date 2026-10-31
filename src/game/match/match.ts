@@ -20,6 +20,14 @@ import { finishChallengeShot, finishRulesShot, strikeShot, updateSimulation } fr
 import { finishPracticeShot, liftPracticeBall, markPracticePosition, placePracticeBall, setPracticePosition, undoPracticeShot } from './practice';
 import type { EffectTarget, Hex, MatchEvent, MatchSetup, Phase, PlayerStats, PlayerSetup, ShotInput, Snapshot } from './types';
 
+/** Carom tables have no pockets: pocket families turn into their nearest table effect. */
+const CAROM_KIND: Partial<Record<SkillKind, SkillKind>> = {
+  shield: 'railcraft', seal: 'chill', maw: 'spin', gravity: 'vision', teleport: 'nudge', displace: 'chill', swap: 'nudge',
+};
+
+/** Rotation games share one target ball: families aimed at "the opponent's ball" keep their rank with a shared-table effect. */
+const ROTATION_KIND: Partial<Record<SkillKind, SkillKind>> = { called: 'seal', displace: 'chill', swap: 'teleport' };
+
 export class Match {
   readonly setup: MatchSetup;
   readonly table: TableGeom;
@@ -485,14 +493,15 @@ export class Match {
     return champion(this.setup.players[side].champion).skills;
   }
 
-  /**
-   * Carom tables have no pockets: pocket families turn into their nearest table effect so
-   * every champion keeps three working skills in every game type.
-   */
+  /** The family a skill really casts in this game type, so every champion keeps three working skills everywhere. */
   effectiveKind(kind: SkillKind): SkillKind {
-    if (!this.isCarom) return kind;
-    const swap: Partial<Record<SkillKind, SkillKind>> = { shield: 'railcraft', seal: 'chill', maw: 'spin', gravity: 'vision', teleport: 'nudge', displace: 'chill', swap: 'nudge' };
-    return swap[kind] ?? kind;
+    if (this.isCarom) return CAROM_KIND[kind] ?? kind;
+    return this.isRotation ? ROTATION_KIND[kind] ?? kind : kind;
+  }
+
+  /** 9 and 10 ball: both players chase the same lowest ball, so nothing on the table is "the opponent's ball". */
+  get isRotation(): boolean {
+    return this.setup.mode === 'nine' || this.setup.mode === 'ten';
   }
 
   /** 0 = ready, otherwise own shots left (basic) or energy missing (ultimate, negative). */
@@ -522,6 +531,8 @@ export class Match {
     sk.kinds.map((k) => this.effectiveKind(k)).forEach((k) => {
       applyKind(this, k, { tier: sk.tier, side, slot, cast, target: sk.target, turns: sk.turns, ult: sk.ult, shape: sk.shape });
     });
+    // Cast while the opponent is lining up: their shot this turn already carries the new hexes.
+    if (this.state.turn !== side && (this.phase === 'aim' || this.phase === 'option')) armTurnHexes(this, this.state.turn);
     this.emit({ type: 'skill', side, champion: this.setup.players[side].champion, slot, skill: sk });
     return true;
   }

@@ -66,7 +66,7 @@ it('match and prediction use identical active terrain and strike parameters', ()
   expect(m.balls).toEqual(prediction.balls);
 });
 it('merges omen and skill forces and overlapping friction without replacing either', () => {
-  const terrain = mergeTerrain({ force: { x: 1, y: 0 }, patches: [{ x: 0, y: 0, r: 2, roll: 0.5, slide: 1 }] }, { force: { x: 1, y: 1 }, wells: [{ x: 0, y: 0, r: 1, a: 1 }] });
+  const terrain = mergeTerrain({ force: { x: 1, y: 0 }, patches: [{ x: 0, y: 0, r: 2, roll: 0.5, slide: 1 }] }, { force: { x: 1, y: 1 }, wells: [{ x: 0, y: 0, r: 1, curve: 1 }] });
   expect(terrain.forces).toHaveLength(2);
   expect(terrain.patches).toHaveLength(1);
   expect(terrain.wells).toHaveLength(1);

@@ -4,7 +4,7 @@ import { other, type Side } from '../../core/rules/types';
 import type { Hex } from './types';
 import { champion, skillPower, type SkillDef, type SkillKind } from '../content/sects';
 import { ENERGY_MAX } from './energy';
-import { decoySegments, displaceBalls, swapBalls } from './tricks';
+import { decoySegments, displaceBalls, swapBalls, swapPair } from './tricks';
 import type { Match } from './match';
 
 /** One skill family taking effect: which cast, by whom, at what strength. */
@@ -62,7 +62,7 @@ function ownShotReady(m: Match, kind: SkillKind, side: Side): boolean {
     case 'second': return !m.secondChance;
     case 'nudge': return m.placing === 'none';
     case 'displace': return !m.isCarom && m.balls.every((b) => !b.onTable || (b.vx === 0 && b.vy === 0));
-    case 'swap': return !m.isCarom && m.balls.every((b) => !b.onTable || (b.vx === 0 && b.vy === 0));
+    case 'swap': return !m.isCarom && !!swapPair(m, side) && m.balls.every((b) => !b.onTable || (b.vx === 0 && b.vy === 0));
     case 'decoy': return !m.activeEffects.some((e) => e.kind === 'decoy' && e.target === other(side));
     case 'teleport': return m.placing !== 'anywhere' && !m.isCarom;
     case 'puppet': return !m.puppeteer;

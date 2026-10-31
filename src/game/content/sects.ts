@@ -105,7 +105,9 @@ export function skillPower(kind: SkillKind, tier: number) {
     case 'bumper': return { length: 0.08 + 0.02 * tier };
     case 'railcraft': return { length: 0.25 + 0.05 * tier, restitution: 0.08 + 0.02 * tier };
     case 'wind': return { acceleration: 0.01 + 0.004 * tier };
-    case 'well': case 'vortex': return { radius: 0.14 + 0.02 * tier, acceleration: 0.015 + 0.003 * tier };
+    // curve: radians of heading turned per metre rolled through the strongest ring (see Terrain in core/physics).
+    case 'well': return { radius: 0.14 + 0.02 * tier, curve: 2 + 0.3 * tier };
+    case 'vortex': return { radius: 0.14 + 0.02 * tier, curve: 0.8 + 0.2 * tier };
     case 'spinwash': return { radius: 0.12 + 0.015 * tier, friction: 1.2 + 0.15 * tier };
     case 'chill': return { tremor: 1.8 + 0.35 * tier };
     case 'spin': return { spin: 1.3 + 0.12 * tier };
@@ -121,14 +123,18 @@ export function skillPower(kind: SkillKind, tier: number) {
     case 'displace': return { pockets: tier >= 4 ? 2 : 1 };
     case 'decoy': return { count: tier >= 4 ? 3 : 2 };
     case 'counter': return { amount: 20 + 5 * tier };
-    case 'silk': return { radius: 0.09 + 0.01 * tier, acceleration: 0.015 + 0.003 * tier };
+    case 'silk': return { radius: 0.09 + 0.01 * tier, curve: 2 + 0.3 * tier };
     case 'quake': return { time: 1.2, factor: 1.6 };
     case 'blind': case 'called': case 'swap': case 'puppet': return {};
     default: return {};
   }
 }
 
-function describeKind(kind: SkillKind, tier: number): string {
+/** Heading turn a ball takes crossing a zone, in whole degrees rounded to 5 so the text reads as an estimate. */
+const turnDegrees = (radians: number) => Math.max(5, Math.round(radians * 180 / Math.PI / 5) * 5);
+
+/** One sentence on what a family does at this strength; the skill text is built from these. */
+export function describeKind(kind: SkillKind, tier: number): string {
   const p = skillPower(kind, tier) as Record<string, number>;
   const pct = (x: number) => `${Math.round(x * 100)}%`;
   switch (kind) {
@@ -138,8 +144,8 @@ function describeKind(kind: SkillKind, tier: number): string {
     case 'bumper': return `Dựng một vật chắn dài ${Math.round(p.length * 100)} cm trên nỉ: bi chạm vào bật ra như chạm băng.`;
     case 'railcraft': return `Yểm một đoạn băng dài ${Math.round(p.length * 100)} cm: chọn băng mềm để bi nảy ít, băng cứng để nảy mạnh.`;
     case 'wind': return 'Gọi một luồng gió theo hướng chọn: bi đang lăn bị đẩy lệch dần theo gió.';
-    case 'well': return `Đặt một điểm hút trên nỉ (rộng ${Math.round(p.radius * 200)} cm): bi lăn gần bị kéo cong vào tâm.`;
-    case 'vortex': return `Tạo một dòng xoáy (rộng ${Math.round(p.radius * 200)} cm): bi lăn qua bị bẻ cong theo chiều xoáy.`;
+    case 'well': return `Đặt một điểm hút trên nỉ (rộng ${Math.round(p.radius * 200)} cm): bi lăn sát tâm bị kéo lệch về tâm khoảng ${turnDegrees(p.curve * p.radius * 0.45)}°.`;
+    case 'vortex': return `Tạo một dòng xoáy (rộng ${Math.round(p.radius * 200)} cm): bi lăn qua bị bẻ hướng khoảng ${turnDegrees(p.curve * p.radius * 4 / Math.PI)}° theo chiều xoáy.`;
     case 'vision': return 'So sánh ba đường dự đoán theo lực đánh hoặc áp phê đã chọn trong cú này.';
     case 'rewind': return 'Đánh hỏng? Quay ngược thời gian và đánh lại cú vừa rồi.';
     case 'shield': return 'Lỗi kế tiếp của bạn không bị phạt bi trong tay.';
@@ -164,7 +170,7 @@ function describeKind(kind: SkillKind, tier: number): string {
     case 'decoy': return `Đặt ${p.count} bi giả là vật chắn tròn cạnh bi mục tiêu của đối thủ.`;
     case 'counter': return `Đặt úp: hoá giải chiêu đối thủ ở lượt kế và hút ${p.amount} năng lượng.`;
     case 'puppet': return 'Bạn đánh trọn cú kế của đối thủ bằng bi cái của họ; cú đó không tính lỗi.';
-    case 'silk': return 'Trải dải lụa chữ S bằng ba xoáy nhỏ, bẻ cong đường bi bằng lực thật.';
+    case 'silk': return `Trải dải lụa chữ S bằng ba xoáy nhỏ: bi lăn dọc dải bị uốn lượn và lệch hướng khoảng ${turnDegrees(p.curve * p.radius * 4 / Math.PI)}°.`;
     case 'quake': return `Nghiêng bàn theo hướng chọn (${p.time.toFixed(1)} giây), bi nằm yên cũng bị kéo theo.`;
     default: return '';
   }
@@ -204,7 +210,7 @@ const ULT_DESCRIPTIONS: Record<UltId, string> = {
 const SHAPE_DESCRIPTIONS: Record<SkillShape, string> = {
   gate: 'Hai vật chắn tạo cổng mở ở giữa.',
   roots: 'Hai rễ chắn hợp thành chữ V.',
-  rim: 'Điểm hút sát miệng lỗ; trên bàn phăng đặt giếng hút trên nỉ.',
+  rim: 'Đặt điểm hút sát mọi miệng lỗ: bi lăn ngang qua miệng lỗ bị kéo lệch vào lỗ. Trên bàn phăng là một giếng hút giữa nỉ.',
 };
 
 function makeSkill(raw: RawSkill, slot: 0 | 1 | 2, tier: number): SkillDef {
@@ -215,7 +221,7 @@ function makeSkill(raw: RawSkill, slot: 0 | 1 | 2, tier: number): SkillDef {
   return {
     slot, name: raw.name, kinds, tier: t, ult: raw.ult, shape: raw.shape, target: raw.target, turns: raw.turns,
     cooldown: slot === 2 ? 0 : base,
-    desc: [raw.ult ? ULT_DESCRIPTIONS[raw.ult] : raw.shape ? SHAPE_DESCRIPTIONS[raw.shape] : '', ...kinds.map((k) => describeKind(k, t))].filter(Boolean).join(' ') + duration,
+    desc: [raw.ult ? ULT_DESCRIPTIONS[raw.ult] : raw.shape ? SHAPE_DESCRIPTIONS[raw.shape] : '', ...kinds.filter((k) => !(raw.shape === 'rim' && k === 'well')).map((k) => describeKind(k, t))].filter(Boolean).join(' ') + duration,
   };
 }
 

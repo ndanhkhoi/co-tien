@@ -14,6 +14,10 @@ trận thật sẽ lệch nhau, và người chơi mất niềm tin vào vật l
 - Lực đều (nghiêng, gió) luôn dưới lực cản lăn μr·g ≈ 0,108 m/s², để bi đứng yên không trôi. Ngoại lệ duy nhất là
   tuyệt chiêu Địa Chấn bậc 5: nghiêng 1,6 × μr·g trong đúng 1,2 giây đầu, có báo hướng và sức trước cú.
 - Gió giữ một chiều suốt lượt và luôn báo sức gió, để người chơi tính được cú.
+- Giếng hút và dòng xoáy (cả dải lụa) là **độ cong**, không phải lực đẩy: chúng bẻ hướng bi đang lăn một góc theo
+  quãng đường đi trong vùng (`curve`, radian mỗi mét), bằng lực vuông góc với chiều lăn. Bi đứng yên không chịu lực
+  và tốc độ không đổi, nên luật "bi đứng yên không trôi" vẫn giữ, còn góc bẻ gần như không phụ thuộc lực đánh.
+  Lực đẩy dưới lực cản lăn chỉ lệch bi chừng 1 cm khi đi qua một vùng nhỏ, người chơi không thấy được.
 
 ## Phương án bị loại
 
@@ -23,4 +27,5 @@ và AI không dùng được.
 ## Hệ quả
 
 - Một hiệu ứng mới phải mô tả được bằng vật lý trước khi làm.
-- Giới hạn lực được chặn trong `src/core/physics/terrain.ts` và kiểm thử ở `tests/terrain-wind.test.ts`.
+- Giới hạn lực được chặn trong `src/core/physics/terrain.ts` và kiểm thử ở `tests/terrain-wind.test.ts`; độ cong
+  của giếng và xoáy kiểm thử ở `tests/skill-effects.test.ts`.

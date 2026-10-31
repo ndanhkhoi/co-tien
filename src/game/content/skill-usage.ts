@@ -19,7 +19,7 @@ const KIND_WAY: Record<SkillKind, UseWay> = {
 };
 
 const WAY_TEXT: Record<UseWay, string> = {
-  place: 'Bấm Dùng rồi đặt lên bàn: kéo để dời, nút xoay, Q/E hoặc con lăn để xoay hướng, R đổi chiều; THI TRIỂN để xác nhận, Huỷ đặt chiêu thì không mất chiêu.',
+  place: 'Bấm Dùng rồi đặt lên bàn: kéo để dời, hai nút xoay để đổi hướng, nút đổi chiều cho chiều xoáy hoặc băng mềm/cứng; THI TRIỂN để xác nhận, Huỷ đặt chiêu thì không mất chiêu.',
   own: 'Dùng trong lượt của bạn, trước khi đánh: tác dụng lên cú bạn sắp đánh.',
   cue: 'Dùng trong lượt của bạn: sau khi bấm, kéo bi cái tới chỗ muốn rồi bấm ĐẶT BI.',
   move: 'Dùng trong lượt của bạn khi mọi bi đứng yên: bi được dời ngay, không cần đặt.',

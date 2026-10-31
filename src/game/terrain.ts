@@ -134,7 +134,7 @@ export function rollOmen(sect: SectId, rng: Rng, t: TableGeom, balls: Ball[]): O
       const [s] = spots(rng, t, 1, [0.3, 0.3]);
       return {
         id: 'star', name: 'Tinh Lực', desc: 'Sao băng rơi xuống bàn: bi lăn gần tâm sao bị hút cong đường.',
-        terrain: { wells: [{ x: s.x, y: s.y, r: 0.3, a: 0.35 }] },
+        terrain: { wells: [{ x: s.x, y: s.y, r: 0.3, curve: 1.2 }] },
       };
     }
     case 'vanthu': {

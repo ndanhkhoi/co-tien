@@ -53,6 +53,8 @@ export interface AiRequest {
   blind?: boolean;
   calledBall?: number | null;
   driftAngle?: number;
+  /** Run Tay: how many times wider the shooter's hand shakes this shot (1 = steady). */
+  tremor?: number;
   /** Puppet shot: the caster whose next table ease the forced shot should maximise. */
   benefitingSide?: Side;
   /** Skills castable right now (checked by the match), with their leading effect family. */

@@ -55,10 +55,14 @@ export interface Terrain {
   /** Forces exempt from the below-rolling-resistance rule (tier-5 quake, strictly time-boxed). */
   unclamped?: boolean;
   quakeWindow?: { duration: number };
-  vortices?: { x: number; y: number; r: number; a: number; sense: number }[];
+  /**
+   * Swirls: a rolling ball's heading turns by `curve` radians per metre at the swirl's mid-radius (fading to 0 at the
+   * centre and rim), clockwise on screen for sense 1. Perpendicular to the motion, so it never moves a resting ball or adds speed.
+   */
+  vortices?: { x: number; y: number; r: number; curve: number; sense: number }[];
   rails?: { ax: number; ay: number; bx: number; by: number; multiplier: number }[];
-  /** Point attractors (m/s² at the centre, fading to 0 at radius r). */
-  wells?: { x: number; y: number; r: number; a: number }[];
+  /** Hollows: a rolling ball's heading bends toward the centre by up to `curve` radians per metre, fading to 0 at r. */
+  wells?: { x: number; y: number; r: number; curve: number }[];
 }
 
 export interface SimWorld {

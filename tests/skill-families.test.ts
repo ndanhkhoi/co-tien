@@ -98,7 +98,7 @@ describe('new families', () => {
 
   it('displace and swap keep every ball on a legal clear resting spot', () => {
     const layout = [makeBall(0, -0.6, 0), makeBall(1, 1.2, -0.55), makeBall(9, 1.15, 0.55), makeBall(10, -0.2, 0.2)];
-    const displace = new Match({ mode: 'nine', raceTo: 1, mutator: null, tableSkin: TABLES[0], seed: 7, layout, players: players() });
+    const displace = new Match({ mode: 'eight', raceTo: 1, mutator: null, tableSkin: TABLES[0], seed: 7, layout, players: players() });
     CHAMPIONS[0].skills[0] = fixtureSkill(['displace']);
     displace.state.groups = ['solid', 'stripe'];
     const events: number[] = [];

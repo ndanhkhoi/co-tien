@@ -106,7 +106,9 @@ function resolvePlacement(kind: SkillKind, tier: number, slot: number, ctx: Cast
   const p = skillPower(kind, tier) as Record<string, number>;
   const margin = Math.max(p.radius ?? 0, (p.length ?? 0) / 2, table.R * 2, slot === 2 && ult ? 0.35 : shape ? 0.25 : 0);
   const clamp = (v: number, span: number) => Math.max(-span / 2 + margin, Math.min(span / 2 - margin, Number.isFinite(v) ? v : 0));
-  const desired = cast.point ?? { x: (cue.x + target.x) / 2, y: (cue.y + target.y) / 2 };
+  // Default: on the aim line, far enough ahead that the cue ball starts outside the zone and rolls through it.
+  const ahead = Math.max(Math.hypot(target.x - cue.x, target.y - cue.y) / 2, (p.radius ?? 0) + table.R * 2.5);
+  const desired = cast.point ?? { x: cue.x + direction.x * ahead, y: cue.y + direction.y * ahead };
   const segmentAt = (pt: { x: number; y: number }): Segment => ({ ax: pt.x - direction.x * p.length / 2, ay: pt.y - direction.y * p.length / 2, bx: pt.x + direction.x * p.length / 2, by: pt.y + direction.y * p.length / 2 });
   const legal = (pt: { x: number; y: number }) => balls.every(b => !b.onTable || (kind === 'bumper' ? segmentDistance(b.x, b.y, segmentAt(pt)) : Math.hypot(pt.x - b.x, pt.y - b.y)) > table.R * 2.1)
     && (kind !== 'bumper' || table.pockets.every(pk => segmentDistance(pk.x, pk.y, segmentAt(pt)) > pk.r + table.R * 2));
@@ -140,7 +142,7 @@ function silkVortex(place: ResolvedPlacement, along: number, p: Record<string, n
   return {
     x: place.point.x + d.x * along + n.x * across,
     y: place.point.y + d.y * along + n.y * across,
-    r: p.radius, a: p.acceleration, sense: (index % 2 === 0 ? 1 : -1),
+    r: p.radius, curve: p.curve, sense: (index % 2 === 0 ? 1 : -1),
   };
 }
 
@@ -150,8 +152,8 @@ function baseEffect(kind: SkillKind, p: Record<string, number>, place: ResolvedP
   const segments: Segment[] = [];
   if (kind === 'slick' || kind === 'sand' || kind === 'spinwash') terrain.patches = [{ ...place.point, r: p.radius, roll: kind === 'spinwash' ? 1 : p.friction, slide: p.friction, spin: kind === 'spinwash' ? p.friction : 1 }];
   if (kind === 'wind') terrain.force = { x: place.direction.x * p.acceleration, y: place.direction.y * p.acceleration };
-  if (kind === 'well') terrain.wells = [{ ...place.point, r: p.radius, a: p.acceleration }];
-  if (kind === 'vortex') terrain.vortices = [{ ...place.point, r: p.radius, a: p.acceleration, sense: resolved.sense === 'cw' ? 1 : -1 }];
+  if (kind === 'well') terrain.wells = [{ ...place.point, r: p.radius, curve: p.curve }];
+  if (kind === 'vortex') terrain.vortices = [{ ...place.point, r: p.radius, curve: p.curve, sense: resolved.sense === 'cw' ? 1 : -1 }];
   if (kind === 'silk') terrain.vortices = [-0.16, 0, 0.16].map((along, i) => silkVortex(place, along, p, i));
   if (kind === 'quake') terrain.forces = [{ x: place.direction.x * 0.173 * p.factor, y: place.direction.y * 0.173 * p.factor, window: { start: 0, duration: p.time } }];
   if (kind === 'bumper' && place.legal(place.point)) segments.push(place.segmentAt(place.point));
@@ -221,7 +223,7 @@ function applyGeometry(g: CastGeometry): void {
       if (insideCloth(table, q, r)) (terrain.patches ??= []).push({ ...q, r, roll, slide: roll, spin });
     },
     well: (q, r = 0.22) => {
-      if (insideCloth(table, q)) (terrain.wells ??= []).push({ ...q, r, a: 0.025 + g.tier * 0.002 });
+      if (insideCloth(table, q)) (terrain.wells ??= []).push({ ...q, r, curve: 1.6 + g.tier * 0.1 });
     },
     obstacle: (a, b) => {
       segments.push({ ax: a.x, ay: a.y, bx: b.x, by: b.y });
@@ -311,7 +313,7 @@ function gateBumper({ segments, at, obstacle }: GeometryKit) {
 
 /** Thiên Hương: two counter-spinning vortices. */
 function thienhuongVortex({ terrain, at, sense }: GeometryKit) {
-  terrain.vortices = [-1, 1].map(sign => ({ ...at(sign * 0.15), r: 0.18, a: 0.035, sense: sense * sign }));
+  terrain.vortices = [-1, 1].map(sign => ({ ...at(sign * 0.15), r: 0.18, curve: 2.2, sense: sense * sign }));
 }
 
 /** Hư Không: a well just inside every pocket mouth. */

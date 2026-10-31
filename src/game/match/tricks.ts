@@ -42,10 +42,9 @@ export function displaceBalls(m: Match, side: Side, count: number): { id: number
 
 /** Đổi Bi: exchange the caster's hardest legal ball with the opponent's easiest legal ball. */
 export function swapBalls(m: Match, side: Side): { balls: [number, number]; at: [{ x: number; y: number }, { x: number; y: number }] } | null {
-  const opp = other(side);
-  const own = legalBall(m, side);
-  const foe = legalBall(m, opp);
-  if (!own || !foe) return null;
+  const pair = swapPair(m, side);
+  if (!pair) return null;
+  const [own, foe] = pair;
   const at: [{ x: number; y: number }, { x: number; y: number }] = [{ x: own.x, y: own.y }, { x: foe.x, y: foe.y }];
   const first = { x: own.x, y: own.y };
   Object.assign(own, { x: foe.x, y: foe.y });
@@ -53,12 +52,16 @@ export function swapBalls(m: Match, side: Side): { balls: [number, number]; at: 
   return { balls: [own.id, foe.id], at };
 }
 
-function legalBall(m: Match, side: Side): Ball | undefined {
-  const cue = m.cueId(side);
-  const ids = m.legalTargets(side).filter((id) => id !== cue);
-  return m.balls
-    .filter((b) => b.onTable && ids.includes(b.id))
-    .sort((a, b) => pocketDistance(m, b) - pocketDistance(m, a))[0];
+/** The caster's ball farthest from a pocket and the opponent's ball nearest one; null when they are the same ball. */
+export function swapPair(m: Match, side: Side): [Ball, Ball] | null {
+  const byPocket = (s: Side) => {
+    const cue = m.cueId(s);
+    const ids = m.legalTargets(s).filter((id) => id !== cue);
+    return m.balls.filter((b) => b.onTable && ids.includes(b.id)).sort((a, b) => pocketDistance(m, a) - pocketDistance(m, b));
+  };
+  const own = byPocket(side).at(-1);
+  const foe = byPocket(other(side)).find((b) => b.id !== own?.id);
+  return own && foe ? [own, foe] : null;
 }
 
 /** Bi Giả: fixed circular obstacles that look like object balls to both players. */
