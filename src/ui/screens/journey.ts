@@ -21,11 +21,11 @@ import { journeyFocus } from '../player-focus';
 
 /** Plaza of each land on art/ui/map.webp, as fractions of the image. */
 const PINS: Record<SectId, [number, number]> = {
-  thienquang: [0.88, 0.26], hoalinh: [0.57, 0.3], hailong: [0.79, 0.47],
-  thienco: [0.52, 0.46], bangphach: [0.14, 0.27], docvu: [0.2, 0.45],
-  kimsa: [0.14, 0.58], vanthu: [0.48, 0.65], huyetsat: [0.8, 0.66],
-  uminh: [0.84, 0.83], tinhtu: [0.63, 0.82], thienhuong: [0.38, 0.86],
-  hukhong: [0.12, 0.85],
+  thienquang: [0.88, 0.34], hoalinh: [0.56, 0.42], hailong: [0.8, 0.52],
+  thienco: [0.51, 0.57], bangphach: [0.15, 0.37], docvu: [0.18, 0.52],
+  kimsa: [0.14, 0.68], vanthu: [0.48, 0.74], huyetsat: [0.8, 0.69],
+  uminh: [0.83, 0.86], tinhtu: [0.635, 0.84], thienhuong: [0.41, 0.87],
+  hukhong: [0.11, 0.87],
 };
 
 const FAMILIES = Object.keys(FAMILY_INFO) as ChallengeFamily[];

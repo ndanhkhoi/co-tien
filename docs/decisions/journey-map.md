@@ -33,9 +33,20 @@ Trong ba bản vẽ mới, lại chọn bản thứ ba: dải trên gần như t
 không tự cắt. Bản một để tháp Thiên Quang và núi tuyết Băng Phách chạm vào dải trên, đường đỏ chỉ quét mép
 đảo Hoa Linh; bản hai dày đặc chi tiết và đường đỏ bỏ sót Hải Long.
 
-## Hoàn thiện: quầng giấy cho đường đỏ, nền tiêu đề đặc
+## Vệt chấm son thay cho đường liền
 
-Hai vết còn sót sau lần vẽ lại:
+Đường đỏ liền trên tranh vẫn đọc như một sợi chỉ đè lên phong cảnh. Vẽ lại lần ba thay cách biểu thị
+tuyến: các chấm son rời rạc như điểm chu sa trên bản đồ cổ, mỗi chấm lớn bằng một dấu bút chấm,
+đặt cách nhau dọc tuyến, không còn nét liền. Chấm vẫn đủ dẫn đường giữa các mốc mà tranh thoáng
+hẳn; quầng giấy hậu xử lý của bản trước không còn cần và bị bỏ.
+
+Trong ba bản vẽ, chọn bản một: vệt chấm qua đủ 13 vùng đúng thứ tự, đơn tuyến, dải trên thuần sương,
+khoảng 62% mặt tranh yên tĩnh. Bản hai và ba bị gãy tuyến ở nửa trên (nhánh cụt hoặc đoạn rời giữa
+Hoa Linh, Hải Long, Thiên Cơ).
+
+## Hoàn thiện giữa chừng: quầng giấy cho đường đỏ, nền tiêu đề
+
+Hai vết còn sót sau lần vẽ lại (về sau phần quầng giấy bị vệt chấm son thay luôn):
 
 - Đường đỏ son bị mực đen nuốt ở vài đoạn (Thiên Quang sang Hoa Linh, quanh Vạn Thú). Khi xuất ảnh,
   thêm một quầng giấy mảnh ôm sát nét đỏ: chọn mask đỏ theo hue và độ bão hoà, nới mềm ra, phủ dải
