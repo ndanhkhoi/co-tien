@@ -40,6 +40,8 @@ function update(el: HTMLElement) {
 }
 
 function track(el: HTMLElement) {
+  // A panel may opt for the fading edge alone (`no-scroll-hint`), e.g. when a chevron would sit on copy.
+  if (el.classList.contains('no-scroll-hint')) return;
   if (tracked.has(el)) return;
   tracked.add(el);
   if (!el.hasAttribute('tabindex')) el.tabIndex = 0;

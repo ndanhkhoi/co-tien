@@ -62,11 +62,13 @@ export interface Champion {
   tier: 1 | 2 | 3 | 4 | 5;
   kind: ChampionKind;
   cls: ClassId;
+  /** Optional additional pose labels; each maps to `pose-N.webp` when that painting ships. */
+  gallery?: { label: string }[];
   skills: [SkillDef, SkillDef, SkillDef];
 }
 
 interface RawSkill { name: string; kinds: string[]; ult?: UltId; shape?: SkillShape; target?: SkillDef['target']; turns?: number }
-interface RawChampion { id: string; name: string; sect: string; tier: number; kind: ChampionKind; cls: string; skills: RawSkill[] }
+interface RawChampion { id: string; name: string; sect: string; tier: number; kind: ChampionKind; cls: string; gallery?: { label: string }[]; skills: RawSkill[] }
 
 const hex = (s: string) => parseInt(s.slice(1), 16);
 
@@ -230,6 +232,7 @@ export const CHAMPIONS: Champion[] = (roster.champions as RawChampion[]).map((c)
   const tier = c.tier as Champion['tier'];
   return {
     id: c.id, name: c.name, sect: c.sect as SectId, tier, kind: c.kind, cls,
+    gallery: c.gallery?.map(({ label }) => ({ label })),
     skills: [makeSkill(c.skills[0], 0, tier), makeSkill(c.skills[1], 1, tier), makeSkill(c.skills[2], 2, tier)],
   };
 });
@@ -348,8 +351,12 @@ const BASE = typeof document === 'undefined' ? import.meta.env.BASE_URL : new UR
 export const portraitUrl = (id: string) => `${BASE}art/champions/${id}/portrait.webp`;
 export const cutoutUrl = (id: string) => `${BASE}art/champions/${id}/cutout.webp`;
 export const winUrl = (id: string) => `${BASE}art/champions/${id}/win.webp`;
+/** Extra gallery pose (`pose-1.webp`, `pose-2.webp`, …) when it is part of the art set. */
+export const poseUrl = (id: string, n: number) => `${BASE}art/champions/${id}/pose-${n}.webp`;
 /** Finishing-strike pose for the rack-winning shot. */
 export const finisherUrl = (id: string) => `${BASE}art/champions/${id}/finisher.webp`;
+/** One wide animation frame of the finishing strike (`fin-1.webp` … `fin-8.webp`). */
+export const finisherFrameUrl = (id: string, frame: number) => `${BASE}art/champions/${id}/fin-${frame}.webp`;
 export const exprUrl = (id: string, e: 'focus' | 'joy' | 'sad' | 'cast') => `${BASE}art/champions/${id}/expr-${e}.webp`;
 export const skillIconUrl = (id: string, slot: number) => `${BASE}art/skills/${id}-${'12u'[slot]}.webp`;
 export const sectArtUrl = (s: SectId, name: 'emblem' | 'splash' | 'cutin' | 'rail' | 'cue-a' | 'cue-b') => `${BASE}art/sects/${s}/${name}.webp`;

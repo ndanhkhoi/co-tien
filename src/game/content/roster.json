@@ -257,6 +257,24 @@
       "look": "a sporty, energetic 14-year-old girl (clearly a girl at first glance: a soft, round girlish face, big bright eyes with long lashes, small nose, cheerful smile), a short glossy jet-black bob with side-swept bangs and a small gold hair clip (neat, not spiky), a white headband, a small bandage on her cheek, white-and-gold short robes with a gold sash over leggings, flat white boots, a small flying sword hovering at her shoulder, slim white-jade cue; must clearly show: a clearly visible white bandage plaster on her cheek and that she is a girl",
       "pose": "aiming the cue like a sword thrust",
       "expr": "eager grin",
+      "gallery": [
+        {
+          "label": "Dán băng má",
+          "pose": "Sitting cross-legged on a white marble step in a frontal view, playfully sticking a fresh white bandage plaster onto her cheek with a sheepish grin, willow-leaf flying sword hovering above while holding her white-jade cue upright beside her flat white boots."
+        },
+        {
+          "label": "Đùa phi kiếm",
+          "pose": "Leaping lightly in a dynamic three-quarter view, laughing merrily as her small flying sword balances a golden chalk cube over the tip of the slim white-jade cue held in her right hand, flat boots kicking back."
+        },
+        {
+          "label": "Ngắm góc khó",
+          "pose": "Crouching low on one knee in a profile view beside a marble rail, resting the slim white-jade cue along her chin with an intensely focused squint, studying a tight bank shot while the flying sword shines a faint path."
+        },
+        {
+          "label": "Ngồi thềm đá",
+          "pose": "Leaning back against a sunlit stone pillar in a three-quarter back view, holding the white-jade cue loosely across her lap with a cheerful relaxed sigh, watching white cranes fly across the sky."
+        }
+      ],
       "skills": [
         {
           "name": "Kiếm Chỉ Đường",
@@ -294,6 +312,24 @@
       "look": "a short, very stocky gate warden around 50 with a cleanly SHAVED bald head, a thick drooping white moustache and NO beard, a round weathered sun-tanned face, bushy white eyebrows, a quilted white-and-gold padded gambeson (not plate armour), bare forearms, a huge sword-shaped tower shield, a thick ivory cue",
       "pose": "guardian bracing behind the shield, cue planted",
       "expr": "steady stern look",
+      "gallery": [
+        {
+          "label": "Uống trà sớm",
+          "pose": "Sitting firmly on a stone bench in a three-quarter view, holding a small steaming ceramic teacup in one calloused hand while resting his heavy iron-core cue against his knee, watching the mountain trail with a stern calm face."
+        },
+        {
+          "label": "Gõ thử đầu cơ",
+          "pose": "Standing upright in a profile view, inspecting the leather tip of his heavy cue by gently tapping it against the golden rim of his bell shield, listening intently to the metallic ring with one brow raised."
+        },
+        {
+          "label": "Đứng canh núi",
+          "pose": "Standing tall with arms folded across his broad chest in an imposing frontal view, heavy cue planted vertically like a gate pillar in the marble flagstone beside his flat cloth boots, white moustache bristling in the wind."
+        },
+        {
+          "label": "Vận khí hộ thể",
+          "pose": "Half-kneeling in a heavy horse stance in a low three-quarter back view, thrusting the butt of his cue into the ground to summon a translucent golden bell aura, grimacing with focused resolve as golden dust scatters."
+        }
+      ],
       "skills": [
         {
           "name": "Kim Chung Chiếu Lộ",
@@ -332,6 +368,25 @@
       "look": "a graceful young male scholar-swordsman, flowing white robes with cloud embroidery, long black hair half-tied under a small silver crown, a white-jade cue wrapped in wisps of cloud",
       "pose": "mage casting, cue held across the body, clouds spiralling",
       "expr": "serene faint smile",
+      "gallery": [
+        {
+          "label": "Đọc sách mây",
+          "frame": "wide",
+          "pose": "Reclining gracefully on a drifting wispy cloud in a relaxed profile view, reading an unfolded silk scroll with a faint smile while his slender cloud cue rests balanced along his folded legs, flat embroidered slippers visible beneath flowing robes."
+        },
+        {
+          "label": "Thoa phấn cơ",
+          "pose": "Standing in a delicate three-quarter view, gently rotating a cube of chalk on the tip of his slender cue with long slender fingers, eyes narrowed in quiet contemplation as a tiny mist ring curls off the tip."
+        },
+        {
+          "label": "Gọi mây che lỗ",
+          "pose": "Gliding forward in a graceful three-quarter back view, turning his head over his shoulder to point his cue outward, trailing soft spiralling white mist ribbons that gently obscure the background, robes billowing smoothly."
+        },
+        {
+          "label": "Ngắm mây chiều",
+          "pose": "Leaning over a carved marble balustrade in a frontal view, resting his chin on one hand with the cloud cue propped securely against his arm, gazing wistfully into the sea of sunset clouds with a serene dreamy expression."
+        }
+      ],
       "skills": [
         {
           "name": "Vân Kiếm Tam Lộ",
@@ -370,6 +425,24 @@
       "look": "a stern woman around 28 with tanned skin, a SHORT ash-blonde undercut: the left temple visibly shaved and a short crest of hair on top (no long hair), a deep vertical scar running through her left eye, angular white-and-gold battle armour with golden pauldrons, a single crimson sash, a broad greatsword-like cue; also clearly: a deep vertical scar through her LEFT eye and the LEFT temple shaved",
       "pose": "warrior swinging the cue in a wide arc",
       "expr": "fierce confident smirk",
+      "gallery": [
+        {
+          "label": "Xem cuộn luật",
+          "pose": "Standing in a stern three-quarter view, reviewing a floating golden law scroll with a sharp gaze, holding her heavy greatsword cue rested over one broad shoulder with a leather-gloved hand, flat combat boots planted firmly."
+        },
+        {
+          "label": "Chỉ cơ phạt bi",
+          "pose": "Standing in an authoritative frontal view, pointing the tip of her greatsword cue straight at the viewer with an unyielding glare, her scarred eye gleaming golden as a glowing decree glyph hovers above the cue ferrule."
+        },
+        {
+          "label": "Vuốt vết sẹo",
+          "pose": "Sitting sideways on a stone ledge in a three-quarter back view, head turned sideways as she traces the scar over her left eye with one fingertip, her greatsword cue propped against the wall beside her in quiet introspection."
+        },
+        {
+          "label": "Đo góc chuẩn",
+          "pose": "Bending slightly over an imaginary aiming line in a profile view, using the straight edge of her cue like a surveyor's ruler, squinting with cold precision to calculate angles with absolute zero tolerance for error."
+        }
+      ],
       "skills": [
         {
           "name": "Thương Kiếm Chiếu Tâm",
@@ -406,6 +479,24 @@
       "look": "a legendary sword saint, an ageless man with a calm, clearly masculine face and strong jaw, long white hair and golden eyes, white robe with gold trim, a radiant sun halo behind him, nine small flying swords orbiting, a radiant golden cue; must clearly show: exactly NINE small flying swords around him, all nine visible and countable",
       "pose": "calm stance, cue pointed forward, swords orbiting",
       "expr": "calm all-knowing look",
+      "gallery": [
+        {
+          "label": "Ngồi thiền mây",
+          "pose": "Sitting in full lotus posture in a three-quarter view, hovering slightly above ground with nine ethereal swords forming a peaceful circle behind him, holding the celestial cue horizontally across his knees in deep meditation."
+        },
+        {
+          "label": "Nhắm vô cực",
+          "pose": "Standing in a serene profile view, raising the celestial cue to eye level with one hand like an archer sighting a star, eyes closed yet glowing with golden omniscience as the swords align in a straight laser-like ray."
+        },
+        {
+          "label": "Nâng chén rượu",
+          "pose": "Standing in a three-quarter back view on a cliff edge, raising a porcelain wine cup to the distant moon with his left hand while his right hand holds the celestial cue resting on the stone, white hair trailing in the breeze."
+        },
+        {
+          "label": "Lau kiếm cơ",
+          "pose": "Standing in a frontal view, gently wiping the flawless polished surface of his celestial cue with a piece of golden silk, expression ancient and fathomless, flat cloth boots resting on a sun-patterned dais."
+        }
+      ],
       "skills": [
         {
           "name": "Huệ Nhãn",
@@ -442,6 +533,24 @@
       "look": "a lean young male assassin in a wolf-ear hood, black leather armour with a crimson scarf, red eyes, twin hooked daggers at the hips, a black-iron cue",
       "pose": "assassin lunging low",
       "expr": "sly grin",
+      "gallery": [
+        {
+          "label": "Ẩn mình rình",
+          "pose": "Crouching low on all fours atop a jagged black rock in a profile view, wolf hood pulled low over glowing red eyes, resting his bone-barbed cue horizontally beneath his chest like a coiled beast."
+        },
+        {
+          "label": "Mài mũi cơ",
+          "pose": "Sitting on an iron chest in a three-quarter view with one leg drawn up, sharpening the bone tip of his cue with a hooked dagger, grinning slyly as small crimson sparks fly off the bone."
+        },
+        {
+          "label": "Đu xích sắt",
+          "pose": "Leaping dynamically from a heavy hanging iron chain in a three-quarter back view, turning his torso mid-air with his bone cue gripped tightly in one hand, crimson scarf trailing behind him."
+        },
+        {
+          "label": "Ngửi mùi máu",
+          "pose": "Standing in a tense frontal view, raising two fingers near his nose to sniff the air while leaning casually on his bone cue, eyes narrowed with predatory amusement."
+        }
+      ],
       "skills": [
         {
           "name": "Lang Nha Bộc",
@@ -479,6 +588,24 @@
       "look": "a massive brutish man with a long crimson mohawk braid and an iron jaw-guard mask over his mouth and chin, heavy chains wrapped around his forearms, black spiked iron armour, no facial paint, a cue shaped like an iron mace",
       "pose": "warrior roaring with the mace-cue raised",
       "expr": "wild grin",
+      "gallery": [
+        {
+          "label": "Vác chùy cơ",
+          "pose": "Walking forward heavily in a towering frontal view, hauling his massive spiked mace-cue across both broad shoulders with chained hands, iron jaw-guard glinting under the blood moon."
+        },
+        {
+          "label": "Gặm thịt nướng",
+          "pose": "Sitting cross-legged on the stone ground in a three-quarter view, pulling down his iron jaw mask with one hand to tear into a roasted beast leg, resting his heavy spiked cue beside his knee."
+        },
+        {
+          "label": "Đập bàn giận",
+          "pose": "Leaning hard onto a black stone billiard rail in a low profile view, slamming a massive fist on the surface while his spiked cue stands upright in his other grip, eyes blazing with fury."
+        },
+        {
+          "label": "Siết xích tay",
+          "pose": "Kneeling on one knee in a three-quarter back view, tightening the heavy iron chains wrapped around his forearms and cue butt, broad scarred back glistening with sweat under demonic flame."
+        }
+      ],
       "skills": [
         {
           "name": "Cuồng Huyết",
@@ -517,6 +644,25 @@
       "look": "an alluring blood sorceress woman around 25 with wavy crimson-red hair piled in a high bun, dark smoky eye makeup, a black lace veil, a crimson-and-black gown with a high collar, a thin crimson cue with a rose tip",
       "pose": "hexer channelling a swirl of blood petals",
       "expr": "mysterious smile",
+      "gallery": [
+        {
+          "label": "Chỉnh khăn lụa",
+          "pose": "Standing gracefully in a three-quarter view, lifting a delicate hand to adjust her translucent crimson veil, half-smiling with sultry red eyes as her blood droplet cue rests upright in the crook of her arm, flat silk slippers on dark stone."
+        },
+        {
+          "label": "Rót huyết tửu",
+          "frame": "wide",
+          "pose": "Reclining sideways on a carved iron divan in a profile view, pouring deep red wine from a small jade decanter into a cup held over her cue tip, bare shoulders draped in burgundy silk."
+        },
+        {
+          "label": "Lướt ngón tay",
+          "pose": "Leaning one hip lightly against a carved railing in a front three-quarter view, lightly tracing a manicured fingertip along the rim of a crimson wine cup, a slow knowing smile, her cue resting against the railing beside her."
+        },
+        {
+          "label": "Hứng hoa máu",
+          "pose": "Standing in a frontal view with head tilted up toward the blood moon, catching a drifting crimson flame petal in her palm while the blood-ruby ferrule of her cue glows faintly at her side."
+        }
+      ],
       "skills": [
         {
           "name": "Huyết Chú",
@@ -555,6 +701,24 @@
       "look": "a scarred war general around 40, heavy black-iron armour, crimson cape, a small war banner on his back, grey topknot, a halberd-shaped cue",
       "pose": "commanding charge, cue swung forward",
       "expr": "battle-hardened glare",
+      "gallery": [
+        {
+          "label": "Cắm cờ chiến",
+          "pose": "Standing tall in a three-quarter back view, thrusting his tattered crimson war banner into cracked basalt flagstones while holding his halberd-styled cue grounded beside his heavy flat war boots."
+        },
+        {
+          "label": "Xem trận đồ",
+          "pose": "Bending over a stone war map in a profile view, resting both scarred gauntlets on his halberd-cue planted vertically, analyzing troop movements under the blood moon with a grim scowl."
+        },
+        {
+          "label": "Lau kích cơ",
+          "pose": "Sitting on a low stone plinth in a frontal view, using an oil cloth to polish the steel halberd edge and ferrule of his cue, grizzled beard bristling with veteran resolve."
+        },
+        {
+          "label": "Chống kích đợi",
+          "pose": "Standing resolute in a low-angle three-quarter view, resting his chin on his crossed hands atop the cue butt, surveying the scorched battlefield with steady piercing gaze."
+        }
+      ],
       "skills": [
         {
           "name": "Hành Quân Lệnh",
@@ -590,6 +754,24 @@
       "look": "the demon lord, a tall pale man with sharp masculine features and a strong jaw, short slicked-back black hair, two curved crimson horns, layered black-and-red robes trailing shadow flames, violet-red eyes, an obsidian cue crackling with dark lightning; must clearly show: short hair slicked straight back off the forehead (no fringe, no bangs); also clearly: no loose strands on the forehead",
       "pose": "time-mage weaving dark energy, cue raised",
       "expr": "cold arrogant smile",
+      "gallery": [
+        {
+          "label": "Ngồi ngai quỷ",
+          "pose": "Sitting imperially on a jagged throne of black iron in a frontal view, one curved demonic horn catching crimson moonlight as he rests his blood scythe-cue across the armrests, eyes burning with ancient majesty."
+        },
+        {
+          "label": "Tụ ma diễm",
+          "pose": "Standing in a three-quarter view, cupping a hovering sphere of black-crimson demonic flame in his left palm while pointing his scythe-cue towards the ground with dark aristocratic composure."
+        },
+        {
+          "label": "Nhìn trăng máu",
+          "pose": "Standing in a dramatic back view overlooking a volcanic chasm, black imperial robes billowing in the updraft as he holds the long scythe-cue angled down, horns silhouetted against the colossal blood moon."
+        },
+        {
+          "label": "Gõ nhẹ đầu cơ",
+          "pose": "Leaning casually in a profile view against a carved iron pillar, tapping the curved scythe tip of his cue against the flagstones in an idle rhythmic tempo, lips curved in a subtle disdainful smirk."
+        }
+      ],
       "skills": [
         {
           "name": "Ma Giác Chấn",
@@ -627,6 +809,24 @@
       "look": "a calm old monk with long white eyebrows, jade-green monk robes, wooden prayer beads, standing on a floating lotus, a staff-like jade cue",
       "pose": "guardian meditating stance, palm raised",
       "expr": "peaceful closed eyes",
+      "gallery": [
+        {
+          "label": "Lần tràng hạt",
+          "pose": "Sitting in half-lotus on a floating lily pad in a frontal view, sliding smooth sandalwood prayer beads through his fingers with eyes gently closed, resting his lotus-wood cue across his crossed knees."
+        },
+        {
+          "label": "Quét hoa rơi",
+          "pose": "Sweeping fallen pink petals off a stone step in a profile view, using his lotus-wood cue like a gentle broom, serene peaceful smile on his youthful monk face, flat cloth slippers on moss."
+        },
+        {
+          "label": "Đỡ chén ngọc",
+          "pose": "Standing in a three-quarter view under a blooming peach branch, holding out a jade alms bowl to catch fresh dew while his cue leans securely against his shoulder."
+        },
+        {
+          "label": "Chắp tay chào",
+          "pose": "Standing in a three-quarter back view, turning his head with a respectful nod and one palm pressed before his chest in Buddhist greeting, lotus cue held vertically behind his sleeve."
+        }
+      ],
       "skills": [
         {
           "name": "Liên Phong Tịnh Tâm",
@@ -664,6 +864,25 @@
       "look": "a lanky young man around 22 with messy sandy-blond hair tied with a small bell, sleepy half-closed eyes, a blade of grass in his mouth, an open jade-green robe with wind ribbons, a long bamboo cue; must clearly show: a green blade of grass held in his mouth",
       "pose": "assassin dashing forward with wind trails",
       "expr": "relaxed smirk",
+      "gallery": [
+        {
+          "label": "Ngủ trên cành",
+          "frame": "wide",
+          "pose": "Lying flat on a sturdy peach tree bough in a side profile view, conical straw hat tilted over his eyes and arms crossed behind his head, his bamboo cue hooked securely in the tree fork beside him."
+        },
+        {
+          "label": "Tu hồ lô rượu",
+          "pose": "Standing in a carefree three-quarter view, tipping a dried gourd flask to drink sweet blossom wine, holding his bamboo cue with colorful wind chimes jingling near the ferrule."
+        },
+        {
+          "label": "Đón chuông gió",
+          "pose": "Leaning back against a wooden post in a three-quarter back view, holding up the wind chime attached to his cue to catch a passing spring breeze, smiling wistfully with his straw hat pushed back."
+        },
+        {
+          "label": "Xoay thân cơ",
+          "pose": "Twirling the bamboo cue horizontally across his knuckles like a playful baton in a dynamic frontal view, peach petals swirling in the miniature vortex around his flat straw sandals."
+        }
+      ],
       "skills": [
         {
           "name": "Phong Ảnh",
@@ -701,6 +920,24 @@
       "look": "a chubby round-faced 12-year-old girl with bright peach-pink hair in two big twin buns, rosy cheeks, a pink peach-blossom dress, a tiny white spirit fox riding on her head, a peach-wood cue with a blossom tip",
       "pose": "mage twirling the cue, petals spiralling",
       "expr": "happy open smile",
+      "gallery": [
+        {
+          "label": "Hái đào chín",
+          "pose": "Standing on tiptoe in a three-quarter view, reaching up with a wicker basket to pluck a ripe peach while using her peach-wood cue as a steady walking stick, flat floral slippers visible."
+        },
+        {
+          "label": "Cài hoa tóc",
+          "pose": "Sitting on a mossy boulder in a frontal view, checking her reflection in a small hand mirror as she pins a fresh peach blossom into her hair bun, cue propped between her knees."
+        },
+        {
+          "label": "Thổi cánh hoa",
+          "pose": "Kneeling forward in a profile view, cupping her hands to blow a handful of pink peach petals playfully at the viewer, her peach cue resting across the grass beside her."
+        },
+        {
+          "label": "Tung hứng bi",
+          "pose": "Standing in a cheerful three-quarter back view, tossing a glossy billiard ball in the air and catching it, cue tucked snugly beneath her left arm with a cheeky bright grin."
+        }
+      ],
       "skills": [
         {
           "name": "Xuân Hồ Dẫn Phong",
@@ -736,6 +973,24 @@
       "look": "an elegant nine-tailed fox spirit woman, white fox ears, nine white-pink tails, lilac-and-white robes, bare feet (no shoes, no heels), golden eyes, a moonstone cue",
       "pose": "hexer casting with tails fanned out",
       "expr": "playful sly smile",
+      "gallery": [
+        {
+          "label": "Chải chín đuôi",
+          "pose": "Sitting sideways on a floating lotus cushion in a three-quarter view, gently combing one of her nine fluffy white fox tails with a jade comb, holding her crystal cue rested against her hip."
+        },
+        {
+          "label": "Đùa lửa hồ ly",
+          "pose": "Floating gracefully in a profile view, guiding a soft pink fox-fire orb around the tip of her crystal cue with a delicate finger, fox ears twitching with playful interest."
+        },
+        {
+          "label": "Núp sau đuôi",
+          "pose": "Crouching low in a frontal view, peeking shyly over a fan of fluffy tails wrapped around herself, holding her crystal cue upright like a sparkling staff with half-lidded amber eyes."
+        },
+        {
+          "label": "Liếc mắt cười",
+          "pose": "Gliding forward in a graceful three-quarter back view, turning her head with an alluring half-smile as her nine tails swirl in a wide circle around her crystal cue, silk slippers hovering above ground."
+        }
+      ],
       "skills": [
         {
           "name": "Hồ Tức Dẫn Lưu",
@@ -774,6 +1029,25 @@
       "look": "the dreamy island mistress around 30, flowing pink-and-mint gown with floating petals, long pastel-pink hair, glowing butterflies, a crystal cue with a butterfly ornament",
       "pose": "time-mage weaving butterflies, cue raised",
       "expr": "dreamy half-closed eyes",
+      "gallery": [
+        {
+          "label": "Dệt mộng ảo",
+          "pose": "Sitting elegantly on a carved rosewood swing in a frontal view, weaving glowing dream threads between her slender fingers while her dream-flower cue rests beside her across the silk cushion."
+        },
+        {
+          "label": "Đón bướm ngọc",
+          "pose": "Standing in a three-quarter view with one sleeve trailing, extending the tip of her dream-flower cue as a glowing jade butterfly lands gently upon the leather ferrule, smiling serenely."
+        },
+        {
+          "label": "Tựa gối ngủ",
+          "frame": "wide",
+          "pose": "Reclining languidly on a carved daybed in a profile view, eyes gently closed as drifting dream ribbons swirl overhead, her floral cue resting securely within her relaxed grasp."
+        },
+        {
+          "label": "Rẽ màn sương",
+          "pose": "Stepping forward in a commanding three-quarter back view, waving her wide silk sleeve to part a curtain of pink morning mist, pointing her dream cue outward toward the open sea."
+        }
+      ],
       "skills": [
         {
           "name": "Mộng Điệp",
@@ -812,6 +1086,24 @@
       "look": "an elegant fairy maiden woman of 20 with very long straight jet-black hair and a straight fringe, ice-blue eyes, a single ice-lotus crystal hairpin, flowing white and pale-blue layered hanfu with sheer ribbons, completely flat white cloth slippers with zero heel height, her heels resting on the ground like ballet flats, slender crystal cue with a lotus tip; must clearly show: sleek perfectly straight hair (no waves) with a blunt straight-cut fringe; also clearly: completely straight hair with no waves at all",
       "pose": "mage casting, one hand weaving a swirl of frost petals, cue held vertically",
       "expr": "gentle serene smile",
+      "gallery": [
+        {
+          "label": "Soi bóng băng",
+          "pose": "Crouching down on a glassy frozen lake in a profile view, touching the clear ice with gloved fingers while her ice-crystal cue rests across her knee, gazing at her calm reflection."
+        },
+        {
+          "label": "Thổi bụi tuyết",
+          "pose": "Standing in a three-quarter view, gently blowing cold breath to clear freshly fallen snowflake dust from the shaft of her crystal cue, pale blue scarf fluttering."
+        },
+        {
+          "label": "Chỉnh mũi tên",
+          "pose": "Sitting on a frosted snowdrift in a frontal view, carefully inspecting a translucent ice arrow drawn from her quiver, ice cue propped against her fur-lined boots."
+        },
+        {
+          "label": "Đứng gác bão",
+          "pose": "Standing motionless against a howling blizzard in a three-quarter back view, holding her ice cue upright like a sentinel spear, hood pulled tight with piercing frosty blue eyes."
+        }
+      ],
       "skills": [
         {
           "name": "Sương Liên Khai Kính",
@@ -849,6 +1141,24 @@
       "look": "a huge broad-shouldered young man guardian, rough armour of blue ice plates over dark wool, short spiky black hair, a large round ice shield on one arm, a thick heavy ice cue",
       "pose": "guardian bracing, shield forward, cue planted on the ground",
       "expr": "calm determined look",
+      "gallery": [
+        {
+          "label": "Chẻ tảng băng",
+          "pose": "Standing in a powerful three-quarter view, swinging the butt of his thick ice-pillar cue down like a chisel to crack a frozen boulder, frost beard covered in crystalline flakes."
+        },
+        {
+          "label": "Nướng cá tuyết",
+          "pose": "Crouching beside a small glowing campfire on the ice in a profile view, roasting a frost-fish on a stick while his thick ice cue leans against a nearby snowbank."
+        },
+        {
+          "label": "Thắt đai da",
+          "pose": "Standing resolute in a frontal view, tightening the thick leather harness across his heavy bear-fur coat, heavy ice cue planted firmly into the snow between his flat leather boots."
+        },
+        {
+          "label": "Trầm ngâm bão",
+          "pose": "Standing in a broad-shouldered back view looking out over an endless glacier expanse, resting both calloused hands on top of the cue butt as freezing northern winds whip his pelt cloak."
+        }
+      ],
       "skills": [
         {
           "name": "Thuẫn Hàn Kính",
@@ -887,6 +1197,24 @@
       "look": "a cheerful 15-year-old girl disciple of the Ice Palace sect, white fur-trimmed hooded cloak over ice-blue robes, silver hair in two short braids, a small crystal bow on her back, slim ice cue",
       "pose": "archer-like aiming, cue drawn back like an arrow, one eye closed",
       "expr": "bright cheeky grin",
+      "gallery": [
+        {
+          "label": "Ôm thỏ tuyết",
+          "pose": "Sitting happily on the snow in a frontal view, hugging a plump white snow hare with both arms while her small icicle cue rests across her lap, wearing oversized flat fur boots."
+        },
+        {
+          "label": "Nặn cầu tuyết",
+          "pose": "Kneeling in a profile view, rolling a crisp round snowball with mittened hands, her icicle cue stuck upright in the snowdrift beside her like a decorative flag."
+        },
+        {
+          "label": "Ngắm hoa băng",
+          "pose": "Crouching in a three-quarter view, tilting her head in wonder as a tiny crystalline frost flower blooms on the tip of her icicle cue, eyes sparkling with childlike delight."
+        },
+        {
+          "label": "Trượt sân băng",
+          "pose": "Gliding forward smoothly on flat soles in a three-quarter back view, holding her icicle cue out like a balancing pole, smiling over her shoulder as the snow hare hops behind."
+        }
+      ],
       "skills": [
         {
           "name": "Băng Tiễn Chỉ Lộ",
@@ -925,6 +1253,24 @@
       "look": "a hulking berserker MAN, half polar bear: a fully HUMAN man's face (human nose, human mouth, human skin, a short white beard, NOT a bear head, NO snout) with small white bear ears on top of his head, a mane of white fur, a shaggy white fur mantle, tribal blue war paint on his face, huge bear-claw gauntlets, a massive club-like cue made of glacier ice and bone",
       "pose": "warrior swinging the cue overhead",
       "expr": "fierce playful roar",
+      "gallery": [
+        {
+          "label": "Gầm đón bão",
+          "pose": "Standing in a wide aggressive stance in a low-angle frontal view, roaring toward the northern lights with chest bare beneath his bear pelt, colossal glacier cue slammed into the permafrost."
+        },
+        {
+          "label": "Bẻ măng đá",
+          "pose": "Snapping a heavy stalactite of blue glacier ice with his clawed gauntlets in a three-quarter view, holding his colossal cue wedged beneath one arm, grimacing with savage triumph."
+        },
+        {
+          "label": "Khoác da gấu",
+          "pose": "Standing in a massive three-quarter back view, adjusting the enormous white bear skull hood over his shoulders, colossal glacier cue held resting on one shoulder like a lumber timber."
+        },
+        {
+          "label": "Tựa tảng băng",
+          "pose": "Sitting heavily against a wall of deep-blue ice in a profile view, resting his massive chin on his forearm atop his cue, breathing out plumes of thick white frost vapor."
+        }
+      ],
       "skills": [
         {
           "name": "Hùng Chưởng Băng Ngân",
@@ -960,6 +1306,24 @@
       "look": "the regal ice-palace mistress, tall woman about 30, crescent-moon ice crown, long silver-white hair, cold pale-violet eyes, long trailing cloak of frost silk with snowflake embroidery, silver-white riding boots with completely flat soles and zero heel height, the whole sole touching the ground, an ornate moon-crested ice cue; must clearly show: pale-violet eyes",
       "pose": "hexer channelling, cue raised, free hand casting a freezing moon sigil",
       "expr": "cold regal half-smile",
+      "gallery": [
+        {
+          "label": "Ngự đài sen",
+          "pose": "Sitting regally on a throne of sculpted blue ice lotus petals in a frontal view, silver crown gleaming as she rests her frozen scepter cue vertically between her fingers, gaze imperious."
+        },
+        {
+          "label": "Ngưng sương cơ",
+          "pose": "Standing in an ethereal profile view, raising her scepter cue horizontally to let a perfect six-pointed frost snowflake crystallize at the leather tip, silver robes pooling cleanly."
+        },
+        {
+          "label": "Ngắm cực quang",
+          "pose": "Standing beside an open palace balcony in a three-quarter back view, looking up at shimmering emerald and violet northern lights while holding her crystal cue loosely at her side."
+        },
+        {
+          "label": "Phất tà áo lụa",
+          "pose": "Stepping slowly down frozen marble steps in a three-quarter view, lifting the sheer hem of her frost gown with one hand while holding her frozen cue erect with the other, flat slippers silent on ice."
+        }
+      ],
       "skills": [
         {
           "name": "Hàn Khí Xâm Cốt",
@@ -995,6 +1359,24 @@
       "look": "an eccentric bearded inventor around 45, wild grey hair, brass armour with a back-mounted fantasy cannon, a bandolier of round firework bombs, a cue shaped like a cannon barrel",
       "pose": "warrior bracing the cannon-cue like a bazooka",
       "expr": "manic laugh",
+      "gallery": [
+        {
+          "label": "Đo thuốc nổ",
+          "pose": "Squinting through brass goggles pushed onto his nose in a three-quarter view, carefully measuring black powder from a copper scoop into the chamber of his brass barrel cue, scorched aprons stained with soot."
+        },
+        {
+          "label": "Bật kính hàn",
+          "pose": "Standing in a frontal view, flipping up one circular tinted lens of his goggles with a soot-covered thumb, chuckling toothily while leaning on his brass barrel cue like a crutch."
+        },
+        {
+          "label": "Né tia lửa",
+          "pose": "Leaping backward comically in a profile view with flat leather work boots off the floor, shielding his face with one forearm as tiny brass sparks spit from his cue muzzle."
+        },
+        {
+          "label": "Gõ đầu búa",
+          "pose": "Sitting on an overturned gunpowder barrel in a three-quarter back view, tapping the percussion cap of his brass cue with a small wrench to test the spring tension."
+        }
+      ],
       "skills": [
         {
           "name": "Lôi Pháo Trấn Vật",
@@ -1032,6 +1414,24 @@
       "look": "a giant wooden mechanical ox golem, brass gears and joints, a glowing cyan core in its chest, carved wooden armour plates, holding a log-like cue; must clearly show: a cue shaped like a rough thick tree log (not a slim polished cue)",
       "pose": "guardian bracing on hind legs, cue held like a barrier",
       "expr": "glowing cyan eyes",
+      "gallery": [
+        {
+          "label": "Xả hơi nước",
+          "pose": "Standing motionless in a sturdy frontal view, puffing twin jets of white steam from brass vents behind his bronze horns, holding his heavy piston cue clamped in one mechanical arm."
+        },
+        {
+          "label": "Tra dầu khớp",
+          "pose": "Kneeling on one wooden knee joint in a profile view, pouring thick amber machine oil from an oiler into his shoulder gears while resting his piston cue against his iron hoof."
+        },
+        {
+          "label": "Húc sừng thử",
+          "pose": "Crouching low in a three-quarter view with gears whirring visibly inside his carved wooden torso, lowering his brass horns as if testing his torque, piston cue gripped across his mechanical chest."
+        },
+        {
+          "label": "Đứng sạc khí",
+          "pose": "Standing plugged into a brass charging pylon in a three-quarter back view, glowing blue energy pulsing through his wooden conduits while his cue rests upright in an automated wall mount."
+        }
+      ],
       "skills": [
         {
           "name": "Cơ Giáp",
@@ -1070,6 +1470,24 @@
       "look": "a 14-year-old apprentice tinkerer boy, brass goggles, oil-stained bronze apron over a teal tunic, a small clockwork bird perched on his shoulder, a slim brass-ringed billiard cue with a tiny spyglass clipped to the butt; must clearly show: the clockwork bird on his shoulder and the spyglass on the cue butt",
       "pose": "crouched low over an imaginary billiard table, one eye sighting along the cue (not jumping)",
       "expr": "focused tongue-out grin",
+      "gallery": [
+        {
+          "label": "Gọt ren ốc",
+          "pose": "Sitting on a high wooden stool in a three-quarter view, carefully carving a brass screw thread with a small chisel while his clockwork cue rests across the workbench, leather apron covered in shavings."
+        },
+        {
+          "label": "Đo góc bi",
+          "pose": "Bending low over the billiard table in a profile view, using a foldable brass caliper against the ferrule of his clockwork cue, tongue poking out in intense mathematical calculation."
+        },
+        {
+          "label": "Gãi đầu nghĩ",
+          "pose": "Standing in a frontal view, scratching his messy brown hair with a pencil eraser while staring at an unfolded blueprint on the floor, clockwork cue held under his arm, flat work boots dusty."
+        },
+        {
+          "label": "Lên dây cót",
+          "pose": "Standing in a three-quarter back view, turning a brass key slotted into the butt of his clockwork cue with audible clicking ratchets, looking over his shoulder with an eager boyish grin."
+        }
+      ],
       "skills": [
         {
           "name": "Đồng Tước Trấn Lộ",
@@ -1108,6 +1526,24 @@
       "look": "a clever puppeteer girl of 19, bronze-and-teal coat with gear buttons, goggles on her head, red bob hair, controlling a small wooden puppet with glowing strings, a brass cue with gyroscope rings; must clearly show: red hair cut in a short chin-length bob (no ponytail, no bun) and the wooden puppet on glowing strings beside her",
       "pose": "mage pulling puppet strings with one hand",
       "expr": "smug clever smile",
+      "gallery": [
+        {
+          "label": "Gọi quạ máy",
+          "pose": "Standing gracefully in a three-quarter view, extending her finger as her brass mechanical raven flutters to land on the ferrule of her gear-spindle cue, delicate silver wires glinting in the lantern light."
+        },
+        {
+          "label": "Gỡ rối tơ vàng",
+          "pose": "Sitting on a brass gear wheel in a profile view, patiently untangling glowing golden silk puppet threads from around her cue shaft, flat embroidered boots resting on the floor."
+        },
+        {
+          "label": "Thả đèn trời",
+          "pose": "Standing on a pagoda roof in a three-quarter back view, releasing a glowing paper sky lantern into the night sky while holding her gear-spindle cue vertically in her left hand."
+        },
+        {
+          "label": "Cười sau quạt",
+          "pose": "Standing in a frontal view, half-concealing a clever smile behind a folding brass gear fan, her spindle cue held upright beside her shoulder with mechanical raven preening its metallic feathers."
+        }
+      ],
       "skills": [
         {
           "name": "Con Quay Thần",
@@ -1146,6 +1582,24 @@
       "look": "the master strategist around 35, elegant blue-and-brass scholar robes, a white feather fan, a brass astrolabe floating beside him, long black hair in a scholar cap, an astrolabe-ringed cue",
       "pose": "time-mage calmly fanning, astrolabe spinning",
       "expr": "knowing calm smile",
+      "gallery": [
+        {
+          "label": "Xoay la kinh",
+          "pose": "Holding a multi-ringed brass astrolabe in both hands in a frontal view, aligning its concentric gear rings to calculate cosmic trajectories while his celestial compass cue hovers at his side."
+        },
+        {
+          "label": "Phẩy quạt lông",
+          "pose": "Standing in a three-quarter view, gently waving his white crane-feather fan with a profound knowing smile, resting his celestial compass cue against his scholar robe, flat silk shoes planted smoothly."
+        },
+        {
+          "label": "Định phương vị",
+          "pose": "Pointing the glowing needle-tip of his compass cue upward in a profile view, projecting a faint geometric star map into the air as gears click within the cue handle."
+        },
+        {
+          "label": "Ngẫm thế cờ",
+          "pose": "Sitting before a glowing brass mechanism board in a three-quarter back view, chin resting on his hand with feather fan folded, contemplating fate while his compass cue leans beside him."
+        }
+      ],
       "skills": [
         {
           "name": "La Bàn Trấn Cơ",
@@ -1183,6 +1637,24 @@
       "look": "a slender snake girl assassin of 18, green scale-pattern outfit under a dark hooded cloak, flat soft leather boots (no heels), slit-pupil amber eyes, a small green snake on her shoulder, a venom-green cue; must clearly show: the small green snake coiled on her shoulder",
       "pose": "assassin coiled low ready to strike",
       "expr": "sly hiss smile",
+      "gallery": [
+        {
+          "label": "Cho rắn ăn độc",
+          "pose": "Crouching on a mossy branch in a profile view, feeding a glowing green insect to the emerald viper coiled around her forearm, bamboo venom cue resting across her thighs, flat hide boots silent."
+        },
+        {
+          "label": "Trườn sát đất",
+          "pose": "Slithering forward low against wet ferns in a low three-quarter view, keeping her venom cue flat along her spine, amber slit eyes scanning the swamp mist alertly."
+        },
+        {
+          "label": "Bôi nọc đầu cơ",
+          "pose": "Sitting on a damp log in a frontal view, carefully tipping a drop of clear venom from a miniature glass vial onto the leather tip of her bamboo cue, green scales glistening on her cheek."
+        },
+        {
+          "label": "Đu cành cây",
+          "pose": "Hanging upside down by her knees from a jungle vine in a dynamic three-quarter back view, holding her bamboo cue like a coiled staff with a playful cheeky smirk."
+        }
+      ],
       "skills": [
         {
           "name": "Xà Độc Tán Toàn",
@@ -1220,6 +1692,24 @@
       "look": "a hunched old poison master, long stringy beard, green-black robes, a poison gourd at his belt, green-stained hands, a gnarled poison-wood cue dripping venom; must clearly show: green-stained hands",
       "pose": "hexer stirring a green mist with the cue",
       "expr": "creepy cackle",
+      "gallery": [
+        {
+          "label": "Hái nấm độc",
+          "pose": "Crouching near a swamp hollow in a profile view, carefully plucking a bioluminescent purple toadstool with blackened fingertips, leaning his weight on his knotted root cue."
+        },
+        {
+          "label": "Lắc hồ lô độc",
+          "pose": "Standing hunched in a three-quarter view, shaking his large dried venom gourd close to his ear to listen to the bubbling fluid, root cue held under his arm, stained cloth slippers on mud."
+        },
+        {
+          "label": "Thổi khói tẩu",
+          "pose": "Sitting on a rotten cypress stump in a frontal view, puffing a cloud of toxic green smoke from a long clay pipe, resting both gnarled hands on the carved root head of his cue with a raspy cackle."
+        },
+        {
+          "label": "Khuấy vạc độc",
+          "pose": "Standing in a three-quarter back view stirring a bubbling iron cauldron with a bone ladle, his knotted root cue propped nearby emitting faint emerald vapors."
+        }
+      ],
       "skills": [
         {
           "name": "Độc Vụ",
@@ -1258,6 +1748,24 @@
       "look": "a mischievous 12-year-old boy with a shaved head and a single topknot, green dot face paint, a gap-toothed grin, five cute venomous critters (centipede, toad, spider, scorpion, snake) crawling on him, a green tunic with pouches, a cue with a glass insect jar; must clearly show: all five critters visible (centipede, toad, spider, scorpion, snake), the glass insect jar, and a gap between his front teeth (no fangs)",
       "pose": "mage holding up the jar, critters swirling",
       "expr": "mischievous grin",
+      "gallery": [
+        {
+          "label": "Bắt bọ cánh",
+          "pose": "Squatting on the grass in a frontal view, trapping a glossy jade beetle beneath an overturned clay jar, dried chitin cue balanced across his small knees, barefoot with five toes visible."
+        },
+        {
+          "label": "Vuốt ve rết",
+          "pose": "Standing in a cheerful profile view, gently petting the head of a foot-long red centipede coiled around his neck like a scarf, holding his chitin cue like a toy stick."
+        },
+        {
+          "label": "Thè lưỡi trêu",
+          "pose": "Leaning forward in a three-quarter view, sticking out his purple-stained tongue with both hands pulling his cheeks, his insect-leg cue planted in the dirt beside him."
+        },
+        {
+          "label": "Lắc lọ trùng",
+          "pose": "Sitting on a flat stone in a three-quarter back view, holding a glass jar of buzzing fireflies and toxic beetles up to his eye, chitin cue resting against his shoulder."
+        }
+      ],
       "skills": [
         {
           "name": "Cổ Trùng Tán Kình",
@@ -1296,6 +1804,24 @@
       "look": "a feral alchemy-mutated wolfman, glass tubes of green serum on his back, glowing green veins, torn dark trousers, long claws, a cue wrapped in chains; must clearly show: a hunched four-legged stance",
       "pose": "pouncing forward low on all four limbs, the chained cue strapped across his back",
       "expr": "snarling",
+      "gallery": [
+        {
+          "label": "Gặm xương thú",
+          "pose": "Crouching on a rock in a feral profile view, gnawing on a marrow bone with mossy fangs dripping green saliva, his heavy poisoned bone cue held in his monstrous foot-claws."
+        },
+        {
+          "label": "Hú gọi bầy",
+          "pose": "Standing tall on digitigrade legs in a three-quarter back view, throwing his wolf head back to howl at the toxic moon, poisoned bone cue gripped in one hairy clawed hand."
+        },
+        {
+          "label": "Cào vỏ cây",
+          "pose": "Raking his sharp poisoned claws down the bark of an ancient tree in a three-quarter view, leaving glowing acidic furrows while holding his bone cue pressed to his side."
+        },
+        {
+          "label": "Gườm trong đêm",
+          "pose": "Crouching in deep shadow in a menacing frontal view, glowing amber eyes burning through tangled fur, poisoned bone cue held horizontally before his muscular chest."
+        }
+      ],
       "skills": [
         {
           "name": "Lang Trảo Tiêu Toàn",
@@ -1332,6 +1858,24 @@
       "look": "the ghost-doctor queen, a severe mature woman physician around 45 with angular features and fine lines, black hair pinned into a tight high coil (no loose long hair, no hood), a LARGE ivory beaked plague-doctor mask raised on top of her head, structured high-collared emerald-and-black physician robes, flat black cloth shoes (no heels), round spectacles, a rectangular lacquered medicine case on her back with an orderly rack of herb vials, a cue like a long silver acupuncture needle; also clearly: a clearly middle-aged face with visible fine lines around the eyes and mouth",
       "pose": "time-mage holding a glowing vial aloft",
       "expr": "knowing smirk",
+      "gallery": [
+        {
+          "label": "Soi kim bạc",
+          "pose": "Standing poised in a profile view, holding a long slender silver acupuncture needle up to the lantern light with gloved fingers, needle-tipped cue held vertically like a surgical staff."
+        },
+        {
+          "label": "Xem bình thuốc",
+          "pose": "Holding a glowing emerald glass flask at eye level in a three-quarter view, masked porcelain face tilted in silent analysis while his needle cue rests tucked under his arm."
+        },
+        {
+          "label": "Chắp tay đứng",
+          "pose": "Standing upright in a tall three-quarter back view, hands clasped behind his back over his needle-tipped cue, dark physician robes trailing without a sound on stone flagstones."
+        },
+        {
+          "label": "Nâng mặt nạ",
+          "pose": "Standing in a chilling frontal view, lifting the corner of his ghostly white mask with one finger to reveal a sliver of pale skin and a chilling smirk, needle cue planted firmly at his side."
+        }
+      ],
       "skills": [
         {
           "name": "Ngân Châm Giải Toàn",
@@ -1367,6 +1911,24 @@
       "look": "an old giant sailor with a white beard and a whale-like build, brass diving helm under one arm, a huge anchor chained to his back, a cue fused with a small anchor",
       "pose": "guardian planting the anchor-cue",
       "expr": "gruff kind smile",
+      "gallery": [
+        {
+          "label": "Vá lưới cá",
+          "pose": "Sitting on an overturned wooden barrel on a deck in a profile view, mending a coarse rope fishing net with a bone needle, his whalebone cue resting against his bare calloused feet."
+        },
+        {
+          "label": "Soi la bàn",
+          "pose": "Standing in a three-quarter view, squinting through salty spray at a brass pocket compass held in his leather-hard palm, whalebone cue propped under his shoulder like a walking staff."
+        },
+        {
+          "label": "Hút tẩu gió",
+          "pose": "Leaning over the ship gunwale in a three-quarter back view, puffing a curved wooden pipe as sea spray wets his grey beard, holding his whalebone cue loosely in one hand."
+        },
+        {
+          "label": "Buộc dây neo",
+          "pose": "Hauling a thick wet hemp anchor rope with bulging biceps in a frontal view, his whalebone cue stuck into the wooden deck grating beside his sturdy flat sea boots."
+        }
+      ],
       "skills": [
         {
           "name": "Thiết Neo Dẫn Lưu",
@@ -1405,6 +1967,24 @@
       "look": "a big shark-toothed pirate brute with a shark-fin mohawk, coral-orange vest, tattooed arms, a huge cleaver-shaped cue",
       "pose": "warrior swinging the cleaver-cue",
       "expr": "toothy shark grin",
+      "gallery": [
+        {
+          "label": "Đếm đồng vàng",
+          "pose": "Sitting atop an open treasure chest in a frontal view, tossing a heavy golden doubloon into the air with a greedy grin, his saw-toothed cue resting across his broad leather-clad knees."
+        },
+        {
+          "label": "Mài răng cưa",
+          "pose": "Scraping a whetstone along the shark-tooth saw edge of his cue in a profile view, eye patch strap tight across his rugged face as metal sparks glint in the tavern light."
+        },
+        {
+          "label": "Gác chân bàn",
+          "pose": "Leaning back on a tavern chair in a three-quarter view with his heavy flat pirate boot propped on a wooden table, resting his saw-toothed cue across his shoulder with a mocking laugh."
+        },
+        {
+          "label": "Rút đoản đao",
+          "pose": "Standing in a menacing three-quarter back view, half-drawing a notched cutlass from his belt while gripping his saw-toothed cue like a war club in the other hand."
+        }
+      ],
       "skills": [
         {
           "name": "Sa Đao Dẫn Triều",
@@ -1444,6 +2024,24 @@
       "look": "a tiny agile 14-year-old pirate girl (clearly a girl at first glance: a round girlish face, big eyes with long lashes) with dark tanned skin, sea-green hair in two short pigtails tied with orange cord, a leather eyepatch, a gap-tooth grin, an orange bandana, a striped teal shirt, a parrot on her shoulder, a fish-shaped cue; must clearly show: a plain brown leather eyepatch and a visible gap between her front teeth (no fangs); also clearly: a visible gap between her two front teeth when she grins",
       "pose": "assassin leaping with the cue",
       "expr": "cocky grin",
+      "gallery": [
+        {
+          "label": "Ngắm hạt ngọc",
+          "pose": "Crouching on a wet coral reef in a frontal view, holding a glowing luminous pearl up to sunlight with a boyish grin, coral branch cue propped in the tide beside his bare webbed feet."
+        },
+        {
+          "label": "Lặn vớt sò",
+          "pose": "Swimming effortlessly through crystal turquoise water in a dynamic profile view, holding his coral cue in one hand while reaching out for an oversized clam shell, bubble trail drifting."
+        },
+        {
+          "label": "Phơi vảy cá",
+          "pose": "Sitting on a sun-warmed sea cliff in a three-quarter back view, letting ocean breezes dry the iridescent turquoise scales on his arms, coral cue lying beside him in the grass."
+        },
+        {
+          "label": "Gọi đàn cá",
+          "pose": "Standing on a submerged sandbar in a three-quarter view, cupping a shell to his lips to whistle toward a school of silver fish, coral cue planted in the shallows like a reed."
+        }
+      ],
       "skills": [
         {
           "name": "Lướt Sóng",
@@ -1483,6 +2081,24 @@
       "look": "a confident pirate captain woman of 26, feathered tricorn hat, coral long coat, teal sash, flat-soled knee-high pirate boots (no heels), gold earrings, wavy auburn hair, a long brass-and-teak cue like a spyglass",
       "pose": "aiming the cue like a spyglass toward the horizon",
       "expr": "confident wink",
+      "gallery": [
+        {
+          "label": "Nhìn kính ngắm",
+          "pose": "Standing at the ship bow in a three-quarter view, extending a brass nautical spyglass to her eye while leaning her hip against the capstan, brass nautical cue held in her other hand."
+        },
+        {
+          "label": "Tung đồng xu",
+          "pose": "Standing in a confident frontal view, flipping a silver sea token in the air with a swaggering smirk, brass nautical cue resting balanced across her shoulders behind her neck."
+        },
+        {
+          "label": "Xem hải đồ",
+          "pose": "Leaning over the captain cabin table in a profile view, pinning down an unrolling parchment sea chart with the tip of her cue, coat draped over one shoulder."
+        },
+        {
+          "label": "Đứng mũi tàu",
+          "pose": "Standing firmly at the prow in a three-quarter back view, holding her brass cue upright while ocean gales whip her long captain coat and feather tricorn hat, looking out to stormy seas."
+        }
+      ],
       "skills": [
         {
           "name": "Thuận Phong Chỉnh Mạn",
@@ -1520,6 +2136,24 @@
       "look": "the sea dragon king, a mature broad-shouldered man with a long flowing teal beard, curved dragon horns, teal scale patches on his cheeks, a coral crown, sea-green robes patterned with waves, a trident-like cue",
       "pose": "hexer raising the trident-cue, waves rising",
       "expr": "imperious stare",
+      "gallery": [
+        {
+          "label": "Ngự thủy đình",
+          "pose": "Sitting majestically upon a throne of white mother-of-pearl in a frontal view, iridescent dragon beard flowing as he rests his tide-ruler cue across his lap, coral horns catching underwater light."
+        },
+        {
+          "label": "Vuốt râu rồng",
+          "pose": "Standing tall in a three-quarter view, thoughtfully stroking his long flowing silver dragon whiskers with one webbed hand, tide-ruler cue held vertically like a scepter of state."
+        },
+        {
+          "label": "Gọi sóng biển",
+          "pose": "Raising his tide-ruler cue horizontally in a powerful profile view, parting twin towering walls of churning blue seafoam with an ancient commanding gaze, pearl robe billowing."
+        },
+        {
+          "label": "Xem thủy tộc",
+          "pose": "Standing on a submerged coral terrace in a three-quarter back view, watching a swirling school of glowing jellyfish and manta rays glide beneath, holding his cue rested in both hands."
+        }
+      ],
       "skills": [
         {
           "name": "Thủy Triều",
@@ -1555,6 +2189,24 @@
       "look": "a kind but eerie old granny ferrywoman of the river of oblivion, hooded grey-jade robes, a ladle and a steaming bowl of soup, a cue like a boat oar; must clearly show: a clearly elderly wrinkled face",
       "pose": "time-mage offering the steaming bowl",
       "expr": "gentle mysterious smile",
+      "gallery": [
+        {
+          "label": "Khuấy vạc canh",
+          "pose": "Leaning over a steaming black iron pot on a boat in a profile view, stirring the murky soup of forgetfulness with a wooden ladle, driftwood cue propped against the wooden gunwale."
+        },
+        {
+          "label": "Khêu bấc đèn",
+          "pose": "Sitting on the ferry bench in a three-quarter view, trimming the wick of her green spirit paper lantern with withered fingers, driftwood cue resting across her knees, worn slippers tucked."
+        },
+        {
+          "label": "Chống đò sương",
+          "pose": "Standing at the stern of her wooden boat in a three-quarter back view, holding her long driftwood cue like a punting pole in both hands, gliding silently through thick grey soul mist."
+        },
+        {
+          "label": "Cười bến vắng",
+          "pose": "Standing in a toothless smiling frontal view, resting both hands on top of her driftwood cue, peering through wispy green mist with ancient, rheumy yet knowing eyes."
+        }
+      ],
       "skills": [
         {
           "name": "Vong Xuyên Độ Khẩu",
@@ -1593,6 +2245,24 @@
       "look": "a skeleton swordsman with jade ghost flames in his eye sockets, tattered grey cloak, a straw hat, a bone cue",
       "pose": "assassin drawing the cue like a sword",
       "expr": "eerie glow eyes",
+      "gallery": [
+        {
+          "label": "Lau khớp xương",
+          "pose": "Sitting on a tombstone in a three-quarter view, carefully polishing his ivory skeletal knuckles with an old burial shroud, spine-bone cue propped between his ribcage."
+        },
+        {
+          "label": "Vái chào kiếm",
+          "pose": "Standing in a respectful frontal stance, holding his spine-bone cue vertically between skeletal prayer palms, cyan soul fire flickering steadily within his hollow eye sockets."
+        },
+        {
+          "label": "Soi vết nứt",
+          "pose": "Holding his spine-bone cue close to his skull in a profile view, tracing a hairline crack along the vertebrae shaft with a bony fingertip, head tilted in silent contemplation."
+        },
+        {
+          "label": "Gác cổng ma",
+          "pose": "Standing motionless as a tomb guardian in a three-quarter back view, spine-bone cue held diagonally across his bare vertebrae back, green soul flames illuminating his ribs."
+        }
+      ],
       "skills": [
         {
           "name": "Cốt Ảnh",
@@ -1631,6 +2301,24 @@
       "look": "a little ghost boy with a translucent pale-green glowing body, round empty white eyes, a yellow paper talisman stuck on his forehead, oversized grey robes, holding a jade spirit lantern, a cue like a lantern pole",
       "pose": "hexer holding the lantern up",
       "expr": "shy blank-eyed smile",
+      "gallery": [
+        {
+          "label": "Thổi ma hoả",
+          "pose": "Crouching on a mossy mound in a frontal view, puffing cheeks to blow out a tiny floating green will-o'-the-wisp, spirit-calling cue clutched in both hands, bare ghost feet hovering inches off ground."
+        },
+        {
+          "label": "Treo đèn lồng",
+          "pose": "Standing on tiptoe in a profile view, hooking his paper funeral lantern onto the top of a wooden grave post using the ferrule of his cue, floating soul fire dancing around his sleeves."
+        },
+        {
+          "label": "Đung đưa chân",
+          "pose": "Sitting atop an ancient mossy headstone in a three-quarter view, swinging his legs cheerfully while resting his spirit cue across his lap, smiling innocently despite pale spectral skin."
+        },
+        {
+          "label": "Dẫn lối hồn",
+          "pose": "Walking slowly forward into dense underworld mist in a three-quarter back view, holding his lantern-tipped cue high to light the path, looking back over his shoulder with wide hollow eyes."
+        }
+      ],
       "skills": [
         {
           "name": "Hồn Đăng Khai Môn",
@@ -1670,6 +2358,24 @@
       "look": "a tall soul-reaper envoy in robes split black and white, a tall hat, chains of soul hooks around him, long tongue-like red ribbon, a cue ending in a hook",
       "pose": "hexer throwing a hooked chain",
       "expr": "unsettling grin",
+      "gallery": [
+        {
+          "label": "Thu xích sắt",
+          "pose": "Standing in a dark three-quarter view, coiling cold black iron soul-chains around his gaunt forearm, scythe-cue grounded beside his tattered robe hem, green soul glow beneath his deep hood."
+        },
+        {
+          "label": "Soi sổ tử",
+          "pose": "Opening a heavy parchment death ledger in a profile view, scanning names with a glowing emerald eye beneath his cowl while resting his scythe-cue against his shoulder."
+        },
+        {
+          "label": "Chỉ mũi liềm",
+          "pose": "Pointing the curved scythe tip of his cue straight forward in an intimidating frontal view, iron chains dangling from the shaft, silent aura of dread enveloping his shadowy figure."
+        },
+        {
+          "label": "Ẩn trong sương",
+          "pose": "Dissolving partially into swirling green graveyard mist in a three-quarter back view, scythe-cue silhouetted against the spirit fog as soul chains drag silently across the stone."
+        }
+      ],
       "skills": [
         {
           "name": "Xích Câu Hồn",
@@ -1706,6 +2412,24 @@
       "look": "the underworld emperor, ageless: a youthful pale man's face around 25 with a sharp masculine jaw, clean-shaven, ancient stern glowing jade eyes, upright jade flames instead of hair, a tall bone crown, heavy rectangular black-and-jade plate armour, a straight spectral mantle, a cue like a great bone sceptre; also clearly: upright jade-green FLAMES instead of hair and a young face",
       "pose": "warrior slamming the sceptre-cue down",
       "expr": "menacing laugh",
+      "gallery": [
+        {
+          "label": "Ngự ngai xương",
+          "pose": "Sitting imperially upon an ornate throne of entwined fossil skulls in a frontal view, soul-jade crown radiating icy green luminescence, resting his ghostly sceptre cue across his armrests."
+        },
+        {
+          "label": "Xem ngọc tỷ",
+          "pose": "Examining a square seal carved of dark soul-jade in his hand in a profile view, skeletal fingers draped in sovereign silk, sceptre cue standing propped against the throne dais."
+        },
+        {
+          "label": "Xua bóng ma",
+          "pose": "Standing in a regal three-quarter back view, sweeping his wide dark sleeve to command kneeling shadow phantoms to depart, sceptre cue held pointing to the ground."
+        },
+        {
+          "label": "Chỉ cơ định số",
+          "pose": "Leveling his ghostly sceptre cue horizontally forward in a three-quarter view, a ring of emerald soul glyphs spinning around the ferrule, piercing spectral gaze weighing souls."
+        }
+      ],
       "skills": [
         {
           "name": "Quỷ Trượng Khai Quan",
@@ -1744,6 +2468,24 @@
       "look": "a tiny star fairy with glowing pale-blue skin, star-shaped pupils, short spiky lavender hair, big translucent dragonfly wings, a violet starry cape, a wand-like cue with a star tip",
       "pose": "mage twirling the star cue",
       "expr": "sparkly excited smile",
+      "gallery": [
+        {
+          "label": "Hứng bụi sao",
+          "pose": "Fluttering mid-air in a frontal view with iridescent starlight wings, cupping her tiny hands to catch sparkling violet comet dust, small wand cue tucked playfully under one arm."
+        },
+        {
+          "label": "Đậu vành trăng",
+          "pose": "Sitting swinging her bare feet on a thin glowing crescent moon sliver in a profile view, resting her chin on her wand cue with big starry violet eyes, smiling happily."
+        },
+        {
+          "label": "Nối chòm sao",
+          "pose": "Drawing a glowing golden line between floating star points with the tip of her wand cue in a three-quarter view, head tilted in whimsical concentration."
+        },
+        {
+          "label": "Lộn nhào bay",
+          "pose": "Flipping playfully upside down in a dynamic three-quarter back view, wings shimmering violet as she twirls her wand cue like a mini sparkler, starlight ribbon trailing."
+        }
+      ],
       "skills": [
         {
           "name": "Tinh Điểm",
@@ -1781,6 +2523,24 @@
       "look": "a stern knight, a man with a square jaw and a short silver-blue crew cut, violet armour engraved with constellations, a visored helmet tucked under one arm, a starlit cape, a round star shield, a silver cue; must clearly show: very short crew-cut hair (no spikes, no long hair) and the helmet tucked under his arm",
       "pose": "guardian raising the star shield",
       "expr": "noble resolve",
+      "gallery": [
+        {
+          "label": "Chỉnh áo giáp",
+          "pose": "Standing in a disciplined frontal view, adjusting the star-etched bronze breastplate over his chest with one gauntlet, starlight spear cue planted vertically beside his flat metal sabatons."
+        },
+        {
+          "label": "Ngắm sao canh",
+          "pose": "Standing atop an observatory rampart in a profile view, resting both hands atop his spear-cue butt, gazing intently at drifting nebulae across the deep violet firmament."
+        },
+        {
+          "label": "Lau khiên tròn",
+          "pose": "Kneeling on one knee in a three-quarter view, using a polishing cloth to buff the brass rings of his astrolabe shield, spear cue propped against his armored shoulder."
+        },
+        {
+          "label": "Chĩa mũi giáo",
+          "pose": "Stepping forward into a low guard stance in a three-quarter back view, holding his starlight spear cue extended outward, starry cape billowing into cosmic mist."
+        }
+      ],
       "skills": [
         {
           "name": "Đẩu Thuẫn Hấp Châu",
@@ -1819,6 +2579,24 @@
       "look": "a moon fairy archer woman of 20 with dark-navy hair in ONE thick braid down her back (no loose hair), pale moonlit skin, a clear silver crescent mark on her forehead, a compact silver-violet archer outfit with a short skirt, arm guards and soft archer boots with completely flat soles and zero heel height (no long flowing dress), a large moon bow on her back, a moonlight cue",
       "pose": "archer aiming the cue along a moonbeam",
       "expr": "focused gentle look",
+      "gallery": [
+        {
+          "label": "Cài trâm trăng",
+          "pose": "Standing gracefully in a three-quarter view, lifting both delicate hands to adjust a silver crescent moon hairpin in her dark updo, moonlight cue resting upright against her hip, flat silk slippers."
+        },
+        {
+          "label": "Hứng ánh trăng",
+          "pose": "Tilting her head upward in a serene profile view, holding out her palm to bathe in silvery lunar light while holding her moonlight cue vertically, silver veil fluttering softly."
+        },
+        {
+          "label": "Vẽ nguyệt luân",
+          "pose": "Sweeping her cue in a graceful arc in a dynamic frontal view, leaving a luminous crescent light trail around her slender waist, flowing violet and silver robes swirling."
+        },
+        {
+          "label": "Tựa ngắm sao",
+          "pose": "Leaning over a celestial marble parapet in a three-quarter back view, gazing down at the starry abyss below with wistful eyes, moonlight cue held gently at her side."
+        }
+      ],
       "skills": [
         {
           "name": "Nguyệt Cung Quy Tâm",
@@ -1857,6 +2635,24 @@
       "look": "a sun war goddess, golden sun-disc armour, red-gold cape, armoured greaves over completely flat sandals with zero heel height, bronze skin, fiery orange hair, a solar spear-like cue; must clearly show: deep bronze-brown skin (not fair skin)",
       "pose": "warrior thrusting the spear-cue skyward",
       "expr": "fierce joyful shout",
+      "gallery": [
+        {
+          "label": "Thắt đai lửa",
+          "pose": "Standing proudly in a frontal view, knotting his blazing golden solar sash around his waist, sunbeam lance cue resting vertically against his shoulder, golden boots planted firmly."
+        },
+        {
+          "label": "Hấp thụ quang",
+          "pose": "Floating cross-legged in a low three-quarter view, palms open toward a miniature blazing sun disc hovering before him, sunbeam cue resting across his knees absorbing solar flare energy."
+        },
+        {
+          "label": "Múa thương lửa",
+          "pose": "Spinning his sunbeam lance cue behind his back in a dynamic profile view, generating a fiery golden halo of heat ripples around his muscular torso, crimson eyes blazing."
+        },
+        {
+          "label": "Đứng đón nắng",
+          "pose": "Standing atop a solar pillar in a commanding three-quarter back view, arms crossed over his chest with his sunbeam cue strapped to his back, golden hair flowing like solar prominences."
+        }
+      ],
       "skills": [
         {
           "name": "Nhật Luân Quy Châu",
@@ -1892,6 +2688,24 @@
       "look": "the star emperor, an ageless celestial god in the form of a calm boy about 12, short silver-violet hair, galaxy-swirl eyes full of ancient wisdom, oversized imperial robes showing a swirling galaxy that trail far on the ground, a crown of floating stars above his head, soft cloth shoes, a cue made of condensed starlight taller than he is; must clearly show: a child's body with very old, serene eyes and the floating star crown",
       "pose": "standing on a small floating star, holding a miniature galaxy in one small hand",
       "expr": "serene, faintly amused cosmic gaze",
+      "gallery": [
+        {
+          "label": "Xoay thiên cầu",
+          "pose": "Hovering majestically in a frontal view, swirling a miniature galaxy orb between his palms while his celestial axis cue floats beside him aligned with the cosmic meridian."
+        },
+        {
+          "label": "Vẽ bản đồ sao",
+          "pose": "Pointing the glowing tip of his axis cue like a calligraphy brush in a profile view, inscribing glowing constellation lines onto a dark parchment star map."
+        },
+        {
+          "label": "Khoác áo sao",
+          "pose": "Standing in a grand three-quarter back view, turning his head as his celestial mantle ripples with swirling nebulae and drifting stars, axis cue held upright like an imperial scepter."
+        },
+        {
+          "label": "Ngắm cõi trời",
+          "pose": "Leaning forward slightly on an astral balcony in a three-quarter view, resting his chin on his fist atop the axis cue butt, contemplating the eternal expansion of space."
+        }
+      ],
       "skills": [
         {
           "name": "Ngân Hà Quy Tụ",
@@ -1927,6 +2741,24 @@
       "look": "a fennec-fox-eared desert thief girl, sand-gold scarf and wraps, flat wrapped sandals (no heels), turquoise jewels, a curved dagger at her hip, a sandstone cue",
       "pose": "assassin sliding through sand",
       "expr": "mischievous wink",
+      "gallery": [
+        {
+          "label": "Đổ cát giày",
+          "pose": "Sitting on a sandstone outcrop in a profile view, tipping one flat desert boot upside down to shake out golden sand, leaning his dune-wood cue against his sandy fox tail."
+        },
+        {
+          "label": "Lau kính cát",
+          "pose": "Standing in a three-quarter view, wiping his brass sand goggles with the hem of his tunic, fox ears twitching alertly while his cue rests tucked under one arm."
+        },
+        {
+          "label": "Nếm nước nguồn",
+          "pose": "Kneeling beside a desert oasis pool in a frontal view, scooping clear turquoise water in his palms to drink, dune-wood cue propped in the soft sand at his side."
+        },
+        {
+          "label": "Tránh bão cát",
+          "pose": "Standing braced against an approaching sandstorm in a three-quarter back view, pulling his linen scarf across his face while holding his cue low to gauge wind direction."
+        }
+      ],
       "skills": [
         {
           "name": "Sa Ảnh",
@@ -1964,6 +2796,24 @@
       "look": "a living lion-headed tomb guardian STATUE carved entirely from sandstone (no fur, no soft hair, no skin): a planar carved stone lion face, a rigid geometric carved mane, weathered cracks and chipped edges, turquoise inlays, faint golden runes, massive block-like stone shoulders and body, holding an obelisk-shaped cue",
       "pose": "guardian standing firm with the obelisk-cue",
       "expr": "stoic glowing eyes",
+      "gallery": [
+        {
+          "label": "Đứng gác lăng",
+          "pose": "Standing completely rigid in a monumental frontal view, holding his heavy sandstone pillar cue grounded between his stone feet, turquoise core glowing faintly behind chest engravings."
+        },
+        {
+          "label": "Phủi bụi cát",
+          "pose": "Shaking fine desert dust off his carved stone shoulders in a profile view, ancient glyphs lighting up as his heavy cue shifts slightly in his stone gauntlet."
+        },
+        {
+          "label": "Chạm ấn chú",
+          "pose": "Touching a glowing hieroglyph on a temple pillar with one thick stone finger in a three-quarter view, holding his sandstone cue propped against his carved torso."
+        },
+        {
+          "label": "Trầm ngâm đá",
+          "pose": "Sitting cross-legged like an ancient carved monument in a three-quarter back view, resting both heavy stone palms on his grounded cue, silent amidst blowing desert sands."
+        }
+      ],
       "skills": [
         {
           "name": "Sư Tượng Sa Vực",
@@ -2001,6 +2851,24 @@
       "look": "an elderly bald sun priest, a thin old man with a long grey goatee and a full golden eye-mask covering the upper half of his face, white-gold linen robes, a turquoise collar, a sun-disc staff cue; must clearly show: a completely bald head with no hair at all, and only a long thin grey goatee on the chin (no moustache, no full beard)",
       "pose": "hexer raising the sun-disc cue",
       "expr": "masked solemn",
+      "gallery": [
+        {
+          "label": "Gieo quẻ cát",
+          "pose": "Kneeling on a golden silk mat in a frontal view, rolling three miniature turquoise billiard balls across a bronze divining plate, resting her sun-gilded cue across her lap."
+        },
+        {
+          "label": "Chỉnh vòng rắn",
+          "pose": "Standing in a three-quarter view, adjusting the coiled gold cobra circlet on her brow with slender fingers, golden eyes glowing with prophetic sight, sun-gilded cue held erect."
+        },
+        {
+          "label": "Dâng ngọc quý",
+          "pose": "Holding out an engraved golden offering platter bearing lapis lazuli beads in a profile view, sun-gilded cue propped securely under her arm, flat gold sandals on stone."
+        },
+        {
+          "label": "Ngắm nhật thực",
+          "pose": "Standing atop a pyramid terrace in a three-quarter back view, gazing up at the blazing solar eclipse disc while holding her cue vertically like a high priestess staff."
+        }
+      ],
       "skills": [
         {
           "name": "Tế Nhật Sa Đàn",
@@ -2039,6 +2907,24 @@
       "look": "a muscular bearded man, the sand king warrior, in crocodile-scale golden armour, a turquoise cape, a golden crown with a sun crest, a massive golden cue",
       "pose": "warrior smashing the cue into sand",
       "expr": "proud roar",
+      "gallery": [
+        {
+          "label": "Tuốt gươm vàng",
+          "pose": "Standing proudly in a three-quarter view, half-drawing his jewel-encrusted royal scimitar from its scabbard with one hand, holding his pharaoh scepter cue firmly in the other."
+        },
+        {
+          "label": "Thả bọ hung",
+          "pose": "Standing in a profile view, letting a mechanical gold scarab crawl from his armored gauntlet onto the tip of his cue, scarab mantle draping over broad golden pauldrons."
+        },
+        {
+          "label": "Đứng thị sát",
+          "pose": "Standing tall on a fortress battlement in a frontal view, arms folded across his golden breastplate with his scepter cue held resting against his forearm, surveying his desert empire."
+        },
+        {
+          "label": "Nâng cúp vàng",
+          "pose": "Reclining on a gilded throne in a three-quarter back view, raising a heavy golden goblet with a confident smirk while his pharaoh scepter cue rests on cushions beside him."
+        }
+      ],
       "skills": [
         {
           "name": "Vương Thổ Sa Trì",
@@ -2075,6 +2961,24 @@
       "look": "the sun empress, a regal dark-skinned woman with tightly braided black hair, gold face-paint lines under her eyes, a tall golden sun crown, a white-and-gold gown, turquoise jewellery, a sun disc blazing behind her, a golden cue with a sun tip",
       "pose": "archer aiming the cue with sunlight streaming",
       "expr": "majestic confident look",
+      "gallery": [
+        {
+          "label": "Ngự toạ ngai",
+          "pose": "Sitting with divine posture on an elevated throne of polished gold in a frontal view, towering solar crown gleaming as she rests her sacred sun-staff cue upright beside her knees."
+        },
+        {
+          "label": "Phất quạt trĩ",
+          "pose": "Standing in an elegant three-quarter view, waving a ceremonial turquoise feather fan with one graceful hand, holding her sun-staff cue lightly with the other, linen robes flowing."
+        },
+        {
+          "label": "Ban phước lành",
+          "pose": "Standing atop temple steps in a profile view, extending one radiant hand forward in blessing while her sun-staff cue rests grounded, flat golden slippers on sacred granite."
+        },
+        {
+          "label": "Ngắm đỉnh tháp",
+          "pose": "Standing at the balcony edge in a three-quarter back view, watching the sun dip behind towering ancient pyramids, holding her sacred cue aloft against the fiery amber twilight."
+        }
+      ],
       "skills": [
         {
           "name": "Đế Miện Sa Chướng",
@@ -2111,6 +3015,24 @@
       "look": "a small leafy forest sprite with green leaf-textured skin, no human hair but a round acorn-cap hat, big amber eyes, a cape of leaves, a twig cue",
       "pose": "mage waving the twig cue, leaves swirling",
       "expr": "curious smile",
+      "gallery": [
+        {
+          "label": "Cho nai con ăn",
+          "pose": "Kneeling on lush moss in a frontal view, feeding fresh clover blossoms to a baby spotted fawn, live willow-branch cue resting across her lap, tiny antlers catching soft sunbeams."
+        },
+        {
+          "label": "Tết vòng hoa",
+          "pose": "Sitting on a fallen oak trunk in a profile view, weaving colorful forest wildflowers into a garland with nimble fingers, willow cue leaning against her bare feet with five toes."
+        },
+        {
+          "label": "Nghe chim hót",
+          "pose": "Standing in a peaceful three-quarter view with eyes closed, smiling as a small green songbird perches directly on the budding tip of her willow-branch cue."
+        },
+        {
+          "label": "Nấp sau cây",
+          "pose": "Peeking shyly from behind a massive mossy tree trunk in a three-quarter back view, holding her willow cue vertically against the bark, deer ears twitching softly."
+        }
+      ],
       "skills": [
         {
           "name": "Sồi Non Phân Rễ",
@@ -2149,6 +3071,24 @@
       "look": "a fierce jungle huntress with leopard ears and tail, spotted fur wraps, green war paint, a spear-like cue; must clearly show: a cue shaped like a hunting spear with a stone spear-head tip",
       "pose": "assassin crouched ready to pounce",
       "expr": "predatory grin",
+      "gallery": [
+        {
+          "label": "Rình trên cành",
+          "pose": "Crouching low on a high jungle branch in a profile view, resting her weight on flat soles, wooden hunting cue held along her side as sharp amber eyes scan the undergrowth."
+        },
+        {
+          "label": "Cài bẫy thú",
+          "pose": "Kneeling in a three-quarter view, setting a wooden snare trap in the grass with quick hands, hunting cue laid across her knees, leopard pelt vest tied tight."
+        },
+        {
+          "label": "Mài mũi lao cơ",
+          "pose": "Sitting on a sunlit rock in a frontal view, scraping a flat river stone along the tip of her wooden hunting cue, tooth necklace rattling against her tanned chest."
+        },
+        {
+          "label": "Vươn vai lười",
+          "pose": "Stretching her arms and back like a cat in a three-quarter back view, yawning showing sharp canines while her wooden cue rests hooked behind her shoulders."
+        }
+      ],
       "skills": [
         {
           "name": "Liệp Trảo Mộc Chướng",
@@ -2188,6 +3128,24 @@
       "look": "an ancient turtle sage with a mossy stone shell, a long white beard, small spectacles, a walking-stick cue",
       "pose": "guardian leaning on the cue, shell glowing",
       "expr": "wise sleepy smile",
+      "gallery": [
+        {
+          "label": "Hút tẩu thuốc",
+          "pose": "Sitting comfortably on a river rock in a profile view, puffing a long stone pipe that billows fragrant herbal smoke, resting his heavy ancient root cue across his mossy shell knees."
+        },
+        {
+          "label": "Tưới rêu xanh",
+          "pose": "Standing slow and steady in a three-quarter view, pouring water from a bamboo cup onto the ancient moss growing on his shell, root cue serving as a sturdy walking cane."
+        },
+        {
+          "label": "Rút vào mai",
+          "pose": "Pulling his wrinkled head and limbs halfway into his massive stone-hard turtle shell in a humorous frontal view, root cue leaning against the front shell opening."
+        },
+        {
+          "label": "Xem rùa con",
+          "pose": "Standing in a three-quarter back view, leaning on his root cue to watch a clutch of tiny baby turtles crawl toward the river, smiling with grandfatherly warmth."
+        }
+      ],
       "skills": [
         {
           "name": "Mai Rùa",
@@ -2227,6 +3185,24 @@
       "look": "a thunder-eagle birdman king, broad feathered wings, amber-and-green plumage, lightning crackling around him, a cue like a lightning rod; must clearly show: both wings complete and inside the frame; also clearly: the head of an EAGLE (hooked beak, feathered eagle head, NO human face)",
       "pose": "archer diving with the cue aimed",
       "expr": "piercing glare",
+      "gallery": [
+        {
+          "label": "Chải cánh lông",
+          "pose": "Sitting on an eagle aerie in a three-quarter view, smoothing the dark golden flight feathers of his left wing with hooked talons, thunderbolt cue propped between his knees."
+        },
+        {
+          "label": "Tụ tia sấm",
+          "pose": "Standing in a fierce frontal view, channeling a crackling spark of golden lightning between his taloned fingers onto the ferrule of his thunderbolt cue, eagle eyes flashing."
+        },
+        {
+          "label": "Sải cánh bay",
+          "pose": "Spreading massive feathered wings wide on a mountain precipice in a magnificent three-quarter back view, holding his thunderbolt cue horizontally as storm gales surge."
+        },
+        {
+          "label": "Rỉa mồi săn",
+          "pose": "Crouching atop a sharp crag in a profile view, tearing into a caught fish with his hooked beak while his thunderbolt feather cue rests pinned under one taloned foot."
+        }
+      ],
       "skills": [
         {
           "name": "Dực Căn Trấn Lộ",
@@ -2263,6 +3239,24 @@
       "look": "the great tree mother, a tall serene woman with bark-textured green skin and hair made of leafy branches with small white flowers, a green dragon coiled around her shoulders, amber eyes, a cue grown from living wood; must clearly show: hair made of leafy branches (not hair), bark-textured green skin on face and arms, and the green dragon coiled on her shoulders",
       "pose": "hexer raising both arms, vines rising",
       "expr": "gentle but powerful",
+      "gallery": [
+        {
+          "label": "Tưới nhựa cây",
+          "pose": "Floating gently in a frontal view, touching a weeping tree wound with glowing amber sap from her fingertips, living ancient branch cue blooming with white blossoms in her grip."
+        },
+        {
+          "label": "Tựa gốc cây",
+          "pose": "Leaning gracefully against an ancient banyan trunk in a profile view, eyelids heavy in peaceful slumber as vines drape over her shoulders, living cue held loosely."
+        },
+        {
+          "label": "Làm hoa nở",
+          "pose": "Standing in a radiant three-quarter view, breathing softly onto her open palm to make a rare jade orchid sprout and bloom, living branch cue grounded beside her root-twined feet."
+        },
+        {
+          "label": "Bao bọc rừng",
+          "pose": "Extending both leafy arms wide in a maternal three-quarter back view, sheltering flying forest birds beneath her canopy of branches, living cue glowing with gentle green life pulse."
+        }
+      ],
       "skills": [
         {
           "name": "Dây Leo Trói",
@@ -2301,6 +3295,24 @@
       "look": "a small low-slung void beetle, about knee-high and cute but creepy, a smooth rounded violet shell with no spikes, two oversized round magenta eyes, six short jointed legs, tiny mandibles, a split fan-shaped tail, holding a slender stinger-tipped cue",
       "pose": "assassin skittering forward",
       "expr": "chittering cute",
+      "gallery": [
+        {
+          "label": "Bò qua khe nứt",
+          "pose": "Scuttling through a jagged purple reality tear in a profile view, multiple clawed limbs gripping the rift edges, holding its chitinous void sting cue horizontally beneath its abdomen."
+        },
+        {
+          "label": "Lau mắt kép",
+          "pose": "Crouching on a floating void asteroid in a frontal view, using two jointed forelegs to clean its multifaceted purple eyes, sting cue planted upright like an antenna."
+        },
+        {
+          "label": "Gặm mảnh bi",
+          "pose": "Nibbling on a cracked billiard ball fragment with sharp chitinous mandibles in a three-quarter view, void sting cue held securely against its carapace."
+        },
+        {
+          "label": "Cuộn tròn mai",
+          "pose": "Curling its segmented armored body into a defensive ball in a three-quarter back view, wrapping its limbs around the void sting cue as purple sparks hiss across its shell."
+        }
+      ],
       "skills": [
         {
           "name": "Đào Hư Không",
@@ -2339,6 +3351,24 @@
       "look": "a big void beast with a gaping fanged maw on its belly, purple spikes, magenta glow, holding a bone cue; must clearly show: a separate beast head with small eyes, and the fanged maw on its belly (not on the head)",
       "pose": "warrior roaring with the belly maw open",
       "expr": "hungry roar",
+      "gallery": [
+        {
+          "label": "Đánh hơi mồi",
+          "pose": "Sniffing the misty floor with a dripping shadowy muzzle in a low profile view, four digitigrade legs creeping forward, dark energy tail cue curled alertly over its spine."
+        },
+        {
+          "label": "Liếm móng đen",
+          "pose": "Sitting back on its haunches in a three-quarter view, licking dark void slime from its front claws with a shadowy tongue, tail cue resting flat on the obsidian floor."
+        },
+        {
+          "label": "Gầm đe dọa",
+          "pose": "Lowering its head in a menacing frontal view, baring rows of jagged needle teeth with a guttural growl, purple void energy crackling along its tail cue whip."
+        },
+        {
+          "label": "Cào vách đá",
+          "pose": "Raking deep gouges into a floating boundary stone in a three-quarter back view, shadows peeling off its flanks like smoke while its tail cue sweeps the empty void behind."
+        }
+      ],
       "skills": [
         {
           "name": "Phệ Khẩu Hấp Châu",
@@ -2377,6 +3407,24 @@
       "look": "a faceless wanderer in a deep purple cloak, a smooth mask showing a starry void, floating above the ground, a cue fading into nothing; must clearly show: no facial features at all, only the smooth starry void mask",
       "pose": "time-mage floating, cue dissolving into particles",
       "expr": "no face, void mask",
+      "gallery": [
+        {
+          "label": "Chỉnh mặt nạ",
+          "pose": "Standing in a mysterious frontal view, raising two fingers to adjust the smooth featureless porcelain mask over his face, rift-carved cue held vertically in his other gloved hand."
+        },
+        {
+          "label": "Xuyên hư ảnh",
+          "pose": "Stepping one foot into a shimmering violet portal in a profile view, cloak shifting between dimensions as he carries his rift cue like a walking cane, flat boots phasing."
+        },
+        {
+          "label": "Lật đồng tiền",
+          "pose": "Flipping a hollow void coin with a flick of his thumb in a three-quarter view, blank mask tilted down in contemplation, rift-carved cue resting against his shoulder."
+        },
+        {
+          "label": "Tan vào sương",
+          "pose": "Turning away into dissolving magenta spatial tears in a three-quarter back view, his void cloak fragmenting into floating polygonal shards around his cue."
+        }
+      ],
       "skills": [
         {
           "name": "Vô Tướng Dẫn Uyên",
@@ -2416,6 +3464,24 @@
       "look": "the void broodmother queen, an insectoid woman with violet chitin plates on her skin, a short black bob, three glowing eyes on her forehead, long antennae, a purple chitin armour-gown, translucent wings, a sceptre cue; must clearly show: THREE separate glowing eyes in a row on her forehead (eyes, not a gem); also clearly: the three forehead eyes side by side in one straight horizontal row",
       "pose": "hexer commanding with the sceptre",
       "expr": "cold imperious smile",
+      "gallery": [
+        {
+          "label": "Vuốt ấu trùng",
+          "pose": "Hovering gracefully in a frontal view, cradling a squirming purple void larva in her slender chitinous hands, warped spire cue floating vertically beside her segmented waist."
+        },
+        {
+          "label": "Dệt kén tím",
+          "pose": "Spinning glowing magenta silk threads from her fingertips around a dark spatial rift in a profile view, spire cue held in her lower pair of hands like a loom rod."
+        },
+        {
+          "label": "Xòe bốn cánh",
+          "pose": "Spreading four translucent violet insect wings wide in a grand three-quarter back view, looking over her shoulder with cold alien royalty, spire cue held in guard."
+        },
+        {
+          "label": "Soi tổ kén",
+          "pose": "Gliding slowly past suspended glowing egg sacks in a three-quarter view, touching each translucent membrane with the tip of her spire cue to feel the fetal heartbeat."
+        }
+      ],
       "skills": [
         {
           "name": "Tam Nhãn Nhiếp Châu",
@@ -2454,6 +3520,24 @@
       "look": "the sky-devouring void titan, an enormous broad-shouldered monolithic demon built like a mountain, a SMALL horned head sunk between huge shoulders, heavy slab-like dark purple armour plates, ONE vast cosmic maw across its whole torso showing stars inside, only a few thin magenta fissures, heavy pillar-like legs, no spikes on the back, a cue like a black stone spike; also clearly: a smooth monolithic silhouette with almost no spikes and only a few magenta cracks",
       "pose": "warrior towering, maw open, cue raised",
       "expr": "devouring roar",
+      "gallery": [
+        {
+          "label": "Nuốt hắc động",
+          "pose": "Tilting back his horned titan head in a monumental profile view, dropping a compressed swirling singularity sphere into his glowing abyssal maw, holding his colossal cue anchored."
+        },
+        {
+          "label": "Đứng ngự uyên",
+          "pose": "Standing immovable on the edge of the universe in a terrifying frontal view, massive arms folded across his colossal chest while his black-hole cue hovers before him."
+        },
+        {
+          "label": "Xé không gian",
+          "pose": "Plunging his clawed monolithic fist into empty space in a three-quarter view, tearing open a massive jagged reality canyon as his cue absorbs the cosmic debris."
+        },
+        {
+          "label": "Quay lưng nhìn",
+          "pose": "Standing in an imposing three-quarter back view looking down into the bottomless abyss, horned silhouette blotting out distant dying stars, colossal cue planted like a pillar."
+        }
+      ],
       "skills": [
         {
           "name": "Cự Uyên Hấp Tinh",
@@ -2490,6 +3574,24 @@
       "look": "a confident dancer, a woman around 22 with a curvy figure, long glossy black hair in a high ponytail with red ribbons, a red-and-gold dance costume with a bare midriff, bare shoulders and long silk sleeves, little golden bells at her wrists, barefoot dancer with thin red ankle bells, no shoes, a slim red lacquer cue",
       "pose": "mid-spin dance step with silk sleeves flowing, cue twirled behind her",
       "expr": "playful wink",
+      "gallery": [
+        {
+          "label": "Buộc dải lụa",
+          "pose": "Sitting on top of a waist-high carved wooden pavilion railing in a three-quarter view, her weight clearly resting on its rail with one hand braced beside her and her bare feet dangling above the floor, the other hand retying a flowing crimson silk ribbon around her high ponytail, her red cue leaning against the railing beside her."
+        },
+        {
+          "label": "Thử điệu múa",
+          "pose": "Pausing mid-stride on tiptoe in a profile view, lifting one long dancer sleeve to test a graceful spin while holding her ribbon cue vertically, floral skirt flaring lightly."
+        },
+        {
+          "label": "Uống chén trà",
+          "pose": "Kneeling at a low lacquered table in a frontal view, sipping fragrant peony tea from a porcelain cup with a radiant smile, cue resting neatly on the tatami mat beside her."
+        },
+        {
+          "label": "Ngoái đầu cười",
+          "pose": "Turning toward the viewer out of a playful spin in a front view, laughing openly with her head tipped back, silk sleeves still swirling around her, the slim red lacquer cue held horizontally across her shoulders behind her neck with both hands, ankle bells jingling."
+        }
+      ],
       "skills": [
         {
           "name": "Vũ Ảnh",
@@ -2524,9 +3626,27 @@
       "tier": 2,
       "kind": "nuhiep",
       "cls": "chusu",
-      "look": "a petite, cute perfumer, clearly a grown woman around 24 (adult face and proportions, not childlike), short stature with short legs and a soft, rounded figure, wavy violet hair in a loose side braid over one shoulder, big bright lilac eyes, a small beauty mark under her eye, rosy cheeks, a violet silk qipao-style dress with short puffed sleeves and a knee-length hem, embroidered flat cloth shoes, a smoking perfume censer at her hip, a plain straight billiard cue in violet lacquer (thick butt at the bottom, slim tip at the top, nothing hanging from it: no lanterns, tassels or ribbons on the cue); must clearly show: small beauty mark under her eye, wavy violet hair over one shoulder, flat embroidered shoes",
+      "look": "a petite, cute perfumer, clearly a grown woman around 24 (adult face and proportions, not childlike), short stature with short legs and a slim, slender figure: narrow waist, slim arms and legs, a small, flat, modest chest (definitely NOT busty, no cleavage), wavy violet hair in a loose side braid over one shoulder, big bright lilac eyes, a small beauty mark under her eye, rosy cheeks, a violet silk qipao-style dress with short puffed sleeves, a knee-length hem and short side slits that stop at mid-thigh, embroidered flat cloth shoes, a smoking perfume censer at her hip, a plain straight billiard cue in violet lacquer (thick butt at the bottom, slim tip at the top, nothing hanging from it: no lanterns, tassels or ribbons on the cue); must clearly show: small beauty mark under her eye, wavy violet hair over one shoulder, flat embroidered shoes",
       "pose": "standing on tiptoe and leaning forward playfully, blowing a puff of violet perfume smoke toward the viewer from one palm, the other hand holding the cue upright beside her with its butt resting on the ground",
       "expr": "mischievous sweet grin with a wink",
+      "gallery": [
+        {
+          "label": "Nghiền hoa khô",
+          "pose": "Sitting cross-legged on the floor in a front view, grinding dried violet petals in a stone mortar held between her knees, tongue poking out in concentration, her cue laid flat across the floor in front of her."
+        },
+        {
+          "label": "Ngửi túi hương",
+          "pose": "Kneeling and leaning far forward on one hand in a side view, eyes closed in bliss as she sniffs a small silk sachet held to her nose, her cue lying flat on the ground beside her knees."
+        },
+        {
+          "label": "Thổi vòng khói",
+          "pose": "Crouching on tiptoe in a three-quarter view, cheeks puffed as she blows a perfect ring of violet smoke from the censer held up at her lips toward the viewer, her cue tucked horizontally under her other arm."
+        },
+        {
+          "label": "Xoay rắc hương",
+          "pose": "Caught mid-spin on one foot with the other leg kicked up behind her, her knee-length skirt flaring, one arm flung wide scattering sparkling incense powder in a big arc, the cue held horizontally behind her back in the other hand, laughing."
+        }
+      ],
       "skills": [
         {
           "name": "Mê Hương",
@@ -2564,6 +3684,25 @@
       "look": "the most captivating courtesan musician of the pavilion, a woman around 25 with a slender, delicate upper body with a small, flat, modest chest (definitely NOT busty), a narrow waist flaring into full, rounded hips and a shapely round rear (a graceful pear-shaped figure: small chest, generous hips), platinum-white hair in a loose ornate updo with white peonies and a few strands falling across her face, half-lidded silver-grey eyes with a teasing knowing look, full glossy lips, gold drop earrings, a form-fitting white-and-gold silk gown with bare shoulders and a low open back, the opaque silk following the curve of her hips and rear closely, with a high side slit and a long sheer train, flat white silk slippers, no heels, a guzheng zither slung on her back, an ivory cue painted with a crane; must clearly show: silver-grey eyes and the guzheng zither on her back",
       "pose": "standing upright and graceful in a three-quarter back view, weight on one leg with a gentle tilt of the hips, glancing back over her shoulder with a soft teasing smile, one hand lifting the sheer train of her gown, the ivory cue held upright beside her",
       "expr": "sultry teasing half-smile, half-lidded silver-grey eyes glancing sideways",
+      "gallery": [
+        {
+          "label": "Chỉnh dây đàn",
+          "pose": "Sitting sideways on the polished wooden billiard table rail in an elegant profile view, her form-fitting white-and-gold silk gown hugging the curve of her hips and rear as she tunes a guzheng string, gazing back over her shoulder with teasing silver-grey eyes, ivory cue leaning against the rail; the table is full height (80 cm, level with a standing adult's hip), so sitting on its rail her legs hang almost straight and only her toes reach the floor, and the balls on the felt are small next to her, each about three fingers wide."
+        },
+        {
+          "label": "Cúi ngắm bi",
+          "pose": "Bending forward smoothly over the felt in a three-quarter back view to line up a shot, the low-back silk gown accentuating her slender waist flaring into generous rounded hips, looking back over her shoulder with a sultry knowing half-smile while bridging the ivory cue on the cushion; she holds a full-length ivory cue painted with a crane (as long as she is tall), its thick butt gripped in her rear hand and reaching well behind her hip, the slim tip resting on her bridge hand by the cue ball."
+        },
+        {
+          "label": "Nhặt bi lỗ góc",
+          "pose": "Crouching low on her heels beside a corner pocket of a full-size billiard table in a side profile, reaching into the pocket to retrieve a ball, her rounded hips and rear prominent in the clinging silk, glancing up over her shoulder with a teasing smile; her guzheng zither is set down leaning upright against the table leg beside her, the ivory cue laid across the table rail."
+        },
+        {
+          "label": "Nằm trên bàn",
+          "frame": "wide",
+          "pose": "Reclining fully on top of a full-size billiard table, her whole body lying on its side along the green felt with both legs resting on the table and knees softly bent, propped up on one elbow with her head on her hand, the other hand rolling a ball lazily across the felt with the ivory cue lying beside her, the curve of her hip the highest point of her silhouette under the clinging silk, her train spilling over the edge, smiling at the viewer; she is not bending over or standing; her guzheng zither is set down leaning against the table's end; the table is a full 2.5-metre table, so her reclining body covers only about two thirds of its length with open felt beyond her head and feet, and each ball is tiny next to her, about the width of three of her fingers."
+        }
+      ],
       "skills": [
         {
           "name": "Ngân Huyền Toàn Khúc",
@@ -2598,9 +3737,27 @@
       "tier": 4,
       "kind": "nuhiep",
       "cls": "cuongchien",
-      "look": "a fierce fan-blade duelist, an athletic woman around 28 with golden-orange hair in ONE thick braid hanging over her shoulder (no loose flowing hair, no sun halo, no crown), a low phoenix comb at the back of her head, golden eyes, compact crimson-lacquer and steel-silver armour over a short split coat (little gold, few ribbons), bare toned arms, flat-soled crimson leather boots, two broad steel war fans as her signature weapons, a cue with a phoenix-tail butt; also clearly: BOTH steel war fans clearly visible, one in each hand, and few ribbons",
+      "look": "a fierce fan-blade duelist, an athletic woman around 28 with golden-orange hair in ONE thick braid hanging over her shoulder (no loose flowing hair, no sun halo, no crown), a low phoenix comb at the back of her head, golden eyes, compact crimson-lacquer and steel-silver armour over a short split coat (little gold, few ribbons), bare toned arms, flat-soled crimson leather boots, two broad steel war fans as her signature weapons, a cue with a phoenix-tail butt; also clearly: BOTH steel war fans clearly visible (held in her hands, or folded and hanging from her belt whenever her hands are busy; never floating in the air), one in each hand, and few ribbons",
       "pose": "lunging with the cue like a spear, a war fan snapped open in the other hand",
       "expr": "fierce confident grin",
+      "gallery": [
+        {
+          "label": "Xòe quạt thép",
+          "pose": "Standing in an athletic frontal view, snapping one steel folding fan open in her left hand with a crisp metallic flick, the other fan folded and tucked into her sash, her right hand gripping the cue laid across her shoulders behind her neck."
+        },
+        {
+          "label": "Thắt bím tóc",
+          "pose": "Sitting on a stone balustrade in a profile view, re-braiding the thick golden-orange hair plait over her shoulder with nimble fingers, cue leaning between her knees, flat boots resting on the rail."
+        },
+        {
+          "label": "Soi bóng quạt",
+          "pose": "Standing in a three-quarter view, tilting a polished steel fan blade to check her sharp reflection with a confident smirk, cue planted firmly like a spear at her side."
+        },
+        {
+          "label": "Thách đấu",
+          "pose": "Standing with arms crossed and weight on one hip in a three-quarter view, both steel war fans folded and tucked into her sash, the cue propped against her shoulder in the crook of her arm, a cocky challenging smirk."
+        }
+      ],
       "skills": [
         {
           "name": "Song Phiến Toàn Phong",
@@ -2639,6 +3796,24 @@
       "look": "the pavilion mistress, a breathtaking mature woman around 32 with a voluptuous figure, very long wavy rose-pink hair, golden eyes, an ornate gold-and-pearl headdress, a deep red silk gown with a sheer gold-embroidered shawl slipping off her shoulders, flat embroidered silk slippers peeking under the gown, no heels, a golden folding fan, a ruby-tipped cue; must clearly show: golden eyes",
       "pose": "standing regally, half-hiding her face behind the open fan, cue held loosely",
       "expr": "captivating confident smile",
+      "gallery": [
+        {
+          "label": "Lật sổ tên",
+          "pose": "Sitting regally on an ornate silk divan in a frontal view, turning a gold-leaf page in the book of names with manicured fingers, sovereign peony cue resting across the silk bolsters beside her."
+        },
+        {
+          "label": "Phe phẩy quạt",
+          "pose": "Standing in an alluring profile view, slowly waving her rose-feather fan before her decolletage with an enigmatic smile, sovereign peony cue held vertically with majestic composure."
+        },
+        {
+          "label": "Thưởng hoa đào",
+          "pose": "Standing beside a porcelain flower stand in a three-quarter view, gently lifting a fragrant blooming pink peony to her lips, sovereign cue held gracefully behind her flowing train."
+        },
+        {
+          "label": "Ngắm lầu hoa",
+          "pose": "Standing at the top floor pavilion balcony in a three-quarter back view, looking out over the lantern-lit pleasure city with a sovereign smile, holding her peony cue firmly at her side."
+        }
+      ],
       "skills": [
         {
           "name": "Kính Hoa Thuỷ Nguyệt",

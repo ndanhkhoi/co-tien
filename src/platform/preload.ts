@@ -15,11 +15,19 @@ const base = new URL(import.meta.env.BASE_URL, document.baseURI).href;
 const url = (path: string) => base + path;
 const CACHE = 'art';
 const REV = 'x-art-rev';
+const ART_URLS = new Set(ART.map(([p]) => url(p)));
 const DONE_KEY = 'cotien.assets';
 /** Files known to be cached at their current revision during this session. */
 const fresh = new Set<string>();
 
 type Entry = [string, number, string];
+
+const ENTRIES = new Map<string, Entry>(ART.map((e) => [e[0], e]));
+const FIN_FRAME = /^art\/champions\/[^/]+\/fin-[1-8]\.webp$/;
+const POSE_FRAME = /^art\/champions\/[^/]+\/pose-\d+\.webp$/;
+const isOnDemand = (path: string) => FIN_FRAME.test(path) || POSE_FRAME.test(path);
+/** Gallery poses and finisher frames are fetched only when their screen is opened. */
+const demandAware = (list: Entry[]): Entry[] => list.filter(([p]) => !isOnDemand(p));
 
 function champFiles(id: string): Entry[] {
   return ART.filter(([p]) => p.startsWith(`art/champions/${id}/`));
@@ -37,7 +45,16 @@ function coreList(own: { champion: string; sect: string }): Entry[] {
   }
   for (const e of champFiles(own.champion)) set.set(e[0], e);
   for (const e of sectFiles(own.sect)) set.set(e[0], e);
-  return [...set.values()];
+  return demandAware([...set.values()]);
+}
+
+/** UI guards for optional paintings: a file not in the manifest must never render as a broken image. */
+export const hasArt = (src: string) => ART_URLS.has(src);
+
+/** An on-demand painting already stored at its current revision. */
+export function artOnDevice(src: string): boolean {
+  const path = src.startsWith(base) ? src.slice(base.length) : src;
+  return fresh.has(path);
 }
 
 const saveData = () => !!(navigator as Navigator & { connection?: { saveData?: boolean } }).connection?.saveData;
@@ -136,7 +153,7 @@ export function coreReady(): boolean {
 /** Loading screen: the whole set (or the core with data saver on), with byte progress. */
 export async function preloadCore(champion: string, sect: string, onProgress: (f: number, got: number, total: number) => void) {
   const whole = !saveData();
-  const ok = await sync(whole ? ART : coreList({ champion, sect }), 6, onProgress);
+  const ok = await sync(whole ? demandAware(ART) : coreList({ champion, sect }), 6, onProgress);
   mark(ok && whole ? 'all' : 'core');
   if (!ok) return;
   // Pruning keys off the manifest, so the core set alone is enough to drop removed files.
@@ -174,7 +191,7 @@ export function preloadBackground(champion?: string) {
       ...(champion ? champFiles(champion).filter(([p]) => p.endsWith('cutout.webp')).map(([p]) => p) : []),
     ]);
     if (marked() === `${__ART_VERSION__}:all` || saveData()) return;
-    void sync(ART, 2, undefined, idle).then((ok) => {
+    void sync(demandAware(ART), 2, undefined, idle).then((ok) => {
       if (!ok) return;
       mark('all');
       void prune();
@@ -183,15 +200,28 @@ export function preloadBackground(champion?: string) {
   }, 1500);
 }
 
+/** Bring on-demand paintings for the screen being opened into the lasting art cache. */
+export async function preloadArt(srcs: string[]): Promise<void> {
+  const list = srcs.map((src) => ENTRIES.get(src.startsWith(base) ? src.slice(base.length) : src)).filter((e): e is Entry => !!e);
+  if (!list.length) return;
+  await sync(list, 6);
+}
+
 /** Both champions and the table's sect; images are decoded so the first cut-in never stutters. */
 export async function preloadMatch(champions: string[], sect: string) {
   const list = [...champions.flatMap(champFiles), ...sectFiles(sect)];
-  await sync(list, 6);
-  await Promise.all(list
-    .filter(([p]) => p.endsWith('cutout.webp') || p.endsWith('finisher.webp') || p.endsWith('/vfx/slash.webp') || p.includes('/flip/') || p.endsWith('cutin.webp'))
-    .map(([p]) => {
-      const img = new Image();
-      img.src = url(p);
-      return img.decode().catch(() => undefined);
-    }));
+  await sync(demandAware(list), 6);
+  const frames = champions.flatMap((id) => {
+    const set = [1, 2, 3, 4, 5, 6, 7, 8].map((n) => ENTRIES.get(`art/champions/${id}/fin-${n}.webp`));
+    return set.every((e): e is Entry => !!e) ? set : [];
+  });
+  if (frames.length) await sync(frames, 6);
+  const decode = new Set([...list, ...frames]
+    .filter(([p]) => p.endsWith('cutout.webp') || p.endsWith('finisher.webp') || p.endsWith('/vfx/slash.webp') || p.includes('/flip/') || p.endsWith('cutin.webp') || FIN_FRAME.test(p))
+    .map(([p]) => p));
+  await Promise.all([...decode].map((p) => {
+    const img = new Image();
+    img.src = url(p);
+    return img.decode().catch(() => undefined);
+  }));
 }

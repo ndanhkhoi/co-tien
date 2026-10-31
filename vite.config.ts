@@ -53,6 +53,9 @@ function slimRoster(): Plugin {
       for (const c of r.champions) {
         delete c.look; delete c.pose; delete c.expr;
         for (const s of c.skills) delete s.icon;
+        if (Array.isArray(c.gallery)) {
+          for (const g of c.gallery) { delete g.pose; delete g.frame; }
+        }
       }
       for (const s of r.sects) { delete s.motifs; delete s.emblem; delete s.element; }
       return { code: JSON.stringify(r), map: null };

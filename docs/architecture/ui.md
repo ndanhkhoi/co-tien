@@ -1,7 +1,9 @@
 # Giao diện (`src/ui`, `src/styles`)
 
 Màn hình là DOM phủ trên canvas PixiJS. `src/ui/app.ts` giữ ngăn xếp màn hình, phông nền (`setBackdrop`) và
-chuyển cảnh.
+chuyển cảnh. Ở các màn menu, hai tướng đứng hai bên khung: tướng của người chơi và một khách mời chọn ngẫu
+nhiên; mỗi lần mở game, mỗi tướng bốc một tranh toàn thân có trong bộ (`cutout`, `win`, gallery pose) và giữ
+tranh đó suốt phiên (`champion-art.ts`). Màn VS, đầu trận, cut-in và ảnh lớn trang chủ vẫn dùng cut-out.
 
 ## Bản đồ
 
@@ -105,6 +107,10 @@ bằng nét mực `ui/ink-tick.webp`; mục đang chọn chuyển màu son và n
 - Không đo layout trong vòng animation; bấm liên tiếp huỷ animation cũ.
 - Mọi chuyển động tôn trọng `prefers-reduced-motion`: trang cập nhật tức thời, Kết liễu hiện tĩnh, không rung.
 - Thời lượng và keyframe nằm trong `src/styles/skin.css` và `src/ui/finisher.ts`; đó là nguồn duy nhất.
+- Nếu manifest có đủ `fin-1…8.webp` của tướng, `.fin-figure` phát tám khung 1152×768 thay cho ảnh tĩnh:
+  các mốc 0 · 0,10 · 0,22 · 0,34 · 0,48 · 0,66 · 0,90 · 1,08 s (tính từ khi Kết liễu mở), khung 6 bao giờ cú chạm
+  0,74 s, mỗi lần đổi hoà mờ 60 ms. Khối và bóng vẽ của khung 4–5 vẫn là chuyển động CSS 60 fps; thiếu bất kỳ khung
+  nào thì quay về ảnh `finisher.webp`/cut-out. Giảm chuyển động chỉ hiện khung 6 tĩnh; chạm bỏ dừng cả bộ hẹn giờ khung.
 
 ## Tàng Các
 
@@ -115,10 +121,14 @@ bằng nét mực `ui/ink-tick.webp`; mục đang chọn chuyển màu son và n
 - Trang môn phái gồm lời dẫn, dấu ấn, Thiên Tượng và ba link sang nhóm tướng, thẻ Linh Đài, thẻ Pháp Cơ của phái
   (đổi tab, cuộn tới thẻ và đánh dấu một nhịp). Thẻ Linh Đài và Pháp Cơ thuộc phái có link ngược về trang môn phái.
 - Tab Luật mở đầu bằng Cơ Tiên Giới, sau đó là luật từng lối chơi và Tiên Đạo.
-- Mỗi tướng có một trang với ba mục ở chân trang: Chiêu thức, Tiểu sử, Tranh. Chạm tranh tướng hoặc một tranh
-  trong mục Tranh mở khung xem trọn tranh.
-- Trang tướng có ba nút icon chiêu riêng của tướng (`skillIconUrl(champion.id, slot)`). Chạm mở thẻ chi tiết
-  trước, không dùng ngay.
+- Mỗi tướng có một trang với đầu trang cố định gồm ba hàng: biểu tượng và tên lớn, nhãn, rồi hàng mục
+  Chiêu thức · Tiểu sử · Tranh cùng nút hành động; vùng dưới là phần duy nhất cuộn. Chạm tranh tướng mở khung
+  xem trọn tranh.
+- Mục Tranh là lưới tranh nhỏ năm cột có nhãn: chạm tranh nào thì tranh lớn cột trái đổi sang tranh đó; rời mục
+  này thì trở về tranh toàn thân. Ảnh biểu cảm chỉ dùng làm ảnh nhỏ vì file gốc 256 px. Mục gallery thêm qua
+  `Champion.gallery` và `poseUrl`, chỉ hiện khi file có trong manifest ảnh.
+- Trang tướng có ba hàng chiêu riêng của tướng (`skillIconUrl(champion.id, slot)`): icon, nhãn, tên, chi phí và
+  mô tả; chạm mở thẻ chi tiết (kèm Cách dùng), không dùng ngay.
 - Tiểu sử chỉ mở với tướng đã gặp hoặc đã sở hữu; Tranh chỉ mở khi đã chiêu mộ. "Đã gặp" không tính Luận Cơ và
   Song Đấu (đối thủ bốc ngẫu nhiên), chỉ tính các trận có đối thủ định sẵn như Hành trình.
 - Xem trước bàn giữ đúng tỉ lệ bàn WPA gồm cả viền.

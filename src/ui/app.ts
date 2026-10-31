@@ -2,10 +2,11 @@ import { Application } from 'pixi.js';
 import { AiClient } from '../ai/ai-client';
 import { sound } from '../audio/sound';
 import { CUES, TABLES } from '../game/content/gear';
-import { CHAMPIONS, cutoutUrl } from '../game/content/sects';
+import { CHAMPIONS } from '../game/content/sects';
 import { levelOf, loadProfile, saveProfile, type Profile } from '../game/profile';
 import { setHaptics } from '../platform/device';
 import { btn, h, modal as baseModal, toast } from './dom';
+import { menuFigurePaintings } from './champion-art';
 
 export interface Screen {
   el: HTMLElement;
@@ -209,15 +210,25 @@ export class App {
     img.decode().then(swap, swap);
   }
 
-  /** Menus flank the stage with the player's champion and one other, picked once per launch. */
+  /** Menus flank the stage with the player's champion and one other. Cast and pose stay fixed per launch. */
   private guest: string | null = null;
+  private readonly menuPoses = new Map<string, string>();
   private menuCast(): [string, string] {
     const own = this.profile.champion;
     if (!this.guest || this.guest === own) {
       const pool = CHAMPIONS.filter((c) => c.id !== own);
       this.guest = pool[Math.floor(Math.random() * pool.length)].id;
     }
-    return [cutoutUrl(own), cutoutUrl(this.guest)];
+    return [this.menuPose(own), this.menuPose(this.guest)];
+  }
+  private menuPose(id: string): string {
+    let src = this.menuPoses.get(id);
+    if (!src) {
+      const figures = menuFigurePaintings(CHAMPIONS.find((c) => c.id === id)!);
+      src = figures[Math.floor(Math.random() * figures.length)].src;
+      this.menuPoses.set(id, src);
+    }
+    return src;
   }
 
   /** Champions standing either side of the stage; each fades in once its art has decoded. */
