@@ -212,7 +212,6 @@ textarea.code-box:focus { border-color: var(--accent); }
 }
 .cc-sub { max-width: 100%; color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: normal; }
 .champ-card .stars .ico { width: 20px; height: 20px; }
-.cc-cta { white-space: nowrap; margin-top: 2px; padding: 2px 10px; border-radius: 999px; background: var(--accent); color: var(--on-accent); font-size: var(--fs-xs); font-weight: 700; }
 
 /* ---------- Splash ---------- */
 
