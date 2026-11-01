@@ -8,6 +8,9 @@ const FILES = [
   'check', 'play', 'home', 'replay', 'shop', 'install', 'star', 'star-empty', 'warning', 'info', 'journey',
   'quick-match', 'collection', 'story', 'codex', 'energy', 'ultimate', 'cooldown', 'hint', 'vision', 'nudge',
   'shield', 'tremor', 'rewind', 'thinking', 'turn',
+  // Skill effect glyphs for the table callouts.
+  'fx-swirl', 'fx-well', 'fx-silk', 'fx-slick', 'fx-sand', 'fx-wash', 'fx-wind', 'fx-quake', 'fx-drift', 'fx-chain',
+  'fx-boost', 'fx-spin', 'fx-blast', 'fx-pull', 'fx-wide', 'fx-swap',
 ] as const;
 
 /** Older names used across the code base. */
