@@ -59,7 +59,7 @@ Chụp ở 932×430, tướng của người chơi là Ngân Cầm.
 | **Luyện thế · chọn thế** | **Luyện thế · Đường đi** |
 | ![Chọn thế luyện](docs/screenshots/luyen-the-chon.webp) | ![Bàn Luyện thế với đường đi của mọi bi](docs/screenshots/luyen-the.webp) |
 | **Tàng Các** | **Trang tướng** |
-| ![Tàng Các](docs/screenshots/tang-cac.webp) | ![Trang tướng: ba icon chiêu, mục Tiểu sử và Tranh](docs/screenshots/trang-tuong.webp) |
+| ![Tàng Các](docs/screenshots/tang-cac.webp) | ![Trang tướng: ba chiêu, mục Tiểu sử và Tranh, nút chọn tướng dưới tranh](docs/screenshots/trang-tuong.webp) |
 | **Trang môn phái** | **Cơ Tiên Truyện** |
 | ![Trang môn phái trong Tàng Các](docs/screenshots/mon-phai.webp) | ![Đọc Cơ Tiên Truyện](docs/screenshots/co-tien-truyen.webp) |
 
