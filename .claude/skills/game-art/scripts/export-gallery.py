@@ -29,30 +29,27 @@ def keyed(src):
 
 
 def drop_edge_slivers(im):
-    """A pose cut from a two-figure sheet can keep a thin strip of its neighbour at the cut edge: clear any opaque
-    strip narrower than a quarter of the image that a clear gap of 8 px or more separates from the figure."""
-    a = im.getchannel("A")
-    w, hgt = im.size
-    cols = list((np.asarray(a) > 12).sum(axis=0))
-    for order in (range(w), range(w - 1, -1, -1)):
-        xs = list(order)
-        i = 0
-        while i < len(xs) and cols[xs[i]] == 0:
-            i += 1
-        start = i
-        while i < len(xs) and cols[xs[i]] > 0:
-            i += 1
-        strip = xs[start:i]
-        gap = 0
-        while i < len(xs) and cols[xs[i]] == 0:
-            gap += 1
-            i += 1
-        if strip and len(strip) < w // 4 and gap >= 8 and i < len(xs):
-            x0, x1 = min(strip), max(strip) + 1
-            im.paste((0, 0, 0, 0), (x0, 0, x1, hgt))
-            for x in strip:
-                cols[x] = 0
-    return im
+    """A pose cut from a two-figure sheet can keep a piece of its neighbour at the cut edge. Split the image into
+    runs of opaque columns; any run that touches the left or right edge and is not the widest run is the
+    neighbour's, so it is cleared."""
+    a = np.asarray(im).copy()
+    filled = (a[..., 3] > 12).any(axis=0)
+    runs, x, w = [], 0, len(filled)
+    while x < w:
+        if filled[x]:
+            start = x
+            while x < w and filled[x]:
+                x += 1
+            runs.append((start, x))
+        else:
+            x += 1
+    if len(runs) < 2:
+        return im
+    main = max(runs, key=lambda r: r[1] - r[0])
+    for r in runs:
+        if r is not main and (r[0] == 0 or r[1] == w):
+            a[:, r[0]:r[1], 3] = 0
+    return Image.fromarray(a, "RGBA")
 
 
 def fit_height(im, h):
