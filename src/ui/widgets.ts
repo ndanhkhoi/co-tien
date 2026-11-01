@@ -98,6 +98,8 @@ interface PickerOpts {
   onSect?: (id: SectId) => void;
   /** Scrolls this sect's group into view once it is painted. */
   focus?: SectId;
+  /** Paint every sect at once (a redraw that must keep its scroll position). */
+  instant?: boolean;
 }
 
 export function championPicker(app: App, opts: PickerOpts): HTMLElement {
@@ -110,8 +112,10 @@ export function championPicker(app: App, opts: PickerOpts): HTMLElement {
       sub: has ? classInfo(c.cls).name : `Thắng ở Hành trình · ${fmt(CHAMPION_PRICE[c.tier])} xu`,
       badge: selected() === c.id ? h('span.cc-using', null, 'Đang dùng') : null,
     }, () => {
+      const before = selected();
       onPick(c);
-      render();
+      // Opening a page changes nothing in the list; redraw only when the pick itself changed.
+      if (selected() !== before) render();
     });
   };
   const group = (s: (typeof SECTS)[number]) => {
@@ -128,8 +132,13 @@ export function championPicker(app: App, opts: PickerOpts): HTMLElement {
       wrap.replaceChildren(h('div.cc-grid', null, ...CHAMPIONS.filter((c) => app.profile.champions.includes(c.id) && c.id !== exclude()).map(card)));
       return;
     }
-    // The first sects paint with the screen; the rest follow a frame at a time so opening never stalls.
     const run = ++pass;
+    // A redraw paints every sect at once so the list keeps its height and the scroll position.
+    if (run > 1 || opts.instant) {
+      wrap.replaceChildren(...SECTS.map(group));
+      return;
+    }
+    // The first sects paint with the screen; the rest follow a frame at a time so opening never stalls.
     wrap.replaceChildren(...SECTS.slice(0, 2).map(group));
     let i = 2;
     const more = () => {

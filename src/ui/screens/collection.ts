@@ -53,6 +53,8 @@ interface CollectionView {
   tab: CollTab;
   /** Class filter on the champion tab; null shows all. */
   cls: ClassId | null;
+  /** True while a redraw must keep the scroll position (paint the whole list at once). */
+  keepScroll?: boolean;
   /** Sect a sect page sent the player to; scrolled to on the next render. */
   focus: SectId | null;
   content: HTMLElement;
@@ -97,13 +99,16 @@ function renderChampionTab(view: CollectionView) {
       onPick: (c) => championModal(app, c, () => {
         // Picking or recruiting redraws the list; keep the player where they were in it.
         const at = content.scrollTop;
+        view.keepScroll = true;
         refreshWallet();
         render();
+        view.keepScroll = false;
         content.scrollTop = at;
       }),
       match: (c) => !view.cls || c.cls === view.cls,
       onSect: view.openSect,
       focus: view.focus ?? undefined,
+      instant: view.keepScroll,
     }));
 }
 
