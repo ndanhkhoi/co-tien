@@ -107,10 +107,6 @@ bằng nét mực `ui/ink-tick.webp`; mục đang chọn chuyển màu son và n
 - Không đo layout trong vòng animation; bấm liên tiếp huỷ animation cũ.
 - Mọi chuyển động tôn trọng `prefers-reduced-motion`: trang cập nhật tức thời, Kết liễu hiện tĩnh, không rung.
 - Thời lượng và keyframe nằm trong `src/styles/skin.css` và `src/ui/finisher.ts`; đó là nguồn duy nhất.
-- Nếu manifest có đủ `fin-1…8.webp` của tướng, `.fin-figure` phát tám khung 1152×768 thay cho ảnh tĩnh:
-  các mốc 0 · 0,10 · 0,22 · 0,34 · 0,48 · 0,66 · 0,90 · 1,08 s (tính từ khi Kết liễu mở), khung 6 bao giờ cú chạm
-  0,74 s, mỗi lần đổi hoà mờ 60 ms. Khối và bóng vẽ của khung 4–5 vẫn là chuyển động CSS 60 fps; thiếu bất kỳ khung
-  nào thì quay về ảnh `finisher.webp`/cut-out. Giảm chuyển động chỉ hiện khung 6 tĩnh; chạm bỏ dừng cả bộ hẹn giờ khung.
 
 ## Tàng Các
 

@@ -23,11 +23,9 @@ const fresh = new Set<string>();
 type Entry = [string, number, string];
 
 const ENTRIES = new Map<string, Entry>(ART.map((e) => [e[0], e]));
-const FIN_FRAME = /^art\/champions\/[^/]+\/fin-[1-8]\.webp$/;
 const POSE_FRAME = /^art\/champions\/[^/]+\/pose-\d+\.webp$/;
-const isOnDemand = (path: string) => FIN_FRAME.test(path) || POSE_FRAME.test(path);
-/** Gallery poses and finisher frames are fetched only when their screen is opened. */
-const demandAware = (list: Entry[]): Entry[] => list.filter(([p]) => !isOnDemand(p));
+/** Gallery poses are fetched only when the champion page's paintings are opened. */
+const demandAware = (list: Entry[]): Entry[] => list.filter(([p]) => !POSE_FRAME.test(p));
 
 function champFiles(id: string): Entry[] {
   return ART.filter(([p]) => p.startsWith(`art/champions/${id}/`));
@@ -211,13 +209,8 @@ export async function preloadArt(srcs: string[]): Promise<void> {
 export async function preloadMatch(champions: string[], sect: string) {
   const list = [...champions.flatMap(champFiles), ...sectFiles(sect)];
   await sync(demandAware(list), 6);
-  const frames = champions.flatMap((id) => {
-    const set = [1, 2, 3, 4, 5, 6, 7, 8].map((n) => ENTRIES.get(`art/champions/${id}/fin-${n}.webp`));
-    return set.every((e): e is Entry => !!e) ? set : [];
-  });
-  if (frames.length) await sync(frames, 6);
-  const decode = new Set([...list, ...frames]
-    .filter(([p]) => p.endsWith('cutout.webp') || p.endsWith('finisher.webp') || p.endsWith('/vfx/slash.webp') || p.includes('/flip/') || p.endsWith('cutin.webp') || FIN_FRAME.test(p))
+  const decode = new Set(list
+    .filter(([p]) => p.endsWith('cutout.webp') || p.endsWith('finisher.webp') || p.endsWith('/vfx/slash.webp') || p.includes('/flip/') || p.endsWith('cutin.webp'))
     .map(([p]) => p));
   await Promise.all([...decode].map((p) => {
     const img = new Image();

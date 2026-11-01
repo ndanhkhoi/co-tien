@@ -355,8 +355,6 @@ export const winUrl = (id: string) => `${BASE}art/champions/${id}/win.webp`;
 export const poseUrl = (id: string, n: number) => `${BASE}art/champions/${id}/pose-${n}.webp`;
 /** Finishing-strike pose for the rack-winning shot. */
 export const finisherUrl = (id: string) => `${BASE}art/champions/${id}/finisher.webp`;
-/** One wide animation frame of the finishing strike (`fin-1.webp` … `fin-8.webp`). */
-export const finisherFrameUrl = (id: string, frame: number) => `${BASE}art/champions/${id}/fin-${frame}.webp`;
 export const exprUrl = (id: string, e: 'focus' | 'joy' | 'sad' | 'cast') => `${BASE}art/champions/${id}/expr-${e}.webp`;
 export const skillIconUrl = (id: string, slot: number) => `${BASE}art/skills/${id}-${'12u'[slot]}.webp`;
 export const sectArtUrl = (s: SectId, name: 'emblem' | 'splash' | 'cutin' | 'rail' | 'cue-a' | 'cue-b') => `${BASE}art/sects/${s}/${name}.webp`;

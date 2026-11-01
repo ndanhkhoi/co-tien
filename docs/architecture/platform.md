@@ -25,11 +25,9 @@ Cách tải:
 - **Lần đầu** (`ui/screens/loading.ts`) tải trọn bộ để sau đó không bao giờ phải chờ ảnh. Bản build có tranh đổi
   chỉ tải lại file có mã nội dung đổi; bản chỉ sửa code không hiện màn tải (`__ART_VERSION__` không đổi).
 - **Tiết kiệm dữ liệu** chỉ tải phần cốt lõi; ở menu, phần thiếu được tải bù lúc rảnh.
-- **Trận** kiểm tra và giải mã trước tranh của hai tướng và môn phái của bàn, gồm đủ `fin-1…8`
-  của hai tướng nếu các khung đó có trong manifest.
-- **Theo nhu cầu** dành cho tranh tư thế Tàng Các (`pose-n.webp`) và khung Kết liễu (`fin-1…8.webp`):
-  màn tải đầu (trọn bộ lẫn core), tải bù nền và `preloadBackground` bỏ qua chúng. Mở mục Tranh tải tranh tư thế;
-  `preloadMatch` tải khung Kết liễu. UI chỉ dùng tranh tư thế đã ở cache hiện tại, nên menu không lôi tranh chưa tải.
+- **Trận** kiểm tra và giải mã trước tranh của hai tướng và môn phái của bàn.
+- **Theo nhu cầu** dành cho tranh tư thế Tàng Các (`pose-n.webp`): màn tải đầu (trọn bộ lẫn core), tải bù nền,
+  `preloadBackground` và `preloadMatch` bỏ qua chúng. Mở mục Tranh mới tải tranh tư thế. UI chỉ dùng tranh tư thế đã ở cache hiện tại, nên menu không lôi tranh chưa tải.
 - Tải xong (trọn bộ hoặc phần cốt lõi khi tiết kiệm dữ liệu), file không còn trong manifest bị xoá. Tải đủ
   trọn bộ thì game xin thêm `navigator.storage.persist()`.
 - Lỗi mạng không chặn khởi động: ảnh tải theo nhu cầu, lần mở sau thử lại. `?loading` giữ màn tải để xem.

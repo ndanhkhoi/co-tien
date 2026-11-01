@@ -19,7 +19,7 @@ function walkArt(dir = 'public/art'): Entry[] {
 const ART = walkArt();
 type Champion = { id: string; gallery?: unknown[] };
 
-const ON_DEMAND = /^art\/champions\/[^/]+\/(pose-\d+|fin-[1-8])\.webp$/;
+const ON_DEMAND = /^art\/champions\/[^/]+\/pose-\d+\.webp$/;
 const championFiles = (art: Entry[], id: string) => art.filter(([path]) => path.startsWith(`art/champions/${id}/`));
 
 function demandAware(art: Entry[]): string[] {
@@ -35,33 +35,17 @@ function coreList(art: Entry[], champion: string, sect: string): string[] {
   return [...set].filter((path) => !ON_DEMAND.test(path));
 }
 
-function preloadMatch(art: Entry[], champions: string[], sect: string): string[] {
-  const base = [...champions.flatMap((id) => championFiles(art, id).map(([path]) => path)),
-    ...art.map(([path]) => path).filter((path) => path.startsWith(`art/sects/${sect}/`))];
-  const frames = champions.flatMap((id) => [1, 2, 3, 4, 5, 6, 7, 8].map((n) => `art/champions/${id}/fin-${n}.webp`));
-  return [...base.filter((path) => !ON_DEMAND.test(path)), ...frames];
-}
-
 function manifestHasOnDemand(entries: Entry[]): boolean {
   return entries.some(([path]) => ON_DEMAND.test(path));
 }
 
 describe('on-demand art loading', () => {
-  it('keeps poses and finisher frames out of first, core and background downloads', () => {
+  it('keeps gallery poses out of first, core and background downloads', () => {
     const cases = [['whole', demandAware(ART)], ['core', coreList(ART, 'ngancam', 'thienhuong')]] as const;
     for (const [name, paths] of cases) {
       expect(paths.some((path) => ON_DEMAND.test(path)), name).toBe(false);
     }
     expect(manifestHasOnDemand(ART)).toBe(true);
-  });
-
-  it('always requests all eight finisher slots for both match champions', () => {
-    const paths = preloadMatch(ART, ['ngancam', 'haclang'], 'thienhuong');
-    for (const id of ['ngancam', 'haclang']) {
-      for (let frame = 1; frame <= 8; frame++) {
-        expect(paths, `${id} frame ${frame}`).toContain(`art/champions/${id}/fin-${frame}.webp`);
-      }
-    }
   });
 
   it('describes four possible gallery paintings for every champion', () => {

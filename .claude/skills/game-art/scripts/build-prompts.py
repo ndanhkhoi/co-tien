@@ -130,33 +130,6 @@ Background: fully transparent (PNG alpha). If alpha is impossible, flat pure #00
 No text, no logo, no frame, no letters.
 """)
 
-# Kết liễu animation: eight keyframes of one strike, all on the same canvas so they play back without jumping.
-FINISH_FRAMES = [
-    "ready: standing poised at the left of the frame, eyes narrowing on the lower right, the cue held low and level",
-    "coil: sinking low onto the back foot, body turned and coiled, the cue drawn far back along the body",
-    "launch: pushing off hard from the back foot, the body tipping forward, the cue starting to come through",
-    "lunge: airborne and stretched along the diagonal from upper left to lower right, the cue driving forward",
-    "thrust: almost at full reach, front arm extending, the cue tip a little short of the lower-right corner",
-    "impact: full extension at the instant of the strike, front arm locked, the cue tip at the lower-right corner, a burst of ink at the tip",
-    "follow-through: momentum carrying the body past the strike, the cue swinging up and across the body",
-    "finish: landed toward the right of the frame and poised, the cue resting on the shoulder or held upright, a cool victorious glance back",
-]
-
-for c in champs:
-    for i, phase in enumerate(FINISH_FRAMES):
-        w(f"fin-{c['id']}-{i + 1}.txt", f"""
-Keyframe {i + 1} of 8 of one finishing strike by the SAME character as the first reference image (same face, species features, hair, outfit, cue and colours), painterly 2.5D anime style matching it: {c['name']}.
-Phase: {phase}.
-Use the second reference image only for framing: same wide canvas, same character scale, same ground line, the whole action moving from left to right across the frame; do not copy its pose.
-Character spec (every trait must match, keep every signature prop, companion and the signature cue): {c['look']}.
-The cue is one single straight cue: slim tip toward the strike direction, thick butt behind the rear hand. A streak of {main} ink brushwork only where the phase mentions ink.
-{body(c)}
-{modesty(c)}
-Whole body in frame with margin, wide 1536x1024 composition, matte painted finish, no glow.
-Background: fully transparent (PNG alpha). If alpha is impossible, flat pure #00ff00 green with no shadow.
-No text, no logo, no frame, no letters.
-""")
-
 w("splash.txt", f"""
 Wide 16:9 landscape painting in Chinese/Vietnamese ink-wash painting (thuỷ mặc) on warm rice paper: black ink brushwork, soft grey washes and mist, with only a faint wash of {main} for this land: the {sect['name']} sect —
 {sect['motifs']}. An ancient stone billiard table stands small on a terrace in the mid-ground. Generous empty paper,
