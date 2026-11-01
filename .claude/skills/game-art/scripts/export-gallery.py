@@ -3,7 +3,7 @@
     python3 export-gallery.py WORK/<sect> REPO_ROOT
 
 Exports raw/pose-<id>-<n>.png to public/art/champions/<id>/pose-<n>.webp only when its review file
-(pose-<id>-<n>.review.json) says "ok". Gallery paintings load on the champion page, so 800 px tall keeps
+(pose-<id>-<n>.review.json) says "ok" from mark-pose.py. Gallery paintings load on the champion page, so 800 px tall keeps
 each near 150 KB.
 """
 import json
@@ -39,7 +39,8 @@ for f in sorted(os.listdir(raw)):
         continue
     review = os.path.join(raw, f[:-4] + ".review.json")
     try:
-        ok = json.load(open(review)).get("verdict") == "ok"
+        r = json.load(open(review))
+        ok = r.get("verdict") == "ok" and r.get("reviewer") == "lead"
     except (OSError, ValueError):
         ok = False
     cid, n = f[5:-4].rsplit("-", 1)
@@ -59,7 +60,8 @@ for c in roster["champions"]:
     for n in range(1, len(c.get("gallery", [])) + 1):
         review = os.path.join(raw, f"pose-{c['id']}-{n}.review.json")
         try:
-            ok = json.load(open(review)).get("verdict") == "ok" and os.path.exists(review[:-12] + ".png")
+            r = json.load(open(review))
+            ok = r.get("verdict") == "ok" and r.get("reviewer") == "lead" and os.path.exists(review[:-12] + ".png")
         except (OSError, ValueError):
             ok = False
         dst = os.path.join(art, c["id"], f"pose-{n}.webp")

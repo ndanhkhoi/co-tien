@@ -51,8 +51,9 @@ MODEST = (
     "close-up. Shoulders, arms, midriff and legs may show as the costume describes."
 )
 SHOWCASE = (
-    "Her figure is the appeal: opaque silk hugging her hips and rear, a tilted hip and an over-the-shoulder glance, "
-    "always fully clothed, no nudity, no underwear, nothing explicit."
+    "Her figure is the appeal and the picture is openly sexy: clinging, partly sheer silk hugging her hips and rear, a "
+    "slit running up to the hip that lets a little of the side and lower curve of her rear show, a tilted hip and an "
+    "over-the-shoulder glance. No nudity: nipples and groin always covered, no underwear shot, nothing explicit."
 )
 
 
@@ -112,6 +113,28 @@ Whole body in frame with margin, rim light in {glow}. Background: fully transpar
 If alpha is impossible, flat pure #00ff00 green with no shadow. No text, no letters.
 """)
     if "gallery" in c:
+        # One call paints two gallery poses side by side (sheet a: poses 1-2, sheet b: poses 3-4); gen-gallery.sh
+        # cuts each sheet in half. Two figures per 1536x1024 canvas keep each about 950 px tall.
+        for half, pair in (("a", (0, 1)), ("b", (2, 3))):
+            poses = "\n".join(
+                f"{side} half: {c['gallery'][i]['pose'].strip().rstrip('.')}."
+                + (" This figure lies or stretches out, so it spans that half's width at a smaller scale." if c["gallery"][i].get("frame") == "wide" else "")
+                for side, i in zip(("Left", "Right"), pair))
+            w(f"sheet-{c['id']}-{half}.txt", f"""
+Two separate full-body illustrations side by side of the SAME character as the reference image (same face, species features, hair, outfit, cue and colours), painterly 2.5D anime splash style matching the reference: {c['name']}.
+Each half of the canvas holds exactly one complete figure, whole from head to feet with clear empty margin on every side; nothing crosses the vertical middle of the canvas. No borders, dividers, labels or text.
+The billiard cue is their weapon and cultivation artifact, styled in the {sect['name']} sect's look ({sect['motifs']}): a slim straight cue about as long as the character is tall, thinner than the wrist, its decorated butt thicker and its shaft tapering to a small white ferrule and leather tip.
+Character spec (every trait must match in both figures, keep every signature prop, companion and the signature cue): {c['look']}.
+The two figures show clearly different poses and expressions, and neither copies the reference pose:
+{poses}
+For each figure paint only the character (and companion), plus at most the one object that pose sits, leans or works on; never a billiard table, no scenery, architecture, sky or floor beyond a small cast shadow. If the cue is not in a hand it rests visibly on that object or lies flat on the ground, never standing or floating on its own.
+Each hand joins its own arm through a visible wrist and is the correct left or right hand, fingers wrapped around what it holds; each prop appears only as often as the spec says and never fuses with the cue.
+{body(c)}
+{modesty(c)}
+Rim light in {glow} and {main}, matte painted finish.
+Background: fully transparent (PNG alpha). If alpha is impossible, flat pure #00ff00 green with no shadow.
+No text, no logo, no frame, no letters.
+""")
         for idx, g in enumerate(c["gallery"]):
             n = idx + 1
             g_pose = g["pose"].strip().rstrip(".")

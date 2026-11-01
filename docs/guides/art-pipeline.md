@@ -44,9 +44,10 @@ response để kiểm tra trước khi chạy lại.
 5. **Duyệt**: đóng vai người duyệt khó tính: so từng tranh với `look`, ảnh tham chiếu và các tướng
    khác. Loại ảnh sai giới tính, mặt/tóc/mắt/dấu nhận diện/trang phục/cơ; loại tướng giống nhau hoặc
    giống nhân vật đã có, chữ sai dấu, vật thể sai nghĩa, màu thừa, ánh kim hay lạc phong cách.
-   Tranh toàn thân phải qua đủ 9 điều của mục *Full-body checklist* trong
-   `.claude/skills/game-art/references/style-bible.md`: giải phẫu, một cây cơ được cầm, đầu cơ đúng là đầu cơ,
-   vật bị che thẳng hàng hai bên, đồ vật đúng tỷ lệ thật, giày đế bằng, đúng nhân vật, tư thế không trùng, không chữ hay cắt cụt.
+   Tranh toàn thân phải qua đủ 17 điều của mục *Full-body checklist* trong
+   `.claude/skills/game-art/references/style-bible.md`: số chi, bàn tay, khớp, bàn chân, tỷ lệ,
+   gương mặt, điểm tựa, trọng lực, vật bị che, tỷ lệ đồ vật, một cây cơ, cơ đúng là cơ, số đạo cụ, đúng nhân vật, tư thế
+   đúng brief, kín đáo, không chữ hay cắt cụt.
    Không chấp nhận chỉ vì ảnh đẹp. Khi vẽ lại tướng, **vẽ lại cả những cảnh truyện có tướng trong `cast`**.
 6. **Đồng bộ nền**: `rebackground.sh WORK SECT [ids]` dùng ảnh cũ làm tham chiếu, chỉ vẽ lại nền chân
    dung và biểu cảm thành giấy dó, giữ nhân vật; chuyển bản cũ vào `raw/old/`, bỏ qua ảnh đã có nền giấy.
@@ -65,8 +66,10 @@ response để kiểm tra trước khi chạy lại.
    sưu tập tư thế trong Tàng Các. Cùng nhân vật với cut-out (gửi cut-out làm `--ref`, chèn toàn bộ `look`),
    dáng người và góc nhìn đa dạng (đời thường, luyện tập, tương tác đạo cụ hoặc bạn đồng hành), nền trong suốt,
    khổ dọc 1024×1536 hoặc ngang 1536×1024 khi tư thế nằm dài (`"frame": "wide"`). Tranh tư thế không vẽ bàn bida.
-   `scripts/refine-gallery.sh SECT WORK [ids]` vẽ, cho Codex soi rồi vẽ lại; `export-gallery.py` chỉ xuất tranh đã
-   đạt (cắt sát, cao 800 px, webp chất lượng 78).
+   `scripts/gen-gallery.sh SECT WORK [ids]` vẽ hai tư thế mỗi lần gọi (tờ 1536×1024, mỗi nửa một tư thế) rồi cắt đôi.
+   Người duyệt tự xem từng tranh theo 17 điều trong *Full-body checklist* và ghi kết quả bằng
+   `scripts/mark-pose.py WORK/SECT ID N ok|redraw "ghi chú"`; tranh bị loại được vẽ lại kèm ghi chú sửa ở lần chạy sau.
+   `export-gallery.py` chỉ xuất tranh đã đạt (cắt sát, cao 800 px, webp chất lượng 78).
 
 ## Phong cách
 
