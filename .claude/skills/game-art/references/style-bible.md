@@ -57,7 +57,8 @@ any single failure means redraw, however good the image looks.
 2. **Hands**: trace each arm from shoulder to wrist to hand. Each hand joins its own arm, is the correct left or right
    hand (thumb on the correct side), and its palm faces the way that forearm can turn. Fingers wrap around what they
    hold; nothing is pasted on the back of a hand or hovers beside the fingers.
-3. **Joints**: elbows and knees bend the natural way (the front of the knee faces the toes); no limb bends where it
+3. **Joints and facing**: head, chest, hips and feet face one consistent way, and a tail, wings or anything worn on
+   the back grows from the back, never the front; elbows and knees bend the natural way (the front of the knee faces the toes); no limb bends where it
    has no joint; wrists and ankles do not twist past what a body can do.
 4. **Feet**: two feet, a left and a right, each pointing away from the body, shoes a matching pair worn the right way
    round. Flat shoes, slippers, flat boots or bare feet with five toes; never heels.
