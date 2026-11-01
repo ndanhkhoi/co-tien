@@ -71,12 +71,13 @@ Nguồn: `src/ui/screens/match/` (trận) và `src/ui/screens/practice/desk.ts` 
   trái/phải, Q/E hoặc con lăn chuột; đổi chiều/băng (phím R); **THI TRIỂN** xác nhận, **Huỷ đặt chiêu** không tiêu chiêu.
 - Khi có vùng bẻ hoặc hãm bi, đường thẳng tham chiếu chỉ còn một đoạn ngắn; đường mô phỏng lấy mẫu mỗi 1/120 giây
   nên khúc cong qua vùng hiện thành đường cong.
-- Chiêu tác động lúc nào thì hiện thông tin lúc đó ở ô giữa thanh trên cùng
-  (`src/ui/screens/match/skill-callouts.ts`): bi vào vùng thì vùng loé vòng son, ra khỏi vùng thì ghi số bi cùng
-  tác dụng (“Bi 3 · Xoáy · lệch 18°”, “Cát · hãm bi”, “Mực tan · mất áp phê”; bỏ qua khi bi va bi hoặc băng ngay
-  trong vùng). Lúc đánh hiện bùa của cú đó (“Run tay ×1,8”, “Lực tối đa 70%”, “Gió đẩy bi”); bi vào lỗ được nới
-  hay hút, bị dời hoặc đổi chỗ cũng báo tại đây. Mỗi dòng có icon mực của loại tác động (`fx-*` trong
-  `art/ui/icons/`). Tối đa sáu thông tin vùng mỗi cú, chỉ giữ ba dòng gần nhất; chữ không phủ lên mặt bàn.
+- Chiêu tác động lúc nào thì hiện lúc đó trên bàn (`src/ui/screens/match/skill-callouts.ts`): bi vào vùng thì vùng
+  loé vòng son, ra khỏi vùng thì một nhãn mực ghi điều đã xảy ra (“Xoáy · lệch 18°”, “Cát · hãm bi”, “Mực tan · mất
+  áp phê”; bỏ qua khi bi va bi hoặc băng ngay trong vùng); lúc đánh, bùa lên cú đó hiện cạnh bi cái (“Run tay ×1,8”,
+  “Lực tối đa 70%”, “Gió đẩy bi”); bi rơi vào lỗ được nới hay hút thì nhãn hiện ở lỗ; bi bị dời hay đổi chỗ có nhãn ngay chỗ mới. Mỗi nhãn là một mảnh giấy vẽ tay (`art/ui/frame/callout.webp`) mang icon mực riêng của loại tác động
+  (`fx-*` trong `art/ui/icons/`: xoáy, giếng hút, dải lụa, nỉ trơn, cát, mực tan, gió, nghiêng bàn, dắt lệch, giảm lực,
+  tăng lực, áp phê, xung lực, lỗ hút, lỗ rộng, đổi chỗ). Tối đa sáu nhãn vùng mỗi cú;
+  giảm chuyển động thì nhãn chỉ mờ dần.
 - Tuyệt chiêu được ghi nhận khi xác nhận, nhưng diễn hoạt chờ ĐÁNH. Thứ tự là khoá điều khiển, cut-in, hiệu ứng
   bàn, cơ vung, rồi mô phỏng. Người và AI đi cùng luồng; tạm dừng và rời trận đều huỷ đúng.
 - Khuynh thành chuyển tay điều khiển trong một cú: thông báo nêu người đánh hộ, thẻ và nút điều khiển theo
@@ -88,18 +89,16 @@ Nguồn: `src/ui/screens/match/` (trận) và `src/ui/screens/practice/desk.ts` 
 
 ## Thông báo và tạm dừng
 
-- Thông báo, mẹo, gợi ý dùng chiêu và thông tin tác dụng chiêu dùng chung ô giữa thanh trên cùng, thay cho ô
-  mục tiêu trong lúc hiện. Thứ tự ưu tiên: thông báo lượt/lỗi, mẹo cho người mới, gợi ý chiêu, tác dụng chiêu,
-  rồi trạng thái máy đang tính. Mục tiêu hiện lại khi không còn thông báo.
+- Thông báo lượt/lỗi hiện trên dải giấy nổi giữa bàn, có chân dung tướng; mục tiêu vẫn ở thanh trên cùng.
+  Trạng thái máy đang tính hiện trên mảnh giấy nhỏ ngay dưới thanh này. Mẹo cho người mới dùng ô giữa thanh.
 - Chạm bàn đóng các thông báo và gợi ý đang có. Lần chạm đó chỉ đóng thông tin, không ngắm, dời bi, đặt chiêu
-  hay gọi bi/lỗ; lần chạm tiếp theo thao tác bình thường. Chạm nút điều khiển vẫn thực hiện nút đó. Có thể cuộn
-  chữ dài trong ô thông báo để đọc tiếp.
-- Thông báo cũng đóng khi bấm phím; vạch son ở chân cho biết thời gian còn lại. Công tắc *Thông báo trong
-  trận* (Cài đặt; tên rút gọn là *Thông báo* trong menu Tạm dừng) tắt thông báo thường, trừ lỗi và thắng ván.
-  Thông báo hệ thống, như có bản cập nhật hoặc lưu thế, vẫn hiện trong ô này.
+  hay gọi bi/lỗ; lần chạm tiếp theo thao tác bình thường. Chạm nút điều khiển vẫn thực hiện nút đó.
+- Thông báo cũng đóng khi bấm phím; vạch son ở chân cho biết thời gian còn lại. Công tắc *Thông báo giữa
+  bàn* (Cài đặt; tên rút gọn là *Thông báo* trong menu Tạm dừng) tắt thông báo thường, trừ lỗi và thắng ván.
+  Thông báo hệ thống, như có bản cập nhật hoặc lưu thế, vẫn hiện trên dải giấy.
 - Mỗi lượt hiện tối đa một mẹo (`hintTurn`); nút “Đã hiểu” hoặc chạm bàn đóng mẹo và ghi nhận đã đọc.
-- Khi chiêu sẵn sàng mà người chơi chưa dùng, gợi ý hiện trong ô giữa và icon chiêu nhấp nhô: chạm gợi ý để
-  mở thẻ chi tiết. Gợi ý tự ẩn sau 4,5 giây.
+- Khi chiêu sẵn sàng mà người chơi chưa dùng, mảnh giấy gợi ý hiện cạnh ô chiêu và icon chiêu nhấp nhô:
+  chạm gợi ý để mở thẻ chi tiết. Gợi ý tự ẩn sau 4,5 giây.
 - Menu Tạm dừng: tỉ số, ba công tắc nhanh (âm thanh, nhạc, thông báo) và một cột hành động. Thoát trận luôn
   hỏi xác nhận.
 - Kết liễu giữ tranh và dòng kết quả đủ lâu để đọc (bản thường 2,9 giây); chạm để bỏ qua.

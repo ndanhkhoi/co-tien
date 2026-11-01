@@ -89,8 +89,8 @@ export function toast(text: string, kind: '' | 'bad' | 'good' | 'gold' = '') {
   const glyph: IconName = ({ bad: 'warning', good: 'check', gold: 'star', '': 'info' } as const)[kind];
   // Long rule explanations stay up long enough to read (about 15 characters a second).
   const ms = Math.min(8000, Math.max(2600, text.length * 65));
-  const slot = document.querySelector('.screen.game.mx:not(.out) .mx-center');
-  if (slot && !slot.dispatchEvent(new CustomEvent<ToastNotice>('cotien:notice', {
+  const match = document.querySelector('.screen.game.mx:not(.out)');
+  if (match && !match.dispatchEvent(new CustomEvent<ToastNotice>('cotien:notice', {
     detail: { text, glyph, bad: kind === 'bad', ms }, cancelable: true,
   }))) return;
   if (!toastLayer) {

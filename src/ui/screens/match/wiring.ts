@@ -295,7 +295,7 @@ function buildSections(x: {
       dom.heraldEl.contains(node) ? false : herald.dismiss(),
       dismissMatchHint(node),
       dom.skillNudge.contains(node) ? false : turn.hideNudge(),
-      dom.effectNotices.contains(node) ? false : ctx.callouts.dismiss(),
+      ctx.callouts.dismiss(),
     ];
     return closed.some(Boolean);
   });

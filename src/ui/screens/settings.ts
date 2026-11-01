@@ -89,10 +89,10 @@ function controlsGroup({ s, save, group }: { s: SettingsView['s']; save(): void;
       s.leftHanded = v;
       save();
     }, 'Thuận tay trái'), { icon: 'place', hint: 'Đưa nút ĐÁNH và thanh lực sang bên trái' }),
-    item('Thông báo trong trận', toggle(s.herald, (v) => {
+    item('Thông báo giữa bàn', toggle(s.herald, (v) => {
       s.herald = v;
       save();
-    }, 'Thông báo trong trận'), { icon: 'info', hint: 'Hiện ở giữa thanh trên cùng. Tắt thì chỉ còn báo lỗi và thắng ván. Chạm bàn để đóng.' }),
+    }, 'Thông báo giữa bàn'), { icon: 'info', hint: 'Tắt thì chỉ còn báo lỗi và thắng ván. Chạm bàn để đóng thông báo.' }),
   );
 }
 

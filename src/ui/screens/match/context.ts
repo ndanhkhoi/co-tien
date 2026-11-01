@@ -94,6 +94,6 @@ export interface MatchCtx {
   firedCall: { ball: number | null; pocket: number } | null;
   strikePress: { id: number; t0: number } | null;
   cancelArmed: boolean;
-  /** Names each skill effect in the top information slot at the moment it acts. */
+  /** Names each skill effect on the table at the moment it acts. */
   callouts: SkillCallouts;
 }

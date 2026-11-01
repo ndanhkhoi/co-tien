@@ -28,8 +28,10 @@ export function createSkillNudge(ctx: MatchCtx, dom: MatchDom, sheets: Sheets, d
       h('span', null, sk.slot === 2 ? 'Tuyệt chiêu sẵn sàng · chạm để xem' : 'Chiêu sẵn sàng · chạm để xem'),
       h('i.mx-h-timer', { style: `--ms:${NUDGE_MS}ms`, 'aria-hidden': 'true' }),
     );
+    const slot = dom.slots[sk.slot].b;
+    dom.skillNudge.style.top = `${slot.offsetTop + dom.dock.offsetTop + slot.offsetHeight / 2}px`;
     dom.skillNudge.classList.add('show');
-    dom.slots[sk.slot].b.classList.add('nudge');
+    slot.classList.add('nudge');
     dom.skillNudge.onclick = () => { hide(); deps.openSkill(sk.slot); };
     clearTimeout(timer);
     timer = window.setTimeout(hide, NUDGE_MS);

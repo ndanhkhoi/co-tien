@@ -62,7 +62,7 @@ export function createHerald(ctx: MatchCtx, dom: MatchDom): {
     dom.heraldEl.replaceChildren(face,
       h('div.mx-h-text', null, h('div.mx-h-title', null, m.title), m.line ? h('div.mx-h-line', null, m.line) : null),
     );
-    // The hairline shows the time left; the text can scroll without dismissing the announcement.
+    // The hairline shows the time left; table input dismisses the paper before acting on the shot.
     if (thinking) dom.heraldEl.append(icon('thinking', 'mx-h-think'));
     else dom.heraldEl.append(h('i.mx-h-timer', { style: `--ms:${Math.round(ms)}ms`, 'aria-hidden': 'true' }));
   };
@@ -85,7 +85,7 @@ export function createHerald(ctx: MatchCtx, dom: MatchDom): {
     thinkingSide = side;
     if (!on) idle();
   };
-  const offToasts = attachToasts(dom.center, herald);
+  const offToasts = attachToasts(dom.el, herald);
   return {
     herald,
     setThinking,
@@ -97,14 +97,14 @@ export function createHerald(ctx: MatchCtx, dom: MatchDom): {
   };
 }
 
-function attachToasts(slot: HTMLElement, herald: (m: HeraldMsg) => void): () => void {
+function attachToasts(root: HTMLElement, herald: (m: HeraldMsg) => void): () => void {
   const receive = (e: Event) => {
     const { text, glyph, bad, ms } = (e as CustomEvent<ToastNotice>).detail;
     herald({ side: null, icon: glyph, title: text, tone: bad ? 'red' : 'ink', ms, important: true });
     e.preventDefault();
   };
-  slot.addEventListener('cotien:notice', receive);
-  return () => slot.removeEventListener('cotien:notice', receive);
+  root.addEventListener('cotien:notice', receive);
+  return () => root.removeEventListener('cotien:notice', receive);
 }
 
 function champOf(ctx: MatchCtx, side: Side): string {

@@ -71,7 +71,7 @@ function pocket(ctx: MatchCtx, p: { pocket: number; id: number; speed: number })
   haptic(18);
   const pk = ctx.match.table.pockets[p.pocket];
   ctx.view.ring(pk.hx, pk.hy, p.id === 0 ? 0xff5a4e : 0xffe08a, 0.03);
-  if (p.id !== 0) ctx.callouts.pocketed();
+  if (p.id !== 0) ctx.callouts.pocketed(p.pocket);
 }
 
 function offTable(ctx: MatchCtx, p: { id: number }, herald: EventDeps['herald']): void {
@@ -135,7 +135,7 @@ function skill(ctx: MatchCtx, deps: EventDeps, e: Extract<MatchEvent, { type: 's
 
 function displace(ctx: MatchCtx, e: Extract<MatchEvent, { type: 'displace' }>): void {
   ctx.view.slideBalls(e.moved);
-  for (const m of e.moved) ctx.callouts.note(`Bi ${m.id} bị dời khỏi lỗ`);
+  for (const m of e.moved) ctx.callouts.note(m.to.x, m.to.y, `Bi ${m.id} bị dời khỏi lỗ`);
 }
 
 function swap(ctx: MatchCtx, e: Extract<MatchEvent, { type: 'swap' }>): void {
@@ -145,7 +145,7 @@ function swap(ctx: MatchCtx, e: Extract<MatchEvent, { type: 'swap' }>): void {
     return { id, from: e.at[i], to: ball ? { x: ball.x, y: ball.y } : e.at[i] };
   }));
   const [a, c] = e.balls;
-  ctx.callouts.note(`Đổi chỗ bi ${a} và bi ${c}`);
+  ctx.callouts.note(e.at[1].x, e.at[1].y, `Đổi chỗ bi ${a} và bi ${c}`);
 }
 
 /** Địa Chấn is announced before the shot with the same direction wording as wind. */
