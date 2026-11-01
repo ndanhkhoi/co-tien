@@ -1,8 +1,8 @@
 import { uiScale } from '../../dom';
 import type { MatchCtx } from './context';
 
-/** Painted hand: ball centre and radius as fractions of the 285×320 image. */
-export const HAND = { w: 285, h: 320, cx: 0.153, cy: 0.239, r: 0.144 };
+/** Painted hand: ball centre and radius as fractions of the 295×320 image. */
+export const HAND = { w: 295, h: 320, cx: 0.1556, cy: 0.2127, r: 0.1547 };
 
 export function createLayout(ctx: MatchCtx): { layout(): void; dispose(): void } {
   const onResize = () => layout();

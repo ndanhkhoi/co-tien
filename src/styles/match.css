@@ -274,7 +274,7 @@
 }
 .mx-cb-dot { position: absolute; width: 10px; height: 10px; margin: -5px 0 0 -5px; border-radius: 50%; background: var(--accent); border: 1.5px solid var(--sheet); }
 
-.mx-dpad { display: none; position: relative; width: 100%; aspect-ratio: 384 / 371; background: url('/art/ui/dpad.webp') center / contain no-repeat; }
+.mx-dpad { display: none; position: relative; width: 100%; aspect-ratio: 1; background: url('/art/ui/dpad.webp') center / contain no-repeat; }
 /* Each direction owns the triangle from its edge to the centre: big, equal touch areas. */
 .mx-dpad-b { position: absolute; inset: 0; padding: 0; border: 0; background: none; touch-action: none; cursor: pointer; }
 .mx-dpad-b.up { clip-path: polygon(0 0, 100% 0, 50% 50%); }

@@ -13,7 +13,7 @@ tranh đó suốt phiên (`champion-art.ts`). Màn VS, đầu trận, cut-in và
 | `screens/setup.ts` | Thiết lập Luận Cơ và Song Đấu |
 | `screens/collection.ts`, `settings.ts` | Tàng Các, Cài đặt |
 | `screens/career.ts`, `challenge-start.ts` | Trận Hành trình, mở một thử thách Luyện Cơ |
-| `screens/journey.ts` | Bản đồ Hành trình 16:9 phủ kín khung, thanh trên cùng nổi trên tranh, không cuộn; mốc lấy thứ tự từ `CHAPTERS`; trận trở về mở đúng vùng đất vừa đánh. Hộp thoại vùng đất xếp bốn cao thủ bậc 1–4 thành 2×2, trùm bậc 5 nằm riêng một hàng |
+| `screens/journey.ts` | Bản đồ Hành trình 16:9 phủ kín khung, thanh trên cùng nổi trên tranh, không cuộn; mốc lấy thứ tự từ `CHAPTERS`; trận trở về mở đúng vùng đất vừa đánh. Hộp thoại vùng đất xếp bốn cao thủ bậc 1–4 thành 2×2, trùm bậc 5 nằm riêng một hàng; thẻ cao thủ kế tiếp có icon hai cây cơ thách đấu, căn giữa bên phải |
 | `screens/champion-page.ts` | Trang tướng duy nhất: Chiêu thức, Tiểu sử, Tranh; chiêu mộ hoặc chọn đại diện |
 | `screens/library.ts` | Trang môn phái và tab Luật của Tàng Các |
 | `screens/challenges.ts` | Luyện Cơ |
@@ -39,6 +39,14 @@ với chân dung lớn; trạng thái máy đang tính ở ngay dưới thanh tr
 hiện khi tắt thông báo thường. `notice-input.ts` bắt lần chạm đóng thông tin trước sự kiện bàn; các nút
 điều khiển vẫn làm đúng thao tác của chúng. Thẻ chiêu có đầu và hàng nút cố định; `.mx-sc-body` là phần duy
 nhất cuộn, nên mô tả dài không đẩy nút Dùng ra ngoài thẻ.
+
+Nút thách đấu ở chi tiết vùng đất dùng icon `challenge` vẽ hai cây cơ bắt chéo. Icon nằm riêng bên phải
+thẻ cao thủ kế tiếp, ngang tâm chân dung; tên nút cho trình đọc màn hình có cả tên đối thủ. “Trùm vùng” là
+nhãn chữ son, tách khỏi hành động. Thẻ đã thắng vẫn có sao và mở lại trận như trước.
+
+Các nút ĐÁNH, ĐẶT BI ở `art/ui/actions/`, bộ mũi tên dời bi ở `art/ui/dpad.webp` và bàn tay cầm bi ở
+`art/ui/hand-ball.webp` cùng dùng giấy dó, nét mực và son. `HAND` trong `screens/match/layout.ts` ghi vị
+trí và bán kính bi trên tranh, để tâm bi vẽ khớp với bi thật khi kéo hoặc thay đổi kích thước khung.
 
 ## Một khung 16:9
 

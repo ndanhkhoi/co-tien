@@ -51,17 +51,21 @@ Chụp ở 932×430, tướng của người chơi là Ngân Cầm.
 | --- | --- |
 | ![Chọn trận Luận Cơ](docs/screenshots/luan-co.webp) | ![Song Đấu: mỗi bên chọn tướng (thẻ ghi bậc), tên và Pháp Cơ](docs/screenshots/song-dau.webp) |
 | **Trận đấu** | **Tạm dừng** |
-| ![Trận đấu: thông báo ở ô giữa thanh trên cùng, mũi tên son chỉ người tới lượt](docs/screenshots/tran-dau.webp) | ![Menu tạm dừng sau khi đặt bi](docs/screenshots/tam-dung.webp) |
+| ![Trận đấu: thông báo giấy giữa bàn, nút ĐẶT BI và mũi tên dời bi bằng nét mực](docs/screenshots/tran-dau.webp) | ![Menu tạm dừng sau khi đặt bi, nút ĐÁNH dùng tranh nét mực](docs/screenshots/tam-dung.webp) |
 | **Chiêu thức** | **Tuyệt chiêu** |
-| ![Thẻ chiêu thức: tên và nút Dùng cố định, mô tả cuộn riêng](docs/screenshots/dat-chieu.webp) | ![Thẻ tuyệt chiêu: nút Dùng có icon năng lượng](docs/screenshots/tuyet-chieu.webp) |
+| ![Thẻ chiêu thức: tên và nút Dùng cố định, mô tả cuộn riêng; nút ĐÁNH mới ở bên phải](docs/screenshots/dat-chieu.webp) | ![Thẻ tuyệt chiêu: nút Dùng có icon năng lượng, nút ĐÁNH dùng tranh nét mực](docs/screenshots/tuyet-chieu.webp) |
 | **Kết liễu** | **Hành trình** |
-| ![Hiệu ứng kết liễu khi thắng ván](docs/screenshots/ket-lieu.webp) | ![Bản đồ Hành trình](docs/screenshots/hanh-trinh.webp) |
+| ![Hiệu ứng kết liễu khi thắng ván, trên bộ điều khiển bằng nét mực](docs/screenshots/ket-lieu.webp) | ![Bản đồ Hành trình](docs/screenshots/hanh-trinh.webp) |
 | **Luyện thế · chọn thế** | **Luyện thế · Đường đi** |
-| ![Chọn thế luyện](docs/screenshots/luyen-the-chon.webp) | ![Bàn Luyện thế với đường đi của mọi bi](docs/screenshots/luyen-the.webp) |
+| ![Chọn thế luyện](docs/screenshots/luyen-the-chon.webp) | ![Bàn Luyện thế với đường đi của mọi bi và nút ĐÁNH mới](docs/screenshots/luyen-the.webp) |
 | **Tàng Các** | **Trang tướng** |
 | ![Tàng Các](docs/screenshots/tang-cac.webp) | ![Trang tướng: ba chiêu, mục Tiểu sử và Tranh, nút chọn tướng dưới tranh](docs/screenshots/trang-tuong.webp) |
 | **Trang môn phái** | **Cơ Tiên Truyện** |
 | ![Trang môn phái trong Tàng Các](docs/screenshots/mon-phai.webp) | ![Đọc Cơ Tiên Truyện](docs/screenshots/co-tien-truyen.webp) |
+
+Chi tiết vùng đất đặt icon hai cây cơ thách đấu riêng bên phải cao thủ kế tiếp:
+
+![Chi tiết Hành trình: nút thách đấu bằng icon hai cây cơ, căn giữa bên phải](docs/screenshots/hanh-trinh-vung-dat.webp)
 
 Trên màn hình 2K (2560×1440), khung 16:9 nằm giữa phông tranh, tướng đứng hai bên:
 

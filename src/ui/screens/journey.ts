@@ -129,8 +129,8 @@ function landSheet(app: App, id: SectId) {
         const best = p.career[n.id];
         // Masters are sorted by tier, so the last one is the land's tier-5 boss.
         const boss = ni === ch.npcs.length - 1;
-        const foot = best !== undefined ? stars(best) : n === nextNpc ? h('span.cc-cta', null, 'Thách đấu') : null;
-        return champCard(champion(n.id), {
+        const foot = best !== undefined ? stars(best) : null;
+        const card = champCard(champion(n.id), {
           locked: !open, name: n.name, cls: `${boss ? 'ls-boss' : 'ls-master'}${n === nextNpc ? ' next' : ''}`,
           sub: open ? `${MODE_NAMES[n.mode]} · ${LEVEL_NAMES[n.level]}` : 'Thắng cao thủ trước để mở',
           foot: boss ? h('span.ls-boss-foot', null, h('span.ls-boss-tag', null, 'Trùm vùng'), foot) : foot,
@@ -139,6 +139,11 @@ function landSheet(app: App, id: SectId) {
           close();
           npcModal(app, n);
         });
+        if (n === nextNpc) {
+          card.setAttribute('aria-label', `Thách đấu ${n.name}`);
+          card.append(h('span.ls-duel', { 'aria-hidden': 'true', title: 'Thách đấu' }, icon('challenge')));
+        }
+        return card;
       })),
       tasks.length ? h('h3.section-title', null, 'Luyện Cơ') : null,
       h('div.ls-tasks', null, ...tasks.map((c, i) => {
