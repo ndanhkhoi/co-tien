@@ -177,7 +177,7 @@ export function finishRulesShot(m: Match, side: Side, shot: ShotSummary) {
 /** Adjust the raw resolution: Tái chiến and Hộ thể can still save the shot. */
 function resolveShot(m: Match, side: Side, shot: ShotSummary): Resolution {
   const res = m.rules.resolve(m.state, m.balls, shot);
-  m.activeEffects = m.activeEffects.filter(e => e.target !== side);
+  // Each effect on this side loses one shot here; one with shots left keeps acting on the next.
   spendTurnEffects(m, side);
   endOmen(m);
   calledFoul(m, shot, res);

@@ -17,7 +17,8 @@ export function armTurnHexes(m: Match, side: Side): void {
 /** Called-ball and armed counter effects waiting for this turn. */
 function armTurnTricks(m: Match, side: Side): void {
   const called = m.called;
-  m.calledNow = called ? called.ball : null;
+  // Only the caster's opponent must touch the called ball first.
+  m.calledNow = called && called.by !== side ? called.ball : null;
   m.counter = m.activeEffects.find((e) => e.kind === 'counter' && e.target === other(side)) ?? null;
 }
 
@@ -44,7 +45,8 @@ export function spendTurnEffects(m: Match, side: Side): void {
     else if (--effect.shotsLeft > 0) kept.push(effect);
   }
   m.activeEffects = kept;
-  if (m.called) {
+  // A called ball counts the opponent's shots, never the caster's own.
+  if (m.called && m.called.by !== side) {
     m.called.shotsLeft--;
     if (m.called.shotsLeft <= 0) m.called = null;
   }

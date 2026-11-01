@@ -109,3 +109,54 @@ describe('AI feels the hexes', () => {
     expect(spread({ driftAngle: 2 }).mean).toBeCloseTo(-1 * Math.PI / 180, 2);
   });
 });
+
+describe('field skills last the number of shots they promise', () => {
+  it('keeps a two-shot field on the opponent for both of their shots', () => {
+    const m = lane(['silk'], 5);
+    CHAMPIONS[0].skills[0] = { ...fixture(['silk'], 5), target: 'opponent', turns: 2 };
+    expect(m.useSkill(0, 0, { point: { x: 0.3, y: 0 }, direction: { x: 1, y: 0 }, sense: 'cw' })).toBe(true);
+    const onOpponent = () => m.activeEffects.filter((e) => e.kind === 'silk' && e.target === 1);
+    expect(onOpponent()[0]?.shotsLeft).toBe(2);
+    const shoot = () => {
+      m.shoot({ angle: Math.PI / 2, power: 0.08, side: 0, vert: 0, call: null, pushOut: false });
+      for (let i = 0; i < 6000 && m.phase === 'rolling'; i++) m.update(1 / 60);
+    };
+    shoot();
+    m.state.turn = 1;
+    m.beginTurn();
+    m.placing = 'none';
+    expect(onOpponent()).toHaveLength(1);
+    shoot();
+    expect(onOpponent()[0]?.shotsLeft).toBe(1);
+  });
+});
+
+describe('every multi-shot skill lasts its promised shots on the opponent', () => {
+  const lasting = (m: Match) => [
+    ...m.hexes.filter((h) => h.target === 1).map((h) => `${h.kind}:${h.shotsLeft}`),
+    ...m.activeEffects.filter((e) => e.target === 1).map((e) => `${e.kind}:${e.shotsLeft}`),
+    ...(m.called ? [`called:${m.called.shotsLeft}`] : []),
+  ];
+  const shoot = (m: Match, side: 0 | 1) => {
+    m.state.turn = side;
+    m.beginTurn();
+    m.placing = 'none';
+    m.shoot({ angle: Math.PI / 2, power: 0.05, side: 0, vert: 0, call: null, pushOut: false });
+    for (let i = 0; i < 6000 && m.phase === 'rolling'; i++) m.update(1 / 60);
+  };
+  const kits = [...new Map(CHAMPIONS.flatMap((c) => c.skills).filter((s) => (s.turns ?? 1) > 1)
+    .map((s) => [s.kinds.join('+'), s] as const)).values()];
+  for (const sk of kits) {
+    it(`${sk.kinds.join(' + ')} for ${sk.turns} shots`, () => {
+      const m = lane(sk.kinds, sk.tier);
+      CHAMPIONS[0].skills[0] = { ...sk, slot: 0 };
+      if (!m.useSkill(0, 0, { point: { x: 0.3, y: 0 }, direction: { x: 1, y: 0 }, sense: 'cw' })) return;
+      const start = lasting(m);
+      if (!start.length) return;
+      expect(start.every((x) => x.endsWith(`:${sk.turns}`)), start.join(' ')).toBe(true);
+      shoot(m, 1);
+      expect(lasting(m).length, `after the first opponent shot: ${lasting(m).join(' ')}`).toBe(start.length);
+    });
+  }
+});
+
