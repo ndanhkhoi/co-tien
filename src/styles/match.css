@@ -143,8 +143,17 @@
 }
 .mx-ball.stripe { background: linear-gradient(#f4f1e6 0 26%, var(--c) 26% 74%, #f4f1e6 74%); }
 
-/* Centre: objective plate, replaced by the herald while it speaks. */
-.mx-center { position: relative; flex: 1; min-width: 0; height: 100%; }
+/* One information slot above the table. Announcements take priority over tips and skill notes. */
+.mx-center { position: relative; flex: 1; min-width: 0; height: 100%; overflow: hidden; }
+.mx-center:has(> .show, > .coach, > .mx-effect-notices:not(:empty)) > .mx-obj { visibility: hidden; }
+.mx-center:has(> .mx-herald.show:not(.thinking)) > .coach,
+.mx-center:has(> .mx-herald.show:not(.thinking)) > .mx-skillnudge,
+.mx-center:has(> .mx-herald.show:not(.thinking)) > .mx-effect-notices,
+.mx-center.coaching > .mx-skillnudge,
+.mx-center.coaching > .mx-effect-notices,
+.mx-center.coaching > .mx-herald.thinking,
+.mx-center:has(> .mx-skillnudge.show) > .mx-effect-notices,
+.mx-center:has(> .mx-skillnudge.show, > .mx-effect-notices:not(:empty)) > .mx-herald.thinking { visibility: hidden; }
 .mx-obj {
   position: absolute;
   display: flex;
@@ -162,26 +171,22 @@
   inset: 0;
   display: none;
   align-items: center;
-  gap: 10px;
-  padding: 4px 14px 4px 4px;
-  border-radius: var(--r-2);
-  border: 1px solid var(--ink);
-  border-left: 4px solid var(--accent);
-  background: var(--sheet);
+  gap: 6px;
+  padding: 4px 8px;
+  isolation: isolate;
   color: var(--ink);
-  box-shadow: 0 3px 0 #201b1520;
 }
-.mx-herald.show { display: flex; animation: mx-herald-in 0.3s var(--ease) both; }
-.mx-herald.red { color: var(--accent); border-color: var(--accent); }
-@keyframes mx-herald-in { from { opacity: 0; transform: translateY(-10px) scale(0.98); } }
-.mx-h-face, .mx-h-icon { height: 100%; aspect-ratio: 1; flex-shrink: 0; border-radius: 50%; border: 2px solid var(--sheet); background: var(--sheet); }
+.mx-herald.show { display: flex; animation: fade-in 0.18s var(--ease) both; }
+.mx-herald.red .mx-h-title { color: var(--accent); }
+.mx-h-face, .mx-h-icon { width: 30px; height: 30px; flex-shrink: 0; border-radius: 50%; background: var(--sheet); }
 .mx-h-face { object-fit: cover; }
 .mx-h-icon { display: grid; place-items: center; }
 .mx-h-icon .ico { width: 64%; height: 64%; }
-.mx-h-text { flex: 1; min-width: 0; }
-.mx-h-title { font: 700 17px/1.2 var(--display); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.mx-h-line { font-size: 13px; font-weight: 600; line-height: 1.3; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-.mx-h-think { width: 38px; height: 38px; padding: 4px; border-radius: 50%; background: var(--sheet); animation: mx-bob 1.1s ease-in-out infinite; }
+.mx-h-text { flex: 1; min-width: 0; max-height: 100%; overflow-y: auto; overscroll-behavior: contain; touch-action: pan-y; }
+.mx-h-title { font: 700 13px/1.25 var(--display); overflow-wrap: anywhere; }
+.mx-h-line { font-size: 12px; font-weight: 600; line-height: 1.35; color: var(--ink-2); }
+.mx-h-think { width: 20px; height: 20px; flex-shrink: 0; animation: mx-bob 1.1s ease-in-out infinite; }
+.mx-h-timer { position: absolute; left: 8px; right: 8px; bottom: 2px; height: 2px; border-radius: 1px; }
 @keyframes mx-bob { 50% { transform: translateY(-3px); } }
 
 /* ---------- Side columns ---------- */
@@ -376,9 +381,11 @@
 .mx-sc-x { position: absolute; top: 8px; right: 8px; }
 .mx-dock.sheet-open .mx-skill { position: relative; z-index: 22; }
 
-.mx-skillcard { left: calc(8px + var(--sl) + var(--colL) + var(--gap)); width: min(370px, 50%); }
+.mx-skillcard { left: calc(8px + var(--sl) + var(--colL) + var(--gap)); width: min(370px, 50%); overflow: hidden; }
 .lefty .mx-skillcard { left: auto; right: calc(8px + var(--sr) + var(--colL) + var(--gap)); }
-.mx-sc-head { display: flex; align-items: center; gap: 12px; padding-right: var(--touch-target); }
+.mx-sc-head { display: flex; align-items: center; flex-shrink: 0; gap: 12px; padding-right: var(--touch-target); }
+.mx-sc-body { flex: 1; min-height: 0; display: flex; flex-direction: column; gap: 10px; padding-right: 6px; }
+.mx-sc-body > * { flex-shrink: 0; }
 .mx-sc-icon { width: 64px; height: 64px; flex-shrink: 0; border-radius: 14px; object-fit: cover; border: 1.5px solid var(--line-2); }
 .mx-sc-titles { min-width: 0; }
 .mx-sc-kicker { font-size: 13px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: var(--accent); }
@@ -388,7 +395,7 @@
 .mx-sc-use b { color: var(--accent); }
 .mx-sc-req { display: flex; align-items: center; gap: 8px; padding: 8px 10px; border-radius: var(--r-1); background: var(--sheet-2); font-size: 14px; font-weight: 600; color: var(--ink-2); }
 .mx-sc-req .ico { width: 26px; height: 26px; }
-.mx-sc-foot { margin-top: auto; display: flex; align-items: center; gap: 12px; }
+.mx-sc-foot { flex-shrink: 0; display: flex; align-items: center; gap: 12px; padding-top: 8px; border-top: 1px solid var(--line); }
 .mx-sc-reason { flex: 1; min-width: 0; font-size: 14px; font-weight: 700; line-height: 1.3; color: var(--bad); }
 .mx-sc-reason.ok { color: var(--ok); }
 .mx-sc-foot .btn { flex-shrink: 0; }
@@ -579,8 +586,6 @@
 .mx:has(.mx-next:not(:empty):not([hidden])) .mx-sk-name { line-height: 1.1; }
 
 /* Match coaches share the objective slot; their bounds never enter the table. */
-.mx-center.coaching > .mx-obj,
-.mx-center.coaching > .mx-herald { visibility: hidden; }
 .mx-center > .coach.match-coach {
   position: absolute;
   inset: 0;
@@ -642,30 +647,30 @@
   .screen.game.mx .mx-ctrl { --colR: 112px; }
 }
 
-/* Skill callouts: a short ink label where a skill acted on a ball; it rises a little and fades by itself. */
-#ui > .screen.game > .mx-callout {
+/* Skill notes and ready-skill prompts use the same slot as the objective and the herald. */
+.mx-effect-notices, .mx-skillnudge {
   position: absolute;
-  z-index: 4;
-  transform: translate(-50%, -100%);
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 3px;
+  padding: 4px 8px;
+  isolation: isolate;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  touch-action: pan-y;
+  color: var(--ink);
+}
+.mx-effect-notices:empty, .mx-skillnudge:not(.show) { display: none; }
+.mx-effect-note {
   display: flex;
   align-items: center;
   gap: 4px;
-  padding: 5px 16px 5px 10px;
-  background: url('/art/ui/frame/callout.webp') center / 100% 100% no-repeat;
-  color: var(--ink);
-  font: 700 13px/1.25 var(--display);
-  white-space: nowrap;
-  filter: drop-shadow(0 2px 3px rgba(40, 30, 18, 0.35));
-  animation: mx-callout 1.9s var(--ease) both;
+  font-size: 12px;
+  line-height: 16px;
 }
-.mx-callout .ico { width: 28px; height: 24px; flex-shrink: 0; object-fit: contain; }
-.mx-callout.red { color: var(--accent); }
-@keyframes mx-callout {
-  0% { opacity: 0; transform: translate(-50%, -60%); }
-  12%, 72% { opacity: 1; transform: translate(-50%, -100%); }
-  100% { opacity: 0; transform: translate(-50%, -150%); }
-}
-@media (prefers-reduced-motion: reduce) {
-  .mx-callout { animation-name: mx-callout-calm; }
-  @keyframes mx-callout-calm { 0%, 80% { opacity: 1; } 100% { opacity: 0; } }
-}
+.mx-effect-note .ico { width: 18px; height: 18px; }
+.mx-effect-note.red { color: var(--accent); }
+.mx-skillnudge { width: 100%; align-items: flex-start; text-align: left; font-size: 12px; line-height: 1.3; }
+.mx-skillnudge b { color: var(--accent-2); font: 700 14px/1.2 var(--display); }

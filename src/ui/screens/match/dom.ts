@@ -55,6 +55,7 @@ export interface MatchDom {
   objPlate: HTMLElement;
   nextBall: HTMLElement;
   heraldEl: HTMLElement;
+  effectNotices: HTMLElement;
   center: HTMLElement;
   topBar: HTMLElement;
   slots: SlotView[];
@@ -147,6 +148,7 @@ export function createMatchDom(ctx: MatchCtx, opts: MatchOptions, host: DomHost)
     objPlate: null!,
     nextBall: h('div.mx-next', { 'aria-live': 'polite' }),
     heraldEl: h('div.mx-herald', { role: 'status', 'aria-live': 'polite' }),
+    effectNotices: h('div.mx-effect-notices', { role: 'status', 'aria-live': 'polite' }),
     center: null!,
     topBar: null!,
     slots: [0, 1, 2].map((slot) => {
@@ -211,7 +213,7 @@ function buildCastControls(dom: MatchDom, castHost: { cancelPlacement(): void; t
 
 function finishTop(dom: MatchDom, ctx: MatchCtx): void {
   dom.objPlate = h('div.mx-obj', null, dom.objKicker, dom.objText);
-  dom.center = h('div.mx-center', null, dom.objPlate);
+  dom.center = h('div.mx-center', null, dom.objPlate, dom.heraldEl, dom.skillNudge, dom.effectNotices);
   dom.topBar = h('div.mx-top', null, dom.pauseBtn, dom.cards[0].el, dom.center, dom.cards[1].el);
   if (ctx.solo) dom.cards[1].el.style.visibility = 'hidden';
 }
@@ -314,7 +316,7 @@ function finishOverlays(dom: MatchDom): void {
   dom.hand.style.display = 'none';
   // Off-table controls only: the push-out toggle lives in the controls column, and the pocket
   // call is read in the objective plate. Nothing sits on the rails, where it could hide a pocket.
-  dom.el.append(dom.probe, dom.hand, dom.topBar, dom.dock, dom.ctrl, dom.callTag, dom.nextBall, dom.heraldEl, dom.ballTag, dom.skillNudge);
+  dom.el.append(dom.probe, dom.hand, dom.topBar, dom.dock, dom.ctrl, dom.callTag, dom.nextBall, dom.ballTag);
 }
 
 export function attachSpinInput(dom: MatchDom, ctx: MatchCtx, canAct: () => boolean): void {

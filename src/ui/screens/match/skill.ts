@@ -133,11 +133,12 @@ function openSkill({ ctx, dom, sheets, deps, side, slot }: OpenSkillArgs): void 
       h('div.mx-sc-titles', null,
         h('div.mx-sc-kicker', null, ult ? 'Tuyệt chiêu' : `Chiêu ${slot + 1}`, ' · ', champ.name),
         h('div.mx-sc-name', null, sk.name))),
-    h('div.mx-sc-desc', null, sk.desc),
-    convertedNote(match, sk),
-    h('div.mx-sc-use', null, h('b', null, 'Tác dụng:'), ' ', skillReach({ ...sk, kinds: sk.kinds.map((k) => match.effectiveKind(k)) })),
-    h('div.mx-sc-use', null, h('b', null, 'Cách dùng:'), ' ', skillUsage({ kinds: sk.kinds.map((k) => match.effectiveKind(k)) })),
-    req,
+    h('div.mx-sc-body.scroll', { tabindex: 0, role: 'region', 'aria-label': `Chi tiết ${sk.name}` },
+      h('div.mx-sc-desc', null, sk.desc),
+      convertedNote(match, sk),
+      h('div.mx-sc-use', null, h('b', null, 'Tác dụng:'), ' ', skillReach({ ...sk, kinds: sk.kinds.map((k) => match.effectiveKind(k)) })),
+      h('div.mx-sc-use', null, h('b', null, 'Cách dùng:'), ' ', skillUsage({ kinds: sk.kinds.map((k) => match.effectiveKind(k)) })),
+      req),
     h('div.mx-sc-foot', null, reason, useBtn));
   const catcher = closeCatcher(deps.closeSheets);
   dom.el.append(catcher, box);
@@ -158,7 +159,7 @@ interface SkillInfo {
 function createUseButton(ctx: MatchCtx, dom: MatchDom, deps: SkillDeps, info: SkillInfo): HTMLButtonElement {
   const { match, aim } = ctx;
   const { side, slot, sk } = info;
-  return btn(frag(icon(info.ult ? 'ultimate' : 'energy'), 'Dùng'), () => {
+  return btn(frag(icon('energy'), 'Dùng'), () => {
     if (!canInspectSkills(ctx) || !match.canUseSkill(side, slot)) return;
     deps.closeSheets();
     const placed = sk.kinds.some(k => PLACED_KINDS.includes(k));

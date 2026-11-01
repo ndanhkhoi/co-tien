@@ -1,6 +1,4 @@
 import type { Side } from '../../../core/rules/types';
-import { champion } from '../../../game/content/sects';
-import { h } from '../../dom';
 import { hintTurn } from '../../hints';
 import type { MatchCtx } from './context';
 import type { MatchDom } from './dom';
@@ -8,6 +6,7 @@ import type { HeraldMsg } from './herald';
 import { updateSpinDot } from './spin';
 import { controllerIsHuman, controllerPlayer, puppetHeraldLine, shotController } from './controller';
 import type { Sheets } from './sheet';
+import { createSkillNudge } from './skill-nudge';
 
 interface TurnDeps {
   herald(m: HeraldMsg): void;
@@ -21,8 +20,8 @@ interface TurnDeps {
   openSkill(slot: number): void;
 }
 
-export function createTurn(ctx: MatchCtx, dom: MatchDom, sheets: Sheets, deps: TurnDeps): { turn(): void; hideNudge(): void; nudge(side: Side): void } {
-  const nudgeApi = createNudge(ctx, dom, sheets, deps);
+export function createTurn(ctx: MatchCtx, dom: MatchDom, sheets: Sheets, deps: TurnDeps): { turn(): void; hideNudge(): boolean; nudge(side: Side): void } {
+  const nudgeApi = createSkillNudge(ctx, dom, sheets, deps);
   return {
     turn: () => onTurn(ctx, dom, deps, nudgeApi.nudge),
     hideNudge: nudgeApi.hide,
@@ -104,51 +103,3 @@ function nudgeIdle(ctx: MatchCtx, nudge: (side: Side) => void, side: Side): void
   const idle = ctx.turn.skillIdle[side]++;
   if (idle >= 1) setTimeout(() => nudge(side), 1900);
 }
-
-const NUDGE_MS = 4500;
-
-function createNudge(ctx: MatchCtx, dom: MatchDom, sheets: Sheets, deps: TurnDeps): {
-  hide(): void; nudge(side: Side): void;
-} {
-  let timer = 0;
-  // A touch anywhere else means the player is busy with the shot; the slip steps aside.
-  const away = (e: Event) => {
-    if (!dom.skillNudge.contains(e.target as Node)) hide();
-  };
-  const hide = () => {
-    clearTimeout(timer);
-    dom.el.removeEventListener('pointerdown', away, true);
-    ctx.app.pixi.canvas.removeEventListener('pointerdown', away, true);
-    dom.skillNudge.classList.remove('show');
-    dom.slots.forEach((s) => s.b.classList.remove('nudge'));
-  };
-  const nudge = (side: Side) => {
-    if (ctx.flags.disposed || ctx.match.turn !== side || !deps.canAct() || sheets.skill) return;
-    const ready = champion(ctx.match.setup.players[side].champion).skills.filter((sk) => ctx.match.canUseSkill(side, sk.slot));
-    const sk = ready.find((x) => x.slot === 2) ?? ready[0];
-    if (!sk) return;
-    paintNudge(dom, sk, NUDGE_MS);
-    dom.skillNudge.onclick = () => {
-      hide();
-      deps.openSkill(sk.slot);
-    };
-    clearTimeout(timer);
-    timer = window.setTimeout(hide, NUDGE_MS);
-    dom.el.addEventListener('pointerdown', away, true);
-    ctx.app.pixi.canvas.addEventListener('pointerdown', away, true);
-  };
-  return { hide, nudge };
-}
-
-function paintNudge(dom: MatchDom, sk: { name: string; slot: number }, ms: number): void {
-  const slot = dom.slots[sk.slot].b;
-  dom.skillNudge.replaceChildren(
-    h('b', null, sk.name),
-    sk.slot === 2 ? 'Tuyệt chiêu sẵn sàng · chạm để dùng' : 'Chiêu sẵn sàng · chạm để dùng',
-    h('i.mx-h-timer', { style: `--ms:${ms}ms`, 'aria-hidden': 'true' }),
-  );
-  dom.skillNudge.style.top = `${slot.offsetTop + dom.dock.offsetTop + slot.offsetHeight / 2}px`;
-  dom.skillNudge.classList.add('show');
-  slot.classList.add('nudge');
-}
-

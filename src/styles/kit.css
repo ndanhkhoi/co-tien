@@ -221,6 +221,7 @@ input[type='text']:focus, input:not([type]):focus { border-color: var(--accent);
   width: min(520px, calc(100% - 32px));
   pointer-events: none;
 }
+body.playing .toast-layer { display: none; }
 .toast {
   position: relative;
   display: flex;

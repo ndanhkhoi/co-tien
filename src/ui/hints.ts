@@ -27,7 +27,7 @@ interface Item extends HintOptions {
 const queue: Item[] = [];
 /** In a match a new player meets at most one tip per turn, so the first shot is not buried. */
 let turnBudget = Infinity;
-let showing: { card: HTMLElement; item: Item; target: Element | null; cleanup: () => void } | null = null;
+let showing: { card: HTMLElement; item: Item; target: Element | null; dismiss: () => void; cleanup: () => void } | null = null;
 
 interface HintContent extends HintOptions {
   key: string;
@@ -65,6 +65,13 @@ export function clearHints() {
   }
 }
 
+/** A table tap closes the match tip without also changing the shot. Reading the tip keeps it open. */
+export function dismissMatchHint(target: Node | null): boolean {
+  if (!showing?.card.classList.contains('match-coach') || showing.card.contains(target) || showing.card.classList.contains('leaving')) return false;
+  showing.dismiss();
+  return true;
+}
+
 function next(app: App) {
   const slot = document.querySelector<HTMLElement>('.screen.game.mx .mx-center');
   if (slot && turnBudget <= 0) {
@@ -91,7 +98,7 @@ function next(app: App) {
       card.remove();
       slot?.classList.remove('coaching');
       if (showing?.card === card) next(app);
-    }, 180);
+    }, slot ? 0 : 180);
   };
   const card = h('div.coach', { role: 'status' },
     h('div.coach-head', null, icon('hint'), h('div.coach-title', null, item.title)),
@@ -100,7 +107,7 @@ function next(app: App) {
   );
   const it = item;
   const target = item.anchor?.() ?? null;
-  showing = { card, item, target, cleanup: () => {
+  showing = { card, item, target, dismiss: done, cleanup: () => {
     window.removeEventListener('resize', place);
     window.removeEventListener('cotien:ui-resize', place);
     slot?.classList.remove('coaching');

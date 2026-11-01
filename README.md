@@ -45,15 +45,15 @@ tiên hiệp riêng: **Cơ Tiên Giới** với 13 môn phái, 65 tướng, mỗ
 
 Chụp ở 932×430, tướng của người chơi là Ngân Cầm.
 
-![Trang chủ](docs/screenshots/trang-chu.webp)
+![Trang chủ: phiên bản ở góc dưới bên phải](docs/screenshots/trang-chu.webp)
 
 | Luận Cơ | Song Đấu |
 | --- | --- |
 | ![Chọn trận Luận Cơ](docs/screenshots/luan-co.webp) | ![Song Đấu: mỗi bên chọn tướng (thẻ ghi bậc), tên và Pháp Cơ](docs/screenshots/song-dau.webp) |
 | **Trận đấu** | **Tạm dừng** |
-| ![Trận đấu: mũi tên son trên chân dung người tới lượt](docs/screenshots/tran-dau.webp) | ![Menu tạm dừng](docs/screenshots/tam-dung.webp) |
+| ![Trận đấu: thông báo ở ô giữa thanh trên cùng, mũi tên son chỉ người tới lượt](docs/screenshots/tran-dau.webp) | ![Menu tạm dừng sau khi đặt bi](docs/screenshots/tam-dung.webp) |
 | **Chiêu thức** | **Tuyệt chiêu** |
-| ![Thẻ chiêu thức](docs/screenshots/dat-chieu.webp) | ![Thẻ tuyệt chiêu](docs/screenshots/tuyet-chieu.webp) |
+| ![Thẻ chiêu thức: tên và nút Dùng cố định, mô tả cuộn riêng](docs/screenshots/dat-chieu.webp) | ![Thẻ tuyệt chiêu: nút Dùng có icon năng lượng](docs/screenshots/tuyet-chieu.webp) |
 | **Kết liễu** | **Hành trình** |
 | ![Hiệu ứng kết liễu khi thắng ván](docs/screenshots/ket-lieu.webp) | ![Bản đồ Hành trình](docs/screenshots/hanh-trinh.webp) |
 | **Luyện thế · chọn thế** | **Luyện thế · Đường đi** |
@@ -65,7 +65,7 @@ Chụp ở 932×430, tướng của người chơi là Ngân Cầm.
 
 Trên màn hình 2K (2560×1440), khung 16:9 nằm giữa phông tranh, tướng đứng hai bên:
 
-![Khung sân khấu trên desktop](docs/screenshots/desktop-san-khau.webp)
+![Khung sân khấu trên desktop: phiên bản nằm trong khung giao diện](docs/screenshots/desktop-san-khau.webp)
 
 ## Phát triển
 

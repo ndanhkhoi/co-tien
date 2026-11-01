@@ -1,6 +1,6 @@
 import { exprUrl, portraitUrl } from '../../../game/content/sects';
 import type { Side } from '../../../core/rules/types';
-import { h } from '../../dom';
+import { h, type ToastNotice } from '../../dom';
 import { icon, type IconName } from '../../icons';
 import type { MatchCtx } from './context';
 import type { MatchDom } from './dom';
@@ -16,13 +16,14 @@ export interface HeraldMsg {
   line?: string;
   tone?: 'ink' | 'red';
   ms?: number;
-  /** Shown even when the player turned announcements off (a rack won). Fouls always show. */
+  /** Shown even when announcements are off (a rack won or system notice). Fouls always show. */
   important?: boolean;
 }
 
 export function createHerald(ctx: MatchCtx, dom: MatchDom): {
   herald(m: HeraldMsg): void;
   setThinking(side: Side | null): void;
+  dismiss(): boolean;
   dispose(): void;
 } {
   const q: HeraldMsg[] = [];
@@ -61,49 +62,49 @@ export function createHerald(ctx: MatchCtx, dom: MatchDom): {
     dom.heraldEl.replaceChildren(face,
       h('div.mx-h-text', null, h('div.mx-h-title', null, m.title), m.line ? h('div.mx-h-line', null, m.line) : null),
     );
-    // Any tap closes an announcement; the hairline shows the time left.
+    // The hairline shows the time left; the text can scroll without dismissing the announcement.
     if (thinking) dom.heraldEl.append(icon('thinking', 'mx-h-think'));
     else dom.heraldEl.append(h('i.mx-h-timer', { style: `--ms:${Math.round(ms)}ms`, 'aria-hidden': 'true' }));
-    dom.center.classList.add('heralding');
   };
-  // Any touch, click or key dismisses the current announcement: the player is acting, and the
-  // banner must never stand between them and the cue ball they are placing.
   const dismiss = () => {
-    if (!on) return;
+    if (!on) return false;
     q.length = 0;
     clearTimeout(timer);
     on = false;
     idle();
+    return true;
   };
   const idle = () => {
     if (thinkingSide !== null) {
       show({ side: thinkingSide, expr: 'focus', title: `${ctx.match.setup.players[thinkingSide].name} đang tính…` }, true);
     } else {
-      // Fade the stroke away instead of cutting it off.
-      dom.heraldEl.className = dom.heraldEl.classList.contains('show') ? 'mx-herald leaving' : 'mx-herald';
-      setTimeout(() => {
-        if (dom.heraldEl.classList.contains('leaving')) dom.heraldEl.className = 'mx-herald';
-      }, 260);
-      dom.center.classList.remove('heralding');
+      dom.heraldEl.className = 'mx-herald';
     }
   };
   const setThinking = (side: Side | null) => {
     thinkingSide = side;
     if (!on) idle();
   };
-  dom.el.addEventListener('pointerdown', dismiss, true);
-  ctx.app.pixi.canvas.addEventListener('pointerdown', dismiss, true);
-  window.addEventListener('keydown', dismiss, true);
+  const offToasts = attachToasts(dom.center, herald);
   return {
     herald,
     setThinking,
+    dismiss,
     dispose: () => {
       clearTimeout(timer);
-      window.removeEventListener('keydown', dismiss, true);
-      ctx.app.pixi.canvas.removeEventListener('pointerdown', dismiss, true);
-      dom.el.removeEventListener('pointerdown', dismiss, true);
+      offToasts();
     },
   };
+}
+
+function attachToasts(slot: HTMLElement, herald: (m: HeraldMsg) => void): () => void {
+  const receive = (e: Event) => {
+    const { text, glyph, bad, ms } = (e as CustomEvent<ToastNotice>).detail;
+    herald({ side: null, icon: glyph, title: text, tone: bad ? 'red' : 'ink', ms, important: true });
+    e.preventDefault();
+  };
+  slot.addEventListener('cotien:notice', receive);
+  return () => slot.removeEventListener('cotien:notice', receive);
 }
 
 function champOf(ctx: MatchCtx, side: Side): string {

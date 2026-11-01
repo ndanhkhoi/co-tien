@@ -19,7 +19,7 @@ tranh đó suốt phiên (`champion-art.ts`). Màn VS, đầu trận, cut-in và
 | `screens/challenges.ts` | Luyện Cơ |
 | `screens/practice/` | Luyện thế: `index.ts` chọn thế, `desk.ts` bảng bên bàn |
 | `screens/story.ts` | Đọc Cơ Tiên Truyện (chunk riêng, chỉ tải khi mở) |
-| `screens/match/` | Màn trận: `index.ts` là `matchScreen`, `wiring.ts` nối các phần dùng chung `MatchCtx` (`context.ts`); mỗi phần một file: HUD, herald, dock chiêu, áp phê, ngắm, bắn, điều khiển, chạm bàn, lượt AI, hộp thoại, menu tạm dừng, vòng khung hình. `controller.ts` re-export người điều khiển cú đánh; `hex-chips.ts` tạo chip ảnh hưởng trên thẻ, `skill-callouts.ts` gọi tên tác dụng chiêu trên bàn |
+| `screens/match/` | Màn trận: `index.ts` là `matchScreen`, `wiring.ts` nối các phần dùng chung `MatchCtx` (`context.ts`); mỗi phần một file: HUD, herald, dock chiêu, áp phê, ngắm, bắn, điều khiển, chạm bàn, lượt AI, hộp thoại, menu tạm dừng, vòng khung hình. `controller.ts` re-export người điều khiển cú đánh; `hex-chips.ts` tạo chip ảnh hưởng trên thẻ, `skill-callouts.ts` gọi tên tác dụng chiêu ở ô thông tin phía trên; `skill-nudge.ts` gợi ý chiêu sẵn sàng, `notice-input.ts` ngăn lần chạm đóng thông báo truyền xuống bàn |
 | `screens/loading.ts`, `install-gate.ts` | Màn tải tranh, màn bắt cài PWA (xem [platform.md](platform.md)) |
 | `finisher.ts`, `skill-cutin.ts` | Kết liễu, cut-in tuyệt chiêu |
 | `hints.ts`, `intro.ts`, `scroll-hint.ts` | Hướng dẫn người mới, gợi ý cuộn |
@@ -28,6 +28,17 @@ tranh đó suốt phiên (`champion-art.ts`). Màn VS, đầu trận, cut-in và
 | `widgets.ts`, `swipe.ts` | Widget màn hình dùng chung (thanh tiêu đề, ví, chip, thẻ và bộ chọn tướng), cử chỉ vuốt |
 
 Tìm trong `dom.ts` và `widgets.ts` trước khi viết tiện ích mới.
+
+Trang chủ có nhãn phiên bản trên nền giấy ở góc dưới bên phải. Nhãn dùng cùng `__APP_VERSION__` với Cài đặt
+([tech-stack.md](tech-stack.md)), để đọc được cả trên điện thoại lẫn màn hình có phông tranh hai bên.
+
+Trong trận, `.mx-center` là ô thông tin duy nhất giữa hai thẻ người chơi. Thông báo lượt/lỗi được ưu tiên,
+rồi đến mẹo, gợi ý chiêu, tác dụng chiêu và trạng thái máy đang tính; khi trống thì hiện mục tiêu. `toast()`
+trong trận chuyển qua sự kiện `cotien:notice` vào cùng hàng đợi herald, kể cả báo cập nhật và lưu thế;
+thông báo hệ thống vẫn hiện khi tắt thông báo thường. Mọi lớp này nằm gọn trong thanh trên cùng.
+`notice-input.ts` bắt lần chạm đóng thông tin trước sự kiện bàn; các nút
+điều khiển vẫn làm đúng thao tác của chúng. Thẻ chiêu có đầu và hàng nút cố định; `.mx-sc-body` là phần duy
+nhất cuộn, nên mô tả dài không đẩy nút Dùng ra ngoài thẻ.
 
 ## Một khung 16:9
 
@@ -94,8 +105,9 @@ bằng nét mực `ui/ink-tick.webp`; mục đang chọn chuyển màu son và n
   không soi `Match.current`.
 - `hex-chips.ts` gom `hexes`, `activeEffects`, `called`, hộ lỗi và bùa của cú đang ngắm thành chip có chữ cho từng
   thẻ. Chiêu phản đang úp chỉ hiện “một chiêu đang úp”.
-- `skill-callouts.ts` (`ctx.callouts`) gọi tên tác dụng của chiêu ngay trên bàn: đọc vùng và bùa trước cú đánh, theo
-  dõi bi vào/ra vùng mỗi khung hình, ghi nhãn mực ở chỗ tác động; các sự kiện va chạm và rơi lỗ đi qua `match-events.ts`.
+- `skill-callouts.ts` (`ctx.callouts`) gọi tên tác dụng của chiêu ở ô giữa thanh trên cùng: đọc vùng và bùa trước
+  cú đánh, theo dõi bi vào/ra vùng mỗi khung hình, giữ ba dòng gần nhất kèm icon. Vòng son chỉ vị trí tác động
+  vẫn ở trên bàn; các sự kiện va chạm và rơi lỗ đi qua `match-events.ts`.
 - `render/decoy-balls.ts` dựng Bi Giả bằng shader bi thật và bóng bi; `render/ball-slides.ts` chạy nét mực
   dời/đổi bi, tôn trọng giảm chuyển động. Rewind/ván mới gọi `TableView.clearTransient()` nên mọi lớp
   trình diễn tạm đều về trạng thái luật.

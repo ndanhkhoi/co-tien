@@ -257,6 +257,7 @@ textarea.code-box:focus { border-color: var(--accent); }
 }
 .home-logo { grid-column: 1; grid-row: 1; align-self: center; height: 58px; width: auto; max-width: 100%; object-fit: contain; object-position: left center; }
 .home-top { grid-column: 2; grid-row: 1; justify-self: end; align-self: start; display: flex; align-items: center; gap: 8px; }
+.home-version { position: absolute; z-index: 3; right: calc(14px + var(--sr)); bottom: calc(10px + var(--sb)); padding: 3px 8px; background: var(--sheet); border: 1px solid var(--line); color: var(--muted); font-size: 11px; }
 .home-hero {
   position: absolute;
   right: calc(4px + var(--sr));

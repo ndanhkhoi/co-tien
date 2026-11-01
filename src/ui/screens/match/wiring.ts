@@ -29,8 +29,9 @@ import { createDialogs } from './dialogs';
 import { currentCall } from './call-marker';
 import { createFrameLoop } from './frame-loop';
 import { createSkillCallouts } from './skill-callouts';
+import { attachNoticeInput } from './notice-input';
 import { createStart, screenBackdrop } from './start';
-import { clearHints } from '../../hints';
+import { clearHints, dismissMatchHint } from '../../hints';
 import { keepAwake } from '../../../platform/device';
 import { sound } from '../../../audio/sound';
 
@@ -71,7 +72,7 @@ function createCtx(app: App, opts: MatchOptions): MatchCtx {
     solo: !!(opts.challenge || opts.practice),
     lefty: app.profile.settings.leftHanded,
     aiCall: null, firedCall: null, strikePress: null, cancelArmed: false,
-    callouts: { beforeShot: () => {}, tick: () => {}, contact: () => {}, pocketed: () => {}, note: () => {}, reset: () => {} },
+    callouts: { beforeShot: () => {}, tick: () => {}, contact: () => {}, pocketed: () => {}, note: () => {}, dismiss: () => false, reset: () => {} },
   };
 }
 
@@ -287,7 +288,18 @@ function buildSections(x: {
     currentCall: () => currentCall(ctx),
   });
   assignLate(late, { hud, skills, spin, aim, shooting, tableInput, ai, dialogs, controls });
-  const offEvents = subscribeMatch(ctx, dom, eventDeps);
+  const unsubscribe = subscribeMatch(ctx, dom, eventDeps);
+  const offNotices = attachNoticeInput(ctx.app.pixi.canvas, dom.el, (target) => {
+    const node = target instanceof Node ? target : null;
+    const closed = [
+      dom.heraldEl.contains(node) ? false : herald.dismiss(),
+      dismissMatchHint(node),
+      dom.skillNudge.contains(node) ? false : turn.hideNudge(),
+      dom.effectNotices.contains(node) ? false : ctx.callouts.dismiss(),
+    ];
+    return closed.some(Boolean);
+  });
+  const offEvents = () => { unsubscribe(); offNotices(); turn.hideNudge(); ctx.callouts.reset(); };
   attachInputs(ctx, dom, guards.canAct);
   return { dom, sheets, layout: x.layout, hud, expressions, herald, skills, spin, aim, shooting, tableInput, controls, timing, turn, ai, dialogs, loop, start: null, offEvents };
 }

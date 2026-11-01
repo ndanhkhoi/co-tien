@@ -83,14 +83,20 @@ export function iconBtn(icon: Element, fn: () => void, title = ''): HTMLButtonEl
 
 let toastLayer: HTMLElement | null = null;
 
+export interface ToastNotice { text: string; glyph: IconName; bad: boolean; ms: number }
+
 export function toast(text: string, kind: '' | 'bad' | 'good' | 'gold' = '') {
+  const glyph: IconName = ({ bad: 'warning', good: 'check', gold: 'star', '': 'info' } as const)[kind];
+  // Long rule explanations stay up long enough to read (about 15 characters a second).
+  const ms = Math.min(8000, Math.max(2600, text.length * 65));
+  const slot = document.querySelector('.screen.game.mx:not(.out) .mx-center');
+  if (slot && !slot.dispatchEvent(new CustomEvent<ToastNotice>('cotien:notice', {
+    detail: { text, glyph, bad: kind === 'bad', ms }, cancelable: true,
+  }))) return;
   if (!toastLayer) {
     toastLayer = h('div.toast-layer');
     document.getElementById('ui')!.append(toastLayer);
   }
-  const glyph: IconName = ({ bad: 'warning', good: 'check', gold: 'star', '': 'info' } as const)[kind];
-  // Long rule explanations stay up long enough to read (about 15 characters a second).
-  const ms = Math.min(8000, Math.max(2600, text.length * 65));
   const bar = h('i.tbar', { style: `animation-duration:${ms}ms` });
   const t = h('div.toast', { class: kind || 'info', role: 'status' }, icon(glyph), h('span.tt', null, text), bar);
   toastLayer.append(t);

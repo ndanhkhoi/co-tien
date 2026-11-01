@@ -45,6 +45,7 @@ export function homeScreen(app: App): Screen {
   el.style.setProperty('--home-bg', `url("${artUrl('ui/home-bg.webp')}")`);
   el.style.setProperty('--map', `url("${artUrl('ui/map.webp')}")`);
   el.append(
+    h('small.home-version', null, `Phiên bản ${__APP_VERSION__}`),
     h('img.home-hero', { src: cutoutUrl(p.champion), alt: '', draggable: false, decoding: 'async' }),
     h('div.home-top', null, player,
       isTouchDevice() ? null : iconBtn(icon('fullscreen'), () => void toggleFullscreen(), 'Toàn màn hình'),

@@ -705,48 +705,21 @@ body.playing .bd-scene, body.playing .bd-mist { animation-play-state: paused; }
 }
 .mx-obj-k { letter-spacing: 0.02em; font-size: 12px; }
 .mx-obj-t { font-size: 14px; line-height: 1.22; }
-/* Announcements sit over the table now, so the objective stays readable meanwhile. */
-.mx-center.heralding .mx-obj { opacity: 1; }
-
-/* Announcements are a paper strip with grey ink-wash ends (art/ui/frame/herald.webp): ink type
-   on paper like the rest of the game. Any tap closes it, so it carries no close mark. */
-#ui .mx-herald {
-  inset: auto; left: 50%; top: 42%; translate: -50% -50%;
-  width: min(480px, 62%); min-height: 80px;
-  padding: 16px 46px 22px; gap: 12px;
-  z-index: 20; pointer-events: none; isolation: isolate;
-  background: none; border: 0; border-radius: 0; box-shadow: none;
-  color: var(--ink);
-}
-#ui .mx-herald::before {
+/* The top information slot reuses the painted paper, with room for its text at either end. */
+.mx-herald::before, .mx-skillnudge::before, .mx-effect-notices::before {
   content: ''; position: absolute; inset: 0; z-index: -1;
-  border: 1px solid transparent; border-image: url('/art/ui/frame/herald.webp') 46 170 46 160 fill / 14px 50px 14px 46px / 0 stretch;
-  filter: drop-shadow(0 4px 10px rgba(40, 30, 18, 0.22));
+  border: 1px solid transparent; border-image: url('/art/ui/frame/scroll.webp') 0 45 fill / 0 8px / 0 stretch;
+  pointer-events: none;
 }
-#ui .mx-herald.show { animation: mx-herald-brush 0.38s var(--ease) both; }
 /* Time left: a vermilion brush hairline along the foot of the paper that draws back to nothing. */
-#ui .mx-h-timer {
-  position: absolute; left: 50px; right: 50px; bottom: 17px; height: 2px; border-radius: 1px;
+.mx-h-timer {
   background: linear-gradient(90deg, transparent, var(--accent) 14%, var(--accent) 86%, transparent);
   opacity: 0.7; transform-origin: left center; pointer-events: none;
   animation: mx-h-timer var(--ms, 3000ms) linear forwards;
 }
 @keyframes mx-h-timer { from { transform: scaleX(1); } to { transform: scaleX(0); } }
-#ui .mx-herald.leaving { display: flex; animation: mx-herald-out 0.26s ease both; }
-@keyframes mx-herald-brush { from { opacity: 0; clip-path: inset(0 100% 0 0); } to { opacity: 1; clip-path: inset(0); } }
-@keyframes mx-herald-out { to { opacity: 0; transform: translateY(-6px); } }
-.mx-herald .mx-h-face, .mx-herald .mx-h-icon { width: 52px; height: 52px; }
-.mx-herald .mx-h-title { font-size: 20px; white-space: normal; color: var(--ink); text-shadow: none; }
-.mx-herald .mx-h-line { margin-top: 3px; font-size: 13px; line-height: 1.3; color: var(--ink-2); -webkit-line-clamp: 3; }
-.mx-herald.red .mx-h-title { color: var(--accent); }
-/* The AI's "thinking" note is a small paper slip under the top strip. */
-#ui .mx-herald.thinking { top: calc(var(--top-h) + 30px); width: min(340px, 44%); min-height: 48px; padding: 6px 24px 6px 20px; gap: 8px; color: var(--ink); }
-#ui .mx-herald.thinking::before { border-image: url('/art/ui/frame/scroll.webp') 0 45 fill / 0 10px / 0 stretch; opacity: 1; }
-.mx-herald.thinking .mx-h-face { width: 34px; height: 34px; }
-.mx-herald.thinking .mx-h-title { font-size: 14px; text-shadow: none; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.mx-herald.thinking .mx-h-think { width: 28px; height: 28px; }
 @media (prefers-reduced-motion: reduce) {
-  #ui .mx-herald.show, #ui .mx-herald.leaving { animation: none; }
+  .mx-herald.show { animation: none; }
   #ui .mx-h-timer { display: none; }
 }
 
@@ -812,25 +785,10 @@ body.playing .bd-scene, body.playing .bd-mist { animation-play-state: paused; }
 @keyframes mx-call-need { 50% { opacity: 0.55; } }
 @media (prefers-reduced-motion: reduce) { .mx-obj.calling.need .mx-obj-t { animation: none; } }
 
-/* Skill nudge: a painted paper slip beside the ready skill, and a soft pulse on the slot itself.
-   It leaves on its own or at the next touch elsewhere; the hairline shows the time left. */
-#ui .mx-skillnudge {
-  position: absolute; z-index: 17; display: none; translate: 0 -50%;
-  left: calc(8px + var(--sl) + var(--colL) + var(--gap) + 6px);
-  max-width: 240px; min-height: var(--touch-target); padding: 10px 24px 10px 22px;
-  flex-direction: column; align-items: flex-start; justify-content: center; gap: 1px;
-  background: none; border: 1px solid transparent; border-image: url('/art/ui/frame/scroll.webp') 0 45 fill / 0 11px / 0 stretch;
-  color: var(--ink-2); font: 500 12px/1.25 var(--body); text-align: left;
-  filter: drop-shadow(0 4px 10px rgba(26, 23, 19, 0.28));
-}
-#ui .mx-skillnudge b { color: var(--accent-2); font: 700 15px/1.2 var(--display); }
-#ui .mx-skillnudge .mx-h-timer { left: 22px; right: 24px; bottom: 5px; }
-#ui .mx-skillnudge.show { display: flex; animation: mx-nudge-in 0.3s var(--ease) both; }
-.lefty #ui .mx-skillnudge, #ui .lefty .mx-skillnudge { left: auto; right: calc(8px + var(--sr) + var(--colL) + var(--gap) + 6px); align-items: flex-end; text-align: right; }
+/* A ready-skill prompt lives in the top slot; only its dock icon pulses. */
 .mx-skill.nudge { animation: mx-skill-nudge 1.1s ease-in-out 3; }
-@keyframes mx-nudge-in { from { opacity: 0; translate: -8px -50%; } }
 @keyframes mx-skill-nudge { 50% { transform: scale(1.06); } }
-@media (prefers-reduced-motion: reduce) { #ui .mx-skillnudge.show, .mx-skill.nudge { animation: none; } }
+@media (prefers-reduced-motion: reduce) { .mx-skill.nudge { animation: none; } }
 
 /* Cards in a row share their line positions: names reserve two lines, so a wrapped name never
    pushes its subtitle, price or description below its neighbours'. */

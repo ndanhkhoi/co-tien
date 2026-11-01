@@ -1,14 +1,13 @@
 import type { Ball, Terrain } from '../../../core/physics';
 import { appliesTo } from '../../../game/match/skills';
-import { h, uiOrigin, uiScale } from '../../dom';
+import { h } from '../../dom';
 import { icon, type IconName } from '../../icons';
 import type { MatchCtx } from './context';
 import type { MatchDom } from './dom';
 
 /**
- * Skill callouts: a skill's effect is named on the table at the moment it acts, so it never works unseen.
- * Fields (swirls, hollows, friction patches) pulse and name what they did to a ball as it leaves them; the shooter's
- * modifiers (tremor, drift, power cap or boost, wider or pulling pockets) are named at the cue ball on the strike.
+ * Skill effects are named in the top information slot at the moment they act.
+ * Fields still pulse on the table; their text never covers the balls or the aiming line.
  */
 
 type FieldKind = 'bend' | 'slick' | 'sand' | 'wash';
@@ -17,6 +16,7 @@ interface Field { x: number; y: number; r: number; name: string; kind: FieldKind
 
 /** One line of a callout: the painted glyph of the effect and what it did. */
 interface Note { glyph: IconName; text: string }
+interface Notice extends Note { tone: 'ink' | 'red' }
 
 /** A ball's state on entering a field; `hit` once it touched a ball or rail inside, which spoils the measure. */
 interface Crossing { heading: number; speed: number; spin: number; hit: boolean }
@@ -29,7 +29,7 @@ const FIELD_GLYPHS: Record<string, IconName> = {
   vortex: 'fx-swirl', well: 'fx-well', silk: 'fx-silk', slick: 'fx-slick', sand: 'fx-sand', spinwash: 'fx-wash',
 };
 
-/** At most this many field callouts per shot, so a crowded break never buries the table in labels. */
+/** At most this many field notes per shot, so a crowded break does not flood the information slot. */
 const MAX_PER_SHOT = 6;
 /** A bend smaller than this is not worth naming. */
 const MIN_BEND_DEG = 2;
@@ -42,9 +42,10 @@ export interface SkillCallouts {
   /** A ball touched another ball or a rail: a bend measured across that contact would be the contact's. */
   contact(id: number): void;
   /** A ball dropped: name the pocket buff that helped, once per shot. */
-  pocketed(pocket: number): void;
-  /** Name an instant skill effect at a table point (a displaced or swapped ball). */
-  note(x: number, y: number, text: string, glyph?: IconName): void;
+  pocketed(): void;
+  /** Name an instant skill effect (a displaced or swapped ball). */
+  note(text: string, glyph?: IconName): void;
+  dismiss(): boolean;
   /** Forget the shot (resolved, rewound or a new rack). */
   reset(): void;
 }
@@ -53,10 +54,24 @@ export function createSkillCallouts(ctx: MatchCtx, dom: MatchDom): SkillCallouts
   let fields: Field[] = [];
   let pocketNote: Note | null = null;
   let shown = 0;
+  let notices: Notice[] = [];
+  let timer = 0;
   const inside = new Map<string, Crossing>();
-  const reset = () => { fields = []; inside.clear(); pocketNote = null; shown = 0; };
-  const say = (x: number, y: number, note: Note, tone: 'ink' | 'red' = 'ink') => {
-    placeLabel(ctx, dom, { x, y, note, tone });
+  const dismiss = () => {
+    const visible = notices.length > 0;
+    notices = [];
+    clearTimeout(timer);
+    dom.effectNotices.replaceChildren();
+    return visible;
+  };
+  const reset = () => { fields = []; inside.clear(); pocketNote = null; shown = 0; dismiss(); };
+  const say = (note: Note, tone: 'ink' | 'red' = 'ink') => {
+    if (ctx.flags.disposed) return;
+    notices = [...notices.filter((n) => n.text !== note.text), { ...note, tone }].slice(-3);
+    dom.effectNotices.replaceChildren(...notices.map((n) =>
+      h('div.mx-effect-note', { class: n.tone }, icon(n.glyph), h('span', null, n.text))));
+    clearTimeout(timer);
+    timer = window.setTimeout(dismiss, 2600);
   };
   return {
     beforeShot() {
@@ -64,8 +79,7 @@ export function createSkillCallouts(ctx: MatchCtx, dom: MatchDom): SkillCallouts
       if (!ctx.hasSkills) return;
       fields = activeFields(ctx.match);
       pocketNote = pocketBuff(ctx.match);
-      const cue = ctx.match.cueBall();
-      shooterNotes(ctx.match).forEach((note, i) => say(cue.x, cue.y - ctx.match.table.R * (3 + i * 4), note, 'red'));
+      shooterNotes(ctx.match).forEach((note) => say(note, 'red'));
     },
     tick() {
       if (!fields.length || ctx.match.phase !== 'rolling') return;
@@ -74,20 +88,20 @@ export function createSkillCallouts(ctx: MatchCtx, dom: MatchDom): SkillCallouts
         fields.forEach((f, i) => {
           const note = crossField(inside, `${b.id}:${i}`, b, f);
           if (note === 'enter') ctx.view.ring(f.x, f.y, 0xb03522, f.r / 3);
-          else if (note && shown < MAX_PER_SHOT) { shown++; say(b.x, b.y, { glyph: f.glyph, text: note }); }
+          else if (note && shown < MAX_PER_SHOT) { shown++; say({ glyph: f.glyph, text: `Bi ${b.id} · ${note}` }); }
         });
       }
     },
     contact(id) {
       for (const [key, c] of inside) if (key.startsWith(`${id}:`)) c.hit = true;
     },
-    pocketed(pocket) {
+    pocketed() {
       if (!pocketNote) return;
-      const p = ctx.match.table.pockets[pocket];
-      say(p.hx * 0.86, p.hy * 0.8, pocketNote, 'red');
+      say(pocketNote, 'red');
       pocketNote = null;
     },
-    note: (x, y, text, glyph = 'fx-swap') => say(x, y, { glyph, text }),
+    note: (text, glyph = 'fx-swap') => say({ glyph, text }),
+    dismiss,
     reset,
   };
 }
@@ -163,16 +177,4 @@ function pocketBuff(m: MatchCtx['match']): Note | null {
   if (m.pull > 0) return { glyph: 'fx-pull', text: 'Lỗ hút bi' };
   if (m.mawScale > 1) return { glyph: 'fx-wide', text: `Miệng lỗ rộng +${Math.round((m.mawScale - 1) * 100)}%` };
   return null;
-}
-
-/** One ink label pinned to a table point; it fades out by itself. */
-function placeLabel(ctx: MatchCtx, dom: MatchDom, x: { x: number; y: number; note: Note; tone: 'ink' | 'red' }): void {
-  const k = uiScale();
-  const sp = ctx.view.toScreen(x.x, x.y);
-  const o = uiOrigin();
-  const el = h('div.mx-callout', { class: x.tone, role: 'status' }, icon(x.note.glyph), h('span', null, x.note.text));
-  el.style.left = `${Math.round((sp.x - o.left) / k)}px`;
-  el.style.top = `${Math.round((sp.y - o.top) / k)}px`;
-  dom.el.append(el);
-  window.setTimeout(() => el.remove(), 1900);
 }
