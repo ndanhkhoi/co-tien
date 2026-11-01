@@ -35,7 +35,13 @@ for id in "${ids[@]}"; do
       [[ -f "$work/fix/$id-$half.txt" ]] && { printf '\nCorrect these faults from the previous draw: '; cat "$work/fix/$id-$half.txt"; } >> "$prompt"
       # The image API rate-limits (HTTP 429, resets within a minute): wait and retry instead of skipping.
       for t in 1 2 3 4 5 6; do
-        "$here/gen-image.sh" --out "$sheet" --prompt-file "$prompt" --ref "$cut" --size 1536x1024 --timeout 600 && break
+        if "$here/gen-image.sh" --out "$sheet" --prompt-file "$prompt" --ref "$cut" --size 1536x1024 --timeout 600; then
+          # A sheet must hold two figures side by side; a single portrait-shaped figure would be cut in half.
+          read -r w h <<< "$(magick identify -format '%w %h' "$sheet")"
+          (( w * 10 >= h * 13 )) && break
+          echo "sheet $id $half came back ${w}x${h}, not two figures: drawing again" >&2
+          rm -f "$sheet"; continue
+        fi
         echo "retry $id sheet $half in $((t * 30))s" >&2; sleep $((t * 30))
       done
     fi

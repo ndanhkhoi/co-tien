@@ -49,4 +49,16 @@ describe('champion gallery briefs', () => {
 
     expect(allPoses.size).toBe(260);
   });
+  it('uses the pronouns of the champion the look describes', () => {
+    // The look names who the champion is; a pose brief saying "his" for a woman paints the wrong person.
+    const woman = /\b(woman|girl|queen|lady|mistress|maiden|priestess|granny|ferrywoman|huntress)\b|\b(she|her)\b/i;
+    const man = /\b(man|boy|king|lord|monk|priest|wolfman|old man)\b|\b(he|his|him)\b/i;
+    for (const c of roster.champions as Array<{ id: string; look: string; gallery: Array<{ pose: string }> }>) {
+      const isWoman = woman.test(c.look) && !/\b(man|boy|priest|monk)\b/i.test(c.look.split(',')[0]);
+      const isMan = !isWoman && man.test(c.look);
+      const poses = c.gallery.map((g) => g.pose).join(' ');
+      if (isWoman) expect(/\b(his|him|he)\b/.test(poses), `${c.id} is a woman but a brief says he/his`).toBe(false);
+      if (isMan) expect(/\b(her|she)\b/.test(poses), `${c.id} is a man but a brief says she/her`).toBe(false);
+    }
+  });
 });
