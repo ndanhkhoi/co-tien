@@ -135,6 +135,7 @@ function skill(ctx: MatchCtx, deps: EventDeps, e: Extract<MatchEvent, { type: 's
 
 function displace(ctx: MatchCtx, e: Extract<MatchEvent, { type: 'displace' }>): void {
   ctx.view.slideBalls(e.moved);
+  for (const m of e.moved) ctx.callouts.note(m.to.x, m.to.y, `Bi ${m.id} bị dời khỏi lỗ`);
 }
 
 function swap(ctx: MatchCtx, e: Extract<MatchEvent, { type: 'swap' }>): void {
@@ -143,6 +144,8 @@ function swap(ctx: MatchCtx, e: Extract<MatchEvent, { type: 'swap' }>): void {
     const ball = b.find((x) => x.id === id);
     return { id, from: e.at[i], to: ball ? { x: ball.x, y: ball.y } : e.at[i] };
   }));
+  const [a, c] = e.balls;
+  ctx.callouts.note(e.at[1].x, e.at[1].y, `Đổi chỗ bi ${a} và bi ${c}`);
 }
 
 /** Địa Chấn is announced before the shot with the same direction wording as wind. */

@@ -72,7 +72,7 @@ Nguồn: `src/ui/screens/match/` (trận) và `src/ui/screens/practice/desk.ts` 
 - Chiêu tác động lúc nào thì hiện lúc đó trên bàn (`src/ui/screens/match/skill-callouts.ts`): bi vào vùng thì vùng
   loé vòng son, ra khỏi vùng thì một nhãn mực ghi điều đã xảy ra (“Xoáy · lệch 18°”, “Cát · hãm bi”, “Mực tan · mất
   áp phê”; bỏ qua khi bi va bi hoặc băng ngay trong vùng); lúc đánh, bùa lên cú đó hiện cạnh bi cái (“Run tay ×1,8”,
-  “Lực tối đa 70%”, “Gió đẩy bi”); bi rơi vào lỗ được nới hay hút thì nhãn hiện ở lỗ. Tối đa sáu nhãn vùng mỗi cú;
+  “Lực tối đa 70%”, “Gió đẩy bi”); bi rơi vào lỗ được nới hay hút thì nhãn hiện ở lỗ; bi bị dời hay đổi chỗ có nhãn ngay chỗ mới. Tối đa sáu nhãn vùng mỗi cú;
   giảm chuyển động thì nhãn chỉ mờ dần.
 - Tuyệt chiêu được ghi nhận khi xác nhận, nhưng diễn hoạt chờ ĐÁNH. Thứ tự là khoá điều khiển, cut-in, hiệu ứng
   bàn, cơ vung, rồi mô phỏng. Người và AI đi cùng luồng; tạm dừng và rời trận đều huỷ đúng.

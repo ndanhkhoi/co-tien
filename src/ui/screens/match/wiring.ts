@@ -71,7 +71,7 @@ function createCtx(app: App, opts: MatchOptions): MatchCtx {
     solo: !!(opts.challenge || opts.practice),
     lefty: app.profile.settings.leftHanded,
     aiCall: null, firedCall: null, strikePress: null, cancelArmed: false,
-    callouts: { beforeShot: () => {}, tick: () => {}, contact: () => {}, pocketed: () => {}, reset: () => {} },
+    callouts: { beforeShot: () => {}, tick: () => {}, contact: () => {}, pocketed: () => {}, note: () => {}, reset: () => {} },
   };
 }
 

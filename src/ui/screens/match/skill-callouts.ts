@@ -36,6 +36,8 @@ export interface SkillCallouts {
   contact(id: number): void;
   /** A ball dropped: name the pocket buff that helped, once per shot. */
   pocketed(pocket: number): void;
+  /** Name an instant skill effect at a table point (a displaced or swapped ball). */
+  note(x: number, y: number, text: string): void;
   /** Forget the shot (resolved, rewound or a new rack). */
   reset(): void;
 }
@@ -78,6 +80,7 @@ export function createSkillCallouts(ctx: MatchCtx, dom: MatchDom): SkillCallouts
       say(p.hx * 0.86, p.hy * 0.8, pocketNote, 'red');
       pocketNote = null;
     },
+    note: (x, y, text) => say(x, y, text),
     reset,
   };
 }
