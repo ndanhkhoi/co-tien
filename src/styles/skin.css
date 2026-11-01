@@ -853,8 +853,8 @@ body.playing .bd-scene, body.playing .bd-mist { animation-play-state: paused; }
 
 /* Gear cards in one row share row tracks (subgrid): a short description leaves blank space
    instead of pulling its stats and button up out of line with the neighbour's. */
-.gear-grid { grid-auto-rows: auto auto auto auto auto; }
-.gear-card { display: grid; grid-row: span 5; grid-template-rows: subgrid; align-content: start; row-gap: 8px; }
+.gear-grid { grid-auto-rows: auto auto auto auto auto auto; }
+.gear-card { display: grid; grid-row: span 6; grid-template-rows: subgrid; align-content: start; row-gap: 8px; }
 .gear-card > .gc-desc { align-self: start; }
 .gear-card > .stat-sheet { align-self: start; }
 .gear-card > :last-child { align-self: end; }

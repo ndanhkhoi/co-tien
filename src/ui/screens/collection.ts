@@ -95,8 +95,11 @@ function renderChampionTab(view: CollectionView) {
     championPicker(app, {
       selected: () => p.champion,
       onPick: (c) => championModal(app, c, () => {
+        // Picking or recruiting redraws the list; keep the player where they were in it.
+        const at = content.scrollTop;
         refreshWallet();
         render();
+        content.scrollTop = at;
       }),
       match: (c) => !view.cls || c.cls === view.cls,
       onSect: view.openSect,
@@ -148,7 +151,8 @@ function gearCard(app: App, x: GearCard): HTMLElement {
   return h('div.gear-card', { class: `${eq ? 'sel' : ''} ${locked ? 'locked' : ''}`, 'data-sect': it.sect ?? null },
     h('div.gc-head', null, h('b.grow', null, it.name),
       eq ? h('span.badge.accent', null, 'Đang dùng') : owned ? h('span.badge.ok', null, 'Đã có') : statChip('coin', fmt(it.price))),
-    it.sect ? sectLink(it.sect, x.openSect) : null,
+    // Every card keeps the same six rows so the shared subgrid lines up; a cue without a sect keeps an empty slot.
+    it.sect ? sectLink(it.sect, x.openSect) : h('span.gc-sect-gap', { 'aria-hidden': 'true' }),
     art,
     h('p.gc-desc', null, it.desc),
     statRows(stats),
