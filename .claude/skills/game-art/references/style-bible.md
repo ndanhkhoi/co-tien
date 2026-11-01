@@ -63,6 +63,7 @@ however good it looks.
 7. **Same character**: face, hair, eyes, marks, outfit, props and cue match `look` and the cut-out.
 8. **Distinct pose**: every full-body image of a champion has its own pose and expression; never a copy of the
    cut-out, the win pose, the finisher or another gallery pose, and never the generic pose another champion uses.
+   Gallery poses never include a billiard table.
 9. **Clean output**: no text or glyphs, no cropped limbs or cue, clean transparent background on cut-outs.
 
 ## Sect palettes (main / glow)

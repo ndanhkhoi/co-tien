@@ -115,14 +115,14 @@ If alpha is impossible, flat pure #00ff00 green with no shadow. No text, no lett
         for idx, g in enumerate(c["gallery"]):
             n = idx + 1
             g_pose = g["pose"].strip().rstrip(".")
-            # A pose spread along a long object (lying on a billiard table) needs a wide canvas to keep true scale.
+            # A pose spread out lying down or along a long object needs a wide canvas to keep true scale.
             frame_text = "wide horizontal 1536x1024 composition" if g.get("frame") == "wide" else "vertical 1024x1536 composition"
             w(f"pose-{c['id']}-{n}.txt", f"""
 Full-body character illustration of the SAME character as the reference image (same face, species features, hair, outfit, cue and colours), painterly 2.5D anime splash style matching the reference: {c['name']}.
 The billiard cue is their weapon and cultivation artifact, styled in the {sect['name']} sect's look ({sect['motifs']}).
 Character spec (every trait must match, keep every signature prop, companion and the signature cue): {c['look']}.
 This pose is clearly different from the reference pose: {g_pose}.
-Paint only the character (and companion), plus at most the one object the pose sits, leans or works on; any place named in the pose is mood only, never painted: no scenery, architecture, sky, moon, lanterns or floor beyond a small cast shadow. If the cue is not in a hand it rests visibly on that object or lies flat on the ground, never standing or floating on its own. Never fall back to a plain standing pose holding the cue upright beside the body unless the pose asks for it: act out the pose with the whole body.
+Paint only the character (and companion), plus at most the one object the pose sits, leans or works on, and never a billiard table (gallery poses are off the table); any place named in the pose is mood only, never painted: no scenery, architecture, sky, moon, lanterns or floor beyond a small cast shadow. If the cue is not in a hand it rests visibly on that object or lies flat on the ground, never standing or floating on its own. Never fall back to a plain standing pose holding the cue upright beside the body unless the pose asks for it: act out the pose with the whole body.
 {body(c)}
 {modesty(c)}
 Whole body in frame with margin, {frame_text}, rim light in {glow} and {main}.

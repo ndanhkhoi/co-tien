@@ -63,9 +63,10 @@ response để kiểm tra trước khi chạy lại.
    game dùng cut-out.
 9. **Bộ tranh tư thế Tàng Các**: mỗi tướng có 4 tranh toàn thân `champions/{id}/pose-{1..4}.webp` cho bộ
    sưu tập tư thế trong Tàng Các. Cùng nhân vật với cut-out (gửi cut-out làm `--ref`, chèn toàn bộ `look`),
-   dáng người và góc nhìn đa dạng (đời thường, luyện tập, ngắm đánh, tương tác đạo cụ hoặc bạn đồng hành),
-   nền trong suốt, khổ dọc 1024×1536. Xuất bản cắt sát, cao tối đa 1024 px, webp chất lượng 86 như `win.webp`.
-   Sinh bằng `scripts/gen-gallery.sh SECT WORK [ids]`.
+   dáng người và góc nhìn đa dạng (đời thường, luyện tập, tương tác đạo cụ hoặc bạn đồng hành), nền trong suốt,
+   khổ dọc 1024×1536 hoặc ngang 1536×1024 khi tư thế nằm dài (`"frame": "wide"`). Tranh tư thế không vẽ bàn bida.
+   `scripts/refine-gallery.sh SECT WORK [ids]` vẽ, cho Codex soi rồi vẽ lại; `export-gallery.py` chỉ xuất tranh đã
+   đạt (cắt sát, cao 800 px, webp chất lượng 78).
 
 ## Phong cách
 
