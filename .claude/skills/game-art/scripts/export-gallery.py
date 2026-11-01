@@ -10,6 +10,7 @@ import json
 import os
 import sys
 
+import numpy as np
 from PIL import Image
 
 work, repo = sys.argv[1], sys.argv[2]
@@ -21,8 +22,36 @@ def keyed(src):
     im = Image.open(src).convert("RGBA")
     if im.getchannel("A").getextrema()[0] < 250:
         return im
-    px = [(r, g, b, 0 if g > 180 and r < 90 and b < 90 else 255) for r, g, b, _ in im.getdata()]
-    im.putdata(px)
+    a = np.asarray(im).copy()
+    green = (a[..., 1] > 180) & (a[..., 0] < 90) & (a[..., 2] < 90)
+    a[..., 3] = np.where(green, 0, 255)
+    return Image.fromarray(a, "RGBA")
+
+
+def drop_edge_slivers(im):
+    """A pose cut from a two-figure sheet can keep a thin strip of its neighbour at the cut edge: clear any opaque
+    strip narrower than a quarter of the image that a clear gap of 8 px or more separates from the figure."""
+    a = im.getchannel("A")
+    w, hgt = im.size
+    cols = list((np.asarray(a) > 12).sum(axis=0))
+    for order in (range(w), range(w - 1, -1, -1)):
+        xs = list(order)
+        i = 0
+        while i < len(xs) and cols[xs[i]] == 0:
+            i += 1
+        start = i
+        while i < len(xs) and cols[xs[i]] > 0:
+            i += 1
+        strip = xs[start:i]
+        gap = 0
+        while i < len(xs) and cols[xs[i]] == 0:
+            gap += 1
+            i += 1
+        if strip and len(strip) < w // 4 and gap >= 8 and i < len(xs):
+            x0, x1 = min(strip), max(strip) + 1
+            im.paste((0, 0, 0, 0), (x0, 0, x1, hgt))
+            for x in strip:
+                cols[x] = 0
     return im
 
 
@@ -49,7 +78,7 @@ for f in sorted(os.listdir(raw)):
         if os.path.exists(dst):
             os.remove(dst)
         continue
-    fit_height(keyed(os.path.join(raw, f)), 800).save(dst, "WEBP", quality=78, method=6)
+    fit_height(drop_edge_slivers(keyed(os.path.join(raw, f))), 800).save(dst, "WEBP", quality=78, method=6)
     done += 1
 # A pose whose draft was rejected (moved to raw/old) must not linger in the game either.
 roster = json.load(open(os.path.join(repo, "src", "game", "content", "roster.json")))
