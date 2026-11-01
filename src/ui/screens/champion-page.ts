@@ -45,9 +45,11 @@ export function championModal(app: App, c: Champion, onChange?: () => void) {
           h('span.badge', null, `Bậc ${c.tier}`),
           h('span.badge', null, cls.name),
           owned ? h('span.badge.ok', null, 'Đã chiêu mộ') : h('span.badge.accent', null, 'Chưa chiêu mộ')),
-        h('div.cp-tabs', null, sectionTabs(app, c, pane, art), action)),
+        h('div.cp-tabs', null, sectionTabs(app, c, pane, art))),
       h('div.cp-content.scroll.no-scroll-hint', { tabindex: '0', 'aria-label': 'Thông tin tướng' }, pane));
-    return h('div.modal.champ-page', { style: `--sect:${hex6(s.main)}` }, art.hero, page, closeX(close));
+    // The pick or recruit action sits under the painting, apart from the section tabs.
+    const side = h('div.cp-side', null, art.hero, h('div.cp-action', null, action));
+    return h('div.modal.champ-page', { style: `--sect:${hex6(s.main)}` }, side, page, closeX(close));
   }, { dismissable: true });
 }
 
@@ -62,6 +64,8 @@ function heroButton(c: Champion, art: GalleryItem): HTMLButtonElement {
 }
 function setHeroArt(hero: HTMLButtonElement, art: GalleryItem): void {
   hero.querySelector('img')!.src = art.src;
+  // Face studies are square: centre them instead of standing them on the bottom edge like a full figure.
+  hero.classList.toggle('face', !!art.small);
   hero.dataset.art = art.src;
   hero.dataset.artLabel = art.label;
   hero.setAttribute('aria-label', `${hero.dataset.artName} · ${art.label} · Xem trọn tranh`);

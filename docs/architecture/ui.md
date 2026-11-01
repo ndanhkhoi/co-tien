@@ -120,7 +120,7 @@ bằng nét mực `ui/ink-tick.webp`; mục đang chọn chuyển màu son và n
   (đổi tab, cuộn tới thẻ và đánh dấu một nhịp). Thẻ Linh Đài và Pháp Cơ thuộc phái có link ngược về trang môn phái.
 - Tab Luật mở đầu bằng Cơ Tiên Giới, sau đó là luật từng lối chơi và Tiên Đạo.
 - Mỗi tướng có một trang với đầu trang cố định gồm ba hàng: biểu tượng và tên lớn, nhãn, rồi hàng mục
-  Chiêu thức · Tiểu sử · Tranh cùng nút hành động (tướng đang dùng chỉ hiện nhãn "Đang dùng"); vùng dưới là phần duy nhất cuộn. Chạm tranh tướng mở khung
+  Chiêu thức · Tiểu sử · Tranh; nút chiêu mộ hoặc chọn tướng (tướng đang dùng chỉ hiện nhãn "Đang dùng") nằm dưới tranh ở cột trái; vùng dưới là phần duy nhất cuộn. Chạm tranh tướng mở khung
   xem trọn tranh.
 - Mục Tranh là hai lưới năm cột có nhãn: tranh toàn thân trong thẻ dọc, bốn biểu cảm trong thẻ vuông ở hàng riêng. Chạm tranh nào thì tranh lớn cột trái đổi sang tranh đó; rời mục
   này thì trở về tranh toàn thân. Ảnh biểu cảm chỉ dùng làm ảnh nhỏ vì file gốc 256 px. Mục gallery thêm qua

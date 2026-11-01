@@ -245,7 +245,7 @@
 .cp-art { background: radial-gradient(circle at 50% 70%, color-mix(in srgb, var(--sect) 32%, transparent), transparent 70%); }
 
 .btn.ghost.small, .btn.secondary.small { border-width: 12px; border-image-width: 12px; }
-.champ-page .cp-tabs > .btn { padding-inline: 8px; font-size: 15px; white-space: normal; text-align: center; }
+.champ-page .cp-action > .btn { padding-inline: 14px; font-size: 15px; white-space: normal; text-align: center; }
 
 /* Keep navigation in one row so the introduction has room for its copy. */
 .modal.intro { grid-template-columns: minmax(0, 38%) minmax(0, 1fr); }
