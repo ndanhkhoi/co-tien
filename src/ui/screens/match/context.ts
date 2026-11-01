@@ -4,6 +4,7 @@ import type { SkillCast } from '../../../game/skill-cast';
 import type { SkillDef } from '../../../game/content/sects';
 import type { Match } from '../../../game/match';
 import type { TableView } from '../../../render/table-view';
+import type { SkillCallouts } from './skill-callouts';
 import type { App } from '../../app';
 import type { MatchOptions } from './options';
 import type { MatchDom } from './dom';
@@ -93,4 +94,6 @@ export interface MatchCtx {
   firedCall: { ball: number | null; pocket: number } | null;
   strikePress: { id: number; t0: number } | null;
   cancelArmed: boolean;
+  /** Names each skill effect on the table at the moment it acts. */
+  callouts: SkillCallouts;
 }

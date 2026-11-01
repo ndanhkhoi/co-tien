@@ -34,11 +34,16 @@ export function drawAimLock(m: Match, g: MetreGraphics, aim: AimView): void {
 }
 
 export function hasPathPreview(m: Match): boolean {
-  return m.eagle || m.sight || m.passiveInfo || m.activeEffects.some(e => e.target === m.turn);
+  return m.eagle || m.sight || m.passiveInfo || m.castPreview.length > 0 || m.activeEffects.some(e => e.target === m.turn || e.target === 'both');
 }
 
 function aimDirection(aim: AimView): { dx: number; dy: number } {
   return { dx: Math.cos(aim.angle), dy: Math.sin(aim.angle) };
+}
+
+function bendsPath(m: Match): boolean {
+  const t = m.terrain();
+  return !!(t.vortices?.length || t.wells?.length || t.patches?.length || t.force || t.forces?.length);
 }
 
 export function drawEagleReference(m: Match, g: MetreGraphics, aim: AimView, cue: { x: number; y: number }): void {
@@ -49,6 +54,11 @@ export function drawEagleReference(m: Match, g: MetreGraphics, aim: AimView, cue
   // power changes. Keep the straight aim to the ghost ball as a fixed reference beneath
   // them; otherwise a power change reads as the aim itself drifting.
   const ref = predictAim({ table: m.table, balls: m.balls, cueId: m.cueId(), angle: aim.angle, extraSegments: m.obstacles() });
+  // A field that bends or slows the ball makes the straight line a lie past the field: keep only a short stub then.
+  if (bendsPath(m)) {
+    g.moveTo(cue.x + dx * R, cue.y + dy * R).lineTo(cue.x + dx * 0.3, cue.y + dy * 0.3).stroke({ width: 1, color: 0xffffff, alpha: 0.45 });
+    return;
+  }
   g.moveTo(cue.x + dx * R, cue.y + dy * R).lineTo(ref.gx - dx * R, ref.gy - dy * R).stroke({ width: 1, color: 0xffffff, alpha: 0.45 });
   g.circle(ref.gx, ref.gy, R).stroke({ width: 1, color: 0xffffff, alpha: 0.5 });
 }

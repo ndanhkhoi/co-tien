@@ -99,10 +99,11 @@ function renderHexes(ctx: MatchCtx, c: CardView, s: Side): void {
   const key = chips.map((x) => `${x.icon}|${x.label}|${x.shotsLeft}`).join(';');
   if (key === c.hexKey) return;
   c.hexKey = key;
+  // Each chip names its effect: an icon alone never told the player which skill was acting on whom.
   c.hexes.replaceChildren(...chips.map((x) => h('span.mx-hex', {
-    title: `${x.label}: còn ${x.shotsLeft} lượt`,
-    'aria-label': `${x.label}, còn ${x.shotsLeft} lượt`,
-  }, icon(x.icon), h('b', null, `${x.shotsLeft}`))));
+    title: `${x.label}: còn ${x.shotsLeft} cú`,
+    'aria-label': `${x.label}, còn ${x.shotsLeft} cú`,
+  }, icon(x.icon), h('span', null, x.label), h('b', null, `${x.shotsLeft}`))));
   c.hexes.classList.toggle('has', chips.length > 0);
 }
 
@@ -172,10 +173,17 @@ function renderObjective(ctx: MatchCtx, dom: MatchDom): void {
   const { match, opts } = ctx;
   const base = dom.desk ? dom.desk.plate().kicker : ctx.solo ? opts.label
     : `${MODE_NAMES[match.setup.mode]} · ${raceName(match.setup.raceTo)} · ván ${match.rackNo}`;
-  dom.objKicker.textContent = base;
-  dom.objText.textContent = objectiveText(ctx);
+  const placing = ctx.skill.placement;
+  // While a skill is being laid, the plate says which one and how to place it.
+  dom.objKicker.textContent = placing ? `Đặt chiêu · ${placementName(ctx)}` : base;
+  dom.objText.textContent = placing && match.calledPreview === null ? 'Kéo để dời · THI TRIỂN để xác nhận' : objectiveText(ctx);
   dom.objPlate.classList.toggle('calling', match.calledNow !== null || match.calledPreview !== null);
   if (match.driftNow) dom.objText.textContent += ` · Hướng bị dắt lệch ${formatAngle(match.driftNow)}°`;
+}
+
+function placementName(ctx: MatchCtx): string {
+  const p = ctx.skill.placement!;
+  return p.slot === -1 ? 'Hộ Pháp' : ctx.match.skills(p.side)[p.slot].name;
 }
 
 function objectiveText(ctx: MatchCtx): string {

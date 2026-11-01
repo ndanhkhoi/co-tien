@@ -170,6 +170,7 @@ async function fireShot(ctx: MatchCtx, deps: ShootingDeps, x: {
   // Let the cue travel through before the ball moves.
   void deps.sleep(70).then(() => {
     if (flags.disposed) return;
+    ctx.callouts.beforeShot();
     match.shoot(input);
     flags.presenting = false;
     flags.pushOut = false;

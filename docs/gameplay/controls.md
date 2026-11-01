@@ -40,8 +40,10 @@ Nguồn: `src/ui/screens/match/` (trận) và `src/ui/screens/practice/desk.ts` 
   Thẻ son "Gọi" cạnh lỗ đã gọi mờ đi khi đường ngắm đang chạy để không che điểm rơi của đường bi.
 - 9 bi và 10 bi hiện hai bi tiếp theo, số in trên bi; chạm một bi hiện nhãn ngay trên bi đó ở bàn.
 - Chân dung người tới lượt có mũi tên son nhấp nhô; mỗi thẻ có khay bi (8 bi: cả nhóm, bi còn trên bàn mờ).
-- Mỗi thẻ cũng gắn chip ảnh hưởng đang tác dụng cho bên đó (run tay, giảm lực, che mắt, dắt lệch, phong lỗ,
-  bi chỉ định, bi giả, phản chiêu úp) cùng số lượt còn lại. Chiêu úp chỉ ghi “một chiêu đang úp”, không lộ tên.
+- Mỗi thẻ cũng gắn chip có chữ cho mọi ảnh hưởng đang tác dụng lên cú của bên đó, kèm số cú còn lại: bùa của đối
+  thủ (run tay, giảm lực, che mắt, dắt lệch, phong lỗ, bi chỉ định, bi giả), vùng đặt trên bàn (xoáy, giếng hút,
+  dải lụa, nỉ trơn, cát, mực tan, vật chắn, yểm băng, gió, nghiêng bàn), hộ lỗi, và bùa của chính mình cho cú này
+  (tăng lực, áp phê mạnh, lỗ rộng, lỗ hút, đánh tiếp, nhìn đường, xung lực). Chiêu úp chỉ ghi “một chiêu đang úp”.
 - Khi bị dắt lệch, ô mục tiêu ghi rõ “Hướng bị dắt lệch X°”; trên nỉ vẫn có chấm son theo hướng thật.
 - Bi bị chỉ định có vòng son quanh bi, ô mục tiêu yêu cầu “phải chạm bi đó trước”.
 - Chiêu chỉ định bi (không kèm chiêu đặt bàn), dùng trong lượt của mình: vào bước chọn, quả bi đối thủ gần lỗ nhất có
@@ -59,11 +61,19 @@ Nguồn: `src/ui/screens/match/` (trận) và `src/ui/screens/practice/desk.ts` 
 ## Chiêu (Tiên Đạo)
 
 - Ba ô icon tranh riêng của tướng; chạm mở thẻ chi tiết, không thi triển ngay.
-- Thẻ chiêu (trong trận và ở trang tướng) có dòng **Cách dùng**, ghép từ cách dùng của từng nhóm trong `kinds`
-  (`src/game/content/skill-usage.ts`): đặt lên bàn, dùng trước cú của mình, dời bi cái, dời bi ngay, tác dụng lên
-  cú kế của đối thủ, bi do game tự chỉ định, chiêu úp, hay đánh lại ngay sau cú vừa đánh.
-- Chiêu đặt bàn vào bước đặt: kéo/chạm bàn hoặc mũi tên dời tâm; xoay hướng bằng nút xoay, phím mũi tên trái/phải, Q/E
-  hoặc con lăn chuột; đổi chiều/băng (phím R); **THI TRIỂN** xác nhận, **Huỷ đặt chiêu** không tiêu chiêu.
+- Thẻ chiêu (trong trận và ở trang tướng) có dòng **Tác dụng** (lên cú của ai, mấy cú, hay có tác dụng ngay) và
+  dòng **Cách dùng**, ghép từ cách dùng của từng nhóm trong `kinds` (`src/game/content/skill-usage.ts`); phần nút
+  khi đặt chỉ nêu nút chiêu đó thật sự có (xoay hướng, đảo chiều xoáy, băng mềm/cứng).
+- Chiêu đặt bàn vào bước đặt: ô mục tiêu ghi “Đặt chiêu · tên chiêu” và cách đặt; đường dự đoán chạy cùng vùng đang
+  đặt để thấy chiêu bẻ cú đánh ra sao. Kéo/chạm bàn hoặc mũi tên dời tâm; xoay hướng bằng nút xoay, phím mũi tên
+  trái/phải, Q/E hoặc con lăn chuột; đổi chiều/băng (phím R); **THI TRIỂN** xác nhận, **Huỷ đặt chiêu** không tiêu chiêu.
+- Khi có vùng bẻ hoặc hãm bi, đường thẳng tham chiếu chỉ còn một đoạn ngắn; đường mô phỏng lấy mẫu mỗi 1/120 giây
+  nên khúc cong qua vùng hiện thành đường cong.
+- Chiêu tác động lúc nào thì hiện lúc đó trên bàn (`src/ui/screens/match/skill-callouts.ts`): bi vào vùng thì vùng
+  loé vòng son, ra khỏi vùng thì một nhãn mực ghi điều đã xảy ra (“Xoáy · lệch 18°”, “Cát · hãm bi”, “Mực tan · mất
+  áp phê”; bỏ qua khi bi va bi hoặc băng ngay trong vùng); lúc đánh, bùa lên cú đó hiện cạnh bi cái (“Run tay ×1,8”,
+  “Lực tối đa 70%”, “Gió đẩy bi”); bi rơi vào lỗ được nới hay hút thì nhãn hiện ở lỗ. Tối đa sáu nhãn vùng mỗi cú;
+  giảm chuyển động thì nhãn chỉ mờ dần.
 - Tuyệt chiêu được ghi nhận khi xác nhận, nhưng diễn hoạt chờ ĐÁNH. Thứ tự là khoá điều khiển, cut-in, hiệu ứng
   bàn, cơ vung, rồi mô phỏng. Người và AI đi cùng luồng; tạm dừng và rời trận đều huỷ đúng.
 - Khuynh thành chuyển tay điều khiển trong một cú: thông báo nêu người đánh hộ, thẻ và nút điều khiển theo

@@ -43,7 +43,7 @@ function handleEvent(ctx: MatchCtx, dom: MatchDom, deps: EventDeps, e: MatchEven
     case 'energy': return energy(ctx, dom, e, deps);
     case 'skill': return skill(ctx, deps, e);
     case 'omen': return omen(ctx, dom, e, deps.herald);
-    case 'resolved': return deps.onResolved(e.res, e.side);
+    case 'resolved': ctx.callouts.reset(); return deps.onResolved(e.res, e.side);
     case 'turn': return deps.onTurn();
     case 'new-rack': return newRack(ctx, dom, deps);
     case 'displace': return displace(ctx, e);
@@ -54,9 +54,14 @@ function handleEvent(ctx: MatchCtx, dom: MatchDom, deps: EventDeps, e: MatchEven
 
 function physical(ctx: MatchCtx, p: Extract<MatchEvent, { type: 'phys' }>['e'], herald: EventDeps['herald']): void {
   if (p.t === 'ball') {
+    ctx.callouts.contact(p.a);
+    ctx.callouts.contact(p.b);
     sound.ballHit(p.speed);
     if (p.speed > 2.4) ctx.view.burst(p.x, p.y, { color: 0xffffff, count: 3, speed: 0.4, size: 0.008 });
-  } else if (p.t === 'cushion') sound.cushion(p.speed);
+  } else if (p.t === 'cushion') {
+    ctx.callouts.contact(p.id);
+    sound.cushion(p.speed);
+  }
   else if (p.t === 'pocket') pocket(ctx, p);
   else if (p.t === 'off-table') offTable(ctx, p, herald);
 }
@@ -66,6 +71,7 @@ function pocket(ctx: MatchCtx, p: { pocket: number; id: number; speed: number })
   haptic(18);
   const pk = ctx.match.table.pockets[p.pocket];
   ctx.view.ring(pk.hx, pk.hy, p.id === 0 ? 0xff5a4e : 0xffe08a, 0.03);
+  if (p.id !== 0) ctx.callouts.pocketed(p.pocket);
 }
 
 function offTable(ctx: MatchCtx, p: { id: number }, herald: EventDeps['herald']): void {

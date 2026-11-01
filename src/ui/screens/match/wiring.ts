@@ -28,6 +28,7 @@ import { createAiTurn } from './ai-turn';
 import { createDialogs } from './dialogs';
 import { currentCall } from './call-marker';
 import { createFrameLoop } from './frame-loop';
+import { createSkillCallouts } from './skill-callouts';
 import { createStart, screenBackdrop } from './start';
 import { clearHints } from '../../hints';
 import { keepAwake } from '../../../platform/device';
@@ -70,6 +71,7 @@ function createCtx(app: App, opts: MatchOptions): MatchCtx {
     solo: !!(opts.challenge || opts.practice),
     lefty: app.profile.settings.leftHanded,
     aiCall: null, firedCall: null, strikePress: null, cancelArmed: false,
+    callouts: { beforeShot: () => {}, tick: () => {}, contact: () => {}, pocketed: () => {}, reset: () => {} },
   };
 }
 
@@ -152,6 +154,7 @@ function createSections(ctx: MatchCtx): MatchSections {
     toggleSense: () => toggleSense(ctx),
   });
   ctx.dom = dom;
+  ctx.callouts = createSkillCallouts(ctx, dom);
   layout.attach();
   const expressions = createExpressions(ctx, dom);
   let lateHerald: ((m: HeraldMsg) => void) | null = null;

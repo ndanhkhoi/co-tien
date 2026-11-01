@@ -2,7 +2,7 @@ import lore from '../../game/content/lore.json';
 import {
   CHAMPION_PRICE, classInfo, cutoutUrl, exprUrl, finisherUrl, sect, sectArtUrl, skillIconUrl, KIND_LABEL, type Champion,
 } from '../../game/content/sects';
-import { skillUsage } from '../../game/content/skill-usage';
+import { skillReach, skillUsage } from '../../game/content/skill-usage';
 import { hasArt } from '../../platform/preload';
 import { fullFigurePaintings, preloadFigures } from '../champion-art';
 import { motionModal as modal, turnPage, type App } from '../app';
@@ -210,6 +210,7 @@ function skillDetail(c: Champion, sk: Champion['skills'][number], button: HTMLBu
     h('div.champion-skill-copy.scroll', { tabindex: '0' },
       h('p.champion-skill-cost', null, sk.slot === 2 ? 'Cần đầy thanh năng lượng (100 năng lượng)' : `Hồi chiêu: ${sk.cooldown} lượt đánh của chính mình`),
       h('p', null, sk.desc),
+      h('p', null, h('b', null, 'Tác dụng:'), ' ', skillReach(sk)),
       h('p', null, h('b', null, 'Cách dùng:'), ' ', skillUsage(sk))),
     h('div.actions', null, back), x);
     requestAnimationFrame(() => back.focus());

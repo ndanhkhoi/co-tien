@@ -1,5 +1,5 @@
 import { champion, describeKind, skillIconUrl, type SkillDef, type SkillKind } from '../../../game/content/sects';
-import { skillUsage } from '../../../game/content/skill-usage';
+import { skillReach, skillUsage } from '../../../game/content/skill-usage';
 import { buildCast, PLACED_KINDS, type SkillCast } from '../../../game/skill-cast';
 import { calledTarget, ENERGY_MAX } from '../../../game/match';
 import { sound } from '../../../audio/sound';
@@ -135,6 +135,7 @@ function openSkill({ ctx, dom, sheets, deps, side, slot }: OpenSkillArgs): void 
         h('div.mx-sc-name', null, sk.name))),
     h('div.mx-sc-desc', null, sk.desc),
     convertedNote(match, sk),
+    h('div.mx-sc-use', null, h('b', null, 'Tác dụng:'), ' ', skillReach({ ...sk, kinds: sk.kinds.map((k) => match.effectiveKind(k)) })),
     h('div.mx-sc-use', null, h('b', null, 'Cách dùng:'), ' ', skillUsage({ kinds: sk.kinds.map((k) => match.effectiveKind(k)) })),
     req,
     h('div.mx-sc-foot', null, reason, useBtn));

@@ -19,7 +19,7 @@ tranh đó suốt phiên (`champion-art.ts`). Màn VS, đầu trận, cut-in và
 | `screens/challenges.ts` | Luyện Cơ |
 | `screens/practice/` | Luyện thế: `index.ts` chọn thế, `desk.ts` bảng bên bàn |
 | `screens/story.ts` | Đọc Cơ Tiên Truyện (chunk riêng, chỉ tải khi mở) |
-| `screens/match/` | Màn trận: `index.ts` là `matchScreen`, `wiring.ts` nối các phần dùng chung `MatchCtx` (`context.ts`); mỗi phần một file: HUD, herald, dock chiêu, áp phê, ngắm, bắn, điều khiển, chạm bàn, lượt AI, hộp thoại, menu tạm dừng, vòng khung hình. `controller.ts` re-export người điều khiển cú đánh; `hex-chips.ts` tạo chip ảnh hưởng trên thẻ |
+| `screens/match/` | Màn trận: `index.ts` là `matchScreen`, `wiring.ts` nối các phần dùng chung `MatchCtx` (`context.ts`); mỗi phần một file: HUD, herald, dock chiêu, áp phê, ngắm, bắn, điều khiển, chạm bàn, lượt AI, hộp thoại, menu tạm dừng, vòng khung hình. `controller.ts` re-export người điều khiển cú đánh; `hex-chips.ts` tạo chip ảnh hưởng trên thẻ, `skill-callouts.ts` gọi tên tác dụng chiêu trên bàn |
 | `screens/loading.ts`, `install-gate.ts` | Màn tải tranh, màn bắt cài PWA (xem [platform.md](platform.md)) |
 | `finisher.ts`, `skill-cutin.ts` | Kết liễu, cut-in tuyệt chiêu |
 | `hints.ts`, `intro.ts`, `scroll-hint.ts` | Hướng dẫn người mới, gợi ý cuộn |
@@ -92,8 +92,10 @@ bằng nét mực `ui/ink-tick.webp`; mục đang chọn chuyển màu son và n
 - `src/game/match/controller.ts` là nguồn duy nhất cho “ai đang điều khiển cú đánh”: khi `puppeteer` còn bật,
   người thi triển Khuynh thành điều khiển, còn luật vẫn thấy bên đang tới lượt. UI và render đọc helper này,
   không soi `Match.current`.
-- `hex-chips.ts` gom `hexes`, `activeEffects` và `called` thành chip cho từng thẻ. Chiêu phản đang úp chỉ
-  hiện “một chiêu đang úp”.
+- `hex-chips.ts` gom `hexes`, `activeEffects`, `called`, hộ lỗi và bùa của cú đang ngắm thành chip có chữ cho từng
+  thẻ. Chiêu phản đang úp chỉ hiện “một chiêu đang úp”.
+- `skill-callouts.ts` (`ctx.callouts`) gọi tên tác dụng của chiêu ngay trên bàn: đọc vùng và bùa trước cú đánh, theo
+  dõi bi vào/ra vùng mỗi khung hình, ghi nhãn mực ở chỗ tác động; các sự kiện va chạm và rơi lỗ đi qua `match-events.ts`.
 - `render/decoy-balls.ts` dựng Bi Giả bằng shader bi thật và bóng bi; `render/ball-slides.ts` chạy nét mực
   dời/đổi bi, tôn trọng giảm chuyển động. Rewind/ván mới gọi `TableView.clearTransient()` nên mọi lớp
   trình diễn tạm đều về trạng thái luật.

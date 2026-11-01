@@ -25,7 +25,10 @@ export function createFrameLoop(ctx: MatchCtx, dom: MatchDom, deps: FrameDeps): 
   const tick = (ticker: Ticker) => {
     const dt = Math.min(0.05, ticker.deltaMS / 1000);
     ctx.frameDt = dt;
-    if (!ctx.flags.paused) ctx.match.update(dt);
+    if (!ctx.flags.paused) {
+      ctx.match.update(dt);
+      ctx.callouts.tick();
+    }
     // The pause sheet can be closed by the system back gesture too.
     if (ctx.flags.paused && ctx.renderState.pauseWrap && !ctx.renderState.pauseWrap.isConnected) {
       ctx.flags.paused = false;
@@ -149,7 +152,8 @@ function aimView(ctx: MatchCtx, deps: FrameDeps, x: { humanAim: boolean; placing
     elevation: aim.elevation,
     power: aimPower(ctx),
     showCue,
-    showGuide: x.humanAim && isHumanTurn(ctx) && (!x.placing || placementAim) && !match.blindNow && power.strikeT === 0,
+    // While a skill is being placed the path preview runs with it, so the player sees what the cast does first.
+    showGuide: x.humanAim && isHumanTurn(ctx) && (!x.placing || placementAim || !!ctx.skill.placement) && !match.blindNow && power.strikeT === 0,
     guideScale: deps.guideScale(),
     fog: match.setup.mutator === 'fog',
     pocketChoices: match.callType() !== 'none' && isHumanTurn(ctx) && !x.placing,

@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { makeBall } from '../src/core/physics';
 import { Match } from '../src/game/match';
 import { CUES, TABLES } from '../src/game/content/gear';
-import { CHAMPIONS, type SkillDef, type SkillKind } from '../src/game/content/sects';
+import { CHAMPIONS, describeKind, type SkillDef, type SkillKind } from '../src/game/content/sects';
 import { addNoise } from '../src/ai/skill-choice';
 import { Rng } from '../src/core/rng';
 import type { Ctx } from '../src/ai/search-context';
@@ -37,7 +37,15 @@ describe('table zones bend a rolling ball enough to see', () => {
     });
   }
 
-  it('never moves a resting ball', () => {
+    it('turns a ball through the swirl centre by about the angle the skill card states', () => {
+    const plain = exitHeading(lane(['vortex'], 3), null);
+    const bent = exitHeading(lane(['vortex'], 3), { point: { x: -0.3, y: 0 }, direction: { x: 1, y: 0 }, sense: 'cw' });
+    const stated = Number(/khoảng (\d+)°/.exec(describeKind('vortex', 3))![1]);
+    expect(Math.abs(bent - plain)).toBeGreaterThan(stated * 0.6);
+    expect(Math.abs(bent - plain)).toBeLessThan(stated * 1.4);
+  });
+
+it('never moves a resting ball', () => {
     const m = lane(['vortex'], 7);
     m.useSkill(0, 0, { point: { x: 0.2, y: 0.3 }, direction: { x: 1, y: 0 }, sense: 'cw' });
     const ball = m.balls.find((b) => b.id === 2)!;

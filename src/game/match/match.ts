@@ -189,7 +189,7 @@ export class Match {
 
   /** Every fixed obstacle on the cloth right now: closed pocket mouths and Thiên Tượng pieces. */
   obstacles() {
-    return [...this.closedPockets.map((i) => this.table.pockets[i].mouth), ...(this.omen?.segments ?? []), ...this.activeEffects.filter(e => appliesTo(e.target, this.turn)).flatMap(e => e.segments)];
+    return [...this.closedPockets.map((i) => this.table.pockets[i].mouth), ...(this.omen?.segments ?? []), ...this.liveEffects().flatMap(e => e.segments)];
   }
 
   syncObstacles() {
@@ -319,7 +319,12 @@ export class Match {
     strike(cue, this.table.R, { angle: input.angle, speed: powerToSpeed(input.power, this.vmax()), side: input.side * reach.side, vert: input.vert * reach.vert, elevation: input.elevation });
   }
 
-  terrain() { return mergeTerrain(this.omen?.terrain, ...this.activeEffects.filter(e => appliesTo(e.target, this.turn)).map(e => e.terrain)); }
+  /** Active effects on the shot being lined up, plus a cast still being placed (previewed, never shot with). */
+  private liveEffects(): CastEffect[] {
+    return [...this.activeEffects.filter(e => appliesTo(e.target, this.turn)), ...this.castPreview];
+  }
+
+  terrain() { return mergeTerrain(this.omen?.terrain, ...this.liveEffects().map(e => e.terrain)); }
 
   simulationWorld(): SimWorld {
     return { table: this.table, balls: this.balls, params: this.params, terrain: this.terrain(), extraSegments: this.obstacles(), closedPockets: this.closedPockets, captureScale: this.mawScale * this.baseCapture * (this.omen?.capture ?? 1), pocketPull: this.pull, pullExempt: this.cueId(), time: 0 };

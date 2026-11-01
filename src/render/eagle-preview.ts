@@ -61,14 +61,17 @@ function drawRuns(m: Match, g: MetreGraphics, runs: EagleRun[]): void {
   }
 }
 
-/** One 1/30 s slice of a path preview, recording where every ball goes. */
+/**
+ * One 1/120 s slice of a path preview, recording where every ball goes. Fine slices keep a bend through a skill field
+ * a curve: at break speed a 1/30 s slice is longer than a swirl is wide.
+ */
 function stepEagle(m: Match, run: EagleRun): void {
   const balls = run.world.balls;
   const events: PhysEvent[] = [];
-  const moving = step(run.world, 1 / 30, events);
+  const moving = step(run.world, 1 / 120, events);
   applyBlast(m, run, events, balls);
   recordPaths(run, balls);
-  if (!moving || ++run.frames >= 600) run.done = true;
+  if (!moving || ++run.frames >= 2400) run.done = true;
 }
 
 function applyBlast(m: Match, run: EagleRun, events: PhysEvent[], balls: Ball[]): void {
@@ -83,6 +86,7 @@ function applyBlast(m: Match, run: EagleRun, events: PhysEvent[], balls: Ball[])
 function recordPaths(run: EagleRun, balls: Ball[]): void {
   for (const b of balls) {
     const p = run.paths.get(b.id)!;
-    if (b.onTable && (p[p.length - 2] !== b.x || p[p.length - 1] !== b.y)) p.push(b.x, b.y);
+    // A point every few millimetres is enough for a smooth curve and keeps fine slices from bloating the path.
+    if (b.onTable && Math.hypot(p[p.length - 2] - b.x, p[p.length - 1] - b.y) > 0.004) p.push(b.x, b.y);
   }
 }

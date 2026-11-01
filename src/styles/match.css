@@ -641,3 +641,30 @@
   .screen.game.mx .mx-ctrl.placing:not(.preview-aim) .mx-place-mode { min-width: 128px; }
   .screen.game.mx .mx-ctrl { --colR: 112px; }
 }
+
+/* Skill callouts: a short ink label where a skill acted on a ball; it rises a little and fades by itself. */
+#ui > .screen.game > .mx-callout { pointer-events: none; }
+.mx-callout {
+  position: absolute;
+  z-index: 4;
+  transform: translate(-50%, -100%);
+  padding: 2px 9px;
+  border-radius: 999px;
+  background: var(--sheet);
+  color: var(--ink);
+  border: 1.5px solid var(--ink);
+  font: 700 13px/1.25 var(--display);
+  white-space: nowrap;
+  box-shadow: var(--sh-1);
+  animation: mx-callout 1.9s var(--ease) both;
+}
+.mx-callout.red { border-color: var(--accent); color: var(--accent); }
+@keyframes mx-callout {
+  0% { opacity: 0; transform: translate(-50%, -60%); }
+  12%, 72% { opacity: 1; transform: translate(-50%, -100%); }
+  100% { opacity: 0; transform: translate(-50%, -150%); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .mx-callout { animation-name: mx-callout-calm; }
+  @keyframes mx-callout-calm { 0%, 80% { opacity: 1; } 100% { opacity: 0; } }
+}

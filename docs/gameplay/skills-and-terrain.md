@@ -46,6 +46,8 @@ Lý do: [decisions/real-physics.md](../decisions/real-physics.md).
 - Chiêu trói dùng giữa lượt đối thủ áp ngay vào cú họ đang ngắm. Máy cũng chịu run tay (tay rung rộng theo hệ số)
   và chỉ bù được nửa góc dắt lệch.
 - Tranh: ba icon riêng mỗi tướng (`skillIconUrl`), vùng đặt ở `public/art/table/skills/`, VFX theo môn phái.
+- Không chiêu nào chạy ngầm: lúc đặt có đường dự đoán, lúc có hiệu lực có chip trên thẻ người chơi, lúc tác động có
+  nhãn trên bàn. Cách hiện: [controls.md](controls.md#chiêu-tiên-đạo).
 
 Kiểm thử: `tests/skill-cast.test.ts`, `ultimate-geometry.test.ts`, `roster-kits.test.ts`, `skill-usage.test.ts`.
 

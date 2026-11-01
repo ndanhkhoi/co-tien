@@ -19,7 +19,7 @@ const KIND_WAY: Record<SkillKind, UseWay> = {
 };
 
 const WAY_TEXT: Record<UseWay, string> = {
-  place: 'Bấm Dùng rồi đặt lên bàn: kéo để dời, hai nút xoay để đổi hướng, nút đổi chiều cho chiều xoáy hoặc băng mềm/cứng; THI TRIỂN để xác nhận, Huỷ đặt chiêu thì không mất chiêu.',
+  place: 'Bấm Dùng rồi đặt lên bàn: kéo hoặc chạm bàn để dời; đường dự đoán chạy theo để bạn thấy chiêu bẻ cú đánh ra sao. THI TRIỂN để xác nhận, Huỷ đặt chiêu thì không mất chiêu.',
   own: 'Dùng trong lượt của bạn, trước khi đánh: tác dụng lên cú bạn sắp đánh.',
   cue: 'Dùng trong lượt của bạn: sau khi bấm, kéo bi cái tới chỗ muốn rồi bấm ĐẶT BI.',
   move: 'Dùng trong lượt của bạn khi mọi bi đứng yên: bi được dời ngay, không cần đặt.',
@@ -46,9 +46,36 @@ export function skillUsage(sk: Pick<SkillDef, 'kinds'>): string {
     return w === 'hex' && called ? 'hexAlong' : w;
   };
   const ways = [...new Set(sk.kinds.map(way))];
+  const extra = placeControls(sk.kinds);
   // A rewind replays your shot, so own-shot buffs in the same package apply to the replay.
   if (ways.includes('rewind') && ways.includes('own')) {
     return [...ways.filter((w) => w !== 'own').map((w) => WAY_TEXT[w]), 'Hiệu ứng đi kèm áp vào cú đánh lại.'].join(' ');
   }
-  return ways.map((w) => WAY_TEXT[w]).join(' ');
+  return [...ways.map((w) => WAY_TEXT[w]), extra].filter(Boolean).join(' ');
+}
+
+/** The placement controls a package really has: only swirls change direction of turn, only rails soft or hard. */
+function placeControls(kinds: SkillKind[]): string {
+  const parts: string[] = [];
+  if (kinds.some((k) => k === 'wind' || k === 'quake' || k === 'bumper' || k === 'railcraft')) parts.push('hai nút xoay đổi hướng');
+  if (kinds.some((k) => k === 'vortex' || k === 'silk')) parts.push('nút Đổi đảo chiều xoáy');
+  if (kinds.includes('railcraft')) parts.push('nút Đổi chọn băng mềm hoặc cứng');
+  return parts.length ? `Khi đặt: ${parts.join(', ')}.` : '';
+}
+
+/** Families that act on the opponent's shots whatever the skill's target says. */
+const ON_OPPONENT: SkillKind[] = ['chill', 'freeze', 'seal', 'blind', 'drift', 'called', 'decoy', 'puppet'];
+/** Families that act once, the moment they are cast. */
+const INSTANT: SkillKind[] = ['displace', 'swap', 'drain', 'teleport', 'nudge', 'rewind'];
+
+/** "Tác dụng": whose shots the skill touches and for how many, or that it acts at once. */
+export function skillReach(sk: Pick<SkillDef, 'kinds' | 'target' | 'turns'>): string {
+  const n = Math.max(1, sk.turns ?? 1);
+  const shots = n === 1 ? 'cú kế' : `${n} cú kế`;
+  if (sk.kinds.every((k) => INSTANT.includes(k))) return 'Có tác dụng ngay khi dùng.';
+  if (sk.kinds.includes('counter')) return 'Úp chờ tới lượt kế của đối thủ.';
+  if (sk.kinds.some((k) => ON_OPPONENT.includes(k)) || sk.target === 'opponent') return `Lên ${shots} của đối thủ.`;
+  if (sk.target === 'both') return `Lên ${shots} của cả hai bên.`;
+  if (sk.kinds.includes('shield')) return 'Đỡ lỗi kế tiếp của bạn.';
+  return `Lên ${shots} của bạn.`;
 }
