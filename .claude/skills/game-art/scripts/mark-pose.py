@@ -1,4 +1,4 @@
-"""Record the review of one gallery pose.
+"""Record the review of one gallery pose. Read the champion's `look` first: a prop it says floats or hovers is design.
 
     python3 mark-pose.py WORK/<sect> ID N ok "what was checked"
     python3 mark-pose.py WORK/<sect> ID N redraw "what is wrong and how to fix it"
