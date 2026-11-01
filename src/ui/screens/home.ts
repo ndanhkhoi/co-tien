@@ -58,7 +58,7 @@ export function homeScreen(app: App): Screen {
       h('nav.home-grid', { 'aria-label': 'Trình đơn chính' },
         tablet('quick-match', 'Luận Cơ', 'So tài cùng máy', () => app.go(quickScreen)),
         tablet('users', 'Song Đấu', 'Hai người · chung máy', () => app.go(localScreen)),
-        tablet('target', 'Luyện Cơ', `Luyện cú · ${chDone}/${CHALLENGES.length}`, () => app.go(challengesScreen)),
+        tablet('target', 'Luyện Cơ', `Luyện cú đánh · ${chDone}/${CHALLENGES.length}`, () => app.go(challengesScreen)),
         tablet('collection', 'Tàng Các', `Chiêu mộ · ${p.champions.length}/${CHAMPIONS.length}`, () => app.go(collectionScreen)),
         // The story and its text load only when opened.
         tablet('story', 'Cơ Tiên Truyện', read ? `Đã đọc ${read} chương` : '15 chương', () => void import('./story').then((m) => app.go(m.storyScreen))),

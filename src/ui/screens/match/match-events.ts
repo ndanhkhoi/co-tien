@@ -108,7 +108,7 @@ function energy(ctx: MatchCtx, dom: MatchDom, e: Extract<MatchEvent, { type: 'en
   const full = e.total >= ENERGY_MAX;
   if (full && !ctx.turn.ultAnnounced[e.side]) announceUltimate(ctx, e.side, deps.herald);
   ctx.turn.ultAnnounced[e.side] = full;
-  hintOnce(ctx.app, { key: 'energy', title: 'Năng lượng', text: 'Mỗi cú +6, mỗi bi vào +11, cú khó còn thêm. Đầy vòng (100) thì dùng tuyệt chiêu.',
+  hintOnce(ctx.app, { key: 'energy', title: 'Năng lượng', text: 'Mỗi cú đánh +6, mỗi bi vào +11, cú đánh khó còn thêm. Đầy vòng (100) thì dùng tuyệt chiêu.',
     anchor: () => dom.cards[e.side].ringWrap, place: e.side === 0 ? 'right' : 'left', alignTop: true });
 }
 
@@ -220,7 +220,7 @@ function resolvedGood(x: { ctx: MatchCtx; deps: EventDeps; r: Resolution; side: 
   deps.setExpr(side, 'joy');
   // A hard or pretty shot is named, so players see what earned the extra energy.
   const sc = ctx.match.lastScore;
-  const title = r.highlight === 'golden' ? 'Bi vàng!' : sc.tier === 2 ? 'Tuyệt kỹ!' : sc.tier === 1 ? 'Cú đẹp!' : ctx.match.isCarom ? 'Ghi điểm!' : potN > 1 ? `Ăn ${potN} bi!` : 'Ăn bi!';
+  const title = r.highlight === 'golden' ? 'Bi vàng!' : sc.tier === 2 ? 'Tuyệt kỹ!' : sc.tier === 1 ? 'Cú đánh đẹp!' : ctx.match.isCarom ? 'Ghi điểm!' : potN > 1 ? `Ăn ${potN} bi!` : 'Ăn bi!';
   const feats = sc.names.join(' · ');
   deps.herald({ side, expr: 'joy', title, line: [feats, r.messages.join(' ')].filter(Boolean).join(' — ') || 'Đánh tiếp' });
 }
@@ -265,7 +265,7 @@ const POCKET_NAMES = ['lỗ góc trên trái', 'lỗ giữa trên', 'lỗ góc t
 export function coachTurn(ctx: MatchCtx, dom: MatchDom, humanSide: Side | null): void {
   if (ctx.solo) return;
   const mode = ctx.match.setup.mode;
-  if (ctx.hasSkills) hintOnce(ctx.app, { key: 'energy', title: 'Năng lượng', text: 'Mỗi cú +6, mỗi bi vào +11, cú khó còn thêm. Đầy vòng (100) thì dùng tuyệt chiêu.',
+  if (ctx.hasSkills) hintOnce(ctx.app, { key: 'energy', title: 'Năng lượng', text: 'Mỗi cú đánh +6, mỗi bi vào +11, cú đánh khó còn thêm. Đầy vòng (100) thì dùng tuyệt chiêu.',
     anchor: () => dom.cards[humanSide ?? ctx.match.turn].ringWrap, place: (humanSide ?? ctx.match.turn) === 0 ? 'right' : 'left', alignTop: true });
   const beside = ctx.lefty ? 'right' : 'left';
   hintOnce(ctx.app, { key: `rules-${mode}`, title: `Luật ${MODE_NAMES[mode]}`, text: `${RULES_TEXT[mode].goal} Xem menu tạm dừng, mục Luật chơi.`, anchor: () => (ctx.lefty ? dom.ctrl : dom.dock), place: 'right', highlight: false, rail: true });

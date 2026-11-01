@@ -23,5 +23,5 @@ export function controllerIsHuman(m: ControllerMatch): boolean {
 
 export function puppetHeraldLine(m: ControllerMatch): string | null {
   if (m.puppeteer === null || m.puppeteer === m.turn) return null;
-  return `Khuynh thành: ${m.setup.players[m.puppeteer].name} đánh hộ ${m.setup.players[m.turn].name} cú này`;
+  return `Khuynh thành: ${m.setup.players[m.puppeteer].name} đánh hộ ${m.setup.players[m.turn].name} cú đánh này`;
 }

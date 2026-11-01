@@ -20,18 +20,18 @@ const KIND_WAY: Record<SkillKind, UseWay> = {
 
 const WAY_TEXT: Record<UseWay, string> = {
   place: 'Bấm Dùng rồi đặt lên bàn: kéo hoặc chạm bàn để dời; đường dự đoán chạy theo để bạn thấy chiêu bẻ cú đánh ra sao. THI TRIỂN để xác nhận, Huỷ đặt chiêu thì không mất chiêu.',
-  own: 'Dùng trong lượt của bạn, trước khi đánh: tác dụng lên cú bạn sắp đánh.',
+  own: 'Dùng trong lượt của bạn, trước khi đánh: tác dụng lên cú đánh bạn sắp đánh.',
   cue: 'Dùng trong lượt của bạn: sau khi bấm, kéo bi cái tới chỗ muốn rồi bấm ĐẶT BI.',
   move: 'Dùng trong lượt của bạn khi mọi bi đứng yên: bi được dời ngay, không cần đặt.',
   decoy: 'Dùng trong lượt của bạn: bi giả hiện ngay cạnh bi mục tiêu của đối thủ, không cần đặt.',
-  hex: 'Bấm Dùng là có tác dụng ngay lên cú kế của đối thủ, dùng được cả khi đang tới lượt họ; chip hiện dưới bảng tên đối thủ.',
-  hexAlong: 'Hiệu ứng đi kèm áp lên cú kế của đối thủ; chip hiện dưới bảng tên đối thủ.',
+  hex: 'Bấm Dùng là có tác dụng ngay lên cú đánh kế của đối thủ, dùng được cả khi đang tới lượt họ; chip hiện dưới bảng tên đối thủ.',
+  hexAlong: 'Hiệu ứng đi kèm áp lên cú đánh kế của đối thủ; chip hiện dưới bảng tên đối thủ.',
   called: 'Bấm Dùng rồi chạm quả bi của đối thủ cần chỉ định (quả gần lỗ nhất được chọn sẵn, có vòng son), bấm THI TRIỂN; Huỷ đặt chiêu thì không mất chiêu. Ngoài lượt của bạn, game tự chọn quả gần lỗ nhất.',
   calledAuto: 'Quả bi bị chỉ định là quả của đối thủ nằm gần lỗ nhất, có vòng son ngay khi đặt.',
   guard: 'Dùng được cả ngoài lượt của bạn, miễn bàn đứng yên.',
   counter: 'Dùng được cả ngoài lượt của bạn: chiêu úp chờ sẵn, đối thủ dùng chiêu ở lượt kế thì bị hoá giải.',
-  rewind: 'Chỉ dùng được ngay sau cú bạn vừa đánh, khi lượt đã sang đối thủ mà họ chưa đánh: bàn quay về trước cú ấy để bạn đánh lại.',
-  puppet: 'Dùng trong lượt của bạn: tới lượt đối thủ, chính bạn ngắm và đánh cú của họ.',
+  rewind: 'Chỉ dùng được ngay sau cú đánh bạn vừa đánh, khi lượt đã sang đối thủ mà họ chưa đánh: bàn quay về trước cú đánh ấy để bạn đánh lại.',
+  puppet: 'Dùng trong lượt của bạn: tới lượt đối thủ, chính bạn ngắm và thực hiện cú đánh của họ.',
 };
 
 /** "Cách dùng" for a skill package: the ways of its families in order, without repeats. */
@@ -71,7 +71,7 @@ const INSTANT: SkillKind[] = ['displace', 'swap', 'drain', 'teleport', 'nudge', 
 /** "Tác dụng": whose shots the skill touches and for how many, or that it acts at once. */
 export function skillReach(sk: Pick<SkillDef, 'kinds' | 'target' | 'turns'>): string {
   const n = Math.max(1, sk.turns ?? 1);
-  const shots = n === 1 ? 'cú kế' : `${n} cú kế`;
+  const shots = n === 1 ? 'cú đánh kế' : `${n} cú đánh kế`;
   if (sk.kinds.every((k) => INSTANT.includes(k))) return 'Có tác dụng ngay khi dùng.';
   if (sk.kinds.includes('counter')) return 'Úp chờ tới lượt kế của đối thủ.';
   if (sk.kinds.some((k) => ON_OPPONENT.includes(k)) || sk.target === 'opponent') return `Lên ${shots} của đối thủ.`;

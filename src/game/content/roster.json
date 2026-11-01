@@ -223,22 +223,22 @@
     {
       "id": "phaptu",
       "name": "Pháp Tu",
-      "passive": "Trước mỗi cú chọn giữ áp phê ngang hoặc tiến/lùi; trục còn lại giảm."
+      "passive": "Trước mỗi cú đánh chọn giữ áp phê ngang hoặc tiến/lùi; trục còn lại giảm."
     },
     {
       "id": "hophap",
       "name": "Hộ Pháp",
-      "passive": "Mỗi lượt cơ được chọn một đoạn băng mềm cho cú của mình."
+      "passive": "Mỗi lượt cơ được chọn một đoạn băng mềm cho cú đánh của mình."
     },
     {
       "id": "chusu",
       "name": "Chú Sư",
-      "passive": "Sau cú hợp lệ kết thúc lượt, để lại một vùng cát nhỏ tại điểm dừng bi cái cho cú kế của đối thủ."
+      "passive": "Sau cú đánh hợp lệ kết thúc lượt, để lại một vùng cát nhỏ tại điểm dừng bi cái cho cú đánh kế của đối thủ."
     },
     {
       "id": "anhsat",
       "name": "Ảnh Sát",
-      "passive": "Ăn liền ít nhất 4 bi không đứt chuỗi, cả chuỗi đạt 5 điểm cú đánh (bi thường 1 điểm, cú khó được thêm), rồi chọn soi đường hoặc tăng lực cho cú tiếp theo."
+      "passive": "Ăn liền ít nhất 4 bi không đứt chuỗi, cả chuỗi đạt 5 điểm cú đánh (bi thường 1 điểm, cú đánh khó được thêm), rồi chọn soi đường hoặc tăng lực cho cú đánh tiếp theo."
     },
     {
       "id": "luanhoi",
@@ -1751,7 +1751,7 @@
       "gallery": [
         {
           "label": "Bắt bọ cánh",
-          "pose": "Squatting on the grass in a frontal view, trapping a glossy jade beetle beneath an overturned clay jar, dried chitin cue balanced across his small knees, barefoot with five toes visible, grinning with blunt rounded child teeth and a gap between his two front teeth, no pointed canines."
+          "pose": "Squatting on the grass in a frontal view, trapping a glossy jade beetle beneath an overturned clay jar, dried chitin cue balanced across his small knees, barefoot with five toes visible, with a mischievous closed-mouth smile, lips together, no teeth showing."
         },
         {
           "label": "Vuốt ve rết",
@@ -1807,7 +1807,7 @@
       "gallery": [
         {
           "label": "Gặm xương thú",
-          "pose": "Crouching on a rock in a feral profile view, gnawing on a marrow bone with mossy fangs dripping green saliva, his heavy poisoned bone cue held in his monstrous foot-claws."
+          "pose": "Crouching on a rock in a feral profile view, gnawing on a marrow bone held in both clawed hands, mossy fangs dripping green saliva, his chain-wrapped cue standing upright against the rock beside him."
         },
         {
           "label": "Hú gọi bầy",
@@ -2031,11 +2031,11 @@
         },
         {
           "label": "Lặn vớt sò",
-          "pose": "Swimming effortlessly through crystal turquoise water in a dynamic profile view, holding her coral cue in one hand while reaching out for an oversized clam shell, bubble trail drifting."
+          "pose": "Swimming effortlessly through crystal turquoise water in a dynamic profile view, holding her coral cue in one hand while reaching out for an oversized clam shell, bubble trail drifting, smiling with her lips closed, no teeth showing."
         },
         {
           "label": "Phơi vảy cá",
-          "pose": "Sitting on a sun-warmed sea cliff in a three-quarter back view, letting ocean breezes dry the iridescent turquoise scales on her arms, coral cue lying beside her in the grass."
+          "pose": "Sitting on a sun-warmed sea cliff in a three-quarter back view, letting ocean breezes dry the iridescent turquoise scales on her arms, coral cue lying beside her in the grass, smiling with her lips closed, no teeth showing."
         },
         {
           "label": "Gọi đàn cá",
@@ -3298,7 +3298,7 @@
       "gallery": [
         {
           "label": "Bò qua khe nứt",
-          "pose": "Scuttling through a jagged purple reality tear in a profile view, multiple clawed limbs gripping the rift edges, holding its chitinous void sting cue horizontally beneath its abdomen."
+          "pose": "Scuttling through a jagged purple reality tear in a profile view, multiple clawed limbs gripping the rift edges, holding its chitinous void sting cue horizontally beneath its abdomen; its cue is held upright in one leg, never lying flat, so the whole cue stays close to its body."
         },
         {
           "label": "Lau mắt kép",

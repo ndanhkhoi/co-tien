@@ -292,7 +292,7 @@ function buildDeskUi(host: DeskHost, carom: boolean, handlers: DeskHandlers) {
   const sight = sightToggle(host);
   const shootView = h('div.pd-view.pd-shoot', null,
     h('div.pd-tally', null,
-      h('div', null, shotsN, h('span', null, 'cú')),
+      h('div', null, shotsN, h('span', null, 'cú đánh')),
       h('div', null, scoredN, h('span', null, carom ? 'điểm' : 'bi vào'))),
     undo, restart, keep, sight);
 
@@ -418,7 +418,7 @@ interface ShotAnnouncement {
 }
 
 function announceShot(host: DeskHost, shot: ShotAnnouncement) {
-  if (shot.scratch) host.herald({ title: 'Bi cái rơi', line: 'Đặt lại bi cái rồi đánh tiếp, hoặc Đánh lại cú vừa rồi.', tone: 'red', ms: 2200 });
+  if (shot.scratch) host.herald({ title: 'Bi cái rơi', line: 'Đặt lại bi cái rồi đánh tiếp, hoặc Đánh lại cú đánh vừa rồi.', tone: 'red', ms: 2200 });
   else if (shot.point) host.herald({ title: 'Ghi điểm', line: shot.feats, ms: 1600 });
   else if (shot.pots.length) host.herald({ title: shot.pots.length > 1 ? `Vào ${shot.pots.length} bi` : `Vào bi ${shot.pots[0]}`, line: [shot.feats, shot.left ? '' : 'Sạch bàn. Về thế đầu để luyện lại.'].filter(Boolean).join(' — ') || undefined, ms: shot.left ? 1600 : 2400 });
   else if (shot.firstHit === null) host.herald({ title: 'Không chạm bi', ms: 1300 });

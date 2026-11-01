@@ -10,8 +10,8 @@ export const RULES_TEXT: Record<GameMode, RulesText> = {
   eight: {
     goal: 'Ăn hết nhóm bi của mình (trơn 1–7 hoặc sọc 9–15), rồi gọi lỗ và ăn bi 8.',
     points: [
-      'Sau cú phá, bàn luôn mở. Cú tiếp theo ăn bi nhóm nào thì nhận nhóm đó.',
-      'Mỗi cú phải chạm bi thuộc nhóm mình trước; bàn mở thì không được chạm bi 8 trước.',
+      'Sau cú phá, bàn luôn mở. Cú đánh tiếp theo ăn bi nhóm nào thì nhận nhóm đó.',
+      'Mỗi cú đánh phải chạm bi thuộc nhóm mình trước; bàn mở thì không được chạm bi 8 trước.',
       'Sau khi chạm bi, phải có bi vào lỗ hoặc có bi chạm băng, nếu không là lỗi.',
       'Bi 8 vào sớm, vào sai lỗ đã gọi, hoặc vào kèm lỗi: thua ván.',
       'Phạm lỗi: đối thủ được đặt bi cái ở bất kỳ đâu.',
@@ -29,13 +29,13 @@ export const RULES_TEXT: Record<GameMode, RulesText> = {
   ten: {
     goal: 'Gọi lỗ và ăn bi 10. Luôn chạm bi nhỏ nhất trước.',
     points: [
-      'Mọi cú đều phải gọi bi và lỗ. Bi vào sai lỗ đã gọi thì mất lượt.',
+      'Mọi cú đánh đều phải gọi bi và lỗ. Bi vào sai lỗ đã gọi thì mất lượt.',
       'Bi 10 vào khi phá hoặc vào không đúng lỗ gọi thì được đặt lại.',
       'Có quyền đẩy bi sau cú phá; 3 lỗi liên tiếp thua ván.',
     ],
   },
   'carom-libre': {
-    goal: 'Bàn không lỗ. Bi cái của bạn chạm cả hai bi còn lại trong một cú là ghi 1 điểm.',
+    goal: 'Bàn không lỗ. Bi cái của bạn chạm cả hai bi còn lại trong một cú đánh là ghi 1 điểm.',
     points: [
       'Ghi điểm thì được đánh tiếp; trượt thì đến lượt đối thủ.',
       'Đủ số điểm của ván trước là thắng ván.',

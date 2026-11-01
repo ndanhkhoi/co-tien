@@ -148,10 +148,10 @@ export function describeKind(kind: SkillKind, tier: number): string {
     case 'wind': return 'Gọi một luồng gió theo hướng chọn: bi đang lăn bị đẩy lệch dần theo gió.';
     case 'well': return `Đặt một điểm hút trên nỉ (rộng ${Math.round(p.radius * 200)} cm): bi lăn sát tâm bị kéo lệch về tâm khoảng ${turnDegrees(p.curve * p.radius * 0.45)}°.`;
     case 'vortex': return `Tạo một dòng xoáy (rộng ${Math.round(p.radius * 200)} cm): bi lăn qua bị bẻ hướng khoảng ${turnDegrees(p.curve * p.radius * 4 / Math.PI)}° theo chiều xoáy.`;
-    case 'vision': return 'So sánh ba đường dự đoán theo lực đánh hoặc áp phê đã chọn trong cú này.';
-    case 'rewind': return 'Đánh hỏng? Quay ngược thời gian và đánh lại cú vừa rồi.';
+    case 'vision': return 'So sánh ba đường dự đoán theo lực đánh hoặc áp phê đã chọn trong cú đánh này.';
+    case 'rewind': return 'Đánh hỏng? Quay ngược thời gian và đánh lại cú đánh vừa rồi.';
     case 'shield': return 'Lỗi kế tiếp của bạn không bị phạt bi trong tay.';
-    case 'chill': return `Cú kế tiếp của đối thủ run tay gấp ${p.tremor.toFixed(1)} lần và mất đường ngắm.`;
+    case 'chill': return `Cú đánh kế tiếp của đối thủ run tay gấp ${p.tremor.toFixed(1)} lần và mất đường ngắm.`;
     case 'spin': return `Áp phê mạnh thêm ${pct(p.spin - 1)} và không thể trượt cơ.`;
     case 'nudge': return `Dời bi cái tối đa ${Math.round(p.radius * 100)} cm trước khi đánh.`;
     case 'reveal': return 'Hiện đường đi dài của bi mục tiêu và bi cái.';
@@ -161,17 +161,17 @@ export function describeKind(kind: SkillKind, tier: number): string {
     case 'maw': return `Miệng lỗ rộng thêm ${pct(p.scale - 1)}.`;
     case 'drain': return `Hút ${p.amount} năng lượng của đối thủ.`;
     case 'gravity': return 'Bi lăn gần miệng lỗ bị hút vào lỗ.';
-    case 'freeze': return `Lực tối đa của đối thủ chỉ còn ${pct(p.power)} ở cú kế tiếp.`;
+    case 'freeze': return `Lực tối đa của đối thủ chỉ còn ${pct(p.power)} ở cú đánh kế tiếp.`;
     case 'teleport': return 'Cầm bi trong tay: đặt bi cái ở bất kỳ đâu trên bàn.';
-    case 'second': return 'Nếu cú này không vào bi và không phạm lỗi, bạn được đánh tiếp.';
-    case 'blind': return 'Đối thủ mất đường ngắm và đường bi dự đoán ở các cú tiếp theo.';
+    case 'second': return 'Nếu cú đánh này không vào bi và không phạm lỗi, bạn được đánh tiếp.';
+    case 'blind': return 'Đối thủ mất đường ngắm và đường bi dự đoán ở các cú đánh tiếp theo.';
     case 'drift': return `Hướng đánh của đối thủ bị dắt lệch ${p.angle.toFixed(1)} độ theo chiều chọn.`;
     case 'called': return 'Chỉ định một bi đối thủ phải chạm trước; chạm bi khác trước là lỗi.';
     case 'displace': return `Dời tối đa ${p.pockets} bi đối thủ đang sát lỗ tới chỗ trống an toàn về giữa bàn.`;
     case 'swap': return 'Đổi chỗ bi của bạn xa nhất với bi đối thủ dễ ăn nhất.';
     case 'decoy': return `Đặt ${p.count} bi giả là vật chắn tròn cạnh bi mục tiêu của đối thủ.`;
     case 'counter': return `Đặt úp: hoá giải chiêu đối thủ ở lượt kế và hút ${p.amount} năng lượng.`;
-    case 'puppet': return 'Bạn đánh trọn cú kế của đối thủ bằng bi cái của họ; cú đó không tính lỗi.';
+    case 'puppet': return 'Bạn đánh trọn cú đánh kế của đối thủ bằng bi cái của họ; cú đánh đó không tính lỗi.';
     case 'silk': return `Trải dải lụa chữ S bằng ba xoáy nhỏ: bi lăn dọc dải bị uốn lượn và lệch hướng khoảng ${turnDegrees(p.curve * p.radius * 4 / Math.PI)}°.`;
     case 'quake': return `Nghiêng bàn theo hướng chọn (${p.time.toFixed(1)} giây), bi nằm yên cũng bị kéo theo.`;
     default: return '';
@@ -219,7 +219,7 @@ function makeSkill(raw: RawSkill, slot: 0 | 1 | 2, tier: number): SkillDef {
   const kinds = raw.kinds as SkillKind[];
   const t = slot === 2 ? tier + 2 : tier;
   const base = KIND_COOLDOWN[kinds[0]];
-  const duration = raw.turns === undefined || raw.turns <= 1 ? '' : ` Trong ${raw.turns} cú của ${raw.target === 'self' ? 'bạn' : 'đối thủ'}.`;
+  const duration = raw.turns === undefined || raw.turns <= 1 ? '' : ` Trong ${raw.turns} cú đánh của ${raw.target === 'self' ? 'bạn' : 'đối thủ'}.`;
   return {
     slot, name: raw.name, kinds, tier: t, ult: raw.ult, shape: raw.shape, target: raw.target, turns: raw.turns,
     cooldown: slot === 2 ? 0 : base,

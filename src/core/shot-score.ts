@@ -122,7 +122,7 @@ function scoreDirectPot(run: ScoreRun, id: number, firstTouch: Extract<PhysEvent
   const pocket = sunk >= 0 ? ev[sunk] : null;
   const pk = pocket?.t === 'pocket' ? s.table.pockets[pocket.pocket] : null;
   const runLength = al + (pk ? Math.hypot(pk.x - obj.x, pk.y - obj.y) : 0);
-  if (runLength > s.table.L * 0.8) addFeat(run.feats, 'Cú xa', 0.4);
+  if (runLength > s.table.L * 0.8) addFeat(run.feats, 'Cú đánh xa', 0.4);
 }
 
 function scoreCarom(run: ScoreRun) {

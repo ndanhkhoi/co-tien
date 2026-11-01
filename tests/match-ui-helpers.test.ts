@@ -34,7 +34,7 @@ describe('puppet controller', () => {
     const m = matchWith(0, ['ai', 'human']);
     expect(shotController(m)).toBe(0);
     expect(controllerIsHuman(m)).toBe(false);
-    expect(puppetHeraldLine(m)).toBe('Khuynh thành: Nguyệt Hà đánh hộ Tần Lãng cú này');
+    expect(puppetHeraldLine(m)).toBe('Khuynh thành: Nguyệt Hà đánh hộ Tần Lãng cú đánh này');
   });
 });
 

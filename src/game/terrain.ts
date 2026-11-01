@@ -91,7 +91,7 @@ function breathOmen(rng: Rng): Omen {
   const grow = rng.next() < 0.5;
   return {
     id: 'breath', name: grow ? 'Hư Không Hít Vào' : 'Hư Không Thở Ra',
-    desc: grow ? 'Miệng lỗ phình to trong cú này.' : 'Miệng lỗ co hẹp trong cú này.',
+    desc: grow ? 'Miệng lỗ phình to trong cú đánh này.' : 'Miệng lỗ co hẹp trong cú đánh này.',
     capture: grow ? 1.18 : 0.84,
   };
 }
@@ -143,7 +143,7 @@ export function rollOmen(sect: SectId, rng: Rng, t: TableGeom, balls: Ball[]): O
     case 'huyetsat':
       return { id: 'quake', name: 'Địa Chấn', desc: 'Mặt đất rung chuyển: các bi đang nằm yên bị xê dịch nhẹ khi bạn đánh.', jitter: 0.06 };
     case 'uminh':
-      return pockets ? { id: 'gate', name: 'Quỷ Môn', desc: 'Một lỗ bị quỷ khí phong kín trong cú này.', closePocket: true } : null;
+      return pockets ? { id: 'gate', name: 'Quỷ Môn', desc: 'Một lỗ bị quỷ khí phong kín trong cú đánh này.', closePocket: true } : null;
     case 'thienhuong':
       return {
         id: 'silk', name: 'Lụa Trải', desc: 'Những tấm lụa trải trên nỉ: bi lướt qua lụa trượt êm và lăn xa hơn.',
@@ -166,10 +166,10 @@ export const OMEN_INFO: Record<SectId, { name: string; desc: string }> = {
   thienco: { name: 'Cơ Quan Nghiêng', desc: 'Cơ quan nâng một đầu bàn: bi lăn chậm trôi về một phía.' },
   docvu: { name: 'Vũng Độc', desc: 'Vũng độc nhớt: bi đi qua mất áp phê và trượt ngắn lại.' },
   hailong: { name: 'Sóng Lừng', desc: 'Bàn chòng chành qua lại như trên thuyền.' },
-  uminh: { name: 'Quỷ Môn', desc: 'Một lỗ bị quỷ khí phong kín trong cú này.' },
+  uminh: { name: 'Quỷ Môn', desc: 'Một lỗ bị quỷ khí phong kín trong cú đánh này.' },
   tinhtu: { name: 'Tinh Lực', desc: 'Sao băng rơi xuống bàn: bi lăn gần tâm sao bị hút cong đường.' },
   kimsa: { name: 'Bão Cát', desc: 'Gió cát thổi ngang và cát phủ dày làm bi chậm.' },
   vanthu: { name: 'Rễ Cổ Thụ', desc: 'Rễ cây trồi lên nỉ: bi chạm rễ bật lại như chạm băng.' },
-  hukhong: { name: 'Hư Không Thở', desc: 'Miệng lỗ phình to hoặc co hẹp trong cú này.' },
+  hukhong: { name: 'Hư Không Thở', desc: 'Miệng lỗ phình to hoặc co hẹp trong cú đánh này.' },
   thienhuong: { name: 'Lụa Trải', desc: 'Lụa trải trên nỉ: bi lướt qua lụa trượt êm và lăn xa hơn.' },
 };

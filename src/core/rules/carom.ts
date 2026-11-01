@@ -34,7 +34,7 @@ function makeCarom(mode: GameMode, threeCushion: boolean): RuleSet {
     callType: () => 'none',
     objective(state) {
       const base = threeCushion ? 'Chạm 2 bi, đủ 3 băng trước bi thứ hai' : 'Bi cái chạm cả 2 bi';
-      return state.isBreak ? `${base} · cú mở chạm bi đỏ trước` : base;
+      return state.isBreak ? `${base} · cú đánh mở chạm bi đỏ trước` : base;
     },
     resolve(state, _balls, shot) {
       const res: Resolution = { foul: null, keepTurn: false, ballInHand: 'none', respot: [], winner: null, messages: [], points: 0 };
@@ -45,7 +45,7 @@ function makeCarom(mode: GameMode, threeCushion: boolean): RuleSet {
         return res;
       }
       if (state.isBreak && shot.firstHit !== null && shot.firstHit !== CAROM_RED) {
-        res.foul = 'Cú mở phải chạm bi đỏ trước';
+        res.foul = 'Cú đánh mở phải chạm bi đỏ trước';
         return res;
       }
       const both = shot.cueContacts.length >= 2;

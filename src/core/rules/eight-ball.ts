@@ -62,7 +62,7 @@ function breakResolution(shot: ShotSummary): Resolution {
   res.keepTurn = objects.length > 0 || !!eight;
   if (objects.length) {
     const kinds = [...new Set(objects.map((id) => groupName(groupOf(id))))].join(' và ');
-    res.messages.push(`Phá vào ${objects.length} ${kinds}. Luật WPA: sau cú phá bàn vẫn mở. Cú tiếp theo ăn bi nhóm nào thì nhận nhóm đó.`);
+    res.messages.push(`Phá vào ${objects.length} ${kinds}. Luật WPA: sau cú phá bàn vẫn mở. Cú đánh tiếp theo ăn bi nhóm nào thì nhận nhóm đó.`);
   }
   return res;
 }

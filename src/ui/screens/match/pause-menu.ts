@@ -138,7 +138,7 @@ function openHelp(ctx: MatchCtx): void {
       tip('spin', 'Áp phê', 'Kéo trên bi cái nhỏ để chỉnh nhanh điểm đánh. Cần chính xác thì chạm để mở bi lớn, chạm điểm đánh hoặc chọn nhanh Giữa, Trô, Cule, Giật, Trái, Phải.'),
       tip('power', 'Lực', 'Chạm thanh lực để đặt mức, kéo lên xuống để tinh chỉnh, rồi chạm ĐÁNH. Hoặc giữ ĐÁNH cho lực dao động, thả đúng lúc; trượt ra xa để huỷ.'),
       tip('place', ctx.match.state.isBreak ? 'Đặt bi phá' : 'Đặt bi cái', 'Kéo bi cái, chạm chỗ muốn đặt, hoặc dùng 4 nút mũi tên. Chọn Ngắm thử để chỉnh hướng; Dời bi để quay lại. Bấm ĐẶT BI để chốt.'),
-      tip('energy', 'Chiêu và năng lượng', 'Chạm ô chiêu để đọc rồi bấm Dùng. Năng lượng tăng mỗi cú đánh, mỗi bi vào (cú càng khó càng nhiều) và khi đối thủ lỗi; cần đầy thanh năng lượng để dùng tuyệt chiêu.'),
+      tip('energy', 'Chiêu và năng lượng', 'Chạm ô chiêu để đọc rồi bấm Dùng. Năng lượng tăng mỗi cú đánh, mỗi bi vào (cú đánh càng khó càng nhiều) và khi đối thủ lỗi; cần đầy thanh năng lượng để dùng tuyệt chiêu.'),
       tip('target', 'Gọi lỗ', 'Khi phải gọi: chạm bi (nếu cần) rồi chạm lỗ trên bàn trước khi đánh.'),
       tip('settings', 'Bàn phím', 'Mũi tên xoay (Shift = tinh), lên/xuống chỉnh lực, Tab đổi mục tiêu, Enter đánh, giữ Space nạp lực, lăn chuột xoay tinh.'),
     ),

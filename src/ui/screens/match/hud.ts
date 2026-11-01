@@ -67,7 +67,7 @@ function renderPassive(ctx: MatchCtx, dom: MatchDom): void {
     cuongchien: 'Tăng lực · giảm xoáy',
     phaptu: match.spinAxis[controller] === 'side' ? 'Ưu tiên áp phê ngang' : 'Ưu tiên kéo / đẩy',
     hophap: match.guardUsed[controller] ? 'Đã dùng băng mềm' : 'Đặt băng mềm',
-    chusu: 'Cú thủ hợp lệ để lại cát',
+    chusu: 'Cú đánh thủ hợp lệ để lại cát',
     anhsat: match.assassinReady[controller] ? (match.assassinChoice[controller] === 'info' ? 'Liên hoàn · xem đường' : 'Liên hoàn · thêm lực') : `Chuỗi ${match.assassinStreak[controller]}/${ASSASSIN_RUN} bi · ${match.assassinValue[controller].toFixed(1).replace('.', ',')}/${ASSASSIN_VALUE} điểm`,
     luanhoi: 'Luân phiên chiêu · hồi nhanh',
   };
@@ -101,8 +101,8 @@ function renderHexes(ctx: MatchCtx, c: CardView, s: Side): void {
   c.hexKey = key;
   // Each chip names its effect: an icon alone never told the player which skill was acting on whom.
   c.hexes.replaceChildren(...chips.map((x) => h('span.mx-hex', {
-    title: `${x.label}: còn ${x.shotsLeft} cú`,
-    'aria-label': `${x.label}, còn ${x.shotsLeft} cú`,
+    title: `${x.label}: còn ${x.shotsLeft} cú đánh`,
+    'aria-label': `${x.label}, còn ${x.shotsLeft} cú đánh`,
   }, icon(x.icon), h('span', null, x.label), h('b', null, `${x.shotsLeft}`))));
   c.hexes.classList.toggle('has', chips.length > 0);
 }
