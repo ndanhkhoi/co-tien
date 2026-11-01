@@ -107,13 +107,18 @@ function sectionBody(
   }
   if (!app.profile.champions.includes(c.id)) return h('p.locked-note', null, 'Chiêu mộ tướng này (thắng ở Hành trình hoặc mua bằng xu) để mở bộ tranh đầy đủ.');
   preloadFigures(fullFigurePaintings(c));
-  return h('div.codex-gallery', null, ...galleryItems(c).map((it, i) => {
-    const thumb = h('button.cg-thumb', {
+  const items = galleryItems(c);
+  const thumb = (it: GalleryItem, i: number) => {
+    const el = h('button.cg-thumb', {
       type: 'button', class: it.small ? 'small' : '', 'aria-pressed': String(i === 0),
       'aria-label': `${it.label} · Hiện ở cột tranh`,
     }, h('span.cg-art', null, h('img', { src: it.src, alt: '', loading: 'lazy' })), h('span.cg-label', null, it.label));
-    return tap(thumb, () => onArt?.(it, thumb));
-  }));
+    return tap(el, () => onArt?.(it, el));
+  };
+  // Full-body paintings get tall cards; the four face studies share their own row of square cards.
+  return h('div.cp-gallery', null,
+    h('div.codex-gallery', null, ...items.filter((it) => !it.small).map(thumb)),
+    h('div.codex-gallery.faces', null, ...items.filter((it) => it.small).map((it) => thumb(it, -1))));
 }
 
 interface GalleryItem { label: string; src: string; small?: boolean }
@@ -139,9 +144,8 @@ function artViewer(src: string, name: string) {
 
 function ownedAction(app: App, c: Champion, close: () => void, onChange?: () => void) {
   if (app.profile.champion === c.id) {
-    const current = btn(h('span.btn-in', null, icon('check'), 'Đang dùng'), () => {}, 'ghost');
-    current.setAttribute('aria-label', `${c.name} đang là tướng đại diện`);
-    return current;
+    // A status, not a button: there is nothing to do when this champion already represents you.
+    return h('span.cp-current', { 'aria-label': `${c.name} đang là tướng đại diện` }, icon('check'), 'Đang dùng');
   }
   const pick = btn(h('span.btn-in', null, 'Chọn tướng'), () => {
     app.profile.champion = c.id;

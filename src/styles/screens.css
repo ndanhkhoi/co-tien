@@ -617,8 +617,9 @@ textarea.code-box:focus { border-color: var(--accent); }
 .cg-art { display: grid; place-items: center; overflow: hidden; border-radius: calc(var(--r-2) - 3px); background: var(--sheet-3); }
 .cg-art img { display: block; width: 100%; aspect-ratio: 1; object-fit: contain; }
 .cg-label { min-height: 14px; overflow: hidden; font: 700 10.5px/1.2 var(--body); color: var(--muted); }
-.champ-page .cg-art img { width: 82px; height: 82px; max-width: 100%; object-fit: contain; }
-.champ-page .cg-thumb.small .cg-art img { object-fit: cover; object-position: 50% 18%; }
+.champ-page .cp-gallery { display: flex; flex-direction: column; gap: 8px; }
+.champ-page .cg-art img { width: 100%; height: auto; aspect-ratio: 3 / 4; object-fit: contain; }
+.champ-page .cg-thumb.small .cg-art img { aspect-ratio: 1; object-fit: cover; object-position: 50% 18%; }
 .modal.art-view { width: 100%; max-width: none; height: 100%; padding: 6px; background: var(--sheet); cursor: zoom-out; }
 .art-view img { width: 100%; height: 100%; object-fit: contain; }
 .locked-note { padding: 10px 12px; border-radius: var(--r-2); background: var(--sheet-2); }
@@ -867,7 +868,9 @@ body.vp-rotate .rotate-hint, body.vp-resize .size-hint { display: flex; }
 .champ-page .cp-pane > * { flex: 1 0 auto; }
 .champ-page .cp-passive { padding: 6px 9px; border-left: 4px solid var(--accent); border-radius: 0 var(--r-2) var(--r-2) 0; background: var(--sheet-2); font-size: 13px; line-height: 1.35; color: var(--ink-2); }
 .champ-page .cp-passive b { color: var(--ink); }
-.champ-page .cp-bio { display: flex; flex-direction: column; justify-content: center; gap: 8px; min-height: 100%; }
+.champ-page .cp-current { display: inline-flex; align-items: center; gap: 5px; min-height: var(--touch-target); padding-inline: 6px; font: 700 15px/1.2 var(--display); color: var(--ok); white-space: nowrap; }
+.champ-page .cp-current img { width: 18px; height: 18px; }
+.champ-page .cp-bio { display: flex; flex-direction: column; gap: 8px; padding-top: 4px; }
 
 /* Painted skill index: icon left; label/name/cost on line one, description on line two. */
 .champion-skills { display: flex; flex-direction: column; gap: 5px; margin: 0; }
