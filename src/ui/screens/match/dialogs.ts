@@ -89,7 +89,7 @@ function rackChallenge(ctx: MatchCtx, deps: DialogDeps, winner: Side): void {
     h('p.mx-mtext', null, match.lastRes?.messages[0] ?? ''),
     h('p.mx-mgoal', null, h('b', null, 'Mục tiêu: '), challenge.goal, h('span', null, ` · lượt ${turn.attempt}/${challenge.tries}`)),
     ok ? stars(r.stars) : h('p.muted', null, triesLeft > 0 ? `Còn ${triesLeft} lượt thử` : 'Hết lượt thử. Thử lại từ đầu nhé'),
-    h('div.actions', null,
+    h('div.actions.stack', null,
       btn('Về danh sách', () => {
         close();
         opts.onExit();

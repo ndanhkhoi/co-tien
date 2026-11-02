@@ -492,6 +492,8 @@
 .mx-res-score { font: 800 34px/1 var(--display); }
 .mx-res-body .stars .ico { width: 40px; height: 40px; }
 .mx-res-body .actions { margin-top: auto; padding-top: 6px; }
+/* Three Vietnamese labels never fit one row beside the art; stack them full-width. */
+.mx-res-body .actions.stack { grid-auto-flow: row; }
 .mx-res-lines .kv > :first-child { color: var(--ink); }
 
 .btn.mx-leave { color: var(--bad); }
