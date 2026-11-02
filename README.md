@@ -63,10 +63,6 @@ Chụp ở 932×430, tướng của người chơi là Ngân Cầm.
 | **Trang môn phái** | **Cơ Tiên Truyện** |
 | ![Trang môn phái trong Tàng Các](docs/screenshots/mon-phai.webp) | ![Đọc Cơ Tiên Truyện](docs/screenshots/co-tien-truyen.webp) |
 
-Chi tiết vùng đất đặt icon hai cây cơ thách đấu riêng bên phải cao thủ kế tiếp:
-
-![Chi tiết Hành trình: nút thách đấu bằng icon hai cây cơ, căn giữa bên phải](docs/screenshots/hanh-trinh-vung-dat.webp)
-
 Trên màn hình 2K (2560×1440), khung 16:9 nằm giữa phông tranh, tướng đứng hai bên:
 
 ![Khung sân khấu trên desktop: phiên bản nằm trong khung giao diện](docs/screenshots/desktop-san-khau.webp)

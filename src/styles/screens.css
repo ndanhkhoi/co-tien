@@ -551,24 +551,18 @@ textarea.code-box:focus { border-color: var(--accent); }
   text-overflow: ellipsis;
 }
 .land-sheet .ls-masters .cc-sub { justify-self: stretch; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.land-sheet .ls-masters .champ-card.next { grid-template-columns: 48px minmax(0, 1fr) var(--touch-target); }
+.land-sheet .ls-masters .champ-card.next { grid-template-columns: 48px minmax(0, 1fr) auto; }
 .land-sheet .ls-masters .champ-card > .ls-duel {
   grid-column: 3;
   grid-row: 1 / span 3;
+  align-self: center;
   justify-self: end;
-  display: grid;
-  place-items: center;
-  width: var(--touch-target);
-  height: var(--touch-target);
-  border: 1px solid var(--accent);
-  border-radius: 50%;
-  background: var(--sheet);
 }
-.ls-duel .ico { width: 34px; height: 34px; }
+.ls-duel .ico { width: 28px; height: 28px; }
 .land-sheet .ls-masters .stars { gap: 1px; }
 .land-sheet .ls-masters .stars .ico { width: 15px; height: 15px; }
 .land-sheet .ls-masters .ls-boss { grid-column: 1 / -1; grid-template-columns: 60px minmax(0, 1fr); padding: 5px 10px 5px 5px; }
-.land-sheet .ls-masters .ls-boss.next { grid-template-columns: 60px minmax(0, 1fr) var(--touch-target); }
+.land-sheet .ls-masters .ls-boss.next { grid-template-columns: 60px minmax(0, 1fr) auto; }
 .land-sheet .ls-masters .ls-boss .cc-art { width: 60px; }
 .ls-boss-foot { display: flex; align-items: center; gap: 6px; margin-top: 2px; }
 .ls-boss-tag {
