@@ -10,32 +10,45 @@ const observers = new WeakMap<HTMLElement, { resize: ResizeObserver; mutation: M
 
 const chevrons = new WeakMap<HTMLElement, HTMLElement>();
 
-function update(el: HTMLElement) {
+/**
+ * `measure` allows layout reads (the chevron's place); only the resize/mutation paths pass it.
+ * A scroll event just flips `data-more` — the chevron never depends on `scrollTop`, so geometry
+ * reads stay off the per-frame scroll path.
+ */
+function update(el: HTMLElement, measure: boolean) {
   const below = el.scrollHeight - el.clientHeight - el.scrollTop > 6;
   const right = el.scrollWidth - el.clientWidth - el.scrollLeft > 6;
   const v = `${below ? 'b' : ''}${right ? 'r' : ''}`;
-  if (v) el.dataset.more = v;
-  else delete el.dataset.more;
+  if (v !== el.dataset.more) {
+    if (v) el.dataset.more = v;
+    else delete el.dataset.more;
+  }
   // The chevron lives beside the list (the fade mask would hide it inside), placed over its bottom edge.
+  const host = el.parentElement;
   let chev = chevrons.get(el);
+  if (!below || !host) {
+    chev?.remove();
+    return;
+  }
+  if (!chev) {
+    chev = document.createElement('div');
+    chev.className = 'more-chevron';
+    chev.append(icon('turn'));
+    chev.setAttribute('aria-hidden', 'true');
+    chevrons.set(el, chev);
+    measure = true;
+  }
   // Keep each affordance in its own panel's stacking context. Appending to #ui
   // puts a story reader's chevron behind the reader itself (z-index 70).
-  const host = el.parentElement;
-  if (host && getComputedStyle(host).position === 'static') host.classList.add('scroll-hint-host');
-  if (below && host) {
-    if (!chev) {
-      chev = document.createElement('div');
-      chev.className = 'more-chevron';
-      chev.append(icon('turn'));
-      chev.setAttribute('aria-hidden', 'true');
-      chevrons.set(el, chev);
-    }
-    if (chev.parentElement !== host) host.append(chev);
+  if (chev.parentElement !== host) {
+    if (getComputedStyle(host).position === 'static') host.classList.add('scroll-hint-host');
+    host.append(chev);
+    measure = true;
+  }
+  if (measure) {
     chev.style.left = `${el.offsetLeft + el.offsetWidth / 2}px`;
     // Sits wholly inside the bottom edge of the faded strip, so it never sits on readable text.
     chev.style.top = `${el.offsetTop + el.offsetHeight - 28}px`;
-  } else {
-    chev?.remove();
   }
 }
 
@@ -45,15 +58,15 @@ function track(el: HTMLElement) {
   if (tracked.has(el)) return;
   tracked.add(el);
   if (!el.hasAttribute('tabindex')) el.tabIndex = 0;
-  const run = () => { if (el.isConnected) update(el); };
-  el.addEventListener('scroll', run, { passive: true });
-  const resize = new ResizeObserver(run);
+  el.addEventListener('scroll', () => { if (el.isConnected) update(el, false); }, { passive: true });
+  const measure = () => { if (el.isConnected) update(el, true); };
+  const resize = new ResizeObserver(measure);
   resize.observe(el);
   // Content that arrives later (tab switches, re-renders) changes the scroll size too.
-  const mutation = new MutationObserver(run);
+  const mutation = new MutationObserver(measure);
   mutation.observe(el, { childList: true, subtree: true });
   observers.set(el, { resize, mutation });
-  requestAnimationFrame(run);
+  requestAnimationFrame(measure);
 }
 
 export function installScrollHints(root: HTMLElement) {
