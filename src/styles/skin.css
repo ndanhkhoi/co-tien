@@ -602,6 +602,11 @@ body.theatre #theatre {
   border-image-repeat: stretch;
 }
 body.playing .bd-scene, body.playing .bd-mist { animation-play-state: paused; }
+/* An open modal freezes the living backdrop too: scrolling behind the scrim is when raster memory
+   is tightest on phones, and the drifting layers hold theirs the whole time. The mist layer drops
+   out entirely — the scrim hides it anyway. */
+body:has(.modal-wrap) .bd-scene, body:has(.modal-wrap) .bd-mist { animation-play-state: paused; }
+body:has(.modal-wrap) .bd-mist { visibility: hidden; }
 @keyframes bd-drift { from { transform: scale(1) translate(0, 0); } to { transform: scale(1.07) translate(-1.6%, -1.2%); } }
 @keyframes bd-mist { to { transform: translateX(-50%); } }
 @media (prefers-reduced-motion: reduce) {

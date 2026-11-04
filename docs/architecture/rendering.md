@@ -19,6 +19,11 @@
 - **Đường đi của Thần Nhãn / Luyện thế mọc dần** trong ngân sách `EAGLE_BUDGET_MS` mỗi khung, nên kéo ngắm vẫn mượt.
 - **Giới hạn mật độ canvas** ở 2× và khoảng 3,6 MP (`src/ui/app.ts`) vì canvas phủ cả cửa sổ; MSAA chỉ bật khi
   màn hình kém nét.
+- **Buffer vẽ sống theo trận** (`src/ui/app.ts`): vào trận canvas mới mang kích thước cửa sổ; về menu thu về
+  1×1 để nhả bộ nhớ GPU. resize của window (trên Android, thanh địa chỉ ẩn/hiện ngay khi cuộn) chỉ đổi
+  kích thước khi đang trong trận. Nếu để tự động, Pixi sẽ cấp phát lại và vẽ buffer đúng lúc compositor
+  raster ô cuộn sau hộp thoại, và GPU process bị reset trên máy yếu (màn đen rồi "đồ hoạ ngừng hoạt
+  động"). Menu mở hộp thoại cũng đóng băng backdrop sống và thả lớp sương (`skin.css`).
 - **Texture canvas thuộc về một `TableView`**: vẽ lại thì huỷ bản cũ, `destroy()` huỷ hết cùng shader bi, nên
   vào ra trận bao nhiêu lần bộ nhớ GPU vẫn như cũ. Ảnh tải qua `Assets` dùng chung và không bị huỷ.
 - **Mất WebGL**: PixiJS tự dựng lại khi trình duyệt trả context; quá lâu thì `app.ts` hiện bảng "Đồ hoạ bị gián

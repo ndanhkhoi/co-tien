@@ -50,7 +50,6 @@ export class App {
     const budget = 3_600_000;
     const resolution = Math.max(1, Math.min(dpr, 2, Math.sqrt(budget / (innerWidth * innerHeight))));
     await this.pixi.init({
-      resizeTo: window,
       antialias: resolution < 1.5,
       backgroundAlpha: 0,
       resolution,
@@ -64,6 +63,14 @@ export class App {
     // a still table must not cost a full redraw and composite every frame.
     this.pixi.ticker.remove(this.pixi.render, this.pixi);
     this.watchGpu(this.pixi.canvas);
+    // The drawing buffer belongs to the match; `show()` sizes it (window in a match, 1×1 on menus).
+    // Pixi's own `resizeTo: window` must stay off: on Android the URL bar's show/hide fires window
+    // resize mid-scroll, and an auto-resize would reallocate — and render — the buffer exactly
+    // while the compositor rasterizes scroll tiles behind a dialog, which reset the GPU process
+    // on small phones (black screen, then "graphics stopped working").
+    addEventListener('resize', () => {
+      if (this.current?.usesStage) this.pixi.renderer.resize(innerWidth, innerHeight);
+    });
     // Compile the ball shader while the player is still on the title screen; otherwise the first
     // table pays for it and the transition into a match stalls.
     const warm = () => void import('../render/ball-warmup').then((m) => m.warmBallShader(this.pixi)).catch(() => undefined);
@@ -271,8 +278,14 @@ export class App {
     // The backdrop's drifting painting and mist hold still while a table is up: on phones the
     // transparent table canvas is composited over them every frame, and their motion made play stutter.
     document.body.classList.toggle('playing', !!next.usesStage);
-    if (next.usesStage) this.pixi.ticker.start();
-    else this.pixi.ticker.stop();
+    if (next.usesStage) {
+      this.pixi.ticker.start();
+      this.pixi.renderer.resize(innerWidth, innerHeight);
+    } else {
+      this.pixi.ticker.stop();
+      // Menus never draw: release the window-sized buffer instead of holding GPU memory for nothing.
+      this.pixi.renderer.resize(1, 1);
+    }
     next.el.dataset.direction = direction;
     this.setBackdrop(next.backdrop);
     this.setCast(next.cast ?? this.menuCast());
