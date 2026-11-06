@@ -13,6 +13,10 @@
   filter: drop-shadow(0 6px 14px rgba(40, 30, 18, 0.16));
 }
 .modal { border-width: 26px; border-image-width: 26px; padding: 6px 10px; }
+/* Dialogs hold scrolling lists, and a filter on a scroller's ancestor (or on its cards) makes the GPU
+   re-render that whole surface every scroll frame; on phones that tipped the GPU process into a reset.
+   The scrim already lifts a dialog off the page, so dialogs and their cards drop the shadow. */
+.modal, .modal .champ-card:not(.sel) { filter: none; }
 .panel { padding: 4px 6px; }
 
 /* Seal-stamp primary buttons and ink-outline secondary buttons. */
@@ -224,7 +228,7 @@
 
 /* Champion cards as collectible card frames: sect-coloured top, ink frame, name plate. */
 .champ-card {
-  animation: ct-art-rise 340ms var(--ease) both;
+  animation: ct-art-rise 340ms var(--ease) backwards;
   padding: 0;
   gap: 0;
   background: none;
@@ -293,7 +297,9 @@
 .ld-tip { margin-top: 14px; max-width: 400px; font-size: 14px; line-height: 1.6; color: var(--ink-2); min-height: 45px; }
 
 /* ---------- Cơ Tiên: directional pages and painted champion entrances ---------- */
-.screen { animation: ct-screen-forward 280ms var(--ease) both; }
+/* Entrances fill backwards only: their last frame equals the resting style, and a finished animation that
+   keeps filling holds its element on its own GPU layer for as long as it is on screen. */
+.screen { animation: ct-screen-forward 280ms var(--ease) backwards; }
 .screen[data-direction='back'] { animation-name: ct-screen-back; }
 .screen[data-direction='reset'] { animation-name: ct-fade-in; }
 .screen.out { animation: ct-parallax-out 280ms var(--ease) both; pointer-events: none; }
@@ -307,9 +313,9 @@
 @keyframes ct-fade-out { to { opacity: 0; } }
 .page-motion-host { position: relative; }
 .page-motion-host > .page-echo { position: absolute !important; right: auto; bottom: auto; pointer-events: none !important; z-index: 2; }
-.motion-sheet { animation: ct-sheet-in 280ms var(--ease) both; }
+.motion-sheet { animation: ct-sheet-in 280ms var(--ease) backwards; }
 @keyframes ct-sheet-in { from { opacity: 0; transform: translateX(36px); } to { opacity: 1; transform: none; } }
-.home-hero, .cp-art img { animation: ct-art-rise 480ms var(--ease) both; }
+.home-hero, .cp-art img { animation: ct-art-rise 480ms var(--ease) backwards; }
 @keyframes ct-art-rise { from { opacity: 0; translate: 0 22px; } to { opacity: 1; translate: 0 0; } }
 .champ-card:nth-child(5n + 2) { animation-delay: 40ms; }
 .champ-card:nth-child(5n + 3) { animation-delay: 80ms; }
@@ -331,7 +337,7 @@
 }
 
 .intro-copy { display: flex; flex-direction: column; gap: 10px; }
-.pm-av img { animation: ct-art-rise 360ms var(--ease) both; }
+.pm-av img { animation: ct-art-rise 360ms var(--ease) backwards; }
 @media (prefers-reduced-motion: reduce) { .pm-av img { animation: none; } }
 
 /* Keep transparent champion art on a simple compositing layer on iOS.
@@ -347,7 +353,7 @@
 }
 
 /* Home tablets drop in one after another. */
-.home-journey, .home-tablet { animation: ct-tile-in 380ms var(--ease) both; }
+.home-journey, .home-tablet { animation: ct-tile-in 380ms var(--ease) backwards; }
 .home-tablet:nth-child(1) { animation-delay: 140ms; } .home-tablet:nth-child(2) { animation-delay: 190ms; } .home-tablet:nth-child(3) { animation-delay: 240ms; }
 .home-tablet:nth-child(4) { animation-delay: 290ms; } .home-tablet:nth-child(5) { animation-delay: 340ms; } .home-tablet:nth-child(6) { animation-delay: 390ms; }
 @keyframes ct-tile-in { from { opacity: 0; translate: -18px 0; scale: 0.96; } to { opacity: 1; translate: 0 0; scale: 1; } }

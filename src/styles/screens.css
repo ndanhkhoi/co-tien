@@ -679,7 +679,7 @@ textarea.code-box:focus { border-color: var(--accent); }
   gap: 10px;
   padding: calc(10px + var(--st)) calc(16px + var(--sr)) calc(10px + var(--sb)) calc(16px + var(--sl));
   background: var(--frame);
-  animation: screen-in 0.24s var(--ease) both;
+  animation: screen-in 0.24s var(--ease) backwards;
 }
 .story-reader.leaving { opacity: 0; transition: opacity 0.18s; }
 .sr-page { flex: 1; min-height: 0; display: grid; grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr); gap: 12px; }

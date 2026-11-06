@@ -190,7 +190,7 @@ input[type='text']:focus, input:not([type]):focus { border-color: var(--accent);
   display: grid;
   place-items: center;
   padding: calc(12px + var(--st)) calc(16px + var(--sr)) calc(12px + var(--sb)) calc(16px + var(--sl));
-  animation: fade-in 0.18s ease both;
+  animation: fade-in 0.18s ease backwards;
 }
 .modal {
   position: relative;
@@ -199,7 +199,7 @@ input[type='text']:focus, input:not([type]):focus { border-color: var(--accent);
   display: flex;
   flex-direction: column;
   gap: 10px;
-  animation: modal-in 0.22s var(--ease) both;
+  animation: modal-in 0.22s var(--ease) backwards;
 }
 .modal.scroll { overflow-y: auto; }
 .modal h2, .modal .title { font: 800 var(--fs-xl)/1.2 var(--display); }
