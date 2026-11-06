@@ -1,5 +1,6 @@
 import { MAX_FORCE } from '../game/terrain';
-import { Assets, Container, Graphics, Sprite, Texture } from 'pixi.js';
+import { Container, Graphics, Sprite, Texture } from 'pixi.js';
+import { loadTableArt } from './table-art';
 import type { CastEffect } from '../game/skill-cast';
 import type { Match } from '../game/match';
 
@@ -31,7 +32,7 @@ interface OmenTiming {
   moving: boolean;
 }
 
-/** Bounded sprite pool: shared Assets textures survive the view; sprites belong to it. */
+/** Bounded sprite pool: shared table art survives the view (the stage releases it); sprites belong to it. */
 export class OmenArt {
   readonly layer = new Container();
   /** Sprites clipped to the bed: the mask is set once on this container, never toggled per sprite. */
@@ -65,7 +66,7 @@ export class OmenArt {
     for (let i = 0; i < 16; i++) this.freePool.push(this.pooledSprite(this.free));
     for (const name of [...names, ...skillNames.map(name => `skill/${name}` as const)]) {
       const path = name.startsWith('skill/') ? `skills/${name.slice(6)}` : `omens/${name}`;
-      void Assets.load<Texture>(`${base}art/table/${path}.webp`).then(texture => {
+      void loadTableArt(`${base}art/table/${path}.webp`).then(texture => {
         if (!this.layer.destroyed) this.textures.set(name, texture);
       }).catch(() => { /* Missing painted art stays absent; never substitute invented geometry. */ });
     }

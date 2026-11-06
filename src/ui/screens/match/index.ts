@@ -1,9 +1,10 @@
-import type { App, Screen } from '../../app';
+import type { App, ScreenFactory } from '../../app';
 import type { MatchOptions } from './options';
 import { buildScreen } from './wiring';
 
 export type { MatchOptions } from './options';
 
-export function matchScreen(opts: MatchOptions) {
-  return (app: App): Screen => buildScreen(app, opts);
+/** A match screen; `stage` has the app open the WebGL table before building it. */
+export function matchScreen(opts: MatchOptions): ScreenFactory {
+  return Object.assign((app: App) => buildScreen(app, opts), { stage: true });
 }

@@ -5,7 +5,7 @@ import { BallMesh } from './ball-mesh';
 
 /**
  * Render one ball, one sprite and one shape off screen so WebGL links every program a match
- * uses (ball shader, sprite and graphics batchers) while the player is still on the title screen.
+ * uses (ball shader, sprite and graphics batchers) as the stage opens, before the table slides in.
  */
 export function warmBallShader(app: Application) {
   const numbers = paintNumberAtlas();

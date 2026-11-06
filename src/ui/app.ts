@@ -1,12 +1,13 @@
-import { Application } from 'pixi.js';
+import type { Application } from 'pixi.js';
 import { AiClient } from '../ai/ai-client';
 import { sound } from '../audio/sound';
 import { CUES, TABLES } from '../game/content/gear';
 import { CHAMPIONS } from '../game/content/sects';
 import { levelOf, loadProfile, saveProfile, type Profile } from '../game/profile';
 import { setHaptics } from '../platform/device';
-import { btn, h, modal as baseModal, toast } from './dom';
+import { h, modal as baseModal, toast } from './dom';
 import { menuFigurePaintings } from './champion-art';
+import { Stage } from './stage';
 
 export interface Screen {
   el: HTMLElement;
@@ -14,8 +15,6 @@ export interface Screen {
   onBack?: () => boolean;
   /** Called when the screen is removed. */
   dispose?: () => void;
-  /** Uses the WebGL stage (game screens). */
-  usesStage?: boolean;
   /** Painting behind the framed stage on roomy screens; the key art when omitted. */
   backdrop?: string;
   /** Champion cut-outs flanking the framed stage (left, right) when the screen has room. */
@@ -24,14 +23,19 @@ export interface Screen {
 
 const KEY_ART = `${import.meta.env.BASE_URL}art/ui/keyart.webp`;
 
-export type ScreenFactory = (app: App) => Screen;
+/** `stage` marks a match: its screen is built on the WebGL table, which opens before it mounts. */
+export type ScreenFactory = ((app: App) => Screen) & { readonly stage?: boolean };
 
 export class App {
-  pixi!: Application;
   readonly profile: Profile;
   readonly ai = new AiClient();
   private ui = document.getElementById('ui')!;
   private stageEl = document.getElementById('stage')!;
+  private stage = new Stage(this.stageEl);
+  /** The current screen is a match on the table. */
+  private inMatch = false;
+  /** Bumped by every navigation, so a stage that finishes opening late mounts nothing stale. */
+  private navToken = 0;
   private stack: ScreenFactory[] = [];
   private current: Screen | null = null;
   private pendingUpdate: (() => void) | null = null;
@@ -41,41 +45,12 @@ export class App {
     this.applySettings();
   }
 
-  async init() {
-    this.pixi = new Application();
-    // The canvas spans the window, so cap its pixel count: a 4K-class buffer with MSAA cannot hold
-    // 60 fps on most GPUs, and a late frame stutters both the rolling balls and the power bar.
-    // Dense screens skip MSAA; balls are anti-aliased in their own shader.
-    const dpr = window.devicePixelRatio || 1;
-    const budget = 3_600_000;
-    const resolution = Math.max(1, Math.min(dpr, 2, Math.sqrt(budget / (innerWidth * innerHeight))));
-    await this.pixi.init({
-      antialias: resolution < 1.5,
-      backgroundAlpha: 0,
-      resolution,
-      autoDensity: true,
-      preference: 'webgl',
-      powerPreference: 'high-performance',
-    });
-    this.stageEl.append(this.pixi.canvas);
-    this.pixi.ticker.stop();
-    // Screens draw the stage themselves, and only when its picture changed (TableView.shouldRender):
-    // a still table must not cost a full redraw and composite every frame.
-    this.pixi.ticker.remove(this.pixi.render, this.pixi);
-    this.watchGpu(this.pixi.canvas);
-    // The drawing buffer belongs to the match; `show()` sizes it (window in a match, 1×1 on menus).
-    // Pixi's own `resizeTo: window` must stay off: on Android the URL bar's show/hide fires window
-    // resize mid-scroll, and an auto-resize would reallocate — and render — the buffer exactly
-    // while the compositor rasterizes scroll tiles behind a dialog, which reset the GPU process
-    // on small phones (black screen, then "graphics stopped working").
-    addEventListener('resize', () => {
-      if (this.current?.usesStage) this.pixi.renderer.resize(innerWidth, innerHeight);
-    });
-    // Compile the ball shader while the player is still on the title screen; otherwise the first
-    // table pays for it and the transition into a match stalls.
-    const warm = () => void import('../render/ball-warmup').then((m) => m.warmBallShader(this.pixi)).catch(() => undefined);
-    if ('requestIdleCallback' in window) requestIdleCallback(warm, { timeout: 2500 });
-    else setTimeout(warm, 1200);
+  /** The match's renderer. Only screens built from a `stage` factory may use it. */
+  get pixi(): Application {
+    return this.stage.pixi;
+  }
+
+  init() {
     // Back button / swipe-back: route through screens instead of leaving the page.
     history.replaceState({ tc: 0 }, '');
     history.pushState({ tc: 1 }, '');
@@ -136,7 +111,7 @@ export class App {
    * blocking sheet rather than playing the old build; inside a match it downloads quietly.
    */
   updateFound() {
-    if (this.current?.usesStage) return;
+    if (this.inMatch) return;
     this.showUpdateSheet('Đang tải bản mới…');
   }
 
@@ -149,7 +124,7 @@ export class App {
   setPendingUpdate(apply: () => void) {
     this.pendingUpdate = apply;
     // Updates are mandatory: right away from menus, and the moment the current match ends.
-    if (this.current?.usesStage) toast('Có bản mới. Game sẽ tự cập nhật ngay khi hết trận', 'gold');
+    if (this.inMatch) toast('Có bản mới. Game sẽ tự cập nhật ngay khi hết trận', 'gold');
     else this.applyUpdate();
   }
 
@@ -173,30 +148,6 @@ export class App {
     document.body.append(h('div.update-sheet', { role: 'alert', 'aria-live': 'assertive' },
       h('div.us-card', null, h('img.us-logo', { src: logo, alt: 'Cơ Tiên' }), h('b.us-text', null, text),
         h('div.us-bar', { 'aria-hidden': 'true' }, h('i')), h('span.us-note', null, 'Tiến trình của bạn được giữ nguyên'))));
-  }
-
-  /**
-   * A GPU reset drops the WebGL context. PixiJS rebuilds the table once the browser restores it;
-   * when the browser keeps it away (it blocks 3D for a page after repeated resets) the table would
-   * stay blank, so the player is told and offered a reload. Only the match in progress is lost.
-   */
-  private watchGpu(canvas: HTMLCanvasElement) {
-    let timer = 0;
-    canvas.addEventListener('webglcontextlost', () => {
-      clearTimeout(timer);
-      timer = window.setTimeout(() => {
-        if (document.querySelector('.gpu-sheet')) return;
-        document.body.append(h('div.update-sheet.gpu-sheet', { role: 'alert', 'aria-live': 'assertive' },
-          h('div.us-card', null, h('img.us-logo', { src: `${import.meta.env.BASE_URL}art/ui/logo.webp`, alt: 'Cơ Tiên' }),
-            h('b.us-text', null, 'Đồ hoạ bị gián đoạn'),
-            h('span.us-note', null, 'Trình duyệt vừa tạm dừng bộ xử lý đồ hoạ. Tải lại để bàn hiện lại. Hồ sơ được giữ nguyên, riêng trận đang chơi sẽ không được lưu.'),
-            btn('Tải lại', () => location.reload()))));
-      }, 3000);
-    });
-    canvas.addEventListener('webglcontextrestored', () => {
-      clearTimeout(timer);
-      document.querySelector('.gpu-sheet')?.remove();
-    });
   }
 
   /** Cross-fade the stage backdrop once the new painting has decoded. */
@@ -263,6 +214,25 @@ export class App {
   }
 
   private show(factory: ScreenFactory, direction: 'forward' | 'back' | 'reset') {
+    const token = ++this.navToken;
+    if (!factory.stage || this.stage.isOpen) {
+      this.mount(factory, direction);
+      return;
+    }
+    // A match waits for its renderer; the screen it leaves stops taking taps meanwhile.
+    if (this.current) this.current.el.inert = true;
+    this.stage.open().then(() => {
+      if (token === this.navToken) this.mount(factory, direction);
+      else if (!this.inMatch) this.stage.close();
+    }, () => {
+      if (token !== this.navToken) return;
+      if (this.current) this.current.el.inert = false;
+      this.stack.pop();
+      this.stage.fail();
+    });
+  }
+
+  private mount(factory: ScreenFactory, direction: 'forward' | 'back' | 'reset') {
     this.ui.querySelectorAll('.screen.out').forEach((el) => el.remove());
     const prev = this.current;
     if (prev) {
@@ -272,19 +242,18 @@ export class App {
       prev.el.classList.add('out');
       setTimeout(() => prev.el.remove(), 280);
     }
+    this.inMatch = !!factory.stage;
+    // Menus hold no WebGL context at all; a rematch keeps the table's.
+    if (!this.inMatch) this.stage.close();
     const next = factory(this);
     this.current = next;
-    this.stageEl.style.visibility = next.usesStage ? 'visible' : 'hidden';
+    this.stageEl.style.visibility = this.inMatch ? 'visible' : 'hidden';
     // The backdrop's drifting painting and mist hold still while a table is up: on phones the
     // transparent table canvas is composited over them every frame, and their motion made play stutter.
-    document.body.classList.toggle('playing', !!next.usesStage);
-    if (next.usesStage) {
+    document.body.classList.toggle('playing', this.inMatch);
+    if (this.inMatch) {
       this.pixi.ticker.start();
       this.pixi.renderer.resize(innerWidth, innerHeight);
-    } else {
-      this.pixi.ticker.stop();
-      // Menus never draw: release the window-sized buffer instead of holding GPU memory for nothing.
-      this.pixi.renderer.resize(1, 1);
     }
     next.el.dataset.direction = direction;
     this.setBackdrop(next.backdrop);
@@ -293,7 +262,7 @@ export class App {
     // The root scaler distinguishes contained gameplay from fullscreen entry art.
     // Let it recompute immediately after a screen transition instead of waiting for resize.
     window.dispatchEvent(new Event('cotien:ui-resize'));
-    if (!next.usesStage && this.pendingUpdate) this.applyUpdate();
+    if (!this.inMatch && this.pendingUpdate) this.applyUpdate();
   }
 
   /** Coins / XP reward with level-up detection. Returns levels gained. */

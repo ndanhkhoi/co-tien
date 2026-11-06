@@ -1,4 +1,5 @@
-import { Assets, Container, Sprite, Texture } from 'pixi.js';
+import { Container, Sprite, Texture } from 'pixi.js';
+import { loadTableArt } from './table-art';
 import { sect as sectInfo, vfxUrl, type SectId, type SkillKind } from '../game/content/sects';
 
 type Pt = { x: number; y: number };
@@ -85,7 +86,7 @@ export class SkillFx {
   private load(url: string): Promise<Texture | null> {
     let p = this.cache.get(url);
     if (!p) {
-      p = Assets.load<Texture>(url).catch(() => null);
+      p = loadTableArt(url).catch(() => null);
       this.cache.set(url, p);
     }
     return p;

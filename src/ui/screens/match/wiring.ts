@@ -362,7 +362,6 @@ function finishScreen(ctx: MatchCtx, s: MatchSections): Screen {
   const backdrop = screenBackdrop(ctx);
   return {
     el: dom.el,
-    usesStage: true,
     // The opponent's homeland hangs behind the table.
     backdrop: backdrop.backdrop,
     cast: backdrop.cast,
