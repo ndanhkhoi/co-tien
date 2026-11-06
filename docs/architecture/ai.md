@@ -9,7 +9,7 @@
 | `skill-choice.ts` | Nhiễu thực hiện và chọn chiêu thông thường |
 | `skill-replan.ts` | Dựng lại cú đánh với hiệu ứng chiêu đã chọn |
 | `ai-worker.ts` | Web Worker chạy `brain.ts` |
-| `ai-client.ts` | Phía giao diện: gửi yêu cầu, huỷ worker khi rời trận |
+| `ai-client.ts` | Phía giao diện: gửi yêu cầu, huỷ worker khi rời trận, chuyển AI về luồng chính khi worker hỏng |
 | `types.ts` | Gói dữ liệu gửi worker; `AiProfile` (cấp 1–4, lối đánh) định nghĩa ở `game/ai-profile.ts` |
 
 ## Quyết định
@@ -18,7 +18,7 @@
   biến thể lực và áp phê, chấm theo vị trí bi cái cho cú sau, chọn phòng thủ khi rủi ro. Nó nhận cùng bàn,
   Thiên Tượng và hiệu ứng chiêu như người chơi (`Match.aiView()`), nên không bao giờ "ăn gian" hay lệch với
   vật lý thật.
-- **Chạy trong Web Worker** để không giật hình. Rời trận khi AI còn tính thì worker bị thay mới thay vì chạy nốt.
+- **Chạy trong Web Worker** để không giật hình. Rời trận khi AI còn tính thì worker bị thay mới thay vì chạy nốt. Nếu worker không tải được hoặc lỗi, các yêu cầu đang chờ được tính trên luồng chính và AI ở lại luồng chính tới hết phiên, nên lượt máy không bao giờ treo ở "đang tính…".
 - **Chiêu ở mọi cấp, kể cả cấp 1**, nhưng chỉ chọn trong các chiêu đang dùng được. Sau khi chọn chiêu, AI dựng
   lại gói hiệu ứng rồi tìm lại cú; chiêu dời bi dùng vị trí mà trận thật chấp nhận.
 - **Khuynh thành:** yêu cầu worker vẫn lấy bên đang tới lượt làm bên đánh (đúng bi cái, luật và hiệu ứng),
