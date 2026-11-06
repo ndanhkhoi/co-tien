@@ -25,7 +25,7 @@ def keyed(src):
     a = np.asarray(im).copy()
     green = (a[..., 1] > 180) & (a[..., 0] < 90) & (a[..., 2] < 90)
     a[..., 3] = np.where(green, 0, 255)
-    return Image.fromarray(a, "RGBA")
+    return Image.fromarray(a)
 
 
 def drop_edge_slivers(im):
@@ -49,7 +49,28 @@ def drop_edge_slivers(im):
     for r in runs:
         if r is not main and (r[0] == 0 or r[1] == w):
             a[:, r[0]:r[1], 3] = 0
-    return Image.fromarray(a, "RGBA")
+    return Image.fromarray(a)
+
+
+def clear_faint_backdrop(im):
+    """Some draws bake a faint checkerboard into the alpha (values around 20-40). Clear low-alpha pixels that connect
+    to the image border; soft glows and sheer cloth inside the figure are not connected to the border and stay."""
+    a = np.asarray(im).copy()
+    low = a[..., 3] < 60
+    reach = np.zeros_like(low)
+    reach[0, :], reach[-1, :], reach[:, 0], reach[:, -1] = low[0, :], low[-1, :], low[:, 0], low[:, -1]
+    while True:
+        grown = reach.copy()
+        grown[1:] |= reach[:-1]
+        grown[:-1] |= reach[1:]
+        grown[:, 1:] |= reach[:, :-1]
+        grown[:, :-1] |= reach[:, 1:]
+        grown &= low
+        if (grown == reach).all():
+            break
+        reach = grown
+    a[reach, 3] = 0
+    return Image.fromarray(a)
 
 
 def fit_height(im, h):
@@ -75,7 +96,7 @@ for f in sorted(os.listdir(raw)):
         if os.path.exists(dst):
             os.remove(dst)
         continue
-    fit_height(drop_edge_slivers(keyed(os.path.join(raw, f))), 800).save(dst, "WEBP", quality=78, method=6)
+    fit_height(drop_edge_slivers(clear_faint_backdrop(keyed(os.path.join(raw, f)))), 800).save(dst, "WEBP", quality=78, method=6)
     done += 1
 # A pose whose draft was rejected (moved to raw/old) must not linger in the game either.
 roster = json.load(open(os.path.join(repo, "src", "game", "content", "roster.json")))

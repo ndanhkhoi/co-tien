@@ -60,8 +60,11 @@ response để kiểm tra trước khi chạy lại.
 8. **Tư thế kết liễu**: mỗi tướng có `champions/{id}/finisher.webp` cho hiệu ứng Kết liễu: cùng nhân vật với
    cut-out (gửi cut-out làm `--ref`, chèn toàn bộ `look`), lao người theo đường chéo từ trên trái xuống dưới
    phải, đầu cơ thúc về góc dưới phải, một vệt mực màu môn phái theo sau đầu cơ, nền trong suốt, khổ
-   1536×1024. Xuất bản cắt sát, tối đa 820 px, webp chất lượng 74 (khoảng 230 KB mỗi tướng). Nếu thiếu tranh,
-   game dùng cut-out.
+   1536×1024. Đầu thúc là đầu nhỏ có ferrule trắng và đầu da; mọi phần trang trí, quả cầu, lưỡi hay đầu nặng của
+   cơ nằm ở phía cán, sau tay sau (trừ khi `look` ghi rõ đầu cơ là hoa, sao…). Tư thế phải khác hẳn cut-out.
+   Vẽ bằng `scripts/gen-finishers.sh WORK id …`, người duyệt xem từng tấm rồi xuất bằng
+   `scripts/export-finisher.py WORK REPO id …` (cắt sát, tối đa 820 px, webp chất lượng 74). Nếu thiếu tranh, game
+   dùng cut-out.
 9. **Bộ tranh tư thế Tàng Các**: mỗi tướng có 4 tranh toàn thân `champions/{id}/pose-{1..4}.webp` cho bộ
    sưu tập tư thế trong Tàng Các. Cùng nhân vật với cut-out (gửi cut-out làm `--ref`, chèn toàn bộ `look`),
    dáng người và góc nhìn đa dạng (đời thường, luyện tập, tương tác đạo cụ hoặc bạn đồng hành), nền trong suốt,
@@ -69,7 +72,8 @@ response để kiểm tra trước khi chạy lại.
    `scripts/gen-gallery.sh SECT WORK [ids]` vẽ hai tư thế mỗi lần gọi (tờ 1536×1024, mỗi nửa một tư thế) rồi cắt đôi.
    Người duyệt tự xem từng tranh theo 17 điều trong *Full-body checklist* và ghi kết quả bằng
    `scripts/mark-pose.py WORK/SECT ID N ok|redraw "ghi chú"`; tranh bị loại được vẽ lại kèm ghi chú sửa ở lần chạy sau.
-   `export-gallery.py` chỉ xuất tranh đã đạt (cắt sát, cao 800 px, webp chất lượng 78).
+   `export-gallery.py` chỉ xuất tranh đã đạt (cắt sát, cao 800 px, webp chất lượng 78); bước xuất xoá mẩu hình bên
+   cạnh còn dính ở mép cắt và nền bàn cờ mờ mà model đôi khi in vào kênh alpha (vùng alpha thấp nối với mép ảnh).
 
 ## Phong cách
 

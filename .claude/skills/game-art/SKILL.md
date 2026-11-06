@@ -97,7 +97,9 @@ lần đầu người chơi tải trọn bộ, bản sau chỉ tải lại file 
 
 `finisher.webp` (Kết liễu): cùng nhân vật với cut-out (gửi cut-out làm `--ref`, chèn `look`), lao người theo đường
 chéo trên trái xuống dưới phải, đầu cơ thúc về góc dưới phải, vệt mực màu môn phái sau đầu cơ, nền trong suốt,
-`--size 1536x1024`; xuất cắt sát, tối đa 820 px, webp q74. Khung 9 lát cho chữ: prompt nêu rõ phần giữa phẳng và
+`--size 1536x1024`; đầu thúc là đầu nhỏ có ferrule, mọi trang trí và đầu nặng nằm ở cán sau tay sau, tư thế khác
+cut-out. Vẽ bằng `scripts/gen-finishers.sh`, duyệt từng tấm, xuất bằng `scripts/export-finisher.py` (cắt sát, tối đa
+820 px, webp q74). Khung 9 lát cho chữ: prompt nêu rõ phần giữa phẳng và
 trống, trang trí chỉ ở hai đầu ngắn; cắt sát thân khung theo chiều dọc trước khi dùng.
 
 `pose-{1..4}.webp` (Tranh tư thế gallery): 4 tranh toàn thân đa dạng dáng và góc nhìn trong Tàng Các, gửi cut-out
