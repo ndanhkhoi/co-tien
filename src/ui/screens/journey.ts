@@ -136,8 +136,8 @@ function landSheet(app: App, id: SectId) {
           foot: boss ? h('span.ls-boss-foot', null, h('span.ls-boss-tag', null, 'Trùm vùng'), foot) : foot,
         }, () => {
           if (!open) return toast('Thắng cao thủ trước để mở', 'bad');
-          close();
-          npcModal(app, n);
+          // The master's sheet stacks on the land sheet, so closing it returns here.
+          npcModal(app, n, close);
         });
         if (n === nextNpc) {
           card.setAttribute('aria-label', `Thách đấu ${n.name}`);

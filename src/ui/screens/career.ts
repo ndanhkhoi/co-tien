@@ -14,7 +14,8 @@ import { matchScreen } from './match';
 
 const tableOf = (n: Npc): TableSkin => TABLES.find((t) => t.id === n.sect) ?? TABLES[0];
 
-export function npcModal(app: App, n: Npc) {
+/** `closeParent` closes the sheet this one stacks on once the duel starts. */
+export function npcModal(app: App, n: Npc, closeParent?: () => void) {
   const mut = n.mutator ? MUTATORS.find((m) => m.id === n.mutator)! : null;
   const best = app.profile.career[n.id];
   const recruited = app.profile.champions.includes(n.id);
@@ -39,6 +40,7 @@ export function npcModal(app: App, n: Npc) {
       recruited ? null : h('span.chip.stat.accent', null, icon('users'), 'Thắng để chiêu mộ'),
       btn(h('span.btn-in', null, icon('play'), 'Thách đấu'), () => {
         close();
+        closeParent?.();
         startCareer(app, n);
       }),
     ),
