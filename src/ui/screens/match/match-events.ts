@@ -14,6 +14,7 @@ import { icon } from '../../icons';
 import type { MatchCtx } from './context';
 import type { MatchDom } from './dom';
 import type { HeraldMsg } from './herald';
+import { warnBeforeAim } from './turn-warning';
 
 type MatchEvent = Parameters<Parameters<MatchCtx['match']['on']>[0]>[0];
 
@@ -127,6 +128,7 @@ function skill(ctx: MatchCtx, deps: EventDeps, e: Extract<MatchEvent, { type: 's
   deps.herald({ side: e.side, expr: 'cast', title: e.skill.name, line: e.slot === 2 ? (human ? 'Đã chuẩn bị · bấm ĐÁNH để thi triển' : 'Đã chuẩn bị · chờ cú đánh') : `${ctx.match.setup.players[e.side].name} dùng chiêu` });
   if (e.skill.kinds.includes('rewind')) ctx.view.clearTransient();
   announceQuake(ctx, deps, e);
+  if (e.side !== ctx.match.turn) warnBeforeAim(ctx, deps.herald);
   if (e.slot !== 2) {
     ctx.view.skillFx(e.champion, e.skill, e.side);
     haptic(25);

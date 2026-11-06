@@ -1,6 +1,7 @@
 import type { Side } from '../../../core/rules/types';
 import { hintTurn } from '../../hints';
 import type { MatchCtx } from './context';
+import { warnBeforeAim } from './turn-warning';
 import type { MatchDom } from './dom';
 import type { HeraldMsg } from './herald';
 import { updateSpinDot } from './spin';
@@ -71,7 +72,7 @@ function turnSide(ctx: MatchCtx, dom: MatchDom, deps: TurnDeps, nudge: (side: Si
   power.preset = power.presets[side];
   updateSpinDot(dom.spinDot, aim);
   deps.aimFirstTarget();
-  announceTurn(ctx, deps, { side, changed });
+  if (!warnBeforeAim(ctx, deps.herald)) announceTurn(ctx, deps, { side, changed });
   hintTurnApp(ctx);
   deps.coachTurn();
   if (ctx.hasSkills) nudgeIdle(ctx, nudge, side);

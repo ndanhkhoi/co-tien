@@ -44,6 +44,10 @@ Nguồn: `src/ui/screens/match/` (trận) và `src/ui/screens/practice/desk.ts` 
   thủ (run tay, giảm lực, che mắt, dắt lệch, phong lỗ, bi chỉ định, bi giả), vùng đặt trên bàn (xoáy, giếng hút,
   dải lụa, nỉ trơn, cát, mực tan, vật chắn, yểm băng, gió, nghiêng bàn), hộ lỗi, và bùa của chính mình cho cú này
   (tăng lực, áp phê mạnh, lỗ rộng, lỗ hút, đánh tiếp, nhìn đường, xung lực). Chiêu úp chỉ ghi “một chiêu đang úp”.
+- Trước khi ngắm, dải giấy đỏ “Chú ý trước khi đánh” liệt kê mọi chiêu đối thủ đang tác động lên cú đánh sắp tới:
+  run tay, hướng lệch bao nhiêu độ và chiều nào, mất đường ngắm, lực tối đa, lỗ bị phong, bi phải chạm trước và vùng chiêu
+  trên bàn (`src/ui/screens/match/turn-warning.ts`). Nó hiện ngay đầu lượt, và hiện lại ngay khi đối thủ dùng chiêu
+  lúc mình đang ngắm, đẩy các thông báo cũ đi; tắt *Thông báo giữa bàn* cũng không ẩn nó. Chiêu úp vẫn không lộ tên.
 - Khi bị dắt lệch, ô mục tiêu ghi rõ “Hướng bị dắt lệch X°”; trên nỉ vẫn có chấm son theo hướng thật.
 - Bi bị chỉ định có vòng son quanh bi, ô mục tiêu yêu cầu “phải chạm bi đó trước”.
 - Chiêu chỉ định bi (không kèm chiêu đặt bàn), dùng trong lượt của mình: vào bước chọn, quả bi đối thủ gần lỗ nhất có

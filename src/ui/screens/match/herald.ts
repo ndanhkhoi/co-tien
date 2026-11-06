@@ -18,6 +18,8 @@ export interface HeraldMsg {
   ms?: number;
   /** Shown even when announcements are off (a rack won or system notice). Fouls always show. */
   important?: boolean;
+  /** Replace old announcements immediately when the conditions for aiming change. */
+  immediate?: boolean;
 }
 
 export function createHerald(ctx: MatchCtx, dom: MatchDom): {
@@ -34,6 +36,11 @@ export function createHerald(ctx: MatchCtx, dom: MatchDom): {
   const herald = (m: HeraldMsg) => {
     if (ctx.flags.disposed) return;
     if (!ctx.app.profile.settings.herald && !m.important && m.tone !== 'red') return;
+    if (m.immediate) {
+      clearTimeout(timer);
+      q.length = 0;
+      on = false;
+    }
     q.push(m);
     // Old news is dropped rather than shown late.
     if (q.length > 3) q.splice(0, q.length - 3);
