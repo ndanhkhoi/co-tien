@@ -8,7 +8,8 @@ export function createLayout(ctx: MatchCtx): { layout(): void; dispose(): void }
   const onResize = () => layout();
   window.addEventListener('resize', onResize);
   window.addEventListener('cotien:ui-resize', onResize);
-  requestAnimationFrame(() => layout());
+  // The first fit waits a frame for the HUD to lay out; a match left within that frame skips it.
+  const first = requestAnimationFrame(() => layout());
   const layout = () => {
     ctx.renderState.handSize = { w: 0, h: 0 };
     ctx.renderState.handKey = '';
@@ -16,6 +17,7 @@ export function createLayout(ctx: MatchCtx): { layout(): void; dispose(): void }
     ctx.renderState.handKey = '';
   };
   return { layout, dispose: () => {
+    cancelAnimationFrame(first);
     window.removeEventListener('resize', onResize);
     window.removeEventListener('cotien:ui-resize', onResize);
   } };
